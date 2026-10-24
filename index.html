@@ -712,7 +712,7 @@ function render(){
   document.querySelectorAll('#modeSeg button').forEach(x=>x.setAttribute('aria-pressed',String(!net&&+x.dataset.mode===S.mode)));
   $('localCtl').hidden=net;$('netCtl').hidden=!net;
   $('reseek').hidden=!(net&&NET.auto&&!NET.watch&&!NET.guest&&!S.over);
-  const seated=net&&colorOf(NET.me)>0;$('resign').hidden=!(seated&&NET.guest&&!S.over);$('rematch').hidden=!(seated&&S.over);
+  const seated=net&&colorOf(NET.me)>0;$('resign').hidden=!(seated&&NET.guest&&!S.over);$('rematch').hidden=!(seated&&S.over);$('rematch').textContent=(S.over&&NET.want&&NET.want[NET.me]===NET.game+1)?'相手を待っています…':(S.over&&NET.want&&NET.want[oppIdOf2()]===NET.game+1)?'もう一局（相手も希望中）':'もう一局';
   if(net){const waiting=colorOf(NET.me)===colorOf(NET.host)&&NET.me===NET.host&&!NET.guest;if(NET.code){$('codeOut').textContent=NET.code;$('linkOut').textContent=inviteLink(NET.code)}}
   renderStatus();
 }
@@ -785,7 +785,7 @@ async function post(obj){
       if(r.status===429){netMsg(LIMIT_MSG,true);return false}}catch(e){}
     await new Promise(r=>setTimeout(r,800))}
   netMsg('送れませんでした。ネットにつながっているか確かめてください。',true);return false}
-function closeNet(){if(NET.es){NET.es.close()}clearTimeout(NET.timer);clearTimeout(NET.waitT);NET.auto=false;
+function closeNet(){if(NET.es){NET.es.close()}clearTimeout(NET.timer);clearTimeout(NET.waitT);NET.auto=false;NET.want={};
   Object.assign(NET,{code:null,es:null,seen:new Set(),host:null,guest:null,game:0,over:null,live:false,sending:false,claimed:false,watch:false});
   $('netIdle').hidden=false}
 function openRoom(code,watch){
@@ -820,7 +820,13 @@ function reduce(m){
     const mv=[m.m[0]|0,m.m[1]|0];if(S.b[mv[0]]!==S.turn||!movesFrom(S.b,mv[0]).some(x=>x[1]===mv[1]))return;
     Object.assign(S,nextState(S,mv));S.sel=-1;if(m.from===NET.me)NET.sending=false;return}
   if(m.t==='resign'){const c=colorOf(m.from);if(m.g===NET.game&&!S.over&&c){S.over={win:3-c,why:(m.from===NET.me?'あなた':'相手')+'が投了'}}return}
-  if(m.t==='rematch'){if(m.g===NET.game+1&&S.over&&colorOf(m.from)){NET.game++;S=initState('net');S.game=NET.game;NET.sending=false;if(m.from!==NET.me)netMsg('相手がもう一局を始めました。')}return}
+  if(m.t==='rematch'){ // 「もう一局」は両方が押したら始まる
+    if(m.g===NET.game+1&&S.over&&colorOf(m.from)){NET.want=NET.want||{};NET.want[m.from]=m.g;
+      const both=NET.host&&NET.guest&&NET.want[NET.host]===m.g&&NET.want[NET.guest]===m.g;
+      if(both){NET.game++;NET.want={};S=initState('net');S.game=NET.game;NET.sending=false;netMsg('')}
+      else if(m.from!==NET.me)netMsg('相手がもう一局を希望しています。「もう一局」を押すと始まります。');
+      else netMsg('相手が「もう一局」を押すのを待っています…')}
+    return}
 }
 function netMove(m){
   if(!human()||NET.sending)return;
@@ -833,7 +839,8 @@ function resign(){
   if(b.dataset.c!=='1'){b.dataset.c='1';b.textContent='本当に投了する';setTimeout(()=>{b.dataset.c='';b.textContent='投了する'},3000);return}
   b.dataset.c='';b.textContent='投了する';if(!S.over)post({t:'resign',g:NET.game});
 }
-function rematch(){if(S.over)post({t:'rematch',g:NET.game+1})}
+const oppIdOf2=()=>NET.me===NET.host?NET.guest:NET.host;
+function rematch(){if(S.over&&!(NET.want&&NET.want[NET.me]===NET.game+1))post({t:'rematch',g:NET.game+1})}
 function leave(){closeNet();netMsg('');try{history.replaceState(null,'',location.pathname)}catch(e){}S=initState(2);render()}
 function createRoom(){openRoom(newCode())}
 function joinRoom(code){openRoom(code)}
