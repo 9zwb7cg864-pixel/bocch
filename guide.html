@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="ひとりぼっちの石は動けない対戦ボードゲーム「bocch」の勝ち方ガイド。仕組み・強い形・定跡・戦法の体系を盤の図で解説。">
+<meta name="description" content="ひとりぼっちの石は動けない対戦ボードゲーム「bocch」の勝ち方ガイド。仕組み・強い形・定跡・戦法・手筋の体系を盤の図で解説。">
 <title>bocch 勝ち方ガイド</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
@@ -98,7 +98,24 @@ button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 /* 毎手の確認 */
 ol.check{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;counter-reset:c}
 ol.check li{counter-increment:c;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start;padding:12px 14px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 10px 10px 0}
-/* 上級：戦法 */
+/* 戦法（序盤の作戦） */
+.strat{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:start;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.strat.top{border-color:var(--gold)}
+@media (max-width:480px){.strat{grid-template-columns:118px minmax(0,1fr);gap:12px;padding:12px}}
+.strat .board{width:100%;padding:4px}
+.hs{width:80%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%)}
+.strat h3{font-family:var(--f-disp);font-size:18px;letter-spacing:.06em}
+.strat h3 small{font-family:var(--f-body);font-weight:400;font-size:12.5px;color:var(--sub);margin-left:6px;letter-spacing:0}
+.strat p{font-size:13.5px;color:var(--sub);margin-top:4px}
+.strat .op{font-size:12.5px;margin-top:6px;color:var(--fg)}
+.strat .op code{font-family:inherit;background:color-mix(in srgb,var(--gold) 12%,transparent);padding:1px 6px;border-radius:4px;margin-right:4px;white-space:nowrap}
+.mtx-wrap{overflow-x:auto;margin-top:6px}
+table.mtx{border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums;min-width:460px}
+.mtx th,.mtx td{padding:8px 6px;text-align:center;border:1px solid var(--line)}
+.mtx th{font-weight:700;background:var(--card)}
+.mtx th.rowh{text-align:left;white-space:nowrap}
+.mtx td.self{color:var(--sub)}
+/* 上級：手筋 */
 .legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:12.5px;color:var(--sub);margin:4px 0 18px}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .lg{width:16px;height:16px;border-radius:50%;display:inline-block;background:#2a2a2a}
@@ -176,6 +193,16 @@ ol.check span{font-size:13.5px;color:var(--sub)}
   <div class="rank" id="opens"></div>
 </section>
 
+<section id="strategy">
+  <h2>戦法（序盤の作戦）</h2>
+  <p class="intro">AI同士に2,400局打たせ、両者の8手目の形を似たものどうしでまとめると、5つの型に分かれました。図は、その型で8手目に石がいた割合です。濃いほど、そのマスにいることが多い形です（自分の陣地が下、攻めた側を左にそろえています）。</p>
+  <div class="rank" id="strats"></div>
+  <h3 style="margin-top:22px">相性</h3>
+  <p class="note" style="margin-top:4px">行の戦法が、列の戦法に勝った割合です。</p>
+  <div class="mtx-wrap"><table class="mtx" id="mtx"></table></div>
+  <p class="note" style="margin-top:10px">型ごとに約770〜1,200局。8手目の形は相手の指し方にも左右されるので、「この型を選べば必ずこの勝率」という意味ではありません。</p>
+</section>
+
 <section>
   <h2>相手のリーチの止め方</h2>
   <p class="intro">黒の石（数字2）が、2マス上のゴールに届く形です。上・右上・左上の3方向に届くので、着地点は最大3か所あります。</p>
@@ -183,15 +210,15 @@ ol.check span{font-size:13.5px;color:var(--sub)}
 </section>
 
 <section id="tactics">
-  <h2>上級：戦法の体系</h2>
-  <p class="intro">強い人が見ているのは、自分の石の数字よりも、相手と自分の石の「ズレ」です。すべての戦法はこの考え方から組み立てられます。</p>
+  <h2>上級：手筋の体系</h2>
+  <p class="intro">強い人が見ているのは、自分の石の数字よりも、相手と自分の石の「ズレ」です。すべての手筋はこの考え方から組み立てられます。</p>
   <div class="rule"><b>ズレ ＝ ゴールまでの段数 − 今の数字</b><br>ズレ0の石はゴールに届きます（リーチ）。上でも斜め上でも、1回で上がる段数は数字と同じだからです。数字が多すぎても盤の外に出るので届きません。<br>1手で動かすと、<b>着いたマスの隣の石はズレが1減り</b>、<b>離れたマスの隣の石はズレが1増えます</b>。</div>
   <div class="legend" aria-label="図の見方">
     <span><i class="lg g0"></i>リーチ（ズレ0）</span><span><i class="lg g1"></i>あと1つ増えるとリーチ（ズレ+1）</span><span><i class="lg gm"></i>あと1つ減るとリーチ（ズレ−1）</span>
     <span><i class="lg tg"></i>黒が届くゴール</span><span><i class="lg wt"></i>白が届くゴール</span><span><i class="lg to"></i>いま着いたマス</span>
   </div>
   <p class="note" style="margin-bottom:14px">図は盤全体（上の段が黒のゴール、下の段が白のゴール）。石の数字・リーチ・届くマスは、すべてルールどおりに自動で計算しています。</p>
-  <div class="tree" aria-label="戦法の一覧">
+  <div class="tree" aria-label="手筋の一覧">
     <a href="#t-atk"><b>攻め</b>スイッチ／抜き／二重スイッチ／飽和リーチ</a>
     <a href="#t-def"><b>守り</b>押し上げ／引き抜き／陣地の壁</a>
     <a href="#t-trap"><b>落とし穴</b>誘爆（着き誘爆・抜き誘爆）</a>
@@ -310,7 +337,27 @@ const defs=document.getElementById('defs');
 defs.innerHTML=DF.map(x=>'<div class="fig"><div class="board"></div><h3>'+x.t+'<span class="tag '+(x.ok?'ok':'ng')+'">'+(x.ok?'効く':'効きにくい')+'</span></h3><p>'+x.d+'</p></div>').join('');
 [...defs.querySelectorAll('.board')].forEach((el,i)=>draw(el,DF[i].rows,DF[i].m,{goalTop:true}));
 
-/* 上級：戦法の図（全盤6×6を自動計算） */
+
+/* 戦法 */
+const HEAT=[[0.2,0.21,0.27,0.17,0.11,0.05,0.09,0.09,0.05,0.03,0.03,0.01,0.08,0.14,0.15,0.12,0.08,0.01,0.07,0.22,0.3,0.22,0.12,0.01,0.1,0.32,0.13,0.13,0.18,0.03,0.33,0.35,0.33,0.37,0.4,0.49],[0.22,0.17,0.13,0.07,0.08,0.1,0.02,0.04,0.01,0.01,0.01,0.01,0.08,0.05,0.04,0.03,0.04,0.01,0.32,0.47,0.31,0.22,0.2,0.07,0.37,0.56,0.29,0.22,0.44,0.18,0.14,0.19,0.15,0.16,0.31,0.26],[0.01,0,0.01,0.01,0,0,0,0,0,0,0,0,0.02,0.02,0.01,0.01,0.01,0,0.29,0.57,0.54,0.36,0.16,0.04,0.34,0.74,0.45,0.26,0.31,0.08,0.23,0.32,0.28,0.29,0.34,0.32],[0.14,0.17,0.22,0.19,0.06,0.02,0,0.02,0.02,0.01,0.01,0,0.02,0.07,0.11,0.05,0.02,0,0.03,0.34,0.61,0.39,0.08,0,0.07,0.54,0.52,0.38,0.17,0,0.23,0.31,0.31,0.29,0.27,0.32],[0.41,0.17,0.11,0.02,0.06,0.04,0.1,0.04,0.01,0,0.01,0,0.17,0.12,0.04,0.02,0.02,0.01,0.34,0.4,0.16,0.06,0.04,0.02,0.29,0.43,0.16,0.07,0.13,0.03,0.29,0.4,0.33,0.43,0.53,0.56]];
+const ST=[
+ {h:3,t:'中央櫓',y:'なかやぐら',v:63,d:'真ん中の3筋に2段×3列の固まりを作ってから前に出る。端の筋はほとんど使わず、陣地に2個ほど残す。どの戦法にも勝ち越す最強の型。',op:['4f→2d','3f→2e','1f→3d']},
+ {h:0,t:'斬り込み',y:'きりこみ',v:51,d:'早くから相手陣まで石を送り込み、相手の石とぶつけて乱戦にする。石はばらけて固まりは小さい。',op:['2f→4d','6f→5e','5f→5d']},
+ {h:1,t:'総掛かり',y:'そうがかり',v:49.5,d:'陣地の石をほぼ全部出して、手前の2段に横へ広く並べる。斬り込みとは互角。',op:['4f→2d','1f→2e','3f→1d']},
+ {h:2,t:'籠城',y:'ろうじょう',v:41.5,d:'自陣の手前に大きな固まりを作り、相手陣にほとんど入らない。対局は長引くが、守りを固めても止めきれない。',op:['2f→2d','3f→2e','6f→5e']},
+ {h:4,t:'端攻め',y:'はしぜめ',v:39,d:'片側の端の筋だけで突破を狙う。反対側の石は陣地に残ったまま余る。籠城にだけは勝ち越す。',op:['3f→1d','1f→2e','4f→3e']}];
+const strats=document.getElementById('strats');
+strats.innerHTML=ST.map((x,i)=>'<div class="strat'+(i===0?' top':'')+'"><div class="board"></div><div style="min-width:0"><h3>'+x.t+'<small>'+x.y+'</small></h3><p>'+x.d+'</p><div class="op">よくある出だし　'+x.op.map(o=>'<code>'+o+'</code>').join('')+'</div>'+bar(x.v)+'</div></div>').join('');
+[...strats.querySelectorAll('.board')].forEach((el,i)=>{const H=HEAT[ST[i].h];el.style.gridTemplateColumns='repeat(6,1fr)';el.innerHTML='';
+  H.forEach((v,j)=>{const c=document.createElement('div');const r=j/6|0;c.className='cell'+(r===0?' r0':'')+(j%6===0?' c0':'')+((r===0||r===5)?' goal':'');
+    if(v>=0.06){const s=document.createElement('div');s.className='hs';s.style.opacity=Math.min(1,0.12+v*1.4).toFixed(2);s.title=Math.round(v*100)+'％';c.appendChild(s)}el.appendChild(c)})});
+const MX=[[50,50,66,44,62],[50,50,56,36,63],[34,44,50,25,45],[56,64,75,50,72],[38,37,55,28,50]];
+const NM=['斬り込み','総掛かり','籠城','中央櫓','端攻め'],ORD=[3,0,1,4,2];
+let th='<tr><th></th>'+ORD.map(j=>'<th>'+NM[j]+'</th>').join('')+'</tr>';
+ORD.forEach(i=>{th+='<tr><th class="rowh">'+NM[i]+'</th>'+ORD.map(j=>{if(i===j)return '<td class="self">—</td>';const v=MX[i][j],a=Math.min(.55,Math.abs(v-50)/50*1.6);
+  const col=v>=50?'var(--good)':'var(--bad)';return '<td style="background:color-mix(in srgb,'+col+' '+Math.round(a*100)+'%,transparent);font-weight:'+(Math.abs(v-50)>=10?700:400)+'">'+v+'％</td>'}).join('')+'</tr>'});
+document.getElementById('mtx').innerHTML=th;
+/* 上級：手筋の図（全盤6×6を自動計算） */
 const nb6=(b,i)=>nb(b,6,6,i);
 function threatsOf(b,i){const p=b[i],d=nb6(b,i);const r=i/6|0,c=i%6,gr=p===1?0:5,dist=Math.abs(r-gr);if(!d||dist!==d)return[];
   const dr=p===1?-1:1,out=[];for(const dc of [-1,0,1]){const rr=r+dr*d,cc=c+dc*d;if(rr>=0&&rr<6&&cc>=0&&cc<6&&!b[rr*6+cc])out.push(rr*6+cc)}return out}
