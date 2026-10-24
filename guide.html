@@ -243,6 +243,10 @@ ol.check span{font-size:13.5px;color:var(--sub)}
   <p class="note" style="margin-top:4px">行の戦法が、列の戦法に勝った割合です。</p>
   <div class="mtx-wrap"><table class="mtx" id="mtx"></table></div>
   <p class="note" style="margin-top:10px">型ごとに約2,300〜3,600局。8手目の形は相手の指し方にも左右されるので、「この型を選べば必ずこの勝率」という意味ではありません。</p>
+  <h3 style="margin-top:26px">派生型</h3>
+  <p class="note" style="margin-top:4px">同じ7,400局をもっと細かく分けると、中央櫓と端攻めの中に、勝率がはっきり違う型が見つかりました。</p>
+  <div class="rank" id="variants" style="margin-top:10px"></div>
+
 </section>
 
 <section id="data">
@@ -361,7 +365,7 @@ B=P.block();mode='move';sel=14;document.getElementById('mPut').setAttribute('ari
 const LO=30,HI=70;
 function bar(v){const x=p=>(p-LO)/(HI-LO)*100;const left=Math.min(x(50),x(v)),wd=Math.abs(x(v)-x(50));
   const col=v>=50?'var(--good)':'var(--bad)';
-  return '<div class="bar" role="img" aria-label="勝率'+v+'％"><i style="left:'+left+'%;width:'+wd+'%;background:'+col+'"></i><b style="'+(v>=50?'left:calc('+x(v)+'% + 6px)':'right:calc('+(100-x(v))+'% + 6px)')+';color:'+col+'">'+v+'％</b></div>'}
+  return '<div class="bar" role="img" aria-label="勝率'+v+'％"><i style="left:'+left+'%;width:'+wd+'%;background:'+col+'"></i><b style="'+(v>=50?(x(v)>84?'right:calc('+(100-x(v))+'% + 5px);color:#fff':'left:calc('+x(v)+'% + 6px);color:'+col):'right:calc('+(100-x(v))+'% + 6px);color:'+col)+'">'+v+'％</b></div>'}
 function rowHTML(top,title,small,desc,v){return '<div class="row'+(top?' top':'')+'"><div class="board"></div><div style="min-width:0"><h3>'+title+(small?'<small>'+small+'</small>':'')+'</h3><p>'+desc+'</p>'+bar(v)+'</div></div>'}
 
 const SH=[
@@ -435,6 +439,13 @@ strats.addEventListener('click',e=>{const card=e.target.closest('.strat');if(!ca
   if(open&&!box.innerHTML)openBuild(card);box.hidden=!open;card.setAttribute('aria-expanded',String(open));card.querySelector('.more').textContent=open?'▼ 閉じる':'▶ タップで組む順番を見る'});
 strats.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('strat')){e.preventDefault();e.target.click()}});
 [...strats.querySelectorAll('.board')].forEach((el,i)=>draw(el,ST[i].rows,null,{goalTop:true}));
+const VAR=[
+ {t:'総櫓',y:'そうやぐら',p:'中央櫓の派生',v:66.9,rows:['......','......','......','.BBB..','.BBB..','......'],d:'陣地の石までほぼ全部（残すのは1個ほど）使って、真ん中に2段×3列の大きな固まりを作る。全戦法の中でいちばん勝つ形。'},
+ {t:'半櫓',y:'はんやぐら',p:'中央櫓の派生',v:51.9,rows:['......','......','......','..BB..','..BB..','B....B'],d:'真ん中に組むが、陣地の端に2〜3個残す。残した石は働かず、総櫓より15ポイント勝てない。'},
+ {t:'片寄せ',y:'かたよせ',p:'端攻めの派生',v:47.3,rows:['......','......','.B....','BB....','BB....','.....B'],d:'片側に寄るが、石は固まっている。端攻めの中ではまだ戦える形。'},
+ {t:'端突き',y:'はしづき',p:'端攻めの派生',v:36.7,rows:['B.....','......','.B....','......','B.....','...BBB'],d:'片側に寄って、石もばらばら。反対側の陣地に石が余る。いちばん負ける形。'}];
+{const el=document.getElementById('variants');el.innerHTML=VAR.map((x,i)=>'<div class="strat'+(i===0?' top':'')+'" style="cursor:default"><div class="board"></div><div style="min-width:0"><h3>'+x.t+'<small>'+x.y+'・'+x.p+'</small></h3><p>'+x.d+'</p>'+bar(x.v)+'</div></div>').join('');
+ [...el.querySelectorAll('.board')].forEach((b,i)=>draw(b,VAR[i].rows,null,{goalTop:true}))}
 const MX=[[50,52,66,42,58],[48,50,57,36,59],[34,43,50,25,48],[58,64,75,50,70],[42,41,52,30,50]];
 const NM=['斬り込み','総掛かり','籠城','中央櫓','端攻め'],ORD=[3,0,1,4,2];
 let th='<tr><th></th>'+ORD.map(j=>'<th>'+NM[j]+'</th>').join('')+'</tr>';
