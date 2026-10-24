@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="ひとりぼっちの石は動けない対戦ボードゲーム「bocch」の勝ち方ガイド。仕組み・強い形・定跡・戦法の体系を盤の図で解説。">
+<title>bocch 勝ち方ガイド</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+[hidden]{display:none!important}img{max-width:100%}
+/* 構成：盤の図を主役に、一段組で上から「仕組み → 形 → 定跡 → 守り → 毎手の確認」 */
+:root{
+  --bg:#f3efe6; --fg:#24201a; --sub:#6b6457; --line:#d8cfbd; --card:#fbf8f1;
+  --wood:#d9b77e; --wood2:#c79f60; --grid:#8a6a3c;
+  --gold:#9a6f22; --good:#2f7d58; --bad:#b0483a; --blue:#2f6fa8; --amber:#c27a12; --plum:#7d4f9e;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#17150f; --fg:#ece6d8; --sub:#a39b8a; --line:#3a352a; --card:#201d16;
+  --wood:#c9a46a; --wood2:#b28a4e; --grid:#6e5330;
+  --gold:#d6b26e; --good:#6fc39a; --bad:#e08c7c; --blue:#7fb2e0; --amber:#f0b04a; --plum:#c39be0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f; --fg:#ece6d8; --sub:#a39b8a; --line:#3a352a; --card:#201d16;
+  --wood:#c9a46a; --wood2:#b28a4e; --grid:#6e5330;
+  --gold:#d6b26e; --good:#6fc39a; --bad:#e08c7c; --blue:#7fb2e0; --amber:#f0b04a; --plum:#c39be0; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.75;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
+main{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:44px}
+h1{font-family:var(--f-disp);font-weight:800;font-size:clamp(28px,7vw,40px);line-height:1.25;margin:0;letter-spacing:.06em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:800;font-size:23px;margin:0 0 6px;letter-spacing:.05em;text-wrap:balance}
+h3{font-size:16px;margin:0;font-weight:700}
+p{margin:0}
+.lead{color:var(--sub);margin-top:10px;max-width:38em}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+section>.intro{color:var(--sub);max-width:40em;margin-bottom:16px}
+.note{font-size:12.5px;color:var(--sub)}
+
+/* 盤 */
+.board{display:grid;background:linear-gradient(160deg,var(--wood),var(--wood2));padding:6px;border-radius:6px;gap:0;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.cell{aspect-ratio:1;position:relative;border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);display:grid;place-items:center}
+.board .cell.r0{border-top:1px solid var(--grid)}.board .cell.c0{border-left:1px solid var(--grid)}
+.cell.goal{background:rgba(255,255,255,.13)}
+.st{width:82%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:clamp(11px,3.4vw,17px);
+  font-variant-numeric:tabular-nums;position:relative;z-index:1}
+.st.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.st.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.st.zero{opacity:.55}
+.cell.tgt::after{content:"";position:absolute;inset:16%;border-radius:50%;border:3px solid var(--good);background:rgba(47,125,88,.18)}
+.cell.from::after{content:"";position:absolute;inset:14%;border-radius:50%;border:2px dashed rgba(20,20,20,.55)}
+.cell.sel .st{outline:3px solid var(--blue);outline-offset:2px}
+.cell.x::after{content:"×";position:absolute;font-size:clamp(16px,5vw,24px);color:var(--bad);font-weight:700}
+
+/* 仕組みの試し盤 */
+.lab{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:620px){.lab{grid-template-columns:minmax(0,1fr)}}
+.lab .board{grid-template-columns:repeat(6,1fr);max-width:340px;width:100%}
+.lab .cell{cursor:pointer}
+.ctl{display:flex;flex-direction:column;gap:12px;min-width:0}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:3px;background:var(--card)}
+.seg button{border:0;background:transparent;color:var(--fg);font:inherit;font-size:13.5px;padding:6px 14px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{font:inherit;font-size:13px;padding:5px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+.chips button:hover,.seg button:hover{border-color:var(--gold)}
+button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.say{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;min-height:5.2em}
+
+/* ランキング */
+.rank{display:flex;flex-direction:column;gap:14px}
+.row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.row.top{border-color:var(--gold)}
+@media (max-width:480px){.row{grid-template-columns:96px minmax(0,1fr);gap:12px;padding:12px}}
+.row .board{width:100%;min-width:0;overflow:hidden}
+.row .board .st{font-size:11px;width:78%}
+.row.wide{grid-template-columns:168px minmax(0,1fr)}
+@media (max-width:480px){.row.wide{grid-template-columns:132px minmax(0,1fr)}.row .board .st{font-size:9.5px}}
+.row h3 small{font-weight:400;color:var(--sub);font-size:12.5px;margin-left:6px}
+.row p{font-size:13.5px;color:var(--sub);margin-top:4px}
+.bar{position:relative;height:22px;margin-top:8px;border-radius:4px;background:linear-gradient(to right,transparent calc(50% - .5px),var(--line) calc(50% - .5px),var(--line) calc(50% + .5px),transparent calc(50% + .5px))}
+.bar i{position:absolute;top:4px;bottom:4px;border-radius:3px}
+.bar b{position:absolute;top:0;font-size:12.5px;line-height:22px;font-variant-numeric:tabular-nums}
+.scale{display:flex;justify-content:space-between;font-size:11px;color:var(--sub);font-variant-numeric:tabular-nums;margin-top:2px}
+
+/* 守り */
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:620px){.trio{grid-template-columns:minmax(0,1fr)}}
+.fig{display:flex;flex-direction:column;gap:8px;min-width:0}
+.fig .board{max-width:260px;width:100%}
+.fig p{font-size:13.5px;color:var(--sub)}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;padding:1px 8px;border-radius:999px;border:1px solid currentColor;margin-left:6px;vertical-align:2px}
+.tag.ok{color:var(--good)}.tag.ng{color:var(--bad)}
+
+/* 毎手の確認 */
+ol.check{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;counter-reset:c}
+ol.check li{counter-increment:c;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start;padding:12px 14px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 10px 10px 0}
+/* 上級：戦法 */
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:12.5px;color:var(--sub);margin:4px 0 18px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.lg{width:16px;height:16px;border-radius:50%;display:inline-block;background:#2a2a2a}
+.lg.g0{box-shadow:0 0 0 3px var(--good)}.lg.g1{outline:2px dashed var(--amber);outline-offset:2px}.lg.gm{outline:2px dotted var(--plum);outline-offset:2px}
+.lg.tg{background:transparent;border:3px solid var(--good)}.lg.wt{background:transparent;border:3px solid var(--blue)}.lg.to{background:transparent;border:3px solid var(--fg)}
+.st.g0{box-shadow:0 0 0 3px var(--good),0 2px 3px rgba(0,0,0,.3)}
+.st.g1{outline:2px dashed var(--amber);outline-offset:2px}
+.st.gm{outline:2px dotted var(--plum);outline-offset:2px}
+.cell.wt::after{content:"";position:absolute;inset:16%;border-radius:50%;border:3px solid var(--blue);background:rgba(47,111,168,.15)}
+.cell.to::before{content:"";position:absolute;inset:4%;border:2px solid rgba(20,20,20,.75);border-radius:4px}
+.tac-group{display:flex;flex-direction:column;gap:18px}
+.tac-group>h3{font-family:var(--f-disp);font-size:19px;letter-spacing:.05em;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.tac{padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--card);display:flex;flex-direction:column;gap:10px}
+.tac h4{margin:0;font-size:15.5px}.tac h4 .tag{font-weight:700}
+.tac>p{font-size:14px;color:var(--fg);max-width:40em}
+.seq{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start}
+.step{display:flex;flex-direction:column;gap:6px;width:min(190px,calc(50% - 5px));min-width:0}
+.step .board{width:100%;padding:4px}
+.step .board .st{font-size:11px;width:78%}
+.step p{font-size:12.5px;color:var(--sub);line-height:1.55}
+.rule{font-size:13.5px;border-left:3px solid var(--gold);padding:6px 10px;background:color-mix(in srgb,var(--gold) 8%,transparent)}
+.tree{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:6px}
+.tree a{display:block;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none;font-size:13.5px}
+.tree a b{display:block;font-size:12px;color:var(--gold);letter-spacing:.1em}
+.tree a:hover{border-color:var(--gold)}
+ol.check li::before{content:counter(c);font-family:var(--f-disp);font-weight:800;font-size:22px;color:var(--gold);line-height:1.2}
+ol.check b{display:block}
+ol.check span{font-size:13.5px;color:var(--sub)}
+.src{border-top:1px solid var(--line);padding-top:16px}
+</style>
+
+</head>
+<body>
+<main>
+<header>
+  <a href="./" style="display:inline-block;margin-bottom:14px;color:var(--gold);text-decoration:none;font-size:14px">‹ ゲームに戻る</a>
+  <div class="eyebrow">ひとりぼっちの石は動けない</div>
+  <h1>bocch 勝ち方ガイド</h1>
+  <p class="lead">AI「最強」が重く見ているポイントと、AI同士の2,000局から集計した「勝ちやすい形」を、盤の図でまとめました。石の数字は、その石が動ける距離です。</p>
+</header>
+
+<section>
+  <h2>まず、仕組みを手で試す</h2>
+  <p class="intro">動ける距離は「まわり8マスにいる石の数（色は問わない）」です。石を置くと、隣の石の数字も変わります。ここがこのゲームのいちばん大事なところです。</p>
+  <div class="lab">
+    <div class="board" id="lab" role="grid" aria-label="試し盤"></div>
+    <div class="ctl">
+      <div class="seg" role="group" aria-label="操作">
+        <button id="mPut" aria-pressed="true">石を置く</button>
+        <button id="mMove" aria-pressed="false">行き先を見る</button>
+      </div>
+      <div class="chips" aria-label="形を並べる">
+        <button data-p="start">初期配置</button>
+        <button data-p="block">田の字</button>
+        <button data-p="lonely">ぼっち</button>
+        <button data-p="foot">相手を足場に</button>
+        <button data-p="threat">リーチ</button>
+        <button data-p="clear">全部消す</button>
+      </div>
+      <div class="say" id="say"></div>
+      <p class="note">「石を置く」：マスを押すたびに 黒 → 白 → 空き と変わります。<br>「行き先を見る」：石を押すと、その石が行けるマスが緑で出ます。上の段が黒のゴール、下の段が白のゴールです。</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>強い形</h2>
+  <p class="intro">AI同士の対局で「その形を相手より多く持っていた側」が最終的に勝った割合です。真ん中の線が50％で、右に伸びるほど勝ちやすい形です。</p>
+  <div class="rank" id="shapes"></div>
+</section>
+
+<section>
+  <h2>黒の1手目（定跡）</h2>
+  <p class="intro">「最強」に7通りの1手目を15秒ずつ読ませた評価です。上から5つはほぼ互角で、下の2つははっきり不利です。白の2手目は、黒が何を指しても「肩寄せ」（端の石を斜めに寄せる手）が最善でした。</p>
+  <div class="rank" id="opens"></div>
+</section>
+
+<section>
+  <h2>相手のリーチの止め方</h2>
+  <p class="intro">黒の石（数字2）が、2マス上のゴールに届く形です。上・右上・左上の3方向に届くので、着地点は最大3か所あります。</p>
+  <div class="trio" id="defs"></div>
+</section>
+
+<section id="tactics">
+  <h2>上級：戦法の体系</h2>
+  <p class="intro">強い人が見ているのは、自分の石の数字よりも、相手と自分の石の「ズレ」です。すべての戦法はこの考え方から組み立てられます。</p>
+  <div class="rule"><b>ズレ ＝ ゴールまでの段数 − 今の数字</b><br>ズレ0の石はゴールに届きます（リーチ）。上でも斜め上でも、1回で上がる段数は数字と同じだからです。数字が多すぎても盤の外に出るので届きません。<br>1手で動かすと、<b>着いたマスの隣の石はズレが1減り</b>、<b>離れたマスの隣の石はズレが1増えます</b>。</div>
+  <div class="legend" aria-label="図の見方">
+    <span><i class="lg g0"></i>リーチ（ズレ0）</span><span><i class="lg g1"></i>あと1つ増えるとリーチ（ズレ+1）</span><span><i class="lg gm"></i>あと1つ減るとリーチ（ズレ−1）</span>
+    <span><i class="lg tg"></i>黒が届くゴール</span><span><i class="lg wt"></i>白が届くゴール</span><span><i class="lg to"></i>いま着いたマス</span>
+  </div>
+  <p class="note" style="margin-bottom:14px">図は盤全体（上の段が黒のゴール、下の段が白のゴール）。石の数字・リーチ・届くマスは、すべてルールどおりに自動で計算しています。</p>
+  <div class="tree" aria-label="戦法の一覧">
+    <a href="#t-atk"><b>攻め</b>スイッチ／抜き／二重スイッチ／飽和リーチ</a>
+    <a href="#t-def"><b>守り</b>押し上げ／引き抜き／陣地の壁</a>
+    <a href="#t-trap"><b>落とし穴</b>誘爆（着き誘爆・抜き誘爆）</a>
+    <a href="#t-both"><b>攻防一体</b>止めながら作る／ぼっち狩り</a>
+  </div>
+  <div id="tacbox" style="display:flex;flex-direction:column;gap:34px"></div>
+</section>
+
+<section>
+  <h2>毎手、この順で確かめる</h2>
+  <ol class="check">
+    <li><div><b>相手のズレ0（リーチ）はあるか</b><span>あれば止めます。押し上げか引き抜きで、ズレを0からずらします。</span></div></li>
+    <li><div><b>その手で誘爆しないか</b><span>着地点の隣に相手のズレ+1、出発点の隣に相手のズレ−1がないかを見ます。</span></div></li>
+    <li><div><b>止めながら自分のリーチも作れないか</b><span>着地点の隣に、自分のズレ+1の石を探します（攻防一体）。</span></div></li>
+    <li><div><b>離れた2か所にリーチを作れるか</b><span>同じ場所に固まったダブルリーチは1手で崩されます。本物は離れた2か所です。</span></div></li>
+    <li><div><b>自分の石がぼっちにならないか</b><span>隣が0〜1個の石が多い側は、勝率が45％前後まで落ちます。</span></div></li>
+  </ol>
+</section>
+
+<p class="note src">集計の出どころ：形の勝率は、AI同士に2,000局打たせ、約4.8万局面で両者を比べた結果です。定跡の評価は「最強」の13手先までの読みで、最後まで解き切ったものではありません。5％程度の差は、読む時間で入れ替わることがあります。</p>
+</main>
+
+<script>
+(function(){
+const N=6;
+function nb(b,w,h,i){const r=i/w|0,c=i%w;let n=0;for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){if(!dr&&!dc)continue;const rr=r+dr,cc=c+dc;if(rr>=0&&rr<h&&cc>=0&&cc<w&&b[rr*w+cc])n++}return Math.min(4,n)}
+function dests(b,i){const d=nb(b,N,N,i);if(!d)return[];const r=i/N|0,c=i%N,out=[];
+  for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){if(!dr&&!dc)continue;const rr=r+dr*d,cc=c+dc*d;if(rr<0||rr>=N||cc<0||cc>=N)continue;const t=rr*N+cc;if(!b[t])out.push(t)}return out}
+// 図を描く。rows は文字列の配列：B=黒 W=白 .=空き  marks は {index:'tgt'|'from'|'x'}
+function draw(el,rows,marks,opt){opt=opt||{};const h=rows.length,w=rows[0].length;const b=[];rows.join('').split('').forEach(ch=>b.push(ch==='B'?1:ch==='W'?2:0));
+  el.style.gridTemplateColumns='repeat('+w+',1fr)';el.innerHTML='';
+  b.forEach((v,i)=>{const c=document.createElement('div');const r=i/w|0;c.className='cell'+(r===0?' r0':'')+(i%w===0?' c0':'')+((opt.goalTop&&r===0)?' goal':'');
+    if(marks&&marks[i])c.classList.add(marks[i]);
+    if(v){const d=nb(b,w,h,i);const s=document.createElement('div');s.className='st '+(v===1?'b':'w')+(d?'':' zero');s.textContent=d;c.appendChild(s)}
+    el.appendChild(c)});return b}
+const idx=(w,r,c)=>r*w+c;
+
+/* 試し盤 */
+const lab=document.getElementById('lab'),say=document.getElementById('say');let B=new Array(36).fill(0),mode='put',sel=-1;
+const P={
+  start:()=>{const b=new Array(36).fill(0);for(let c=0;c<6;c++){b[c]=2;b[30+c]=1}return b},
+  block:()=>{const b=new Array(36).fill(0);[14,15,20,21].forEach(i=>b[i]=1);return b},
+  lonely:()=>{const b=new Array(36).fill(0);b[20]=1;[30,31].forEach(i=>b[i]=1);return b},
+  foot:()=>{const b=new Array(36).fill(0);b[20]=1;b[19]=2;b[21]=2;return b},
+  threat:()=>{const b=new Array(36).fill(0);b[14]=1;b[19]=1;b[21]=1;return b},
+  clear:()=>new Array(36).fill(0)};
+const MSG={start:'最初は端の石が2〜3個の隣を持っています。真ん中の4個は数字が2、角の石は1です。',
+  block:'田の字は4個とも数字が3です。「行き先を見る」で押すと、どれも3マス先まで飛べるのが分かります。',
+  lonely:'真ん中の黒は隣に誰もいないので0、動けません。下の2個は互いに1です。',
+  foot:'黒は仲間がいなくても、両隣の白のおかげで数字が2になります。相手の石を足場にする形です。',
+  threat:'上の黒は数字2で、ちょうど2マス上がゴールです。「行き先を見る」で押すと、ゴールの3か所に届くのが分かります。',
+  clear:'マスを押して石を置いてみてください。'};
+function renderLab(){lab.innerHTML='';
+  const ds=sel>=0&&B[sel]?dests(B,sel):[];
+  B.forEach((v,i)=>{const c=document.createElement('div');const r=i/N|0;c.className='cell'+(r===0?' r0':'')+(i%N===0?' c0':'')+((r===0||r===5)?' goal':'');
+    c.setAttribute('role','gridcell');c.tabIndex=0;c.setAttribute('aria-label',(i%N+1)+'abcdef'[r]+(v?(v===1?' 黒':' 白')+' 数字'+nb(B,N,N,i):' 空き'));
+    if(ds.includes(i))c.classList.add('tgt');if(i===sel)c.classList.add('sel');
+    if(v){const d=nb(B,N,N,i);const s=document.createElement('div');s.className='st '+(v===1?'b':'w')+(d?'':' zero');s.textContent=d;c.appendChild(s)}
+    const act=()=>tap(i);c.addEventListener('click',act);c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();act()}});
+    lab.appendChild(c)})}
+function tap(i){
+  if(mode==='put'){B[i]=(B[i]+1)%3;sel=-1;say.textContent='置いた石の数字と、隣の石の数字が同時に変わります。';}
+  else{if(!B[i]){sel=-1;say.textContent='石を押してください。';}
+    else{sel=i;const d=nb(B,N,N,i),ds=dests(B,i),goal=B[i]===1?0:5,hits=ds.filter(t=>(t/N|0)===goal).length;
+      say.textContent=d===0?'この石は隣に誰もいないので動けません（ぼっち）。':
+        '数字は'+d+'なので、8方向のどれかにちょうど'+d+'マス進めます。行けるマスは'+ds.length+'か所'+(hits?'、そのうちゴールが'+hits+'か所です。':'です。')}}
+  renderLab()}
+function setMode(m){mode=m;sel=-1;document.getElementById('mPut').setAttribute('aria-pressed',m==='put');document.getElementById('mMove').setAttribute('aria-pressed',m==='move');
+  say.textContent=m==='put'?'マスを押すと 黒 → 白 → 空き と変わります。':'石を押すと、行けるマスが緑で出ます。';renderLab()}
+document.getElementById('mPut').addEventListener('click',()=>setMode('put'));
+document.getElementById('mMove').addEventListener('click',()=>setMode('move'));
+document.querySelectorAll('[data-p]').forEach(bt=>bt.addEventListener('click',()=>{const k=bt.dataset.p;B=P[k]();sel=-1;
+  if(k==='block'||k==='threat'){mode='move';document.getElementById('mPut').setAttribute('aria-pressed','false');document.getElementById('mMove').setAttribute('aria-pressed','true');sel=14}
+  say.textContent=MSG[k];renderLab()}));
+B=P.block();mode='move';sel=14;document.getElementById('mPut').setAttribute('aria-pressed','false');document.getElementById('mMove').setAttribute('aria-pressed','true');say.textContent=MSG.block;renderLab();
+
+/* 勝率バー（30〜70％を全幅、中央が50％） */
+const LO=30,HI=70;
+function bar(v){const x=p=>(p-LO)/(HI-LO)*100;const left=Math.min(x(50),x(v)),wd=Math.abs(x(v)-x(50));
+  const col=v>=50?'var(--good)':'var(--bad)';
+  return '<div class="bar" role="img" aria-label="勝率'+v+'％"><i style="left:'+left+'%;width:'+wd+'%;background:'+col+'"></i><b style="'+(v>=50?'left:calc('+x(v)+'% + 6px)':'right:calc('+(100-x(v))+'% + 6px)')+';color:'+col+'">'+v+'％</b></div>'}
+function rowHTML(top,title,small,desc,v){return '<div class="row'+(top?' top':'')+'"><div class="board"></div><div style="min-width:0"><h3>'+title+(small?'<small>'+small+'</small>':'')+'</h3><p>'+desc+'</p>'+bar(v)+'</div></div>'}
+
+const SH=[
+ {t:'田の字',s:'2×2の固まり',d:'4個とも数字3。1個が飛び出しても残りが崩れにくい発射台です。',v:62.3,rows:['....','.BB.','.BB.','....']},
+ {t:'次に届く石',s:'リーチ',d:'ゴールまでのマス数と数字がちょうど同じ石。2つ作れば止められません。',v:56.5,rows:['......','......','...B..','..B.B.'],m:{3:'tgt',1:'tgt',5:'tgt'},goal:true},
+ {t:'数字3以上の石',s:'',d:'6×6ではほぼどこからでもゴールを狙えます。',v:55.8,rows:['.B.','BB.','.B.']},
+ {t:'2つ並び',s:'横・縦・斜め',d:'向きによる差はほぼありません。ぼっちにならない最低限の形です。',v:54.3,rows:['....','.BB.','....']},
+ {t:'相手を足場に',s:'',d:'仲間がいなくても、相手の石にくっついていれば動けます。相手はどかすと自分の形が崩れます。',v:53.8,rows:['...','WBW','...']},
+ {t:'横に3つ一列',s:'',d:'ペアと同じくらいの強さで、田の字には届きません。',v:53.5,rows:['.....','.BBB.','.....']},
+ {t:'数字1の石',s:'',d:'1マスずつしか動けず、相手に止められやすい石です。',v:45.8,rows:['....','.BB.','....'],weak:true},
+ {t:'ぼっち',s:'数字0',d:'動けない石。こういう石が多い側は負けやすくなります。',v:45.5,rows:['...','.B.','...']}];
+const shapes=document.getElementById('shapes');
+shapes.innerHTML=SH.map((x,i)=>rowHTML(i===0,x.t,x.s,x.d,x.v)).join('');
+[...shapes.querySelectorAll('.board')].forEach((el,i)=>draw(el,SH[i].rows,SH[i].m,{goalTop:SH[i].goal}));
+
+const OP=[
+ {t:'寄り添い',d:'端の石を斜めに寄せ、仲間の隣で射程を伸ばす。',v:51,f:[5,0],to:[4,1]},
+ {t:'正面突破',d:'中央の石をまっすぐ2歩。いちばん素直な攻め。',v:49,f:[5,2],to:[3,2]},
+ {t:'渡り鳥',d:'仲間を飛び越えて中央へ。',v:48,f:[5,1],to:[3,3]},
+ {t:'十字路',d:'中の石が反対側へ斜めに渡る。',v:48,f:[5,2],to:[3,4]},
+ {t:'隅守り',d:'端の石を1歩だけ前へ。様子を見る構え。',v:47,f:[5,0],to:[4,0]},
+ {t:'一本槍',d:'まっすぐ突っ込み、仲間から離れて止められやすい。',v:41,f:[5,1],to:[3,1]},
+ {t:'はぐれ雲',d:'外へ抜けて、ひとりぼっちになりやすい。',v:37,f:[5,2],to:[3,0]}];
+const opens=document.getElementById('opens');
+opens.innerHTML=OP.map((x,i)=>rowHTML(i===0,x.t,'',x.d,x.v).replace('class="row','class="row wide')).join('');
+[...opens.querySelectorAll('.board')].forEach((el,i)=>{const o=OP[i];const g=[];for(let r=3;r<6;r++){let s='';for(let c=0;c<6;c++){let v=r===5?'B':'.';if(r===o.f[0]&&c===o.f[1])v='.';if(r===o.to[0]&&c===o.to[1])v='B';s+=v}g.push(s)}
+  const m={};m[idx(6,o.f[0]-3,o.f[1])]='from';draw(el,g,m)});
+
+/* 守り */
+const DF=[
+ {t:'着地点をふさぐ',ok:false,d:'白で1か所ふさいでも、残り2か所から届きます。ふさぐだけでは止まりません。',rows:['..W...','......','..B...','.B.B..'],m:{0:'tgt',4:'tgt'}},
+ {t:'隣に寄って数字を変える',ok:true,d:'白が隣に入ると数字が3になり、3マス上は盤の外。ゴールには届かなくなります。',rows:['......','...W..','..B...','.B.B..'],m:{}},
+ {t:'隣から離れて数字を変える',ok:true,d:'黒の数字2のうち1つが白なら、その白をどかすだけで数字が1になり、ゴールに届きません。',rows:['......','......','..B...','.B.W..'],m:{0:'tgt',2:'tgt',4:'tgt'}}];
+const defs=document.getElementById('defs');
+defs.innerHTML=DF.map(x=>'<div class="fig"><div class="board"></div><h3>'+x.t+'<span class="tag '+(x.ok?'ok':'ng')+'">'+(x.ok?'効く':'効きにくい')+'</span></h3><p>'+x.d+'</p></div>').join('');
+[...defs.querySelectorAll('.board')].forEach((el,i)=>draw(el,DF[i].rows,DF[i].m,{goalTop:true}));
+
+/* 上級：戦法の図（全盤6×6を自動計算） */
+const nb6=(b,i)=>nb(b,6,6,i);
+function threatsOf(b,i){const p=b[i],d=nb6(b,i);const r=i/6|0,c=i%6,gr=p===1?0:5,dist=Math.abs(r-gr);if(!d||dist!==d)return[];
+  const dr=p===1?-1:1,out=[];for(const dc of [-1,0,1]){const rr=r+dr*d,cc=c+dc*d;if(rr>=0&&rr<6&&cc>=0&&cc<6&&!b[rr*6+cc])out.push(rr*6+cc)}return out}
+function drawFull(el,b,mk){el.style.gridTemplateColumns='repeat(6,1fr)';el.innerHTML='';const tg={};
+  b.forEach((v,i)=>{if(v)threatsOf(b,i).forEach(t=>tg[t]=v)});
+  b.forEach((v,i)=>{const c=document.createElement('div');const r=i/6|0;c.className='cell'+(r===0?' r0':'')+(i%6===0?' c0':'')+((r===0||r===5)?' goal':'');
+    if(tg[i])c.classList.add(tg[i]===1?'tgt':'wt');if(mk&&mk.from===i)c.classList.add('from');if(mk&&mk.to===i)c.classList.add('to');
+    if(v){const d=nb6(b,i),gap=Math.abs(r-(v===1?0:5))-d;const s=document.createElement('div');
+      s.className='st '+(v===1?'b':'w')+(d?'':' zero')+(gap===0&&d?' g0':gap===1?' g1':gap===-1?' gm':'');s.textContent=d;c.appendChild(s)}
+    el.appendChild(c)})}
+const PB=rows=>rows.join('').split('').map(ch=>ch==='B'?1:ch==='W'?2:0);
+const TAC=[
+ {id:'t-atk',g:'攻め　リーチを作る',items:[
+  {t:'スイッチ',k:'ok',d:'リーチになる石を動かす必要はありません。ズレ+1の自分の石の隣に、別の石を着けるだけでリーチになります。動かした石は、ただのスイッチです。',
+   rows:['......','......','..B...','.B....','....BB','......'],steps:[{f:[4,4],t:[3,3],c:'右下の石を斜めに1つ上げて、3cの隣に着ける'}],c0:'3cは数字1でズレ+1。まだ届かない'},
+  {t:'抜き',k:'ok',d:'数字が多すぎて届かない石（ズレ−1）は、隣の自分の石を1つどかすと届くようになります。離れるだけで攻めになります。',
+   rows:['......','..B...','.B.B..','......','......','......'],steps:[{f:[2,3],t:[2,4],c:'4cを右へ1つどかすと、3bの数字が1になってリーチ'}],c0:'3bは1段先がゴールなのに数字2で行き過ぎ'},
+  {t:'二重スイッチとその弱点',k:'ng',d:'着地点の隣にズレ+1の自分の石が2つあれば、1手でリーチが2つできます。ただし2つは同じマスの近くにあるので、相手もそのそばに1手入れるだけで、両方の数字を同時に上げて止められます。',
+   rows:['......','......','.B.B..','B...B.','..B.W.','.BBB..'],steps:[{f:[4,2],t:[1,2],c:'黒が3eから3bへ3つ飛ぶ。2cと4cが同時にリーチ'},{f:[4,4],t:[2,2],c:'白が3cに入ると両方が数字3になって止まる。白にもリーチができる'}],c0:'2cと4cはどちらもズレ+1'},
+  {t:'飽和リーチ',k:'ok',d:'数字は4までなので、隣が5個以上ある石は、隣が1つ増えても減っても数字4のままです。ゴールまで4段の石がこうなると、数字を変えて止めることができません。止めるには着地点（この形なら1か所）をふさぐしかありません。',
+   rows:['......','......','......','......','.BBB..','.BBB..'],steps:[],c0:'3eは隣が5個で数字4、4段先の3aに届く'}]},
+ {id:'t-def',g:'守り　リーチを消す',items:[
+  {t:'押し上げ',k:'ok',d:'リーチの石の隣に着けて、数字を1つ上げます。数字が段数を超えると盤の外に出るので、ゴールには届かなくなります。着地点が3か所あっても、まとめて消せます。',
+   rows:['......','......','..B.B.','.B.B..','......','......'],steps:[{add:[1,1],c:'白が2bに入る。3cは数字3になって届かない'}],c0:'3cがリーチ（ゴール3か所）'},
+  {t:'引き抜き',k:'ok',d:'相手のリーチを支えているのが自分の石なら、その石をどかすだけで数字が1つ下がり、止まります。',
+   rows:['......','......','..B...','.B.W..','......','......'],steps:[{f:[3,3],t:[4,4],c:'白が4dから5eへ離れる。3cは数字1になって届かない'}],c0:'3cの数字2のうち1つは白の石'},
+  {t:'陣地の壁',k:'ok',d:'相手のゴールの段（自分の陣地）に残っている石は、着地点をふさいでいます。相手のリーチの前にいる陣地の石を動かすと、着地点が空いて届くようになります。',
+   rows:['WWWWWW','......','..B...','.B.B..','......','......'],steps:[{f:[0,2],t:[2,0],c:'白が3aの石を動かすと、3aが空いて黒が届く'}],c0:'3cは数字2でズレ0だが、着地点が全部ふさがっている'}]},
+ {id:'t-trap',g:'落とし穴　誘爆',items:[
+  {t:'着き誘爆',k:'ng',d:'押し上げの着地点の隣に、相手のズレ+1の石がいると、その石の数字も上がってリーチになります。1つ止めて、1つ作ってしまいます。',
+   rows:['......','......','..B.B.','.B.B..','......','......'],steps:[{add:[1,3],c:'白が4bに入ると、3cは止まるが5cがリーチになる'}],c0:'3cがリーチ、5cはズレ+1'},
+  {t:'抜き誘爆',k:'ng',d:'引き抜きの出発点の隣に、相手のズレ−1の石がいると、その石の数字が下がってリーチになります。',
+   rows:['......','......','..B..B','.B.WB.','....BB','......'],steps:[{f:[3,3],t:[3,0],c:'白が4dを離れると、3cは止まるが5dがリーチになる'}],c0:'3cがリーチ、5dは数字4でズレ−1'}]},
+ {id:'t-both',g:'攻防一体',items:[
+  {t:'止めながら作る',k:'ok',d:'着地点の隣に「相手のリーチ」と「自分のズレ+1の石」が両方あるマスを探します。1手で相手を止めて、自分のリーチも作れます。',
+   rows:['......','.....W','..B.WW','.BB...','......','......'],steps:[{add:[1,3],c:'白が4bに入る。黒の3cは止まり、白の5cがリーチになる'}],c0:'黒3cがリーチ、白5cはズレ+1'},
+  {t:'ぼっち狩り',k:'ok',d:'相手の石の隣が自分の石だけなら、その石をどかすと相手の石は数字0になって動けなくなります。',
+   rows:['......','......','..W...','...B..','....B.','......'],steps:[{f:[3,3],t:[3,5],c:'黒が4dから6dへ離れると、白の3cは数字0で動けない'}],c0:'白3cの隣は黒4dだけ'}]}
+];
+const box=document.getElementById('tacbox');
+TAC.forEach(gr=>{const G=document.createElement('div');G.className='tac-group';G.id=gr.id;G.innerHTML='<h3>'+gr.g+'</h3>';
+  gr.items.forEach(it=>{const T=document.createElement('div');T.className='tac';
+    T.innerHTML='<h4>'+it.t+'<span class="tag '+it.k+'">'+(it.k==='ok'?'使う':'注意')+'</span></h4><p>'+it.d+'</p><div class="seq"></div>';
+    const seq=T.querySelector('.seq');let b=PB(it.rows);
+    const add=(bb,mk,cap)=>{const S=document.createElement('div');S.className='step';S.innerHTML='<div class="board"></div><p>'+cap+'</p>';seq.appendChild(S);drawFull(S.querySelector('.board'),bb,mk)};
+    add(b,null,it.c0);
+    it.steps.forEach(st=>{b=b.slice();let mk={};
+      if(st.f){const f=st.f[0]*6+st.f[1],t=st.t[0]*6+st.t[1];b[t]=b[f];b[f]=0;mk={from:f,to:t}}else{const t=st.add[0]*6+st.add[1];b[t]=2;mk={to:t}}
+      add(b,mk,st.c)});
+    G.appendChild(T)});box.appendChild(G)});
+})();
+</script>
+
+</body>
+</html>
