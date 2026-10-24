@@ -172,6 +172,8 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .cell.bestt::after{border-style:solid;background:rgba(127,194,160,.18)}
 #reviewRow{justify-content:center;margin:22px 0 14px;padding-top:18px;border-top:1px solid var(--line)}
 #localCtl,#netCtl{gap:14px;justify-content:center}
+.watch-st{text-align:center;margin-top:16px}
+.hist .live{color:#9fc79a}
 @media (prefers-reduced-motion:reduce){.stone,button{transition:none}}
 </style>
 </head>
@@ -186,6 +188,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
       <button class="primary big" id="randomBtn">ランダム対戦</button>
       <button class="big" data-go="friend">友だちと対戦</button>
       <button class="big" data-go="solo">ひとりで遊ぶ</button>
+      <button class="big" data-go="watch">観戦する</button>
       <button class="big" data-go="history">対局履歴・感想戦</button>
       <button class="big" data-go="rules">ルール</button>
     </nav>
@@ -263,6 +266,15 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
   </div>
   <div class="row chks"><label class="chk"><input type="checkbox" id="rShowBest" checked> 最善手を表示</label><label class="chk"><input type="checkbox" id="rOnlyBad"> 悪手だけ追う</label></div>
   <div class="rev-list" id="revList"></div>
+</section>
+
+<!-- 観戦 -->
+<section class="scr" data-scr="watch" hidden>
+  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>観戦する</h2><span class="sp"></span></div>
+  <p class="lead hist-note">いま対局中の部屋です。選ぶと観戦できます（指すことはできません）。</p>
+  <div class="hist" id="watchList"></div>
+  <p class="hist-empty" id="watchEmpty">いま対局中の部屋はありません。</p>
+  <p class="hist-note watch-st" id="watchSt"></p>
 </section>
 
 <!-- ひとりで遊ぶ -->
@@ -583,6 +595,7 @@ function renderStatus(){
       const you=my&&S.over.win===my;
       st.innerHTML=`<span class="dot ${S.over.win===1?'b':'w'}"></span>${my?(you?'あなたの勝ち':'相手の勝ち'):NAME[S.over.win]+'の勝ち'}`;
       hn.innerHTML=`<span class="result${my&&!you?' lose':''}">${S.over.why}${you?'。お見事':''}</span>`;return}
+    if(!my&&NET.watch){st.innerHTML=`<span class="dot ${S.turn===1?'b':'w'}"></span>${NAME[S.turn]}の番`;hn.textContent=NET.live?'観戦中（'+S.ply+'手目まで）':'つないでいます…';return}
     if(!my){st.innerHTML=`<span class="dot ${S.turn===1?'b':'w'}"></span>${NAME[S.turn]}の番`;hn.innerHTML='観戦中です。対局者がページを開き直した場合は、自分の色を選ぶと席に戻れます。<br><button id="seatB">黒の席に戻る</button> <button id="seatW">白の席に戻る</button>';$('seatB').onclick=()=>takeSeat(1);$('seatW').onclick=()=>takeSeat(2);return}
     st.innerHTML=`<span class="dot ${S.turn===1?'b':'w'}"></span>${S.turn===my?'あなたの番':'相手の番'}（${NAME[S.turn]}）`;
     hn.textContent=NET.sending?'送信中…':!NET.live?'通信を再接続しています…':S.turn===my?(S.sel>=0?'点のあるマスへ動かす。輪は向こう岸のマス':'あなたは'+NAME[my]+'。動かす石を選んでください'):'相手が考えています';
@@ -598,7 +611,7 @@ function renderStatus(){
 }
 
 /* 友だちと対戦（中継サーバー経由。対局の記録を全員が同じ順に読んで盤を再現する） */
-const NET={code:null,me:null,es:null,seen:new Set(),host:null,guest:null,game:0,over:null,live:false,sending:false,claimed:false,timer:null};
+const NET={code:null,me:null,es:null,seen:new Set(),host:null,guest:null,game:0,over:null,live:false,sending:false,claimed:false,timer:null,watch:false};
 const TOPIC=c=>'bocch-v1-'+c, RELAY='https://ntfy.sh/';
 function netMsg(t,err){const m=$('netMsg');m.textContent=t||'';m.hidden=!t;m.classList.toggle('err',!!err)}
 function newCode(){const a='abcdefghjkmnpqrstuvwxyz23456789';let s='';const r=crypto.getRandomValues(new Uint32Array(6));for(const x of r)s+=a[x%a.length];return s}
@@ -616,19 +629,19 @@ async function post(obj){
     await new Promise(r=>setTimeout(r,800))}
   netMsg('送れませんでした。ネットにつながっているか確かめてください。',true);return false}
 function closeNet(){if(NET.es){NET.es.close()}clearTimeout(NET.timer);
-  Object.assign(NET,{code:null,es:null,seen:new Set(),host:null,guest:null,game:0,over:null,live:false,sending:false,claimed:false});
+  Object.assign(NET,{code:null,es:null,seen:new Set(),host:null,guest:null,game:0,over:null,live:false,sending:false,claimed:false,watch:false});
   $('netIdle').hidden=false}
-function openRoom(code){
+function openRoom(code,watch){
   code=(code||'').toLowerCase().replace(/[^a-z0-9]/g,'');
   if(code.length!==6){netMsg('部屋コードは6文字です。',true);return}
-  closeNet();NET.code=code;NET.me=myId(code);
+  closeNet();NET.code=code;NET.watch=!!watch;NET.me=watch?'w'+newCode()+newCode():myId(code);
   S=initState('net');netMsg('部屋につないでいます…');
   $('netIdle').hidden=true;
-  try{history.replaceState(null,'','?room='+code)}catch(e){}
+  try{history.replaceState(null,'',(watch?'?watch=':'?room=')+code)}catch(e){}
   render();
   const es=new EventSource(RELAY+TOPIC(code)+'/sse?since=all');NET.es=es;
   es.onopen=()=>{NET.live=true;render();
-    if(!NET.claimed){clearTimeout(NET.timer);NET.timer=setTimeout(claimSeat,1500)}};
+    if(!NET.claimed&&!NET.watch){clearTimeout(NET.timer);NET.timer=setTimeout(claimSeat,1500)}else if(NET.watch)netMsg('')};
   es.onerror=()=>{NET.live=false;render()};
   es.onmessage=e=>{let d,m;try{d=JSON.parse(e.data)}catch(x){return}
     if(d.event&&d.event!=='message')return;if(d.id){if(NET.seen.has(d.id))return;NET.seen.add(d.id)}
@@ -687,7 +700,8 @@ $('leave').addEventListener('click',leave);
 
 cellsBuild();S=initState(2);render();
 {const q=new URLSearchParams(location.search),room=q.get('room');
- if(room){$('codeIn').value=room;openRoom(room)}}
+ const watch=q.get('watch');
+ if(room){$('codeIn').value=room;openRoom(room)}else if(watch)openRoom(watch,true)}
 </script>
 
 <script>
@@ -926,6 +940,41 @@ $('reviewNow').addEventListener('click',()=>{saveFinished();const id=currentGame
 document.querySelector('[data-go="history"]').addEventListener('click',renderHistory);
 addEventListener('popstate',()=>{if(CUR==='history')renderHistory();if(CUR!=='review')REV.job++});
 if(CUR==='history')renderHistory();
+
+/* 観戦：対局中の部屋を「いま対局中」板に知らせ、一覧から選んで観る */
+const LIVE=RELAY+'bocch-v1-live';
+const LV={es:null,rooms:new Map(),tick:null,seen:new Set()};
+function livePost(o){try{fetch(LIVE,{method:'POST',body:JSON.stringify(o)})}catch(e){}}
+let liveLast='';
+function liveBeat(force){
+  if(S.mode!=='net'||!NET.code||!NET.host||!NET.guest||NET.watch||colorOf(NET.me)<=0)return;
+  const k=NET.code+':'+NET.game+':'+(S.over?'end':'live'+S.ply);
+  if(S.over){if(liveLast!==k){liveLast=k;livePost({t:'end',room:NET.code,g:NET.game})}return}
+  if(force||liveLast!==k){liveLast=k;livePost({t:'live',room:NET.code,g:NET.game,ply:S.ply})}}
+setInterval(()=>liveBeat(true),25000);
+const _renderL=render;render=function(){_renderL();liveBeat(false);$('leave').textContent=NET.watch?'観戦をやめる':'対戦をやめる';if(NET.watch&&S.mode==='net')$('connTxt').textContent='観戦中・部屋 '+NET.code};
+addEventListener('pagehide',()=>{if(S.mode==='net'&&NET.code&&NET.guest&&!NET.watch&&colorOf(NET.me)>0&&!S.over){try{fetch(LIVE,{method:'POST',keepalive:true,body:JSON.stringify({t:'end',room:NET.code,g:NET.game})})}catch(e){}}});
+function startWatchList(){stopWatchList();LV.rooms=new Map();LV.seen=new Set();$('watchSt').textContent='探しています…';renderWatch();
+  const es=new EventSource(LIVE+'/sse?since=90s');LV.es=es;
+  es.onopen=()=>{$('watchSt').textContent='';renderWatch()};
+  es.onerror=()=>{$('watchSt').textContent='つなぎ直しています…'};
+  es.onmessage=e=>{let d,m;try{d=JSON.parse(e.data)}catch(x){return}if(d.event&&d.event!=='message')return;
+    if(d.id){if(LV.seen.has(d.id))return;LV.seen.add(d.id)}try{m=JSON.parse(d.message)}catch(x){return}
+    if(!m||typeof m.room!=='string'||!/^[a-z0-9]{6}$/.test(m.room))return;
+    const old=LV.rooms.get(m.room),t=d.time||Date.now()/1000;if(old&&old.at>t)return;
+    LV.rooms.set(m.room,{at:t,ended:m.t==='end',ply:m.ply|0,g:m.g|0});renderWatch()};
+  LV.tick=setInterval(renderWatch,5000)}
+function stopWatchList(){if(LV.es)LV.es.close();LV.es=null;clearInterval(LV.tick)}
+function renderWatch(){const box=$('watchList');box.innerHTML='';const now=Date.now()/1000;
+  const list=[...LV.rooms.entries()].filter(([,r])=>!r.ended&&now-r.at<75).sort((a,b)=>b[1].at-a[1].at);
+  $('watchEmpty').hidden=!!list.length;
+  list.forEach(([room,r])=>{const b=document.createElement('button');
+    const st=document.createElement('span');st.className='res live';st.textContent='対局中';
+    const m=document.createElement('span');m.className='meta';const mb=document.createElement('b');mb.textContent='部屋 '+room.toUpperCase();
+    m.append(mb,document.createElement('br'),document.createTextNode((r.ply?r.ply+'手目まで進行':'始まったところ')+(r.g?'　'+(r.g+1)+'局目':'')));
+    b.append(st,m);b.addEventListener('click',()=>{stopWatchList();openRoom(room,true);show('game')});box.appendChild(b)})}
+document.querySelector('[data-go="watch"]').addEventListener('click',startWatchList);
+addEventListener('popstate',()=>{if(CUR==='watch'){if(!LV.es)startWatchList()}else stopWatchList()});
 </script>
 </body>
 </html>
