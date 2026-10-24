@@ -181,6 +181,17 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .rev-list button.bad{color:#e08c7c}.rev-list button.dub{color:#d9b46a}
 .cell.bestf::after,.cell.bestt::after{content:"";position:absolute;inset:8%;border:2px dashed #7fc2a0;border-radius:50%;pointer-events:none}
 .cell.bestt::after{border-style:solid;background:rgba(127,194,160,.18)}
+.cell.pvlast{box-shadow:inset 0 0 0 3px #7fb2e0}
+.pvbox{margin:10px auto 0;max-width:420px;padding:10px 12px;border:1px solid rgba(127,178,224,.45);border-radius:10px;background:rgba(127,178,224,.07)}
+.pvbox .pv-h{font-size:13.5px;margin-bottom:8px}
+.pvbtn{display:inline-block;margin:6px 4px 0;padding:6px 12px;font-size:13px;border-radius:999px;border:1px solid rgba(127,178,224,.6);background:transparent;color:inherit;cursor:pointer}
+.pvctl{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap}
+.pvctl button{padding:7px 12px;font-size:13px;border-radius:8px;border:1px solid rgba(236,230,216,.25);background:transparent;color:inherit;cursor:pointer}
+.pvctl .pvk{font-family:var(--f-latin);min-width:4.5em;text-align:center;font-size:13px}
+.pvmoves{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-top:8px}
+.pvmoves button{padding:3px 8px;font-size:12px;border-radius:6px;border:1px solid rgba(236,230,216,.18);background:transparent;color:var(--sub);cursor:pointer}
+.pvmoves button.cur{border-color:#7fb2e0;color:var(--fg)}
+.best-line{margin-top:6px;font-size:13.5px}
 #reviewRow{justify-content:center;margin:22px 0 14px;padding-top:18px;border-top:1px solid var(--line)}
 #localCtl,#netCtl{gap:14px;justify-content:center}
 .watch-st{text-align:center;margin-top:16px}
@@ -288,7 +299,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
   <div class="boardwrap rev-board"><div class="board" id="rboard"><div class="lab lab-top" id="rlabTop" aria-hidden="true"></div><div class="lab lab-left" id="rlabLeft" aria-hidden="true"></div><div class="grid" id="rgrid" aria-label="感想戦の盤"></div></div></div>
   <div class="rev-info">
     <p class="rev-move" id="revMove"></p>
-    <p class="rev-note" id="revNote"></p>
+    <div class="rev-note" id="revNote"></div>
   </div>
   <div class="rev-graph"><svg id="revGraph" viewBox="0 0 300 84" preserveAspectRatio="none" role="img" aria-label="形勢のグラフ"></svg><div class="rev-graph-lab"><span>上ほど黒有利・下ほど白有利</span><span id="revProg"></span></div></div>
   <div class="row rev-nav">
@@ -669,7 +680,29 @@ function renderStatus(){
 
 /* 友だちと対戦（中継サーバー経由。対局の記録を全員が同じ順に読んで盤を再現する） */
 const NET={code:null,me:null,es:null,seen:new Set(),host:null,guest:null,game:0,over:null,live:false,sending:false,claimed:false,timer:null,watch:false};
-const TOPIC=c=>'bocch-v1-'+c, RELAY='https://ntfy.sh/';
+const TOPIC=c=>'bocch-v1-'+c, RELAY_DEFAULT='https://ntfy.sh/';
+// 中継先。?relay=… で一時的に切り替えられる（このタブの間だけ有効）
+const RELAY=(()=>{try{const q=new URLSearchParams(location.search).get('relay');if(q==='off')sessionStorage.removeItem('bocch-relay');else if(q&&/^https?:\/\/[^\s]+\/$/.test(q))sessionStorage.setItem('bocch-relay',q);return sessionStorage.getItem('bocch-relay')||RELAY_DEFAULT}catch(e){return RELAY_DEFAULT}})();
+// 受信：ntfy なら EventSource、自前の中継なら WebSocket（切れたら自動でつなぎ直す）
+function relaySub(path,since){
+  const h={onopen:null,onmessage:null,onerror:null,closed:false,ws:null,t:null,pi:null,close(){}};
+  if(/ntfy\.sh/.test(RELAY)){const es=new EventSource(RELAY+path+'/sse?since='+since);
+    es.onopen=()=>h.onopen&&h.onopen();es.onerror=()=>h.onerror&&h.onerror();es.onmessage=e=>h.onmessage&&h.onmessage(e);
+    h.close=()=>{h.closed=true;es.close()};return h}
+  const url=RELAY.replace(/^http/,'ws')+path+'/ws?since='+since;let tries=0;
+  const retry=()=>{clearTimeout(h.t);if(!h.closed)h.t=setTimeout(conn,Math.min(8000,700*(++tries)))};
+  function conn(){if(h.closed)return;let ws;try{ws=new WebSocket(url)}catch(e){retry();return}h.ws=ws;
+    ws.onmessage=e=>{if(h.ws!==ws||e.data==='pong')return;let d;try{d=JSON.parse(e.data)}catch(x){return}
+      if(d.event==='open'){tries=0;h.onopen&&h.onopen();return}
+      h.onmessage&&h.onmessage({data:e.data})};
+    ws.onclose=()=>{if(h.ws!==ws)return;clearInterval(h.pi);if(h.closed)return;h.onerror&&h.onerror();retry()};
+    ws.onerror=()=>{};
+    clearInterval(h.pi);h.pi=setInterval(()=>{try{if(ws.readyState===1)ws.send('ping')}catch(e){}},25000)}
+  const vis=()=>{if(h.closed){document.removeEventListener('visibilitychange',vis);return}
+    if(!document.hidden&&(!h.ws||h.ws.readyState>1)){tries=0;clearTimeout(h.t);conn()}};
+  document.addEventListener('visibilitychange',vis);
+  h.close=()=>{h.closed=true;clearTimeout(h.t);clearInterval(h.pi);document.removeEventListener('visibilitychange',vis);try{h.ws&&h.ws.close()}catch(e){}};
+  conn();return h}
 const LIMIT_MSG='通信の上限に達しました（同じWi-Fiで1日に送れる回数に上限があります）。少し時間をおくか、別の回線（モバイル通信など）で試してください。';
 function netMsg(t,err){const m=$('netMsg');m.textContent=t||'';m.hidden=!t;m.classList.toggle('err',!!err)}
 function newCode(){const a='abcdefghjkmnpqrstuvwxyz23456789';let s='';const r=crypto.getRandomValues(new Uint32Array(6));for(const x of r)s+=a[x%a.length];return s}
@@ -697,7 +730,7 @@ function openRoom(code,watch){
   $('netIdle').hidden=true;
   try{history.replaceState(null,'',(watch?'?watch=':'?room=')+code)}catch(e){}
   render();
-  const es=new EventSource(RELAY+TOPIC(code)+'/sse?since=all');NET.es=es;
+  const es=relaySub(TOPIC(code),'all');NET.es=es;
   es.onopen=()=>{NET.live=true;render();
     if(!NET.claimed&&!NET.watch){clearTimeout(NET.timer);NET.timer=setTimeout(claimSeat,1500)}else if(NET.watch)netMsg('')};
   es.onerror=()=>{NET.live=false;render()};
@@ -800,7 +833,7 @@ function startMatch(){
   show('match');
   MATCH.tick=setInterval(()=>{const t=Math.floor((Date.now()-MATCH.t0)/1000);$('matchTime').textContent=Math.floor(t/60)+':'+String(t%60).padStart(2,'0');
     if(t===45)$('matchMsg').textContent='まだ見つかりません。このまま待つか、「友だちと対戦」でリンクを送ってみてください。'},1000);
-  const es=new EventSource(LOBBY+'/sse?since=140s');MATCH.es=es;
+  const es=relaySub('bocch-v1-lobby','140s');MATCH.es=es;
   es.onopen=()=>{if(!MATCH.decided){clearTimeout(MATCH.timer);MATCH.timer=setTimeout(()=>{MATCH.decided=true;consider();if(MATCH.on&&!MATCH.mine&&!MATCH.taking)postSeek()},1600)}};
   es.onerror=()=>{if(MATCH.on)$('matchMsg').textContent='通信を再接続しています…'};
   es.onmessage=e=>{let d,m;try{d=JSON.parse(e.data)}catch(x){return}
@@ -990,13 +1023,23 @@ function openReview(id){const g=loadGames().find(x=>x.id===id);if(!g)return;
   REV.g=g;REV.pos=buildPos(g);REV.an=(g.an&&g.an.length)?g.an.map(x=>x&&x.pv!==undefined?x:null):[];REV.job++;
   // 最初の悪手へ飛ぶのは解析後。最初は終局図から
   REV.i=0;show('review');renderReview();if(REV.an.filter(Boolean).length<g.log.length)nextAnalysis()}
-function setRev(i){REV.i=Math.max(0,Math.min(REV.pos.length-1,i));renderReview()}
+function setRev(i){REV.pv=null;clearInterval(REV.pvT);REV.i=Math.max(0,Math.min(REV.pos.length-1,i));renderReview()}
+/* 読み筋の再生：base局面からAIの予想手順を1手ずつ盤に並べる */
+function pvState(){const v=REV.pv,p=REV.pos[v.base];let b=p.b.slice(),turn=p.turn;
+  for(let k=0;k<v.k;k++){const [f,t]=v.line[k];b[t]=b[f];b[f]=0;turn=3-turn}return {b,turn}}
+function pvOpen(base,line){if(!line||!line.length)return;clearInterval(REV.pvT);REV.pv={base,line,k:0,auto:false};renderReview()}
+function pvStep(d){const v=REV.pv;if(!v)return;v.k=Math.max(0,Math.min(v.line.length,v.k+d));if(v.k>=v.line.length)pvAuto(false);renderReview()}
+function pvAuto(on){const v=REV.pv;if(!v)return;clearInterval(REV.pvT);v.auto=on;
+  if(on){if(v.k>=v.line.length)v.k=0;REV.pvT=setInterval(()=>{if(!REV.pv||CUR!=='review'){clearInterval(REV.pvT);return}pvStep(1)},900)}}
+function pvClose(){clearInterval(REV.pvT);REV.pv=null;renderReview()}
 function fmtMove(m,n){return (n+1)+'. '+(n%2?'白':'黒')+' '+sqName(m[0])+'→'+sqName(m[1])}
-function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,p=REV.pos[i],flip=g.me===2,n=g.log.length;
-  const last=i>0?g.log[i-1]:null,a=REV.an[i],showBest=$('rShowBest').checked&&a&&a.m&&i<n;
+function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n=g.log.length,PV=REV.pv;
+  const p=PV?pvState():REV.pos[i];
+  const last=PV?(PV.k>0?PV.line[PV.k-1]:(PV.base>0?g.log[PV.base-1]:null)):(i>0?g.log[i-1]:null),a=REV.an[i];
+  const nextM=PV?(PV.k<PV.line.length?PV.line[PV.k]:null):($('rShowBest').checked&&a&&a.m&&i<n?a.m:null);
   for(let k=0;k<36;k++){const el=$('r'+k),v=p.b[k],r=k/6|0,d=v?nbCount(p.b,k):0;let cls='cell';
-    if(r===0||r===5)cls+=' goal';if(last&&(last[0]===k||last[1]===k))cls+=' last';
-    if(showBest&&a.m[0]===k)cls+=' bestf';if(showBest&&a.m[1]===k)cls+=' bestt';el.className=cls;
+    if(r===0||r===5)cls+=' goal';if(last&&(last[0]===k||last[1]===k))cls+=(PV&&PV.k>0?' pvlast':' last');
+    if(nextM&&nextM[0]===k)cls+=' bestf';if(nextM&&nextM[1]===k)cls+=' bestt';el.className=cls;
     el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}"><span>${d}</span></div>`:''}
   $('rboard').classList.toggle('flip',flip);$('rboard').classList.toggle('hideNum',!$('showNum').checked);$('rboard').classList.toggle('nolab',!$('showLab').checked);
   [...$('rlabTop').children].forEach((e,k)=>e.textContent=String(flip?6-k:k+1));
@@ -1012,13 +1055,19 @@ function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,p=REV.pos[i],fl
   if(bp!=null){const pct=Math.round(bp*100);note+=i===n?'終局。':'';
     if(i<n)note+=pct>=99?'黒の勝ちが読み切れています。':pct<=1?'白の勝ちが読み切れています。':`形勢　黒 ${pct}%・白 ${100-pct}%`}
   note='<span class="rev-pos">'+note+'</span>';
-  if(i>0){const pa=REV.an[i-1],mk=markOf(i-1),pb=REV.pos[i-1].b,pt=REV.pos[i-1].turn;
-    if(pa&&pa.m&&mk&&mk.k!=='best'&&mk.loss>=.03){
-      note+=`<div class="why"><div class="why-h">ここは <b>${mvTxt(pa.m)}</b> が最善でした（勝率 ${Math.round(mk.loss*100)}% 損）</div>`+whyCompare(pb,pt,pa.m,g.log[i-1])+pvTxt(pa.pv,pt)+'</div>'}
-    else if(mk&&mk.k==='best'){const f=moveFacts(pb,pt,g.log[i-1]).filter(x=>x.good);
-      note+=`<div class="why"><div class="why-h">この手は最善</div>`+(f.length?factList(f.slice(0,3)):'<p class="why-none">大きな変化はなく、読みの結果いちばん良い手です。</p>')+pvTxt(pa&&pa.pv,pt)+'</div>'}}
-  if(i<n&&a&&a.m){const f=moveFacts(p.b,p.turn,a.m).filter(x=>x.good);
-    note+=`<div class="why why-next"><div class="why-h">次の${p.turn===1?'黒':'白'}の最善手：<b>${mvTxt(a.m)}</b></div>`+(f.length?factList(f.slice(0,3)):'<p class="why-none">はっきりした決め手はなく、読み比べでいちばん良い手です。</p>')+pvTxt(a.pv,p.turn)+'</div>'}
+  if(PV){const tb=REV.pos[PV.base].turn;mv.textContent=PV.k?`読み筋 ${PV.k}手目　${(PV.k%2?tb:3-tb)===1?'黒':'白'} ${mvTxt(PV.line[PV.k-1])}`:'読み筋の開始局面';note=''}
+  const side=t=>t===1?'黒':'白';
+  if(PV){const v=PV,tb=REV.pos[v.base].turn;let mv2='';
+    v.line.forEach((m,k)=>{mv2+=`<button data-pvk="${k+1}" class="${k+1===v.k?'cur':''}">${k+1}. ${side(k%2?3-tb:tb)} ${mvTxt(m)}</button>`});
+    note+=`<div class="pvbox"><div class="pv-h">AIの読み筋　${v.base}手目の局面から</div>
+      <div class="pvctl"><button data-act="pvprev">◀ 戻る</button><span class="pvk">${v.k} / ${v.line.length}</span><button data-act="pvnext">進む ▶</button>
+      <button data-act="pvauto">${v.auto?'一時停止':'自動再生'}</button><button data-act="pvclose">✕ 閉じる</button></div>
+      <div class="pvmoves">${mv2}</div></div>`}
+  else{
+    if(i>0){const pa=REV.an[i-1],mk=markOf(i-1),pt=REV.pos[i-1].turn;
+      if(pa&&pa.m&&mk&&mk.k!=='best'&&mk.loss>=.03)
+        note+=`<div class="best-line">ここは <b>${mvTxt(pa.m)}</b> が最善でした（勝率 ${Math.round(mk.loss*100)}% 損）`+(pa.pv&&pa.pv.length?`<br><button class="pvbtn" data-act="pvA">▶ 最善手からの読み筋を再生</button>`:'')+'</div>'}
+    if(i<n&&a&&a.m)note+=`<div class="best-line">次の${side(p.turn)}の最善手：<b>${mvTxt(a.m)}</b>`+(a.pv&&a.pv.length?`<br><button class="pvbtn" data-act="pvB">▶ 読み筋を再生</button>`:'')+'</div>'}
   if(i<n&&!a)note+='<span class="rev-pos">　解析中…</span>';
   nt.innerHTML=note;
   const done=REV.an.filter(Boolean).length;$('revProg').textContent=done<n?`解析中 ${done}/${n}`:'解析済み';
@@ -1043,7 +1092,15 @@ function stepBad(dir){const n=REV.g.log.length;for(let k=REV.i-1+dir;k>=0&&k<n;k
 $('rPrev').addEventListener('click',()=>$('rOnlyBad').checked?stepBad(-1):setRev(REV.i-1));
 $('rNext').addEventListener('click',()=>$('rOnlyBad').checked?stepBad(1):setRev(REV.i+1));
 $('rShowBest').addEventListener('change',renderReview);
-addEventListener('keydown',e=>{if(CUR!=='review')return;if(e.key==='ArrowLeft')$('rPrev').click();else if(e.key==='ArrowRight')$('rNext').click()});
+addEventListener('keydown',e=>{if(CUR!=='review')return;
+  if(REV.pv){if(e.key==='ArrowLeft')pvStep(-1);else if(e.key==='ArrowRight')pvStep(1);else if(e.key==='Escape')pvClose();return}
+  if(e.key==='ArrowLeft')$('rPrev').click();else if(e.key==='ArrowRight')$('rNext').click()});
+$('revNote').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const act=b.dataset.act;
+  if(b.dataset.pvk&&REV.pv){pvAuto(false);REV.pv.k=+b.dataset.pvk;renderReview();return}
+  if(act==='pvA'){const pa=REV.an[REV.i-1];if(pa)pvOpen(REV.i-1,pa.pv)}
+  else if(act==='pvB'){const a=REV.an[REV.i];if(a)pvOpen(REV.i,a.pv)}
+  else if(act==='pvprev'){pvAuto(false);pvStep(-1)}else if(act==='pvnext'){pvAuto(false);pvStep(1)}
+  else if(act==='pvauto'){pvAuto(!REV.pv.auto);renderReview()}else if(act==='pvclose')pvClose()});
 $('reviewNow').addEventListener('click',()=>{saveFinished();const id=currentGameId();if(id)openReview(id)});
 document.querySelector('[data-go="history"]').addEventListener('click',renderHistory);
 addEventListener('popstate',()=>{if(CUR==='history')renderHistory();if(CUR!=='review')REV.job++});
