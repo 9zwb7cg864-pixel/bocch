@@ -35,7 +35,8 @@ header p{margin:0;color:var(--sub);font-family:var(--f-disp);font-size:14px;lett
   border-radius:4px;box-shadow:0 30px 60px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,236,190,.35),inset 0 0 0 7px var(--wood-edge),inset 0 0 0 8px rgba(90,60,25,.5)}
 .grid{position:absolute;top:5%;left:5%;right:5%;bottom:5%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));border-top:1.5px solid var(--wood-line);border-left:1.5px solid var(--wood-line)}
 .cell{position:relative;border:0;border-right:1.5px solid var(--wood-line);border-bottom:1.5px solid var(--wood-line);background:transparent;padding:0;margin:0;cursor:default;display:flex;align-items:center;justify-content:center;font:inherit;color:inherit;border-radius:0;-webkit-tap-highlight-color:transparent}
-.cell:hover{background:transparent}
+.grid .cell,.grid .cell:hover,.grid .cell:active,.grid .cell:focus{border-color:var(--wood-line);transition:none}
+.grid .cell:not(.goal):not(.last):hover{background:transparent}
 .cell.goal{background:rgba(110,74,28,.10)}
 .cell:focus-visible{outline:2px solid var(--dot);outline-offset:-3px;z-index:3}
 .cell.last{background:rgba(29,42,37,.16)}
@@ -532,9 +533,15 @@ $('matchCancel').addEventListener('click',()=>{cancelMatch();show('home')});
 
 /* 1手目の定跡名（左右反転は同じ定跡） */
 const JOSEKI={'0-4-0':['隅守り','端の石が一歩だけ前へ。まずは様子を見る構え'],'0-4-1':['寄り添い','端の石が斜めに寄り、仲間の隣で射程を伸ばす'],'1-3-1':['一本槍','二筋目の石がまっすぐ二歩。向こう岸への最短の筋'],'1-3-3':['渡り鳥','仲間を飛び越えて中央へ。盤の真ん中を先に取る'],'2-3-0':['はぐれ雲','中の石が外側へ斜めに抜ける。ぼっちを恐れない一手'],'2-3-2':['正面突破','中央の石がまっすぐ二歩。いちばん素直な攻め'],'2-3-4':['十字路','中の石が反対側へ斜めに渡る。相手の読みを散らす']};
+const JOSEKI2={'0-4-0':['様子見','端の石を一歩だけ出して、黒の出方を待つ'],'0-4-1':['肩寄せ','端の石を斜めに寄せ、仲間の隣で射程を伸ばす'],'1-3-1':['迎え槍','二筋目をまっすぐ出して、黒の槍に槍で応える'],'1-3-3':['渡り返し','仲間を飛び越えて中央へ。黒に真ん中を譲らない'],'2-3-0':['離れ雲','あえて外へ抜けて、黒の読みから外れる'],'2-3-2':['正面受け','中央をまっすぐ出して、正面からぶつかる'],'2-3-4':['交差返し','反対側へ斜めに渡り、盤面を入り組ませる']};
+function keyOf(m,p){if(!m)return null;let f=m[0],t=m[1],fr=f/6|0,tr=t/6|0,fc=f%6,tc=t%6;if(p===2){if(fr!==0)return null;tr=5-tr}else if(fr!==5)return null;if(fc>2){fc=5-fc;tc=5-tc}return fc+'-'+tr+'-'+tc}
 function josekiOf(m){if(!m)return null;let f=m[0],t=m[1],fc=f%6,tc=t%6,tr=t/6|0;if((f/6|0)!==5)return null;if(fc>2){fc=5-fc;tc=5-tc}return JOSEKI[fc+'-'+tr+'-'+tc]||null}
 const _render2=render;
-render=function(){_render2();if(CUR==='game'&&MATCH.on&&S.mode==='net'&&NET.guest)stopMatch();const el=$('joseki');const j=(S.ply===1&&!S.over)?josekiOf(S.last):null;el.hidden=!j;if(j){el.innerHTML='';const b=document.createElement('b');b.textContent='定跡「'+j[0]+'」';const sm=document.createElement('small');sm.textContent=j[1];el.append(b,sm)}};
+render=function(){_render2();if(CUR==='game'&&MATCH.on&&S.mode==='net'&&NET.guest)stopMatch();const el=$('joseki');let j=null,lab='';
+  if(!S.over&&S.ply===1){j=josekiOf(S.last);lab='1手目 定跡「'}
+  else if(!S.over&&S.ply===2){const k2=keyOf(S.last,2),w=k2&&JOSEKI2[k2];if(w){const k1=S.firstKey;j=(k1&&k1===k2)?['鏡・'+w[0],'黒と同じ形で応じる。'+w[1]]:w;lab='2手目 定跡「'}}
+  if(S.ply===1&&S.last)S.firstKey=keyOf(S.last,1);
+  el.hidden=!j;if(j){el.innerHTML='';const b=document.createElement('b');b.textContent=lab+j[0]+'」';const sm=document.createElement('small');sm.textContent=j[1];el.append(b,sm)}};
 render();
 </script>
 </body>
