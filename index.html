@@ -209,8 +209,8 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .rev-graph{margin:6px 0 10px}
 .rev-graph svg{display:block;width:100%;height:84px;background:var(--soft);border:1px solid var(--line);border-radius:2px;cursor:pointer;touch-action:none}
 .rev-graph-lab{display:flex;justify-content:space-between;font-size:11px;color:var(--mute);margin-top:3px}
-.rev-nav{justify-content:center;gap:8px}
-.rev-nav button{min-width:64px;padding:10px 0;font-size:16px;letter-spacing:0}
+.rev-nav{justify-content:center;gap:8px;margin-top:10px}
+.rev-nav button{min-width:84px;padding:12px 0;font-size:17px;letter-spacing:0}
 .rev-ply{min-width:5.5em;text-align:center;font-size:13px;color:var(--sub);font-variant-numeric:tabular-nums}
 .rev-list{display:flex;flex-wrap:wrap;gap:4px;margin:14px 0 0;font-size:12.5px;font-variant-numeric:tabular-nums}
 .rev-list button{min-height:32px;padding:4px 8px;font-size:12.5px;letter-spacing:.02em;border-color:var(--line)}
@@ -267,7 +267,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.2</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.3</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -349,14 +349,14 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
   <p class="rev-head" id="revHead"></p>
   <p class="rev-share-msg" id="revShareMsg" hidden></p>
   <div class="boardwrap rev-board"><div class="board" id="rboard"><div class="lab lab-top" id="rlabTop" aria-hidden="true"></div><div class="lab lab-left" id="rlabLeft" aria-hidden="true"></div><div class="grid" id="rgrid" aria-label="感想戦の盤"></div></div></div>
+  <div class="row rev-nav">
+    <button id="rPrev" aria-label="1手戻る">◀</button><span class="rev-ply" id="revPly"></span><button id="rNext" aria-label="1手進む">▶</button>
+  </div>
   <div class="rev-info">
     <p class="rev-move" id="revMove"></p>
     <div class="rev-note" id="revNote"></div>
   </div>
   <div class="rev-graph"><svg id="revGraph" viewBox="0 0 300 84" preserveAspectRatio="none" role="img" aria-label="形勢のグラフ"></svg><div class="rev-graph-lab"><span>上ほど黒有利・下ほど白有利</span><span id="revProg"></span></div></div>
-  <div class="row rev-nav">
-    <button id="rPrev" aria-label="1手戻る">◀</button><span class="rev-ply" id="revPly"></span><button id="rNext" aria-label="1手進む">▶</button>
-  </div>
   <div class="row chks"><label class="chk"><input type="checkbox" id="rShowBest" checked> 最善手を表示</label><label class="chk"><input type="checkbox" id="rOnlyBad"> 悪手だけ追う</label></div>
   <div class="rev-list" id="revList"></div>
 </section>
@@ -1218,7 +1218,7 @@ function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n
   $('rboard').classList.toggle('flip',flip);$('rboard').classList.toggle('hideNum',!$('showNum').checked);$('rboard').classList.toggle('nolab',!$('showLab').checked);
   [...$('rlabTop').children].forEach((e,k)=>e.textContent=String(flip?6-k:k+1));
   [...$('rlabLeft').children].forEach((e,k)=>e.textContent='abcdef'[flip?5-k:k]);
-  const [rt]=resultOf(g);$('revHead').textContent=MODE_NAME(g.mode)+'　'+fmtDate(g.t)+'　'+rt+'（'+g.why+'）';
+  const [rt]=resultOf(g);$('revHead').textContent=MODE_NAME(g.mode)+'　'+fmtDate(g.t)+'　'+rt+(g.why?'（'+g.why+'）':'');
   $('revPly').textContent=i+' / '+n+'手';
   // 直前の手の評価
   const mv=$('revMove'),nt=$('revNote');
