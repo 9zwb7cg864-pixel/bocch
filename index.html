@@ -162,7 +162,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .rev-graph svg{display:block;width:100%;height:84px;background:var(--soft);border:1px solid var(--line);border-radius:2px;cursor:pointer;touch-action:none}
 .rev-graph-lab{display:flex;justify-content:space-between;font-size:11px;color:var(--mute);margin-top:3px}
 .rev-nav{justify-content:center;gap:8px}
-.rev-nav button{min-width:52px;padding:10px 0;font-size:16px;letter-spacing:0}
+.rev-nav button{min-width:64px;padding:10px 0;font-size:16px;letter-spacing:0}
 .rev-ply{min-width:5.5em;text-align:center;font-size:13px;color:var(--sub);font-variant-numeric:tabular-nums}
 .rev-list{display:flex;flex-wrap:wrap;gap:4px;margin:14px 0 0;font-size:12.5px;font-variant-numeric:tabular-nums}
 .rev-list button{min-height:32px;padding:4px 8px;font-size:12.5px;letter-spacing:.02em;border-color:var(--line)}
@@ -258,7 +258,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
   </div>
   <div class="rev-graph"><svg id="revGraph" viewBox="0 0 300 84" preserveAspectRatio="none" role="img" aria-label="形勢のグラフ"></svg><div class="rev-graph-lab"><span>上ほど黒有利・下ほど白有利</span><span id="revProg"></span></div></div>
   <div class="row rev-nav">
-    <button id="rFirst" aria-label="最初へ">⏮</button><button id="rPrev" aria-label="1手戻る">◀</button><span class="rev-ply" id="revPly"></span><button id="rNext" aria-label="1手進む">▶</button><button id="rLast" aria-label="最後へ">⏭</button>
+    <button id="rPrev" aria-label="1手戻る">◀</button><span class="rev-ply" id="revPly"></span><button id="rNext" aria-label="1手進む">▶</button>
   </div>
   <div class="row chks"><label class="chk"><input type="checkbox" id="rShowBest" checked> 最善手を表示</label><label class="chk"><input type="checkbox" id="rOnlyBad"> 悪手だけ追う</label></div>
   <div class="rev-list" id="revList"></div>
@@ -894,7 +894,7 @@ function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,p=REV.pos[i],fl
   let note='';const bp=blackPct(i);
   if(bp!=null){const pct=Math.round(bp*100);note+=i===n?'終局。':'';
     if(i<n)note+=pct>=99?'黒の勝ちが読み切れています。':pct<=1?'白の勝ちが読み切れています。':`形勢　黒 ${pct}%・白 ${100-pct}%`}
-  if(i>0){const pa=REV.an[i-1],mk=markOf(i-1);if(pa&&pa.m&&mk&&mk.k!=='best')note+=`<br>ここは <b>${sqName(pa.m[0])}→${sqName(pa.m[1])}</b> が最善でした（勝率 ${Math.round(mk.loss*100)}% 損）。`}
+  if(i>0){const pa=REV.an[i-1],mk=markOf(i-1);if(pa&&pa.m&&mk&&mk.k!=='best'&&mk.loss>=.03)note+=`<br>ここは <b>${sqName(pa.m[0])}→${sqName(pa.m[1])}</b> が最善でした（勝率 ${Math.round(mk.loss*100)}% 損）。`}
   if(i<n&&a&&a.m)note+=`<br>次の${p.turn===1?'黒':'白'}の最善手：<b>${sqName(a.m[0])}→${sqName(a.m[1])}</b>`;
   if(i<n&&!a)note+='　解析中…';
   nt.innerHTML=note;
@@ -917,7 +917,6 @@ function graphPick(e){const r=$('revGraph').getBoundingClientRect(),n=REV.pos.le
 $('revGraph').addEventListener('pointerdown',e=>{graphPick(e);$('revGraph').setPointerCapture(e.pointerId)});
 $('revGraph').addEventListener('pointermove',e=>{if(e.buttons)graphPick(e)});
 function stepBad(dir){const n=REV.g.log.length;for(let k=REV.i-1+dir;k>=0&&k<n;k+=dir){const mk=markOf(k);if(mk&&(mk.k==='bad'||mk.k==='dub')&&(!REV.g.me||REV.pos[k].turn===REV.g.me)){setRev(k+1);return}}setRev(dir>0?REV.pos.length-1:0)}
-$('rFirst').addEventListener('click',()=>setRev(0));$('rLast').addEventListener('click',()=>setRev(REV.pos.length-1));
 $('rPrev').addEventListener('click',()=>$('rOnlyBad').checked?stepBad(-1):setRev(REV.i-1));
 $('rNext').addEventListener('click',()=>$('rOnlyBad').checked?stepBad(1):setRev(REV.i+1));
 $('rShowBest').addEventListener('change',renderReview);
