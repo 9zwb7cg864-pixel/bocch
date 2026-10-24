@@ -275,7 +275,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.5</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.6</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -576,6 +576,9 @@ var BocchEngine=(function(){
     var a0=alpha,ttm=-1,ix=ttProbe();
     if(ix>=0){ttm=tM[ix];if(tD[ix]>=depth){var v=tV[ix];if(v>WIN-1000)v-=ply;else if(v<-WIN+1000)v+=ply;
       var fl=tF[ix];if(fl===0)return v;if(fl===1&&v>=beta)return v;if(fl===2&&v<=alpha)return v}}
+    var se=(ply>0&&beta-alpha===1&&Math.abs(beta)<WIN-1000)?evaluate(p):null;
+    if(se!==null&&depth<=3&&se-60*depth>=beta)return se-60*depth;
+    if(se!==null&&depth>=3&&se>=beta){side=o;h1^=ZS1;h2^=ZS2;path1[pathLen]=0;path2[pathLen]=0;pathLen++;var nv=-search(depth-3,-beta,-beta+1,ply+1);pathLen--;side=p;h1^=ZS1;h2^=ZS2;if(stop)return 0;if(nv>=beta)return beta}
     var ms=mvBuf[ply],sc=scBuf[ply],n=gen(p,ms);
     if(!n)return -WIN+ply;
     var g=goalRow(p),k1=killers[ply*2],k2=killers[ply*2+1];
