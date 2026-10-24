@@ -170,7 +170,8 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .rev-list button.bad{color:#e08c7c}.rev-list button.dub{color:#d9b46a}
 .cell.bestf::after,.cell.bestt::after{content:"";position:absolute;inset:8%;border:2px dashed #7fc2a0;border-radius:50%;pointer-events:none}
 .cell.bestt::after{border-style:solid;background:rgba(127,194,160,.18)}
-#reviewRow{justify-content:center;margin-top:10px}
+#reviewRow{justify-content:center;margin:22px 0 14px;padding-top:18px;border-top:1px solid var(--line)}
+#localCtl,#netCtl{gap:14px;justify-content:center}
 @media (prefers-reduced-motion:reduce){.stone,button{transition:none}}
 </style>
 </head>
@@ -305,12 +306,12 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <button id="undo">1手戻す</button>
     <button id="reset" class="primary">最初から</button>
   </div>
-  <div class="row" id="reviewRow" hidden><button id="reviewNow" class="primary">この対局を感想戦</button></div>
   <div class="row" id="netCtl" hidden>
     <button id="resign" class="danger">投了する</button>
     <button id="rematch" class="primary" hidden>もう一局</button>
     <button id="leave">対戦をやめる</button>
   </div>
+  <div class="row" id="reviewRow" hidden><button id="reviewNow">この対局を感想戦 ›</button></div>
   <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label></div>
 </section>
 
