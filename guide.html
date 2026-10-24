@@ -102,7 +102,8 @@ ol.check li{counter-increment:c;display:grid;grid-template-columns:34px minmax(0
 .strat{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:start;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
 .strat.top{border-color:var(--gold)}
 @media (max-width:480px){.strat{grid-template-columns:118px minmax(0,1fr);gap:12px;padding:12px}}
-.strat .board{width:100%;padding:4px}
+.strat .board{width:100%;padding:4px;overflow:hidden}
+.strat .board .st{font-size:10.5px;width:76%}
 .hs{width:80%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%)}
 .strat h3{font-family:var(--f-disp);font-size:18px;letter-spacing:.06em}
 .strat h3 small{font-family:var(--f-body);font-weight:400;font-size:12.5px;color:var(--sub);margin-left:6px;letter-spacing:0}
@@ -195,7 +196,7 @@ ol.check span{font-size:13.5px;color:var(--sub)}
 
 <section id="strategy">
   <h2>戦法（序盤の作戦）</h2>
-  <p class="intro">AI同士に2,400局打たせ、両者の8手目の形を似たものどうしでまとめると、5つの型に分かれました。図は、その型で8手目に石がいた割合です。濃いほど、そのマスにいることが多い形です（自分の陣地が下、攻めた側を左にそろえています）。</p>
+  <p class="intro">AI同士に2,400局打たせ、両者の8手目の形を似たものどうしでまとめると、5つの型に分かれました。図は、その型の8手目に多かった自分の石の並びを、6個の石で描いた典型形です（相手の石は省略。自分の陣地が下、攻めた側を左にそろえています）。</p>
   <div class="rank" id="strats"></div>
   <h3 style="margin-top:22px">相性</h3>
   <p class="note" style="margin-top:4px">行の戦法が、列の戦法に勝った割合です。</p>
@@ -249,7 +250,7 @@ function dests(b,i){const d=nb(b,N,N,i);if(!d)return[];const r=i/N|0,c=i%N,out=[
   for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){if(!dr&&!dc)continue;const rr=r+dr*d,cc=c+dc*d;if(rr<0||rr>=N||cc<0||cc>=N)continue;const t=rr*N+cc;if(!b[t])out.push(t)}return out}
 // 図を描く。rows は文字列の配列：B=黒 W=白 .=空き  marks は {index:'tgt'|'from'|'x'}
 function draw(el,rows,marks,opt){opt=opt||{};const h=rows.length,w=rows[0].length;const b=[];rows.join('').split('').forEach(ch=>b.push(ch==='B'?1:ch==='W'?2:0));
-  el.style.gridTemplateColumns='repeat('+w+',1fr)';el.innerHTML='';
+  el.style.gridTemplateColumns='repeat('+w+',minmax(0,1fr))';el.innerHTML='';
   b.forEach((v,i)=>{const c=document.createElement('div');const r=i/w|0;c.className='cell'+(r===0?' r0':'')+(i%w===0?' c0':'')+((opt.goalTop&&r===0)?' goal':'');
     if(marks&&marks[i])c.classList.add(marks[i]);
     if(v){const d=nb(b,w,h,i);const s=document.createElement('div');s.className='st '+(v===1?'b':'w')+(d?'':' zero');s.textContent=d;c.appendChild(s)}
@@ -339,18 +340,15 @@ defs.innerHTML=DF.map(x=>'<div class="fig"><div class="board"></div><h3>'+x.t+'<
 
 
 /* 戦法 */
-const HEAT=[[0.2,0.21,0.27,0.17,0.11,0.05,0.09,0.09,0.05,0.03,0.03,0.01,0.08,0.14,0.15,0.12,0.08,0.01,0.07,0.22,0.3,0.22,0.12,0.01,0.1,0.32,0.13,0.13,0.18,0.03,0.33,0.35,0.33,0.37,0.4,0.49],[0.22,0.17,0.13,0.07,0.08,0.1,0.02,0.04,0.01,0.01,0.01,0.01,0.08,0.05,0.04,0.03,0.04,0.01,0.32,0.47,0.31,0.22,0.2,0.07,0.37,0.56,0.29,0.22,0.44,0.18,0.14,0.19,0.15,0.16,0.31,0.26],[0.01,0,0.01,0.01,0,0,0,0,0,0,0,0,0.02,0.02,0.01,0.01,0.01,0,0.29,0.57,0.54,0.36,0.16,0.04,0.34,0.74,0.45,0.26,0.31,0.08,0.23,0.32,0.28,0.29,0.34,0.32],[0.14,0.17,0.22,0.19,0.06,0.02,0,0.02,0.02,0.01,0.01,0,0.02,0.07,0.11,0.05,0.02,0,0.03,0.34,0.61,0.39,0.08,0,0.07,0.54,0.52,0.38,0.17,0,0.23,0.31,0.31,0.29,0.27,0.32],[0.41,0.17,0.11,0.02,0.06,0.04,0.1,0.04,0.01,0,0.01,0,0.17,0.12,0.04,0.02,0.02,0.01,0.34,0.4,0.16,0.06,0.04,0.02,0.29,0.43,0.16,0.07,0.13,0.03,0.29,0.4,0.33,0.43,0.53,0.56]];
 const ST=[
- {h:3,t:'中央櫓',y:'なかやぐら',v:63,d:'真ん中の3筋に2段×3列の固まりを作ってから前に出る。端の筋はほとんど使わず、陣地に2個ほど残す。どの戦法にも勝ち越す最強の型。',op:['4f→2d','3f→2e','1f→3d']},
- {h:0,t:'斬り込み',y:'きりこみ',v:51,d:'早くから相手陣まで石を送り込み、相手の石とぶつけて乱戦にする。石はばらけて固まりは小さい。',op:['2f→4d','6f→5e','5f→5d']},
- {h:1,t:'総掛かり',y:'そうがかり',v:49.5,d:'陣地の石をほぼ全部出して、手前の2段に横へ広く並べる。斬り込みとは互角。',op:['4f→2d','1f→2e','3f→1d']},
- {h:2,t:'籠城',y:'ろうじょう',v:41.5,d:'自陣の手前に大きな固まりを作り、相手陣にほとんど入らない。対局は長引くが、守りを固めても止めきれない。',op:['2f→2d','3f→2e','6f→5e']},
- {h:4,t:'端攻め',y:'はしぜめ',v:39,d:'片側の端の筋だけで突破を狙う。反対側の石は陣地に残ったまま余る。籠城にだけは勝ち越す。',op:['3f→1d','1f→2e','4f→3e']}];
+ {h:3,t:'中央櫓',rows:['..B...','......','......','.BBB..','.BB...','......'],y:'なかやぐら',v:63,d:'真ん中の筋に田の字＋1の固まりを作り、そこから1個を先に送り込む。端の筋はほとんど使わない。どの戦法にも勝ち越す最強の型。',op:['4f→2d','3f→2e','1f→3d']},
+ {h:0,t:'斬り込み',rows:['......','......','.B.B..','..B...','.B....','....BB'],y:'きりこみ',v:51,d:'早くから相手陣まで石を送り込み、相手の石とぶつけて乱戦にする。石はばらけて固まりは小さい。',op:['2f→4d','6f→5e','5f→5d']},
+ {h:1,t:'総掛かり',rows:['......','......','......','BBB...','.B.BB.','......'],y:'そうがかり',v:49.5,d:'陣地の石をほぼ全部出して、手前の2段に横へ広く並べる。斬り込みとは互角。',op:['4f→2d','1f→2e','3f→1d']},
+ {h:2,t:'籠城',rows:['......','......','......','.BB...','.BB...','B...B.'],y:'ろうじょう',v:41.5,d:'自陣の手前に田の字を作り、陣地にも石を残して、相手陣にはほとんど入らない。対局は長引くが、守りを固めても止めきれない。',op:['2f→2d','3f→2e','6f→5e']},
+ {h:4,t:'端攻め',rows:['B.....','......','......','BB....','.B....','....BB'],y:'はしぜめ',v:39,d:'片側の端の筋だけで突破を狙う。反対側の石は陣地に残ったまま余る。籠城にだけは勝ち越す。',op:['3f→1d','1f→2e','4f→3e']}];
 const strats=document.getElementById('strats');
 strats.innerHTML=ST.map((x,i)=>'<div class="strat'+(i===0?' top':'')+'"><div class="board"></div><div style="min-width:0"><h3>'+x.t+'<small>'+x.y+'</small></h3><p>'+x.d+'</p><div class="op">よくある出だし　'+x.op.map(o=>'<code>'+o+'</code>').join('')+'</div>'+bar(x.v)+'</div></div>').join('');
-[...strats.querySelectorAll('.board')].forEach((el,i)=>{const H=HEAT[ST[i].h];el.style.gridTemplateColumns='repeat(6,1fr)';el.innerHTML='';
-  H.forEach((v,j)=>{const c=document.createElement('div');const r=j/6|0;c.className='cell'+(r===0?' r0':'')+(j%6===0?' c0':'')+((r===0||r===5)?' goal':'');
-    if(v>=0.06){const s=document.createElement('div');s.className='hs';s.style.opacity=Math.min(1,0.12+v*1.4).toFixed(2);s.title=Math.round(v*100)+'％';c.appendChild(s)}el.appendChild(c)})});
+[...strats.querySelectorAll('.board')].forEach((el,i)=>draw(el,ST[i].rows,null,{goalTop:true}));
 const MX=[[50,50,66,44,62],[50,50,56,36,63],[34,44,50,25,45],[56,64,75,50,72],[38,37,55,28,50]];
 const NM=['斬り込み','総掛かり','籠城','中央櫓','端攻め'],ORD=[3,0,1,4,2];
 let th='<tr><th></th>'+ORD.map(j=>'<th>'+NM[j]+'</th>').join('')+'</tr>';
@@ -361,7 +359,7 @@ document.getElementById('mtx').innerHTML=th;
 const nb6=(b,i)=>nb(b,6,6,i);
 function threatsOf(b,i){const p=b[i],d=nb6(b,i);const r=i/6|0,c=i%6,gr=p===1?0:5,dist=Math.abs(r-gr);if(!d||dist!==d)return[];
   const dr=p===1?-1:1,out=[];for(const dc of [-1,0,1]){const rr=r+dr*d,cc=c+dc*d;if(rr>=0&&rr<6&&cc>=0&&cc<6&&!b[rr*6+cc])out.push(rr*6+cc)}return out}
-function drawFull(el,b,mk){el.style.gridTemplateColumns='repeat(6,1fr)';el.innerHTML='';const tg={};
+function drawFull(el,b,mk){el.style.gridTemplateColumns='repeat(6,minmax(0,1fr))';el.innerHTML='';const tg={};
   b.forEach((v,i)=>{if(v)threatsOf(b,i).forEach(t=>tg[t]=v)});
   b.forEach((v,i)=>{const c=document.createElement('div');const r=i/6|0;c.className='cell'+(r===0?' r0':'')+(i%6===0?' c0':'')+((r===0||r===5)?' goal':'');
     if(tg[i])c.classList.add(tg[i]===1?'tgt':'wt');if(mk&&mk.from===i)c.classList.add('from');if(mk&&mk.to===i)c.classList.add('to');
