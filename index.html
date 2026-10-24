@@ -6,7 +6,7 @@
 <title>bocch</title>
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&family=Cinzel:wght@600&family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
 <style>
 /* 漆の黒緑に金の細線、榧の盤、那智黒と蛤の石 */
 :root{
@@ -44,26 +44,6 @@ header p{margin:0;color:var(--sub);font-family:var(--f-disp);font-size:14px;lett
 .stone.b{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%);color:#e4e5e6}
 .stone.w{background:radial-gradient(circle at 34% 28%,#ffffff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c}
 .stone.zero{opacity:.45}
-/* 石のスキン（対戦相手・観戦者にも見える） */
-.stone.sk-ruri{background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.6) 0 7%,rgba(255,255,255,0) 26%),radial-gradient(circle at 30% 62%,#f2cf74 0 2.5%,transparent 4%),radial-gradient(circle at 64% 40%,#f2cf74 0 2%,transparent 3.5%),radial-gradient(circle at 58% 76%,#e9c46a 0 1.8%,transparent 3%),radial-gradient(circle at 34% 28%,#4b6fe0 0%,#1d3486 45%,#0b1744 100%);color:#fff}
-.stone.sk-pool{--pc:#8a8f96;background:radial-gradient(ellipse 26% 18% at 34% 24%,rgba(255,255,255,.85) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 36% 30%,rgba(255,255,255,0) 40%,rgba(0,0,0,.38) 100%),radial-gradient(circle at 50% 50%,#fbfaf4 0 30%,transparent 31.5%),var(--pc);color:#141414;font-family:var(--f-body);font-weight:700}
-.stone.sk-pool.p1{--pc:#f4c51a}.stone.sk-pool.p2{--pc:#1f4fb8}.stone.sk-pool.p3{--pc:#d42a22}
-.stone.sk-pool.p4{background:radial-gradient(ellipse 26% 18% at 34% 24%,rgba(255,255,255,.85) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 36% 30%,rgba(255,255,255,0) 40%,rgba(0,0,0,.38) 100%),radial-gradient(circle at 50% 50%,#fbfaf4 0 30%,transparent 31.5%),linear-gradient(180deg,#fbfaf4 0 24%,#5b2a8f 24% 76%,#fbfaf4 76%)}
-.stone.sk-pool span{font-size:.78em}
-.stone.sk-kokuji{background:radial-gradient(ellipse 26% 18% at 34% 24%,rgba(255,255,255,.75) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 36% 30%,#3a3a3c 0%,#121214 50%,#050506 100%);color:#e6c06a;box-shadow:inset 0 0 0 1.5px rgba(230,192,106,.6),0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
-.stone.sk-kokuji span{font-family:Cinzel,var(--f-latin);font-weight:600;font-size:.9em;letter-spacing:.02em;text-shadow:0 1px 0 rgba(0,0,0,.8),0 0 6px rgba(230,192,106,.35)}
-.stone.sk-hibi{background:radial-gradient(ellipse 16% 10% at 32% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 16% 10% at 68% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 26% 16% at 34% 20%,rgba(255,255,255,.9) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 40% 34%,#ffffff 0%,#f1eee6 50%,#c9c3b6 100%);box-shadow:0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3),inset 0 -3px 5px rgba(0,0,0,.12)}
-.stone.sk-hibi span{visibility:hidden;margin-top:40%;font-size:.7em;color:#2a1a18}
-.hibiNum:not(.hideNum) .stone.sk-hibi span{visibility:visible}
-.stone.sk-hibi.p1{background:linear-gradient(118deg,transparent 47%,#2e2a26 47.6% 50.2%,transparent 50.8%) 0 0/100% 55% no-repeat,radial-gradient(ellipse 16% 10% at 32% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 16% 10% at 68% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 26% 16% at 34% 20%,rgba(255,255,255,.9) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 40% 34%,#ffffff 0%,#f1eee6 50%,#c9c3b6 100%)}
-.stone.sk-hibi.p2{background:linear-gradient(118deg,transparent 47%,#2e2a26 47.6% 50.2%,transparent 50.8%) 0 0/100% 55% no-repeat,linear-gradient(64deg,transparent 46.6%,#2e2a26 47.2% 49.8%,transparent 50.4%) 0 100%/60% 50% no-repeat,radial-gradient(ellipse 16% 10% at 32% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 16% 10% at 68% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 26% 16% at 34% 20%,rgba(255,255,255,.9) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 40% 34%,#ffffff 0%,#f1eee6 50%,#c9c3b6 100%)}
-.stone.sk-hibi.p3{background:linear-gradient(118deg,transparent 47%,#2e2a26 47.6% 50.2%,transparent 50.8%) 0 0/100% 55% no-repeat,linear-gradient(64deg,transparent 46.6%,#2e2a26 47.2% 49.8%,transparent 50.4%) 0 100%/60% 50% no-repeat,linear-gradient(150deg,transparent 46.6%,#2e2a26 47.2% 49.8%,transparent 50.4%) 100% 100%/46% 46% no-repeat,radial-gradient(ellipse 16% 10% at 32% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 16% 10% at 68% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 26% 16% at 34% 20%,rgba(255,255,255,.9) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 40% 34%,#ffffff 0%,#f1eee6 50%,#c9c3b6 100%)}
-.stone.sk-hibi.p4{background:linear-gradient(118deg,transparent 47%,#2e2a26 47.6% 50.2%,transparent 50.8%) 0 0/100% 55% no-repeat,linear-gradient(64deg,transparent 46.6%,#2e2a26 47.2% 49.8%,transparent 50.4%) 0 100%/60% 50% no-repeat,linear-gradient(150deg,transparent 46.6%,#2e2a26 47.2% 49.8%,transparent 50.4%) 100% 100%/46% 46% no-repeat,linear-gradient(28deg,transparent 46.6%,#2e2a26 47.2% 49.8%,transparent 50.4%) 0 0/42% 30% no-repeat,radial-gradient(ellipse 16% 10% at 32% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 16% 10% at 68% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 26% 16% at 34% 20%,rgba(255,255,255,.9) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 40% 34%,#ffffff 0%,#f1eee6 50%,#c9c3b6 100%)}
-.stone.sk-kokuji.p3 span,.stone.sk-kokuji.p4 span{font-size:.7em}
-.skin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px;margin-top:10px}
-.skin-sw{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px 8px;border-radius:12px;border:1px solid var(--line);background:transparent;cursor:pointer;font-size:12.5px;color:inherit;min-width:0}
-.skin-sw .stone{width:42px;height:42px;font-size:20px}
-.skin-sw[aria-pressed="true"]{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold) inset}
 .mine{cursor:pointer}.mine:hover .stone{translate:0 -2px}
 .sel .stone{box-shadow:0 0 0 3px var(--wood),0 0 0 5px var(--gold),0 4px 6px rgba(0,0,0,.38)}
 .nb .stone{box-shadow:0 0 0 2px var(--gold),0 4px 6px rgba(0,0,0,.38)}
@@ -364,11 +344,6 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <p class="prof-rec" id="profRec"></p>
     <p class="note">レートはオンライン対戦とCPU戦（1手戻しを使わなかった対局）で上下します。CPUのレートは やさしい 900・ふつう 1200・つよい 1500・最強 1900 として計算します。名前とレートはオンライン対戦では相手と観戦者に表示されます。</p>
   </div>
-  <div class="card prof" id="skinCard">
-    <h3 class="acct-h">石のスキン</h3>
-    <p class="note">自分の石の見た目を変えます。オンライン対戦では、相手と観戦者にもこのスキンで見えます。ビリヤードは進める距離で玉の色が、金の刻字は数字がローマ数字（動けない石はN）に、ひびの仮面は数字のかわりにひびの本数（ひびのないお面は動けない石）になります。</p>
-    <div class="skin-grid" id="skinGrid"></div>
-  </div>
   <div class="card prof acct" id="acct">
     <h3 class="acct-h">メールでアカウント登録</h3>
     <p class="note" id="acctLead">登録すると、名前・レート・戦績がアカウントに保存され、別の端末でもログインすれば同じものを使えます。一度ログインすれば、ログアウトするまでこの端末ではログインしたままです。</p>
@@ -444,7 +419,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <button id="leave">対戦をやめる</button>
   </div>
   <div class="row" id="reviewRow" hidden><button id="reviewNow">この対局を感想戦 ›</button></div>
-  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk" id="hibiNumL" hidden><input type="checkbox" id="hibiNum"> ふつうの数字</label></div>
+  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label></div>
 </section>
 
 <script id="eng">
@@ -604,19 +579,6 @@ if(typeof module!=='undefined')module.exports=BocchEngine;
 <script>
 const N=6, DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]], NEED=2, PREFIX='bocch-game-';
 const $=id=>document.getElementById(id);
-/* 石のスキン：自分の石だけ、この端末の画面でだけ変わる */
-const SKINS=[['std','標準'],['pool','ビリヤード'],['ruri','瑠璃'],['kokuji','金の刻字'],['hibi','ひびの仮面']];
-let SKIN='std';try{const v=localStorage.getItem('bocch-skin');if(SKINS.some(x=>x[0]===v))SKIN=v}catch(e){}
-const skinOk=k=>SKINS.some(x=>x[0]===k);
-const skinOf=(k,d)=>!k||k==='std'?'':' sk-'+k+(k==='pool'||k==='kokuji'||k==='hibi'?' p'+d:'');
-const numOf=(k,d)=>k==='kokuji'&&!plainNum()?['N','I','II','III','IV'][d]:d;
-const plainNum=()=>{const e=document.getElementById('hibiNum');return !!(e&&e.checked)}; // 「ふつうの数字」：仮面・ローマ数字も 0〜4 で出す // 金の刻字はローマ数字（0はN）
-// その色の石を持つ人のスキン（オンラインは各自が知らせたもの、CPU戦は自分の黒だけ）
-function colorSkin(c){if(S.mode==='net'){const id=[NET.host,NET.guest].find(x=>x&&colorOf(x)===c);if(!id)return 'std';if(id===NET.me&&!NET.watch)return SKIN;return (typeof NM!=='undefined'&&NM[id]&&NM[id].skin)||'std'}return S.mode!==0&&c===1?SKIN:'std'}
-function myColor(){if(S.mode==='net')return NET.watch?0:colorOf(NET.me);return S.mode===0?0:1}
-function renderSkins(){$('skinGrid').innerHTML=SKINS.map(([k,n])=>`<button class="skin-sw" data-skin="${k}" aria-pressed="${k===SKIN}"><div class="stone b${skinOf(k,3)}"><span>${numOf(k,3)}</span></div>${n}</button>`).join('')}
-function setSkin(k,push){if(!SKINS.some(x=>x[0]===k))return;SKIN=k;try{localStorage.setItem('bocch-skin',k)}catch(e){}renderSkins();try{render()}catch(e){}try{if(REV.g)renderReview()}catch(e){}if(push&&typeof acctPush==='function')acctPush()}
-renderSkins();$('skinGrid').addEventListener('click',e=>{const b=e.target.closest('.skin-sw');if(b)setSkin(b.dataset.skin,true)});
 const gridEl=$('grid');
 let S;
 const key=(b,t)=>b.join('')+t;
@@ -710,18 +672,16 @@ const NAME={1:'黒',2:'白'};
 function render(){
   const b=S.b,targets=S.sel>=0?movesFrom(b,S.sel).map(m=>m[1]):[];
   const nbs=new Set();if(S.sel>=0){const r=S.sel/N|0,c=S.sel%N;for(const[x,y]of DIRS)if(ok(r+x,c+y)&&b[(r+x)*N+c+y])nbs.add((r+x)*N+c+y)}
-  const canAct=human(),skc=[0,colorSkin(1),colorSkin(2)];
-  if(skc[1]!=='std'&&skc[1]===skc[2]){const me=myColor();skc[me?3-me:2]='std'} // 同じスキンどうしは相手を標準に（観戦中は白を標準に）
+  const canAct=human();
   for(let i=0;i<N*N;i++){const el=$('c'+i),v=b[i],r=i/N|0,d=v?nbCount(b,i):0;
     let cls='cell';if(r===0||r===N-1)cls+=' goal';if(S.last&&(S.last[0]===i||S.last[1]===i))cls+=' last';
     if(canAct&&v===S.turn)cls+=' mine';if(i===S.sel)cls+=' sel';if(nbs.has(i))cls+=' nb';
     if(targets.includes(i))cls+=' target'+(r===goalRow(S.turn)?' fin':'');el.className=cls;
     el.setAttribute('aria-label',(v?NAME[v]+'の石、射程'+d:'空き')+'、'+(N-r)+'段'+(i%N+1)+'列');
-    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${skinOf(skc[v],d)}"><span>${numOf(skc[v],d)}</span></div>`:'';}
+    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}"><span>${d}</span></div>`:'';}
   const net=S.mode==='net';
   $('board').classList.toggle('flip',net&&colorOf(NET.me)===2);
   $('board').classList.toggle('hideNum',!$('showNum').checked);
-  {const odd=k=>k==='hibi'||k==='kokuji',hb=odd(skc[1])||odd(skc[2]);$('hibiNumL').hidden=!hb;$('board').classList.toggle('hibiNum',hb&&$('hibiNum').checked)}
   document.querySelectorAll('#modeSeg button').forEach(x=>x.setAttribute('aria-pressed',String(!net&&+x.dataset.mode===S.mode)));
   $('localCtl').hidden=net;$('netCtl').hidden=!net;
   const seated=net&&colorOf(NET.me)>0;$('resign').hidden=!(seated&&NET.guest&&!S.over);$('rematch').hidden=!(seated&&S.over);
@@ -857,9 +817,7 @@ $('undo').addEventListener('click',()=>{
   while(steps--&&S.hist.length){const h=S.hist.pop();S.b=h.b;S.turn=h.turn;S.last=h.last;S.reps=h.reps;S.ply=h.ply}
   S.over=null;S.sel=-1;S.log=(S.log||[]).slice(0,S.ply||0);render()});
 $('showNum').addEventListener('change',render);
-// ひびの仮面・金の刻字の石もふつうの数字で出す（自分の画面だけ、この端末に覚える）
-try{$('hibiNum').checked=localStorage.getItem('bocch-hibinum')==='1'}catch(e){}
-$('hibiNum').addEventListener('change',()=>{try{localStorage.setItem('bocch-hibinum',$('hibiNum').checked?'1':'0')}catch(e){}render();try{if(REV.g)renderReview()}catch(e){}});
+try{localStorage.removeItem('bocch-skin');localStorage.removeItem('bocch-hibinum')}catch(e){} // 廃止したスキンの設定を消す
 $('create').addEventListener('click',createRoom);
 $('join').addEventListener('click',()=>joinRoom($('codeIn').value));
 $('codeIn').addEventListener('keydown',e=>{if(e.key==='Enter')joinRoom($('codeIn').value)});
@@ -1122,8 +1080,8 @@ function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n
   for(let k=0;k<36;k++){const el=$('r'+k),v=p.b[k],r=k/6|0,d=v?nbCount(p.b,k):0;let cls='cell';
     if(r===0||r===5)cls+=' goal';if(last&&(last[0]===k||last[1]===k))cls+=(PV&&PV.k>0?' pvlast':' last');
     if(nextM&&nextM[0]===k)cls+=' bestf';if(nextM&&nextM[1]===k)cls+=' bestt';el.className=cls;
-    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${v===g.me?skinOf(SKIN,d):''}"><span>${v===g.me?numOf(SKIN,d):d}</span></div>`:''}
-  $('rboard').classList.toggle('flip',flip);$('rboard').classList.toggle('hideNum',!$('showNum').checked);$('rboard').classList.toggle('hibiNum',$('hibiNum').checked);$('rboard').classList.toggle('nolab',!$('showLab').checked);
+    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}"><span>${d}</span></div>`:''}
+  $('rboard').classList.toggle('flip',flip);$('rboard').classList.toggle('hideNum',!$('showNum').checked);$('rboard').classList.toggle('nolab',!$('showLab').checked);
   [...$('rlabTop').children].forEach((e,k)=>e.textContent=String(flip?6-k:k+1));
   [...$('rlabLeft').children].forEach((e,k)=>e.textContent='abcdef'[flip?5-k:k]);
   const [rt]=resultOf(g);$('revHead').textContent=MODE_NAME(g.mode)+'　'+fmtDate(g.t)+'　'+rt+'（'+g.why+'）';
@@ -1243,9 +1201,9 @@ const myName=()=>PROF.name||'名無し';
 function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF))}catch(e){}}
 
 var NM={};
-const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi')){o.name=myName();o.rate=Math.round(PROF.rating);o.skin=SKIN}return _post(o)};
+const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi')){o.name=myName();o.rate=Math.round(PROF.rating)}return _post(o)};
 const _reduce=reduce;reduce=function(m){
-  if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500,skin:skinOk(m.skin)?m.skin:'std'}}
+  if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500}}
   return _reduce(m)};
 function oppIdOf(){return NET.me===NET.host?NET.guest:NET.host}
 function rateGame(){
@@ -1269,7 +1227,7 @@ let hiKey='';
 const _renderP=render;render=function(){_renderP();
   if(S.over)rateGame();
   // 自分の名前とレートを部屋に知らせる（席に着いている時だけ）
-  if(S.mode==='net'&&NET.code&&NET.live&&!NET.watch&&colorOf(NET.me)>0){const k=NET.code+'|'+NET.me+'|'+myName()+'|'+Math.round(PROF.rating)+'|'+SKIN;if(k!==hiKey&&NET.claimed!==false){hiKey=k;post({t:'hi'})}}
+  if(S.mode==='net'&&NET.code&&NET.live&&!NET.watch&&colorOf(NET.me)>0){const k=NET.code+'|'+NET.me+'|'+myName()+'|'+Math.round(PROF.rating);if(k!==hiKey&&NET.claimed!==false){hiKey=k;post({t:'hi'})}}
   // 相手は盤の左上、自分は盤の右下（観戦中は手前側の黒を右下）
   const pt=$('plTop'),pbt=$('plBot');pt.innerHTML='';pbt.innerHTML='';
   if(S.mode==='net'&&NET.host){const hc=colorOf(NET.host),bId=hc===1?NET.host:NET.guest,wId=hc===1?NET.guest:NET.host;
@@ -1345,12 +1303,12 @@ function acctErr(e){acctMsg(ACCT_ERR[e&&e.code]||('うまくいきませんで�
 function acctRender(){const u=FB.user;$('acctOut').hidden=!!u;$('acctVerify').hidden=!(u&&!u.emailVerified);$('acctIn').hidden=!(u&&u.emailVerified);
   if(u){$('acctVEmail').textContent=u.email;$('acctUEmail').textContent=u.email}
   const me=$('meEdit');if(me)me.textContent=u&&u.emailVerified?'ログイン中 ›':'アカウント ›'}
-function profData(){return {name:PROF.name||'',rating:Math.round(PROF.rating*10)/10,games:PROF.games|0,w:PROF.w|0,l:PROF.l|0,d:PROF.d|0,rated:(PROF.rated||[]).slice(-150),skin:SKIN,t:Date.now()}}
+function profData(){return {name:PROF.name||'',rating:Math.round(PROF.rating*10)/10,games:PROF.games|0,w:PROF.w|0,l:PROF.l|0,d:PROF.d|0,rated:(PROF.rated||[]).slice(-150),t:Date.now()}}
 async function acctPull(){if(!FB.user||!FB.user.emailVerified)return;FB.syncing=true;$('acctSync').textContent='データを読み込んでいます…';
   try{const ref=FB.db.collection('users').doc(FB.user.uid);const snap=await ref.get();
     if(snap.exists){const d=snap.data();
       // 対局数が多い方を正とする（この端末で登録前に遊んだ分を失わないため）
-      if((d.games|0)>=(PROF.games|0)){PROF.name=d.name||PROF.name;PROF.rating=Number(d.rating)||PROF.rating;PROF.games=d.games|0;PROF.w=d.w|0;PROF.l=d.l|0;PROF.d=d.d|0;PROF.rated=Array.from(new Set([...(PROF.rated||[]),...(d.rated||[])])).slice(-200);_saveProfLocal();if(skinOk(d.skin))setSkin(d.skin,false)}
+      if((d.games|0)>=(PROF.games|0)){PROF.name=d.name||PROF.name;PROF.rating=Number(d.rating)||PROF.rating;PROF.games=d.games|0;PROF.w=d.w|0;PROF.l=d.l|0;PROF.d=d.d|0;PROF.rated=Array.from(new Set([...(PROF.rated||[]),...(d.rated||[])])).slice(-200);_saveProfLocal()}
       else await ref.set(profData())}
     else await ref.set(profData());
     $('acctSync').textContent='名前・レート・戦績をアカウントに保存しています';if(typeof renderProf==='function')renderProf();render()}
