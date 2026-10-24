@@ -210,6 +210,13 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .prof-rate{display:flex;align-items:baseline;justify-content:space-between;border-top:1px solid var(--line);padding-top:14px}
 .prof-rate b{font-family:var(--f-latin);font-size:34px;color:var(--gold);font-weight:600}
 .prof-rec{color:var(--sub);font-size:13px;margin:4px 0 14px}
+.acct{margin-top:14px}
+.acct-h{font-family:var(--f-disp);font-size:17px;margin:0 0 6px;letter-spacing:.06em}
+.acct input{width:100%;font-family:var(--f-body);font-size:16px;min-height:48px;padding:10px 14px;box-sizing:border-box}
+.acct-btns{margin-top:14px;gap:10px}
+.acct-link{background:none;border:0;color:var(--gold);font-size:13px;padding:8px 0;margin-top:4px;cursor:pointer;text-decoration:underline}
+.acct-st{font-size:14px;line-height:1.7;margin:4px 0 0}
+.acct-sync{font-size:12.5px;color:var(--sub)}
 .players{display:flex;justify-content:flex-start;align-items:center;gap:12px;font-size:13.5px;color:var(--sub);width:min(100%,calc(100dvh - 330px));min-width:min(100%,260px);margin:-6px auto 8px;min-height:20px}
 .players.bot{justify-content:flex-end;margin:8px auto 0}
 .players b{color:var(--fg);font-weight:500}.players .r{color:var(--gold);font-family:var(--f-latin);margin-left:4px}
@@ -230,7 +237,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
     <p class="tag">ひとりぼっちの石は、動けない。</p>
-    <button class="me-btn" id="meBtn" data-go="profile"><span id="meName"></span><span class="me-rate" id="meRate"></span><span class="me-edit">名前・レート ›</span></button>
+    <button class="me-btn" id="meBtn" data-go="profile"><span id="meName"></span><span class="me-rate" id="meRate"></span><span class="me-edit" id="meEdit">アカウント ›</span></button>
     <nav class="menu" aria-label="メニュー">
       <button class="big resume" id="resumeBtn" hidden></button>
       <button class="primary big" id="randomBtn">ランダム対戦</button>
@@ -328,14 +335,36 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 
 <!-- プロフィール -->
 <section class="scr" data-scr="profile" hidden>
-  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>名前とレート</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>アカウント</h2><span class="sp"></span></div>
   <div class="card prof">
     <label class="prof-l" for="nameIn">名前（12文字まで）</label>
     <div class="row prof-row"><input type="text" id="nameIn" maxlength="12" autocomplete="nickname" placeholder="名無し"><button id="nameSave" class="primary">保存</button></div>
     <p class="prof-msg" id="nameMsg"></p>
     <div class="prof-rate"><span>レート</span><b id="profRate"></b></div>
     <p class="prof-rec" id="profRec"></p>
-    <p class="note">レートはオンライン対戦とCPU戦（1手戻しを使わなかった対局）で上下します。CPUのレートは やさしい 900・ふつう 1200・つよい 1500・最強 1900 として計算します。名前とレートはこの端末に保存され、オンライン対戦では相手と観戦者に表示されます。</p>
+    <p class="note">レートはオンライン対戦とCPU戦（1手戻しを使わなかった対局）で上下します。CPUのレートは やさしい 900・ふつう 1200・つよい 1500・最強 1900 として計算します。名前とレートはオンライン対戦では相手と観戦者に表示されます。</p>
+  </div>
+  <div class="card prof acct" id="acct">
+    <h3 class="acct-h">メールでアカウント登録</h3>
+    <p class="note" id="acctLead">登録すると、名前・レート・戦績がアカウントに保存され、別の端末でもログインすれば同じものを使えます。一度ログインすれば、ログアウトするまでこの端末ではログインしたままです。</p>
+    <div id="acctOut">
+      <label class="prof-l" for="acctEmail">メールアドレス</label>
+      <input type="email" id="acctEmail" autocomplete="email" inputmode="email" placeholder="you@example.com">
+      <label class="prof-l" for="acctPass" style="margin-top:10px">パスワード（6文字以上）</label>
+      <input type="password" id="acctPass" autocomplete="current-password" placeholder="••••••">
+      <div class="row acct-btns"><button id="acctLogin" class="primary">ログイン</button><button id="acctSignup">新しく登録</button></div>
+      <button class="acct-link" id="acctReset">パスワードを忘れたとき</button>
+    </div>
+    <div id="acctVerify" hidden>
+      <p class="acct-st"><b id="acctVEmail"></b> に確認メールを送りました。メールのリンクを開いてから「確認した」を押してください。</p>
+      <div class="row acct-btns"><button id="acctChecked" class="primary">確認した</button><button id="acctResend">メールを再送</button></div>
+      <button class="acct-link" id="acctLogout2">別のアカウントでログイン</button>
+    </div>
+    <div id="acctIn" hidden>
+      <p class="acct-st">ログイン中：<b id="acctUEmail"></b><br><span id="acctSync" class="acct-sync"></span></p>
+      <div class="row acct-btns"><button id="acctLogout">ログアウト</button></div>
+    </div>
+    <p class="prof-msg" id="acctMsg"></p>
   </div>
 </section>
 
@@ -1256,6 +1285,46 @@ $('resumeBtn').addEventListener('click',()=>{const a=getActive();if(!a){updResum
 $('leave').addEventListener('click',()=>{if(!NET.watch)setActive(null);updResume()});
 addEventListener('popstate',updResume);
 setInterval(()=>{if(S.mode==='net'&&NET.guest&&!S.over&&!NET.watch&&colorOf(NET.me)>0){const a=getActive();if(a&&a.code===NET.code){a.t=Date.now();setActive(a)}}},20000);
+
+/* メールでアカウント登録（ファイアベース認証＋データベース）。名前・レート・戦績をアカウントに保存して端末間で共有する */
+const FB_CONFIG={apiKey:"AIzaSyDKnPBLV0t4wid2mwtrT-mVc39jLnoQgXY",authDomain:"bocch-7072d.firebaseapp.com",projectId:"bocch-7072d",storageBucket:"bocch-7072d.firebasestorage.app",messagingSenderId:"393814894084",appId:"1:393814894084:web:b57113309ca401fcf0b751"};
+const FB={ready:false,auth:null,db:null,user:null,syncing:false,saveT:null};
+function loadScript(src){return new Promise((ok,ng)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=ng;document.head.appendChild(s)})}
+async function fbInit(){if(FB.ready||FB.loading)return FB.loading;FB.loading=(async()=>{
+  const V='10.12.2';await loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-app-compat.js');
+  await Promise.all([loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-auth-compat.js'),loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-firestore-compat.js')]);
+  firebase.initializeApp(FB_CONFIG);FB.auth=firebase.auth();FB.auth.languageCode='ja';FB.db=firebase.firestore();FB.ready=true;
+  FB.auth.onAuthStateChanged(u=>{FB.user=u;acctRender();if(u&&u.emailVerified)acctPull()})})();return FB.loading}
+const ACCT_ERR={'auth/email-already-in-use':'このメールアドレスはもう登録されています。「ログイン」を押してください。','auth/invalid-email':'メールアドレスの形が正しくありません。','auth/weak-password':'パスワードは6文字以上にしてください。','auth/invalid-credential':'メールアドレスかパスワードが違います。','auth/wrong-password':'メールアドレスかパスワードが違います。','auth/user-not-found':'このメールアドレスは登録されていません。','auth/missing-password':'パスワードを入れてください。','auth/too-many-requests':'試した回数が多すぎます。少し時間をおいてください。','auth/network-request-failed':'通信できませんでした。ネットにつながっているか確かめてください。'};
+function acctMsg(t,err){const m=$('acctMsg');m.textContent=t||'';m.style.color=err?'#e08c7c':''}
+function acctErr(e){acctMsg(ACCT_ERR[e&&e.code]||('うまくいきませんでした（'+(e&&e.code||e)+'）'),true)}
+function acctRender(){const u=FB.user;$('acctOut').hidden=!!u;$('acctVerify').hidden=!(u&&!u.emailVerified);$('acctIn').hidden=!(u&&u.emailVerified);
+  if(u){$('acctVEmail').textContent=u.email;$('acctUEmail').textContent=u.email}
+  const me=$('meEdit');if(me)me.textContent=u&&u.emailVerified?'ログイン中 ›':'アカウント ›'}
+function profData(){return {name:PROF.name||'',rating:Math.round(PROF.rating*10)/10,games:PROF.games|0,w:PROF.w|0,l:PROF.l|0,d:PROF.d|0,rated:(PROF.rated||[]).slice(-150),t:Date.now()}}
+async function acctPull(){if(!FB.user||!FB.user.emailVerified)return;FB.syncing=true;$('acctSync').textContent='データを読み込んでいます…';
+  try{const ref=FB.db.collection('users').doc(FB.user.uid);const snap=await ref.get();
+    if(snap.exists){const d=snap.data();
+      // 対局数が多い方を正とする（この端末で登録前に遊んだ分を失わないため）
+      if((d.games|0)>=(PROF.games|0)){PROF.name=d.name||PROF.name;PROF.rating=Number(d.rating)||PROF.rating;PROF.games=d.games|0;PROF.w=d.w|0;PROF.l=d.l|0;PROF.d=d.d|0;PROF.rated=Array.from(new Set([...(PROF.rated||[]),...(d.rated||[])])).slice(-200);_saveProfLocal()}
+      else await ref.set(profData())}
+    else await ref.set(profData());
+    $('acctSync').textContent='名前・レート・戦績をアカウントに保存しています';if(typeof renderProf==='function')renderProf();render()}
+  catch(e){$('acctSync').textContent='読み込めませんでした（'+(e.code||e.message)+'）'}
+  FB.syncing=false}
+function acctPush(){if(!FB.ready||!FB.user||!FB.user.emailVerified||FB.syncing)return;clearTimeout(FB.saveT);FB.saveT=setTimeout(()=>{FB.db.collection('users').doc(FB.user.uid).set(profData()).catch(()=>{})},800)}
+const _saveProfLocal=saveProf;saveProf=function(){_saveProfLocal();acctPush()};
+$('acctSignup').addEventListener('click',async()=>{acctMsg('登録しています…');try{await fbInit();const c=await FB.auth.createUserWithEmailAndPassword($('acctEmail').value.trim(),$('acctPass').value);await c.user.sendEmailVerification();acctMsg('確認メールを送りました。迷惑メールのフォルダも見てください。')}catch(e){acctErr(e)}});
+$('acctLogin').addEventListener('click',async()=>{acctMsg('ログインしています…');try{await fbInit();await FB.auth.signInWithEmailAndPassword($('acctEmail').value.trim(),$('acctPass').value);acctMsg('')}catch(e){acctErr(e)}});
+$('acctReset').addEventListener('click',async()=>{const em=$('acctEmail').value.trim();if(!em){acctMsg('上にメールアドレスを入れてから押してください。',true);return}try{await fbInit();await FB.auth.sendPasswordResetEmail(em);acctMsg('パスワードを決め直すメールを送りました。')}catch(e){acctErr(e)}});
+$('acctResend').addEventListener('click',async()=>{try{await FB.user.sendEmailVerification();acctMsg('確認メールを送り直しました。')}catch(e){acctErr(e)}});
+$('acctChecked').addEventListener('click',async()=>{try{await FB.user.reload();FB.user=FB.auth.currentUser;await FB.user.getIdToken(true);acctRender();if(FB.user.emailVerified){acctMsg('メールを確認できました。');acctPull()}else acctMsg('まだ確認できていません。メールのリンクを開いてから押してください。',true)}catch(e){acctErr(e)}});
+const acctOut=async()=>{try{await FB.auth.signOut();acctMsg('ログアウトしました。この端末の名前とレートはそのまま残ります。')}catch(e){acctErr(e)}};
+$('acctLogout').addEventListener('click',acctOut);$('acctLogout2').addEventListener('click',acctOut);
+// ログイン状態を復元するため、ページを開いたら少し後に読み込む（以前ログインしたことがある端末だけ）
+try{if(localStorage.getItem('bocch-acct')==='1')setTimeout(fbInit,300)}catch(e){}
+$('meBtn').addEventListener('click',()=>{fbInit().catch(()=>{})});
+{const mark=()=>{try{localStorage.setItem('bocch-acct','1')}catch(e){}};$('acctLogin').addEventListener('click',mark);$('acctSignup').addEventListener('click',mark)}
 render();
 </script>
 </body>
