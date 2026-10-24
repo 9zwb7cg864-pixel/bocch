@@ -212,6 +212,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <button class="big" data-mode="1">CPU やさしい</button>
     <button class="big" data-mode="2">CPU ふつう</button>
     <button class="big" data-mode="3">CPU つよい</button>
+    <button class="big" data-mode="4">CPU 最強</button>
     <button class="big" data-mode="0">1台で2人</button>
   </div>
 </section>
@@ -253,6 +254,149 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
   <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label></div>
 </section>
 
+<script id="eng">
+/* bocch 最強エンジン：置換表・反復深化・主変化探索・指し手並べ替え・差分更新 */
+var BocchEngine=(function(){
+  var N=6,SQ=36,DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]];
+  var WIN=100000;
+  // 盤の前計算
+  var NB=[],RAY=new Int8Array(SQ*8*5).fill(-1);
+  for(var i=0;i<SQ;i++){var r=i/N|0,c=i%N,l=[];
+    for(var d=0;d<8;d++){var x=DIRS[d][0],y=DIRS[d][1];
+      if(r+x>=0&&r+x<N&&c+y>=0&&c+y<N)l.push((r+x)*N+c+y);
+      for(var k=1;k<=4;k++){var rr=r+x*k,cc=c+y*k;if(rr>=0&&rr<N&&cc>=0&&cc<N)RAY[(i*8+d)*5+k]=rr*N+cc}}
+    NB.push(l)}
+  // ハッシュ用乱数（2本の32ビット）
+  var seed=0x9e3779b9;function rnd(){seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;return seed|0}
+  var Z1=new Int32Array(3*SQ),Z2=new Int32Array(3*SQ);for(i=0;i<3*SQ;i++){Z1[i]=rnd();Z2[i]=rnd()}
+  var ZS1=rnd(),ZS2=rnd();
+  // 置換表
+  var TB=20,TS=1<<TB,TM=TS-1;
+  var tK=new Int32Array(TS),tV=new Int32Array(TS),tD=new Int8Array(TS),tF=new Int8Array(TS),tM=new Int16Array(TS);
+  // 評価の重み（自動調整で上書き可）
+  var W={row:[0,23.6,34.5,23.9,4.3,0],arr:234,mob:0.6,th:25.4,dth:23.7,frz:27.7,tempo:17.1};
+  // 状態
+  var b=new Int8Array(SQ),cnt=new Int8Array(SQ),h1=0,h2=0,side=1;
+  var path1=new Int32Array(512),path2=new Int32Array(512),pathLen=0;
+  var gameRep=null; // 対局中に出た局面（キー→回数）
+  var killers=new Int16Array(128*2),hist=new Int32Array(3*SQ*SQ);
+  var nodes=0,deadline=0,stop=false;
+  var mvBuf=[];for(i=0;i<128;i++)mvBuf.push(new Int16Array(200));
+  var scBuf=[];for(i=0;i<128;i++)scBuf.push(new Int32Array(200));
+
+  function load(arr,s){h1=0;h2=0;for(var i=0;i<SQ;i++){b[i]=arr[i];if(b[i]){h1^=Z1[b[i]*SQ+i];h2^=Z2[b[i]*SQ+i]}}
+    for(i=0;i<SQ;i++){var n=0,l=NB[i];for(var j=0;j<l.length;j++)if(b[l[j]])n++;cnt[i]=n}
+    side=s;if(s===2){h1^=ZS1;h2^=ZS2}}
+  function make(f,t){var c=b[f],l,j;b[f]=0;l=NB[f];for(j=0;j<l.length;j++)cnt[l[j]]--;
+    b[t]=c;l=NB[t];for(j=0;j<l.length;j++)cnt[l[j]]++;
+    h1^=Z1[c*SQ+f]^Z1[c*SQ+t]^ZS1;h2^=Z2[c*SQ+f]^Z2[c*SQ+t]^ZS2;side=3-side}
+  function unmake(f,t){make(t,f)}
+  function goalRow(p){return p===1?0:5}
+  function arrivedCnt(p){var g=goalRow(p)*6,n=0;for(var c=0;c<6;c++)if(b[g+c]===p)n++;return n}
+  function gen(p,out){var n=0;for(var i=0;i<SQ;i++)if(b[i]===p){var d=cnt[i];if(!d)continue;if(d>4)d=4;
+      for(var k=0;k<8;k++){var t=RAY[(i*8+k)*5+d];if(t>=0&&!b[t])out[n++]=i*36+t}}return n}
+  function countMoves(p){var n=0,th=0,g=goalRow(p);for(var i=0;i<SQ;i++)if(b[i]===p){var d=cnt[i];if(!d)continue;if(d>4)d=4;
+      for(var k=0;k<8;k++){var t=RAY[(i*8+k)*5+d];if(t>=0&&!b[t]){n++;if((t/6|0)===g&&(i/6|0)!==g)th++}}}return n*1000+th}
+  // 手番側が1手で勝てるか
+  function winInOne(p){var a=arrivedCnt(p);if(a<1)return false;var g=goalRow(p);
+    for(var i=0;i<SQ;i++)if(b[i]===p&&(i/6|0)!==g){var d=cnt[i];if(!d)continue;if(d>4)d=4;
+      for(var k=0;k<8;k++){var t=RAY[(i*8+k)*5+d];if(t>=0&&!b[t]&&(t/6|0)===g)return true}}return false}
+  function feats(p){ // 手番側から見た特徴量の差
+    var o=3-p,F=[0,0,0,0,0,0,0,0,0,0,0,0];
+    for(var i=0;i<SQ;i++){var v=b[i];if(!v)continue;var r=i/6|0,adv=v===1?5-r:r,s=v===p?1:-1;
+      if(adv<5)F[adv]+=s; if(!cnt[i])F[8]+=s}
+    F[5]=arrivedCnt(p)-arrivedCnt(o);
+    var mp=countMoves(p),mo=countMoves(o);F[6]=((mp/1000|0)-(mo/1000|0));F[7]=mp%1000;F[9]=mo%1000;F[10]=1;F[11]=winInOne(p)?1:0;
+    return F}
+  function evaluate(p){var o=3-p,s=0,R=W.row;
+    for(var i=0;i<SQ;i++){var v=b[i];if(!v)continue;var r=i/6|0,adv=v===1?5-r:r,x=(adv<5?R[adv]:0)-(cnt[i]?0:W.frz);s+=v===p?x:-x}
+    var ap=arrivedCnt(p),ao=arrivedCnt(o);s+=(ap-ao)*W.arr;
+    var mp=countMoves(p),mo=countMoves(o);
+    s+=((mp/1000|0)-(mo/1000|0))*W.mob+(mp%1000)*W.th-(mo%1000)*W.dth+W.tempo;
+    return s}
+  function repeated(){ // 探索経路中か対局履歴に同じ局面
+    for(var i=pathLen-2;i>=0;i-=2)if(path1[i]===h1&&path2[i]===h2)return true;
+    if(gameRep&&gameRep[h1+':'+h2])return true;return false}
+  function ttProbe(){var ix=h1&TM;return tK[ix]===h2?ix:-1}
+  function ttStore(d,v,f,m,ply){var ix=h1&TM;if(tK[ix]===h2&&tD[ix]>d&&tF[ix]===0)return;
+    if(v>WIN-1000)v+=ply;else if(v<-WIN+1000)v-=ply;tK[ix]=h2;tV[ix]=v;tD[ix]=d;tF[ix]=f;tM[ix]=m}
+
+  function search(depth,alpha,beta,ply){
+    if((++nodes&2047)===0&&Date.now()>deadline)stop=true;
+    if(stop)return 0;
+    var p=side,o=3-p;
+    if(arrivedCnt(o)>=2)return -WIN+ply;
+    if(ply>0&&repeated())return 0;
+    if(winInOne(p))return WIN-ply-1;
+    if(depth<=0)return evaluate(p);
+    var a0=alpha,ttm=-1,ix=ttProbe();
+    if(ix>=0){ttm=tM[ix];if(tD[ix]>=depth){var v=tV[ix];if(v>WIN-1000)v-=ply;else if(v<-WIN+1000)v+=ply;
+      var fl=tF[ix];if(fl===0)return v;if(fl===1&&v>=beta)return v;if(fl===2&&v<=alpha)return v}}
+    var ms=mvBuf[ply],sc=scBuf[ply],n=gen(p,ms);
+    if(!n)return -WIN+ply;
+    var g=goalRow(p),k1=killers[ply*2],k2=killers[ply*2+1];
+    for(var i=0;i<n;i++){var m=ms[i],t=m%36,f=(m/36|0),s=hist[p*1296+m];
+      if(m===ttm)s=1e9;else if(m===k1)s=5e8;else if(m===k2)s=4e8;
+      if((t/6|0)===g&&(f/6|0)!==g)s+=6e8;sc[i]=s}
+    var best=-WIN*2,bm=ms[0];
+    path1[pathLen]=h1;path2[pathLen]=h2;pathLen++;
+    for(i=0;i<n;i++){
+      var bi=i;for(var j=i+1;j<n;j++)if(sc[j]>sc[bi])bi=j;
+      if(bi!==i){var tm=ms[i];ms[i]=ms[bi];ms[bi]=tm;var ts=sc[i];sc[i]=sc[bi];sc[bi]=ts}
+      m=ms[i];f=m/36|0;t=m%36;
+      make(f,t);
+      var v2;
+      if(i===0)v2=-search(depth-1,-beta,-alpha,ply+1);
+      else{var red=(depth>=3&&i>=4&&sc[i]<4e8)?1:0;
+        v2=-search(depth-1-red,-alpha-1,-alpha,ply+1);
+        if(v2>alpha&&!stop)v2=-search(depth-1,-beta,-alpha,ply+1)}
+      unmake(f,t);
+      if(stop){pathLen--;return 0}
+      if(v2>best){best=v2;bm=m}
+      if(v2>alpha)alpha=v2;
+      if(alpha>=beta){if(m!==k1){killers[ply*2+1]=k1;killers[ply*2]=m}hist[p*1296+m]+=depth*depth;break}
+    }
+    pathLen--;
+    ttStore(depth,best,best>=beta?1:best<=a0?2:0,bm,ply);
+    return best}
+
+  // 局面arr（36要素, 0空 1黒 2白）、手番p、思考ミリ秒、対局履歴のキー配列
+  function think(arr,p,ms,opt){opt=opt||{};
+    load(arr,p);gameRep=null;
+    if(opt.history){gameRep={};var sv1=h1,sv2=h2,sb=Array.from(b);
+      for(var q=0;q<opt.history.length;q++){load(opt.history[q].b,opt.history[q].turn);gameRep[h1+':'+h2]=1}
+      load(sb,p)}
+    hist.fill(0);killers.fill(0);nodes=0;stop=false;pathLen=0;
+    var t0=Date.now();deadline=t0+ms;
+    var root=new Int16Array(200),n=gen(p,root);if(!n)return null;
+    // 1手勝ち
+    var g=goalRow(p);
+    for(var i=0;i<n;i++){var f=root[i]/36|0,t=root[i]%36;make(f,t);var w=arrivedCnt(p)>=2;unmake(f,t);if(w)return{move:[f,t],score:WIN,depth:1,nodes:1}}
+    if(opt.shuffle)for(i=n-1;i>0;i--){var j=Math.random()*(i+1)|0,tm=root[i];root[i]=root[j];root[j]=tm}
+    var bestMove=root[0],bestScore=0,depthDone=0,maxD=opt.maxDepth||60;
+    var scores=new Int32Array(n);
+    for(var d=1;d<=maxD;d++){
+      var alpha=-WIN*2,beta=WIN*2,best=-WIN*2,bm=bestMove;
+      // 前回の最善手を先頭へ
+      for(i=0;i<n;i++)if(root[i]===bestMove){root[i]=root[0];root[0]=bestMove;break}
+      path1[0]=h1;path2[0]=h2;pathLen=1;
+      for(i=0;i<n;i++){var m=root[i];f=m/36|0;t=m%36;make(f,t);var v;
+        if(i===0)v=-search(d-1,-beta,-alpha,1);
+        else{v=-search(d-1,-alpha-1,-alpha,1);if(v>alpha&&!stop)v=-search(d-1,-beta,-alpha,1)}
+        unmake(f,t);if(stop)break;
+        if(v>best){best=v;bm=m}if(v>alpha)alpha=v}
+      if(stop){if(best>-WIN*2)bestMove=bm;break}
+      bestMove=bm;bestScore=best;depthDone=d;
+      if(Math.abs(best)>WIN-1000)break;
+      if(Date.now()-t0>ms*0.45)break; // 次の深さは間に合わない見込み
+    }
+    return{move:[bestMove/36|0,bestMove%36],score:bestScore,depth:depthDone,nodes:nodes,ms:Date.now()-t0}}
+
+  return{think:think,W:W,feats:function(arr,p){load(arr,p);return feats(p)},
+    evalOf:function(arr,p){load(arr,p);return evaluate(p)}};
+})();
+if(typeof module!=='undefined')module.exports=BocchEngine;
+</script>
 <script>
 const N=6, DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]], NEED=2, PREFIX='bocch-game-';
 const $=id=>document.getElementById(id);
@@ -313,8 +457,25 @@ function doMove(m){
   if(S.mode==='net'){netMove(m);return}
   S.hist.push({b:S.b,turn:S.turn,last:S.last,reps:{...S.reps},ply:S.ply});
   Object.assign(S,nextState(S,m));S.sel=-1;render();
-  if(!S.over&&S.mode&&S.turn===2)setTimeout(()=>{if(S.mode&&S.mode!=='net'&&S.turn===2&&!S.over){const cm=cpuMove(S.b,2,S.mode);if(cm)doMove(cm)}},380);
+  if(!S.over&&S.mode&&S.turn===2)setTimeout(()=>{if(S.mode&&S.mode!=='net'&&S.turn===2&&!S.over){cpuPlay()}},380);
 }
+
+
+/* 最強CPU（別スレッドで思考） */
+let WK=null,WKkey='';
+function getWorker(){if(WK!==null)return WK;
+  try{const src=$('eng').textContent+'\nonmessage=e=>{const d=e.data;const r=BocchEngine.think(d.b,d.p,d.ms,{history:d.history,shuffle:d.shuffle});postMessage({key:d.key,r})}';
+    WK=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));
+    WK.onmessage=e=>{const d=e.data;if(d.key===WKkey&&d.key===S.ply+':'+key(S.b,S.turn)&&S.mode===4&&S.turn===2&&!S.over&&d.r)doMove(d.r.move)};
+    WK.onerror=()=>{WK=false}}catch(e){WK=false}return WK}
+function cpuPlay(){
+  if(S.mode===4){const k=S.ply+':'+key(S.b,S.turn);WKkey=k;
+    const job={key:k,b:S.b.slice(),p:2,ms:3000,history:S.hist.map(h=>({b:h.b,turn:h.turn})),shuffle:S.ply<4};
+    const w=getWorker();
+    if(w)w.postMessage(job);
+    else setTimeout(()=>{if(WKkey!==k)return;const r=BocchEngine.think(job.b,2,1500,job);if(r&&k===S.ply+':'+key(S.b,S.turn)&&S.mode===4&&!S.over)doMove(r.move)},30);
+    return}
+  const cm=cpuMove(S.b,2,S.mode);if(cm)doMove(cm)}
 
 /* 描画 */
 function cellsBuild(){gridEl.innerHTML='';for(let i=0;i<N*N;i++){const d=document.createElement('button');d.className='cell';d.id='c'+i;d.addEventListener('click',()=>onCell(i));gridEl.appendChild(d)}}
@@ -487,7 +648,7 @@ const _render=render;
 render=function(){_render();
   if(S.mode==='net'){const waiting=!!NET.host&&NET.me===NET.host&&!NET.guest;
     if(waiting&&CUR==='game')show('invite',true);else if(NET.guest&&(CUR==='invite'||CUR==='match'))show('game',true);}
-  if(S.mode!=='net'){$('conn').className='conn';$('connTxt').textContent=S.mode===0?'1台で2人':['','CPU やさしい','CPU ふつう','CPU つよい'][S.mode]||''}
+  if(S.mode!=='net'){$('conn').className='conn';$('connTxt').textContent=S.mode===0?'1台で2人':['','CPU やさしい','CPU ふつう','CPU つよい','CPU 最強'][S.mode]||''}
 };
 show(NET.code?'game':'home',true);render();
 
