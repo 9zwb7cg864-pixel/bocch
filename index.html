@@ -415,7 +415,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
       <li>途中の石は<b>飛び越えてよい</b>。着地点に石があったら行けない。石は取られない</li>
       <li>自分の手を指し終えたとき、向こう岸（相手側の端の列）に自分の石が<b>2つ以上</b>あれば勝ち。着いた石も動かしてよい</li>
       <li>動かせる石がなければ負け。同じ局面が3回出たら引き分け</li>
-      <li>オンライン対戦の持ち時間は1人5分。使い切ったら負け</li>
+      <li>オンライン対戦の持ち時間は1人7分。使い切ったら負け</li>
     </ol>
     <p class="note">マスは「列の数字＋段の英字」で呼ぶ（例：3c）。列は黒から見て左から1〜6、段は上（白の陣）からa〜f。最初は自分側の端の列に6個並べる。黒が先手。友だちとの対戦では、自分の石がいつも手前に来るように盤を回して表示します。</p>
   </div>
@@ -444,7 +444,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <button id="leave">対戦をやめる</button>
   </div>
   <div class="row" id="reviewRow" hidden><button id="reviewNow">この対局を感想戦 ›</button></div>
-  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk" id="hibiNumL" hidden><input type="checkbox" id="hibiNum"> 仮面に数字</label></div>
+  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk" id="hibiNumL" hidden><input type="checkbox" id="hibiNum"> ふつうの数字</label></div>
 </section>
 
 <script id="eng">
@@ -609,7 +609,8 @@ const SKINS=[['std','標準'],['pool','ビリヤード'],['ruri','瑠璃'],['kok
 let SKIN='std';try{const v=localStorage.getItem('bocch-skin');if(SKINS.some(x=>x[0]===v))SKIN=v}catch(e){}
 const skinOk=k=>SKINS.some(x=>x[0]===k);
 const skinOf=(k,d)=>!k||k==='std'?'':' sk-'+k+(k==='pool'||k==='kokuji'||k==='hibi'?' p'+d:'');
-const numOf=(k,d)=>k==='kokuji'?['N','I','II','III','IV'][d]:d; // 金の刻字はローマ数字（0はN）
+const numOf=(k,d)=>k==='kokuji'&&!plainNum()?['N','I','II','III','IV'][d]:d;
+const plainNum=()=>{const e=document.getElementById('hibiNum');return !!(e&&e.checked)}; // 「ふつうの数字」：仮面・ローマ数字も 0〜4 で出す // 金の刻字はローマ数字（0はN）
 // その色の石を持つ人のスキン（オンラインは各自が知らせたもの、CPU戦は自分の黒だけ）
 function colorSkin(c){if(S.mode==='net'){const id=[NET.host,NET.guest].find(x=>x&&colorOf(x)===c);if(!id)return 'std';if(id===NET.me&&!NET.watch)return SKIN;return (typeof NM!=='undefined'&&NM[id]&&NM[id].skin)||'std'}return S.mode!==0&&c===1?SKIN:'std'}
 function myColor(){if(S.mode==='net')return NET.watch?0:colorOf(NET.me);return S.mode===0?0:1}
@@ -720,7 +721,7 @@ function render(){
   const net=S.mode==='net';
   $('board').classList.toggle('flip',net&&colorOf(NET.me)===2);
   $('board').classList.toggle('hideNum',!$('showNum').checked);
-  {const hb=skc[1]==='hibi'||skc[2]==='hibi';$('hibiNumL').hidden=!hb;$('board').classList.toggle('hibiNum',hb&&$('hibiNum').checked)}
+  {const odd=k=>k==='hibi'||k==='kokuji',hb=odd(skc[1])||odd(skc[2]);$('hibiNumL').hidden=!hb;$('board').classList.toggle('hibiNum',hb&&$('hibiNum').checked)}
   document.querySelectorAll('#modeSeg button').forEach(x=>x.setAttribute('aria-pressed',String(!net&&+x.dataset.mode===S.mode)));
   $('localCtl').hidden=net;$('netCtl').hidden=!net;
   const seated=net&&colorOf(NET.me)>0;$('resign').hidden=!(seated&&NET.guest&&!S.over);$('rematch').hidden=!(seated&&S.over);
@@ -856,7 +857,7 @@ $('undo').addEventListener('click',()=>{
   while(steps--&&S.hist.length){const h=S.hist.pop();S.b=h.b;S.turn=h.turn;S.last=h.last;S.reps=h.reps;S.ply=h.ply}
   S.over=null;S.sel=-1;S.log=(S.log||[]).slice(0,S.ply||0);render()});
 $('showNum').addEventListener('change',render);
-// ひびの仮面の石にも数字を出す（自分の画面だけ、この端末に覚える）
+// ひびの仮面・金の刻字の石もふつうの数字で出す（自分の画面だけ、この端末に覚える）
 try{$('hibiNum').checked=localStorage.getItem('bocch-hibinum')==='1'}catch(e){}
 $('hibiNum').addEventListener('change',()=>{try{localStorage.setItem('bocch-hibinum',$('hibiNum').checked?'1':'0')}catch(e){}render();try{if(REV.g)renderReview()}catch(e){}});
 $('create').addEventListener('click',createRoom);
@@ -1287,8 +1288,8 @@ $('nameSave').addEventListener('click',()=>{PROF.name=cleanName($('nameIn').valu
 $('nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('nameSave').click()});
 addEventListener('popstate',()=>{if(CUR==='profile')renderProf()});
 
-/* 持ち時間（オンライン対戦：1人5分）。時刻は中継サーバーが付けた時刻で数えるので、両方の画面で同じ判定になる */
-let CLOCK_SEC=300;
+/* 持ち時間（オンライン対戦：1人7分）。時刻は中継サーバーが付けた時刻で数えるので、両方の画面で同じ判定になる */
+let CLOCK_SEC=420;
 function clockReset(t){NET.clk={g:NET.game,last:t,used:{1:0,2:0}}}
 function flagWhy(c){const my=colorOf(NET.me);return my&&!NET.watch?(c===my?'あなたの時間切れ':'相手の時間切れ'):(c===1?'黒':'白')+'の時間切れ'}
 const _reduceT=reduce;reduce=function(m){
