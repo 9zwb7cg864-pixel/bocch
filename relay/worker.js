@@ -103,6 +103,8 @@ export class Topic extends DurableObject {
       const pair = new WebSocketPair();
       const [client, server] = Object.values(pair);
       this.ctx.acceptWebSocket(server);
+      server.serializeAttachment({ w: url.searchParams.get("role") === "w" });
+      if (/^bocch-v1-[a-z0-9]{6}$/.test(topic)) await this.ctx.storage.put("name", topic);
       const since = parseSince(url.searchParams.get("since"), now);
       server.send(JSON.stringify({ event: "open", topic, time: now }));
       for (const r of this.rows(since)) server.send(JSON.stringify(this.ev(topic, r)));
@@ -112,8 +114,25 @@ export class Topic extends DurableObject {
     return new Response("not found\n", { status: 404, headers: h });
   }
 
+  // 部屋にいる対局者（観戦者は除く）の数
+  players(except) {
+    return this.ctx.getWebSockets().filter(s => s !== except && !(s.deserializeAttachment() || {}).w).length;
+  }
+  // 対局者が全員いなくなったら、1分待ってから「いま対局中」板に終わりを出す（すぐ戻ってきた場合は出さない）
+  async gone(ws) {
+    if (this.players(ws) > 0) return;
+    const name = await this.ctx.storage.get("name");
+    if (name) await this.ctx.storage.setAlarm(Date.now() + 60000);
+  }
+  async alarm() {
+    const name = await this.ctx.storage.get("name");
+    if (!name || this.players(null) > 0) return;
+    const live = this.env.TOPIC.get(this.env.TOPIC.idFromName("bocch-v1-live"));
+    await live.fetch(new Request("https://relay/bocch-v1-live", { method: "POST", body: JSON.stringify({ t: "end", room: name.slice(9), why: "gone" }) }));
+  }
+
   // 受け取ったメッセージ（ping 以外）は使わない。送信は POST で行う
   async webSocketMessage(ws, msg) {}
-  async webSocketClose(ws, code) { try { ws.close(code === 1005 ? 1000 : code, "bye"); } catch (e) {} }
-  async webSocketError(ws) { try { ws.close(1011, "error"); } catch (e) {} }
+  async webSocketClose(ws, code) { try { ws.close(code === 1005 ? 1000 : code, "bye"); } catch (e) {} await this.gone(ws); }
+  async webSocketError(ws) { try { ws.close(1011, "error"); } catch (e) {} await this.gone(ws); }
 }
