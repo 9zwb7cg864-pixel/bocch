@@ -44,6 +44,7 @@ header p{margin:0;color:var(--sub);font-family:var(--f-disp);font-size:14px;lett
 .stone.b{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%);color:#e4e5e6}
 .stone.w{background:radial-gradient(circle at 34% 28%,#ffffff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c}
 .stone.zero{opacity:.45}
+.ver{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));right:14px;font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums;letter-spacing:.04em}
 /* レートで変わる石の縁（二段:銀 三段:金 四段:金の二重 名人:二重＋光）。相手の石は相手のレートで決まる */
 .stone.r2,.stone.r3,.stone.r4,.stone.r5{box-sizing:border-box;border:2.5px solid transparent}
 .stone.b.r2{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%) padding-box,conic-gradient(from 20deg,#ffffff,#a7b0b8 14%,#f2f5f7 26%,#6c757d 40%,#e9edf0 55%,#8e979f 70%,#ffffff 84%,#a7b0b8 92%,#ffffff) border-box}
@@ -105,7 +106,7 @@ footer span:first-child{font-family:var(--f-latin);font-style:italic;font-size:1
 
 /* 画面切り替え */
 body{min-height:100dvh}
-.scr{max-width:560px;margin:0 auto;width:100%}
+.scr{max-width:560px;margin:0 auto;width:100%;position:relative}
 .home{min-height:calc(100dvh - 80px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
 .home h1{font-size:76px}
 .tag{margin:0 0 26px;color:var(--sub);font-family:var(--f-disp);font-size:15px;letter-spacing:.14em}
@@ -247,6 +248,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
+  <div class="ver" id="ver" aria-label="バージョン">v1.0</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -359,7 +361,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <div class="rank-row" id="rankRow" aria-label="段位ごとの石の縁"></div>
     <p class="rank-note">レートが上がると石の縁が良くなります（1400で銀、1600で金、1800で金の二重、2000で金の光）。オンライン対戦では、相手の石も相手のレートの縁で見えます。</p>
     <p class="prof-rec" id="profRec"></p>
-    <p class="note">レートはオンライン対戦とCPU戦（1手戻しを使わなかった対局）で上下します。CPUのレートは やさしい 900・ふつう 1200・つよい 1500・最強 1900 として計算します。名前とレートはオンライン対戦では相手と観戦者に表示されます。</p>
+    <p class="note">レートはオンライン対戦とCPU戦（1手戻しを使わなかった対局）で上下します。CPUのレートは やさしい 900・ふつう 1200・つよい 1500・最強 2100 として計算します。名前とレートはオンライン対戦では相手と観戦者に表示されます。</p>
   </div>
   <div class="card prof acct" id="acct">
     <h3 class="acct-h">メールでアカウント登録</h3>
@@ -1236,7 +1238,7 @@ document.querySelector('[data-go="watch"]').addEventListener('click',startWatchL
 addEventListener('popstate',()=>{if(CUR==='watch'){if(!LV.on)startWatchList()}else stopWatchList()});
 
 /* 名前とレート（この端末に保存。オンラインでは部屋の記録に名前とレートを添えて送る） */
-var PKEY='bocch-profile',CPU_RATE={1:900,2:1200,3:1500,4:1900};
+var PKEY='bocch-profile',CPU_RATE={1:900,2:1200,3:1500,4:2100};
 const cleanName=x=>String(x==null?'':x).replace(/[\u0000-\u001f\u007f<>]/g,'').trim().slice(0,12);
 function loadProf(){let p={};try{p=JSON.parse(localStorage.getItem(PKEY)||'{}')||{}}catch(e){}
   return {name:cleanName(p.name)||'',rating:Number.isFinite(p.rating)?p.rating:1500,games:p.games|0,w:p.w|0,l:p.l|0,d:p.d|0,rated:Array.isArray(p.rated)?p.rated.slice(-200):[]}}
