@@ -213,6 +213,9 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .players .you{color:var(--gold);font-size:11px;margin-left:4px}
 .players .pl-vs{color:var(--mute);font-size:12px}
 .players .dot{width:12px;height:12px;margin-right:6px;vertical-align:-1px}
+.players .clk{font-family:var(--f-latin);font-variant-numeric:tabular-nums;margin-left:8px;padding:1px 8px;border-radius:5px;border:1px solid var(--gold-soft);color:var(--sub);font-size:14px}
+.players .clk.run{background:var(--gold);border-color:var(--gold);color:#16130d}
+.players .clk.low{color:#e08c7c;border-color:#e08c7c}.players .clk.run.low{background:#e08c7c;color:#16130d}
 .rate-msg{margin:6px 0 0;font-size:14px;color:var(--gold);font-family:var(--f-latin)}
 @media (prefers-reduced-motion:reduce){.stone,button{transition:none}}
 </style>
@@ -354,6 +357,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
       <li>途中の石は<b>飛び越えてよい</b>。着地点に石があったら行けない。石は取られない</li>
       <li>自分の手を指し終えたとき、向こう岸（相手側の端の列）に自分の石が<b>2つ以上</b>あれば勝ち。着いた石も動かしてよい</li>
       <li>動かせる石がなければ負け。同じ局面が3回出たら引き分け</li>
+      <li>オンライン対戦の持ち時間は1人5分。使い切ったら負け</li>
     </ol>
     <p class="note">マスは「列の数字＋段の英字」で呼ぶ（例：3c）。列は黒から見て左から1〜6、段は上（白の陣）からa〜f。最初は自分側の端の列に6個並べる。黒が先手。友だちとの対戦では、自分の石がいつも手前に来るように盤を回して表示します。</p>
   </div>
@@ -716,7 +720,7 @@ async function post(obj){
   obj.from=NET.me;
   for(let i=0;i<3;i++){
     try{const r=await fetch(RELAY+TOPIC(NET.code),{method:'POST',body:JSON.stringify(obj)});
-      if(r.ok)return true;
+      if(r.ok){try{const j=await r.json();if(typeof j.time==='number'){const sk=j.time-Date.now()/1000;if(NET.skew==null||sk>NET.skew)NET.skew=sk}}catch(e){}return true}
       if(r.status===429){netMsg(LIMIT_MSG,true);return false}}catch(e){}
     await new Promise(r=>setTimeout(r,800))}
   netMsg('送れませんでした。ネットにつながっているか確かめてください。',true);return false}
@@ -738,7 +742,8 @@ function openRoom(code,watch){
   es.onmessage=e=>{let d,m;try{d=JSON.parse(e.data)}catch(x){return}
     if(d.event&&d.event!=='message')return;if(d.id){if(NET.seen.has(d.id))return;NET.seen.add(d.id)}
     try{m=JSON.parse(d.message)}catch(x){return}
-    if(m&&typeof m==='object'){reduce(m);render()}};
+    if(typeof d.time==='number'){const sk=d.time-Date.now()/1000;if(NET.skew==null||sk>NET.skew)NET.skew=sk}
+    if(m&&typeof m==='object'){m._t=d.time;reduce(m);render()}};
 }
 async function claimSeat(){
   if(NET.claimed)return;NET.claimed=true;
@@ -1205,6 +1210,32 @@ $('meBtn').addEventListener('click',()=>{renderProf();$('nameMsg').textContent='
 $('nameSave').addEventListener('click',()=>{PROF.name=cleanName($('nameIn').value);saveProf();renderProf();$('nameMsg').textContent='保存しました：'+myName();render()});
 $('nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('nameSave').click()});
 addEventListener('popstate',()=>{if(CUR==='profile')renderProf()});
+
+/* 持ち時間（オンライン対戦：1人5分）。時刻は中継サーバーが付けた時刻で数えるので、両方の画面で同じ判定になる */
+let CLOCK_SEC=300;
+function clockReset(t){NET.clk={g:NET.game,last:t,used:{1:0,2:0}}}
+function flagWhy(c){const my=colorOf(NET.me);return my&&!NET.watch?(c===my?'あなたの時間切れ':'相手の時間切れ'):(c===1?'黒':'白')+'の時間切れ'}
+const _reduceT=reduce;reduce=function(m){
+  if(S.mode==='net'&&m&&typeof m._t==='number'){
+    if(m.t==='join'){const had=NET.guest;const r=_reduceT(m);if(!had&&NET.guest)clockReset(m._t);return r}
+    if(m.t==='rematch'){const g0=NET.game;const r=_reduceT(m);if(NET.game!==g0)clockReset(m._t);return r}
+    if(m.t==='move'&&NET.clk&&NET.clk.g===NET.game&&!S.over&&m.g===NET.game&&colorOf(m.from)===S.turn&&m.ply===S.ply){
+      const c=S.turn,spent=Math.max(0,m._t-NET.clk.last);
+      if(NET.clk.used[c]+spent>CLOCK_SEC+1){S.over={win:3-c,why:flagWhy(c)};NET.sending=false;return}
+      const p0=S.ply;const r=_reduceT(m);if(S.ply!==p0){NET.clk.used[c]+=spent;NET.clk.last=m._t}return r}}
+  return _reduceT(m)};
+function srvNow(){return Date.now()/1000+(NET.skew!=null?NET.skew:0)}
+function remain(c){const k=NET.clk;if(!k)return CLOCK_SEC;let u=k.used[c];if(!S.over&&S.turn===c)u+=Math.max(0,srvNow()-k.last);return CLOCK_SEC-u}
+function fmtT(s){s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+function updClock(){
+  const on=S.mode==='net'&&NET.clk&&NET.clk.g===NET.game;
+  if(!on){document.querySelectorAll('.players .clk').forEach(e=>e.remove());return}
+  for(const c of [1,2]){const dot=document.querySelector('.players .dot.'+(c===1?'b':'w'));if(!dot)continue;const sp=dot.parentElement;let el=sp.querySelector('.clk');
+    if(!el){el=document.createElement('span');el.className='clk';sp.appendChild(el)}const r=remain(c);el.textContent=fmtT(r);el.classList.toggle('run',!S.over&&S.turn===c);el.classList.toggle('low',r<=30)}
+  if(!S.over&&remain(S.turn)<-2){const c=S.turn;S.over={win:3-c,why:flagWhy(c)};NET.sending=false;render()}}
+const _netMoveT=netMove;netMove=function(m){if(NET.clk&&NET.clk.g===NET.game&&remain(colorOf(NET.me))<=0)return;return _netMoveT(m)};
+const _renderT=render;render=function(){_renderT();updClock()};
+setInterval(()=>{if(S.mode==='net'&&CUR==='game')updClock()},250);
 render();
 </script>
 </body>
