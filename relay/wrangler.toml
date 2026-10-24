@@ -1,4 +1,4 @@
-name = "bocch-relay"
+name = "bocch"
 main = "worker.js"
 compatibility_date = "2025-09-01"
 
