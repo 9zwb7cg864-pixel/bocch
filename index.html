@@ -265,7 +265,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.0</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.1</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -897,7 +897,10 @@ function joinRoom(code){openRoom(code)}
 /* 操作 */
 document.querySelectorAll('#modeSeg button').forEach(x=>x.addEventListener('click',()=>{if(S.mode==='net')leave();S=initState(+x.dataset.mode);KICK='';render()}));
 /* 研究：AI同士の対局と、評価値を見ながらの検討 */
-const STUDY={run:false,lv:{1:0,2:0},sp:600,evKey:'',ev:null,ew:null};
+const STUDY={run:false,lv:{1:0,2:0},sp:600,evKey:'',ev:null,ew:null,ply:-1,at:0};
+// 研究のAI同士：手が進まなくなったら（画面を離れた・考えが返ってこない等）指し直させる
+setInterval(()=>{if(!S||!S.study||!STUDY.run||S.over)return;if(S.ply!==STUDY.ply){STUDY.ply=S.ply;STUDY.at=Date.now();return}
+  if(STUDY.lv[S.turn]&&Date.now()-STUDY.at>Math.max(9000,STUDY.sp+6000)){STUDY.at=Date.now();KICK='';WKkey='';kick()}},1500);
 function studyStart(){if(S.mode==='net')leave();S=initState(0);S.study=true;STUDY.run=false;STUDY.ev=null;STUDY.evKey='';KICK='';WKkey='';$('stRun').textContent='▶ AIに指させる';render();show('game')}
 function studyKick(){if(!STUDY.run||S.over)return;const lv=STUDY.lv[S.turn];if(!lv)return;const k='s:'+S.ply+':'+key(S.b,S.turn);if(KICK===k)return;KICK=k;
   setTimeout(()=>{if(S.study&&STUDY.run&&!S.over&&KICK==='s:'+S.ply+':'+key(S.b,S.turn))cpuPlay(S.turn,STUDY.lv[S.turn])},STUDY.sp)}
@@ -1319,7 +1322,7 @@ function renderWatch(){const box=$('watchList');box.innerHTML='';
 document.querySelector('[data-go="watch"]').addEventListener('click',startWatchList);
 /* AIを観戦する：最強対最強を1手7秒で。誰かが観ていればその部屋に入る。
    観ている人全員が手を出せる仕組み（同じ手が二重に届いても2回目は無視される）なので、最初の人が抜けても続く */
-const AIW={on:false,code:null,b:null,w:null,lastPly:-1,lastAt:0,thinkKey:'',res:null,worker:null,primary:false,beat:0,overFor:-1};
+const AIW={on:false,code:null,b:null,w:null,lastPly:-1,lastAt:0,thinkKey:'',res:null,worker:null,primary:false,beat:0,overFor:-1,posted:0,seen:'',thinkAt:0};
 function aiWorker(){if(AIW.worker!==null)return AIW.worker;try{const src=$('eng').textContent+'\nonmessage=e=>{const d=e.data;const r=BocchEngine.think(d.b,d.p,d.ms,{shuffle:d.shuffle});postMessage({key:d.key,r})}';
   AIW.worker=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));AIW.worker.onmessage=e=>{if(e.data.key===AIW.thinkKey)AIW.res=e.data}}catch(e){AIW.worker=false}return AIW.worker}
 function aiRaw(o){o.from=o.from||NET.me;return fetch(RELAY+TOPIC(NET.code),{method:'POST',body:JSON.stringify(o)}).catch(()=>{})}
@@ -1329,6 +1332,7 @@ function aiHost(){const code=newCode();openRoom(code,false);NET.claimed=true;NET
   aiRaw({t:'create',from:AIW.b,name:'最強AI',rate:2100,ai:1}).then(()=>aiRaw({t:'join',from:AIW.w,name:'最強AI',rate:2100,ai:1})).then(()=>{aiLive();AIW.beat=Date.now()});
   aiStart(code)}
 function aiStart(code){AIW.on=true;AIW.code=code;AIW.lastPly=-1;AIW.thinkKey='';AIW.res=null;AIW.overFor=-1}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&AIW.on){AIW.lastPly=-1}if(!document.hidden&&S&&S.study){KICK='';WKkey='';try{kick()}catch(e){}}}); // 画面に戻ったらすぐ再開
 $('aiWatch').addEventListener('click',()=>{stopWatchList();const now=Date.now()/1000;
   const room=[...LV.rooms.entries()].filter(([,r])=>r.ai&&now-r.at<5400).sort((a,b)=>b[1].at-a[1].at)[0];
   if(room){openRoom(room[0],true);AIW.primary=false;aiStart(room[0])}else aiHost();show('game')});
@@ -1340,13 +1344,15 @@ setInterval(()=>{if(!AIW.on)return;if(S.mode!=='net'||NET.code!==AIW.code){AIW.o
     if(AIW.overFor!==NET.game){AIW.overFor=NET.game;AIW.lastAt=now;if(AIW.primary)livePost({t:'end',room:NET.code,g:NET.game})}
     else if(now-AIW.lastAt>(AIW.primary?8000:14000)){AIW.lastAt=now+60000;const g=NET.game+1;aiRaw({t:'rematch',g,from:NET.host}).then(()=>aiRaw({t:'rematch',g,from:NET.guest})).then(()=>{if(AIW.primary){aiLive();AIW.beat=Date.now()}})}
     return}
-  if(S.ply!==AIW.lastPly){AIW.lastPly=S.ply;AIW.lastAt=now;AIW.res=null;AIW.thinkKey=NET.game+':'+S.ply+':'+key(S.b,S.turn);
+  // 見張り：送った手が届かない／考えが返ってこないときは、考え直して送り直す
+  if(S.ply===AIW.lastPly&&((AIW.posted&&now-AIW.posted>10000)||(!AIW.posted&&!AIW.res&&now-AIW.thinkAt>25000))){AIW.lastPly=-1}
+  if(S.ply!==AIW.lastPly){const key2=NET.game+':'+S.ply;if(AIW.seen!==key2){AIW.seen=key2;AIW.lastAt=now}AIW.lastPly=S.ply;AIW.res=null;AIW.posted=0;AIW.thinkAt=now;AIW.thinkKey=NET.game+':'+S.ply+':'+key(S.b,S.turn);
     const w=aiWorker(),job={key:AIW.thinkKey,b:S.b.slice(),p:S.turn,ms:3500,shuffle:S.ply<4};
     if(w)w.postMessage(job);else{const k=AIW.thinkKey;setTimeout(()=>{if(AIW.thinkKey===k)AIW.res={key:k,r:BocchEngine.think(job.b,job.p,1500,job)}},50)}
     return}
   const wait=AIW.primary?7000:7000+5000+((NET.me||'').charCodeAt(0)%4)*1000; // 観ているだけの人は、手が来ないときだけ代わりに指す
   if(AIW.res&&AIW.res.key===AIW.thinkKey&&AIW.res.r&&now-AIW.lastAt>=wait){const m=AIW.res.r.move;AIW.res=null;
-    const from=colorOf(NET.host)===S.turn?NET.host:NET.guest;aiRaw({t:'move',g:NET.game,ply:S.ply,m,from});AIW.lastAt=now+3000;if(!AIW.primary){AIW.primary=true;AIW.beat=0}} // 代わりに指したら、以後はこの人が進める
+    const from=colorOf(NET.host)===S.turn?NET.host:NET.guest;aiRaw({t:'move',g:NET.game,ply:S.ply,m,from});AIW.posted=now;if(!AIW.primary){AIW.primary=true;AIW.beat=0}} // 代わりに指したら、以後はこの人が進める
 },400);
 addEventListener('popstate',()=>{if(CUR==='watch'){if(!LV.on)startWatchList()}else stopWatchList()});
 
