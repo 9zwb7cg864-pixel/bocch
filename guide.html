@@ -37,6 +37,11 @@ p{margin:0}
 .lead{color:var(--sub);margin-top:10px;max-width:38em}
 .eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
 section>.intro{color:var(--sub);max-width:40em;margin-bottom:16px}
+.tabs{position:sticky;top:0;z-index:10;display:flex;gap:4px;margin:-20px 0 -16px;padding:8px 0;background:var(--bg);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:1 0 auto;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--sub);font:inherit;font-weight:700;font-size:14px;letter-spacing:.04em;cursor:pointer;white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.tabs button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .note{font-size:12.5px;color:var(--sub)}
 
 /* 盤 */
@@ -199,10 +204,18 @@ ol.check span{font-size:13.5px;color:var(--sub)}
   <a href="./" style="display:inline-block;margin-bottom:14px;color:var(--gold);text-decoration:none;font-size:14px">‹ ゲームに戻る</a>
   <div class="eyebrow">ひとりぼっちの石は動けない</div>
   <h1>bocch 勝ち方ガイド</h1>
-  <p class="lead">AI「最強」が重く見ているポイントと、AI同士の26,000局から集計した「勝ちやすい形」を、盤の図でまとめました。石の数字は、その石が動ける距離です。</p>
+  <p class="lead">AI「最強」が重く見ているポイントと、AI同士の3万局から集計した「勝ちやすい形」を、盤の図でまとめました。石の数字は、その石が動ける距離です。</p>
 </header>
 
-<section>
+<nav class="tabs" id="tabs" role="tablist" aria-label="ガイドの章">
+  <button role="tab" data-t="basic">基本</button>
+  <button role="tab" data-t="shape">形・定跡</button>
+  <button role="tab" data-t="strat">戦法</button>
+  <button role="tab" data-t="tac">手筋</button>
+  <button role="tab" data-t="data">データ</button>
+</nav>
+
+<section data-tab="basic">
   <h2>まず、仕組みを手で試す</h2>
   <p class="intro">動ける距離は「まわり8マスにいる石の数（色は問わない）」です。石を置くと、隣の石の数字も変わります。ここがこのゲームのいちばん大事なところです。</p>
   <div class="lab">
@@ -226,19 +239,19 @@ ol.check span{font-size:13.5px;color:var(--sub)}
   </div>
 </section>
 
-<section>
+<section data-tab="shape">
   <h2>強い形</h2>
   <p class="intro">AI同士の対局で「その形を相手より多く持っていた側」が最終的に勝った割合です。真ん中の線が50％で、右に伸びるほど勝ちやすい形です。</p>
   <div class="rank" id="shapes"></div>
 </section>
 
-<section>
+<section data-tab="shape">
   <h2>黒の1手目（定跡）</h2>
-  <p class="intro">「最強」に7通りの1手目を15秒ずつ読ませた評価です。上から5つはほぼ互角で、下の2つははっきり不利です。白の2手目は、黒が何を指しても「肩寄せ」（端の石を斜めに寄せる手）が最善でした。</p>
+  <p class="intro">強くなった「最強」（v1.7）に、14通りの1手目をすべて15秒ずつ（15〜18手先まで）読ませた評価です（左右対称の手はまとめて平均）。端の石を使う<b>寄り添い・隅守りの2つだけが互角</b>で、中の石を2歩出す手はどれも少しずつ損でした。白の2手目は、黒が何を指しても「肩寄せ」（端の石を斜めに寄せる手）が最善です。この読みはゲームの定跡として「最強」に入っています。</p>
   <div class="rank" id="opens"></div>
 </section>
 
-<section id="strategy">
+<section id="strategy" data-tab="strat">
   <h2>戦法（序盤の作戦）</h2>
   <p class="intro">AI同士に26,000局打たせ、両者の8手目の形を似たものどうしでまとめると、5つの型に分かれました。図は、その型の8手目に多かった自分の石の並びを、6個の石で描いた典型形です（相手の石は省略。自分の陣地が下、攻めた側を左にそろえています）。</p>
   <div class="rank" id="strats"></div>
@@ -256,7 +269,19 @@ ol.check span{font-size:13.5px;color:var(--sub)}
 
 </section>
 
-<section id="data">
+<section data-tab="data">
+  <h2>最新AI（v1.7）同士の4,000局</h2>
+  <p class="intro">読み方を改良した最新の「最強」は、前のAIに約6割勝ちます（300局で170勝109敗）。その最新AI同士に4,000局打たせた結果です（最初の2〜6手はばらつかせるため無作為）。</p>
+  <div class="facts" id="facts2"></div>
+  <ul class="keynotes" style="margin-top:12px">
+    <li><b>強くなるほど対局が長くなる</b>：真ん中の手数は29手から39手に伸びました。お互いがリーチを早めに止めるので、簡単には着けません。</li>
+    <li><b>1個目の価値が上がった</b>：先に1個着いた側の勝率は62％から68％へ。守りが固い相手から1個奪うのは、それだけ大きいということです。</li>
+    <li><b>引き分けが増えた</b>：2％から7％へ。読みが深いと、お互い危ない手を避けて同じ局面をくり返しやすくなります。</li>
+    <li><b>AIが学んだ局面の見方</b>：最新の対局から読み取れたのは「向こう岸に1つ届いた価値は前より大きい」「端の列の石は思ったより働かない」「動けない石はもっと減点すべき」の3つでした。</li>
+  </ul>
+</section>
+
+<section id="data" data-tab="data">
   <h2>26,000局のデータで見る対局</h2>
   <p class="intro">AI同士の26,000局を数えた結果です。対局の流れをつかむ目安にしてください。</p>
   <div class="facts" id="facts"></div>
@@ -276,13 +301,13 @@ ol.check span{font-size:13.5px;color:var(--sub)}
   </ul></div>
 </section>
 
-<section>
+<section data-tab="basic">
   <h2>相手のリーチの止め方</h2>
   <p class="intro">黒の石（数字2）が、2マス上のゴールに届く形です。上・右上・左上の3方向に届くので、着地点は最大3か所あります。</p>
   <div class="trio" id="defs"></div>
 </section>
 
-<section id="tactics">
+<section id="tactics" data-tab="tac">
   <h2>上級：手筋の体系</h2>
   <p class="intro">強い人が見ているのは、自分の石の数字よりも、相手と自分の石の「ズレ」です。すべての手筋はこの考え方から組み立てられます。</p>
   <div class="rule"><b>ズレ ＝ ゴールまでの段数 − 今の数字</b><br>ズレ0の石はゴールに届きます（リーチ）。上でも斜め上でも、1回で上がる段数は数字と同じだからです。数字が多すぎても盤の外に出るので届きません。<br>1手で動かすと、<b>着いたマスの隣の石はズレが1減り</b>、<b>離れたマスの隣の石はズレが1増えます</b>。</div>
@@ -301,7 +326,7 @@ ol.check span{font-size:13.5px;color:var(--sub)}
   <div id="tacbox" style="display:flex;flex-direction:column;gap:34px"></div>
 </section>
 
-<section>
+<section data-tab="basic">
   <h2>毎手、この順で確かめる</h2>
   <ol class="check">
     <li><div><b>相手のズレ0（リーチ）はあるか</b><span>あれば止めます。押し上げか引き抜きで、ズレを0からずらします。</span></div></li>
@@ -312,7 +337,7 @@ ol.check span{font-size:13.5px;color:var(--sub)}
   </ol>
 </section>
 
-<p class="note src">集計の出どころ：形の勝率は、AI同士に2,000局打たせ、約4.8万局面で両者を比べた結果です。定跡の評価は「最強」の13手先までの読みで、最後まで解き切ったものではありません。5％程度の差は、読む時間で入れ替わることがあります。</p>
+<p class="note src" data-tab="data">集計の出どころ：形の勝率は、AI同士に2,000局打たせ、約4.8万局面で両者を比べた結果です。定跡の評価は「最強」の13手先までの読みで、最後まで解き切ったものではありません。5％程度の差は、読む時間で入れ替わることがあります。</p>
 </main>
 
 <script>
@@ -392,13 +417,13 @@ shapes.innerHTML=SH.map((x,i)=>rowHTML(i===0,x.t,x.s,x.d,x.v)).join('');
 const DERIV={"寄り添い":{"n":7428,"win":60,"dist":[{"s":"中央櫓","p":33,"win":68},{"s":"総掛かり","p":22,"win":56},{"s":"斬り込み","p":21,"win":60},{"s":"端攻め","p":12,"win":52},{"s":"籠城","p":12,"win":52}]},"正面突破":{"n":7429,"win":53,"dist":[{"s":"中央櫓","p":32,"win":62},{"s":"斬り込み","p":20,"win":53},{"s":"総掛かり","p":19,"win":52},{"s":"籠城","p":17,"win":45},{"s":"端攻め","p":13,"win":46}]},"渡り鳥":{"n":7325,"win":52,"dist":[{"s":"中央櫓","p":27,"win":58},{"s":"斬り込み","p":23,"win":54},{"s":"総掛かり","p":19,"win":48},{"s":"籠城","p":16,"win":44},{"s":"端攻め","p":14,"win":49}]},"隅守り":{"n":7330,"win":49,"dist":[{"s":"総掛かり","p":29,"win":46},{"s":"中央櫓","p":22,"win":62},{"s":"籠城","p":17,"win":41},{"s":"斬り込み","p":17,"win":49},{"s":"端攻め","p":15,"win":42}]},"十字路":{"n":7371,"win":48,"dist":[{"s":"総掛かり","p":26,"win":46},{"s":"中央櫓","p":23,"win":58},{"s":"斬り込み","p":19,"win":50},{"s":"籠城","p":17,"win":41},{"s":"端攻め","p":15,"win":42}]},"一本槍":{"n":7345,"win":45,"dist":[{"s":"中央櫓","p":23,"win":53},{"s":"総掛かり","p":22,"win":43},{"s":"籠城","p":20,"win":38},{"s":"斬り込み","p":19,"win":48},{"s":"端攻め","p":16,"win":41}]},"はぐれ雲":{"n":7402,"win":43,"dist":[{"s":"総掛かり","p":30,"win":43},{"s":"端攻め","p":23,"win":38},{"s":"籠城","p":19,"win":37},{"s":"中央櫓","p":14,"win":55},{"s":"斬り込み","p":14,"win":44}]}};
 const REPLY={"一本槍": [{"r": "肩寄せ", "win": 60.6, "n": 543}, {"r": "様子見", "win": 54.9, "n": 506}, {"r": "正面受け", "win": 51.9, "n": 511}, {"r": "交差返し", "win": 51.8, "n": 533}, {"r": "渡り返し", "win": 50, "n": 494}, {"r": "迎え槍", "win": 47.4, "n": 504}, {"r": "離れ雲", "win": 47.1, "n": 526}], "十字路": [{"r": "肩寄せ", "win": 59.5, "n": 558}, {"r": "正面受け", "win": 55.6, "n": 505}, {"r": "交差返し", "win": 47.1, "n": 505}, {"r": "渡り返し", "win": 45.9, "n": 532}, {"r": "様子見", "win": 44.4, "n": 520}, {"r": "離れ雲", "win": 41.8, "n": 565}, {"r": "迎え槍", "win": 41.3, "n": 542}], "正面突破": [{"r": "肩寄せ", "win": 58.2, "n": 533}, {"r": "正面受け", "win": 46.2, "n": 582}, {"r": "渡り返し", "win": 43, "n": 551}, {"r": "様子見", "win": 41.6, "n": 519}, {"r": "迎え槍", "win": 40.4, "n": 534}, {"r": "交差返し", "win": 37.6, "n": 476}, {"r": "離れ雲", "win": 30, "n": 527}], "寄り添い": [{"r": "肩寄せ", "win": 48.4, "n": 517}, {"r": "渡り返し", "win": 38.6, "n": 497}, {"r": "正面受け", "win": 38, "n": 545}, {"r": "迎え槍", "win": 37.8, "n": 516}, {"r": "交差返し", "win": 37.6, "n": 550}, {"r": "様子見", "win": 33.6, "n": 545}, {"r": "離れ雲", "win": 24.7, "n": 526}], "はぐれ雲": [{"r": "肩寄せ", "win": 63.4, "n": 511}, {"r": "正面受け", "win": 57.5, "n": 539}, {"r": "渡り返し", "win": 56.2, "n": 548}, {"r": "様子見", "win": 50, "n": 502}, {"r": "迎え槍", "win": 47.2, "n": 566}, {"r": "離れ雲", "win": 45.4, "n": 511}, {"r": "交差返し", "win": 44.5, "n": 548}], "渡り鳥": [{"r": "肩寄せ", "win": 46.8, "n": 526}, {"r": "交差返し", "win": 45.9, "n": 512}, {"r": "正面受け", "win": 45.5, "n": 508}, {"r": "渡り返し", "win": 44.8, "n": 538}, {"r": "迎え槍", "win": 42, "n": 528}, {"r": "様子見", "win": 41.7, "n": 525}, {"r": "離れ雲", "win": 37.8, "n": 505}], "隅守り": [{"r": "肩寄せ", "win": 59.6, "n": 544}, {"r": "正面受け", "win": 50.5, "n": 517}, {"r": "様子見", "win": 49, "n": 527}, {"r": "渡り返し", "win": 48.8, "n": 523}, {"r": "交差返し", "win": 45.2, "n": 520}, {"r": "迎え槍", "win": 43.3, "n": 538}, {"r": "離れ雲", "win": 34.6, "n": 517}]};
 const OP=[
- {t:'寄り添い',d:'端の石を斜めに寄せ、仲間の隣で射程を伸ばす。',v:51,f:[5,0],to:[4,1]},
- {t:'正面突破',d:'中央の石をまっすぐ2歩。いちばん素直な攻め。',v:49,f:[5,2],to:[3,2]},
- {t:'渡り鳥',d:'仲間を飛び越えて中央へ。',v:48,f:[5,1],to:[3,3]},
- {t:'十字路',d:'中の石が反対側へ斜めに渡る。',v:48,f:[5,2],to:[3,4]},
- {t:'隅守り',d:'端の石を1歩だけ前へ。様子を見る構え。',v:47,f:[5,0],to:[4,0]},
- {t:'一本槍',d:'まっすぐ突っ込み、仲間から離れて止められやすい。',v:41,f:[5,1],to:[3,1]},
- {t:'はぐれ雲',d:'外へ抜けて、ひとりぼっちになりやすい。',v:37,f:[5,2],to:[3,0]}];
+ {t:'寄り添い',d:'端の石を斜めに寄せ、仲間の隣で射程を伸ばす。最新の読みでも最善。',v:50,f:[5,0],to:[4,1]},
+ {t:'隅守り',d:'端の石を1歩だけ前へ。様子を見る構え。寄り添いに次ぐ2番手。',v:46,f:[5,0],to:[4,0]},
+ {t:'渡り鳥',d:'仲間を飛び越えて中央へ。',v:39,f:[5,1],to:[3,3]},
+ {t:'正面突破',d:'中央の石をまっすぐ2歩。素直だが、深く読むと少し損。',v:38,f:[5,2],to:[3,2]},
+ {t:'十字路',d:'中の石が反対側へ斜めに渡る。',v:34,f:[5,2],to:[3,4]},
+ {t:'一本槍',d:'まっすぐ突っ込み、仲間から離れて止められやすい。',v:33,f:[5,1],to:[3,1]},
+ {t:'はぐれ雲',d:'外へ抜けて、ひとりぼっちになりやすい。',v:33,f:[5,2],to:[3,0]}];
 const opens=document.getElementById('opens');
 opens.innerHTML=OP.map((x,i)=>rowHTML(i===0,x.t,'',x.d,x.v).replace('class="row','tabindex="0" role="button" aria-expanded="false" data-i="'+i+'" class="tap row wide').replace(/<\/div><\/div>$/,'<div class="more">▶ タップで派生（この後どの戦法になるか）を見る</div></div><div class="deriv" hidden></div></div>')).join('');
 opens.addEventListener('click',e=>{const row=e.target.closest('.row.tap');if(!row||e.target.closest('.deriv'))return;const box=row.querySelector('.deriv'),open=box.hidden;
@@ -463,6 +488,8 @@ ORD.forEach(i=>{th+='<tr><th class="rowh">'+NM[i]+'</th>'+ORD.map(j=>{if(i===j)r
   const col=v>=50?'var(--good)':'var(--bad)';return '<td style="background:color-mix(in srgb,'+col+' '+Math.round(a*100)+'%,transparent);font-weight:'+(Math.abs(v-50)>=10?700:400)+'">'+v+'％</td>'}).join('')+'</tr>'});
 document.getElementById('mtx').innerHTML=th;
 
+/* 最新AIの4,000局 */
+document.getElementById('facts2').innerHTML=[['51.5％','先手（黒）の勝率（引き分けを除く）'],['6.9％','引き分け'],['39手','1局の長さ（真ん中の値）'],['67.6％','先に1個着いた側の勝率']].map(x=>'<div class="fact"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('');
 /* 26,000局のデータ */
 const DATA={"blackWin": 54, "draw": 2.2, "len": {"q1": 23, "med": 29, "q3": 36, "mean": 30.9}, "firstArr": {"win": 62, "medPly": 12}, "faBucket": {"14〜17手": {"win": 64.7, "n": 6137}, "10〜13手": {"win": 58.8, "n": 10965}, "〜9手": {"win": 60.5, "n": 5269}, "18〜23手": {"win": 69.1, "n": 2820}, "24手〜": {"win": 73.2, "n": 622}}, "lenHist": {"5": 1, "10": 309, "15": 2190, "20": 5360, "25": 6094, "30": 4476, "35": 2884, "40": 1722, "45": 1111, "50": 637, "55": 444, "60": 587}, "sq": [52.5, 52.4, 60.8, 59.2, 52.8, 51.2, 39, 39.8, null, null, 40.1, 41.1, 39.4, 46, 51.2, 51.2, 47.4, 43, 42.6, 50.3, 54.2, 54.5, 49, 41.6, 42.8, 52.1, 52.6, 51.8, 51.5, 42.8, 44.9, 49.3, 51.7, 51.4, 49.5, 45.4]};
 document.getElementById('facts').innerHTML=[[DATA.blackWin+'％','先手（黒）の勝率'],[DATA.draw+'％','引き分け（同じ局面3回）'],[DATA.len.med+'手','1局の長さ（真ん中の値）'],[DATA.firstArr.win+'％','先に1個着いた側の勝率']].map(x=>'<div class="fact"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('');
@@ -532,6 +559,19 @@ TAC.forEach(gr=>{const G=document.createElement('div');G.className='tac-group';G
       add(b,mk,st.c)});
     G.appendChild(T)});box.appendChild(G)});
 })();
+</script>
+<script>
+/* タブ：章ごとに表示を切り替える（選んだ章は覚えておく） */
+(function(){const tabs=[...document.querySelectorAll('#tabs button')],secs=[...document.querySelectorAll('[data-tab]')];
+  const has=t=>tabs.some(b=>b.dataset.t===t);
+  function go(t,scroll){if(!has(t))t='basic';tabs.forEach(b=>b.setAttribute('aria-selected',String(b.dataset.t===t)));secs.forEach(x=>x.hidden=x.dataset.tab!==t);
+    try{localStorage.setItem('bocch-guide-tab',t)}catch(e){}if(scroll){const n=document.getElementById('tabs');window.scrollTo({top:n.offsetTop-2})}}
+  tabs.forEach(b=>b.addEventListener('click',()=>go(b.dataset.t,true)));
+  // ページ内リンク（#t-atk など）は、その章を開いてから移動
+  document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const el=document.querySelector(a.getAttribute('href'));if(!el)return;const sec=el.closest('[data-tab]');if(sec&&sec.hidden){go(sec.dataset.tab,false);setTimeout(()=>el.scrollIntoView(),0)}});
+  let t='basic';try{t=localStorage.getItem('bocch-guide-tab')||'basic'}catch(e){}
+  const h=location.hash.slice(1);if(h){const el=document.getElementById(h);const sec=el&&el.closest('[data-tab]');if(sec)t=sec.dataset.tab}
+  go(t,false)})();
 </script>
 
 </body>
