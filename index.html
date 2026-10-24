@@ -139,6 +139,8 @@ button.resume{border:1px solid var(--gold);color:var(--gold);letter-spacing:.08e
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 18px;padding-bottom:12px;border-bottom:1px solid var(--gold-line)}
 .topbar h2{font-family:var(--f-disp);font-weight:500;font-size:18px;letter-spacing:.14em;margin:0;text-align:center;flex:1}
 .topbar .sp{width:72px}
+.topbar button.rshare{text-align:right}
+.rev-share-msg{font-size:12.5px;color:var(--gold);text-align:center;margin:-8px 0 10px}
 button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-spacing:.08em;background:transparent;width:72px;text-align:left}
 .topbar button.back:last-child{text-align:right}
 .stack{display:flex;flex-direction:column;gap:12px}
@@ -265,7 +267,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.1</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.2</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -343,8 +345,9 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 
 <!-- 感想戦 -->
 <section class="scr" data-scr="review" hidden>
-  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>感想戦</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>感想戦</h2><button class="back rshare" id="revShare">共有 ↗</button></div>
   <p class="rev-head" id="revHead"></p>
+  <p class="rev-share-msg" id="revShareMsg" hidden></p>
   <div class="boardwrap rev-board"><div class="board" id="rboard"><div class="lab lab-top" id="rlabTop" aria-hidden="true"></div><div class="lab lab-left" id="rlabLeft" aria-hidden="true"></div><div class="grid" id="rgrid" aria-label="感想戦の盤"></div></div></div>
   <div class="rev-info">
     <p class="rev-move" id="revMove"></p>
@@ -1275,6 +1278,33 @@ $('revNote').addEventListener('click',e=>{const b=e.target.closest('button');if(
 $('reviewNow').addEventListener('click',()=>{saveFinished();const id=currentGameId();if(id)openReview(id)});
 document.querySelector('[data-go="history"]').addEventListener('click',renderHistory);
 addEventListener('popstate',()=>{if(CUR==='history')renderHistory();if(CUR!=='review')REV.job++});
+/* 感想戦の共有：棋譜をリンクに入れて送る。リンクを開くとその対局の感想戦がそのまま見られる */
+const SQC='0123456789abcdefghijklmnopqrstuvwxyz';
+function shareLink(g,i){const q=new URLSearchParams();q.set('kifu',g.log.map(m=>SQC[m[0]]+SQC[m[1]]).join(''));
+  q.set('r',String(g.win==null?'':g.win));if(g.why)q.set('y',g.why);q.set('m',String(g.mode));q.set('t',String(g.t||Date.now()));
+  if(g.me)q.set('me',String(g.me));if(g.opp)q.set('o',g.opp);if(i)q.set('i',String(i));
+  return location.origin+location.pathname+'#'+q.toString()}
+function revMsg(t){const m=$('revShareMsg');m.textContent=t;m.hidden=!t;clearTimeout(revMsg.T);if(t)revMsg.T=setTimeout(()=>{m.hidden=true},4000)}
+$('revShare').addEventListener('click',async()=>{const g=REV.g;if(!g)return;const url=shareLink(g,REV.i),[rt]=resultOf(g);
+  const text='bocchの感想戦　'+MODE_NAME(g.mode)+'　'+rt+'（'+g.log.length+'手）';
+  if(navigator.share){try{await navigator.share({title:'bocchの感想戦',text,url});return}catch(e){if(e&&e.name==='AbortError')return}}
+  try{await navigator.clipboard.writeText(url);revMsg('リンクをコピーしました。送った相手はリンクを開くだけでこの感想戦を見られます。')}
+  catch(e){prompt('このリンクをコピーして送ってください',url)}});
+function openShared(){let q;try{q=new URLSearchParams(location.hash.slice(1))}catch(e){return false}
+  const k=q.get('kifu');if(!k||k.length%2||!/^[0-9a-z]+$/.test(k))return false;
+  const log=[];for(let j=0;j<k.length;j+=2)log.push([SQC.indexOf(k[j]),SQC.indexOf(k[j+1])]);
+  if(log.some(m=>m[0]<0||m[0]>35||m[1]<0||m[1]>35))return false;
+  // 棋譜が壊れていないか：動かす石が手番の石か確かめる
+  let b=startBoard(),turn=1;for(const m of log){if(b[m[0]]!==turn||!movesFrom(b,m[0]).some(x=>x[1]===m[1]))return false;b=apply(b,m);turn=3-turn}
+  const r=q.get('r'),md=q.get('m'),me=+q.get('me')||0;
+  const g={id:'share:'+k,shared:true,sm:me,t:+q.get('t')||Date.now(),mode:md==null?0:(/^\d+$/.test(md)?+md:md),me:0,win:r===''||r==null?undefined:+r,why:q.get('y')||'',opp:q.get('o')||'',log,an:[]};
+  REV.g=g;REV.pos=buildPos(g);REV.an=[];REV.job++;REV.pv=null;REV.i=Math.max(0,Math.min(log.length,+q.get('i')||0));
+  show('home',true);show('review');renderReview();nextAnalysis();
+  revMsg('共有された対局です。AIが1手ずつ解析します。');return true}
+{const _rh=renderReview;renderReview=function(){_rh();const g=REV.g;if(g&&g.shared){const h=$('revHead');h.textContent='共有された対局'+(g.sm?'（送った人は'+(g.sm===1?'黒':'白')+(g.opp?'・相手 '+g.opp:'')+'）':'')+'　'+h.textContent}}}
+addEventListener('hashchange',()=>{if(/kifu=/.test(location.hash))openShared()});
+if(/kifu=/.test(location.hash))setTimeout(openShared,0);
+
 if(CUR==='history')renderHistory();
 
 /* 観戦：対局中の部屋を「いま対局中」板に知らせ、一覧から選んで観る */
