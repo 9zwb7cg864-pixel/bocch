@@ -87,6 +87,14 @@ header p{margin:0;color:var(--sub);font-family:var(--f-disp);font-size:14px;lett
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .seg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);border-radius:2px;overflow:hidden}
 @media (max-width:420px){.seg{grid-template-columns:repeat(2,minmax(0,1fr))}.status{font-size:21px;gap:10px}.panel{padding:18px}h1{font-size:40px}}
+.side-pick{margin:0 0 18px}.side-l{font-size:13px;color:var(--sub);letter-spacing:.08em;margin:0 0 8px}.side-seg{grid-template-columns:repeat(3,minmax(0,1fr))!important}.side-seg button[aria-pressed="true"]{background:var(--gold);color:#1a1712;font-weight:700}
+.study{border:1px solid var(--line);border-radius:6px;padding:14px 14px 10px;margin:4px 0 14px;display:flex;flex-direction:column;gap:10px}
+.ev-bar{height:12px;border-radius:6px;background:#e9e6df;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}.ev-bar i{display:block;height:100%;width:50%;background:#18191a;transition:width .35s}
+.ev-row{display:flex;justify-content:space-between;gap:10px;font-size:14px;font-variant-numeric:tabular-nums;flex-wrap:wrap}.ev-row #evBest{color:#7fc2a0}
+.ev-pv{margin:0;font-size:12.5px;color:var(--sub);line-height:1.6;min-height:1.6em}
+.st-ai{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.st-ai label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--sub)}.st-ai select{font:inherit;font-size:14px;padding:8px 6px;background:var(--soft);color:var(--fg);border:1px solid var(--line);border-radius:4px;min-height:40px}
+.st-btns{gap:8px}.st-btns button{flex:1}
+.ai-watch{width:100%;margin:4px 0 14px}.res.ai{background:#2b3a52;color:#cfe0ff}
 .seg button{border:0;border-right:1px solid var(--line);border-radius:0;white-space:nowrap;padding:12px 6px}.seg button:last-child{border-right:0}
 button{font:inherit;font-size:14px;letter-spacing:.1em;color:var(--fg);background:transparent;border:1px solid rgba(236,230,216,.22);border-radius:2px;padding:11px 18px;min-height:44px;cursor:pointer;transition:background .15s,border-color .15s}
 button:hover{background:rgba(201,169,110,.08);border-color:var(--gold-soft)}
@@ -354,6 +362,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <section class="scr" data-scr="watch" hidden>
   <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>観戦する</h2><span class="sp"></span></div>
   <p class="lead hist-note">いま対局中の部屋です。選ぶと観戦できます（指すことはできません）。</p>
+  <button class="big primary ai-watch" id="aiWatch">AIを観戦する（最強 対 最強）</button>
   <div class="hist" id="watchList"></div>
   <p class="hist-empty" id="watchEmpty">いま対局中の部屋はありません。</p>
   <p class="hist-note watch-st" id="watchSt"></p>
@@ -399,12 +408,19 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <!-- ひとりで遊ぶ -->
 <section class="scr" data-scr="solo" hidden>
   <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>ひとりで遊ぶ</h2><span class="sp"></span></div>
+  <div class="side-pick">
+    <div class="side-l">CPU戦の手番</div>
+    <div class="seg side-seg" id="sideSeg" role="group" aria-label="CPU戦の手番">
+      <button data-side="b">先手（黒）</button><button data-side="w">後手（白）</button><button data-side="r">ランダム</button>
+    </div>
+  </div>
   <div class="stack" id="modeSeg">
     <button class="big" data-mode="1">CPU やさしい</button>
     <button class="big" data-mode="2">CPU ふつう</button>
     <button class="big" data-mode="3">CPU つよい</button>
     <button class="big" data-mode="4">CPU 最強</button>
     <button class="big" data-mode="0">1台で2人</button>
+    <button class="big" id="studyBtn">研究（AI同士・評価値つき）</button>
   </div>
 </section>
 
@@ -436,6 +452,18 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <p class="rate-msg" id="rateMsg" hidden></p>
     <p class="joseki" id="joseki" hidden></p>
     <details class="kifu" id="kifuBox" hidden><summary id="kifuSum"></summary><div id="kifu" aria-label="棋譜"></div></details>
+  </div>
+  <div class="study" id="studyPanel" hidden>
+    <div class="ev-bar" aria-hidden="true"><i id="evFill"></i></div>
+    <div class="ev-row"><span id="evTxt">評価値を計算しています…</span><span id="evBest"></span></div>
+    <p class="ev-pv" id="evPv"></p>
+    <div class="st-ai">
+      <label>黒のAI<select id="stB"><option value="0">人が指す</option><option value="1">やさしい</option><option value="2">ふつう</option><option value="3">つよい</option><option value="4">最強</option></select></label>
+      <label>白のAI<select id="stW"><option value="0">人が指す</option><option value="1">やさしい</option><option value="2">ふつう</option><option value="3">つよい</option><option value="4">最強</option></select></label>
+      <label>速さ<select id="stSp"><option value="1500">ゆっくり</option><option value="600" selected>ふつう</option><option value="150">はやい</option></select></label>
+    </div>
+    <div class="row st-btns"><button id="stRun" class="primary">▶ AIに指させる</button><button id="stOne">AIに1手だけ</button></div>
+    <div class="row chks"><label class="chk"><input type="checkbox" id="stEv" checked> 評価値</label><label class="chk"><input type="checkbox" id="stBest" checked> 最善手を盤に表示</label></div>
   </div>
   <div class="row" id="localCtl">
     <button id="undo">1手戻す</button>
@@ -619,14 +647,20 @@ const rankName=r=>RANK_NAMES[rankOf(r)];
 const rankCls=k=>k>0?' rk r'+k+(k>=9?' gn':''):'';
 // その色の石を持つ人の段位（オンラインは相手が知らせたレート、CPU戦はCPUのレート）
 function colorRank(c){if(S.mode==='net'){const id=[NET.host,NET.guest].find(x=>x&&colorOf(x)===c);if(!id)return 0;if(id===NET.me&&!NET.watch)return rankOf(myRate());const o=typeof NM!=='undefined'&&NM[id];return o?rankOf(o.rate):0}
-  if(typeof CPU_RATE!=='undefined'&&CPU_RATE[S.mode])return c===1?rankOf(myRate()):rankOf(CPU_RATE[S.mode]);return 0}
+  if(typeof CPU_RATE!=='undefined'&&CPU_RATE[S.mode])return c===hcOf()?rankOf(myRate()):rankOf(CPU_RATE[S.mode]);return 0}
 const myRate=()=>typeof PROF!=='undefined'?PROF.rating:1500;
 const gridEl=$('grid');
 let S;
 const key=(b,t)=>b.join('')+t;
 const ok=(r,c)=>r>=0&&r<N&&c>=0&&c<N;
 function startBoard(){const b=Array(N*N).fill(0);for(let c=0;c<N;c++){b[c]=2;b[(N-1)*N+c]=1}return b}
-function initState(mode){const b=startBoard();return {b,turn:1,mode,hist:[],sel:-1,last:null,over:null,reps:{[key(b,1)]:1},ply:0,log:[]}}
+function initState(mode){const b=startBoard();return {b,turn:1,mode,hc:(typeof mode==='number'&&mode>=1&&mode<=4)?pickSide():1,hist:[],sel:-1,last:null,over:null,reps:{[key(b,1)]:1},ply:0,log:[]}}
+// CPU戦の手番：b=先手（黒） w=後手（白） r=ランダム。選んだものはこの端末に覚える
+let SIDE='b';try{const v=localStorage.getItem('bocch-side');if(v==='b'||v==='w'||v==='r')SIDE=v}catch(e){}
+function pickSide(){return SIDE==='w'?2:SIDE==='r'?(Math.random()<.5?1:2):1}
+const hcOf=()=>S&&S.hc?S.hc:1; // 人間の色（CPU戦）
+let KICK='';function kick(){if(S&&S.study){studyKick();return}if(!S||!S.mode||S.mode==='net'||S.over||S.turn===hcOf())return;const k=S.mode+':'+S.ply+':'+key(S.b,S.turn);if(KICK===k)return;KICK=k;
+  setTimeout(()=>{if(S.mode&&S.mode!=='net'&&!S.over&&S.turn!==hcOf()&&KICK===S.mode+':'+S.ply+':'+key(S.b,S.turn))cpuPlay()},380)}
 function nbCount(b,i){const r=i/N|0,c=i%N;let n=0;for(const[x,y]of DIRS)if(ok(r+x,c+y)&&b[(r+x)*N+c+y])n++;return Math.min(4,n)}
 function movesFrom(b,i){const d=nbCount(b,i),r=i/N|0,c=i%N,out=[];if(!d)return out;
   for(const[x,y]of DIRS){const rr=r+x*d,cc=c+y*d;if(ok(rr,cc)&&!b[rr*N+cc])out.push([i,rr*N+cc])}return out}
@@ -678,7 +712,7 @@ function doMove(m){
   if(S.mode==='net'){netMove(m);return}
   S.hist.push({b:S.b,turn:S.turn,last:S.last,reps:{...S.reps},ply:S.ply});
   Object.assign(S,nextState(S,m));S.sel=-1;render();
-  if(!S.over&&S.mode&&S.turn===2)setTimeout(()=>{if(S.mode&&S.mode!=='net'&&S.turn===2&&!S.over){cpuPlay()}},380);
+  kick();
 }
 
 
@@ -687,23 +721,24 @@ let WK=null,WKkey='';
 function getWorker(){if(WK!==null)return WK;
   try{const src=$('eng').textContent+'\nonmessage=e=>{const d=e.data;const r=BocchEngine.think(d.b,d.p,d.ms,{history:d.history,shuffle:d.shuffle});postMessage({key:d.key,r})}';
     WK=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));
-    WK.onmessage=e=>{const d=e.data;if(d.key===WKkey&&d.key===S.ply+':'+key(S.b,S.turn)&&S.mode===4&&S.turn===2&&!S.over&&d.r)doMove(d.r.move)};
+    WK.onmessage=e=>{const d=e.data;if(d.key===WKkey&&d.key===S.ply+':'+key(S.b,S.turn)&&!S.over&&d.r)doMove(d.r.move)};
     WK.onerror=()=>{WK=false}}catch(e){WK=false}return WK}
-function cpuPlay(){
-  if(S.mode===4){const k=S.ply+':'+key(S.b,S.turn);WKkey=k;
-    const job={key:k,b:S.b.slice(),p:2,ms:3000,history:S.hist.map(h=>({b:h.b,turn:h.turn})),shuffle:S.ply<4};
+function cpuPlay(p,lv){p=p||3-hcOf();lv=lv||S.mode;
+  if(lv===4){const k=S.ply+':'+key(S.b,S.turn);WKkey=k;
+    const job={key:k,b:S.b.slice(),p,ms:S.study?Math.min(3000,Math.max(800,STUDY.sp*2)):3000,history:S.hist.map(h=>({b:h.b,turn:h.turn})),shuffle:S.ply<4};
     const w=getWorker();
     if(w)w.postMessage(job);
-    else setTimeout(()=>{if(WKkey!==k)return;const r=BocchEngine.think(job.b,2,1500,job);if(r&&k===S.ply+':'+key(S.b,S.turn)&&S.mode===4&&!S.over)doMove(r.move)},30);
+    else setTimeout(()=>{if(WKkey!==k)return;const r=BocchEngine.think(job.b,job.p,1500,job);if(r&&k===S.ply+':'+key(S.b,S.turn)&&!S.over)doMove(r.move)},30);
     return}
-  const cm=cpuMove(S.b,2,S.mode);if(cm)doMove(cm)}
+  const cm=cpuMove(S.b,p,lv);if(cm)doMove(cm)}
 
 /* 描画 */
 function cellsBuild(){gridEl.innerHTML='';for(let i=0;i<N*N;i++){const d=document.createElement('button');d.className='cell';d.id='c'+i;d.addEventListener('click',()=>onCell(i));gridEl.appendChild(d)}}
 function human(){
   if(S.over)return false;
   if(S.mode==='net')return NET.live&&!!NET.host&&!!NET.guest&&!NET.sending&&colorOf(NET.me)===S.turn;
-  return S.mode===0||S.turn===1;
+  if(S.study)return !(STUDY.run&&STUDY.lv[S.turn]);
+  return S.mode===0||S.turn===hcOf();
 }
 function onCell(i){
   if(!human())return;
@@ -722,7 +757,7 @@ function render(){
     el.setAttribute('aria-label',(v?NAME[v]+'の石、射程'+d:'空き')+'、'+(N-r)+'段'+(i%N+1)+'列');
     el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${rankCls(rk[v])}"><span>${d}</span></div>`:'';}
   const net=S.mode==='net';
-  $('board').classList.toggle('flip',net&&colorOf(NET.me)===2);
+  $('board').classList.toggle('flip',net?colorOf(NET.me)===2:(!!S.mode&&hcOf()===2));
   $('board').classList.toggle('hideNum',!$('showNum').checked);
   document.querySelectorAll('#modeSeg button').forEach(x=>x.setAttribute('aria-pressed',String(!net&&+x.dataset.mode===S.mode)));
   $('localCtl').hidden=net;$('netCtl').hidden=!net;
@@ -751,10 +786,10 @@ function renderStatus(){
     return}
   if(S.over){
     if(S.over.win===0){st.textContent='引き分け';hn.innerHTML='<span class="result">'+S.over.why+'</span>'}
-    else{const lose=S.mode&&S.over.win===2;st.innerHTML=`<span class="dot ${S.over.win===1?'b':'w'}"></span>${NAME[S.over.win]}の勝ち`;
+    else{const lose=S.mode&&S.over.win!==hcOf();st.innerHTML=`<span class="dot ${S.over.win===1?'b':'w'}"></span>${NAME[S.over.win]}の勝ち`;
       hn.innerHTML=`<span class="result${lose?' lose':''}">${S.over.why}${S.mode?(lose?'。もう一局どうぞ':'。お見事'):''}</span>`}
   }else{
-    st.innerHTML=`<span class="dot ${S.turn===1?'b':'w'}"></span>${S.mode?(S.turn===1?'あなた（黒）の番':'CPU（白）が考え中…'):NAME[S.turn]+'の番'}`;
+    st.innerHTML=`<span class="dot ${S.turn===1?'b':'w'}"></span>${S.mode?(S.turn===hcOf()?'あなた（'+NAME[S.turn]+'）の番':'CPU（'+NAME[S.turn]+'）が考え中…'):NAME[S.turn]+'の番'}`;
     hn.textContent=human()?(S.sel>=0?'点のあるマスへ動かす。輪は向こう岸のマス':'動かす石を選んでください'):'';
   }
 }
@@ -806,7 +841,7 @@ function closeNet(){if(NET.es){NET.es.close()}clearTimeout(NET.timer);clearTimeo
 function openRoom(code,watch){
   code=(code||'').toLowerCase().replace(/[^a-z0-9]/g,'');
   if(code.length!==6){netMsg('部屋コードは6文字です。',true);return}
-  closeNet();NET.auto=false;clearTimeout(NET.waitT);NET.code=code;NET.watch=!!watch;NET.me=watch?'w'+newCode()+newCode():myId(code);
+  closeNet();NET.auto=false;NET.ai=false;clearTimeout(NET.waitT);NET.code=code;NET.watch=!!watch;NET.me=watch?'w'+newCode()+newCode():myId(code);
   S=initState('net');netMsg('部屋につないでいます…');
   $('netIdle').hidden=true;
   try{history.replaceState(null,'',(watch?'?watch=':'?room=')+code)}catch(e){}
@@ -860,12 +895,48 @@ function leave(){closeNet();netMsg('');try{history.replaceState(null,'',location
 function createRoom(){openRoom(newCode())}
 function joinRoom(code){openRoom(code)}
 /* 操作 */
-document.querySelectorAll('#modeSeg button').forEach(x=>x.addEventListener('click',()=>{if(S.mode==='net')leave();S=initState(+x.dataset.mode);render()}));
-$('reset').addEventListener('click',()=>{S=initState(S.mode);render()});
+document.querySelectorAll('#modeSeg button').forEach(x=>x.addEventListener('click',()=>{if(S.mode==='net')leave();S=initState(+x.dataset.mode);KICK='';render()}));
+/* 研究：AI同士の対局と、評価値を見ながらの検討 */
+const STUDY={run:false,lv:{1:0,2:0},sp:600,evKey:'',ev:null,ew:null};
+function studyStart(){if(S.mode==='net')leave();S=initState(0);S.study=true;STUDY.run=false;STUDY.ev=null;STUDY.evKey='';KICK='';WKkey='';$('stRun').textContent='▶ AIに指させる';render();show('game')}
+function studyKick(){if(!STUDY.run||S.over)return;const lv=STUDY.lv[S.turn];if(!lv)return;const k='s:'+S.ply+':'+key(S.b,S.turn);if(KICK===k)return;KICK=k;
+  setTimeout(()=>{if(S.study&&STUDY.run&&!S.over&&KICK==='s:'+S.ply+':'+key(S.b,S.turn))cpuPlay(S.turn,STUDY.lv[S.turn])},STUDY.sp)}
+function studyStop(){STUDY.run=false;KICK='';$('stRun').textContent='▶ AIに指させる';render()}
+function evWorker(){if(STUDY.ew!==null)return STUDY.ew;try{const src=$('eng').textContent+'\nonmessage=e=>{const d=e.data;const r=BocchEngine.think(d.b,d.p,d.ms,{history:d.history});postMessage({key:d.key,p:d.p,r})}';
+  STUDY.ew=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));STUDY.ew.onmessage=e=>{const d=e.data;if(d.key!==STUDY.evKey)return;STUDY.ev=d;renderStudy()}}catch(e){STUDY.ew=false}return STUDY.ew}
+function renderStudy(){const on=!!S.study;if(on&&S.over&&STUDY.run){STUDY.run=false;$('stRun').textContent='▶ もう一局AIに指させる'}$('studyPanel').hidden=!on;$('localCtl').classList.toggle('st',on);if(!on)return;
+  const showEv=$('stEv').checked;$('studyPanel').querySelector('.ev-bar').hidden=!showEv;$('evTxt').parentElement.hidden=!showEv;$('evPv').hidden=!showEv;
+  const k=S.ply+':'+key(S.b,S.turn);
+  if(S.over){$('evFill').style.width=(S.over.win===1?100:S.over.win===2?0:50)+'%';$('evTxt').textContent=S.over.win?NAME[S.over.win]+'の勝ち':'引き分け';$('evBest').textContent='';$('evPv').textContent='';return}
+  if(showEv&&STUDY.evKey!==k){STUDY.evKey=k;STUDY.ev=null;$('evTxt').textContent='評価値を計算しています…';$('evBest').textContent='';$('evPv').textContent='';
+    const w=evWorker(),job={key:k,b:S.b.slice(),p:S.turn,ms:700,history:S.hist.map(h=>({b:h.b,turn:h.turn}))};
+    if(w)w.postMessage(job);else setTimeout(()=>{if(STUDY.evKey!==k)return;STUDY.ev={key:k,p:S.turn,r:BocchEngine.think(job.b,job.p,400,job)};renderStudy()},30)}
+  const d=STUDY.ev;if(!d||!d.r||d.key!==k)return;
+  let sc=d.r.score;if(d.p===2)sc=-sc; // 黒から見た値
+  const pb=Math.abs(sc)>=90000?(sc>0?100:0):Math.round(100/(1+Math.exp(-0.013*sc)));
+  $('evFill').style.width=pb+'%';
+  $('evTxt').textContent=Math.abs(sc)>=90000?(sc>0?'黒の勝ち筋':'白の勝ち筋')+'（読み切り）':'黒 '+pb+'%　白 '+(100-pb)+'%（評価値 '+(sc>0?'+':'')+Math.round(sc)+'）';
+  const m=d.r.move;$('evBest').textContent=m?'最善手 '+sqName(m[0])+'→'+sqName(m[1]):'';
+  $('evPv').textContent=d.r.pv&&d.r.pv.length>1?'読み筋　'+d.r.pv.slice(0,8).map(x=>sqName(x[0])+'→'+sqName(x[1])).join('　'):'';
+  if($('stBest').checked&&m&&!(STUDY.run&&STUDY.lv[S.turn])){const a=$('c'+m[0]),b=$('c'+m[1]);if(a)a.classList.add('bestf');if(b)b.classList.add('bestt')}}
+$('studyBtn').addEventListener('click',studyStart);
+$('stB').addEventListener('change',e=>{STUDY.lv[1]=+e.target.value;KICK='';render()});
+$('stW').addEventListener('change',e=>{STUDY.lv[2]=+e.target.value;KICK='';render()});
+$('stSp').addEventListener('change',e=>{STUDY.sp=+e.target.value});
+$('stRun').addEventListener('click',()=>{if(STUDY.run){studyStop();return}
+  if(!STUDY.lv[1]&&!STUDY.lv[2]){STUDY.lv[1]=STUDY.lv[2]=2;$('stB').value=$('stW').value='2'}
+  if(S.over){S=initState(0);S.study=true;STUDY.evKey=''}
+  STUDY.run=true;KICK='';$('stRun').textContent='⏸ 止める';render()});
+$('stOne').addEventListener('click',()=>{if(S.over||STUDY.run)return;cpuPlay(S.turn,STUDY.lv[S.turn]||3)});
+$('stEv').addEventListener('change',()=>{STUDY.evKey='';render()});$('stBest').addEventListener('change',render);
+$('reset').addEventListener('click',()=>{const st=!!S.study;S=initState(S.mode);if(st){S.study=true;STUDY.evKey='';if(STUDY.run)studyStop()}KICK='';render()});
+function renderSide(){document.querySelectorAll('#sideSeg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.side===SIDE)))}
+document.querySelectorAll('#sideSeg button').forEach(b=>b.addEventListener('click',()=>{SIDE=b.dataset.side;try{localStorage.setItem('bocch-side',SIDE)}catch(e){}renderSide()}));renderSide();
 $('undo').addEventListener('click',()=>{
-  if(S.mode==='net'||!S.hist.length)return;let steps=S.mode&&S.turn===1&&S.hist.length>=2?2:1;if(S.mode&&S.over&&S.over.win===1)steps=1;
+  if(S.mode==='net'||!S.hist.length)return;let steps=S.mode&&S.turn===hcOf()&&S.hist.length>=2?2:1;if(S.mode&&S.over&&S.over.win===hcOf())steps=1;
+  if(S.mode&&hcOf()===2&&S.turn===2&&S.hist.length<=1)return; // 後手でCPUの初手しかないときは戻さない
   while(steps--&&S.hist.length){const h=S.hist.pop();S.b=h.b;S.turn=h.turn;S.last=h.last;S.reps=h.reps;S.ply=h.ply}
-  S.over=null;S.sel=-1;S.log=(S.log||[]).slice(0,S.ply||0);render()});
+  S.over=null;S.sel=-1;S.log=(S.log||[]).slice(0,S.ply||0);KICK='';render()});
 $('showNum').addEventListener('change',render);
 try{localStorage.removeItem('bocch-skin');localStorage.removeItem('bocch-hibinum')}catch(e){} // 廃止したスキンの設定を消す
 $('create').addEventListener('click',createRoom);
@@ -904,7 +975,7 @@ const _render=render;
 render=function(){_render();
   if(S.mode==='net'){const waiting=!!NET.host&&NET.me===NET.host&&!NET.guest;
     if(waiting&&CUR==='game')show('invite',true);else if(NET.guest&&(CUR==='invite'||CUR==='match'))show('game',true);}
-  if(S.mode!=='net'){$('conn').className='conn';$('connTxt').textContent=S.mode===0?'1台で2人':['','CPU やさしい','CPU ふつう','CPU つよい','CPU 最強'][S.mode]||''}
+  if(S.mode!=='net'){$('conn').className='conn';$('connTxt').textContent=S.study?'研究':S.mode===0?'1台で2人':['','CPU やさしい','CPU ふつう','CPU つよい','CPU 最強'][S.mode]||''}
 };
 show(NET.code?'game':'home',true);render();
 
@@ -970,7 +1041,7 @@ function cancelMatch(){if(MATCH.mine)lobbyPost({t:'cancel',room:MATCH.mine});sto
 const sqName=i=>(i%6+1)+'abcdef'[i/6|0];
 (function(){const t=$('labTop'),l=$('labLeft');for(let i=0;i<6;i++){t.appendChild(document.createElement('span'));l.appendChild(document.createElement('span'))}})();
 const _render3=render;
-render=function(){_render3();
+render=function(){_render3();try{kick()}catch(e){}try{renderStudy()}catch(e){console.error(e)}
   const flip=$('board').classList.contains('flip');
   [...$('labTop').children].forEach((e,i)=>e.textContent=String(flip?6-i:i+1));
   [...$('labLeft').children].forEach((e,i)=>e.textContent='abcdef'[flip?5-i:i]);
@@ -1007,7 +1078,7 @@ render();
 const GKEY='bocch-games',GMAX=100;
 function loadGames(){try{const v=JSON.parse(localStorage.getItem(GKEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return[]}}
 function storeGames(a){try{localStorage.setItem(GKEY,JSON.stringify(a.slice(0,GMAX)))}catch(e){}}
-const MODE_NAME=m=>m==='net'?'オンライン対戦':m===0?'1台で2人':['','CPU やさしい','CPU ふつう','CPU つよい','CPU 最強'][m]||'';
+const MODE_NAME=m=>m==='net'?'オンライン対戦':m==='study'?'研究':m===0?'1台で2人':['','CPU やさしい','CPU ふつう','CPU つよい','CPU 最強'][m]||'';
 function currentGameId(){
   if(S.mode==='net')return NET.code?'n-'+NET.code+'-'+NET.game:null;
   if(!S.gid)S.gid='g'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
@@ -1015,10 +1086,10 @@ function currentGameId(){
 function saveFinished(){
   if(!S.over||!S.log||!S.log.length)return;
   const id=currentGameId();if(!id)return;
-  const me=S.mode==='net'?colorOf(NET.me):S.mode===0?0:1;
+  const me=S.mode==='net'?colorOf(NET.me):S.mode===0?0:hcOf();
   const g=loadGames(),ix=g.findIndex(x=>x.id===id),old=ix>=0?g[ix]:null;
   const same=old&&old.log.length===S.log.length&&old.log.every((m,i)=>m[0]===S.log[i][0]&&m[1]===S.log[i][1]);
-  const e={id,t:old?old.t:Date.now(),mode:S.mode,me,win:S.over.win,why:S.over.why,log:S.log.map(m=>[m[0],m[1]]),an:same?old.an:null};if(old&&same){if(old.rd!=null)e.rd=old.rd;if(old.opp)e.opp=old.opp;if(old.ra!=null)e.ra=old.ra}
+  const e={id,t:old?old.t:Date.now(),mode:S.study?'study':S.mode,me,win:S.over.win,why:S.over.why,log:S.log.map(m=>[m[0],m[1]]),an:same?old.an:null};if(old&&same){if(old.rd!=null)e.rd=old.rd;if(old.opp)e.opp=old.opp;if(old.ra!=null)e.ra=old.ra}
   if(ix>=0)g.splice(ix,1);g.unshift(e);storeGames(g)}
 const _renderR=render;
 render=function(){_renderR();
@@ -1232,7 +1303,7 @@ function startWatchList(){stopWatchList();LV.rooms=new Map();LV.seen=new Set();$
   sub.onmessage=e=>{let d,m;try{d=JSON.parse(e.data)}catch(x){return}if(d.event&&d.event!=='message')return;
     if(d.id){if(LV.seen.has(d.id))return;LV.seen.add(d.id)}try{m=JSON.parse(d.message)}catch(x){return}
     if(!m||typeof m.room!=='string'||!/^[a-z0-9]{6}$/.test(m.room))return;const g=m.g|0,cur=LV.rooms.get(m.room);
-    if(m.t==='live'){if(!cur||g>=cur.g)LV.rooms.set(m.room,{g,at:d.time||Date.now()/1000,names:Array.isArray(m.names)?m.names.slice(0,2).map(lvClean):[]})}
+    if(m.t==='live'){if(!cur||g>=cur.g)LV.rooms.set(m.room,{g,ai:m.ai===1,at:(cur&&cur.g===g&&cur.ai)?cur.at:(d.time||Date.now()/1000),names:Array.isArray(m.names)?m.names.slice(0,2).map(lvClean):[]})}
     else if(m.t==='end'){if(cur&&(m.g==null||g>=cur.g))LV.rooms.delete(m.room)}
     clearTimeout(LV.rt);LV.rt=setTimeout(renderWatch,120)};
   LV.tick=setInterval(renderWatch,30000)}
@@ -1241,11 +1312,42 @@ function renderWatch(){const box=$('watchList');box.innerHTML='';
   const now=Date.now()/1000;const list=[...LV.rooms.entries()].filter(([,r])=>now-r.at<5400).sort((a,b)=>b[1].at-a[1].at);
   $('watchEmpty').hidden=!!list.length||$('watchSt').textContent!=='';
   list.forEach(([room,r])=>{const b=document.createElement('button');
-    const st=document.createElement('span');st.className='res live';st.textContent='対局中';
+    const st=document.createElement('span');st.className='res live'+(r.ai?' ai':'');st.textContent=r.ai?'AI対局':'対局中';
     const m=document.createElement('span');m.className='meta';const mb=document.createElement('b');mb.textContent=r.names&&r.names.length===2?r.names[0]+' 対 '+r.names[1]:'部屋 '+room.toUpperCase();
     m.append(mb,document.createElement('br'),document.createTextNode(((now-r.at)<60?'始まったところ':Math.floor((now-r.at)/60)+'分前に開始')+(r.g?'　'+(r.g+1)+'局目':'')+(r.names&&r.names.length===2?'　部屋 '+room.toUpperCase():'')));
     b.append(st,m);b.addEventListener('click',()=>{stopWatchList();openRoom(room,true);show('game')});box.appendChild(b)})}
 document.querySelector('[data-go="watch"]').addEventListener('click',startWatchList);
+/* AIを観戦する：最強対最強を1手7秒で。誰かが観ていればその部屋に入る。
+   観ている人全員が手を出せる仕組み（同じ手が二重に届いても2回目は無視される）なので、最初の人が抜けても続く */
+const AIW={on:false,code:null,b:null,w:null,lastPly:-1,lastAt:0,thinkKey:'',res:null,worker:null,primary:false,beat:0,overFor:-1};
+function aiWorker(){if(AIW.worker!==null)return AIW.worker;try{const src=$('eng').textContent+'\nonmessage=e=>{const d=e.data;const r=BocchEngine.think(d.b,d.p,d.ms,{shuffle:d.shuffle});postMessage({key:d.key,r})}';
+  AIW.worker=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));AIW.worker.onmessage=e=>{if(e.data.key===AIW.thinkKey)AIW.res=e.data}}catch(e){AIW.worker=false}return AIW.worker}
+function aiRaw(o){o.from=o.from||NET.me;return fetch(RELAY+TOPIC(NET.code),{method:'POST',body:JSON.stringify(o)}).catch(()=>{})}
+function aiLive(){livePost({t:'live',room:NET.code,g:NET.game,ai:1,names:['最強AI','最強AI']})}
+function aiHost(){const code=newCode();openRoom(code,false);NET.claimed=true;NET.watch=true;NET.ai=true;
+  AIW.b='ai'+newCode()+'b';AIW.w='ai'+newCode()+'w';AIW.primary=true;
+  aiRaw({t:'create',from:AIW.b,name:'最強AI',rate:2100,ai:1}).then(()=>aiRaw({t:'join',from:AIW.w,name:'最強AI',rate:2100,ai:1})).then(()=>{aiLive();AIW.beat=Date.now()});
+  aiStart(code)}
+function aiStart(code){AIW.on=true;AIW.code=code;AIW.lastPly=-1;AIW.thinkKey='';AIW.res=null;AIW.overFor=-1}
+$('aiWatch').addEventListener('click',()=>{stopWatchList();const now=Date.now()/1000;
+  const room=[...LV.rooms.entries()].filter(([,r])=>r.ai&&now-r.at<5400).sort((a,b)=>b[1].at-a[1].at)[0];
+  if(room){openRoom(room[0],true);AIW.primary=false;aiStart(room[0])}else aiHost();show('game')});
+setInterval(()=>{if(!AIW.on)return;if(S.mode!=='net'||NET.code!==AIW.code){AIW.on=false;return}
+  if(!NET.ai||!NET.host||!NET.guest)return;
+  const now=Date.now();
+  if(AIW.primary&&now-AIW.beat>60000){AIW.beat=now;aiLive()} // 一覧から消えないよう1分ごとに知らせる
+  if(S.over){ // 終わったら8秒後に次の局
+    if(AIW.overFor!==NET.game){AIW.overFor=NET.game;AIW.lastAt=now;if(AIW.primary)livePost({t:'end',room:NET.code,g:NET.game})}
+    else if(now-AIW.lastAt>(AIW.primary?8000:14000)){AIW.lastAt=now+60000;const g=NET.game+1;aiRaw({t:'rematch',g,from:NET.host}).then(()=>aiRaw({t:'rematch',g,from:NET.guest})).then(()=>{if(AIW.primary){aiLive();AIW.beat=Date.now()}})}
+    return}
+  if(S.ply!==AIW.lastPly){AIW.lastPly=S.ply;AIW.lastAt=now;AIW.res=null;AIW.thinkKey=NET.game+':'+S.ply+':'+key(S.b,S.turn);
+    const w=aiWorker(),job={key:AIW.thinkKey,b:S.b.slice(),p:S.turn,ms:3500,shuffle:S.ply<4};
+    if(w)w.postMessage(job);else{const k=AIW.thinkKey;setTimeout(()=>{if(AIW.thinkKey===k)AIW.res={key:k,r:BocchEngine.think(job.b,job.p,1500,job)}},50)}
+    return}
+  const wait=AIW.primary?7000:7000+5000+((NET.me||'').charCodeAt(0)%4)*1000; // 観ているだけの人は、手が来ないときだけ代わりに指す
+  if(AIW.res&&AIW.res.key===AIW.thinkKey&&AIW.res.r&&now-AIW.lastAt>=wait){const m=AIW.res.r.move;AIW.res=null;
+    const from=colorOf(NET.host)===S.turn?NET.host:NET.guest;aiRaw({t:'move',g:NET.game,ply:S.ply,m,from});AIW.lastAt=now+3000;if(!AIW.primary){AIW.primary=true;AIW.beat=0}} // 代わりに指したら、以後はこの人が進める
+},400);
 addEventListener('popstate',()=>{if(CUR==='watch'){if(!LV.on)startWatchList()}else stopWatchList()});
 
 /* 名前とレート（この端末に保存。オンラインでは部屋の記録に名前とレートを添えて送る） */
@@ -1260,6 +1362,7 @@ function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF))}catch(e)
 var NM={};
 const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi')){o.name=myName();o.rate=Math.round(PROF.rating)}return _post(o)};
 const _reduce=reduce;reduce=function(m){
+  if(m&&m.t==='create'&&m.ai===1)NET.ai=true;
   if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500}}
   return _reduce(m)};
 function oppIdOf(){return NET.me===NET.host?NET.guest:NET.host}
@@ -1267,7 +1370,7 @@ function rateGame(){
   if(!S.over||!S.log||S.log.length<2||S.noRate)return;
   let my,opp,oppName;
   if(S.mode==='net'){my=colorOf(NET.me);if(!my||NET.watch)return;const o=NM[oppIdOf()];opp=o?o.rate:1500;oppName=o?o.name:'名無し'}
-  else if(CPU_RATE[S.mode]){my=1;opp=CPU_RATE[S.mode];oppName=MODE_NAME(S.mode)}else return;
+  else if(CPU_RATE[S.mode]){my=hcOf();opp=CPU_RATE[S.mode];oppName=MODE_NAME(S.mode)}else return;
   const id=currentGameId();if(!id||PROF.rated.includes(id))return;
   const res=S.over.win===0?.5:S.over.win===my?1:0,K=PROF.games<20?40:24;
   const exp=1/(1+Math.pow(10,(opp-PROF.rating)/400)),before=Math.round(PROF.rating);
@@ -1292,7 +1395,7 @@ const _renderP=render;render=function(){_renderP();
     const meW=colorOf(NET.me)===2;
     const bs=plSpan(1,bn.name,bn.rate,bId&&bId===NET.me),ws=plSpan(2,wn.name,wn.rate,wId&&wId===NET.me);
     if(meW){pbt.append(ws);pt.append(bs)}else{pbt.append(bs);pt.append(ws)}pt.hidden=pbt.hidden=false}
-  else if(CPU_RATE[S.mode]){pbt.append(plSpan(1,myName(),Math.round(PROF.rating),true));pt.append(plSpan(2,MODE_NAME(S.mode),CPU_RATE[S.mode],false));pt.hidden=pbt.hidden=false}
+  else if(CPU_RATE[S.mode]){pbt.append(plSpan(hcOf(),myName(),Math.round(PROF.rating),true));pt.append(plSpan(3-hcOf(),MODE_NAME(S.mode),CPU_RATE[S.mode],false));pt.hidden=pbt.hidden=false}
   else pt.hidden=pbt.hidden=true;
   const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?'1手戻しを使ったのでレートは変わりません':'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
   $('meName').textContent=myName();$('meRate').textContent=Math.round(PROF.rating)};
