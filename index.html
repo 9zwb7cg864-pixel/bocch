@@ -139,6 +139,38 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .joseki b{font-family:var(--f-disp);font-weight:700;font-size:18px;letter-spacing:.2em;color:var(--gold)}
 .joseki small{font-size:12px;color:var(--sub);letter-spacing:.06em}
 #game-chk,.scr[data-scr=game] .chk{justify-content:center}
+
+/* 対局履歴・感想戦 */
+.hist-note{font-size:13px;color:var(--sub);margin:0 0 12px}
+.hist{display:flex;flex-direction:column;gap:8px}
+.hist button{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center;text-align:left;letter-spacing:.04em;padding:12px 14px;width:100%}
+.hist .res{grid-row:span 2;font-family:var(--f-disp);font-weight:700;font-size:17px;min-width:3.2em}
+.hist .res.win{color:var(--gold)}.hist .res.lose{color:#c98f84}.hist .res.draw{color:var(--sub)}
+.hist .meta{font-size:12.5px;color:var(--sub);line-height:1.5}
+.hist .meta b{color:var(--fg);font-weight:500;font-size:14px}
+.hist .bad{grid-column:2;font-size:12px;color:var(--gold);line-height:1.4}
+.hist-empty{color:var(--sub);text-align:center;margin:28px 0}
+.hist-ctl{justify-content:center;margin-top:22px}
+.rev-head{text-align:center;color:var(--sub);font-size:13px;margin:-6px 0 10px}
+.rev-board{width:min(100%,calc(100dvh - 420px));min-width:min(100%,240px)}
+.rev-info{text-align:center;margin:10px 0 4px;min-height:5.6em}
+.rev-move{font-family:var(--f-disp);font-weight:700;font-size:19px;margin:0;letter-spacing:.06em}
+.rev-note{margin:2px 0 0;font-size:13.5px;color:#b9b2a2;line-height:1.6}
+.rev-note b{color:var(--gold);font-weight:500}
+.tag-bad{color:#e08c7c}.tag-dub{color:#d9b46a}.tag-best{color:#9fc79a}
+.rev-graph{margin:6px 0 10px}
+.rev-graph svg{display:block;width:100%;height:84px;background:var(--soft);border:1px solid var(--line);border-radius:2px;cursor:pointer;touch-action:none}
+.rev-graph-lab{display:flex;justify-content:space-between;font-size:11px;color:var(--mute);margin-top:3px}
+.rev-nav{justify-content:center;gap:8px}
+.rev-nav button{min-width:52px;padding:10px 0;font-size:16px;letter-spacing:0}
+.rev-ply{min-width:5.5em;text-align:center;font-size:13px;color:var(--sub);font-variant-numeric:tabular-nums}
+.rev-list{display:flex;flex-wrap:wrap;gap:4px;margin:14px 0 0;font-size:12.5px;font-variant-numeric:tabular-nums}
+.rev-list button{min-height:32px;padding:4px 8px;font-size:12.5px;letter-spacing:.02em;border-color:var(--line)}
+.rev-list button.cur{border-color:var(--gold);color:var(--gold)}
+.rev-list button.bad{color:#e08c7c}.rev-list button.dub{color:#d9b46a}
+.cell.bestf::after,.cell.bestt::after{content:"";position:absolute;inset:8%;border:2px dashed #7fc2a0;border-radius:50%;pointer-events:none}
+.cell.bestt::after{border-style:solid;background:rgba(127,194,160,.18)}
+#reviewRow{justify-content:center;margin-top:10px}
 @media (prefers-reduced-motion:reduce){.stone,button{transition:none}}
 </style>
 </head>
@@ -153,6 +185,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
       <button class="primary big" id="randomBtn">ランダム対戦</button>
       <button class="big" data-go="friend">友だちと対戦</button>
       <button class="big" data-go="solo">ひとりで遊ぶ</button>
+      <button class="big" data-go="history">対局履歴・感想戦</button>
       <button class="big" data-go="rules">ルール</button>
     </nav>
     <p class="foot">アカウント不要・リンクを送るだけで対戦</p>
@@ -205,6 +238,32 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
   </div>
 </section>
 
+<!-- 対局履歴 -->
+<section class="scr" data-scr="history" hidden>
+  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>対局履歴</h2><span class="sp"></span></div>
+  <p class="lead hist-note">終わった対局はこの端末に自動で残ります。選ぶと感想戦を開きます。</p>
+  <div class="hist" id="histList"></div>
+  <p class="hist-empty" id="histEmpty">まだ対局がありません。</p>
+  <div class="row hist-ctl"><button id="histClear" class="danger">履歴をすべて消す</button></div>
+</section>
+
+<!-- 感想戦 -->
+<section class="scr" data-scr="review" hidden>
+  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>感想戦</h2><span class="sp"></span></div>
+  <p class="rev-head" id="revHead"></p>
+  <div class="boardwrap rev-board"><div class="board" id="rboard"><div class="lab lab-top" id="rlabTop" aria-hidden="true"></div><div class="lab lab-left" id="rlabLeft" aria-hidden="true"></div><div class="grid" id="rgrid" aria-label="感想戦の盤"></div></div></div>
+  <div class="rev-info">
+    <p class="rev-move" id="revMove"></p>
+    <p class="rev-note" id="revNote"></p>
+  </div>
+  <div class="rev-graph"><svg id="revGraph" viewBox="0 0 300 84" preserveAspectRatio="none" role="img" aria-label="形勢のグラフ"></svg><div class="rev-graph-lab"><span>上ほど黒有利・下ほど白有利</span><span id="revProg"></span></div></div>
+  <div class="row rev-nav">
+    <button id="rFirst" aria-label="最初へ">⏮</button><button id="rPrev" aria-label="1手戻る">◀</button><span class="rev-ply" id="revPly"></span><button id="rNext" aria-label="1手進む">▶</button><button id="rLast" aria-label="最後へ">⏭</button>
+  </div>
+  <div class="row chks"><label class="chk"><input type="checkbox" id="rShowBest" checked> 最善手を表示</label><label class="chk"><input type="checkbox" id="rOnlyBad"> 悪手だけ追う</label></div>
+  <div class="rev-list" id="revList"></div>
+</section>
+
 <!-- ひとりで遊ぶ -->
 <section class="scr" data-scr="solo" hidden>
   <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>ひとりで遊ぶ</h2><span class="sp"></span></div>
@@ -246,6 +305,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <button id="undo">1手戻す</button>
     <button id="reset" class="primary">最初から</button>
   </div>
+  <div class="row" id="reviewRow" hidden><button id="reviewNow" class="primary">この対局を感想戦</button></div>
   <div class="row" id="netCtl" hidden>
     <button id="resign" class="danger">投了する</button>
     <button id="rematch" class="primary" hidden>もう一局</button>
@@ -738,6 +798,134 @@ render=function(){_render2();if(CUR==='game'&&MATCH.on&&S.mode==='net'&&NET.gues
   if(S.ply===1&&S.last)S.firstKey=keyOf(S.last,1);
   el.hidden=!j;if(j){el.innerHTML='';const b=document.createElement('b');b.textContent=lab+j[0]+'」';const sm=document.createElement('small');sm.textContent=j[1];el.append(b,sm)}};
 render();
+
+/* 対局履歴（この端末に保存） */
+const GKEY='bocch-games',GMAX=100;
+function loadGames(){try{const v=JSON.parse(localStorage.getItem(GKEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return[]}}
+function storeGames(a){try{localStorage.setItem(GKEY,JSON.stringify(a.slice(0,GMAX)))}catch(e){}}
+const MODE_NAME=m=>m==='net'?'オンライン対戦':m===0?'1台で2人':['','CPU やさしい','CPU ふつう','CPU つよい','CPU 最強'][m]||'';
+function currentGameId(){
+  if(S.mode==='net')return NET.code?'n-'+NET.code+'-'+NET.game:null;
+  if(!S.gid)S.gid='g'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+  return S.gid}
+function saveFinished(){
+  if(!S.over||!S.log||!S.log.length)return;
+  const id=currentGameId();if(!id)return;
+  const me=S.mode==='net'?colorOf(NET.me):S.mode===0?0:1;
+  const g=loadGames(),ix=g.findIndex(x=>x.id===id),old=ix>=0?g[ix]:null;
+  const same=old&&old.log.length===S.log.length&&old.log.every((m,i)=>m[0]===S.log[i][0]&&m[1]===S.log[i][1]);
+  const e={id,t:old?old.t:Date.now(),mode:S.mode,me,win:S.over.win,why:S.over.why,log:S.log.map(m=>[m[0],m[1]]),an:same?old.an:null};
+  if(ix>=0)g.splice(ix,1);g.unshift(e);storeGames(g)}
+const _renderR=render;
+render=function(){_renderR();
+  if(S.over)saveFinished();
+  const rr=$('reviewRow');if(rr)rr.hidden=!(S.over&&S.log&&S.log.length)};
+
+/* 履歴の一覧 */
+function fmtDate(t){const d=new Date(t),p=n=>String(n).padStart(2,'0');return (d.getMonth()+1)+'/'+d.getDate()+' '+p(d.getHours())+':'+p(d.getMinutes())}
+function resultOf(g){if(g.win===0)return['引き分け','draw'];if(!g.me)return[(g.win===1?'黒':'白')+'勝ち',g.win===1?'win':'lose'];return g.win===g.me?['勝ち','win']:['負け','lose']}
+function renderHistory(){const g=loadGames(),box=$('histList');box.innerHTML='';$('histEmpty').hidden=!!g.length;$('histClear').hidden=!g.length;
+  g.forEach(x=>{const b=document.createElement('button'),[rt,rc]=resultOf(x);
+    const side=x.me===1?'あなたは黒':x.me===2?'あなたは白':'';
+    let bad='';if(x.an){const c=countMarks(x);bad=c.bad||c.dub?`悪手 ${c.bad}・疑問手 ${c.dub}${x.me?'（あなた）':''}`:'悪手なし'}else bad='未解析';
+    const r=document.createElement('span');r.className='res '+rc;r.textContent=rt;
+    const m=document.createElement('span');m.className='meta';const mb=document.createElement('b');mb.textContent=MODE_NAME(x.mode);m.append(mb,document.createElement('br'),document.createTextNode(fmtDate(x.t)+'　'+x.log.length+'手'+(side?'　'+side:'')));
+    const bd=document.createElement('span');bd.className='bad';bd.textContent=bad;
+    b.append(r,m,bd);b.addEventListener('click',()=>openReview(x.id));box.appendChild(b)})}
+$('histClear').addEventListener('click',()=>{const b=$('histClear');if(b.dataset.arm){storeGames([]);delete b.dataset.arm;b.textContent='履歴をすべて消す';renderHistory()}else{b.dataset.arm='1';b.textContent='もう一度押すと消えます';setTimeout(()=>{delete b.dataset.arm;b.textContent='履歴をすべて消す'},3000)}});
+
+/* 感想戦 */
+const REV={g:null,pos:[],i:0,an:[],job:0};
+const sig=x=>1/(1+Math.exp(-x));
+const EK=0.013,EWIN=100000;
+function blackPct(i){const p=REV.pos[i];if(!p)return null;
+  if(i===REV.pos.length-1&&REV.g.win!==undefined&&i===REV.g.log.length){return REV.g.win===1?1:REV.g.win===2?0:.5}
+  const a=REV.an[i];if(!a)return null;let v=a.s>EWIN-1000?1:a.s<-EWIN+1000?0:sig(EK*a.s);return p.turn===1?v:1-v}
+function markOf(i){ // i手目（0始まり）の評価
+  const g=REV.g,m=g.log[i],a=REV.an[i];if(!a)return null;
+  const mover=REV.pos[i].turn,b0=blackPct(i),b1=blackPct(i+1);if(b0==null||b1==null)return null;
+  const before=mover===1?b0:1-b0,after=mover===1?b1:1-b1,loss=before-after;
+  const best=a.m&&a.m[0]===m[0]&&a.m[1]===m[1];
+  if(best)return{k:'best',loss:0};
+  if(loss>=.25)return{k:'bad',loss};if(loss>=.12)return{k:'dub',loss};return{k:'ok',loss}}
+function countMarks(g){let bad=0,dub=0;const save={g:REV.g,pos:REV.pos,an:REV.an};REV.g=g;REV.pos=buildPos(g);REV.an=g.an||[];
+  for(let i=0;i<g.log.length;i++){if(g.me&&REV.pos[i].turn!==g.me)continue;const k=markOf(i);if(k&&k.k==='bad')bad++;else if(k&&k.k==='dub')dub++}
+  Object.assign(REV,save);return{bad,dub}}
+function buildPos(g){let b=startBoard(),turn=1;const out=[{b,turn}];for(const m of g.log){b=apply(b,m);turn=3-turn;out.push({b,turn})}return out}
+(function(){const t=$('rlabTop'),l=$('rlabLeft'),gr=$('rgrid');for(let i=0;i<6;i++){t.appendChild(document.createElement('span'));l.appendChild(document.createElement('span'))}
+  for(let i=0;i<36;i++){const d=document.createElement('div');d.className='cell';d.id='r'+i;gr.appendChild(d)}})();
+let AW=null;
+function analysisWorker(){if(AW!==null)return AW;try{const src=$('eng').textContent+'\nonmessage=e=>{const d=e.data;const r=BocchEngine.think(d.b,d.p,d.ms,{history:d.history});postMessage({job:d.job,i:d.i,r})}';
+  AW=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));AW.onmessage=e=>onAnalysis(e.data);AW.onerror=()=>{AW=false}}catch(e){AW=false}return AW}
+function nextAnalysis(){const n=REV.g.log.length;let i=-1;
+  // 今見ている局面を優先し、そのあと頭から
+  if(REV.i<n&&!REV.an[REV.i])i=REV.i;else if(REV.i+1<n&&!REV.an[REV.i+1])i=REV.i+1;else for(let k=0;k<n;k++)if(!REV.an[k]){i=k;break}
+  if(i<0){finishAnalysis();return}
+  const p=REV.pos[i],job={job:REV.job,i,b:p.b.slice(),p:p.turn,ms:700,history:REV.pos.slice(0,i).map(x=>({b:x.b,turn:x.turn}))};
+  const w=analysisWorker();
+  if(w)w.postMessage(job);else setTimeout(()=>{const r=BocchEngine.think(job.b,job.p,250,job);onAnalysis({job:job.job,i,r})},20)}
+function onAnalysis(d){if(d.job!==REV.job||!REV.g)return;
+  REV.an[d.i]=d.r?{s:d.r.score,m:d.r.move,d:d.r.depth}:{s:0,m:null,d:0};
+  {const g=loadGames(),ix=g.findIndex(x=>x.id===REV.g.id);if(ix>=0){g[ix].an=REV.an;storeGames(g)}}
+  renderReview();nextAnalysis()}
+function finishAnalysis(){const g=loadGames(),ix=g.findIndex(x=>x.id===REV.g.id);if(ix>=0){g[ix].an=REV.an;storeGames(g)}REV.g.an=REV.an;renderReview()}
+function openReview(id){const g=loadGames().find(x=>x.id===id);if(!g)return;
+  REV.g=g;REV.pos=buildPos(g);REV.an=(g.an&&g.an.length)?g.an.slice():[];REV.job++;
+  // 最初の悪手へ飛ぶのは解析後。最初は終局図から
+  REV.i=0;show('review');renderReview();if(REV.an.filter(Boolean).length<g.log.length)nextAnalysis()}
+function setRev(i){REV.i=Math.max(0,Math.min(REV.pos.length-1,i));renderReview()}
+function fmtMove(m,n){return (n+1)+'. '+(n%2?'白':'黒')+' '+sqName(m[0])+'→'+sqName(m[1])}
+function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,p=REV.pos[i],flip=g.me===2,n=g.log.length;
+  const last=i>0?g.log[i-1]:null,a=REV.an[i],showBest=$('rShowBest').checked&&a&&a.m&&i<n;
+  for(let k=0;k<36;k++){const el=$('r'+k),v=p.b[k],r=k/6|0,d=v?nbCount(p.b,k):0;let cls='cell';
+    if(r===0||r===5)cls+=' goal';if(last&&(last[0]===k||last[1]===k))cls+=' last';
+    if(showBest&&a.m[0]===k)cls+=' bestf';if(showBest&&a.m[1]===k)cls+=' bestt';el.className=cls;
+    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}"><span>${d}</span></div>`:''}
+  $('rboard').classList.toggle('flip',flip);$('rboard').classList.toggle('hideNum',!$('showNum').checked);$('rboard').classList.toggle('nolab',!$('showLab').checked);
+  [...$('rlabTop').children].forEach((e,k)=>e.textContent=String(flip?6-k:k+1));
+  [...$('rlabLeft').children].forEach((e,k)=>e.textContent='abcdef'[flip?5-k:k]);
+  const [rt]=resultOf(g);$('revHead').textContent=MODE_NAME(g.mode)+'　'+fmtDate(g.t)+'　'+rt+'（'+g.why+'）';
+  $('revPly').textContent=i+' / '+n+'手';
+  // 直前の手の評価
+  const mv=$('revMove'),nt=$('revNote');
+  if(i===0){mv.textContent='開始局面';}
+  else{const mk=markOf(i-1);mv.innerHTML='';mv.append(fmtMove(last,i-1));
+    if(mk){const sp=document.createElement('span');sp.className=mk.k==='bad'?'tag-bad':mk.k==='dub'?'tag-dub':mk.k==='best'?'tag-best':'';sp.textContent=mk.k==='bad'?'　悪手':mk.k==='dub'?'　疑問手':mk.k==='best'?'　最善':'';mv.append(sp)}}
+  let note='';const bp=blackPct(i);
+  if(bp!=null){const pct=Math.round(bp*100);note+=i===n?'終局。':'';
+    if(i<n)note+=pct>=99?'黒の勝ちが読み切れています。':pct<=1?'白の勝ちが読み切れています。':`形勢　黒 ${pct}%・白 ${100-pct}%`}
+  if(i>0){const pa=REV.an[i-1],mk=markOf(i-1);if(pa&&pa.m&&mk&&mk.k!=='best')note+=`<br>ここは <b>${sqName(pa.m[0])}→${sqName(pa.m[1])}</b> が最善でした（勝率 ${Math.round(mk.loss*100)}% 損）。`}
+  if(i<n&&a&&a.m)note+=`<br>次の${p.turn===1?'黒':'白'}の最善手：<b>${sqName(a.m[0])}→${sqName(a.m[1])}</b>`;
+  if(i<n&&!a)note+='　解析中…';
+  nt.innerHTML=note;
+  const done=REV.an.filter(Boolean).length;$('revProg').textContent=done<n?`解析中 ${done}/${n}`:'解析済み';
+  drawGraph();
+  const list=$('revList');list.innerHTML='';
+  g.log.forEach((m,k)=>{const b=document.createElement('button'),mk=markOf(k);b.textContent=fmtMove(m,k);
+    if(mk&&mk.k==='bad')b.classList.add('bad');else if(mk&&mk.k==='dub')b.classList.add('dub');if(k===i-1)b.classList.add('cur');
+    b.addEventListener('click',()=>setRev(k+1));list.appendChild(b)})}
+function drawGraph(){const svg=$('revGraph'),n=REV.pos.length-1,W=300,H=84;if(!n){svg.innerHTML='';return}
+  const xs=k=>k/n*W,ys=v=>(1-v)*H;let pts=[];for(let k=0;k<=n;k++){const v=blackPct(k);if(v!=null)pts.push([xs(k),ys(v),k])}
+  let h=`<line x1="0" y1="${H/2}" x2="${W}" y2="${H/2}" stroke="rgba(236,230,216,.18)" stroke-dasharray="3 3"/>`;
+  if(pts.length){const poly=pts.map(q=>q[0].toFixed(1)+','+q[1].toFixed(1)).join(' ');
+    h+=`<polygon points="${pts[0][0].toFixed(1)},${H} ${poly} ${pts[pts.length-1][0].toFixed(1)},${H}" fill="rgba(20,20,20,.55)"/>`;
+    h+=`<polyline points="${poly}" fill="none" stroke="#c9a96e" stroke-width="1.6" vector-effect="non-scaling-stroke"/>`;
+    for(let k=0;k<REV.g.log.length;k++){const mk=markOf(k);if(mk&&(mk.k==='bad'||mk.k==='dub')){const v=blackPct(k+1);h+=`<circle cx="${xs(k+1)}" cy="${ys(v)}" r="2.6" fill="${mk.k==='bad'?'#e08c7c':'#d9b46a'}"/>`}}}
+  h+=`<line x1="${xs(REV.i)}" y1="0" x2="${xs(REV.i)}" y2="${H}" stroke="#ece6d8" stroke-width="1" vector-effect="non-scaling-stroke"/>`;
+  svg.innerHTML=h}
+function graphPick(e){const r=$('revGraph').getBoundingClientRect(),n=REV.pos.length-1;setRev(Math.round((e.clientX-r.left)/r.width*n))}
+$('revGraph').addEventListener('pointerdown',e=>{graphPick(e);$('revGraph').setPointerCapture(e.pointerId)});
+$('revGraph').addEventListener('pointermove',e=>{if(e.buttons)graphPick(e)});
+function stepBad(dir){const n=REV.g.log.length;for(let k=REV.i-1+dir;k>=0&&k<n;k+=dir){const mk=markOf(k);if(mk&&(mk.k==='bad'||mk.k==='dub')&&(!REV.g.me||REV.pos[k].turn===REV.g.me)){setRev(k+1);return}}setRev(dir>0?REV.pos.length-1:0)}
+$('rFirst').addEventListener('click',()=>setRev(0));$('rLast').addEventListener('click',()=>setRev(REV.pos.length-1));
+$('rPrev').addEventListener('click',()=>$('rOnlyBad').checked?stepBad(-1):setRev(REV.i-1));
+$('rNext').addEventListener('click',()=>$('rOnlyBad').checked?stepBad(1):setRev(REV.i+1));
+$('rShowBest').addEventListener('change',renderReview);
+addEventListener('keydown',e=>{if(CUR!=='review')return;if(e.key==='ArrowLeft')$('rPrev').click();else if(e.key==='ArrowRight')$('rNext').click()});
+$('reviewNow').addEventListener('click',()=>{saveFinished();const id=currentGameId();if(id)openReview(id)});
+document.querySelector('[data-go="history"]').addEventListener('click',renderHistory);
+addEventListener('popstate',()=>{if(CUR==='history')renderHistory();if(CUR!=='review')REV.job++});
+if(CUR==='history')renderHistory();
 </script>
 </body>
 </html>
