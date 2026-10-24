@@ -117,6 +117,19 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .gameinfo .status{justify-content:center}
 .gameinfo .hint{margin:4px 0 0}
 #localCtl,#netCtl{justify-content:center;margin-bottom:10px}
+.lab{position:absolute;display:grid;font-family:var(--f-disp);font-weight:700;font-size:clamp(9px,2.4vw,13px);color:#6b4b22;pointer-events:none;line-height:1}
+.lab span{display:flex;align-items:center;justify-content:center}
+.lab-top{top:0;left:5%;right:5%;height:5%;grid-template-columns:repeat(6,minmax(0,1fr))}
+.lab-left{left:0;top:5%;bottom:5%;width:5%;grid-template-rows:repeat(6,minmax(0,1fr))}
+.kifu{margin:10px auto 0;max-width:420px;font-size:12.5px;line-height:1.55;color:var(--sub);text-align:left;padding:6px 10px;border:1px solid var(--line);border-radius:2px;font-variant-numeric:tabular-nums}
+.kifu summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:10px;min-height:28px;align-items:center}
+.kifu summary::-webkit-details-marker{display:none}
+.kifu summary::after{content:"開く ▾";color:var(--gold);font-size:12px;flex:none}
+.kifu[open] summary::after{content:"たたむ ▴"}
+.kifu #kifu{max-height:7.8em;overflow-y:auto;padding-top:6px;margin-top:4px;border-top:1px solid var(--line)}
+.chks{justify-content:center;gap:18px}
+.nolab .lab{display:none}
+.kifu b{color:var(--fg);font-weight:500}
 .seek{min-height:calc(100dvh - 200px);justify-content:center;gap:16px}
 .elapsed{margin:0;font-family:var(--f-latin);font-size:28px;letter-spacing:.2em;color:var(--gold)}
 .searching .dot{animation:bob 1.6s ease-in-out infinite}.searching .dot.w{animation-delay:.8s}
@@ -214,18 +227,19 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
       <li>自分の手を指し終えたとき、向こう岸（相手側の端の列）に自分の石が<b>2つ以上</b>あれば勝ち。着いた石も動かしてよい</li>
       <li>動かせる石がなければ負け。同じ局面が3回出たら引き分け</li>
     </ol>
-    <p class="note">最初は自分側の端の列に6個並べる。黒が先手。友だちとの対戦では、自分の石がいつも手前に来るように盤を回して表示します。</p>
+    <p class="note">マスは「列の数字＋段の英字」で呼ぶ（例：3c）。列は黒から見て左から1〜6、段は上（白の陣）からa〜f。最初は自分側の端の列に6個並べる。黒が先手。友だちとの対戦では、自分の石がいつも手前に来るように盤を回して表示します。</p>
   </div>
 </section>
 
 <!-- 対局 -->
 <section class="scr" data-scr="game" hidden>
   <div class="topbar"><button class="back" id="gameBack">‹ ホーム</button><span class="conn" id="conn"><i></i><span id="connTxt"></span></span><button class="back" data-go="rules">ルール</button></div>
-  <div class="boardwrap"><div class="board" id="board"><div class="grid" id="grid" role="grid" aria-label="盤"></div></div></div>
+  <div class="boardwrap"><div class="board" id="board"><div class="lab lab-top" id="labTop" aria-hidden="true"></div><div class="lab lab-left" id="labLeft" aria-hidden="true"></div><div class="grid" id="grid" role="grid" aria-label="盤"></div></div></div>
   <div class="gameinfo">
     <div class="status" id="status"></div>
     <p class="hint" id="hint"></p>
     <p class="joseki" id="joseki" hidden></p>
+    <details class="kifu" id="kifuBox" hidden><summary id="kifuSum"></summary><div id="kifu" aria-label="棋譜"></div></details>
   </div>
   <div class="row" id="localCtl">
     <button id="undo">1手戻す</button>
@@ -236,7 +250,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <button id="rematch" class="primary" hidden>もう一局</button>
     <button id="leave">対戦をやめる</button>
   </div>
-  <label class="chk"><input type="checkbox" id="showNum" checked> 石に「進める距離」を表示する</label>
+  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label></div>
 </section>
 
 <script>
@@ -247,7 +261,7 @@ let S;
 const key=(b,t)=>b.join('')+t;
 const ok=(r,c)=>r>=0&&r<N&&c>=0&&c<N;
 function startBoard(){const b=Array(N*N).fill(0);for(let c=0;c<N;c++){b[c]=2;b[(N-1)*N+c]=1}return b}
-function initState(mode){const b=startBoard();return {b,turn:1,mode,hist:[],sel:-1,last:null,over:null,reps:{[key(b,1)]:1},ply:0}}
+function initState(mode){const b=startBoard();return {b,turn:1,mode,hist:[],sel:-1,last:null,over:null,reps:{[key(b,1)]:1},ply:0,log:[]}}
 function nbCount(b,i){const r=i/N|0,c=i%N;let n=0;for(const[x,y]of DIRS)if(ok(r+x,c+y)&&b[(r+x)*N+c+y])n++;return Math.min(4,n)}
 function movesFrom(b,i){const d=nbCount(b,i),r=i/N|0,c=i%N,out=[];if(!d)return out;
   for(const[x,y]of DIRS){const rr=r+x*d,cc=c+y*d;if(ok(rr,cc)&&!b[rr*N+cc])out.push([i,rr*N+cc])}return out}
@@ -293,7 +307,7 @@ function nextState(st,m){
   else{turn=3-mover;const k=key(b,turn);reps[k]=(reps[k]||0)+1;
     if(!allMoves(b,turn).length)over={win:mover,why:'相手が動けなくなった'};
     else if(reps[k]>=3)over={win:0,why:'同じ局面が3回'};}
-  return {b,turn,last:m,over,reps,ply:(st.ply||0)+1}
+  return {b,turn,last:m,over,reps,ply:(st.ply||0)+1,log:[...(st.log||[]),m]}
 }
 function doMove(m){
   if(S.mode==='net'){netMove(m);return}
@@ -436,7 +450,7 @@ $('reset').addEventListener('click',()=>{S=initState(S.mode);render()});
 $('undo').addEventListener('click',()=>{
   if(S.mode==='net'||!S.hist.length)return;let steps=S.mode&&S.turn===1&&S.hist.length>=2?2:1;if(S.mode&&S.over&&S.over.win===1)steps=1;
   while(steps--&&S.hist.length){const h=S.hist.pop();S.b=h.b;S.turn=h.turn;S.last=h.last;S.reps=h.reps;S.ply=h.ply}
-  S.over=null;S.sel=-1;render()});
+  S.over=null;S.sel=-1;S.log=(S.log||[]).slice(0,S.ply||0);render()});
 $('showNum').addEventListener('change',render);
 $('create').addEventListener('click',createRoom);
 $('join').addEventListener('click',()=>joinRoom($('codeIn').value));
@@ -527,6 +541,26 @@ async function take(room){
     else{MATCH.taking=null;consider();if(MATCH.on&&!MATCH.mine&&!MATCH.taking)postSeek()}},1500);
 }
 function cancelMatch(){if(MATCH.mine)lobbyPost({t:'cancel',room:MATCH.mine});stopMatch();MATCH.mine=null;if(S.mode==='net')leave()}
+
+/* 符号（列=1〜6、段=a〜f）と棋譜 */
+const sqName=i=>(i%6+1)+'abcdef'[i/6|0];
+(function(){const t=$('labTop'),l=$('labLeft');for(let i=0;i<6;i++){t.appendChild(document.createElement('span'));l.appendChild(document.createElement('span'))}})();
+const _render3=render;
+render=function(){_render3();
+  const flip=$('board').classList.contains('flip');
+  [...$('labTop').children].forEach((e,i)=>e.textContent=String(flip?6-i:i+1));
+  [...$('labLeft').children].forEach((e,i)=>e.textContent='abcdef'[flip?5-i:i]);
+  const box=$('kifuBox'),k=$('kifu'),log=S.log||[];box.hidden=!log.length;
+  $('board').classList.toggle('nolab',!$('showLab').checked);
+  if(log.length){const fmt=(m,n)=>(n+1)+'. '+(n%2?'白':'黒')+' '+sqName(m[0])+'→'+sqName(m[1]);
+    $('kifuSum').textContent='棋譜 '+log.length+'手　最新 '+fmt(log[log.length-1],log.length-1);
+    k.innerHTML='';log.forEach((m,n)=>{const sp=document.createElement('span');sp.textContent=(n?'　':'')+fmt(m,n);if(n===log.length-1){const b=document.createElement('b');b.appendChild(sp);k.appendChild(b)}else k.appendChild(sp)});k.scrollTop=k.scrollHeight}
+};
+render();
+(function(){try{if(localStorage.getItem('bocch-kifu-open')==='1')$('kifuBox').open=true;if(localStorage.getItem('bocch-lab')==='0')$('showLab').checked=false}catch(e){}})();
+$('kifuBox').addEventListener('toggle',()=>{try{localStorage.setItem('bocch-kifu-open',$('kifuBox').open?'1':'0')}catch(e){}});
+$('showLab').addEventListener('change',()=>{try{localStorage.setItem('bocch-lab',$('showLab').checked?'1':'0')}catch(e){}render()});
+render();
 $('randomBtn').addEventListener('click',startMatch);
 addEventListener('pagehide',()=>{if(MATCH.on&&MATCH.mine){try{fetch(LOBBY,{method:'POST',keepalive:true,body:JSON.stringify({t:'cancel',room:MATCH.mine,from:MATCH.id})})}catch(e){}}});
 $('matchCancel').addEventListener('click',()=>{cancelMatch();show('home')});
