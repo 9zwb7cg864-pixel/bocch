@@ -680,7 +680,7 @@ function renderStatus(){
 
 /* 友だちと対戦（中継サーバー経由。対局の記録を全員が同じ順に読んで盤を再現する） */
 const NET={code:null,me:null,es:null,seen:new Set(),host:null,guest:null,game:0,over:null,live:false,sending:false,claimed:false,timer:null,watch:false};
-const TOPIC=c=>'bocch-v1-'+c, RELAY_DEFAULT='https://ntfy.sh/';
+const TOPIC=c=>'bocch-v1-'+c, RELAY_DEFAULT='https://bocch.9zwb7cg864.workers.dev/';
 // 中継先。?relay=… で一時的に切り替えられる（このタブの間だけ有効）
 const RELAY=(()=>{try{const q=new URLSearchParams(location.search).get('relay');if(q==='off')sessionStorage.removeItem('bocch-relay');else if(q&&/^https?:\/\/[^\s]+\/$/.test(q))sessionStorage.setItem('bocch-relay',q);return sessionStorage.getItem('bocch-relay')||RELAY_DEFAULT}catch(e){return RELAY_DEFAULT}})();
 // 受信：ntfy なら EventSource、自前の中継なら WebSocket（切れたら自動でつなぎ直す）
