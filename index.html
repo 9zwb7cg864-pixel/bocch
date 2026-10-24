@@ -6,84 +6,94 @@
 <title>bocch</title>
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
 <style>
+/* 漆の黒緑に金の細線、榧の盤、那智黒と蛤の石 */
 :root{
-  --bg:#eef0ee; --panel:#ffffff; --fg:#1f2522; --sub:#5d6661; --line:#d5dad6; --soft:#f4f6f4;
-  --wood:#e3c99a; --wood-line:#b8955c; --wood-dark:#c9aa72; --goal:#cfe0d2;
-  --ai:#2b4f7a; --ai-soft:#dbe5f1; --win:#2e6b4a; --lose:#a6392c;
-  --black:#1c1c1c; --white:#f7f5ef;
+  --bg:#0e1311; --panel:#131a17; --fg:#ece6d8; --sub:#9a9484; --mute:#6f6a5e;
+  --gold:#c9a96e; --gold-soft:rgba(201,169,110,.28); --gold-line:rgba(201,169,110,.18);
+  --line:rgba(236,230,216,.14); --soft:#18201c;
+  --wood:#d9b878; --wood-line:#5e4220; --wood-edge:#c9a463;
+  --ai:#c9a96e; --win:#8fbf9a; --lose:#d9a08b; --dot:#1d2a25;
+  --f-latin:"Cormorant Garamond","Times New Roman",serif;
   --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
   --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
-  color-scheme:light;
+  color-scheme:dark;
 }
-@media (prefers-color-scheme: dark){:root{
-  --bg:#161a19; --panel:#1f2523; --fg:#e8ece9; --sub:#9aa39e; --line:#333b38; --soft:#252c2a;
-  --wood:#b8996a; --wood-line:#7d6136; --wood-dark:#9e8053; --goal:#7f9a7a;
-  --ai:#8fb4e0; --ai-soft:#22324a; --win:#7cc79d; --lose:#e07a6c; color-scheme:dark}}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.7;
+html{-webkit-text-size-adjust:100%;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.75;
   padding:max(20px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(40px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
-header{max-width:1000px;margin:0 auto 16px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
-h1{font-family:var(--f-disp);font-weight:800;font-size:46px;line-height:1;margin:0;letter-spacing:.02em}
-header p{margin:0;color:var(--sub);font-size:14px}
-.wrap{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:minmax(0,560px) minmax(0,1fr);gap:24px;align-items:start}
-@media (max-width:840px){.wrap{grid-template-columns:minmax(0,1fr)}}
-.board{position:relative;aspect-ratio:1;max-width:100%;background:var(--wood);border-radius:6px;padding:3.2%;box-shadow:inset 0 0 0 2px var(--wood-dark)}
-.grid{display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(6,1fr);width:100%;height:100%;border:2px solid var(--wood-line)}
-.cell{position:relative;border:1px solid var(--wood-line);background:transparent;padding:0;margin:0;cursor:default;display:flex;align-items:center;justify-content:center;font:inherit;color:inherit;border-radius:0;-webkit-tap-highlight-color:transparent}
-.cell.goal{background:color-mix(in srgb,var(--goal) 55%,transparent)}
-.cell:focus-visible{outline:3px solid var(--ai);outline-offset:-3px;z-index:3}
-.cell.last{background:color-mix(in srgb,var(--ai) 16%,transparent)}
-.stone{width:80%;height:80%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(15px,4vw,22px);font-variant-numeric:tabular-nums;transition:transform .15s}
-.stone.b{background:radial-gradient(circle at 35% 30%,#4a4a4a,var(--black) 60%);color:#f1f1f1;box-shadow:0 2px 3px rgba(0,0,0,.35)}
-.stone.w{background:radial-gradient(circle at 35% 30%,#fff,#e6e2d6 70%);color:#222;box-shadow:0 2px 3px rgba(0,0,0,.25)}
-.stone.zero{opacity:.5}
-.mine{cursor:pointer}
-.sel .stone{outline:4px solid var(--ai);outline-offset:2px}
-.nb .stone{box-shadow:0 0 0 3px var(--ai-soft),0 0 0 5px var(--ai)}
+header{max-width:1040px;margin:0 auto 22px;padding-bottom:18px;border-bottom:1px solid var(--gold-line);display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+h1{font-family:var(--f-latin);font-style:italic;font-weight:600;font-size:46px;line-height:1;margin:0;letter-spacing:.02em}
+header p{margin:0;color:var(--sub);font-family:var(--f-disp);font-size:14px;letter-spacing:.12em}
+.wrap{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:minmax(0,580px) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:start}
+@media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr)}}
+.board{position:relative;aspect-ratio:1;max-width:100%;background:var(--wood);
+  background-image:repeating-linear-gradient(92deg,rgba(120,82,34,.07) 0 2px,transparent 2px 9px),repeating-linear-gradient(88deg,rgba(255,240,200,.10) 0 1px,transparent 1px 23px);
+  border-radius:4px;padding:5%;box-shadow:0 30px 60px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,236,190,.35),inset 0 0 0 7px var(--wood-edge),inset 0 0 0 8px rgba(90,60,25,.5)}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(6,1fr);width:100%;height:100%;border-top:1.5px solid var(--wood-line);border-left:1.5px solid var(--wood-line)}
+.cell{position:relative;border:0;border-right:1.5px solid var(--wood-line);border-bottom:1.5px solid var(--wood-line);background:transparent;padding:0;margin:0;cursor:default;display:flex;align-items:center;justify-content:center;font:inherit;color:inherit;border-radius:0;-webkit-tap-highlight-color:transparent}
+.cell:hover{background:transparent}
+.cell.goal{background:rgba(110,74,28,.10)}
+.cell:focus-visible{outline:2px solid var(--dot);outline-offset:-3px;z-index:3}
+.cell.last{background:rgba(29,42,37,.16)}
+.stone{width:80%;height:80%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--f-latin);font-weight:600;font-size:clamp(18px,4.6vw,32px);line-height:1;transition:transform .15s;box-shadow:0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
+.stone.b{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%);color:var(--gold)}
+.stone.w{background:repeating-linear-gradient(170deg,rgba(150,135,105,.06) 0 1px,transparent 1px 5px),radial-gradient(circle at 34% 28%,#fff 0%,#f3eee3 45%,#d6cdb9 100%);color:#3b3227}
+.stone.zero{opacity:.45}
+.mine{cursor:pointer}.mine:hover .stone{transform:translateY(-2px)}
+.sel .stone{box-shadow:0 0 0 3px var(--wood),0 0 0 5px var(--gold),0 4px 6px rgba(0,0,0,.38)}
+.nb .stone{box-shadow:0 0 0 2px var(--gold),0 4px 6px rgba(0,0,0,.38)}
 .target{cursor:pointer}
-.target::after{content:"";position:absolute;width:26%;height:26%;border-radius:50%;background:var(--ai);opacity:.75}
-.target.fin::after{width:88%;height:88%;background:transparent;border:4px solid var(--win);opacity:1}
+.target::after{content:"";position:absolute;width:20%;height:20%;border-radius:50%;background:var(--dot);box-shadow:0 0 0 3px rgba(29,42,37,.25)}
+.target.fin::after{width:84%;height:84%;background:transparent;border:2px solid var(--dot);box-shadow:inset 0 0 0 3px rgba(201,169,110,.6)}
 .flip .grid{transform:rotate(180deg)}.flip .stone{transform:rotate(180deg)}
 .hideNum .stone span{visibility:hidden}
-.side{display:flex;flex-direction:column;gap:14px;min-width:0}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;min-width:0}
-.panel h2{font-family:var(--f-disp);font-size:19px;margin:0}
-.status{font-size:20px;font-weight:700;display:flex;align-items:center;gap:10px}
-.dot{width:18px;height:18px;border-radius:50%;flex:none;display:inline-block}
-.dot.b{background:var(--black);border:1px solid #555}.dot.w{background:var(--white);border:1px solid #999}
-.hint{color:var(--sub);font-size:14px;margin:-6px 0 0;min-height:1.5em}
-.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.seg button{border:0;border-right:1px solid var(--line);border-radius:0;white-space:nowrap;flex:1 1 auto}.seg button:last-child{border-right:0}
-button{font:inherit;font-size:14px;color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer}
-button:hover{background:color-mix(in srgb,var(--ai) 8%,transparent)}
-button[aria-pressed="true"],button.primary{background:var(--ai);color:var(--panel);border-color:var(--ai)}
-button.danger{color:var(--lose)}
+.side{display:flex;flex-direction:column;gap:18px;min-width:0}
+.panel{background:var(--panel);border:1px solid var(--gold-soft);border-radius:2px;padding:22px 24px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.panel h2{font-family:var(--f-disp);font-weight:500;font-size:17px;letter-spacing:.16em;color:var(--gold);margin:0}
+.status{font-family:var(--f-disp);font-size:26px;font-weight:700;letter-spacing:.06em;display:flex;align-items:center;gap:12px;line-height:1.3}
+.dot{width:20px;height:20px;border-radius:50%;flex:none;display:inline-block}
+.dot.b{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%)}
+.dot.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f3eee3 45%,#d6cdb9 100%)}
+.hint{color:#b9b2a2;font-size:14px;margin:-4px 0 0;min-height:1.6em}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.seg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid var(--line);border-radius:2px;overflow:hidden}
+@media (max-width:420px){.seg{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.seg button{border:0;border-right:1px solid var(--line);border-radius:0;white-space:nowrap;padding:12px 6px}.seg button:last-child{border-right:0}
+button{font:inherit;font-size:14px;letter-spacing:.1em;color:var(--fg);background:transparent;border:1px solid rgba(236,230,216,.22);border-radius:2px;padding:11px 18px;min-height:44px;cursor:pointer;transition:background .15s,border-color .15s}
+button:hover{background:rgba(201,169,110,.08);border-color:var(--gold-soft)}
+button[aria-pressed="true"],button.primary{background:var(--gold);color:#14110b;border-color:var(--gold);font-weight:500}
+button.primary:hover{background:#d8bc85}
+button.danger{color:var(--lose);border-color:rgba(217,160,139,.45)}
 button:disabled{opacity:.5;cursor:default}
-button:focus-visible,input:focus-visible{outline:2px solid var(--ai);outline-offset:2px}
-input[type=text]{font:inherit;font-size:16px;color:var(--fg);background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:7px 10px;width:9em;letter-spacing:.1em;text-transform:lowercase}
-label.chk{display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer}
-.code{font-size:28px;font-weight:700;letter-spacing:.18em;font-variant-numeric:tabular-nums}
-.link{font-size:13px;color:var(--sub);word-break:break-all;background:var(--soft);border-radius:6px;padding:6px 8px;user-select:all}
+button:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+input[type=text]{font:inherit;font-family:var(--f-latin);font-size:20px;color:var(--fg);background:var(--soft);border:1px solid var(--line);border-radius:2px;padding:6px 12px;width:9em;letter-spacing:.2em;text-transform:lowercase;min-height:44px}
+input[type=checkbox]{accent-color:var(--gold)}
+input::placeholder{font-family:var(--f-body);font-size:14px;letter-spacing:.1em;color:var(--mute)}
+label.chk{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--sub);letter-spacing:.06em;cursor:pointer}
+.code{font-family:var(--f-latin);font-weight:500;font-size:44px;line-height:1.1;letter-spacing:.3em;color:var(--gold);padding:10px 0;border-top:1px solid var(--gold-soft);border-bottom:1px solid var(--gold-soft);text-align:center}
+.link{font-size:12px;color:var(--sub);word-break:break-all;background:var(--soft);border:1px solid var(--line);border-radius:2px;padding:8px 10px;user-select:all}
 .msg{font-size:13px;color:var(--sub);margin:0}
 .msg.err{color:var(--lose)}
-.conn{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--sub)}
-.conn i{width:8px;height:8px;border-radius:50%;background:var(--sub)}
+.conn{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--sub)}
+.conn i{width:7px;height:7px;border-radius:50%;background:var(--sub)}
 .conn.on i{background:var(--win)}.conn.off i{background:var(--lose)}
-.rules ol{margin:0;padding-left:1.3em;font-size:14px}.rules li{margin:3px 0}
-.rules .note{font-size:12px;color:var(--sub);margin:8px 0 0}
-.result{font-size:15px;font-weight:700;color:var(--win)}.result.lose{color:var(--lose)}
-@media (prefers-reduced-motion:reduce){.stone{transition:none}}
+.rules ol{margin:0;padding-left:1.4em;font-size:13.5px;color:#c4bdad}.rules li{margin:4px 0}
+.rules .note{font-size:12px;color:var(--mute);margin:8px 0 0}
+.rules b{color:var(--fg);font-weight:500}
+.result{font-size:15px;font-weight:500;color:var(--win)}.result.lose{color:var(--lose)}
+footer{max-width:1040px;margin:32px auto 0;padding-top:16px;border-top:1px solid var(--gold-line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--mute);letter-spacing:.1em}
+footer span:first-child{font-family:var(--f-latin);font-style:italic;font-size:15px}
+@media (prefers-reduced-motion:reduce){.stone,button{transition:none}}
 </style>
 </head>
 <body>
 <header>
   <h1>bocch</h1>
-  <p>ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ち</p>
+  <p>ひとりぼっちの石は、動けない。</p>
 </header>
 
 <div class="wrap">
@@ -152,6 +162,7 @@ label.chk{display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<footer><span>bocch</span><span>アカウント不要・リンクを送るだけで対戦</span></footer>
 <script>
 const N=6, DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]], NEED=2, PREFIX='bocch-game-';
 const $=id=>document.getElementById(id);
@@ -256,7 +267,7 @@ function renderStatus(){
       st.innerHTML=`<span class="dot ${S.over.win===1?'b':'w'}"></span>${you?'あなたの勝ち':'相手の勝ち'}`;
       hn.innerHTML=`<span class="result${you?'':' lose'}">${S.over.why}${you?'。お見事':''}</span>`;return}
     st.innerHTML=`<span class="dot ${S.turn===1?'b':'w'}"></span>${S.turn===NET.color?'あなたの番':'相手の番'}（${NAME[S.turn]}）`;
-    hn.textContent=!NET.connected?'相手が戻るのを待っています':human()?(S.sel>=0?'青い点へ動かす。緑の輪は向こう岸のマス':'あなたは'+NAME[NET.color]+'。動かす石を選んでください'):'相手が考えています';
+    hn.textContent=!NET.connected?'相手が戻るのを待っています':human()?(S.sel>=0?'点のあるマスへ動かす。輪は向こう岸のマス':'あなたは'+NAME[NET.color]+'。動かす石を選んでください'):'相手が考えています';
     return}
   if(S.over){
     if(S.over.win===0){st.textContent='引き分け';hn.innerHTML='<span class="result">'+S.over.why+'</span>'}
@@ -264,7 +275,7 @@ function renderStatus(){
       hn.innerHTML=`<span class="result${lose?' lose':''}">${S.over.why}${S.mode?(lose?'。もう一局どうぞ':'。お見事'):''}</span>`}
   }else{
     st.innerHTML=`<span class="dot ${S.turn===1?'b':'w'}"></span>${S.mode?(S.turn===1?'あなた（黒）の番':'CPU（白）が考え中…'):NAME[S.turn]+'の番'}`;
-    hn.textContent=human()?(S.sel>=0?'青い点へ動かす。緑の輪は向こう岸のマス':'動かす石を選んでください'):'';
+    hn.textContent=human()?(S.sel>=0?'点のあるマスへ動かす。輪は向こう岸のマス':'動かす石を選んでください'):'';
   }
 }
 
