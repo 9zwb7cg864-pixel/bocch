@@ -87,81 +87,157 @@ label.chk{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--sub
 .result{font-size:15px;font-weight:500;color:var(--win)}.result.lose{color:var(--lose)}
 footer{max-width:1040px;margin:32px auto 0;padding-top:16px;border-top:1px solid var(--gold-line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--mute);letter-spacing:.1em}
 footer span:first-child{font-family:var(--f-latin);font-style:italic;font-size:15px}
+
+/* 画面切り替え */
+body{min-height:100dvh}
+.scr{max-width:560px;margin:0 auto;width:100%}
+.home{min-height:calc(100dvh - 80px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center}
+.home h1{font-size:76px}
+.tag{margin:0 0 26px;color:var(--sub);font-family:var(--f-disp);font-size:15px;letter-spacing:.14em}
+.menu{display:flex;flex-direction:column;gap:12px;width:100%;max-width:340px}
+.foot{margin:28px 0 0;font-size:12px;color:var(--mute);letter-spacing:.1em}
+.mark{display:flex;gap:10px;justify-content:center}
+.dot.big{width:34px;height:34px;box-shadow:0 6px 10px rgba(0,0,0,.5)}
+.dot.ghost{background:transparent;border:1px dashed var(--gold-soft);box-shadow:none}
+button.big{min-height:54px;font-size:15px;letter-spacing:.16em;width:100%}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 18px;padding-bottom:12px;border-bottom:1px solid var(--gold-line)}
+.topbar h2{font-family:var(--f-disp);font-weight:500;font-size:18px;letter-spacing:.14em;margin:0;text-align:center;flex:1}
+.topbar .sp{width:72px}
+button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-spacing:.08em;background:transparent;width:72px;text-align:left}
+.topbar button.back:last-child{text-align:right}
+.stack{display:flex;flex-direction:column;gap:12px}
+.center{align-items:center;text-align:center}
+.card{background:var(--panel);border:1px solid var(--gold-soft);border-radius:2px;padding:20px}
+.lead{margin:0;color:#c4bdad;font-size:14px;line-height:1.8}
+.row.nowrap{flex-wrap:nowrap}.row.nowrap input{flex:1;min-width:0;width:auto}
+#netHost .code{width:100%}
+.boardwrap{width:min(100%,calc(100dvh - 330px));min-width:min(100%,260px);margin:0 auto}
+.gameinfo{margin:16px 0 10px;text-align:center}
+.gameinfo .status{justify-content:center}
+.gameinfo .hint{margin:4px 0 0}
+#localCtl,#netCtl{justify-content:center;margin-bottom:10px}
+.seek{min-height:calc(100dvh - 200px);justify-content:center;gap:16px}
+.elapsed{margin:0;font-family:var(--f-latin);font-size:28px;letter-spacing:.2em;color:var(--gold)}
+.searching .dot{animation:bob 1.6s ease-in-out infinite}.searching .dot.w{animation-delay:.8s}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@media (prefers-reduced-motion:reduce){.searching .dot{animation:none}}
+.joseki{margin:10px auto 0;display:inline-flex;flex-direction:column;gap:2px;padding:8px 18px;border-top:1px solid var(--gold-soft);border-bottom:1px solid var(--gold-soft)}
+.joseki b{font-family:var(--f-disp);font-weight:700;font-size:18px;letter-spacing:.2em;color:var(--gold)}
+.joseki small{font-size:12px;color:var(--sub);letter-spacing:.06em}
+#game-chk,.scr[data-scr=game] .chk{justify-content:center}
 @media (prefers-reduced-motion:reduce){.stone,button{transition:none}}
 </style>
 </head>
 <body>
-<header>
-  <h1>bocch</h1>
-  <p>ひとりぼっちの石は、動けない。</p>
-</header>
+<!-- ホーム -->
+<section class="scr" data-scr="home">
+  <div class="home">
+    <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
+    <h1>bocch</h1>
+    <p class="tag">ひとりぼっちの石は、動けない。</p>
+    <nav class="menu" aria-label="メニュー">
+      <button class="primary big" id="randomBtn">ランダム対戦</button>
+      <button class="big" data-go="friend">友だちと対戦</button>
+      <button class="big" data-go="solo">ひとりで遊ぶ</button>
+      <button class="big" data-go="rules">ルール</button>
+    </nav>
+    <p class="foot">アカウント不要・リンクを送るだけで対戦</p>
+  </div>
+</section>
 
-<div class="wrap">
-  <div><div class="board" id="board"><div class="grid" id="grid" role="grid" aria-label="盤"></div></div></div>
-
-  <div class="side">
-    <div class="panel">
-      <div>
-        <div class="status" id="status"></div>
-        <p class="hint" id="hint"></p>
+<!-- 友だちと対戦 -->
+<section class="scr" data-scr="friend" hidden>
+  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>友だちと対戦</h2><span class="sp"></span></div>
+  <div id="net" class="stack">
+    <div id="netIdle" class="stack">
+      <div class="card stack">
+        <p class="lead">部屋を作って、リンクを相手に送ります。</p>
+        <button id="create" class="primary big">部屋を作る</button>
       </div>
-      <div class="row" id="localCtl">
-        <button id="undo">1手戻す</button>
-        <button id="reset" class="primary">最初から</button>
-      </div>
-      <div class="row" id="netCtl" hidden>
-        <span class="conn" id="conn"><i></i><span id="connTxt"></span></span>
-        <button id="resign" class="danger">投了する</button>
-        <button id="rematch" class="primary" hidden>もう一局</button>
-        <button id="leave">対戦をやめる</button>
-      </div>
-      <label class="chk"><input type="checkbox" id="showNum" checked> 石に「進める距離」を表示する</label>
-    </div>
-
-    <div class="panel" id="net">
-      <h2>友だちと対戦</h2>
-      <div id="netIdle">
-        <p class="msg" style="margin-bottom:10px">アカウントは要りません。部屋を作ってリンクを送るだけです。</p>
-        <div class="row"><button id="create" class="primary">部屋を作る</button></div>
-        <div class="row" style="margin-top:12px">
+      <div class="card stack">
+        <p class="lead">部屋コードをもらった人はこちら。</p>
+        <div class="row nowrap">
           <input type="text" id="codeIn" maxlength="6" placeholder="部屋コード" autocomplete="off" aria-label="部屋コード">
           <button id="join">参加する</button>
         </div>
       </div>
-      <div id="netHost" hidden>
-        <p class="msg">この部屋コードかリンクを相手に送ってください。相手が開くと対局が始まります。途中でページを閉じても、同じリンクを開けば続きから再開できます。</p>
-        <div class="code" id="codeOut"></div>
-        <div class="link" id="linkOut"></div>
-        <div class="row"><button id="share" class="primary">リンクを送る</button><button id="copy">リンクをコピー</button><button id="cancel">やめる</button></div>
-      </div>
-      <p class="msg" id="netMsg" hidden></p>
     </div>
-
-    <div class="panel">
-      <h2>ひとりで遊ぶ</h2>
-      <div class="seg" id="modeSeg">
-        <button data-mode="1">やさしい</button>
-        <button data-mode="2">ふつう</button>
-        <button data-mode="3">つよい</button>
-        <button data-mode="0">1台で2人</button>
-      </div>
-    </div>
-
-    <div class="panel rules">
-      <h2>ルール</h2>
-      <ol>
-        <li>自分の石を1つ選び、縦・横・斜めにまっすぐ動かす</li>
-        <li>進む距離は、動かす前にその石のまわり8マスにいる石の数（色は問わない）と<b>ぴったり同じ</b>。<b>5以上は4</b>として数える。隣に誰もいない石は動けない</li>
-        <li>途中の石は<b>飛び越えてよい</b>。着地点に石があったら行けない。石は取られない</li>
-        <li>自分の手を指し終えたとき、向こう岸（相手側の端の列）に自分の石が<b>2つ以上</b>あれば勝ち。着いた石も動かしてよい</li>
-        <li>動かせる石がなければ負け。同じ局面が3回出たら引き分け</li>
-      </ol>
-      <p class="note">最初は自分側の端の列に6個並べる。緑の列がゴール。黒が先手。友だちとの対戦では、自分の石がいつも手前に来るように盤を回して表示します。</p>
-    </div>
+    <p class="msg" id="netMsg" hidden></p>
   </div>
-</div>
+</section>
 
-<footer><span>bocch</span><span>アカウント不要・リンクを送るだけで対戦</span></footer>
+<!-- 招待（相手待ち） -->
+<section class="scr" data-scr="invite" hidden>
+  <div class="topbar"><button class="back" id="cancel">‹ やめる</button><h2>相手を待っています</h2><span class="sp"></span></div>
+  <div id="netHost" class="stack center">
+    <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot ghost big"></span></div>
+    <p class="lead">この部屋のリンクを送ってください。<br>相手が開くと、すぐに対局が始まります。</p>
+    <div class="code" id="codeOut"></div>
+    <div class="link" id="linkOut"></div>
+    <button id="share" class="primary big">リンクを送る</button>
+    <button id="copy" class="big">リンクをコピー</button>
+    <p class="msg">途中でページを閉じても、同じリンクを開けば続きから再開できます。</p>
+  </div>
+</section>
+
+<!-- ランダム対戦（相手探し） -->
+<section class="scr" data-scr="match" hidden>
+  <div class="topbar"><button class="back" id="matchCancel">‹ やめる</button><h2>ランダム対戦</h2><span class="sp"></span></div>
+  <div class="stack center seek">
+    <div class="mark searching" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
+    <p class="status" id="matchTitle">相手を探しています</p>
+    <p class="lead" id="matchMsg">同じタイミングで探している人と、自動で組み合わせます。</p>
+    <p class="elapsed" id="matchTime">0:00</p>
+  </div>
+</section>
+
+<!-- ひとりで遊ぶ -->
+<section class="scr" data-scr="solo" hidden>
+  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>ひとりで遊ぶ</h2><span class="sp"></span></div>
+  <div class="stack" id="modeSeg">
+    <button class="big" data-mode="1">CPU やさしい</button>
+    <button class="big" data-mode="2">CPU ふつう</button>
+    <button class="big" data-mode="3">CPU つよい</button>
+    <button class="big" data-mode="0">1台で2人</button>
+  </div>
+</section>
+
+<!-- ルール -->
+<section class="scr" data-scr="rules" hidden>
+  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>ルール</h2><span class="sp"></span></div>
+  <div class="card rules">
+    <ol>
+      <li>自分の石を1つ選び、縦・横・斜めにまっすぐ動かす</li>
+      <li>進む距離は、動かす前にその石のまわり8マスにいる石の数（色は問わない）と<b>ぴったり同じ</b>。<b>5以上は4</b>として数える。隣に誰もいない石は動けない</li>
+      <li>途中の石は<b>飛び越えてよい</b>。着地点に石があったら行けない。石は取られない</li>
+      <li>自分の手を指し終えたとき、向こう岸（相手側の端の列）に自分の石が<b>2つ以上</b>あれば勝ち。着いた石も動かしてよい</li>
+      <li>動かせる石がなければ負け。同じ局面が3回出たら引き分け</li>
+    </ol>
+    <p class="note">最初は自分側の端の列に6個並べる。黒が先手。友だちとの対戦では、自分の石がいつも手前に来るように盤を回して表示します。</p>
+  </div>
+</section>
+
+<!-- 対局 -->
+<section class="scr" data-scr="game" hidden>
+  <div class="topbar"><button class="back" id="gameBack">‹ ホーム</button><span class="conn" id="conn"><i></i><span id="connTxt"></span></span><button class="back" data-go="rules">ルール</button></div>
+  <div class="boardwrap"><div class="board" id="board"><div class="grid" id="grid" role="grid" aria-label="盤"></div></div></div>
+  <div class="gameinfo">
+    <div class="status" id="status"></div>
+    <p class="hint" id="hint"></p>
+    <p class="joseki" id="joseki" hidden></p>
+  </div>
+  <div class="row" id="localCtl">
+    <button id="undo">1手戻す</button>
+    <button id="reset" class="primary">最初から</button>
+  </div>
+  <div class="row" id="netCtl" hidden>
+    <button id="resign" class="danger">投了する</button>
+    <button id="rematch" class="primary" hidden>もう一局</button>
+    <button id="leave">対戦をやめる</button>
+  </div>
+  <label class="chk"><input type="checkbox" id="showNum" checked> 石に「進める距離」を表示する</label>
+</section>
+
 <script>
 const N=6, DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]], NEED=2, PREFIX='bocch-game-';
 const $=id=>document.getElementById(id);
@@ -254,7 +330,7 @@ function render(){
   document.querySelectorAll('#modeSeg button').forEach(x=>x.setAttribute('aria-pressed',String(!net&&+x.dataset.mode===S.mode)));
   $('localCtl').hidden=net;$('netCtl').hidden=!net;
   const seated=net&&colorOf(NET.me)>0;$('resign').hidden=!(seated&&NET.guest&&!S.over);$('rematch').hidden=!(seated&&S.over);
-  if(net){const waiting=colorOf(NET.me)===colorOf(NET.host)&&NET.me===NET.host&&!NET.guest;$('netHost').hidden=!waiting;if(waiting){$('codeOut').textContent=NET.code;$('linkOut').textContent=inviteLink(NET.code)}}
+  if(net){const waiting=colorOf(NET.me)===colorOf(NET.host)&&NET.me===NET.host&&!NET.guest;if(NET.code){$('codeOut').textContent=NET.code;$('linkOut').textContent=inviteLink(NET.code)}}
   renderStatus();
 }
 function renderStatus(){
@@ -304,7 +380,7 @@ async function post(obj){
   netMsg('送れませんでした。ネットにつながっているか確かめてください。',true);return false}
 function closeNet(){if(NET.es){NET.es.close()}clearTimeout(NET.timer);
   Object.assign(NET,{code:null,es:null,seen:new Set(),host:null,guest:null,game:0,over:null,live:false,sending:false,claimed:false});
-  $('netIdle').hidden=false;$('netHost').hidden=true}
+  $('netIdle').hidden=false}
 function openRoom(code){
   code=(code||'').toLowerCase().replace(/[^a-z0-9]/g,'');
   if(code.length!==6){netMsg('部屋コードは6文字です。',true);return}
@@ -375,6 +451,91 @@ $('leave').addEventListener('click',leave);
 cellsBuild();S=initState(2);render();
 {const q=new URLSearchParams(location.search),room=q.get('room');
  if(room){$('codeIn').value=room;openRoom(room)}}
+</script>
+
+<script>
+/* 画面の切り替え（ブラウザの戻るにも対応） */
+let CUR='home';
+function paint(n){document.querySelectorAll('.scr').forEach(e=>{e.hidden=e.dataset.scr!==n});CUR=n;window.scrollTo(0,0)}
+function show(n,replace){paint(n);try{(replace?history.replaceState:history.pushState).call(history,{scr:n},'')}catch(e){}}
+addEventListener('popstate',e=>{const n=(e.state&&e.state.scr)||'home';if(CUR==='match'&&n!=='match'&&n!=='game'&&typeof cancelMatch==='function'&&MATCH.on)cancelMatch();if((CUR==='game'||CUR==='invite')&&S.mode==='net'&&n!=='game'&&n!=='invite')leave();paint(n);render()});
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
+document.querySelectorAll('[data-back]').forEach(b=>b.addEventListener('click',()=>history.length>1?history.back():show('home')));
+document.querySelectorAll('#modeSeg button').forEach(b=>b.addEventListener('click',()=>show('game')));
+$('create').addEventListener('click',()=>show('invite'));
+$('join').addEventListener('click',()=>{if(NET.code)show('game')});
+$('codeIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&NET.code)show('game')});
+$('cancel').addEventListener('click',()=>show('home'));
+$('leave').addEventListener('click',()=>show('home'));
+$('gameBack').addEventListener('click',()=>{if(S.mode==='net')leave();show('home')});
+const _render=render;
+render=function(){_render();
+  if(S.mode==='net'){const waiting=!!NET.host&&NET.me===NET.host&&!NET.guest;
+    if(waiting&&CUR==='game')show('invite',true);else if(NET.guest&&(CUR==='invite'||CUR==='match'))show('game',true);}
+  if(S.mode!=='net'){$('conn').className='conn';$('connTxt').textContent=S.mode===0?'1台で2人':['','CPU やさしい','CPU ふつう','CPU つよい'][S.mode]||''}
+};
+show(NET.code?'game':'home',true);render();
+
+
+/* 自動マッチング（ロビーに「探しています」を出し、先に見つけた人が取る） */
+const LOBBY=RELAY+'bocch-v1-lobby';
+const MATCH={on:false,id:null,es:null,seen:new Set(),seeks:new Map(),takes:new Map(),cancels:new Set(),mine:null,taking:null,decided:false,timer:null,hb:null,tick:null,t0:0};
+function lobbyId(){return MATCH.id||(MATCH.id=newCode()+newCode())}
+async function lobbyPost(o){o.from=lobbyId();try{const r=await fetch(LOBBY,{method:'POST',body:JSON.stringify(o)});return r.ok}catch(e){return false}}
+function stopMatch(){MATCH.on=false;if(MATCH.es)MATCH.es.close();MATCH.es=null;clearTimeout(MATCH.timer);clearInterval(MATCH.hb);clearInterval(MATCH.tick)}
+function startMatch(){
+  stopMatch();if(S.mode==='net')leave();
+  Object.assign(MATCH,{on:true,seen:new Set(),seeks:new Map(),takes:new Map(),cancels:new Set(),mine:null,taking:null,decided:false,t0:Date.now()});
+  $('matchTitle').textContent='相手を探しています';$('matchMsg').textContent='同じタイミングで探している人と、自動で組み合わせます。';
+  show('match');
+  MATCH.tick=setInterval(()=>{const t=Math.floor((Date.now()-MATCH.t0)/1000);$('matchTime').textContent=Math.floor(t/60)+':'+String(t%60).padStart(2,'0');
+    if(t===45)$('matchMsg').textContent='まだ見つかりません。このまま待つか、「友だちと対戦」でリンクを送ってみてください。'},1000);
+  const es=new EventSource(LOBBY+'/sse?since=90s');MATCH.es=es;
+  es.onopen=()=>{if(!MATCH.decided){clearTimeout(MATCH.timer);MATCH.timer=setTimeout(()=>{MATCH.decided=true;consider();if(MATCH.on&&!MATCH.mine&&!MATCH.taking)postSeek()},1600)}};
+  es.onerror=()=>{if(MATCH.on)$('matchMsg').textContent='通信を再接続しています…'};
+  es.onmessage=e=>{let d,m;try{d=JSON.parse(e.data)}catch(x){return}
+    if(d.event&&d.event!=='message')return;if(d.id){if(MATCH.seen.has(d.id))return;MATCH.seen.add(d.id)}
+    try{m=JSON.parse(d.message)}catch(x){return}if(!m||typeof m!=='object'||typeof m.room!=='string')return;
+    m.time=d.time||Date.now()/1000;onLobby(m)};
+}
+function liveSeek(s){return s.from!==MATCH.id&&Date.now()/1000-s.time<75&&!MATCH.takes.has(s.room)&&!MATCH.cancels.has(s.room)}
+function onLobby(m){
+  if(m.t==='seek')MATCH.seeks.set(m.room,m);
+  else if(m.t==='cancel')MATCH.cancels.add(m.room);
+  else if(m.t==='take'){
+    if(!MATCH.takes.has(m.room))MATCH.takes.set(m.room,m.from);
+    if(MATCH.on&&m.room===MATCH.mine&&MATCH.takes.get(m.room)!==MATCH.id){
+      $('matchTitle').textContent='相手が見つかりました';$('matchMsg').textContent='対局を始めます…';stopMatch();}
+  }
+  if(MATCH.on&&MATCH.decided)consider();
+}
+function consider(){
+  if(!MATCH.on||MATCH.taking)return;
+  for(const s of MATCH.seeks.values()){if(!liveSeek(s))continue;if(!MATCH.mine||MATCH.id>s.from){take(s.room);return}}
+}
+function postSeek(){
+  const code=newCode();MATCH.mine=code;openRoom(code);show('match',true);
+  lobbyPost({t:'seek',room:code});clearInterval(MATCH.hb);MATCH.hb=setInterval(()=>{if(MATCH.on&&MATCH.mine===code)lobbyPost({t:'seek',room:code})},30000);
+}
+async function take(room){
+  MATCH.taking=room;
+  if(MATCH.mine){lobbyPost({t:'cancel',room:MATCH.mine});clearInterval(MATCH.hb);closeNet();MATCH.mine=null}
+  await lobbyPost({t:'take',room});
+  setTimeout(()=>{if(!MATCH.on)return;
+    if(MATCH.takes.get(room)===MATCH.id){$('matchTitle').textContent='相手が見つかりました';stopMatch();openRoom(room);show('game',true)}
+    else{MATCH.taking=null;consider();if(MATCH.on&&!MATCH.mine&&!MATCH.taking)postSeek()}},1500);
+}
+function cancelMatch(){if(MATCH.mine)lobbyPost({t:'cancel',room:MATCH.mine});stopMatch();MATCH.mine=null;if(S.mode==='net')leave()}
+$('randomBtn').addEventListener('click',startMatch);
+addEventListener('pagehide',()=>{if(MATCH.on&&MATCH.mine){try{fetch(LOBBY,{method:'POST',keepalive:true,body:JSON.stringify({t:'cancel',room:MATCH.mine,from:MATCH.id})})}catch(e){}}});
+$('matchCancel').addEventListener('click',()=>{cancelMatch();show('home')});
+
+/* 1手目の定跡名（左右反転は同じ定跡） */
+const JOSEKI={'0-4-0':['隅守り','端の石が一歩だけ前へ。まずは様子を見る構え'],'0-4-1':['寄り添い','端の石が斜めに寄り、仲間の隣で射程を伸ばす'],'1-3-1':['一本槍','二筋目の石がまっすぐ二歩。向こう岸への最短の筋'],'1-3-3':['渡り鳥','仲間を飛び越えて中央へ。盤の真ん中を先に取る'],'2-3-0':['はぐれ雲','中の石が外側へ斜めに抜ける。ぼっちを恐れない一手'],'2-3-2':['正面突破','中央の石がまっすぐ二歩。いちばん素直な攻め'],'2-3-4':['十字路','中の石が反対側へ斜めに渡る。相手の読みを散らす']};
+function josekiOf(m){if(!m)return null;let f=m[0],t=m[1],fc=f%6,tc=t%6,tr=t/6|0;if((f/6|0)!==5)return null;if(fc>2){fc=5-fc;tc=5-tc}return JOSEKI[fc+'-'+tr+'-'+tc]||null}
+const _render2=render;
+render=function(){_render2();if(CUR==='game'&&MATCH.on&&S.mode==='net'&&NET.guest)stopMatch();const el=$('joseki');const j=(S.ply===1&&!S.over)?josekiOf(S.last):null;el.hidden=!j;if(j){el.innerHTML='';const b=document.createElement('b');b.textContent='定跡「'+j[0]+'」';const sm=document.createElement('small');sm.textContent=j[1];el.append(b,sm)}};
+render();
 </script>
 </body>
 </html>
