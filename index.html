@@ -101,6 +101,9 @@ body{min-height:100dvh}
 .dot.big{width:34px;height:34px;box-shadow:0 6px 10px rgba(0,0,0,.5)}
 .dot.ghost{background:transparent;border:1px dashed var(--gold-soft);box-shadow:none}
 button.big{min-height:54px;font-size:15px;letter-spacing:.16em;width:100%}
+button.resume{border:1px solid var(--gold);color:var(--gold);letter-spacing:.08em;animation:resumePulse 2.4s ease-in-out infinite}
+@keyframes resumePulse{50%{box-shadow:0 0 0 4px rgba(201,169,110,.18)}}
+@media (prefers-reduced-motion:reduce){button.resume{animation:none}}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 18px;padding-bottom:12px;border-bottom:1px solid var(--gold-line)}
 .topbar h2{font-family:var(--f-disp);font-weight:500;font-size:18px;letter-spacing:.14em;margin:0;text-align:center;flex:1}
 .topbar .sp{width:72px}
@@ -229,6 +232,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <p class="tag">ひとりぼっちの石は、動けない。</p>
     <button class="me-btn" id="meBtn" data-go="profile"><span id="meName"></span><span class="me-rate" id="meRate"></span><span class="me-edit">名前・レート ›</span></button>
     <nav class="menu" aria-label="メニュー">
+      <button class="big resume" id="resumeBtn" hidden></button>
       <button class="primary big" id="randomBtn">ランダム対戦</button>
       <button class="big" data-go="friend">友だちと対戦</button>
       <button class="big" data-go="solo">ひとりで遊ぶ</button>
@@ -712,8 +716,8 @@ const LIMIT_MSG='通信の上限に達しました（同じWi-Fiで1日に送れ
 function netMsg(t,err){const m=$('netMsg');m.textContent=t||'';m.hidden=!t;m.classList.toggle('err',!!err)}
 function newCode(){const a='abcdefghjkmnpqrstuvwxyz23456789';let s='';const r=crypto.getRandomValues(new Uint32Array(6));for(const x of r)s+=a[x%a.length];return s}
 function inviteLink(code){const u=new URL(location.href);u.search='?room='+code;u.hash='';return u.toString()}
-function myId(code){const k='bocch-me-'+code;try{let v=sessionStorage.getItem(k);if(!v){v=newCode()+newCode();sessionStorage.setItem(k,v)}return v}catch(e){return NET._mem||(NET._mem=newCode()+newCode())}}
-function takeSeat(color){const id=color===colorOf(NET.host)?NET.host:NET.guest;if(!id)return;NET.me=id;try{sessionStorage.setItem('bocch-me-'+NET.code,id)}catch(e){}netMsg('');render()}
+function myId(code){const k='bocch-me-'+code;try{let v=localStorage.getItem(k)||sessionStorage.getItem(k);if(!v)v=newCode()+newCode();localStorage.setItem(k,v);return v}catch(e){return NET._mem||(NET._mem=newCode()+newCode())}}
+function takeSeat(color){const id=color===colorOf(NET.host)?NET.host:NET.guest;if(!id)return;NET.me=id;try{localStorage.setItem('bocch-me-'+NET.code,id)}catch(e){}netMsg('');render()}
 const hostColor=()=>NET.game%2===0?1:2;
 function colorOf(id){if(!id)return 0;if(id===NET.host)return hostColor();if(id===NET.guest)return 3-hostColor();return 0}
 async function post(obj){
@@ -1236,6 +1240,22 @@ function updClock(){
 const _netMoveT=netMove;netMove=function(m){if(NET.clk&&NET.clk.g===NET.game&&remain(colorOf(NET.me))<=0)return;return _netMoveT(m)};
 const _renderT=render;render=function(){_renderT();updClock()};
 setInterval(()=>{if(S.mode==='net'&&CUR==='game')updClock()},250);
+
+/* 進行中の対局に戻る：席の情報はこの端末に保存し、ホームに「対局に戻る」を出す */
+const AKEY='bocch-active';
+function getActive(){try{const a=JSON.parse(localStorage.getItem(AKEY)||'null');if(a&&a.code&&Date.now()-a.t<30*60*1000)return a}catch(e){}return null}
+function setActive(a){try{a?localStorage.setItem(AKEY,JSON.stringify(a)):localStorage.removeItem(AKEY)}catch(e){}}
+function updResume(){const b=$('resumeBtn');const a=getActive();const show=!!a&&!(S.mode==='net'&&NET.code===a.code);b.hidden=!show;
+  if(show){const nm=a.opp?a.opp+'との':'';b.textContent='▶ '+nm+'対局に戻る（部屋 '+a.code.toUpperCase()+'）'}}
+const _renderA=render;render=function(){_renderA();
+  if(S.mode==='net'&&NET.code&&!NET.watch&&NET.guest&&colorOf(NET.me)>0){
+    if(S.over)setActive(null);
+    else{const o=typeof NM!=='undefined'&&NM[NET.me===NET.host?NET.guest:NET.host];setActive({code:NET.code,t:Date.now(),opp:o?o.name:''})}}
+  updResume()};
+$('resumeBtn').addEventListener('click',()=>{const a=getActive();if(!a){updResume();return}openRoom(a.code);show('game')});
+$('leave').addEventListener('click',()=>{if(!NET.watch)setActive(null);updResume()});
+addEventListener('popstate',updResume);
+setInterval(()=>{if(S.mode==='net'&&NET.guest&&!S.over&&!NET.watch&&colorOf(NET.me)>0){const a=getActive();if(a&&a.code===NET.code){a.t=Date.now();setActive(a)}}},20000);
 render();
 </script>
 </body>
