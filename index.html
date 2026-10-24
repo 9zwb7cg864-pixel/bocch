@@ -39,11 +39,11 @@ header p{margin:0;color:var(--sub);font-family:var(--f-disp);font-size:14px;lett
 .cell.goal{background:rgba(110,74,28,.10)}
 .cell:focus-visible{outline:2px solid var(--dot);outline-offset:-3px;z-index:3}
 .cell.last{background:rgba(29,42,37,.16)}
-.stone{width:80%;height:80%;min-width:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--f-latin);font-weight:600;font-size:clamp(18px,4.6vw,32px);line-height:1;transition:transform .15s;box-shadow:0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
+.stone{width:80%;height:80%;min-width:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--f-disp);font-weight:700;font-variant-numeric:lining-nums;font-size:clamp(16px,4.2vw,28px);line-height:1;transition:transform .15s;box-shadow:0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
 .stone.b{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%);color:var(--gold)}
 .stone.w{background:repeating-linear-gradient(170deg,rgba(150,135,105,.06) 0 1px,transparent 1px 5px),radial-gradient(circle at 34% 28%,#fff 0%,#f3eee3 45%,#d6cdb9 100%);color:#3b3227}
 .stone.zero{opacity:.45}
-.mine{cursor:pointer}.mine:hover .stone{transform:translateY(-2px)}
+.mine{cursor:pointer}.mine:hover .stone{translate:0 -2px}
 .sel .stone{box-shadow:0 0 0 3px var(--wood),0 0 0 5px var(--gold),0 4px 6px rgba(0,0,0,.38)}
 .nb .stone{box-shadow:0 0 0 2px var(--gold),0 4px 6px rgba(0,0,0,.38)}
 .target{cursor:pointer}
@@ -129,7 +129,7 @@ footer span:first-child{font-family:var(--f-latin);font-style:italic;font-size:1
         </div>
       </div>
       <div id="netHost" hidden>
-        <p class="msg">この部屋コードかリンクを相手に送ってください。相手が開くと対局が始まります。</p>
+        <p class="msg">この部屋コードかリンクを相手に送ってください。相手が開くと対局が始まります。途中でページを閉じても、同じリンクを開けば続きから再開できます。</p>
         <div class="code" id="codeOut"></div>
         <div class="link" id="linkOut"></div>
         <div class="row"><button id="share" class="primary">リンクを送る</button><button id="copy">リンクをコピー</button><button id="cancel">やめる</button></div>
@@ -161,7 +161,6 @@ footer span:first-child{font-family:var(--f-latin);font-style:italic;font-size:1
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <footer><span>bocch</span><span>アカウント不要・リンクを送るだけで対戦</span></footer>
 <script>
 const N=6, DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]], NEED=2, PREFIX='bocch-game-';
@@ -230,7 +229,7 @@ function doMove(m){
 function cellsBuild(){gridEl.innerHTML='';for(let i=0;i<N*N;i++){const d=document.createElement('button');d.className='cell';d.id='c'+i;d.addEventListener('click',()=>onCell(i));gridEl.appendChild(d)}}
 function human(){
   if(S.over)return false;
-  if(S.mode==='net')return NET.connected&&NET.color===S.turn;
+  if(S.mode==='net')return NET.live&&!!NET.host&&!!NET.guest&&!NET.sending&&colorOf(NET.me)===S.turn;
   return S.mode===0||S.turn===1;
 }
 function onCell(i){
@@ -250,24 +249,30 @@ function render(){
     el.setAttribute('aria-label',(v?NAME[v]+'の石、射程'+d:'空き')+'、'+(N-r)+'段'+(i%N+1)+'列');
     el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}"><span>${d}</span></div>`:'';}
   const net=S.mode==='net';
-  $('board').classList.toggle('flip',net&&NET.color===2);
+  $('board').classList.toggle('flip',net&&colorOf(NET.me)===2);
   $('board').classList.toggle('hideNum',!$('showNum').checked);
   document.querySelectorAll('#modeSeg button').forEach(x=>x.setAttribute('aria-pressed',String(!net&&+x.dataset.mode===S.mode)));
   $('localCtl').hidden=net;$('netCtl').hidden=!net;
-  $('resign').hidden=!(net&&NET.connected&&!S.over);$('rematch').hidden=!(net&&NET.connected&&S.over);
+  const seated=net&&colorOf(NET.me)>0;$('resign').hidden=!(seated&&NET.guest&&!S.over);$('rematch').hidden=!(seated&&S.over);
+  if(net){const waiting=colorOf(NET.me)===colorOf(NET.host)&&NET.me===NET.host&&!NET.guest;$('netHost').hidden=!waiting;if(waiting){$('codeOut').textContent=NET.code;$('linkOut').textContent=inviteLink(NET.code)}}
   renderStatus();
 }
 function renderStatus(){
   const st=$('status'),hn=$('hint');
   if(S.mode==='net'){
-    const c=$('conn');c.className='conn '+(NET.connected?'on':'off');$('connTxt').textContent=NET.connected?'相手とつながっています':'相手との接続が切れています';
+    const my=colorOf(NET.me),c=$('conn');
+    c.className='conn '+(NET.live?'on':'off');$('connTxt').textContent=NET.live?'部屋 '+NET.code:'通信を再接続しています…';
+    if(!NET.host||!NET.guest){
+      st.textContent=NET.host?'相手を待っています':'部屋を準備しています…';
+      hn.textContent=NET.me===NET.host?'下のリンクを相手に送ってください。':'';return}
     if(S.over){
       if(S.over.win===0){st.textContent='引き分け';hn.innerHTML='<span class="result">'+S.over.why+'</span>';return}
-      const you=S.over.win===NET.color;
-      st.innerHTML=`<span class="dot ${S.over.win===1?'b':'w'}"></span>${you?'あなたの勝ち':'相手の勝ち'}`;
-      hn.innerHTML=`<span class="result${you?'':' lose'}">${S.over.why}${you?'。お見事':''}</span>`;return}
-    st.innerHTML=`<span class="dot ${S.turn===1?'b':'w'}"></span>${S.turn===NET.color?'あなたの番':'相手の番'}（${NAME[S.turn]}）`;
-    hn.textContent=!NET.connected?'相手が戻るのを待っています':human()?(S.sel>=0?'点のあるマスへ動かす。輪は向こう岸のマス':'あなたは'+NAME[NET.color]+'。動かす石を選んでください'):'相手が考えています';
+      const you=my&&S.over.win===my;
+      st.innerHTML=`<span class="dot ${S.over.win===1?'b':'w'}"></span>${my?(you?'あなたの勝ち':'相手の勝ち'):NAME[S.over.win]+'の勝ち'}`;
+      hn.innerHTML=`<span class="result${my&&!you?' lose':''}">${S.over.why}${you?'。お見事':''}</span>`;return}
+    if(!my){st.innerHTML=`<span class="dot ${S.turn===1?'b':'w'}"></span>${NAME[S.turn]}の番`;hn.innerHTML='観戦中です。対局者がページを開き直した場合は、自分の色を選ぶと席に戻れます。<br><button id="seatB">黒の席に戻る</button> <button id="seatW">白の席に戻る</button>';$('seatB').onclick=()=>takeSeat(1);$('seatW').onclick=()=>takeSeat(2);return}
+    st.innerHTML=`<span class="dot ${S.turn===1?'b':'w'}"></span>${S.turn===my?'あなたの番':'相手の番'}（${NAME[S.turn]}）`;
+    hn.textContent=NET.sending?'送信中…':!NET.live?'通信を再接続しています…':S.turn===my?(S.sel>=0?'点のあるマスへ動かす。輪は向こう岸のマス':'あなたは'+NAME[my]+'。動かす石を選んでください'):'相手が考えています';
     return}
   if(S.over){
     if(S.over.win===0){st.textContent='引き分け';hn.innerHTML='<span class="result">'+S.over.why+'</span>'}
@@ -279,92 +284,75 @@ function renderStatus(){
   }
 }
 
-/* 友だちと対戦（端末同士を直接つなぐ） */
-const NET={peer:null,conn:null,role:null,code:null,color:0,connected:false,game:0};
+/* 友だちと対戦（中継サーバー経由。対局の記録を全員が同じ順に読んで盤を再現する） */
+const NET={code:null,me:null,es:null,seen:new Set(),host:null,guest:null,game:0,over:null,live:false,sending:false,claimed:false,timer:null};
+const TOPIC=c=>'bocch-v1-'+c, RELAY='https://ntfy.sh/';
 function netMsg(t,err){const m=$('netMsg');m.textContent=t||'';m.hidden=!t;m.classList.toggle('err',!!err)}
 function newCode(){const a='abcdefghjkmnpqrstuvwxyz23456789';let s='';const r=crypto.getRandomValues(new Uint32Array(6));for(const x of r)s+=a[x%a.length];return s}
 function inviteLink(code){const u=new URL(location.href);u.search='?room='+code;u.hash='';return u.toString()}
-function peerOK(){if(typeof Peer==='undefined'){netMsg('通信の部品を読み込めませんでした。ネットにつながっているか確かめて、ページを開き直してください。',true);return false}return true}
-function closeNet(){try{NET.conn&&NET.conn.close()}catch(e){}try{NET.peer&&NET.peer.destroy()}catch(e){}Object.assign(NET,{peer:null,conn:null,role:null,code:null,color:0,connected:false});
+function myId(code){const k='bocch-me-'+code;try{let v=sessionStorage.getItem(k);if(!v){v=newCode()+newCode();sessionStorage.setItem(k,v)}return v}catch(e){return NET._mem||(NET._mem=newCode()+newCode())}}
+function takeSeat(color){const id=color===colorOf(NET.host)?NET.host:NET.guest;if(!id)return;NET.me=id;try{sessionStorage.setItem('bocch-me-'+NET.code,id)}catch(e){}netMsg('');render()}
+const hostColor=()=>NET.game%2===0?1:2;
+function colorOf(id){if(!id)return 0;if(id===NET.host)return hostColor();if(id===NET.guest)return 3-hostColor();return 0}
+async function post(obj){
+  obj.from=NET.me;
+  for(let i=0;i<3;i++){
+    try{const r=await fetch(RELAY+TOPIC(NET.code),{method:'POST',body:JSON.stringify(obj)});
+      if(r.ok)return true;
+      if(r.status===429){netMsg('送信が混み合っています。数秒待ってからもう一度指してください。',true);return false}}catch(e){}
+    await new Promise(r=>setTimeout(r,800))}
+  netMsg('送れませんでした。ネットにつながっているか確かめてください。',true);return false}
+function closeNet(){if(NET.es){NET.es.close()}clearTimeout(NET.timer);
+  Object.assign(NET,{code:null,es:null,seen:new Set(),host:null,guest:null,game:0,over:null,live:false,sending:false,claimed:false});
   $('netIdle').hidden=false;$('netHost').hidden=true}
-function createRoom(){
-  if(!peerOK())return;closeNet();
-  const code=newCode();NET.role='host';NET.code=code;
-  netMsg('部屋を準備しています…');
-  const peer=new Peer(PREFIX+code);NET.peer=peer;
-  peer.on('open',()=>{netMsg('');$('netIdle').hidden=true;$('netHost').hidden=false;$('codeOut').textContent=code;$('linkOut').textContent=inviteLink(code);
-    try{history.replaceState(null,'','?room='+code+'&host=1')}catch(e){}});
-  peer.on('connection',conn=>{
-    if(NET.conn&&NET.connected){conn.on('open',()=>{conn.send({t:'full'});setTimeout(()=>conn.close(),500)});return}
-    attach(conn);
-  });
-  peer.on('error',e=>{if(e.type==='unavailable-id'){netMsg('部屋コードが重なりました。もう一度「部屋を作る」を押してください。',true);closeNet()}
-    else if(e.type==='network'||e.type==='server-error'||e.type==='socket-error')netMsg('通信サーバーにつながりません。少し待ってからやり直してください。',true);
-    else netMsg('通信でエラーが起きました（'+e.type+'）。',true)});
-  peer.on('disconnected',()=>{try{peer.reconnect()}catch(e){}});
-}
-function joinRoom(code){
+function openRoom(code){
   code=(code||'').toLowerCase().replace(/[^a-z0-9]/g,'');
   if(code.length!==6){netMsg('部屋コードは6文字です。',true);return}
-  if(!peerOK())return;closeNet();
-  NET.role='guest';NET.code=code;netMsg('部屋につないでいます…');
-  const peer=new Peer();NET.peer=peer;
-  peer.on('open',()=>{const conn=peer.connect(PREFIX+code,{reliable:true});attach(conn);
-    setTimeout(()=>{if(!NET.connected&&NET.role==='guest')netMsg('つながりません。部屋コードが合っているか、相手がページを開いたままか確かめてください。',true)},12000)});
-  peer.on('error',e=>{if(e.type==='peer-unavailable')netMsg('その部屋は見つかりませんでした。相手が部屋を作ったままか確かめてください。',true);
-    else netMsg('通信でエラーが起きました（'+e.type+'）。',true)});
+  closeNet();NET.code=code;NET.me=myId(code);
+  S=initState('net');netMsg('部屋につないでいます…');
+  $('netIdle').hidden=true;
+  try{history.replaceState(null,'','?room='+code)}catch(e){}
+  render();
+  const es=new EventSource(RELAY+TOPIC(code)+'/sse?since=all');NET.es=es;
+  es.onopen=()=>{NET.live=true;render();
+    if(!NET.claimed){clearTimeout(NET.timer);NET.timer=setTimeout(claimSeat,1500)}};
+  es.onerror=()=>{NET.live=false;render()};
+  es.onmessage=e=>{let d,m;try{d=JSON.parse(e.data)}catch(x){return}
+    if(d.event&&d.event!=='message')return;if(d.id){if(NET.seen.has(d.id))return;NET.seen.add(d.id)}
+    try{m=JSON.parse(d.message)}catch(x){return}
+    if(m&&typeof m==='object'){reduce(m);render()}};
 }
-function attach(conn){
-  NET.conn=conn;
-  conn.on('open',()=>{
-    NET.connected=true;netMsg('');
-    if(NET.role==='host'){
-      $('netHost').hidden=true;$('netIdle').hidden=true;
-      if(S.mode!=='net'){NET.game=0;newNetGame()}else{sendState()}
-    }else{conn.send({t:'hello'})}
-    render();
-  });
-  conn.on('data',onData);
-  conn.on('close',()=>{NET.connected=false;if(S.mode==='net'){netMsg(NET.role==='host'?'相手が抜けました。同じリンクを開き直してもらえば続きから再開できます。':'接続が切れました。招待リンクを開き直すと再開できます。',true);render()}});
-  conn.on('error',()=>{});
+async function claimSeat(){
+  if(NET.claimed)return;NET.claimed=true;
+  if(!NET.host){await post({t:'create'})}
+  else if(NET.host!==NET.me&&!NET.guest){await post({t:'join'})}
+  netMsg('');render();
 }
-function newNetGame(){
-  // ホストは1局目が黒、以後1局ごとに色を交代
-  const hostColor=NET.game%2===0?1:2;NET.color=hostColor;
-  S=initState('net');S.hostColor=hostColor;S.game=NET.game;render();sendState();
-}
-function sendState(){if(!NET.conn||!NET.connected)return;
-  NET.conn.send({t:'state',b:S.b.join(''),turn:S.turn,last:S.last,over:S.over,reps:S.reps,ply:S.ply,hostColor:S.hostColor,game:S.game})}
-function validState(d){return d&&typeof d.b==='string'&&/^[012]{36}$/.test(d.b)&&(d.turn===1||d.turn===2)}
-function onData(d){
-  if(!d||typeof d!=='object')return;
-  if(d.t==='full'){netMsg('その部屋はもう対局中です。',true);return}
-  if(d.t==='hello'&&NET.role==='host'){sendState();return}
-  if(d.t==='state'&&validState(d)){
-    if(NET.role==='guest'){NET.color=d.hostColor===1?2:1;$('netIdle').hidden=true;$('netHost').hidden=true}
-    S={b:d.b.split('').map(Number),turn:d.turn,mode:'net',hist:[],sel:-1,last:d.last,over:d.over,reps:d.reps||{},ply:d.ply||0,hostColor:d.hostColor,game:d.game||0};
-    NET.game=S.game;netMsg('');render();return}
-  if(d.t==='move'&&Array.isArray(d.m)&&S.mode==='net'&&!S.over&&S.turn!==NET.color){
-    const m=d.m,legal=movesFrom(S.b,m[0]).some(x=>x[1]===m[1])&&S.b[m[0]]===S.turn;
-    if(!legal){sendState();return}
-    Object.assign(S,nextState(S,m));S.sel=-1;render();return}
-  if(d.t==='resign'&&S.mode==='net'&&!S.over){S.over={win:NET.color,why:'相手が投了'};render();return}
-  if(d.t==='rematch'&&NET.role==='host'){NET.game++;newNetGame();return}
+function reduce(m){
+  if(m.t==='create'){if(!NET.host&&m.from)NET.host=m.from;return}
+  if(m.t==='join'){if(NET.host&&!NET.guest&&m.from&&m.from!==NET.host)NET.guest=m.from;return}
+  if(m.t==='move'){
+    if(m.g!==NET.game||S.over||colorOf(m.from)!==S.turn||m.ply!==S.ply||!Array.isArray(m.m))return;
+    const mv=[m.m[0]|0,m.m[1]|0];if(S.b[mv[0]]!==S.turn||!movesFrom(S.b,mv[0]).some(x=>x[1]===mv[1]))return;
+    Object.assign(S,nextState(S,mv));S.sel=-1;if(m.from===NET.me)NET.sending=false;return}
+  if(m.t==='resign'){const c=colorOf(m.from);if(m.g===NET.game&&!S.over&&c){S.over={win:3-c,why:(m.from===NET.me?'あなた':'相手')+'が投了'}}return}
+  if(m.t==='rematch'){if(m.g===NET.game+1&&S.over&&colorOf(m.from)){NET.game++;S=initState('net');S.game=NET.game;NET.sending=false;if(m.from!==NET.me)netMsg('相手がもう一局を始めました。')}return}
 }
 function netMove(m){
-  if(!human())return;
-  Object.assign(S,nextState(S,m));S.sel=-1;render();
-  NET.conn.send({t:'move',m});
+  if(!human()||NET.sending)return;
+  NET.sending=true;S.sel=-1;render();
+  post({t:'move',g:NET.game,ply:S.ply,m}).then(ok=>{if(!ok){NET.sending=false;render()}});
+  setTimeout(()=>{if(NET.sending){NET.sending=false;render()}},8000);
 }
 function resign(){
   const b=$('resign');
   if(b.dataset.c!=='1'){b.dataset.c='1';b.textContent='本当に投了する';setTimeout(()=>{b.dataset.c='';b.textContent='投了する'},3000);return}
-  b.dataset.c='';b.textContent='投了する';
-  if(!S.over){S.over={win:3-NET.color,why:'あなたが投了'};NET.conn&&NET.conn.send({t:'resign'});render()}
+  b.dataset.c='';b.textContent='投了する';if(!S.over)post({t:'resign',g:NET.game});
 }
-function rematch(){if(NET.role==='host'){NET.game++;newNetGame()}else{NET.conn&&NET.conn.send({t:'rematch'});netMsg('もう一局を申し込みました。')}}
+function rematch(){if(S.over)post({t:'rematch',g:NET.game+1})}
 function leave(){closeNet();netMsg('');try{history.replaceState(null,'',location.pathname)}catch(e){}S=initState(2);render()}
-
+function createRoom(){openRoom(newCode())}
+function joinRoom(code){openRoom(code)}
 /* 操作 */
 document.querySelectorAll('#modeSeg button').forEach(x=>x.addEventListener('click',()=>{if(S.mode==='net')leave();S=initState(+x.dataset.mode);render()}));
 $('reset').addEventListener('click',()=>{S=initState(S.mode);render()});
@@ -386,7 +374,7 @@ $('leave').addEventListener('click',leave);
 
 cellsBuild();S=initState(2);render();
 {const q=new URLSearchParams(location.search),room=q.get('room');
- if(room&&!q.get('host')){$('codeIn').value=room;joinRoom(room)}}
+ if(room){$('codeIn').value=room;openRoom(room)}}
 </script>
 </body>
 </html>
