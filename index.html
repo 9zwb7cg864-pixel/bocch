@@ -53,7 +53,8 @@ header p{margin:0;color:var(--sub);font-family:var(--f-disp);font-size:14px;lett
 .stone.sk-kokuji{background:radial-gradient(ellipse 26% 18% at 34% 24%,rgba(255,255,255,.75) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 36% 30%,#3a3a3c 0%,#121214 50%,#050506 100%);color:#e6c06a;box-shadow:inset 0 0 0 1.5px rgba(230,192,106,.6),0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
 .stone.sk-kokuji span{font-family:Cinzel,var(--f-latin);font-weight:600;font-size:.9em;letter-spacing:.02em;text-shadow:0 1px 0 rgba(0,0,0,.8),0 0 6px rgba(230,192,106,.35)}
 .stone.sk-hibi{background:radial-gradient(ellipse 16% 10% at 32% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 16% 10% at 68% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 26% 16% at 34% 20%,rgba(255,255,255,.9) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 40% 34%,#ffffff 0%,#f1eee6 50%,#c9c3b6 100%);box-shadow:0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3),inset 0 -3px 5px rgba(0,0,0,.12)}
-.stone.sk-hibi span{visibility:hidden}
+.stone.sk-hibi span{visibility:hidden;margin-top:40%;font-size:.7em;color:#2a1a18}
+.hibiNum:not(.hideNum) .stone.sk-hibi span{visibility:visible}
 .stone.sk-hibi.p1{background:linear-gradient(118deg,transparent 47%,#2e2a26 47.6% 50.2%,transparent 50.8%) 0 0/100% 55% no-repeat,radial-gradient(ellipse 16% 10% at 32% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 16% 10% at 68% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 26% 16% at 34% 20%,rgba(255,255,255,.9) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 40% 34%,#ffffff 0%,#f1eee6 50%,#c9c3b6 100%)}
 .stone.sk-hibi.p2{background:linear-gradient(118deg,transparent 47%,#2e2a26 47.6% 50.2%,transparent 50.8%) 0 0/100% 55% no-repeat,linear-gradient(64deg,transparent 46.6%,#2e2a26 47.2% 49.8%,transparent 50.4%) 0 100%/60% 50% no-repeat,radial-gradient(ellipse 16% 10% at 32% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 16% 10% at 68% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 26% 16% at 34% 20%,rgba(255,255,255,.9) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 40% 34%,#ffffff 0%,#f1eee6 50%,#c9c3b6 100%)}
 .stone.sk-hibi.p3{background:linear-gradient(118deg,transparent 47%,#2e2a26 47.6% 50.2%,transparent 50.8%) 0 0/100% 55% no-repeat,linear-gradient(64deg,transparent 46.6%,#2e2a26 47.2% 49.8%,transparent 50.4%) 0 100%/60% 50% no-repeat,linear-gradient(150deg,transparent 46.6%,#2e2a26 47.2% 49.8%,transparent 50.4%) 100% 100%/46% 46% no-repeat,radial-gradient(ellipse 16% 10% at 32% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 16% 10% at 68% 39%,#050505 0 54%,#3a3632 62%,transparent 68%),radial-gradient(ellipse 26% 16% at 34% 20%,rgba(255,255,255,.9) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 40% 34%,#ffffff 0%,#f1eee6 50%,#c9c3b6 100%)}
@@ -443,7 +444,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <button id="leave">対戦をやめる</button>
   </div>
   <div class="row" id="reviewRow" hidden><button id="reviewNow">この対局を感想戦 ›</button></div>
-  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label></div>
+  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk" id="hibiNumL" hidden><input type="checkbox" id="hibiNum"> 仮面に数字</label></div>
 </section>
 
 <script id="eng">
@@ -719,6 +720,7 @@ function render(){
   const net=S.mode==='net';
   $('board').classList.toggle('flip',net&&colorOf(NET.me)===2);
   $('board').classList.toggle('hideNum',!$('showNum').checked);
+  {const hb=skc[1]==='hibi'||skc[2]==='hibi';$('hibiNumL').hidden=!hb;$('board').classList.toggle('hibiNum',hb&&$('hibiNum').checked)}
   document.querySelectorAll('#modeSeg button').forEach(x=>x.setAttribute('aria-pressed',String(!net&&+x.dataset.mode===S.mode)));
   $('localCtl').hidden=net;$('netCtl').hidden=!net;
   const seated=net&&colorOf(NET.me)>0;$('resign').hidden=!(seated&&NET.guest&&!S.over);$('rematch').hidden=!(seated&&S.over);
@@ -854,6 +856,9 @@ $('undo').addEventListener('click',()=>{
   while(steps--&&S.hist.length){const h=S.hist.pop();S.b=h.b;S.turn=h.turn;S.last=h.last;S.reps=h.reps;S.ply=h.ply}
   S.over=null;S.sel=-1;S.log=(S.log||[]).slice(0,S.ply||0);render()});
 $('showNum').addEventListener('change',render);
+// ひびの仮面の石にも数字を出す（自分の画面だけ、この端末に覚える）
+try{$('hibiNum').checked=localStorage.getItem('bocch-hibinum')==='1'}catch(e){}
+$('hibiNum').addEventListener('change',()=>{try{localStorage.setItem('bocch-hibinum',$('hibiNum').checked?'1':'0')}catch(e){}render();try{if(REV.g)renderReview()}catch(e){}});
 $('create').addEventListener('click',createRoom);
 $('join').addEventListener('click',()=>joinRoom($('codeIn').value));
 $('codeIn').addEventListener('keydown',e=>{if(e.key==='Enter')joinRoom($('codeIn').value)});
@@ -1117,7 +1122,7 @@ function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n
     if(r===0||r===5)cls+=' goal';if(last&&(last[0]===k||last[1]===k))cls+=(PV&&PV.k>0?' pvlast':' last');
     if(nextM&&nextM[0]===k)cls+=' bestf';if(nextM&&nextM[1]===k)cls+=' bestt';el.className=cls;
     el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${v===g.me?skinOf(SKIN,d):''}"><span>${v===g.me?numOf(SKIN,d):d}</span></div>`:''}
-  $('rboard').classList.toggle('flip',flip);$('rboard').classList.toggle('hideNum',!$('showNum').checked);$('rboard').classList.toggle('nolab',!$('showLab').checked);
+  $('rboard').classList.toggle('flip',flip);$('rboard').classList.toggle('hideNum',!$('showNum').checked);$('rboard').classList.toggle('hibiNum',$('hibiNum').checked);$('rboard').classList.toggle('nolab',!$('showLab').checked);
   [...$('rlabTop').children].forEach((e,k)=>e.textContent=String(flip?6-k:k+1));
   [...$('rlabLeft').children].forEach((e,k)=>e.textContent='abcdef'[flip?5-k:k]);
   const [rt]=resultOf(g);$('revHead').textContent=MODE_NAME(g.mode)+'　'+fmtDate(g.t)+'　'+rt+'（'+g.why+'）';
