@@ -210,6 +210,14 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .rev-graph svg{display:block;width:100%;height:84px;background:var(--soft);border:1px solid var(--line);border-radius:2px;cursor:pointer;touch-action:none}
 .rev-graph-lab{display:flex;justify-content:space-between;font-size:11px;color:var(--mute);margin-top:3px}
 .rev-nav{justify-content:center;gap:8px;margin-top:10px}
+.w-live{min-width:auto!important;padding:10px 14px!important;font-size:13.5px!important;letter-spacing:.06em!important}
+.board.past{filter:saturate(.75) brightness(.92)}
+.boardwrap{position:relative}
+.ai-bub{position:absolute;z-index:20;max-width:min(78%,300px);padding:8px 12px;border-radius:12px;background:#f6f0e2;color:#1d1a16;font-size:13.5px;line-height:1.5;box-shadow:0 6px 18px rgba(0,0,0,.45);pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s}
+.ai-bub.on{opacity:1;transform:none}
+.ai-bub b{font-weight:700;margin-right:4px}.ai-bub .who-b{color:#111}.ai-bub .who-w{color:#7a6a45}
+.ai-bub::after{content:"";position:absolute;left:var(--tx,50%);margin-left:-7px;border:7px solid transparent}
+.ai-bub.up::after{top:100%;border-top-color:#f6f0e2}.ai-bub.down::after{bottom:100%;border-bottom-color:#f6f0e2}
 .rev-nav button{min-width:84px;padding:12px 0;font-size:17px;letter-spacing:0}
 .rev-ply{min-width:5.5em;text-align:center;font-size:13px;color:var(--sub);font-variant-numeric:tabular-nums}
 .rev-list{display:flex;flex-wrap:wrap;gap:4px;margin:14px 0 0;font-size:12.5px;font-variant-numeric:tabular-nums}
@@ -267,7 +275,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.4</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.5</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -468,6 +476,9 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <div class="row st-btns"><button id="stRun" class="primary">▶ AIに指させる</button><button id="stOne">AIに1手だけ</button></div>
     <div class="row chks"><label class="chk"><input type="checkbox" id="stEv" checked> 評価値</label><label class="chk"><input type="checkbox" id="stBest" checked> 最善手を盤に表示</label></div>
   </div>
+  <div class="row rev-nav" id="watchNav" hidden>
+    <button id="wPrev" aria-label="1手戻る">◀</button><span class="rev-ply" id="wPly"></span><button id="wNext" aria-label="1手進む">▶</button><button id="wLive" class="w-live">最新へ</button>
+  </div>
   <div class="row" id="localCtl">
     <button id="undo">1手戻す</button>
     <button id="reset" class="primary">最初から</button>
@@ -479,7 +490,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <button id="leave">対戦をやめる</button>
   </div>
   <div class="row" id="reviewRow" hidden><button id="reviewNow">この対局を感想戦 ›</button></div>
-  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label></div>
+  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label></div>
 </section>
 
 <script id="eng">
@@ -1527,6 +1538,68 @@ $('acctLogout').addEventListener('click',acctOut);$('acctLogout2').addEventListe
 try{if(localStorage.getItem('bocch-acct')==='1')setTimeout(fbInit,300)}catch(e){}
 $('meBtn').addEventListener('click',()=>{fbInit().catch(()=>{})});
 {const mark=()=>{try{localStorage.setItem('bocch-acct','1')}catch(e){}};$('acctLogin').addEventListener('click',mark);$('acctSignup').addEventListener('click',mark)}
+render();
+</script>
+<script>
+/* AIの手に吹き出しで解説を付ける（CPU戦・研究のAI・AI観戦） */
+const TALK={ply:-1,b:null,turn:1,game:-1,T:0};
+try{const v=localStorage.getItem('bocch-talk');if(v==='0')$('showTalk').checked=false}catch(e){}
+$('showTalk').addEventListener('change',e=>{try{localStorage.setItem('bocch-talk',e.target.checked?'1':'0')}catch(_){}if(!e.target.checked)hideBubble()});
+function aiMover(p){if(S.mode==='net')return !!NET.ai;if(S.study)return !!(STUDY.run&&STUDY.lv[p]);return typeof S.mode==='number'&&S.mode>=1&&S.mode<=4&&p===3-hcOf()}
+function talkText(b,p,m){let F=[];try{F=moveFacts(b,p,m)}catch(e){}
+  const pick=k=>F.find(f=>f.k===k);
+  const order=['win','mate','block','reach','threat','freeze','squeeze','advance'];
+  const good=order.map(pick).filter(Boolean);
+  if(pick('allow'))return 'くっ…どう指しても次に勝たれてしまう。'+(good[0]?'せめて'+good[0].t.replace(/^.*?：/,'')+'。':'');
+  if(good.length){const t=good.slice(0,2).map(f=>f.t);
+    if(good[0].k==='win')return '向こう岸に2つそろえて、勝ち！';
+    return t.join('。しかも')+'。'}
+  const fr=m[0]/6|0,tr=m[1]/6|0,adv=p===1?fr-tr:tr-fr;
+  if(adv===1)return '石を1段進めて、次に動ける形を整える。';
+  if(adv===0)return '横に動いて、仲間の石と並べて射程を調整する。';
+  if(adv<0)return '一度下がって、相手の進む道をふさぐ。';
+  return '形を整える手。'}
+function hideBubble(){const e=document.getElementById('aiBub');if(e)e.classList.remove('on')}
+function showBubble(p,m,text){if(!$('showTalk').checked||CUR!=='game')return;
+  const wrap=$('board').parentElement;let e=document.getElementById('aiBub');
+  if(!e){e=document.createElement('div');e.id='aiBub';e.className='ai-bub';wrap.appendChild(e)}
+  e.innerHTML=`<b class="${p===1?'who-b':'who-w'}">${p===1?'黒':'白'}AI</b>`;e.append(text);
+  const cell=$('c'+m[1]);if(!cell)return;const wr=wrap.getBoundingClientRect(),cr=cell.getBoundingClientRect();
+  e.style.left='0px';e.style.top='0px';e.classList.add('on');
+  const bw=e.offsetWidth,bh=e.offsetHeight,cx=cr.left-wr.left+cr.width/2,above=cr.top-wr.top>bh+14;
+  let x=Math.max(4,Math.min(wr.width-bw-4,cx-bw/2));
+  e.style.left=x+'px';e.style.setProperty('--tx',Math.max(14,Math.min(bw-14,cx-x))+'px');
+  e.classList.toggle('up',above);e.classList.toggle('down',!above);
+  e.style.top=(above?cr.top-wr.top-bh-10:cr.bottom-wr.top+10)+'px';
+  clearTimeout(TALK.T);TALK.T=setTimeout(hideBubble,S.mode==='net'?6500:4500)}
+function talkWatch(){
+  const g=S.mode==='net'?NET.game:-2;
+  if(g!==TALK.game||!S.ply||S.ply<TALK.ply){TALK.game=g;TALK.ply=S.ply;TALK.b=S.b.slice();TALK.turn=S.turn;hideBubble();return}
+  if(S.ply===TALK.ply+1&&S.last&&TALK.b){const p=TALK.b[S.last[0]];
+    if(p&&aiMover(p)&&VIEW.i==null)showBubble(p,S.last,talkText(TALK.b,p,S.last))}
+  if(S.ply!==TALK.ply){TALK.ply=S.ply;TALK.b=S.b.slice();TALK.turn=S.turn}}
+
+/* 観戦中に前の手を見返す（感想戦のような戻る・送る） */
+const VIEW={i:null,game:-1};
+function viewBoard(i){let b=startBoard(),turn=1;for(let k=0;k<i;k++){b=apply(b,S.log[k]);turn=3-turn}return {b,turn,last:i>0?S.log[i-1]:null}}
+function drawView(){const n=(S.log||[]).length,i=VIEW.i,v=viewBoard(i),rk=[0,colorRank(1),colorRank(2)];
+  for(let k=0;k<36;k++){const el=$('c'+k),c=v.b[k],r=k/6|0,d=c?nbCount(v.b,k):0;let cls='cell';
+    if(r===0||r===5)cls+=' goal';if(v.last&&(v.last[0]===k||v.last[1]===k))cls+=' last';el.className=cls;
+    el.innerHTML=c?`<div class="stone ${c===1?'b':'w'}${d?'':' zero'}${rankCls(rk[c])}"><span>${d}</span></div>`:''}
+  $('board').classList.add('past');
+  $('hint').textContent=i+'手目の局面を見ています（いまは'+n+'手目）'}
+function viewSet(i){const n=(S.log||[]).length;if(i==null||i>=n){VIEW.i=null}else VIEW.i=Math.max(0,i);hideBubble();render()}
+$('wPrev').addEventListener('click',()=>{const n=(S.log||[]).length;viewSet((VIEW.i==null?n:VIEW.i)-1)});
+$('wNext').addEventListener('click',()=>{if(VIEW.i!=null)viewSet(VIEW.i+1)});
+$('wLive').addEventListener('click',()=>viewSet(null));
+const _renderV=render;render=function(){_renderV();
+  const watching=S.mode==='net'&&NET.watch&&!colorOf(NET.me);
+  if(!watching||NET.game!==VIEW.game){VIEW.i=null;VIEW.game=watching?NET.game:-1}
+  const n=(S.log||[]).length,nav=$('watchNav');nav.hidden=!(watching&&n>0);
+  if(VIEW.i!=null&&VIEW.i>=n)VIEW.i=null;
+  if(watching&&n>0){$('wPly').textContent=(VIEW.i==null?n:VIEW.i)+' / '+n+'手';$('wNext').disabled=VIEW.i==null;$('wPrev').disabled=VIEW.i===0;$('wLive').hidden=VIEW.i==null}
+  if(VIEW.i!=null)drawView();else $('board').classList.remove('past');
+  try{talkWatch()}catch(e){console.error(e)}};
 render();
 </script>
 </body>
