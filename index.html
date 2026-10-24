@@ -45,20 +45,29 @@ header p{margin:0;color:var(--sub);font-family:var(--f-disp);font-size:14px;lett
 .stone.w{background:radial-gradient(circle at 34% 28%,#ffffff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c}
 .stone.zero{opacity:.45}
 .ver{position:absolute;top:calc(10px + env(safe-area-inset-top,0px));right:14px;font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums;letter-spacing:.04em}
-/* レートで変わる石の縁（二段:銀 三段:金 四段:金の二重 名人:二重＋光）。相手の石は相手のレートで決まる */
-.stone.r2,.stone.r3,.stone.r4,.stone.r5{box-sizing:border-box;border:2.5px solid transparent}
-.stone.b.r2{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%) padding-box,conic-gradient(from 20deg,#ffffff,#a7b0b8 14%,#f2f5f7 26%,#6c757d 40%,#e9edf0 55%,#8e979f 70%,#ffffff 84%,#a7b0b8 92%,#ffffff) border-box}
-.stone.w.r2{background:radial-gradient(circle at 34% 28%,#ffffff 0%,#e4e5e6 38%,#c3c5c7 72%) padding-box,conic-gradient(from 20deg,#ffffff,#a7b0b8 14%,#f2f5f7 26%,#6c757d 40%,#e9edf0 55%,#8e979f 70%,#ffffff 84%,#a7b0b8 92%,#ffffff) border-box}
-.stone.b.r3,.stone.b.r4,.stone.b.r5{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%) padding-box,conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#f6d77c 55%,#a8761e 70%,#fff3c4 84%,#c9952e 92%,#fff6d0) border-box}
-.stone.w.r3,.stone.w.r4,.stone.w.r5{background:radial-gradient(circle at 34% 28%,#ffffff 0%,#e4e5e6 38%,#c3c5c7 72%) padding-box,conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#f6d77c 55%,#a8761e 70%,#fff3c4 84%,#c9952e 92%,#fff6d0) border-box}
-.stone.b.r4,.stone.b.r5{box-shadow:inset 0 0 0 1.5px #0c0d0e,inset 0 0 0 3px #e2bd62,0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
-.stone.w.r4,.stone.w.r5{box-shadow:inset 0 0 0 1.5px #e4e5e6,inset 0 0 0 3px #e2bd62,0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
-.stone.b.r5{box-shadow:inset 0 0 0 1.5px #0c0d0e,inset 0 0 0 3px #e2bd62,0 0 12px 2px rgba(240,205,120,.55),0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
-.stone.w.r5{box-shadow:inset 0 0 0 1.5px #e4e5e6,inset 0 0 0 3px #e2bd62,0 0 12px 2px rgba(240,205,120,.55),0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
-.stone.b.r5{color:#e8cf8e}.stone.w.r5{color:#6a4c12}
-.sel .stone.r4,.sel .stone.r5,.nb .stone.r4,.nb .stone.r5{box-shadow:0 0 0 3px var(--wood),0 0 0 5px var(--gold),0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
+/* レートで変わる石の縁：100ごとに1段。相手の石は相手のレートで決まる */
+.stone.rk{box-sizing:border-box;border:var(--bw,2px) solid transparent;box-shadow:inset 0 0 0 var(--g1,0px) var(--gi),inset 0 0 0 var(--g2,0px) var(--gc,#e2bd62),0 0 var(--gl,0px) var(--gs,0px) var(--gw,rgba(240,205,120,.55)),0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
+.stone.b.rk{--gi:#0c0d0e;background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%) padding-box,var(--ring) border-box}
+.stone.w.rk{--gi:#e4e5e6;background:radial-gradient(circle at 34% 28%,#ffffff 0%,#e4e5e6 38%,#c3c5c7 72%) padding-box,var(--ring) border-box}
+.stone.b.rk.gn{color:#e8cf8e}.stone.w.rk.gn{color:#6a4c12}
+.r1{--ring:conic-gradient(from 20deg,#f6d2b0,#a8653a 14%,#e9b98f 26%,#6e3a1c 40%,#dca27a 55%,#8a4e2a 70%,#f3caa6 84%,#a8653a 92%,#f6d2b0);--bw:1.5px}
+.r2{--ring:conic-gradient(from 20deg,#f6d2b0,#a8653a 14%,#e9b98f 26%,#6e3a1c 40%,#dca27a 55%,#8a4e2a 70%,#f3caa6 84%,#a8653a 92%,#f6d2b0);--bw:2.5px}
+.r3{--ring:conic-gradient(from 20deg,#ffffff,#a7b0b8 14%,#f2f5f7 26%,#6c757d 40%,#e9edf0 55%,#8e979f 70%,#ffffff 84%,#a7b0b8 92%,#ffffff);--bw:1.5px}
+.r4{--ring:conic-gradient(from 20deg,#ffffff,#a7b0b8 14%,#f2f5f7 26%,#6c757d 40%,#e9edf0 55%,#8e979f 70%,#ffffff 84%,#a7b0b8 92%,#ffffff);--bw:2.5px}
+.r5{--ring:conic-gradient(from 20deg,#ffffff,#a7b0b8 14%,#f2f5f7 26%,#6c757d 40%,#e9edf0 55%,#8e979f 70%,#ffffff 84%,#a7b0b8 92%,#ffffff);--bw:2.5px;--g1:1.5px;--g2:3px;--gc:#d5dbe0}
+.r6{--ring:conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#f6d77c 55%,#a8761e 70%,#fff3c4 84%,#c9952e 92%,#fff6d0);--bw:1.5px}
+.r7{--ring:conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#f6d77c 55%,#a8761e 70%,#fff3c4 84%,#c9952e 92%,#fff6d0);--bw:2.5px}
+.r8{--ring:conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#f6d77c 55%,#a8761e 70%,#fff3c4 84%,#c9952e 92%,#fff6d0);--bw:2.5px;--g1:1.5px;--g2:3px}
+.r9{--ring:conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#f6d77c 55%,#a8761e 70%,#fff3c4 84%,#c9952e 92%,#fff6d0);--bw:2.5px;--g1:1.5px;--g2:3px}
+.r10{--ring:conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#f6d77c 55%,#a8761e 70%,#fff3c4 84%,#c9952e 92%,#fff6d0);--bw:2.5px;--g1:1.5px;--g2:3px;--gl:8px;--gs:1px}
+.r11{--ring:conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#f6d77c 55%,#a8761e 70%,#fff3c4 84%,#c9952e 92%,#fff6d0);--bw:3px;--g1:1.5px;--g2:3px;--gl:12px;--gs:2px}
+.r12{--ring:conic-gradient(from 20deg,#ffffff,#b9d4e6 12%,#f4f8ff 24%,#8aa3b8 38%,#ffffff 50%,#c7d9f0 62%,#7f97ad 76%,#eef4ff 88%,#ffffff);--bw:3px;--g1:1.5px;--g2:3px;--gc:#e6eef8;--gl:12px;--gs:2px;--gw:rgba(190,220,255,.6)}
+.r13{--ring:conic-gradient(from 20deg,#ffffff,#b9d4e6 12%,#f4f8ff 24%,#8aa3b8 38%,#ffffff 50%,#c7d9f0 62%,#7f97ad 76%,#eef4ff 88%,#ffffff);--bw:3px;--g1:1.5px;--g2:3px;--gl:14px;--gs:3px;--gw:rgba(190,220,255,.7)}
+.r14{--ring:conic-gradient(from 20deg,#ffffff,#b9d4e6 12%,#f4f8ff 24%,#8aa3b8 38%,#ffffff 50%,#c7d9f0 62%,#7f97ad 76%,#eef4ff 88%,#ffffff);--bw:3px;--g1:1.5px;--g2:3px;--gl:16px;--gs:4px;--gw:rgba(255,215,130,.75)}
+.sel .stone.rk{box-shadow:inset 0 0 0 var(--g1,0px) var(--gi),inset 0 0 0 var(--g2,0px) var(--gc,#e2bd62),0 0 0 3px var(--wood),0 0 0 5px var(--gold),0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
+.nb .stone.rk{box-shadow:inset 0 0 0 var(--g1,0px) var(--gi),inset 0 0 0 var(--g2,0px) var(--gc,#e2bd62),0 0 0 2px var(--gold),0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
 .rank-note{font-size:12.5px;color:var(--sub);margin:8px 0 0;line-height:1.7}
-.rank-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.rank-row div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11.5px;color:var(--sub)}.rank-row .stone{width:34px;height:34px;font-size:16px}
+.rank-row{display:flex;gap:8px 6px;flex-wrap:wrap;margin-top:8px}.rank-row div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11.5px;color:var(--sub)}.rank-row .stone{width:30px;height:30px;font-size:16px}
 .mine{cursor:pointer}.mine:hover .stone{translate:0 -2px}
 .sel .stone{box-shadow:0 0 0 3px var(--wood),0 0 0 5px var(--gold),0 4px 6px rgba(0,0,0,.38)}
 .nb .stone{box-shadow:0 0 0 2px var(--gold),0 4px 6px rgba(0,0,0,.38)}
@@ -359,7 +368,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <p class="prof-msg" id="nameMsg"></p>
     <div class="prof-rate"><span>レート</span><b id="profRate"></b><span id="profRank" style="margin-left:10px;color:var(--gold)"></span></div>
     <div class="rank-row" id="rankRow" aria-label="段位ごとの石の縁"></div>
-    <p class="rank-note">レートが上がると石の縁が良くなります（1400で銀、1600で金、1800で金の二重、2000で金の光）。オンライン対戦では、相手の石も相手のレートの縁で見えます。</p>
+    <p class="rank-note"><span id="rankNext" style="color:var(--gold)"></span><br>レート1000から100上がるごとに石の縁が良くなります（銅→銀→金→白金）。金IVからは数字が金色、金Vからは縁が光ります。オンライン対戦では、相手の石も相手のレートの縁で見えます。</p>
     <p class="prof-rec" id="profRec"></p>
     <p class="note">レートはオンライン対戦とCPU戦（1手戻しを使わなかった対局）で上下します。CPUのレートは やさしい 900・ふつう 1200・つよい 1500・最強 2100 として計算します。名前とレートはオンライン対戦では相手と観戦者に表示されます。</p>
   </div>
@@ -602,13 +611,15 @@ if(typeof module!=='undefined')module.exports=BocchEngine;
 const N=6, DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]], NEED=2, PREFIX='bocch-game-';
 const $=id=>document.getElementById(id);
 // レートの段位：石の縁の格。1399まで初段、1400二段、1600三段、1800四段、2000名人
-const RANKS=[[2000,5,'名人'],[1800,4,'四段'],[1600,3,'三段'],[1400,2,'二段'],[0,1,'初段']];
-const rankOf=r=>{r=Number(r);if(!Number.isFinite(r))return 1;for(const [min,k] of RANKS)if(r>=min)return k;return 1};
-const rankName=r=>RANKS.find(x=>x[1]===rankOf(r))[2];
-const rankCls=k=>k>1?' r'+k:'';
+// レートの段：1000から100ごとに1段（〜999は縁なし、2300以上は「極」）
+const RANK_NAMES=['無印','銅I','銅II','銀I','銀II','銀III','金I','金II','金III','金IV','金V','名人','白金I','白金II','極'];
+const RANKS=RANK_NAMES.map((n,k)=>[k?900+k*100:0,k,n]);
+const rankOf=r=>{r=Number(r);if(!Number.isFinite(r))return 0;return Math.max(0,Math.min(14,Math.floor(r/100)-9))};
+const rankName=r=>RANK_NAMES[rankOf(r)];
+const rankCls=k=>k>0?' rk r'+k+(k>=9?' gn':''):'';
 // その色の石を持つ人の段位（オンラインは相手が知らせたレート、CPU戦はCPUのレート）
-function colorRank(c){if(S.mode==='net'){const id=[NET.host,NET.guest].find(x=>x&&colorOf(x)===c);if(!id)return 1;if(id===NET.me&&!NET.watch)return rankOf(myRate());const o=typeof NM!=='undefined'&&NM[id];return o?rankOf(o.rate):1}
-  if(typeof CPU_RATE!=='undefined'&&CPU_RATE[S.mode])return c===1?rankOf(myRate()):rankOf(CPU_RATE[S.mode]);return 1}
+function colorRank(c){if(S.mode==='net'){const id=[NET.host,NET.guest].find(x=>x&&colorOf(x)===c);if(!id)return 0;if(id===NET.me&&!NET.watch)return rankOf(myRate());const o=typeof NM!=='undefined'&&NM[id];return o?rankOf(o.rate):0}
+  if(typeof CPU_RATE!=='undefined'&&CPU_RATE[S.mode])return c===1?rankOf(myRate()):rankOf(CPU_RATE[S.mode]);return 0}
 const myRate=()=>typeof PROF!=='undefined'?PROF.rating:1500;
 const gridEl=$('grid');
 let S;
@@ -1286,7 +1297,8 @@ const _renderP=render;render=function(){_renderP();
   const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?'1手戻しを使ったのでレートは変わりません':'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
   $('meName').textContent=myName();$('meRate').textContent=Math.round(PROF.rating)};
 function renderProf(){$('nameIn').value=PROF.name;$('profRate').textContent=Math.round(PROF.rating);$('profRank').textContent=rankName(PROF.rating);
-  $('rankRow').innerHTML=RANKS.slice().reverse().map(([min,k,n])=>`<div><div class="stone b${rankCls(k)}"><span>3</span></div>${n}${k===rankOf(PROF.rating)?'（いま）':''}</div>`).join('');
+  {const cur=rankOf(PROF.rating);$('rankRow').innerHTML=RANKS.map(([min,k,n])=>`<div title="${k?min+'〜':'〜999'}" style="${k===cur?'color:var(--gold);font-weight:700':''}"><div class="stone b${rankCls(k)}"><span>3</span></div>${n}</div>`).join('');
+   $('rankNext').textContent=cur<14?'次は '+(1000+cur*100)+' で「'+RANK_NAMES[cur+1]+'」':'最高の段です'}
   $('profRec').textContent=PROF.games?PROF.games+'局　'+PROF.w+'勝 '+PROF.l+'敗'+(PROF.d?' '+PROF.d+'分':''):'まだレート対局がありません'}
 $('meBtn').addEventListener('click',()=>{renderProf();$('nameMsg').textContent=''});
 $('nameSave').addEventListener('click',()=>{PROF.name=cleanName($('nameIn').value);saveProf();renderProf();$('nameMsg').textContent='保存しました：'+myName();render()});
