@@ -267,7 +267,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.3</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.4</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -1283,14 +1283,14 @@ const SQC='0123456789abcdefghijklmnopqrstuvwxyz';
 function shareLink(g,i){const q=new URLSearchParams();q.set('kifu',g.log.map(m=>SQC[m[0]]+SQC[m[1]]).join(''));
   q.set('r',String(g.win==null?'':g.win));if(g.why)q.set('y',g.why);q.set('m',String(g.mode));q.set('t',String(g.t||Date.now()));
   if(g.me)q.set('me',String(g.me));if(g.opp)q.set('o',g.opp);if(i)q.set('i',String(i));
-  return location.origin+location.pathname+'#'+q.toString()}
+  return location.origin+location.pathname+'?'+q.toString()}
 function revMsg(t){const m=$('revShareMsg');m.textContent=t;m.hidden=!t;clearTimeout(revMsg.T);if(t)revMsg.T=setTimeout(()=>{m.hidden=true},4000)}
 $('revShare').addEventListener('click',async()=>{const g=REV.g;if(!g)return;const url=shareLink(g,REV.i),[rt]=resultOf(g);
   const text='bocchの感想戦　'+MODE_NAME(g.mode)+'　'+rt+'（'+g.log.length+'手）';
-  if(navigator.share){try{await navigator.share({title:'bocchの感想戦',text,url});return}catch(e){if(e&&e.name==='AbortError')return}}
+  if(navigator.share){try{await navigator.share({title:'bocchの感想戦',text:text+'\n'+url});return}catch(e){if(e&&e.name==='AbortError')return}}
   try{await navigator.clipboard.writeText(url);revMsg('リンクをコピーしました。送った相手はリンクを開くだけでこの感想戦を見られます。')}
   catch(e){prompt('このリンクをコピーして送ってください',url)}});
-function openShared(){let q;try{q=new URLSearchParams(location.hash.slice(1))}catch(e){return false}
+function openShared(){let q;try{q=new URLSearchParams(location.search);if(!q.get('kifu'))q=new URLSearchParams(location.hash.slice(1))}catch(e){return false}
   const k=q.get('kifu');if(!k||k.length%2||!/^[0-9a-z]+$/.test(k))return false;
   const log=[];for(let j=0;j<k.length;j+=2)log.push([SQC.indexOf(k[j]),SQC.indexOf(k[j+1])]);
   if(log.some(m=>m[0]<0||m[0]>35||m[1]<0||m[1]>35))return false;
@@ -1303,7 +1303,7 @@ function openShared(){let q;try{q=new URLSearchParams(location.hash.slice(1))}ca
   revMsg('共有された対局です。AIが1手ずつ解析します。');return true}
 {const _rh=renderReview;renderReview=function(){_rh();const g=REV.g;if(g&&g.shared){const h=$('revHead');h.textContent='共有された対局'+(g.sm?'（送った人は'+(g.sm===1?'黒':'白')+(g.opp?'・相手 '+g.opp:'')+'）':'')+'　'+h.textContent}}}
 addEventListener('hashchange',()=>{if(/kifu=/.test(location.hash))openShared()});
-if(/kifu=/.test(location.hash))setTimeout(openShared,0);
+if(/kifu=/.test(location.search+location.hash))setTimeout(openShared,0);
 
 if(CUR==='history')renderHistory();
 
