@@ -6,7 +6,7 @@
 <title>bocch</title>
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&family=Cinzel:wght@600&family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
 <style>
 /* 漆の黒緑に金の細線、榧の盤、那智黒と蛤の石 */
 :root{
@@ -50,6 +50,9 @@ header p{margin:0;color:var(--sub);font-family:var(--f-disp);font-size:14px;lett
 .stone.sk-pool.p1{--pc:#f4c51a}.stone.sk-pool.p2{--pc:#1f4fb8}.stone.sk-pool.p3{--pc:#d42a22}
 .stone.sk-pool.p4{background:radial-gradient(ellipse 26% 18% at 34% 24%,rgba(255,255,255,.85) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 36% 30%,rgba(255,255,255,0) 40%,rgba(0,0,0,.38) 100%),radial-gradient(circle at 50% 50%,#fbfaf4 0 30%,transparent 31.5%),linear-gradient(180deg,#fbfaf4 0 24%,#5b2a8f 24% 76%,#fbfaf4 76%)}
 .stone.sk-pool span{font-size:.78em}
+.stone.sk-kokuji{background:radial-gradient(ellipse 26% 18% at 34% 24%,rgba(255,255,255,.75) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 36% 30%,#3a3a3c 0%,#121214 50%,#050506 100%);color:#e6c06a;box-shadow:inset 0 0 0 1.5px rgba(230,192,106,.6),0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
+.stone.sk-kokuji span{font-family:Cinzel,var(--f-latin);font-weight:600;font-size:.9em;letter-spacing:.02em;text-shadow:0 1px 0 rgba(0,0,0,.8),0 0 6px rgba(230,192,106,.35)}
+.stone.sk-kokuji.p3 span,.stone.sk-kokuji.p4 span{font-size:.7em}
 .skin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px;margin-top:10px}
 .skin-sw{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px 8px;border-radius:12px;border:1px solid var(--line);background:transparent;cursor:pointer;font-size:12.5px;color:inherit;min-width:0}
 .skin-sw .stone{width:42px;height:42px;font-size:20px}
@@ -356,7 +359,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
   </div>
   <div class="card prof" id="skinCard">
     <h3 class="acct-h">石のスキン</h3>
-    <p class="note">自分の石の見た目を変えます。オンライン対戦では、相手と観戦者にもこのスキンで見えます。ビリヤードは、進める距離で玉の色が変わります。</p>
+    <p class="note">自分の石の見た目を変えます。オンライン対戦では、相手と観戦者にもこのスキンで見えます。ビリヤードは進める距離で玉の色が、金の刻字は数字がローマ数字（動けない石はN）になります。</p>
     <div class="skin-grid" id="skinGrid"></div>
   </div>
   <div class="card prof acct" id="acct">
@@ -595,14 +598,15 @@ if(typeof module!=='undefined')module.exports=BocchEngine;
 const N=6, DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]], NEED=2, PREFIX='bocch-game-';
 const $=id=>document.getElementById(id);
 /* 石のスキン：自分の石だけ、この端末の画面でだけ変わる */
-const SKINS=[['std','標準'],['pool','ビリヤード'],['ruri','瑠璃']];
+const SKINS=[['std','標準'],['pool','ビリヤード'],['ruri','瑠璃'],['kokuji','金の刻字']];
 let SKIN='std';try{const v=localStorage.getItem('bocch-skin');if(SKINS.some(x=>x[0]===v))SKIN=v}catch(e){}
 const skinOk=k=>SKINS.some(x=>x[0]===k);
-const skinOf=(k,d)=>!k||k==='std'?'':' sk-'+k+(k==='pool'?' p'+d:'');
+const skinOf=(k,d)=>!k||k==='std'?'':' sk-'+k+(k==='pool'||k==='kokuji'?' p'+d:'');
+const numOf=(k,d)=>k==='kokuji'?['N','I','II','III','IV'][d]:d; // 金の刻字はローマ数字（0はN）
 // その色の石を持つ人のスキン（オンラインは各自が知らせたもの、CPU戦は自分の黒だけ）
 function colorSkin(c){if(S.mode==='net'){const id=[NET.host,NET.guest].find(x=>x&&colorOf(x)===c);if(!id)return 'std';if(id===NET.me&&!NET.watch)return SKIN;return (typeof NM!=='undefined'&&NM[id]&&NM[id].skin)||'std'}return S.mode!==0&&c===1?SKIN:'std'}
 function myColor(){if(S.mode==='net')return NET.watch?0:colorOf(NET.me);return S.mode===0?0:1}
-function renderSkins(){$('skinGrid').innerHTML=SKINS.map(([k,n])=>`<button class="skin-sw" data-skin="${k}" aria-pressed="${k===SKIN}"><div class="stone b${skinOf(k,3)}"><span>3</span></div>${n}</button>`).join('')}
+function renderSkins(){$('skinGrid').innerHTML=SKINS.map(([k,n])=>`<button class="skin-sw" data-skin="${k}" aria-pressed="${k===SKIN}"><div class="stone b${skinOf(k,3)}"><span>${numOf(k,3)}</span></div>${n}</button>`).join('')}
 function setSkin(k,push){if(!SKINS.some(x=>x[0]===k))return;SKIN=k;try{localStorage.setItem('bocch-skin',k)}catch(e){}renderSkins();try{render()}catch(e){}try{if(REV.g)renderReview()}catch(e){}if(push&&typeof acctPush==='function')acctPush()}
 renderSkins();$('skinGrid').addEventListener('click',e=>{const b=e.target.closest('.skin-sw');if(b)setSkin(b.dataset.skin,true)});
 const gridEl=$('grid');
@@ -705,7 +709,7 @@ function render(){
     if(canAct&&v===S.turn)cls+=' mine';if(i===S.sel)cls+=' sel';if(nbs.has(i))cls+=' nb';
     if(targets.includes(i))cls+=' target'+(r===goalRow(S.turn)?' fin':'');el.className=cls;
     el.setAttribute('aria-label',(v?NAME[v]+'の石、射程'+d:'空き')+'、'+(N-r)+'段'+(i%N+1)+'列');
-    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${skinOf(skc[v],d)}"><span>${d}</span></div>`:'';}
+    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${skinOf(skc[v],d)}"><span>${numOf(skc[v],d)}</span></div>`:'';}
   const net=S.mode==='net';
   $('board').classList.toggle('flip',net&&colorOf(NET.me)===2);
   $('board').classList.toggle('hideNum',!$('showNum').checked);
@@ -1106,7 +1110,7 @@ function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n
   for(let k=0;k<36;k++){const el=$('r'+k),v=p.b[k],r=k/6|0,d=v?nbCount(p.b,k):0;let cls='cell';
     if(r===0||r===5)cls+=' goal';if(last&&(last[0]===k||last[1]===k))cls+=(PV&&PV.k>0?' pvlast':' last');
     if(nextM&&nextM[0]===k)cls+=' bestf';if(nextM&&nextM[1]===k)cls+=' bestt';el.className=cls;
-    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${v===g.me?skinOf(SKIN,d):''}"><span>${d}</span></div>`:''}
+    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${v===g.me?skinOf(SKIN,d):''}"><span>${v===g.me?numOf(SKIN,d):d}</span></div>`:''}
   $('rboard').classList.toggle('flip',flip);$('rboard').classList.toggle('hideNum',!$('showNum').checked);$('rboard').classList.toggle('nolab',!$('showLab').checked);
   [...$('rlabTop').children].forEach((e,k)=>e.textContent=String(flip?6-k:k+1));
   [...$('rlabLeft').children].forEach((e,k)=>e.textContent='abcdef'[flip?5-k:k]);
