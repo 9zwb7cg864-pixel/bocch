@@ -44,6 +44,20 @@ header p{margin:0;color:var(--sub);font-family:var(--f-disp);font-size:14px;lett
 .stone.b{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%);color:#e4e5e6}
 .stone.w{background:radial-gradient(circle at 34% 28%,#ffffff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c}
 .stone.zero{opacity:.45}
+/* レートで変わる石の縁（二段:銀 三段:金 四段:金の二重 名人:二重＋光）。相手の石は相手のレートで決まる */
+.stone.r2,.stone.r3,.stone.r4,.stone.r5{box-sizing:border-box;border:2.5px solid transparent}
+.stone.b.r2{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%) padding-box,conic-gradient(from 20deg,#ffffff,#a7b0b8 14%,#f2f5f7 26%,#6c757d 40%,#e9edf0 55%,#8e979f 70%,#ffffff 84%,#a7b0b8 92%,#ffffff) border-box}
+.stone.w.r2{background:radial-gradient(circle at 34% 28%,#ffffff 0%,#e4e5e6 38%,#c3c5c7 72%) padding-box,conic-gradient(from 20deg,#ffffff,#a7b0b8 14%,#f2f5f7 26%,#6c757d 40%,#e9edf0 55%,#8e979f 70%,#ffffff 84%,#a7b0b8 92%,#ffffff) border-box}
+.stone.b.r3,.stone.b.r4,.stone.b.r5{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%) padding-box,conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#f6d77c 55%,#a8761e 70%,#fff3c4 84%,#c9952e 92%,#fff6d0) border-box}
+.stone.w.r3,.stone.w.r4,.stone.w.r5{background:radial-gradient(circle at 34% 28%,#ffffff 0%,#e4e5e6 38%,#c3c5c7 72%) padding-box,conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#f6d77c 55%,#a8761e 70%,#fff3c4 84%,#c9952e 92%,#fff6d0) border-box}
+.stone.b.r4,.stone.b.r5{box-shadow:inset 0 0 0 1.5px #0c0d0e,inset 0 0 0 3px #e2bd62,0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
+.stone.w.r4,.stone.w.r5{box-shadow:inset 0 0 0 1.5px #e4e5e6,inset 0 0 0 3px #e2bd62,0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
+.stone.b.r5{box-shadow:inset 0 0 0 1.5px #0c0d0e,inset 0 0 0 3px #e2bd62,0 0 12px 2px rgba(240,205,120,.55),0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
+.stone.w.r5{box-shadow:inset 0 0 0 1.5px #e4e5e6,inset 0 0 0 3px #e2bd62,0 0 12px 2px rgba(240,205,120,.55),0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
+.stone.b.r5{color:#e8cf8e}.stone.w.r5{color:#6a4c12}
+.sel .stone.r4,.sel .stone.r5,.nb .stone.r4,.nb .stone.r5{box-shadow:0 0 0 3px var(--wood),0 0 0 5px var(--gold),0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
+.rank-note{font-size:12.5px;color:var(--sub);margin:8px 0 0;line-height:1.7}
+.rank-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.rank-row div{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11.5px;color:var(--sub)}.rank-row .stone{width:34px;height:34px;font-size:16px}
 .mine{cursor:pointer}.mine:hover .stone{translate:0 -2px}
 .sel .stone{box-shadow:0 0 0 3px var(--wood),0 0 0 5px var(--gold),0 4px 6px rgba(0,0,0,.38)}
 .nb .stone{box-shadow:0 0 0 2px var(--gold),0 4px 6px rgba(0,0,0,.38)}
@@ -240,6 +254,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <button class="me-btn" id="meBtn" data-go="profile"><span id="meName"></span><span class="me-rate" id="meRate"></span><span class="me-edit" id="meEdit">アカウント ›</span></button>
     <nav class="menu" aria-label="メニュー">
       <button class="big resume" id="resumeBtn" hidden></button>
+      <button class="big resume" id="rematchBtn" hidden>▶ マッチングに復帰（相手を探し直す）</button>
       <button class="primary big" id="randomBtn">ランダム対戦</button>
       <button class="big" data-go="friend">友だちと対戦</button>
       <button class="big" data-go="solo">ひとりで遊ぶ</button>
@@ -340,7 +355,9 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <label class="prof-l" for="nameIn">名前（12文字まで）</label>
     <div class="row prof-row"><input type="text" id="nameIn" maxlength="12" autocomplete="nickname" placeholder="名無し"><button id="nameSave" class="primary">保存</button></div>
     <p class="prof-msg" id="nameMsg"></p>
-    <div class="prof-rate"><span>レート</span><b id="profRate"></b></div>
+    <div class="prof-rate"><span>レート</span><b id="profRate"></b><span id="profRank" style="margin-left:10px;color:var(--gold)"></span></div>
+    <div class="rank-row" id="rankRow" aria-label="段位ごとの石の縁"></div>
+    <p class="rank-note">レートが上がると石の縁が良くなります（1400で銀、1600で金、1800で金の二重、2000で金の光）。オンライン対戦では、相手の石も相手のレートの縁で見えます。</p>
     <p class="prof-rec" id="profRec"></p>
     <p class="note">レートはオンライン対戦とCPU戦（1手戻しを使わなかった対局）で上下します。CPUのレートは やさしい 900・ふつう 1200・つよい 1500・最強 1900 として計算します。名前とレートはオンライン対戦では相手と観戦者に表示されます。</p>
   </div>
@@ -416,6 +433,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
   <div class="row" id="netCtl" hidden>
     <button id="resign" class="danger">投了する</button>
     <button id="rematch" class="primary" hidden>もう一局</button>
+    <button id="reseek" hidden>相手を探し直す</button>
     <button id="leave">対戦をやめる</button>
   </div>
   <div class="row" id="reviewRow" hidden><button id="reviewNow">この対局を感想戦 ›</button></div>
@@ -579,6 +597,15 @@ if(typeof module!=='undefined')module.exports=BocchEngine;
 <script>
 const N=6, DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]], NEED=2, PREFIX='bocch-game-';
 const $=id=>document.getElementById(id);
+// レートの段位：石の縁の格。1399まで初段、1400二段、1600三段、1800四段、2000名人
+const RANKS=[[2000,5,'名人'],[1800,4,'四段'],[1600,3,'三段'],[1400,2,'二段'],[0,1,'初段']];
+const rankOf=r=>{r=Number(r);if(!Number.isFinite(r))return 1;for(const [min,k] of RANKS)if(r>=min)return k;return 1};
+const rankName=r=>RANKS.find(x=>x[1]===rankOf(r))[2];
+const rankCls=k=>k>1?' r'+k:'';
+// その色の石を持つ人の段位（オンラインは相手が知らせたレート、CPU戦はCPUのレート）
+function colorRank(c){if(S.mode==='net'){const id=[NET.host,NET.guest].find(x=>x&&colorOf(x)===c);if(!id)return 1;if(id===NET.me&&!NET.watch)return rankOf(myRate());const o=typeof NM!=='undefined'&&NM[id];return o?rankOf(o.rate):1}
+  if(typeof CPU_RATE!=='undefined'&&CPU_RATE[S.mode])return c===1?rankOf(myRate()):rankOf(CPU_RATE[S.mode]);return 1}
+const myRate=()=>typeof PROF!=='undefined'?PROF.rating:1500;
 const gridEl=$('grid');
 let S;
 const key=(b,t)=>b.join('')+t;
@@ -672,18 +699,19 @@ const NAME={1:'黒',2:'白'};
 function render(){
   const b=S.b,targets=S.sel>=0?movesFrom(b,S.sel).map(m=>m[1]):[];
   const nbs=new Set();if(S.sel>=0){const r=S.sel/N|0,c=S.sel%N;for(const[x,y]of DIRS)if(ok(r+x,c+y)&&b[(r+x)*N+c+y])nbs.add((r+x)*N+c+y)}
-  const canAct=human();
+  const canAct=human(),rk=[0,colorRank(1),colorRank(2)];
   for(let i=0;i<N*N;i++){const el=$('c'+i),v=b[i],r=i/N|0,d=v?nbCount(b,i):0;
     let cls='cell';if(r===0||r===N-1)cls+=' goal';if(S.last&&(S.last[0]===i||S.last[1]===i))cls+=' last';
     if(canAct&&v===S.turn)cls+=' mine';if(i===S.sel)cls+=' sel';if(nbs.has(i))cls+=' nb';
     if(targets.includes(i))cls+=' target'+(r===goalRow(S.turn)?' fin':'');el.className=cls;
     el.setAttribute('aria-label',(v?NAME[v]+'の石、射程'+d:'空き')+'、'+(N-r)+'段'+(i%N+1)+'列');
-    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}"><span>${d}</span></div>`:'';}
+    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${rankCls(rk[v])}"><span>${d}</span></div>`:'';}
   const net=S.mode==='net';
   $('board').classList.toggle('flip',net&&colorOf(NET.me)===2);
   $('board').classList.toggle('hideNum',!$('showNum').checked);
   document.querySelectorAll('#modeSeg button').forEach(x=>x.setAttribute('aria-pressed',String(!net&&+x.dataset.mode===S.mode)));
   $('localCtl').hidden=net;$('netCtl').hidden=!net;
+  $('reseek').hidden=!(net&&NET.auto&&!NET.watch&&!NET.guest&&!S.over);
   const seated=net&&colorOf(NET.me)>0;$('resign').hidden=!(seated&&NET.guest&&!S.over);$('rematch').hidden=!(seated&&S.over);
   if(net){const waiting=colorOf(NET.me)===colorOf(NET.host)&&NET.me===NET.host&&!NET.guest;if(NET.code){$('codeOut').textContent=NET.code;$('linkOut').textContent=inviteLink(NET.code)}}
   renderStatus();
@@ -757,13 +785,13 @@ async function post(obj){
       if(r.status===429){netMsg(LIMIT_MSG,true);return false}}catch(e){}
     await new Promise(r=>setTimeout(r,800))}
   netMsg('送れませんでした。ネットにつながっているか確かめてください。',true);return false}
-function closeNet(){if(NET.es){NET.es.close()}clearTimeout(NET.timer);
+function closeNet(){if(NET.es){NET.es.close()}clearTimeout(NET.timer);clearTimeout(NET.waitT);NET.auto=false;
   Object.assign(NET,{code:null,es:null,seen:new Set(),host:null,guest:null,game:0,over:null,live:false,sending:false,claimed:false,watch:false});
   $('netIdle').hidden=false}
 function openRoom(code,watch){
   code=(code||'').toLowerCase().replace(/[^a-z0-9]/g,'');
   if(code.length!==6){netMsg('部屋コードは6文字です。',true);return}
-  closeNet();NET.code=code;NET.watch=!!watch;NET.me=watch?'w'+newCode()+newCode():myId(code);
+  closeNet();NET.auto=false;clearTimeout(NET.waitT);NET.code=code;NET.watch=!!watch;NET.me=watch?'w'+newCode()+newCode():myId(code);
   S=initState('net');netMsg('部屋につないでいます…');
   $('netIdle').hidden=true;
   try{history.replaceState(null,'',(watch?'?watch=':'?room=')+code)}catch(e){}
@@ -865,9 +893,10 @@ const MATCH={on:false,id:null,es:null,seen:new Set(),seeks:new Map(),takes:new M
 function lobbyId(){return MATCH.id||(MATCH.id=newCode()+newCode())}
 async function lobbyPost(o){o.from=lobbyId();try{const r=await fetch(LOBBY,{method:'POST',body:JSON.stringify(o)});
   if(r.status===429&&MATCH.on){$('matchTitle').textContent='いまは対戦相手を探せません';$('matchMsg').textContent=LIMIT_MSG}return r.ok}catch(e){return false}}
-function stopMatch(){MATCH.on=false;if(MATCH.es)MATCH.es.close();MATCH.es=null;clearTimeout(MATCH.timer);clearInterval(MATCH.hb);clearInterval(MATCH.tick)}
+function stopMatch(){MATCH.on=false;try{localStorage.removeItem('bocch-matching')}catch(e){}if(MATCH.es)MATCH.es.close();MATCH.es=null;clearTimeout(MATCH.timer);clearInterval(MATCH.hb);clearInterval(MATCH.tick)}
 function startMatch(){
   stopMatch();if(S.mode==='net')leave();
+  try{localStorage.setItem('bocch-matching',String(Date.now()))}catch(e){}
   Object.assign(MATCH,{on:true,seen:new Set(),seeks:new Map(),takes:new Map(),cancels:new Set(),mine:null,taking:null,decided:false,t0:Date.now()});
   $('matchTitle').textContent='相手を探しています';$('matchMsg').textContent='同じタイミングで探している人と、自動で組み合わせます。';
   show('match');
@@ -888,7 +917,7 @@ function onLobby(m){
   else if(m.t==='take'){
     if(!MATCH.takes.has(m.room))MATCH.takes.set(m.room,m.from);
     if(MATCH.on&&m.room===MATCH.mine&&MATCH.takes.get(m.room)!==MATCH.id){
-      $('matchTitle').textContent='相手が見つかりました';$('matchMsg').textContent='対局を始めます…';stopMatch();}
+      $('matchTitle').textContent='相手が見つかりました';$('matchMsg').textContent='対局を始めます…';stopMatch();NET.auto=true;armWait();}
   }
   if(MATCH.on&&MATCH.decided)consider();
 }
@@ -897,17 +926,22 @@ function consider(){
   for(const s of MATCH.seeks.values()){if(!liveSeek(s))continue;if(!MATCH.mine||MATCH.id>s.from){take(s.room);return}}
 }
 function postSeek(){
-  const code=newCode();MATCH.mine=code;openRoom(code);show('match',true);
+  const code=newCode();MATCH.mine=code;openRoom(code);NET.auto=true;show('match',true);
   lobbyPost({t:'seek',room:code});clearInterval(MATCH.hb);MATCH.hb=setInterval(()=>{if(MATCH.on&&MATCH.mine===code)lobbyPost({t:'seek',room:code})},60000);
 }
 async function take(room){
   MATCH.taking=room;
   if(MATCH.mine){lobbyPost({t:'cancel',room:MATCH.mine});clearInterval(MATCH.hb);closeNet();MATCH.mine=null}
-  await lobbyPost({t:'take',room});
-  setTimeout(()=>{if(!MATCH.on)return;
-    if(MATCH.takes.get(room)===MATCH.id){$('matchTitle').textContent='相手が見つかりました';stopMatch();openRoom(room);show('game',true)}
-    else{MATCH.taking=null;consider();if(MATCH.on&&!MATCH.mine&&!MATCH.taking)postSeek()}},1500);
+  const ok=await lobbyPost({t:'take',room});
+  // 自分の take が中継から返ってくるまで待つ（最大6秒）。固定の短い待ちだと遅い回線で取りこぼして二重に探しに行く
+  const t0=Date.now();const settle=()=>{if(!MATCH.on)return;
+    if(MATCH.takes.get(room)===MATCH.id){$('matchTitle').textContent='相手が見つかりました';stopMatch();openRoom(room);NET.auto=true;armWait();show('game',true);return}
+    if(ok&&!MATCH.takes.has(room)&&Date.now()-t0<6000){setTimeout(settle,200);return}
+    MATCH.taking=null;consider();if(MATCH.on&&!MATCH.mine&&!MATCH.taking)postSeek()};
+  setTimeout(settle,300);
 }
+// 組み合わせのあと、相手が部屋に来ないとき（同時に取り合った等）は、自動で探し直す
+function armWait(){clearTimeout(NET.waitT);NET.waitT=setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.watch&&!NET.guest&&!S.over){netMsg('相手が来なかったので、探し直します…');setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.guest)startMatch()},1200)}},12000)}
 function cancelMatch(){if(MATCH.mine)lobbyPost({t:'cancel',room:MATCH.mine});stopMatch();MATCH.mine=null;if(S.mode==='net')leave()}
 
 /* 符号（列=1〜6、段=a〜f）と棋譜 */
@@ -930,6 +964,7 @@ $('kifuBox').addEventListener('toggle',()=>{try{localStorage.setItem('bocch-kifu
 $('showLab').addEventListener('change',()=>{try{localStorage.setItem('bocch-lab',$('showLab').checked?'1':'0')}catch(e){}render()});
 render();
 $('randomBtn').addEventListener('click',startMatch);
+$('reseek').addEventListener('click',()=>startMatch());
 addEventListener('pagehide',()=>{if(MATCH.on&&MATCH.mine){try{fetch(LOBBY,{method:'POST',keepalive:true,body:JSON.stringify({t:'cancel',room:MATCH.mine,from:MATCH.id})})}catch(e){}}});
 $('matchCancel').addEventListener('click',()=>{cancelMatch();show('home')});
 
@@ -1080,7 +1115,7 @@ function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n
   for(let k=0;k<36;k++){const el=$('r'+k),v=p.b[k],r=k/6|0,d=v?nbCount(p.b,k):0;let cls='cell';
     if(r===0||r===5)cls+=' goal';if(last&&(last[0]===k||last[1]===k))cls+=(PV&&PV.k>0?' pvlast':' last');
     if(nextM&&nextM[0]===k)cls+=' bestf';if(nextM&&nextM[1]===k)cls+=' bestt';el.className=cls;
-    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}"><span>${d}</span></div>`:''}
+    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${v===g.me?rankCls(rankOf(myRate())):''}"><span>${d}</span></div>`:''}
   $('rboard').classList.toggle('flip',flip);$('rboard').classList.toggle('hideNum',!$('showNum').checked);$('rboard').classList.toggle('nolab',!$('showLab').checked);
   [...$('rlabTop').children].forEach((e,k)=>e.textContent=String(flip?6-k:k+1));
   [...$('rlabLeft').children].forEach((e,k)=>e.textContent='abcdef'[flip?5-k:k]);
@@ -1192,11 +1227,11 @@ document.querySelector('[data-go="watch"]').addEventListener('click',startWatchL
 addEventListener('popstate',()=>{if(CUR==='watch'){if(!LV.on)startWatchList()}else stopWatchList()});
 
 /* 名前とレート（この端末に保存。オンラインでは部屋の記録に名前とレートを添えて送る） */
-const PKEY='bocch-profile',CPU_RATE={1:900,2:1200,3:1500,4:1900};
+var PKEY='bocch-profile',CPU_RATE={1:900,2:1200,3:1500,4:1900};
 const cleanName=x=>String(x==null?'':x).replace(/[\u0000-\u001f\u007f<>]/g,'').trim().slice(0,12);
 function loadProf(){let p={};try{p=JSON.parse(localStorage.getItem(PKEY)||'{}')||{}}catch(e){}
   return {name:cleanName(p.name)||'',rating:Number.isFinite(p.rating)?p.rating:1500,games:p.games|0,w:p.w|0,l:p.l|0,d:p.d|0,rated:Array.isArray(p.rated)?p.rated.slice(-200):[]}}
-let PROF=loadProf();
+var PROF=loadProf();
 const myName=()=>PROF.name||'名無し';
 function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF))}catch(e){}}
 
@@ -1239,7 +1274,8 @@ const _renderP=render;render=function(){_renderP();
   else pt.hidden=pbt.hidden=true;
   const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?'1手戻しを使ったのでレートは変わりません':'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
   $('meName').textContent=myName();$('meRate').textContent=Math.round(PROF.rating)};
-function renderProf(){$('nameIn').value=PROF.name;$('profRate').textContent=Math.round(PROF.rating);
+function renderProf(){$('nameIn').value=PROF.name;$('profRate').textContent=Math.round(PROF.rating);$('profRank').textContent=rankName(PROF.rating);
+  $('rankRow').innerHTML=RANKS.slice().reverse().map(([min,k,n])=>`<div><div class="stone b${rankCls(k)}"><span>3</span></div>${n}${k===rankOf(PROF.rating)?'（いま）':''}</div>`).join('');
   $('profRec').textContent=PROF.games?PROF.games+'局　'+PROF.w+'勝 '+PROF.l+'敗'+(PROF.d?' '+PROF.d+'分':''):'まだレート対局がありません'}
 $('meBtn').addEventListener('click',()=>{renderProf();$('nameMsg').textContent=''});
 $('nameSave').addEventListener('click',()=>{PROF.name=cleanName($('nameIn').value);saveProf();renderProf();$('nameMsg').textContent='保存しました：'+myName();render()});
@@ -1277,12 +1313,14 @@ const AKEY='bocch-active';
 function getActive(){try{const a=JSON.parse(localStorage.getItem(AKEY)||'null');if(a&&a.code&&Date.now()-a.t<30*60*1000)return a}catch(e){}return null}
 function setActive(a){try{a?localStorage.setItem(AKEY,JSON.stringify(a)):localStorage.removeItem(AKEY)}catch(e){}}
 function updResume(){const b=$('resumeBtn');const a=getActive();const show=!!a&&!(S.mode==='net'&&NET.code===a.code);b.hidden=!show;
+  {let m=0;try{m=+localStorage.getItem('bocch-matching')||0}catch(e){}$('rematchBtn').hidden=!(m&&Date.now()-m<3*60*1000&&!MATCH.on&&!show)}
   if(show){const nm=a.opp?a.opp+'との':'';b.textContent='▶ '+nm+'対局に戻る（部屋 '+a.code.toUpperCase()+'）'}}
 const _renderA=render;render=function(){_renderA();
   if(S.mode==='net'&&NET.code&&!NET.watch&&NET.guest&&colorOf(NET.me)>0){
     if(S.over)setActive(null);
     else{const o=typeof NM!=='undefined'&&NM[NET.me===NET.host?NET.guest:NET.host];setActive({code:NET.code,t:Date.now(),opp:o?o.name:''})}}
   updResume()};
+$('rematchBtn').addEventListener('click',()=>startMatch());
 $('resumeBtn').addEventListener('click',()=>{const a=getActive();if(!a){updResume();return}openRoom(a.code);show('game')});
 $('leave').addEventListener('click',()=>{if(!NET.watch)setActive(null);updResume()});
 addEventListener('popstate',updResume);
