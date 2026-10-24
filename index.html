@@ -174,6 +174,23 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 #localCtl,#netCtl{gap:14px;justify-content:center}
 .watch-st{text-align:center;margin-top:16px}
 .hist .live{color:#9fc79a}
+
+/* 名前・レート */
+.me-btn{display:flex;align-items:baseline;gap:10px;margin:-10px auto 22px;padding:8px 16px;min-height:40px;border-color:var(--gold-line);letter-spacing:.06em;font-size:14px}
+.me-btn .me-rate{color:var(--gold);font-family:var(--f-latin);font-weight:600}
+.me-btn .me-edit{color:var(--sub);font-size:12px}
+.prof-l{display:block;font-size:13px;color:var(--sub);margin-bottom:6px}
+.prof-row{flex-wrap:nowrap}.prof-row input{flex:1;min-width:0;width:auto;font-family:var(--f-body);font-size:17px;letter-spacing:.04em}
+.prof-msg{min-height:1.4em;font-size:13px;color:var(--gold);margin:6px 0 10px}
+.prof-rate{display:flex;align-items:baseline;justify-content:space-between;border-top:1px solid var(--line);padding-top:14px}
+.prof-rate b{font-family:var(--f-latin);font-size:34px;color:var(--gold);font-weight:600}
+.prof-rec{color:var(--sub);font-size:13px;margin:4px 0 14px}
+.players{display:flex;justify-content:center;align-items:center;gap:12px;margin:-6px 0 10px;font-size:13.5px;color:var(--sub);flex-wrap:wrap}
+.players b{color:var(--fg);font-weight:500}.players .r{color:var(--gold);font-family:var(--f-latin);margin-left:4px}
+.players .you{color:var(--gold);font-size:11px;margin-left:4px}
+.players .pl-vs{color:var(--mute);font-size:12px}
+.players .dot{width:12px;height:12px;margin-right:6px;vertical-align:-1px}
+.rate-msg{margin:6px 0 0;font-size:14px;color:var(--gold);font-family:var(--f-latin)}
 @media (prefers-reduced-motion:reduce){.stone,button{transition:none}}
 </style>
 </head>
@@ -184,6 +201,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
     <p class="tag">ひとりぼっちの石は、動けない。</p>
+    <button class="me-btn" id="meBtn" data-go="profile"><span id="meName"></span><span class="me-rate" id="meRate"></span><span class="me-edit">名前・レート ›</span></button>
     <nav class="menu" aria-label="メニュー">
       <button class="primary big" id="randomBtn">ランダム対戦</button>
       <button class="big" data-go="friend">友だちと対戦</button>
@@ -277,6 +295,19 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
   <p class="hist-note watch-st" id="watchSt"></p>
 </section>
 
+<!-- プロフィール -->
+<section class="scr" data-scr="profile" hidden>
+  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>名前とレート</h2><span class="sp"></span></div>
+  <div class="card prof">
+    <label class="prof-l" for="nameIn">名前（12文字まで）</label>
+    <div class="row prof-row"><input type="text" id="nameIn" maxlength="12" autocomplete="nickname" placeholder="名無し"><button id="nameSave" class="primary">保存</button></div>
+    <p class="prof-msg" id="nameMsg"></p>
+    <div class="prof-rate"><span>レート</span><b id="profRate"></b></div>
+    <p class="prof-rec" id="profRec"></p>
+    <p class="note">レートはオンライン対戦とCPU戦（1手戻しを使わなかった対局）で上下します。CPUのレートは やさしい 900・ふつう 1200・つよい 1500・最強 1900 として計算します。名前とレートはこの端末に保存され、オンライン対戦では相手と観戦者に表示されます。</p>
+  </div>
+</section>
+
 <!-- ひとりで遊ぶ -->
 <section class="scr" data-scr="solo" hidden>
   <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>ひとりで遊ぶ</h2><span class="sp"></span></div>
@@ -307,10 +338,12 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <!-- 対局 -->
 <section class="scr" data-scr="game" hidden>
   <div class="topbar"><button class="back" id="gameBack">‹ ホーム</button><span class="conn" id="conn"><i></i><span id="connTxt"></span></span><button class="back" data-go="rules">ルール</button></div>
+  <div class="players" id="players" hidden><span id="plB"></span><span class="pl-vs">対</span><span id="plW"></span></div>
   <div class="boardwrap"><div class="board" id="board"><div class="lab lab-top" id="labTop" aria-hidden="true"></div><div class="lab lab-left" id="labLeft" aria-hidden="true"></div><div class="grid" id="grid" role="grid" aria-label="盤"></div></div></div>
   <div class="gameinfo">
     <div class="status" id="status"></div>
     <p class="hint" id="hint"></p>
+    <p class="rate-msg" id="rateMsg" hidden></p>
     <p class="joseki" id="joseki" hidden></p>
     <details class="kifu" id="kifuBox" hidden><summary id="kifuSum"></summary><div id="kifu" aria-label="棋譜"></div></details>
   </div>
@@ -349,7 +382,8 @@ var BocchEngine=(function(){
   // 評価の重み（自動調整で上書き可）
   var W={row:[0,23.6,34.5,23.9,4.3,0],arr:234,mob:0.6,th:25.4,dth:23.7,frz:27.7,tempo:17.1};
   // 状態
-  var b=new Int8Array(SQ),cnt=new Int8Array(SQ),h1=0,h2=0,side=1;
+  var b=new Int8Array(SQ),cnt=new Int8Array(SQ),h1=0,h2=0,side=1,arr=new Int8Array(3),pcs=[null,new Int8Array(6),new Int8Array(6)],pn=new Int8Array(3),pidx=new Int8Array(SQ),srt=new Int8Array(6);
+  var gr1=new Int32Array(0),gr2=new Int32Array(0);
   var path1=new Int32Array(512),path2=new Int32Array(512),pathLen=0;
   var gameRep=null; // 対局中に出た局面（キー→回数）
   var killers=new Int16Array(128*2),hist=new Int32Array(3*SQ*SQ);
@@ -357,22 +391,24 @@ var BocchEngine=(function(){
   var mvBuf=[];for(i=0;i<128;i++)mvBuf.push(new Int16Array(200));
   var scBuf=[];for(i=0;i<128;i++)scBuf.push(new Int32Array(200));
 
-  function load(arr,s){h1=0;h2=0;for(var i=0;i<SQ;i++){b[i]=arr[i];if(b[i]){h1^=Z1[b[i]*SQ+i];h2^=Z2[b[i]*SQ+i]}}
+  function load(A,s){h1=0;h2=0;pn[1]=pn[2]=0;arr[1]=arr[2]=0;for(var i=0;i<SQ;i++){b[i]=A[i];var v=b[i];if(v){h1^=Z1[v*SQ+i];h2^=Z2[v*SQ+i];pidx[i]=pn[v];pcs[v][pn[v]++]=i;if((v===1&&i<6)||(v===2&&i>=30))arr[v]++}}
     for(i=0;i<SQ;i++){var n=0,l=NB[i];for(var j=0;j<l.length;j++)if(b[l[j]])n++;cnt[i]=n}
     side=s;if(s===2){h1^=ZS1;h2^=ZS2}}
-  function make(f,t){var c=b[f],l,j;b[f]=0;l=NB[f];for(j=0;j<l.length;j++)cnt[l[j]]--;
+  function make(f,t){var c=b[f],l,j;b[f]=0;var k=pidx[f];pcs[c][k]=t;pidx[t]=k;
+    if(c===1){if(f<6)arr[1]--;if(t<6)arr[1]++}else{if(f>=30)arr[2]--;if(t>=30)arr[2]++}l=NB[f];for(j=0;j<l.length;j++)cnt[l[j]]--;
     b[t]=c;l=NB[t];for(j=0;j<l.length;j++)cnt[l[j]]++;
     h1^=Z1[c*SQ+f]^Z1[c*SQ+t]^ZS1;h2^=Z2[c*SQ+f]^Z2[c*SQ+t]^ZS2;side=3-side}
   function unmake(f,t){make(t,f)}
   function goalRow(p){return p===1?0:5}
-  function arrivedCnt(p){var g=goalRow(p)*6,n=0;for(var c=0;c<6;c++)if(b[g+c]===p)n++;return n}
-  function gen(p,out){var n=0;for(var i=0;i<SQ;i++)if(b[i]===p){var d=cnt[i];if(!d)continue;if(d>4)d=4;
+  function arrivedCnt(p){return arr[p]}
+  function gen(p,out){var n=0,P=pcs[p],m=pn[p],q,j2;for(q=0;q<m;q++){var x=P[q];j2=q;while(j2>0&&srt[j2-1]>x){srt[j2]=srt[j2-1];j2--}srt[j2]=x}
+    for(q=0;q<m;q++){var i=srt[q];var d=cnt[i];if(!d)continue;if(d>4)d=4;
       for(var k=0;k<8;k++){var t=RAY[(i*8+k)*5+d];if(t>=0&&!b[t])out[n++]=i*36+t}}return n}
-  function countMoves(p){var n=0,th=0,g=goalRow(p);for(var i=0;i<SQ;i++)if(b[i]===p){var d=cnt[i];if(!d)continue;if(d>4)d=4;
+  function countMoves(p){var n=0,th=0,g=goalRow(p),P=pcs[p],m=pn[p];for(var q=0;q<m;q++){var i=P[q];var d=cnt[i];if(!d)continue;if(d>4)d=4;
       for(var k=0;k<8;k++){var t=RAY[(i*8+k)*5+d];if(t>=0&&!b[t]){n++;if((t/6|0)===g&&(i/6|0)!==g)th++}}}return n*1000+th}
   // 手番側が1手で勝てるか
   function winInOne(p){var a=arrivedCnt(p);if(a<1)return false;var g=goalRow(p);
-    for(var i=0;i<SQ;i++)if(b[i]===p&&(i/6|0)!==g){var d=cnt[i];if(!d)continue;if(d>4)d=4;
+    var P=pcs[p],m=pn[p];for(var q=0;q<m;q++){var i=P[q];if((i/6|0)===g)continue;var d=cnt[i];if(!d)continue;if(d>4)d=4;
       for(var k=0;k<8;k++){var t=RAY[(i*8+k)*5+d];if(t>=0&&!b[t]&&(t/6|0)===g)return true}}return false}
   function feats(p){ // 手番側から見た特徴量の差
     var o=3-p,F=[0,0,0,0,0,0,0,0,0,0,0,0];
@@ -382,14 +418,14 @@ var BocchEngine=(function(){
     var mp=countMoves(p),mo=countMoves(o);F[6]=((mp/1000|0)-(mo/1000|0));F[7]=mp%1000;F[9]=mo%1000;F[10]=1;F[11]=winInOne(p)?1:0;
     return F}
   function evaluate(p){var o=3-p,s=0,R=W.row;
-    for(var i=0;i<SQ;i++){var v=b[i];if(!v)continue;var r=i/6|0,adv=v===1?5-r:r,x=(adv<5?R[adv]:0)-(cnt[i]?0:W.frz);s+=v===p?x:-x}
+    for(var c=1;c<=2;c++){var P=pcs[c],m=pn[c],sg=c===p?1:-1;for(var q=0;q<m;q++){var i=P[q],r=i/6|0,adv=c===1?5-r:r;s+=sg*((adv<5?R[adv]:0)-(cnt[i]?0:W.frz))}}
     var ap=arrivedCnt(p),ao=arrivedCnt(o);s+=(ap-ao)*W.arr;
     var mp=countMoves(p),mo=countMoves(o);
     s+=((mp/1000|0)-(mo/1000|0))*W.mob+(mp%1000)*W.th-(mo%1000)*W.dth+W.tempo;
     return s}
   function repeated(){ // 探索経路中か対局履歴に同じ局面
     for(var i=pathLen-2;i>=0;i-=2)if(path1[i]===h1&&path2[i]===h2)return true;
-    if(gameRep&&gameRep[h1+':'+h2])return true;return false}
+    for(i=0;i<gr1.length;i++)if(gr1[i]===h1&&gr2[i]===h2)return true;return false}
   function ttProbe(){var ix=h1&TM;return tK[ix]===h2?ix:-1}
   function ttStore(d,v,f,m,ply){var ix=h1&TM;if(tK[ix]===h2&&tD[ix]>d&&tF[ix]===0)return;
     if(v>WIN-1000)v+=ply;else if(v<-WIN+1000)v-=ply;tK[ix]=h2;tV[ix]=v;tD[ix]=d;tF[ix]=f;tM[ix]=m}
@@ -435,9 +471,9 @@ var BocchEngine=(function(){
 
   // 局面arr（36要素, 0空 1黒 2白）、手番p、思考ミリ秒、対局履歴のキー配列
   function think(arr,p,ms,opt){opt=opt||{};
-    load(arr,p);gameRep=null;
-    if(opt.history){gameRep={};var sv1=h1,sv2=h2,sb=Array.from(b);
-      for(var q=0;q<opt.history.length;q++){load(opt.history[q].b,opt.history[q].turn);gameRep[h1+':'+h2]=1}
+    load(arr,p);gr1=new Int32Array(0);gr2=new Int32Array(0);
+    if(opt.history){var H=opt.history,sb=Array.from(b);gr1=new Int32Array(H.length);gr2=new Int32Array(H.length);
+      for(var q=0;q<H.length;q++){load(H[q].b,H[q].turn);gr1[q]=h1;gr2[q]=h2}
       load(sb,p)}
     hist.fill(0);killers.fill(0);nodes=0;stop=false;pathLen=0;
     var t0=Date.now();deadline=t0+ms;
@@ -829,7 +865,7 @@ function saveFinished(){
   const me=S.mode==='net'?colorOf(NET.me):S.mode===0?0:1;
   const g=loadGames(),ix=g.findIndex(x=>x.id===id),old=ix>=0?g[ix]:null;
   const same=old&&old.log.length===S.log.length&&old.log.every((m,i)=>m[0]===S.log[i][0]&&m[1]===S.log[i][1]);
-  const e={id,t:old?old.t:Date.now(),mode:S.mode,me,win:S.over.win,why:S.over.why,log:S.log.map(m=>[m[0],m[1]]),an:same?old.an:null};
+  const e={id,t:old?old.t:Date.now(),mode:S.mode,me,win:S.over.win,why:S.over.why,log:S.log.map(m=>[m[0],m[1]]),an:same?old.an:null};if(old&&same){if(old.rd!=null)e.rd=old.rd;if(old.opp)e.opp=old.opp;if(old.ra!=null)e.ra=old.ra}
   if(ix>=0)g.splice(ix,1);g.unshift(e);storeGames(g)}
 const _renderR=render;
 render=function(){_renderR();
@@ -844,7 +880,7 @@ function renderHistory(){const g=loadGames(),box=$('histList');box.innerHTML='';
     const side=x.me===1?'あなたは黒':x.me===2?'あなたは白':'';
     let bad='';if(x.an){const c=countMarks(x);bad=c.bad||c.dub?`悪手 ${c.bad}・疑問手 ${c.dub}${x.me?'（あなた）':''}`:'悪手なし'}else bad='未解析';
     const r=document.createElement('span');r.className='res '+rc;r.textContent=rt;
-    const m=document.createElement('span');m.className='meta';const mb=document.createElement('b');mb.textContent=MODE_NAME(x.mode);m.append(mb,document.createElement('br'),document.createTextNode(fmtDate(x.t)+'　'+x.log.length+'手'+(side?'　'+side:'')));
+    const m=document.createElement('span');m.className='meta';const mb=document.createElement('b');mb.textContent=MODE_NAME(x.mode)+(x.mode==='net'&&x.opp?'　対 '+x.opp:'')+(x.rd!=null?'　'+(x.rd>=0?'+':'')+x.rd:'');m.append(mb,document.createElement('br'),document.createTextNode(fmtDate(x.t)+'　'+x.log.length+'手'+(side?'　'+side:'')));
     const bd=document.createElement('span');bd.className='bad';bd.textContent=bad;
     b.append(r,m,bd);b.addEventListener('click',()=>openReview(x.id));box.appendChild(b)})}
 $('histClear').addEventListener('click',()=>{const b=$('histClear');if(b.dataset.arm){storeGames([]);delete b.dataset.arm;b.textContent='履歴をすべて消す';renderHistory()}else{b.dataset.arm='1';b.textContent='もう一度押すと消えます';setTimeout(()=>{delete b.dataset.arm;b.textContent='履歴をすべて消す'},3000)}});
@@ -964,12 +1000,14 @@ async function scanRooms(){const cand=new Set();
     if(m&&typeof m.room==='string'&&/^[a-z0-9]{6}$/.test(m.room)&&(m.t==='take'||m.t==='live'))cand.add(m.room)}
   const now=Date.now()/1000;
   await Promise.all([...cand].map(async room=>{const L=await pollTopic(TOPIC(room),'15m');if(!L.length){LV.rooms.delete(room);return}
-    let last=0,ply=0,g=0,ended=false;
+    let last=0,ply=0,g=0,ended=false,host=null,guest=null;const nms={};
     for(const x of L){let m;try{m=JSON.parse(x.message)}catch(e){continue}last=Math.max(last,x.time);
+      if(m.from&&m.name!=null)nms[m.from]=String(m.name).replace(/[\u0000-\u001f\u007f<>]/g,'').trim().slice(0,12)||'名無し';
+      if(m.t==='create'&&!host)host=m.from;if(m.t==='join'&&host&&!guest&&m.from!==host)guest=m.from;
       if(m.t==='move'){if((m.g|0)>g){g=m.g|0;ply=0}if((m.g|0)===g)ply=Math.max(ply,(m.ply|0)+1);ended=false}
       if(m.t==='rematch'){g=Math.max(g,m.g|0);ply=0;ended=false}
       if(m.t==='resign')ended=true}
-    if(ended||now-last>180)LV.rooms.delete(room);else LV.rooms.set(room,{at:last,ply,g})}));
+    if(ended||now-last>180)LV.rooms.delete(room);else LV.rooms.set(room,{at:last,ply,g,names:[nms[host]||(host?'名無し':''),nms[guest]||(guest?'名無し':'')].filter(Boolean)})}));
   $('watchSt').textContent='';renderWatch()}
 function startWatchList(){stopWatchList();LV.rooms=new Map();$('watchSt').textContent='探しています…';renderWatch();
   LV.on=true;scanRooms();LV.tick=setInterval(()=>{if(LV.on)scanRooms()},15000)}
@@ -979,11 +1017,63 @@ function renderWatch(){const box=$('watchList');box.innerHTML='';
   $('watchEmpty').hidden=!!list.length||$('watchSt').textContent!=='';
   list.forEach(([room,r])=>{const b=document.createElement('button');
     const st=document.createElement('span');st.className='res live';st.textContent='対局中';
-    const m=document.createElement('span');m.className='meta';const mb=document.createElement('b');mb.textContent='部屋 '+room.toUpperCase();
-    m.append(mb,document.createElement('br'),document.createTextNode((r.ply?r.ply+'手目まで進行':'始まったところ')+(r.g?'　'+(r.g+1)+'局目':'')));
+    const m=document.createElement('span');m.className='meta';const mb=document.createElement('b');mb.textContent=r.names&&r.names.length===2?r.names[0]+' 対 '+r.names[1]:'部屋 '+room.toUpperCase();
+    m.append(mb,document.createElement('br'),document.createTextNode((r.ply?r.ply+'手目まで進行':'始まったところ')+(r.g?'　'+(r.g+1)+'局目':'')+(r.names&&r.names.length===2?'　部屋 '+room.toUpperCase():'')));
     b.append(st,m);b.addEventListener('click',()=>{stopWatchList();openRoom(room,true);show('game')});box.appendChild(b)})}
 document.querySelector('[data-go="watch"]').addEventListener('click',startWatchList);
 addEventListener('popstate',()=>{if(CUR==='watch'){if(!LV.on)startWatchList()}else stopWatchList()});
+
+/* 名前とレート（この端末に保存。オンラインでは部屋の記録に名前とレートを添えて送る） */
+const PKEY='bocch-profile',CPU_RATE={1:900,2:1200,3:1500,4:1900};
+const cleanName=x=>String(x==null?'':x).replace(/[\u0000-\u001f\u007f<>]/g,'').trim().slice(0,12);
+function loadProf(){let p={};try{p=JSON.parse(localStorage.getItem(PKEY)||'{}')||{}}catch(e){}
+  return {name:cleanName(p.name)||'',rating:Number.isFinite(p.rating)?p.rating:1500,games:p.games|0,w:p.w|0,l:p.l|0,d:p.d|0,rated:Array.isArray(p.rated)?p.rated.slice(-200):[]}}
+let PROF=loadProf();
+const myName=()=>PROF.name||'名無し';
+function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF))}catch(e){}}
+const NM={};
+const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi')){o.name=myName();o.rate=Math.round(PROF.rating)}return _post(o)};
+const _reduce=reduce;reduce=function(m){
+  if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500}}
+  return _reduce(m)};
+function oppIdOf(){return NET.me===NET.host?NET.guest:NET.host}
+function rateGame(){
+  if(!S.over||!S.log||S.log.length<2||S.noRate)return;
+  let my,opp,oppName;
+  if(S.mode==='net'){my=colorOf(NET.me);if(!my||NET.watch)return;const o=NM[oppIdOf()];opp=o?o.rate:1500;oppName=o?o.name:'名無し'}
+  else if(CPU_RATE[S.mode]){my=1;opp=CPU_RATE[S.mode];oppName=MODE_NAME(S.mode)}else return;
+  const id=currentGameId();if(!id||PROF.rated.includes(id))return;
+  const res=S.over.win===0?.5:S.over.win===my?1:0,K=PROF.games<20?40:24;
+  const exp=1/(1+Math.pow(10,(opp-PROF.rating)/400)),before=Math.round(PROF.rating);
+  PROF.rating=Math.max(100,PROF.rating+K*(res-exp));PROF.games++;if(res===1)PROF.w++;else if(res===0)PROF.l++;else PROF.d++;
+  PROF.rated.push(id);PROF.rated=PROF.rated.slice(-200);saveProf();
+  const after=Math.round(PROF.rating),dl=after-before;
+  S.rateMsg='レート '+before+' → '+after+'（'+(dl>=0?'+':'')+dl+'）';
+  const g=loadGames(),ix=g.findIndex(x=>x.id===id);if(ix>=0){g[ix].rd=dl;g[ix].opp=oppName;g[ix].ra=after;storeGames(g)}}
+$('undo').addEventListener('click',()=>{if(S.mode&&S.mode!=='net')S.noRate=true});
+function plSpan(color,name,rate,you){const sp=document.createElement('span');const d=document.createElement('span');d.className='dot '+(color===1?'b':'w');
+  const b=document.createElement('b');b.textContent=name;sp.append(d,b);if(rate!=null){const r=document.createElement('span');r.className='r';r.textContent=rate;sp.append(r)}
+  if(you){const y=document.createElement('span');y.className='you';y.textContent='あなた';sp.append(y)}return sp}
+let hiKey='';
+const _renderP=render;render=function(){_renderP();
+  if(S.over)rateGame();
+  // 自分の名前とレートを部屋に知らせる（席に着いている時だけ）
+  if(S.mode==='net'&&NET.code&&NET.live&&!NET.watch&&colorOf(NET.me)>0){const k=NET.code+'|'+NET.me+'|'+myName()+'|'+Math.round(PROF.rating);if(k!==hiKey&&NET.claimed!==false){hiKey=k;post({t:'hi'})}}
+  const pl=$('players'),pb=$('plB'),pw=$('plW');pb.innerHTML='';pw.innerHTML='';
+  if(S.mode==='net'&&NET.host){const hc=colorOf(NET.host),bId=hc===1?NET.host:NET.guest,wId=hc===1?NET.guest:NET.host;
+    const nm=id=>id?(NM[id]||{name:'…',rate:null}):{name:'待機中',rate:null};const bn=nm(bId),wn=nm(wId);
+    pb.append(plSpan(1,bn.name,bn.rate,bId&&bId===NET.me));pw.append(plSpan(2,wn.name,wn.rate,wId&&wId===NET.me));pl.hidden=false}
+  else if(CPU_RATE[S.mode]){pb.append(plSpan(1,myName(),Math.round(PROF.rating),true));pw.append(plSpan(2,MODE_NAME(S.mode),CPU_RATE[S.mode],false));pl.hidden=false}
+  else pl.hidden=true;
+  const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?'1手戻しを使ったのでレートは変わりません':'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
+  $('meName').textContent=myName();$('meRate').textContent=Math.round(PROF.rating)};
+function renderProf(){$('nameIn').value=PROF.name;$('profRate').textContent=Math.round(PROF.rating);
+  $('profRec').textContent=PROF.games?PROF.games+'局　'+PROF.w+'勝 '+PROF.l+'敗'+(PROF.d?' '+PROF.d+'分':''):'まだレート対局がありません'}
+$('meBtn').addEventListener('click',()=>{renderProf();$('nameMsg').textContent=''});
+$('nameSave').addEventListener('click',()=>{PROF.name=cleanName($('nameIn').value);saveProf();renderProf();$('nameMsg').textContent='保存しました：'+myName();render()});
+$('nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('nameSave').click()});
+addEventListener('popstate',()=>{if(CUR==='profile')renderProf()});
+render();
 </script>
 </body>
 </html>
