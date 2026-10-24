@@ -460,7 +460,9 @@ var BocchEngine=(function(){
   var TB=20,TS=1<<TB,TM=TS-1;
   var tK=new Int32Array(TS),tV=new Int32Array(TS),tD=new Int8Array(TS),tF=new Int8Array(TS),tM=new Int16Array(TS);
   // 評価の重み（自動調整で上書き可）
-  var W={row:[0,23.6,34.5,23.9,4.3,0],arr:234,mob:0.6,th:25.4,dth:23.7,frz:27.7,tempo:17.1};
+  var W={pst:[[27.7, 2.2, -32.4], [34.9, 32.5, -18.8], [51.5, 41.9, -1.1], [29.3, 43.2, 12.1], [0.7, -3.5, 23.8]],arr:249,mob:0.81,th:38.1,dth:32.4,frz:28,tempo:20.2};
+  // マスごとの価値（段×中央からの距離）。黒用・白用に展開
+  var PSQ=[null,new Float64Array(36),new Float64Array(36)];function buildPsq(){for(var c=1;c<=2;c++)for(var i=0;i<36;i++){var r=i/6|0,adv=c===1?5-r:r,col=i%6,cd=col<3?2-col:col-3;PSQ[c][i]=adv<5?W.pst[adv][cd]:0}}buildPsq();
   // 状態
   var b=new Int8Array(SQ),cnt=new Int8Array(SQ),h1=0,h2=0,side=1,arr=new Int8Array(3),pcs=[null,new Int8Array(6),new Int8Array(6)],pn=new Int8Array(3),pidx=new Int8Array(SQ),srt=new Int8Array(6);
   var gr1=new Int32Array(0),gr2=new Int32Array(0);
@@ -497,8 +499,8 @@ var BocchEngine=(function(){
     F[5]=arrivedCnt(p)-arrivedCnt(o);
     var mp=countMoves(p),mo=countMoves(o);F[6]=((mp/1000|0)-(mo/1000|0));F[7]=mp%1000;F[9]=mo%1000;F[10]=1;F[11]=winInOne(p)?1:0;
     return F}
-  function evaluate(p){var o=3-p,s=0,R=W.row;
-    for(var c=1;c<=2;c++){var P=pcs[c],m=pn[c],sg=c===p?1:-1;for(var q=0;q<m;q++){var i=P[q],r=i/6|0,adv=c===1?5-r:r;s+=sg*((adv<5?R[adv]:0)-(cnt[i]?0:W.frz))}}
+  function evaluate(p){var o=3-p,s=0;
+    for(var c=1;c<=2;c++){var P=pcs[c],m=pn[c],sg=c===p?1:-1,T=PSQ[c];for(var q=0;q<m;q++){var i=P[q];s+=sg*(T[i]-(cnt[i]?0:W.frz))}}
     var ap=arrivedCnt(p),ao=arrivedCnt(o);s+=(ap-ao)*W.arr;
     var mp=countMoves(p),mo=countMoves(o);
     s+=((mp/1000|0)-(mo/1000|0))*W.mob+(mp%1000)*W.th-(mo%1000)*W.dth+W.tempo;
@@ -589,7 +591,7 @@ var BocchEngine=(function(){
     for(var z2=done.length-1;z2>=0;z2--)unmake(done[z2]/36|0,done[z2]%36);
     return{move:[bestMove/36|0,bestMove%36],score:bestScore,depth:depthDone,nodes:nodes,ms:Date.now()-t0,pv:pv}}
 
-  return{think:think,W:W,feats:function(arr,p){load(arr,p);return feats(p)},
+  return{think:think,W:W,buildPsq:buildPsq,feats:function(arr,p){load(arr,p);return feats(p)},
     evalOf:function(arr,p){load(arr,p);return evaluate(p)}};
 })();
 if(typeof module!=='undefined')module.exports=BocchEngine;
