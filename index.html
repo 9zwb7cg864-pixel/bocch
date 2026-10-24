@@ -44,17 +44,12 @@ header p{margin:0;color:var(--sub);font-family:var(--f-disp);font-size:14px;lett
 .stone.b{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%);color:#e4e5e6}
 .stone.w{background:radial-gradient(circle at 34% 28%,#ffffff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c}
 .stone.zero{opacity:.45}
-/* 石のスキン（自分の石だけ・この端末だけ） */
-.stone.my.sk-sakura,.skin-sw .sk-sakura{background:radial-gradient(circle at 34% 28%,#ffe6f0 0%,#f2a0bf 40%,#c25d86 78%);color:#4a1428}
-.stone.my.sk-hisui,.skin-sw .sk-hisui{background:radial-gradient(circle at 34% 28%,#d2f5e2 0%,#4fae80 40%,#1b5e41 78%);color:#fff}
-.stone.my.sk-ruri,.skin-sw .sk-ruri{background:radial-gradient(circle at 34% 28%,#a9c9ff 0%,#2f62c8 40%,#122868 78%);color:#fff}
-.stone.my.sk-kin,.skin-sw .sk-kin{background:radial-gradient(circle at 34% 28%,#fff6cf 0%,#e3b44c 40%,#8a6114 78%);color:#3b2a05}
-.stone.my.sk-beni,.skin-sw .sk-beni{background:radial-gradient(circle at 34% 28%,#ffa49c 0%,#d23a32 40%,#701210 78%);color:#fff}
-.stone.my.sk-kohaku,.skin-sw .sk-kohaku{background:radial-gradient(circle at 34% 28%,#ffe6b5 0%,#e38f2f 42%,#7f420b 80%);color:#fff}
-.stone.my.sk-fuji,.skin-sw .sk-fuji{background:radial-gradient(circle at 34% 28%,#eadcff 0%,#9d74d8 40%,#4f2d86 78%);color:#fff}
-.stone.my.sk-yozora,.skin-sw .sk-yozora{background:radial-gradient(circle at 70% 30%,#fff 0 3%,transparent 5%),radial-gradient(circle at 28% 66%,#fff 0 2.5%,transparent 4.5%),radial-gradient(circle at 62% 74%,#bfe3ff 0 2%,transparent 4%),radial-gradient(circle at 46% 46%,#fff8 0 1.5%,transparent 3%),radial-gradient(circle at 34% 28%,#3e5194 0%,#16204a 45%,#060a1c 80%);color:#fff}
-.stone.my.sk-niji,.skin-sw .sk-niji{background:radial-gradient(circle at 34% 28%,#fffc 0%,#fff0 45%),conic-gradient(from 200deg,#ff6b6b,#ffb84d,#ffe14d,#5fd17a,#4d9bff,#a774ff,#ff6b9d,#ff6b6b);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.55)}
-.stone.my.sk-hagane,.skin-sw .sk-hagane{background:linear-gradient(140deg,#f6f8fa 0%,#a3aab1 42%,#eef1f3 54%,#5f676f 100%);color:#16181a}
+/* 石のスキン（対戦相手・観戦者にも見える） */
+.stone.sk-ruri{background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.6) 0 7%,rgba(255,255,255,0) 26%),radial-gradient(circle at 30% 62%,#f2cf74 0 2.5%,transparent 4%),radial-gradient(circle at 64% 40%,#f2cf74 0 2%,transparent 3.5%),radial-gradient(circle at 58% 76%,#e9c46a 0 1.8%,transparent 3%),radial-gradient(circle at 34% 28%,#4b6fe0 0%,#1d3486 45%,#0b1744 100%);color:#fff}
+.stone.sk-pool{--pc:#8a8f96;background:radial-gradient(ellipse 26% 18% at 34% 24%,rgba(255,255,255,.85) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 36% 30%,rgba(255,255,255,0) 40%,rgba(0,0,0,.38) 100%),radial-gradient(circle at 50% 50%,#fbfaf4 0 30%,transparent 31.5%),var(--pc);color:#141414;font-family:var(--f-body);font-weight:700}
+.stone.sk-pool.p1{--pc:#f4c51a}.stone.sk-pool.p2{--pc:#1f4fb8}.stone.sk-pool.p3{--pc:#d42a22}
+.stone.sk-pool.p4{background:radial-gradient(ellipse 26% 18% at 34% 24%,rgba(255,255,255,.85) 0 40%,rgba(255,255,255,0) 100%),radial-gradient(circle at 36% 30%,rgba(255,255,255,0) 40%,rgba(0,0,0,.38) 100%),radial-gradient(circle at 50% 50%,#fbfaf4 0 30%,transparent 31.5%),linear-gradient(180deg,#fbfaf4 0 24%,#5b2a8f 24% 76%,#fbfaf4 76%)}
+.stone.sk-pool span{font-size:.78em}
 .skin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px;margin-top:10px}
 .skin-sw{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px 8px;border-radius:12px;border:1px solid var(--line);background:transparent;cursor:pointer;font-size:12.5px;color:inherit;min-width:0}
 .skin-sw .stone{width:42px;height:42px;font-size:20px}
@@ -361,7 +356,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
   </div>
   <div class="card prof" id="skinCard">
     <h3 class="acct-h">石のスキン</h3>
-    <p class="note">自分の石の見た目を変えます。変わるのはこの画面だけで、相手や観戦者には普通の黒・白の石で見えます。</p>
+    <p class="note">自分の石の見た目を変えます。オンライン対戦では、相手と観戦者にもこのスキンで見えます。ビリヤードは、進める距離で玉の色が変わります。</p>
     <div class="skin-grid" id="skinGrid"></div>
   </div>
   <div class="card prof acct" id="acct">
@@ -600,11 +595,14 @@ if(typeof module!=='undefined')module.exports=BocchEngine;
 const N=6, DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]], NEED=2, PREFIX='bocch-game-';
 const $=id=>document.getElementById(id);
 /* 石のスキン：自分の石だけ、この端末の画面でだけ変わる */
-const SKINS=[['std','標準'],['sakura','桜'],['hisui','翡翠'],['ruri','瑠璃'],['kin','金'],['beni','紅'],['kohaku','琥珀'],['fuji','藤'],['yozora','夜空'],['niji','虹'],['hagane','鋼']];
+const SKINS=[['std','標準'],['pool','ビリヤード'],['ruri','瑠璃']];
 let SKIN='std';try{const v=localStorage.getItem('bocch-skin');if(SKINS.some(x=>x[0]===v))SKIN=v}catch(e){}
-const skinCls=()=>SKIN==='std'?'':' my sk-'+SKIN;
+const skinOk=k=>SKINS.some(x=>x[0]===k);
+const skinOf=(k,d)=>!k||k==='std'?'':' sk-'+k+(k==='pool'?' p'+d:'');
+// その色の石を持つ人のスキン（オンラインは各自が知らせたもの、CPU戦は自分の黒だけ）
+function colorSkin(c){if(S.mode==='net'){const id=[NET.host,NET.guest].find(x=>x&&colorOf(x)===c);if(!id)return 'std';if(id===NET.me&&!NET.watch)return SKIN;return (typeof NM!=='undefined'&&NM[id]&&NM[id].skin)||'std'}return S.mode!==0&&c===1?SKIN:'std'}
 function myColor(){if(S.mode==='net')return NET.watch?0:colorOf(NET.me);return S.mode===0?0:1}
-function renderSkins(){$('skinGrid').innerHTML=SKINS.map(([k,n])=>`<button class="skin-sw" data-skin="${k}" aria-pressed="${k===SKIN}"><div class="stone b${k==='std'?'':' sk-'+k}"><span>3</span></div>${n}</button>`).join('')}
+function renderSkins(){$('skinGrid').innerHTML=SKINS.map(([k,n])=>`<button class="skin-sw" data-skin="${k}" aria-pressed="${k===SKIN}"><div class="stone b${skinOf(k,3)}"><span>3</span></div>${n}</button>`).join('')}
 function setSkin(k,push){if(!SKINS.some(x=>x[0]===k))return;SKIN=k;try{localStorage.setItem('bocch-skin',k)}catch(e){}renderSkins();try{render()}catch(e){}try{if(REV.g)renderReview()}catch(e){}if(push&&typeof acctPush==='function')acctPush()}
 renderSkins();$('skinGrid').addEventListener('click',e=>{const b=e.target.closest('.skin-sw');if(b)setSkin(b.dataset.skin,true)});
 const gridEl=$('grid');
@@ -700,13 +698,14 @@ const NAME={1:'黒',2:'白'};
 function render(){
   const b=S.b,targets=S.sel>=0?movesFrom(b,S.sel).map(m=>m[1]):[];
   const nbs=new Set();if(S.sel>=0){const r=S.sel/N|0,c=S.sel%N;for(const[x,y]of DIRS)if(ok(r+x,c+y)&&b[(r+x)*N+c+y])nbs.add((r+x)*N+c+y)}
-  const canAct=human(),mc=myColor(),sk=skinCls();
+  const canAct=human(),skc=[0,colorSkin(1),colorSkin(2)];
+  if(skc[1]!=='std'&&skc[1]===skc[2]){const me=myColor();skc[me?3-me:2]='std'} // 同じスキンどうしは相手を標準に（観戦中は白を標準に）
   for(let i=0;i<N*N;i++){const el=$('c'+i),v=b[i],r=i/N|0,d=v?nbCount(b,i):0;
     let cls='cell';if(r===0||r===N-1)cls+=' goal';if(S.last&&(S.last[0]===i||S.last[1]===i))cls+=' last';
     if(canAct&&v===S.turn)cls+=' mine';if(i===S.sel)cls+=' sel';if(nbs.has(i))cls+=' nb';
     if(targets.includes(i))cls+=' target'+(r===goalRow(S.turn)?' fin':'');el.className=cls;
     el.setAttribute('aria-label',(v?NAME[v]+'の石、射程'+d:'空き')+'、'+(N-r)+'段'+(i%N+1)+'列');
-    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${v===mc?sk:''}"><span>${d}</span></div>`:'';}
+    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${skinOf(skc[v],d)}"><span>${d}</span></div>`:'';}
   const net=S.mode==='net';
   $('board').classList.toggle('flip',net&&colorOf(NET.me)===2);
   $('board').classList.toggle('hideNum',!$('showNum').checked);
@@ -1104,10 +1103,10 @@ function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n
   const p=PV?pvState():REV.pos[i];
   const last=PV?(PV.k>0?PV.line[PV.k-1]:(PV.base>0?g.log[PV.base-1]:null)):(i>0?g.log[i-1]:null),a=REV.an[i];
   const nextM=PV?(PV.k<PV.line.length?PV.line[PV.k]:null):($('rShowBest').checked&&a&&a.m&&i<n?a.m:null);
-  const sk=skinCls();for(let k=0;k<36;k++){const el=$('r'+k),v=p.b[k],r=k/6|0,d=v?nbCount(p.b,k):0;let cls='cell';
+  for(let k=0;k<36;k++){const el=$('r'+k),v=p.b[k],r=k/6|0,d=v?nbCount(p.b,k):0;let cls='cell';
     if(r===0||r===5)cls+=' goal';if(last&&(last[0]===k||last[1]===k))cls+=(PV&&PV.k>0?' pvlast':' last');
     if(nextM&&nextM[0]===k)cls+=' bestf';if(nextM&&nextM[1]===k)cls+=' bestt';el.className=cls;
-    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${v===g.me?sk:''}"><span>${d}</span></div>`:''}
+    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${v===g.me?skinOf(SKIN,d):''}"><span>${d}</span></div>`:''}
   $('rboard').classList.toggle('flip',flip);$('rboard').classList.toggle('hideNum',!$('showNum').checked);$('rboard').classList.toggle('nolab',!$('showLab').checked);
   [...$('rlabTop').children].forEach((e,k)=>e.textContent=String(flip?6-k:k+1));
   [...$('rlabLeft').children].forEach((e,k)=>e.textContent='abcdef'[flip?5-k:k]);
@@ -1227,10 +1226,10 @@ let PROF=loadProf();
 const myName=()=>PROF.name||'名無し';
 function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF))}catch(e){}}
 
-const NM={};
-const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi')){o.name=myName();o.rate=Math.round(PROF.rating)}return _post(o)};
+var NM={};
+const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi')){o.name=myName();o.rate=Math.round(PROF.rating);o.skin=SKIN}return _post(o)};
 const _reduce=reduce;reduce=function(m){
-  if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500}}
+  if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500,skin:skinOk(m.skin)?m.skin:'std'}}
   return _reduce(m)};
 function oppIdOf(){return NET.me===NET.host?NET.guest:NET.host}
 function rateGame(){
@@ -1254,7 +1253,7 @@ let hiKey='';
 const _renderP=render;render=function(){_renderP();
   if(S.over)rateGame();
   // 自分の名前とレートを部屋に知らせる（席に着いている時だけ）
-  if(S.mode==='net'&&NET.code&&NET.live&&!NET.watch&&colorOf(NET.me)>0){const k=NET.code+'|'+NET.me+'|'+myName()+'|'+Math.round(PROF.rating);if(k!==hiKey&&NET.claimed!==false){hiKey=k;post({t:'hi'})}}
+  if(S.mode==='net'&&NET.code&&NET.live&&!NET.watch&&colorOf(NET.me)>0){const k=NET.code+'|'+NET.me+'|'+myName()+'|'+Math.round(PROF.rating)+'|'+SKIN;if(k!==hiKey&&NET.claimed!==false){hiKey=k;post({t:'hi'})}}
   // 相手は盤の左上、自分は盤の右下（観戦中は手前側の黒を右下）
   const pt=$('plTop'),pbt=$('plBot');pt.innerHTML='';pbt.innerHTML='';
   if(S.mode==='net'&&NET.host){const hc=colorOf(NET.host),bId=hc===1?NET.host:NET.guest,wId=hc===1?NET.guest:NET.host;
@@ -1335,7 +1334,7 @@ async function acctPull(){if(!FB.user||!FB.user.emailVerified)return;FB.syncing=
   try{const ref=FB.db.collection('users').doc(FB.user.uid);const snap=await ref.get();
     if(snap.exists){const d=snap.data();
       // 対局数が多い方を正とする（この端末で登録前に遊んだ分を失わないため）
-      if((d.games|0)>=(PROF.games|0)){PROF.name=d.name||PROF.name;PROF.rating=Number(d.rating)||PROF.rating;PROF.games=d.games|0;PROF.w=d.w|0;PROF.l=d.l|0;PROF.d=d.d|0;PROF.rated=Array.from(new Set([...(PROF.rated||[]),...(d.rated||[])])).slice(-200);_saveProfLocal();if(d.skin)setSkin(d.skin,false)}
+      if((d.games|0)>=(PROF.games|0)){PROF.name=d.name||PROF.name;PROF.rating=Number(d.rating)||PROF.rating;PROF.games=d.games|0;PROF.w=d.w|0;PROF.l=d.l|0;PROF.d=d.d|0;PROF.rated=Array.from(new Set([...(PROF.rated||[]),...(d.rated||[])])).slice(-200);_saveProfLocal();if(skinOk(d.skin))setSkin(d.skin,false)}
       else await ref.set(profData())}
     else await ref.set(profData());
     $('acctSync').textContent='名前・レート・戦績をアカウントに保存しています';if(typeof renderProf==='function')renderProf();render()}
