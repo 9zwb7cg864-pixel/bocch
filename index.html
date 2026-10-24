@@ -153,10 +153,21 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .hist-ctl{justify-content:center;margin-top:22px}
 .rev-head{text-align:center;color:var(--sub);font-size:13px;margin:-6px 0 10px}
 .rev-board{width:min(100%,calc(100dvh - 420px));min-width:min(100%,240px)}
-.rev-info{text-align:center;margin:10px 0 4px;min-height:5.6em}
+.rev-info{text-align:center;margin:10px 0 4px;min-height:9em}
 .rev-move{font-family:var(--f-disp);font-weight:700;font-size:19px;margin:0;letter-spacing:.06em}
 .rev-note{margin:2px 0 0;font-size:13.5px;color:#b9b2a2;line-height:1.6}
 .rev-note b{color:var(--gold);font-weight:500}
+.rev-pos{display:block}
+.why{margin:8px auto 0;max-width:440px;text-align:left;background:var(--soft);border:1px solid var(--line);border-radius:2px;padding:8px 12px}
+.why-h{font-size:13.5px;color:var(--fg);margin-bottom:2px}.why-h b{color:var(--gold);font-weight:500}
+.why-s{display:block;font-size:11.5px;color:var(--mute);letter-spacing:.08em;margin-top:6px}
+.why-l{margin:2px 0 0;padding-left:1.2em;font-size:13px;line-height:1.6}
+.why-l li.g{color:#cfe3c7}.why-l li.n{color:#e6b3a8}
+.why-none{margin:4px 0 0;font-size:12.5px;color:var(--sub)}
+.why-pv{margin-top:6px;font-size:12.5px;color:var(--sub);line-height:1.7}.why-pv .why-s{display:inline;margin:0 4px 0 0}
+.why-pv .pb{color:var(--fg)}.why-pv .pw{color:#cfc9ba}
+.why-next{border-color:var(--gold-line)}
+
 .tag-bad{color:#e08c7c}.tag-dub{color:#d9b46a}.tag-best{color:#9fc79a}
 .rev-graph{margin:6px 0 10px}
 .rev-graph svg{display:block;width:100%;height:84px;background:var(--soft);border:1px solid var(--line);border-radius:2px;cursor:pointer;touch-action:none}
@@ -185,7 +196,8 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .prof-rate{display:flex;align-items:baseline;justify-content:space-between;border-top:1px solid var(--line);padding-top:14px}
 .prof-rate b{font-family:var(--f-latin);font-size:34px;color:var(--gold);font-weight:600}
 .prof-rec{color:var(--sub);font-size:13px;margin:4px 0 14px}
-.players{display:flex;justify-content:center;align-items:center;gap:12px;margin:-6px 0 10px;font-size:13.5px;color:var(--sub);flex-wrap:wrap}
+.players{display:flex;justify-content:flex-start;align-items:center;gap:12px;font-size:13.5px;color:var(--sub);width:min(100%,calc(100dvh - 330px));min-width:min(100%,260px);margin:-6px auto 8px;min-height:20px}
+.players.bot{justify-content:flex-end;margin:8px auto 0}
 .players b{color:var(--fg);font-weight:500}.players .r{color:var(--gold);font-family:var(--f-latin);margin-left:4px}
 .players .you{color:var(--gold);font-size:11px;margin-left:4px}
 .players .pl-vs{color:var(--mute);font-size:12px}
@@ -338,8 +350,9 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <!-- 対局 -->
 <section class="scr" data-scr="game" hidden>
   <div class="topbar"><button class="back" id="gameBack">‹ ホーム</button><span class="conn" id="conn"><i></i><span id="connTxt"></span></span><button class="back" data-go="rules">ルール</button></div>
-  <div class="players" id="players" hidden><span id="plB"></span><span class="pl-vs">対</span><span id="plW"></span></div>
+  <div class="players top" id="plTop" hidden></div>
   <div class="boardwrap"><div class="board" id="board"><div class="lab lab-top" id="labTop" aria-hidden="true"></div><div class="lab lab-left" id="labLeft" aria-hidden="true"></div><div class="grid" id="grid" role="grid" aria-label="盤"></div></div></div>
+  <div class="players bot" id="plBot" hidden></div>
   <div class="gameinfo">
     <div class="status" id="status"></div>
     <p class="hint" id="hint"></p>
@@ -499,7 +512,15 @@ var BocchEngine=(function(){
       if(Math.abs(best)>WIN-1000)break;
       if(Date.now()-t0>ms*0.45)break; // 次の深さは間に合わない見込み
     }
-    return{move:[bestMove/36|0,bestMove%36],score:bestScore,depth:depthDone,nodes:nodes,ms:Date.now()-t0}}
+    // 読み筋（置換表をたどる）
+    var pv=[],mv=bestMove,done=[],buf=new Int16Array(200);
+    for(var q2=0;q2<10;q2++){var ff=mv/36|0,tt=mv%36,nn=gen(side,buf),okm=false;
+      for(var z=0;z<nn;z++)if(buf[z]===mv){okm=true;break}
+      if(!okm)break;
+      var won=false;make(ff,tt);done.push(mv);pv.push([ff,tt]);if(arrivedCnt(3-side)>=2)won=true;
+      if(won)break;var ix2=ttProbe();if(ix2<0)break;mv=tM[ix2]}
+    for(var z2=done.length-1;z2>=0;z2--)unmake(done[z2]/36|0,done[z2]%36);
+    return{move:[bestMove/36|0,bestMove%36],score:bestScore,depth:depthDone,nodes:nodes,ms:Date.now()-t0,pv:pv}}
 
   return{think:think,W:W,feats:function(arr,p){load(arr,p);return feats(p)},
     evalOf:function(arr,p){load(arr,p);return evaluate(p)}};
@@ -649,6 +670,7 @@ function renderStatus(){
 /* 友だちと対戦（中継サーバー経由。対局の記録を全員が同じ順に読んで盤を再現する） */
 const NET={code:null,me:null,es:null,seen:new Set(),host:null,guest:null,game:0,over:null,live:false,sending:false,claimed:false,timer:null,watch:false};
 const TOPIC=c=>'bocch-v1-'+c, RELAY='https://ntfy.sh/';
+const LIMIT_MSG='通信の上限に達しました（同じWi-Fiで1日に送れる回数に上限があります）。少し時間をおくか、別の回線（モバイル通信など）で試してください。';
 function netMsg(t,err){const m=$('netMsg');m.textContent=t||'';m.hidden=!t;m.classList.toggle('err',!!err)}
 function newCode(){const a='abcdefghjkmnpqrstuvwxyz23456789';let s='';const r=crypto.getRandomValues(new Uint32Array(6));for(const x of r)s+=a[x%a.length];return s}
 function inviteLink(code){const u=new URL(location.href);u.search='?room='+code;u.hash='';return u.toString()}
@@ -661,7 +683,7 @@ async function post(obj){
   for(let i=0;i<3;i++){
     try{const r=await fetch(RELAY+TOPIC(NET.code),{method:'POST',body:JSON.stringify(obj)});
       if(r.ok)return true;
-      if(r.status===429){netMsg('送信が混み合っています。数秒待ってからもう一度指してください。',true);return false}}catch(e){}
+      if(r.status===429){netMsg(LIMIT_MSG,true);return false}}catch(e){}
     await new Promise(r=>setTimeout(r,800))}
   netMsg('送れませんでした。ネットにつながっているか確かめてください。',true);return false}
 function closeNet(){if(NET.es){NET.es.close()}clearTimeout(NET.timer);
@@ -768,7 +790,8 @@ show(NET.code?'game':'home',true);render();
 const LOBBY=RELAY+'bocch-v1-lobby';
 const MATCH={on:false,id:null,es:null,seen:new Set(),seeks:new Map(),takes:new Map(),cancels:new Set(),mine:null,taking:null,decided:false,timer:null,hb:null,tick:null,t0:0};
 function lobbyId(){return MATCH.id||(MATCH.id=newCode()+newCode())}
-async function lobbyPost(o){o.from=lobbyId();try{const r=await fetch(LOBBY,{method:'POST',body:JSON.stringify(o)});return r.ok}catch(e){return false}}
+async function lobbyPost(o){o.from=lobbyId();try{const r=await fetch(LOBBY,{method:'POST',body:JSON.stringify(o)});
+  if(r.status===429&&MATCH.on){$('matchTitle').textContent='いまは対戦相手を探せません';$('matchMsg').textContent=LIMIT_MSG}return r.ok}catch(e){return false}}
 function stopMatch(){MATCH.on=false;if(MATCH.es)MATCH.es.close();MATCH.es=null;clearTimeout(MATCH.timer);clearInterval(MATCH.hb);clearInterval(MATCH.tick)}
 function startMatch(){
   stopMatch();if(S.mode==='net')leave();
@@ -777,7 +800,7 @@ function startMatch(){
   show('match');
   MATCH.tick=setInterval(()=>{const t=Math.floor((Date.now()-MATCH.t0)/1000);$('matchTime').textContent=Math.floor(t/60)+':'+String(t%60).padStart(2,'0');
     if(t===45)$('matchMsg').textContent='まだ見つかりません。このまま待つか、「友だちと対戦」でリンクを送ってみてください。'},1000);
-  const es=new EventSource(LOBBY+'/sse?since=90s');MATCH.es=es;
+  const es=new EventSource(LOBBY+'/sse?since=140s');MATCH.es=es;
   es.onopen=()=>{if(!MATCH.decided){clearTimeout(MATCH.timer);MATCH.timer=setTimeout(()=>{MATCH.decided=true;consider();if(MATCH.on&&!MATCH.mine&&!MATCH.taking)postSeek()},1600)}};
   es.onerror=()=>{if(MATCH.on)$('matchMsg').textContent='通信を再接続しています…'};
   es.onmessage=e=>{let d,m;try{d=JSON.parse(e.data)}catch(x){return}
@@ -785,7 +808,7 @@ function startMatch(){
     try{m=JSON.parse(d.message)}catch(x){return}if(!m||typeof m!=='object'||typeof m.room!=='string')return;
     m.time=d.time||Date.now()/1000;onLobby(m)};
 }
-function liveSeek(s){return s.from!==MATCH.id&&Date.now()/1000-s.time<75&&!MATCH.takes.has(s.room)&&!MATCH.cancels.has(s.room)}
+function liveSeek(s){return s.from!==MATCH.id&&Date.now()/1000-s.time<140&&!MATCH.takes.has(s.room)&&!MATCH.cancels.has(s.room)}
 function onLobby(m){
   if(m.t==='seek')MATCH.seeks.set(m.room,m);
   else if(m.t==='cancel')MATCH.cancels.add(m.room);
@@ -802,7 +825,7 @@ function consider(){
 }
 function postSeek(){
   const code=newCode();MATCH.mine=code;openRoom(code);show('match',true);
-  lobbyPost({t:'seek',room:code});clearInterval(MATCH.hb);MATCH.hb=setInterval(()=>{if(MATCH.on&&MATCH.mine===code)lobbyPost({t:'seek',room:code})},30000);
+  lobbyPost({t:'seek',room:code});clearInterval(MATCH.hb);MATCH.hb=setInterval(()=>{if(MATCH.on&&MATCH.mine===code)lobbyPost({t:'seek',room:code})},60000);
 }
 async function take(room){
   MATCH.taking=room;
@@ -885,6 +908,49 @@ function renderHistory(){const g=loadGames(),box=$('histList');box.innerHTML='';
     b.append(r,m,bd);b.addEventListener('click',()=>openReview(x.id));box.appendChild(b)})}
 $('histClear').addEventListener('click',()=>{const b=$('histClear');if(b.dataset.arm){storeGames([]);delete b.dataset.arm;b.textContent='履歴をすべて消す';renderHistory()}else{b.dataset.arm='1';b.textContent='もう一度押すと消えます';setTimeout(()=>{delete b.dataset.arm;b.textContent='履歴をすべて消す'},3000)}});
 
+
+/* 感想戦の「なぜその手か」：盤面の具体的な変化を数えて説明する */
+const mvTxt=m=>sqName(m[0])+'→'+sqName(m[1]);
+function winMoves(b,p){const out=[];for(const m of allMoves(b,p))if(arrived(apply(b,m),p))out.push(m);return out}
+function frozen(b,p){let n=0;for(let i=0;i<36;i++)if(b[i]===p&&!nbCount(b,i))n++;return n}
+function unstoppable(a,p){ // pの勝ち筋を、相手oがどう指しても消せないか
+  const o=3-p;if(winMoves(a,o).length)return false;const om=allMoves(a,o);if(!om.length)return true;
+  for(const m of om){const a2=apply(a,m);if(!winMoves(a2,p).length)return false}return true}
+function moveFacts(b,p,m){const o=3-p,a=apply(b,m),F=[];const C=p===1?'黒':'白',CO=p===1?'白':'黒';
+  if(arrived(a,p)){F.push({k:'win',good:true,t:'向こう岸に2つそろえて勝ち'});return F}
+  const gr=goalRow(p),tr=m[1]/6|0,fr=m[0]/6|0;
+  if(tr===gr&&fr!==gr)F.push({k:'reach',good:true,t:'向こう岸に1つ目を届かせる（あと1つで勝ち）'});
+  const ow0=winMoves(b,o),ow1=winMoves(a,o);
+  if(ow0.length&&!ow1.length)F.push({k:'block',good:true,t:`相手の勝ち筋（${CO} ${mvTxt(ow0[0])}）を消す`});
+  if(ow1.length)F.push({k:'allow',good:false,t:`相手に次の一手で勝たれる（${CO} ${mvTxt(ow1[0])}）`});
+  const mw0=winMoves(b,p).length,mw1=winMoves(a,p).length;
+  if(mw1&&!ow1.length){if(unstoppable(a,p))F.push({k:'mate',good:true,t:'次に勝つ形を作り、相手はどう受けても防げない'});
+    else if(!mw0||mw1>mw0)F.push({k:'threat',good:true,t:`次に勝てる手を${mw1>1?mw1+'通り':''}用意して相手に受けを強いる`})}
+  const of0=frozen(b,o),of1=frozen(a,o);if(of1>of0)F.push({k:'freeze',good:true,t:`相手の石を${of1-of0}個ひとりぼっちにして動けなくする`});
+  const mf0=frozen(b,p),mf1=frozen(a,p);if(mf1>mf0)F.push({k:'selffreeze',good:false,t:`自分の石が${mf1-mf0}個ひとりぼっちで動けなくなる`});
+  if(of1<of0)F.push({k:'unfreeze',good:false,t:`相手の動けなかった石を${of0-of1}個動けるようにしてしまう`});
+  const om0=allMoves(b,o).length,om1=allMoves(a,o).length;
+  if(om1<=om0-3)F.push({k:'squeeze',good:true,t:`相手の動ける手を ${om0}→${om1} に減らす`});
+  else if(om1>=om0+4)F.push({k:'loosen',good:false,t:`相手の動ける手が ${om0}→${om1} に増える`});
+  const adv=p===1?fr-tr:tr-fr;if(adv>=2)F.push({k:'advance',good:true,t:`石を一気に${adv}段前へ進める`});
+  if(adv<0)F.push({k:'retreat',good:false,t:`石を${-adv}段後ろへ下げる`});
+  const r1=nbCount(a,m[1]);if(r1===0&&!F.some(x=>x.k==='selffreeze'))F.push({k:'lonely',good:false,t:'動かした石がひとりぼっちになる'});
+  return F}
+function factList(F){return '<ul class="why-l">'+F.map(f=>`<li class="${f.good?'g':'n'}">${f.t}</li>`).join('')+'</ul>'}
+function whyCompare(b,p,best,played){const fb=moveFacts(b,p,best),fp=moveFacts(b,p,played);
+  const bk=new Set(fb.map(x=>x.k)),pk=new Set(fp.map(x=>x.k));
+  const gain=fb.filter(x=>x.good&&!pk.has(x.k)),lose=fp.filter(x=>!x.good&&!bk.has(x.k));
+  let h='';
+  if(gain.length)h+='<div class="why-s">最善手なら</div>'+factList(gain.slice(0,3));
+  if(lose.length)h+='<div class="why-s">実際の手（'+mvTxt(played)+'）の問題</div>'+factList(lose.slice(0,3));
+  if(!gain.length&&!lose.length){const ga=fb.filter(x=>x.good);
+    h+=ga.length?'<div class="why-s">最善手の狙い</div>'+factList(ga.slice(0,3)):'';
+    h+='<p class="why-none">見た目の差は小さく、数手先まで読むと差がつきます。下の読み筋を見てください。</p>'}
+  return h}
+function pvTxt(pv,turn){if(!pv||pv.length<2)return '';let t=turn,out=[];
+  for(const m of pv.slice(0,6)){out.push(`<span class="${t===1?'pb':'pw'}">${t===1?'黒':'白'} ${mvTxt(m)}</span>`);t=3-t}
+  return '<div class="why-pv"><span class="why-s">読み筋</span> '+out.join(' → ')+(pv.length>6?' …':'')+'</div>'}
+
 /* 感想戦 */
 const REV={g:null,pos:[],i:0,an:[],job:0};
 const sig=x=>1/(1+Math.exp(-x));
@@ -916,12 +982,12 @@ function nextAnalysis(){const n=REV.g.log.length;let i=-1;
   const w=analysisWorker();
   if(w)w.postMessage(job);else setTimeout(()=>{const r=BocchEngine.think(job.b,job.p,250,job);onAnalysis({job:job.job,i,r})},20)}
 function onAnalysis(d){if(d.job!==REV.job||!REV.g)return;
-  REV.an[d.i]=d.r?{s:d.r.score,m:d.r.move,d:d.r.depth}:{s:0,m:null,d:0};
+  REV.an[d.i]=d.r?{s:d.r.score,m:d.r.move,d:d.r.depth,pv:d.r.pv||null}:{s:0,m:null,d:0};
   {const g=loadGames(),ix=g.findIndex(x=>x.id===REV.g.id);if(ix>=0){g[ix].an=REV.an;storeGames(g)}}
   renderReview();nextAnalysis()}
 function finishAnalysis(){const g=loadGames(),ix=g.findIndex(x=>x.id===REV.g.id);if(ix>=0){g[ix].an=REV.an;storeGames(g)}REV.g.an=REV.an;renderReview()}
 function openReview(id){const g=loadGames().find(x=>x.id===id);if(!g)return;
-  REV.g=g;REV.pos=buildPos(g);REV.an=(g.an&&g.an.length)?g.an.slice():[];REV.job++;
+  REV.g=g;REV.pos=buildPos(g);REV.an=(g.an&&g.an.length)?g.an.map(x=>x&&x.pv!==undefined?x:null):[];REV.job++;
   // 最初の悪手へ飛ぶのは解析後。最初は終局図から
   REV.i=0;show('review');renderReview();if(REV.an.filter(Boolean).length<g.log.length)nextAnalysis()}
 function setRev(i){REV.i=Math.max(0,Math.min(REV.pos.length-1,i));renderReview()}
@@ -945,9 +1011,15 @@ function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,p=REV.pos[i],fl
   let note='';const bp=blackPct(i);
   if(bp!=null){const pct=Math.round(bp*100);note+=i===n?'終局。':'';
     if(i<n)note+=pct>=99?'黒の勝ちが読み切れています。':pct<=1?'白の勝ちが読み切れています。':`形勢　黒 ${pct}%・白 ${100-pct}%`}
-  if(i>0){const pa=REV.an[i-1],mk=markOf(i-1);if(pa&&pa.m&&mk&&mk.k!=='best'&&mk.loss>=.03)note+=`<br>ここは <b>${sqName(pa.m[0])}→${sqName(pa.m[1])}</b> が最善でした（勝率 ${Math.round(mk.loss*100)}% 損）。`}
-  if(i<n&&a&&a.m)note+=`<br>次の${p.turn===1?'黒':'白'}の最善手：<b>${sqName(a.m[0])}→${sqName(a.m[1])}</b>`;
-  if(i<n&&!a)note+='　解析中…';
+  note='<span class="rev-pos">'+note+'</span>';
+  if(i>0){const pa=REV.an[i-1],mk=markOf(i-1),pb=REV.pos[i-1].b,pt=REV.pos[i-1].turn;
+    if(pa&&pa.m&&mk&&mk.k!=='best'&&mk.loss>=.03){
+      note+=`<div class="why"><div class="why-h">ここは <b>${mvTxt(pa.m)}</b> が最善でした（勝率 ${Math.round(mk.loss*100)}% 損）</div>`+whyCompare(pb,pt,pa.m,g.log[i-1])+pvTxt(pa.pv,pt)+'</div>'}
+    else if(mk&&mk.k==='best'){const f=moveFacts(pb,pt,g.log[i-1]).filter(x=>x.good);
+      note+=`<div class="why"><div class="why-h">この手は最善</div>`+(f.length?factList(f.slice(0,3)):'<p class="why-none">大きな変化はなく、読みの結果いちばん良い手です。</p>')+pvTxt(pa&&pa.pv,pt)+'</div>'}}
+  if(i<n&&a&&a.m){const f=moveFacts(p.b,p.turn,a.m).filter(x=>x.good);
+    note+=`<div class="why why-next"><div class="why-h">次の${p.turn===1?'黒':'白'}の最善手：<b>${mvTxt(a.m)}</b></div>`+(f.length?factList(f.slice(0,3)):'<p class="why-none">はっきりした決め手はなく、読み比べでいちばん良い手です。</p>')+pvTxt(a.pv,p.turn)+'</div>'}
+  if(i<n&&!a)note+='<span class="rev-pos">　解析中…</span>';
   nt.innerHTML=note;
   const done=REV.an.filter(Boolean).length;$('revProg').textContent=done<n?`解析中 ${done}/${n}`:'解析済み';
   drawGraph();
@@ -982,24 +1054,25 @@ const LIVE=RELAY+'bocch-v1-live';
 const LV={es:null,rooms:new Map(),tick:null,seen:new Set()};
 function livePost(o){try{fetch(LIVE,{method:'POST',body:JSON.stringify(o)})}catch(e){}}
 let liveLast='';
+// 送信回数を節約するため、知らせは「1局につき1回・部屋を作った人だけ」。
 function liveBeat(force){
-  if(S.mode!=='net'||!NET.code||!NET.host||!NET.guest||NET.watch||colorOf(NET.me)<=0)return;
-  const k=NET.code+':'+NET.game+':'+(S.over?'end':'live'+S.ply);
-  if(S.over){if(liveLast!==k){liveLast=k;livePost({t:'end',room:NET.code,g:NET.game})}return}
-  if(force||liveLast!==k){liveLast=k;livePost({t:'live',room:NET.code,g:NET.game,ply:S.ply})}}
-setInterval(()=>liveBeat(true),25000);
+  if(S.mode!=='net'||!NET.code||!NET.host||!NET.guest||NET.watch||NET.me!==NET.host||S.over)return;
+  const k=NET.code+':'+NET.game;
+  if(liveLast!==k){liveLast=k;livePost({t:'live',room:NET.code,g:NET.game,ply:S.ply})}}
 const _renderL=render;render=function(){_renderL();liveBeat(false);$('leave').textContent=NET.watch?'観戦をやめる':'対戦をやめる';if(NET.watch&&S.mode==='net')$('connTxt').textContent='観戦中・部屋 '+NET.code};
-addEventListener('pagehide',()=>{if(S.mode==='net'&&NET.code&&NET.guest&&!NET.watch&&colorOf(NET.me)>0&&!S.over){try{fetch(LIVE,{method:'POST',keepalive:true,body:JSON.stringify({t:'end',room:NET.code,g:NET.game})})}catch(e){}}});
 // 一覧は「ランダム対戦で組まれた部屋」と「対局中の知らせが届いた部屋」を集め、
 // 各部屋の記録を直接のぞいて最近（3分以内）指し手があるものだけ出す。古い版のページで対局中の部屋も拾える。
 async function pollTopic(tp,since){try{const r=await fetch(RELAY+tp+'/json?poll=1&since='+since);if(!r.ok)return[];
   return (await r.text()).trim().split('\n').filter(Boolean).map(x=>{try{return JSON.parse(x)}catch(e){return null}}).filter(x=>x&&x.event==='message')}catch(e){return[]}}
-async function scanRooms(){const cand=new Set();
-  const [lob,liv]=await Promise.all([pollTopic('bocch-v1-lobby','3h'),pollTopic('bocch-v1-live','1h')]);
+const LVDEAD=new Map();
+async function scanRooms(){const seenAt=new Map();
+  const [lob,liv]=await Promise.all([pollTopic('bocch-v1-lobby','2h'),pollTopic('bocch-v1-live','2h')]);
   for(const x of [...lob,...liv]){let m;try{m=JSON.parse(x.message)}catch(e){continue}
-    if(m&&typeof m.room==='string'&&/^[a-z0-9]{6}$/.test(m.room)&&(m.t==='take'||m.t==='live'))cand.add(m.room)}
+    if(m&&typeof m.room==='string'&&/^[a-z0-9]{6}$/.test(m.room)&&(m.t==='take'||m.t==='live'))seenAt.set(m.room,Math.max(seenAt.get(m.room)||0,x.time))}
   const now=Date.now()/1000;
-  await Promise.all([...cand].map(async room=>{const L=await pollTopic(TOPIC(room),'15m');if(!L.length){LV.rooms.delete(room);return}
+  // 一度「終わっている」と分かった部屋は3分間のぞかない。のぞくのは新しい順に最大10部屋
+  const cand=[...seenAt.entries()].filter(([r,t])=>!(LVDEAD.get(r)>now-180&&LVDEAD.get(r)>t)).sort((a,b)=>b[1]-a[1]).slice(0,10).map(x=>x[0]);
+  await Promise.all(cand.map(async room=>{const L=await pollTopic(TOPIC(room),'15m');if(!L.length){LV.rooms.delete(room);LVDEAD.set(room,now);return}
     let last=0,ply=0,g=0,ended=false,host=null,guest=null;const nms={};
     for(const x of L){let m;try{m=JSON.parse(x.message)}catch(e){continue}last=Math.max(last,x.time);
       if(m.from&&m.name!=null)nms[m.from]=String(m.name).replace(/[\u0000-\u001f\u007f<>]/g,'').trim().slice(0,12)||'名無し';
@@ -1007,10 +1080,10 @@ async function scanRooms(){const cand=new Set();
       if(m.t==='move'){if((m.g|0)>g){g=m.g|0;ply=0}if((m.g|0)===g)ply=Math.max(ply,(m.ply|0)+1);ended=false}
       if(m.t==='rematch'){g=Math.max(g,m.g|0);ply=0;ended=false}
       if(m.t==='resign')ended=true}
-    if(ended||now-last>180)LV.rooms.delete(room);else LV.rooms.set(room,{at:last,ply,g,names:[nms[host]||(host?'名無し':''),nms[guest]||(guest?'名無し':'')].filter(Boolean)})}));
+    if(ended||now-last>180){LV.rooms.delete(room);LVDEAD.set(room,now)}else LV.rooms.set(room,{at:last,ply,g,names:[nms[host]||(host?'名無し':''),nms[guest]||(guest?'名無し':'')].filter(Boolean)})}));
   $('watchSt').textContent='';renderWatch()}
 function startWatchList(){stopWatchList();LV.rooms=new Map();$('watchSt').textContent='探しています…';renderWatch();
-  LV.on=true;scanRooms();LV.tick=setInterval(()=>{if(LV.on)scanRooms()},15000)}
+  LV.on=true;scanRooms();LV.tick=setInterval(()=>{if(LV.on)scanRooms()},30000)}
 function stopWatchList(){LV.on=false;clearInterval(LV.tick)}
 function renderWatch(){const box=$('watchList');box.innerHTML='';
   const list=[...LV.rooms.entries()].sort((a,b)=>b[1].at-a[1].at);
@@ -1059,12 +1132,15 @@ const _renderP=render;render=function(){_renderP();
   if(S.over)rateGame();
   // 自分の名前とレートを部屋に知らせる（席に着いている時だけ）
   if(S.mode==='net'&&NET.code&&NET.live&&!NET.watch&&colorOf(NET.me)>0){const k=NET.code+'|'+NET.me+'|'+myName()+'|'+Math.round(PROF.rating);if(k!==hiKey&&NET.claimed!==false){hiKey=k;post({t:'hi'})}}
-  const pl=$('players'),pb=$('plB'),pw=$('plW');pb.innerHTML='';pw.innerHTML='';
+  // 相手は盤の左上、自分は盤の右下（観戦中は手前側の黒を右下）
+  const pt=$('plTop'),pbt=$('plBot');pt.innerHTML='';pbt.innerHTML='';
   if(S.mode==='net'&&NET.host){const hc=colorOf(NET.host),bId=hc===1?NET.host:NET.guest,wId=hc===1?NET.guest:NET.host;
     const nm=id=>id?(NM[id]||{name:'…',rate:null}):{name:'待機中',rate:null};const bn=nm(bId),wn=nm(wId);
-    pb.append(plSpan(1,bn.name,bn.rate,bId&&bId===NET.me));pw.append(plSpan(2,wn.name,wn.rate,wId&&wId===NET.me));pl.hidden=false}
-  else if(CPU_RATE[S.mode]){pb.append(plSpan(1,myName(),Math.round(PROF.rating),true));pw.append(plSpan(2,MODE_NAME(S.mode),CPU_RATE[S.mode],false));pl.hidden=false}
-  else pl.hidden=true;
+    const meW=colorOf(NET.me)===2;
+    const bs=plSpan(1,bn.name,bn.rate,bId&&bId===NET.me),ws=plSpan(2,wn.name,wn.rate,wId&&wId===NET.me);
+    if(meW){pbt.append(ws);pt.append(bs)}else{pbt.append(bs);pt.append(ws)}pt.hidden=pbt.hidden=false}
+  else if(CPU_RATE[S.mode]){pbt.append(plSpan(1,myName(),Math.round(PROF.rating),true));pt.append(plSpan(2,MODE_NAME(S.mode),CPU_RATE[S.mode],false));pt.hidden=pbt.hidden=false}
+  else pt.hidden=pbt.hidden=true;
   const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?'1手戻しを使ったのでレートは変わりません':'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
   $('meName').textContent=myName();$('meRate').textContent=Math.round(PROF.rating)};
 function renderProf(){$('nameIn').value=PROF.name;$('profRate').textContent=Math.round(PROF.rating);
