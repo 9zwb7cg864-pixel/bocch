@@ -273,6 +273,8 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .pvbtn{display:inline-block;margin:6px 4px 0;padding:6px 12px;font-size:13px;border-radius:999px;border:1px solid rgba(127,178,224,.6);background:transparent;color:inherit;cursor:pointer}
 .pvctl{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap}
 .pvctl button{padding:7px 12px;font-size:13px;border-radius:8px;border:1px solid rgba(236,230,216,.25);background:transparent;color:inherit;cursor:pointer}
+.pv-hint{font-size:12px;color:var(--sub)}
+.rev-board .grid{cursor:pointer}
 .pvctl .pvk{font-family:var(--f-latin);min-width:4.5em;text-align:center;font-size:13px}
 .pvmoves{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-top:8px}
 .pvmoves button{padding:3px 8px;font-size:12px;border-radius:6px;border:1px solid rgba(236,230,216,.18);background:transparent;color:var(--sub);cursor:pointer}
@@ -1416,7 +1418,7 @@ function fmtMove(m,n){return (n+1)+'. '+(n%2?'白':'黒')+' '+sqName(m[0])+'→'
 function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n=g.log.length,PV=REV.pv;
   const p=PV?pvState():REV.pos[i];
   const last=PV?(PV.k>0?PV.line[PV.k-1]:(PV.base>0?g.log[PV.base-1]:null)):(i>0?g.log[i-1]:null),a=REV.an[i];
-  const nextM=PV?(PV.k<PV.line.length?PV.line[PV.k]:null):($('rShowBest').checked&&a&&a.m&&i<n?a.m:null);
+  const nextM=PV?(PV.k<PV.line.length?PV.line[PV.k]:null):($('rShowBest').checked&&a&&a.m&&i<n&&!revBadAlt()?a.m:null);
   for(let k=0;k<36;k++){const el=$('r'+k),v=p.b[k],r=k/6|0,d=v?nbCount(p.b,k):0;let cls='cell';
     if(r===0||r===5)cls+=' goal';if(last&&(last[0]===k||last[1]===k))cls+=(PV&&PV.k>0?' pvlast':' last');
     if(nextM&&nextM[0]===k)cls+=' bestf';if(nextM&&nextM[1]===k)cls+=' bestt';el.className=cls;
@@ -1441,13 +1443,13 @@ function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n
     v.line.forEach((m,k)=>{mv2+=`<button data-pvk="${k+1}" class="${k+1===v.k?'cur':''}">${k+1}. ${side(k%2?3-tb:tb)} ${mvTxt(m)}</button>`});
     note+=`<div class="pvbox"><div class="pv-h">AIの読み筋　${v.base}手目の局面から</div>
       <div class="pvctl"><button data-act="pvprev">◀ 戻る</button><span class="pvk">${v.k} / ${v.line.length}</span><button data-act="pvnext">進む ▶</button>
-      <button data-act="pvauto">${v.auto?'一時停止':'自動再生'}</button><button data-act="pvclose">✕ 閉じる</button></div>
+      <button data-act="pvclose" class="primary">本筋に戻る</button></div><div class="pv-hint" style="text-align:center;margin-top:6px">盤をタップすると、次の最善手へ進みます</div>
       <div class="pvmoves">${mv2}</div></div>`}
   else{
     if(i>0){const pa=REV.an[i-1],mk=markOf(i-1),pt=REV.pos[i-1].turn;
       if(pa&&pa.m&&mk&&mk.k!=='best'&&mk.loss>=.03)
-        note+=`<div class="best-line">ここは <b>${mvTxt(pa.m)}</b> が最善でした（勝率 ${Math.round(mk.loss*100)}% 損）`+(pa.pv&&pa.pv.length?`<br><button class="pvbtn" data-act="pvA">▶ 最善手からの読み筋を再生</button>`:'')+'</div>'}
-    if(i<n&&a&&a.m)note+=`<div class="best-line">次の${side(p.turn)}の最善手：<b>${mvTxt(a.m)}</b>`+(a.pv&&a.pv.length?`<br><button class="pvbtn" data-act="pvB">▶ 読み筋を再生</button>`:'')+'</div>'}
+        note+=`<div class="best-line">ここは <b>${mvTxt(pa.m)}</b> が最善でした（勝率 ${Math.round(mk.loss*100)}% 損）`+(pa.pv&&pa.pv.length?'<br><span class="pv-hint">盤をタップすると、この最善手から読み筋が進みます</span>':'')+'</div>'}
+    if(i<n&&a&&a.m)note+=`<div class="best-line">次の${side(p.turn)}の最善手：<b>${mvTxt(a.m)}</b>`+(a.pv&&a.pv.length&&!revBadAlt()?'<br><span class="pv-hint">盤をタップすると、最善の読み筋が進みます</span>':'')+'</div>'}
   if(i<n&&!a)note+='<span class="rev-pos">　解析中…</span>';
   nt.innerHTML=note;
   const done=REV.an.filter(Boolean).length;$('revProg').textContent=done<n?`解析中 ${done}/${n}`:'解析済み';
@@ -1481,6 +1483,15 @@ $('revNote').addEventListener('click',e=>{const b=e.target.closest('button');if(
   else if(act==='pvB'){const a=REV.an[REV.i];if(a)pvOpen(REV.i,a.pv)}
   else if(act==='pvprev'){pvAuto(false);pvStep(-1)}else if(act==='pvnext'){pvAuto(false);pvStep(1)}
   else if(act==='pvauto'){pvAuto(!REV.pv.auto);renderReview()}else if(act==='pvclose')pvClose()});
+/* 盤をタップして最善の読み筋を進める。悪手・疑問手の局面では、その手の代わりの最善手から進む */
+function revBadAlt(){const i=REV.i;if(i<1)return null;const pa=REV.an[i-1],mk=markOf(i-1);if(pa&&pa.pv&&pa.pv.length&&mk&&(mk.k==='bad'||mk.k==='dub'))return pa;return null}
+function revWon(b,p){let c=0;for(let k=0;k<6;k++)if(b[(p===1?0:30)+k]===p)c++;return c>=2}
+function pvExtend(){const v=REV.pv;if(!v)return false;const st=pvState();const prev=3-st.turn;if(v.k>0&&revWon(st.b,prev))return false;
+  let r=null;try{r=BocchEngine.think(st.b.slice(),st.turn,350,{})}catch(e){}if(!r||!r.move)return false;v.line=v.line.slice(0,v.k).concat([r.move]);return true}
+$('rgrid').addEventListener('click',()=>{if(CUR!=='review'||!REV.g)return;
+  if(!REV.pv){const alt=revBadAlt();if(alt){pvOpen(REV.i-1,alt.pv.slice());REV.pv.k=1;renderReview();return}
+    const a=REV.an[REV.i];if(REV.i<REV.g.log.length&&a&&a.m){pvOpen(REV.i,(a.pv&&a.pv.length?a.pv:[a.m]).slice());REV.pv.k=1;renderReview()}return}
+  pvAuto(false);const v=REV.pv;if(v.k>=v.line.length){if(!pvExtend())return}v.k++;renderReview()});
 $('reviewNow').addEventListener('click',()=>{saveFinished();const id=currentGameId();if(id)openReview(id)});
 document.querySelector('[data-go="history"]').addEventListener('click',renderHistory);
 addEventListener('popstate',()=>{if(CUR==='history')renderHistory();if(CUR!=='review')REV.job++});
