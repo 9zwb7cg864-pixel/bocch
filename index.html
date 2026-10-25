@@ -215,6 +215,11 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 
 .tag-bad{color:#e08c7c}.tag-dub{color:#d9b46a}.tag-best{color:#9fc79a}
 .rev-graph{margin:6px 0 10px}
+.deep-box{margin:10px 0 14px;text-align:center}
+.deep-btn{width:100%;min-height:48px;border:1px solid var(--gold-line);background:color-mix(in srgb,var(--gold) 12%,transparent);color:var(--gold);font:inherit;font-weight:700;letter-spacing:.06em;border-radius:10px;cursor:pointer}
+.deep-btn:disabled{opacity:.55;cursor:default}
+.deep-note{font-size:12px;color:var(--sub);margin:6px 0 0;line-height:1.6}
+.home-ad{margin:18px auto 0;width:100%;max-width:468px;min-height:60px}
 .rev-graph svg{display:block;width:100%;height:84px;background:var(--soft);border:1px solid var(--line);border-radius:2px;cursor:pointer;touch-action:none}
 .rev-graph-lab{display:flex;justify-content:space-between;font-size:11px;color:var(--mute);margin-top:3px}
 .rev-nav{justify-content:center;gap:8px;margin-top:10px}
@@ -283,7 +288,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.11</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.12</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -301,6 +306,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
       <button class="big" id="guideBtn" onclick="location.href='guide.html'">勝ち方ガイド</button>
     </nav>
     <p class="foot">アカウント不要・リンクを送るだけで対戦</p>
+    <div class="home-ad" id="homeAd" hidden aria-label="広告"></div>
   </div>
 </section>
 
@@ -374,6 +380,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
   </div>
   <div class="rev-graph"><svg id="revGraph" viewBox="0 0 300 84" preserveAspectRatio="none" role="img" aria-label="形勢のグラフ"></svg><div class="rev-graph-lab"><span>上ほど黒有利・下ほど白有利</span><span id="revProg"></span></div></div>
   <div class="row chks"><label class="chk"><input type="checkbox" id="rShowBest" checked> 最善手を表示</label><label class="chk"><input type="checkbox" id="rOnlyBad"> 悪手だけ追う</label></div>
+  <div class="deep-box" id="deepBox"><button id="deepBtn" class="deep-btn"></button><p class="deep-note" id="deepNote"></p></div>
   <div class="rev-list" id="revList"></div>
 </section>
 
@@ -1217,7 +1224,7 @@ function nextAnalysis(){const n=REV.g.log.length;let i=-1;
   // 今見ている局面を優先し、そのあと頭から
   if(REV.i<n&&!REV.an[REV.i])i=REV.i;else if(REV.i+1<n&&!REV.an[REV.i+1])i=REV.i+1;else for(let k=0;k<n;k++)if(!REV.an[k]){i=k;break}
   if(i<0){finishAnalysis();return}
-  const p=REV.pos[i],job={job:REV.job,i,b:p.b.slice(),p:p.turn,ms:700,history:REV.pos.slice(0,i).map(x=>({b:x.b,turn:x.turn}))};
+  const p=REV.pos[i],job={job:REV.job,i,b:p.b.slice(),p:p.turn,ms:(REV.g&&REV.g.deep)?2500:700,history:REV.pos.slice(0,i).map(x=>({b:x.b,turn:x.turn}))};
   const w=analysisWorker();
   if(w)w.postMessage(job);else setTimeout(()=>{const r=BocchEngine.think(job.b,job.p,250,job);onAnalysis({job:job.job,i,r})},20)}
 function onAnalysis(d){if(d.job!==REV.job||!REV.g)return;
@@ -1638,6 +1645,38 @@ const _renderV=render;render=function(){_renderV();
 render();
 // ホーム画面アプリ用（つながらないときもCPU戦などが開けるように）
 if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})});
+</script>
+<script>
+/* 広告：ホームのバナーと、感想戦のリワード（広告を見ると「最強で深く再解析」）
+   AdSense の審査が通ったら、下の client と homeSlot を入れるだけで動く。空のあいだは広告なしで再解析を無料で使える */
+const ADS={client:'',homeSlot:''};
+let ADS_READY=false;
+(function(){if(!ADS.client)return;
+  const sc=document.createElement('script');sc.async=true;sc.crossOrigin='anonymous';
+  sc.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+ADS.client;
+  sc.setAttribute('data-ad-client',ADS.client);sc.setAttribute('data-ad-frequency-hint','30s');document.head.appendChild(sc);
+  window.adsbygoogle=window.adsbygoogle||[];window.adBreak=window.adConfig=function(o){adsbygoogle.push(o)};
+  adConfig({preloadAdBreaks:'on',sound:'on',onReady:()=>{ADS_READY=true}});
+  if(ADS.homeSlot){const box=$('homeAd');box.hidden=false;box.innerHTML='<ins class="adsbygoogle" style="display:block" data-ad-client="'+ADS.client+'" data-ad-slot="'+ADS.homeSlot+'" data-ad-format="auto" data-full-width-responsive="true"></ins>';try{adsbygoogle.push({})}catch(e){}}})();
+function deepStart(){if(!REV.g)return;REV.g.deep=true;REV.an=[];REV.job++;
+  const g=loadGames(),ix=g.findIndex(x=>x.id===REV.g.id);if(ix>=0){g[ix].deep=true;g[ix].an=[];storeGames(g)}
+  renderReview();nextAnalysis()}
+function deepRender(){const b=$('deepBtn'),n=$('deepNote');if(!b||!REV.g)return;const g=REV.g,len=g.log.length,done=REV.an.filter(Boolean).length;
+  if(g.deep&&done<len){b.disabled=true;b.textContent='最強で深く解析しています… '+done+' / '+len;n.textContent='1手あたり約2.5秒かけて読み直しています。画面はこのまま見ていられます。';return}
+  if(g.deep){b.disabled=true;b.textContent='✓ 最強で深く解析済み';n.textContent='悪手・疑問手と最善手は、深く読んだ結果で表示しています。';return}
+  b.disabled=false;b.textContent=ADS.client?'▶ 広告を見て、最強で深く再解析':'▶ 最強で深く再解析';
+  n.textContent='ふだんの解析より約3倍長く読み直して、悪手の判定と最善手をより正確にします（1局で1〜2分）。'}
+$('deepBtn').addEventListener('click',()=>{if(!REV.g||REV.g.deep)return;
+  if(!ADS.client||typeof adBreak!=='function'){deepStart();return}
+  const b=$('deepBtn');b.disabled=true;b.textContent='広告を読み込んでいます…';let shown=false;
+  adBreak({type:'reward',name:'deep_review',
+    beforeReward:showAdFn=>{shown=true;showAdFn()},
+    adViewed:()=>{deepStart()},
+    adDismissed:()=>{deepRender();$('deepNote').textContent='広告を最後まで見ると、深く再解析できます。'},
+    adBreakDone:info=>{if(!shown){deepStart()}}}); // 広告が用意できなかったときは、そのまま使えるようにする
+});
+// 開き直したときも、深く解析した対局はその考える時間で続きを読む
+{const _rr=renderReview;renderReview=function(){_rr();try{deepRender()}catch(e){}}}
 </script>
 </body>
 </html>
