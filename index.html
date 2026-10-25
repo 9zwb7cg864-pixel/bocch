@@ -229,6 +229,13 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .fr-inv{position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:60;width:min(92vw,380px);background:var(--panel);border:1px solid var(--gold);border-radius:6px;padding:12px 14px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
 .fr-inv p{margin:0 0 10px;font-size:14px}.fr-inv .fr-row button{flex:1}
 .fr-item .fr-play{margin-top:8px;width:100%}
+.fr-c{padding:4px 6px 4px 4px;margin:0 0 6px}.fr-c .fr-top{gap:6px}
+.fr-name{flex:1;min-width:0;display:flex;align-items:center;gap:10px;border:0;background:none;text-align:left;padding:8px 8px;min-height:44px;letter-spacing:0}
+.fr-name b{flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.fr-name .fr-st{margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fr-chev{font-style:normal;color:var(--sub);font-size:12px}
+.fr-c .fr-play{margin:0;width:auto;min-height:36px;padding:6px 14px}
+.fr-c .fr-games{margin:2px 4px 8px}.fr-rm{align-self:flex-end;font-size:12px;min-height:32px;padding:4px 10px;color:var(--sub)}
+.fr-find{width:100%;font:inherit;font-size:16px;color:var(--fg);background:var(--soft);border:1px solid var(--line);border-radius:2px;padding:8px 10px;min-height:42px;margin:0 0 8px}
 .hist-ctl{justify-content:center;margin-top:22px}
 .rev-head{text-align:center;color:var(--sub);font-size:13px;margin:-6px 0 10px}
 .rev-board{width:min(100%,calc(100dvh - 420px));min-width:min(100%,240px)}
@@ -449,7 +456,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <p class="lead hist-note">フレンドの対局（研究以外）を、対局中は観戦、終わった対局は12時間以内なら感想戦で見られます。</p>
     <div class="fr-sec"><h3>フレンド申請</h3><div class="fr-row"><input id="frName" maxlength="12" placeholder="相手の名前" autocomplete="off"><button class="primary" id="frSend">申請</button></div><p class="fr-msg" id="frMsg" hidden></p></div>
     <div class="fr-sec" id="frInSec" hidden><h3>届いた申請</h3><div id="frIn"></div></div>
-    <div class="fr-sec"><h3>フレンド</h3><div id="frList"></div><p class="hist-empty" id="frEmpty">まだフレンドがいません。名前で申請するか、オンライン対戦の相手に申請できます。</p></div>
+    <div class="fr-sec"><h3>フレンド</h3><input id="frFind" class="fr-find" placeholder="フレンドを名前で探す" autocomplete="off" hidden><div id="frList"></div><p class="hist-empty" id="frEmpty">まだフレンドがいません。名前で申請するか、オンライン対戦の相手に申請できます。</p></div>
     <div class="fr-sec" id="frOutSec" hidden><h3>申請中</h3><div id="frOut"></div></div>
   </div>
 </section>
@@ -1910,15 +1917,23 @@ function frRender(){if(!$('frMain'))return;const me=myUid();$('frNeed').hidden=!
   for(const f of FR.fin){const it=mk('div','fr-item'),top=mk('div','fr-top');top.append(mk('b','',f.name));const a=mk('button','primary','承認'),d=mk('button','','断る');a.onclick=()=>frAccept(f.uid);d.onclick=()=>frDecline(f.uid);top.append(a,d);it.append(top);inb.append(it)}
   const ob=$('frOut');ob.innerHTML='';$('frOutSec').hidden=!FR.fout.length;
   for(const f of FR.fout){const it=mk('div','fr-item'),top=mk('div','fr-top');top.append(mk('b','',f.name));const c=mk('button','','取り消す');c.onclick=()=>frCancelOut(f.uid);top.append(c);it.append(top,mk('div','fr-st','承認を待っています'));ob.append(it)}
-  const lb=$('frList');lb.innerHTML='';$('frEmpty').hidden=!!FR.friends.length;
-  for(const f of FR.friends){const it=mk('div','fr-item'),top=mk('div','fr-top');top.append(mk('b','',f.name));const x=mk('button','','外す');x.onclick=()=>frRemove(f.uid);top.append(x);it.append(top);
-    const gs=frGames(f.uid),now=Date.now()/1000,live=gs.find(g=>!g.over&&now-g._t<900);
-    const st=mk('div','fr-st'+(live?' live':''),FR.feeds[f.uid]?(live?'● '+MODE_NAME(live.mode)+'で対局中（'+live.k.length/2+'手）':gs.length?'直近12時間の対局 '+gs.length+'局':'直近12時間の対局はありません'):'読み込み中…');it.append(st);
-    const box=mk('div','fr-games');
-    if(live){const b=mk('button','primary',live.room?'▶ 観戦する（オンライン対戦）':'▶ 対局を見る（自動で更新）');b.onclick=()=>live.room?frWatchRoom(live.room):frOpen(f,live,true);box.append(b)}
-    for(const g of gs.filter(g=>g.over).slice(0,5)){const lg=frLog(g.k);if(!lg)continue;const r=g.win===0?'引き分け':g.me?f.name+(g.win===g.me?'の勝ち':'の負け'):(g.win===1?'黒':'白')+'勝ち';
-      const b=mk('button','',fmtDate(g._t*1000)+'　'+MODE_NAME(g.mode)+'　'+r+'（'+lg.length+'手）'+(g.opp?'　相手 '+g.opp:'')+'　感想戦 ›');b.onclick=()=>frOpen(f,g,false);box.append(b)}
-    if(box.children.length)it.append(box);const pl=mk('button','primary fr-play','対戦を申し込む');pl.onclick=()=>frChallenge(f);it.append(pl);lb.append(it)}}
+  const lb=$('frList');lb.innerHTML='';$('frEmpty').hidden=!!FR.friends.length;FR.open=FR.open||new Set();
+  const fs=$('frFind');fs.hidden=FR.friends.length<8;const q=fs.hidden?'':fs.value.trim().toLowerCase();
+  const now=Date.now()/1000,info=FR.friends.map(f=>{const gs=frGames(f.uid);return {f,gs,live:gs.find(g=>!g.over&&now-g._t<900)}});
+  info.sort((a,b)=>(!!b.live-!!a.live)||((b.gs[0]?b.gs[0]._t:0)-(a.gs[0]?a.gs[0]._t:0))||a.f.name.localeCompare(b.f.name,'ja'));
+  for(const {f,gs,live} of info){if(q&&!f.name.toLowerCase().includes(q))continue;const op=FR.open.has(f.uid);
+    const it=mk('div','fr-item fr-c'+(op?' open':'')),top=mk('div','fr-top');
+    const nb=mk('button','fr-name');nb.setAttribute('aria-expanded',String(op));const nm=mk('b','',f.name);
+    const st=mk('span','fr-st'+(live?' live':''),FR.feeds[f.uid]?(live?'● 対局中（'+live.k.length/2+'手）':gs.length?'12時間で'+gs.length+'局':''):'');nb.append(nm,st,mk('i','fr-chev',op?'▴':'▾'));
+    nb.onclick=()=>{op?FR.open.delete(f.uid):FR.open.add(f.uid);frRender()};
+    const pl=mk('button','fr-play','対戦');pl.onclick=()=>frChallenge(f);top.append(nb,pl);it.append(top);
+    if(op){const box=mk('div','fr-games');
+      if(live){const b=mk('button','primary',live.room?'▶ 観戦する（オンライン対戦）':'▶ 対局を見る（自動で更新）');b.onclick=()=>live.room?frWatchRoom(live.room):frOpen(f,live,true);box.append(b)}
+      for(const g of gs.filter(g=>g.over).slice(0,5)){const lg=frLog(g.k);if(!lg)continue;const r=g.win===0?'引き分け':g.me?f.name+(g.win===g.me?'の勝ち':'の負け'):(g.win===1?'黒':'白')+'勝ち';
+        const b=mk('button','',fmtDate(g._t*1000)+'　'+MODE_NAME(g.mode)+'　'+r+'（'+lg.length+'手）'+(g.opp?'　相手 '+g.opp:'')+'　感想戦 ›');b.onclick=()=>frOpen(f,g,false);box.append(b)}
+      if(!box.children.length)box.append(mk('div','fr-st',FR.feeds[f.uid]?'直近12時間の対局はありません':'読み込み中…'));
+      const x=mk('button','fr-rm','フレンドから外す');x.onclick=()=>frRemove(f.uid);box.append(x);it.append(box)}
+    lb.append(it)}}
 function frWatchRoom(room){if(!/^[a-z0-9]{6}$/.test(room))return;try{if(S.mode==='net')leave()}catch(e){}openRoom(room,true);show('game')}
 function frOpen(f,snap,live){const log=frLog(snap.k);if(!log)return;
   const g={id:'fr:'+f.uid+':'+snap.id,frName:f.name,frLive:!!live,sm:snap.me||0,t:snap._t*1000,mode:snap.mode,me:0,win:snap.over?snap.win:undefined,why:snap.why||'',opp:snap.opp||'',log,an:[]};
@@ -1960,6 +1975,7 @@ function frInvShow(uid,nm,room){let el=$('frInv');if(!el){el=document.createElem
   ok.onclick=()=>{el.hidden=true;try{if(S.mode==='net')leave()}catch(e){}openRoom(room);show('game')};
   no.onclick=()=>{el.hidden=true;frRelay(frTopic('in',uid),{t:'fdec',uid:myUid(),name:myName(),room})}}
 $('frSend').addEventListener('click',()=>frByName($('frName').value));
+$('frFind').addEventListener('input',frRender);
 $('frName').addEventListener('keydown',e=>{if(e.key==='Enter')frByName($('frName').value)});
 document.querySelector('[data-go="friends"]').addEventListener('click',()=>{fbInit().catch(()=>{});frRender();frMsg('');frPollFeeds();clearInterval(FR.pollT);FR.pollT=setInterval(()=>{if(CUR!=='friends'){clearInterval(FR.pollT);return}if(!document.hidden)frPollFeeds()},10000)});
 $('frOpp').addEventListener('click',async()=>{const o=NM[oppIdOf()];if(!o||!o.uid)return;const ok=await frRequest(o.uid,o.name);netMsg(ok?o.name+' さんにフレンド申請しました':($('frMsg').textContent||'申請できませんでした'),!ok);render()});
