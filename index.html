@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>bocch</title>
 <meta name="google-adsense-account" content="ca-pub-7697290378023391">
@@ -1857,7 +1858,7 @@ $('acctChecked').addEventListener('click',async()=>{try{await FB.user.reload();F
 const acctOut=async()=>{try{await FB.auth.signOut();acctMsg('ログアウトしました。この端末の名前とレートはそのまま残ります。')}catch(e){acctErr(e)}};
 $('acctLogout').addEventListener('click',acctOut);$('acctLogout2').addEventListener('click',acctOut);
 // ログイン状態を復元するため、ページを開いたら少し後に読み込む（以前ログインしたことがある端末だけ）
-try{if(localStorage.getItem('bocch-acct')==='1')setTimeout(fbInit,300)}catch(e){}
+try{if(localStorage.getItem('bocch-acct')==='1')fbInit().catch(()=>{});if(localStorage.getItem('bocch-named')==='1'){const me=$('meEdit');if(me)me.textContent='ログイン中 ›'}}catch(e){}
 $('meBtn').addEventListener('click',()=>{fbInit().catch(()=>{})});
 {const mark=()=>{try{localStorage.setItem('bocch-acct','1')}catch(e){}};$('acctLogin').addEventListener('click',mark);$('acctSignup').addEventListener('click',mark)}
 render();
@@ -1912,7 +1913,7 @@ async function frPollFeeds(){const me=myUid();if(!me)return;const targets=[...FR
 function frGames(uid){const ms=FR.feeds[uid]||[],by=new Map();for(const m of ms){if(m.t!=='g'||typeof m.id!=='string'||typeof m.k!=='string')continue;by.set(m.id,m)}
   return [...by.values()].sort((a,b)=>b._t-a._t)}
 const frLog=k=>{const log=[];if(!/^[0-9a-z]*$/.test(k)||k.length%2)return null;for(let j=0;j<k.length;j+=2)log.push([SQC.indexOf(k[j]),SQC.indexOf(k[j+1])]);return log};
-function frRender(){if(!$('frMain'))return;const me=myUid();$('frNeed').hidden=!!me;$('frMain').hidden=!me;frBadge();if(!me)return;
+function frRender(){if(!$('frMain'))return;const me=myUid();$('frNeed').hidden=!!me||(!FB.ready&&named());$('frMain').hidden=!me;frBadge();if(!me)return;
   const mk=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
   const inb=$('frIn');inb.innerHTML='';$('frInSec').hidden=!FR.fin.length;
   for(const f of FR.fin){const it=mk('div','fr-item'),top=mk('div','fr-top');top.append(mk('b','',f.name));const a=mk('button','primary','承認'),d=mk('button','','断る');a.onclick=()=>frAccept(f.uid);d.onclick=()=>frDecline(f.uid);top.append(a,d);it.append(top);inb.append(it)}
@@ -1954,7 +1955,7 @@ function frSnap(){if(!myUid()||!FR.friends.length||!S||S.study||!S.log||!S.log.l
   return {t:'g',id,mode:S.mode,me:S.mode==='net'?colorOf(NET.me):S.mode===0?0:hcOf(),k:S.log.map(m=>SQC[m[0]]+SQC[m[1]]).join(''),room:S.mode==='net'?NET.code:null,over:S.over?1:0,win:S.over?S.over.win:null,why:S.over?S.over.why||'':'',opp:S.mode==='net'?((NM[oppIdOf()]||{}).name||''):'',name:myName()}}
 function frTick(){const s=frSnap();if(!s)return;const key=s.id+'|'+s.k.length+'|'+s.over;if(key===FR.lastPost)return;clearTimeout(FR.postT);
   FR.postT=setTimeout(()=>{const s2=frSnap();if(!s2)return;const k2=s2.id+'|'+s2.k.length+'|'+s2.over;if(k2===FR.lastPost)return;FR.lastPost=k2;frRelay(frTopic('fd',myUid()),s2)},s.over?200:1500)}
-function frStart(){if(!myUid())return;FR.loaded=true;frSubInbox();frBadge();frPollInbox();clearInterval(FR.inT);FR.inT=setInterval(()=>{if(!document.hidden)frPollInbox()},45000);
+function frStart(){if(!myUid())return;FR.loaded=true;frSubInbox();try{if(CUR==='friends')frRender()}catch(e){}frBadge();frPollInbox();clearInterval(FR.inT);FR.inT=setInterval(()=>{if(!document.hidden)frPollInbox()},45000);
   let lp=0;try{lp=+localStorage.getItem('bocch-fr-lp')||0}catch(e){}if(Date.now()-lp>6*3600e3)frPostList();if(CUR==='friends')frPollFeeds()}
 /* フレンドに対戦を申し込む：部屋を作り、相手の受信箱に招待を送る。相手には画面上に「受ける／断る」が出る */
 function frChallenge(f){if(!myUid())return;try{if(S.mode==='net')leave()}catch(e){}createRoom();if(!NET.code)return;const room=NET.code;show('invite');
