@@ -1049,7 +1049,7 @@ cellsBuild();S=initState(2);render();
 <script>
 /* 画面の切り替え（ブラウザの戻るにも対応） */
 let CUR='home';
-function paint(n){document.querySelectorAll('.scr').forEach(e=>{e.hidden=e.dataset.scr!==n});CUR=n;window.scrollTo(0,0)}
+function paint(n){try{if(MATCH.on&&n!=='match'&&!(n==='game'&&S.mode==='net'))cancelMatch()}catch(e){}document.querySelectorAll('.scr').forEach(e=>{e.hidden=e.dataset.scr!==n});CUR=n;window.scrollTo(0,0)}
 function show(n,replace){paint(n);try{(replace?history.replaceState:history.pushState).call(history,{scr:n},'')}catch(e){}}
 addEventListener('popstate',e=>{const n=(e.state&&e.state.scr)||'home';if(CUR==='match'&&n!=='match'&&n!=='game'&&typeof cancelMatch==='function'&&MATCH.on)cancelMatch();if((CUR==='game'||CUR==='invite')&&S.mode==='net'&&n!=='game'&&n!=='invite')leave();paint(n);render()});
 document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
@@ -1093,7 +1093,7 @@ function startMatch(){
     try{m=JSON.parse(d.message)}catch(x){return}if(!m||typeof m!=='object'||typeof m.room!=='string')return;
     m.time=d.time||Date.now()/1000;onLobby(m)};
 }
-function liveSeek(s){return s.from!==MATCH.id&&Date.now()/1000-s.time<140&&!MATCH.takes.has(s.room)&&!MATCH.cancels.has(s.room)}
+function liveSeek(s){return s.from!==MATCH.id&&Date.now()/1000-s.time<70&&!MATCH.takes.has(s.room)&&!MATCH.cancels.has(s.room)}
 function onLobby(m){
   if(m.t==='seek')MATCH.seeks.set(m.room,m);
   else if(m.t==='cancel')MATCH.cancels.add(m.room);
@@ -1105,12 +1105,12 @@ function onLobby(m){
   if(MATCH.on&&MATCH.decided)consider();
 }
 function consider(){
-  if(!MATCH.on||MATCH.taking)return;
+  if(!MATCH.on||MATCH.taking||document.hidden)return;
   for(const s of MATCH.seeks.values()){if(!liveSeek(s))continue;if(!MATCH.mine||MATCH.id>s.from){take(s.room);return}}
 }
 function postSeek(){
   const code=newCode();MATCH.mine=code;openRoom(code);NET.auto=true;show('match',true);
-  lobbyPost({t:'seek',room:code});clearInterval(MATCH.hb);MATCH.hb=setInterval(()=>{if(MATCH.on&&MATCH.mine===code)lobbyPost({t:'seek',room:code})},60000);
+  lobbyPost({t:'seek',room:code});clearInterval(MATCH.hb);MATCH.hb=setInterval(()=>{if(MATCH.on&&MATCH.mine===code&&!document.hidden)lobbyPost({t:'seek',room:code})},25000);
 }
 async function take(room){
   MATCH.taking=room;
@@ -1118,13 +1118,28 @@ async function take(room){
   const ok=await lobbyPost({t:'take',room});
   // 自分の take が中継から返ってくるまで待つ（最大6秒）。固定の短い待ちだと遅い回線で取りこぼして二重に探しに行く
   const t0=Date.now();const settle=()=>{if(!MATCH.on)return;
-    if(MATCH.takes.get(room)===MATCH.id){$('matchTitle').textContent='相手が見つかりました';stopMatch();openRoom(room);NET.auto=true;armWait();show('game',true);return}
+    if(MATCH.takes.get(room)===MATCH.id){$('matchTitle').textContent='相手が見つかりました';stopMatch();openRoom(room);NET.auto=true;armWait();show('game',true);checkHost(room);return}
     if(ok&&!MATCH.takes.has(room)&&Date.now()-t0<6000){setTimeout(settle,200);return}
     MATCH.taking=null;consider();if(MATCH.on&&!MATCH.mine&&!MATCH.taking)postSeek()};
   setTimeout(settle,300);
 }
 // 組み合わせのあと、相手が部屋に来ないとき（同時に取り合った等）は、自動で探し直す
 function armWait(){clearTimeout(NET.waitT);NET.waitT=setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.watch&&!NET.guest&&!S.over){netMsg('相手が来なかったので、探し直します…');setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.guest)startMatch()},1200)}},12000)}
+// 取った部屋の相手（部屋を作った人）が本当にいるか確かめる。応答がなければ、その部屋は捨てて探し直す
+function checkHost(room){NET.pingN=newCode();NET.alive=false;const n=NET.pingN;let tries=0;
+  const ping=()=>{if(NET.code!==room||NET.alive||NET.pingN!==n)return;if(NET.live&&NET.claimed)post({t:'ping',n});if(++tries<4)setTimeout(ping,2500)};
+  setTimeout(ping,2200);
+  setTimeout(()=>{if(NET.code!==room||NET.pingN!==n||NET.alive||S.over)return;if(S.log&&S.log.length)return;
+    lobbyPost({t:'cancel',room});netMsg('相手の応答がなかったので、探し直します…');setTimeout(()=>{if(NET.code===room&&!NET.alive){leave();startMatch()}},1200)},11000)}
+{const _reduceP=reduce;reduce=function(m){
+  if(m&&m.t==='ping'){if(NET.me===NET.host&&!NET.watch&&m.from!==NET.me&&NET.live&&(Date.now()/1000-(m._t||0))<30)post({t:'pong',n:m.n});return}
+  if(m&&m.t==='pong'){if(m.n&&m.n===NET.pingN)NET.alive=true;return}
+  if(m&&m.t==='move'&&m.from&&m.from!==NET.me)NET.alive=true;
+  return _reduceP(m)}}
+// 探している途中で画面を離れたら募集を取り下げ、戻ってきたら探し直す（スマホで裏に回った人と組まないため）
+document.addEventListener('visibilitychange',()=>{if(!MATCH.on)return;
+  if(document.hidden){if(MATCH.mine){lobbyPost({t:'cancel',room:MATCH.mine});MATCH.away=true}}
+  else if(MATCH.away){MATCH.away=false;startMatch()}});
 function cancelMatch(){if(MATCH.mine)lobbyPost({t:'cancel',room:MATCH.mine});stopMatch();MATCH.mine=null;if(S.mode==='net')leave()}
 
 /* 符号（列=1〜6、段=a〜f）と棋譜 */
