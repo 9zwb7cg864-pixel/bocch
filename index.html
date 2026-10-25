@@ -212,6 +212,16 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .hist .meta b{color:var(--fg);font-weight:500;font-size:14px}
 .hist .bad{grid-column:2;font-size:12px;color:var(--gold);line-height:1.4}
 .hist-empty{color:var(--sub);text-align:center;margin:28px 0}
+.fr-badge{display:inline-block;min-width:20px;height:20px;line-height:20px;border-radius:10px;background:var(--gold);color:#1a140a;font-size:12px;margin-left:8px;padding:0 6px;letter-spacing:0;font-family:var(--f-latin);font-weight:700}
+.fr-sec{margin:0 0 18px}.fr-sec h3{font-family:var(--f-disp);font-size:15px;letter-spacing:.1em;margin:0 0 8px;color:var(--gold)}
+.fr-row{display:flex;gap:8px;align-items:center}.fr-row input{flex:1;min-width:0;font:inherit;font-size:16px;color:var(--fg);background:var(--soft);border:1px solid var(--line);border-radius:2px;padding:8px 10px;min-height:44px}
+.fr-item{border:1px solid var(--line);border-radius:4px;padding:10px 12px;margin:0 0 8px;background:var(--panel)}
+.fr-item .fr-top{display:flex;align-items:center;gap:8px}.fr-item .fr-top b{flex:1;font-weight:600}
+.fr-item .fr-st{font-size:12.5px;color:var(--sub);margin-top:4px}.fr-item .fr-st.live{color:#8fbf9a}
+.fr-item button{min-height:36px;padding:6px 12px;font-size:13px}
+.fr-games{display:flex;flex-direction:column;gap:6px;margin-top:8px}.fr-games button{text-align:left;font-size:13px;padding:8px 10px;min-height:38px}
+.fr-msg{font-size:13px;margin:8px 0 0;color:var(--gold)}.fr-msg.err{color:#e08c7c}
+#frOpp{white-space:nowrap}
 .hist-ctl{justify-content:center;margin-top:22px}
 .rev-head{text-align:center;color:var(--sub);font-size:13px;margin:-6px 0 10px}
 .rev-board{width:min(100%,calc(100dvh - 420px));min-width:min(100%,240px)}
@@ -335,6 +345,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
       <button class="big" data-go="friend">友だちと対戦</button>
       <button class="big" data-go="solo">ひとりで遊ぶ</button>
       <button class="big" data-go="watch">観戦する</button>
+      <button class="big" data-go="friends" id="friendsBtn">フレンド<span class="fr-badge" id="frBadge" hidden></span></button>
       <button class="big" data-go="history">対局履歴・感想戦</button>
       <button class="big" data-go="rules">ルール</button>
       <button class="big" id="guideBtn" onclick="location.href='guide.html'">勝ち方ガイド</button>
@@ -422,6 +433,17 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 </section>
 
 <!-- 観戦 -->
+<section class="scr" data-scr="friends" hidden>
+  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>フレンド</h2><span class="sp"></span></div>
+  <div id="frNeed" class="card prof" hidden><p class="note">フレンド機能は、アカウントに登録してログインし、名前を付けると使えます。</p><button class="primary" data-go="profile">アカウントへ</button></div>
+  <div id="frMain" hidden>
+    <p class="lead hist-note">フレンドの対局（研究以外）を、対局中は観戦、終わった対局は12時間以内なら感想戦で見られます。</p>
+    <div class="fr-sec"><h3>フレンド申請</h3><div class="fr-row"><input id="frName" maxlength="12" placeholder="相手の名前" autocomplete="off"><button class="primary" id="frSend">申請</button></div><p class="fr-msg" id="frMsg" hidden></p></div>
+    <div class="fr-sec" id="frInSec" hidden><h3>届いた申請</h3><div id="frIn"></div></div>
+    <div class="fr-sec"><h3>フレンド</h3><div id="frList"></div><p class="hist-empty" id="frEmpty">まだフレンドがいません。名前で申請するか、オンライン対戦の相手に申請できます。</p></div>
+    <div class="fr-sec" id="frOutSec" hidden><h3>申請中</h3><div id="frOut"></div></div>
+  </div>
+</section>
 <section class="scr" data-scr="watch" hidden>
   <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>観戦する</h2><span class="sp"></span></div>
   <p class="lead hist-note">いま対局中の部屋です。選ぶと観戦できます（指すことはできません）。</p>
@@ -547,6 +569,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <button id="rematch" class="primary" hidden>もう一局</button>
     <button id="reseek" hidden>相手を探し直す</button>
     <button id="leave" hidden>対戦をやめる</button>
+    <button id="frOpp" hidden>＋フレンド申請</button>
   </div>
   <div class="row" id="reviewRow" hidden><button id="reviewNow">この対局を感想戦 ›</button></div>
   <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label></div>
@@ -1671,11 +1694,11 @@ let OBN=0;function offBadge(px){const sp=document.createElement('span');const gi
 function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF))}catch(e){}}
 
 var NM={};
-const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi')){o.name=myName();o.rate=Math.round(PROF.rating);o.off=isOff()?1:0}return _post(o)};
+const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi')){o.name=myName();o.rate=Math.round(PROF.rating);o.off=isOff()?1:0;try{if(FB.ready&&FB.user&&FB.user.emailVerified)o.uid=FB.user.uid}catch(e){}}return _post(o)};
 const _reduce=reduce;reduce=function(m){
   if(m&&m.t==='create'&&m.ai===1){NET.ai=true;if(!NET.watch&&!colorOf(NET.me)){NET.watch=true;NET.claimed=true;clearTimeout(NET.timer);try{history.replaceState(null,'','?watch='+NET.code)}catch(e){}}}
   if(m&&m.t==='next'&&typeof m.room==='string'&&/^[a-z0-9]{6}$/.test(m.room)&&NET.ai){aiFollow(m.room);return}
-  if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500,off:m.off===1}}
+  if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500,off:m.off===1,uid:typeof m.uid==='string'&&/^[A-Za-z0-9]{10,40}$/.test(m.uid)?m.uid:null}}
   return _reduce(m)};
 function oppIdOf(){return NET.me===NET.host?NET.guest:NET.host}
 function rateGame(){
@@ -1787,21 +1810,22 @@ async function fbInit(){if(FB.ready||FB.loading)return FB.loading;FB.loading=(as
   await Promise.all([loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-auth-compat.js'),loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-firestore-compat.js')]);
   firebase.initializeApp(FB_CONFIG);FB.auth=firebase.auth();FB.auth.languageCode='ja';FB.db=firebase.firestore();FB.ready=true;
   FB.auth.onAuthStateChanged(u=>{FB.user=u;try{if(u&&u.emailVerified){localStorage.setItem('bocch-named','1');localStorage.setItem('bocch-off',OFFICERS.includes(String(u.email||'').toLowerCase())?'1':'0')}else{localStorage.removeItem('bocch-named');localStorage.removeItem('bocch-off')}}catch(e){}
-    acctRender();if(u&&u.emailVerified)acctPull();if(typeof renderProf==='function'&&CUR==='profile')renderProf();render()})})();return FB.loading}
+    acctRender();if(u&&u.emailVerified)acctPull();else{try{FR.friends=[];FR.fout=[];FR.fin=[];FR.loaded=false;FR.feeds={};clearInterval(FR.inT);frBadge()}catch(e){}}if(typeof renderProf==='function'&&CUR==='profile')renderProf();render()})})();return FB.loading}
 const ACCT_ERR={'auth/email-already-in-use':'このメールアドレスはもう登録されています。「ログイン」を押してください。','auth/invalid-email':'メールアドレスの形が正しくありません。','auth/weak-password':'パスワードは6文字以上にしてください。','auth/invalid-credential':'メールアドレスかパスワードが違います。','auth/wrong-password':'メールアドレスかパスワードが違います。','auth/user-not-found':'このメールアドレスは登録されていません。','auth/missing-password':'パスワードを入れてください。','auth/too-many-requests':'試した回数が多すぎます。少し時間をおいてください。','auth/network-request-failed':'通信できませんでした。ネットにつながっているか確かめてください。'};
 function acctMsg(t,err){const m=$('acctMsg');m.textContent=t||'';m.style.color=err?'#e08c7c':''}
 function acctErr(e){acctMsg(ACCT_ERR[e&&e.code]||('うまくいきませんでした（'+(e&&e.code||e)+'）'),true)}
 function acctRender(){const u=FB.user;$('acctOut').hidden=!!u;$('acctVerify').hidden=!(u&&!u.emailVerified);$('acctIn').hidden=!(u&&u.emailVerified);
   if(u){$('acctVEmail').textContent=u.email;$('acctUEmail').textContent=u.email}
   const me=$('meEdit');if(me)me.textContent=u&&u.emailVerified?'ログイン中 ›':'アカウント ›'}
-function profData(){return {name:PROF.name||'',rating:Math.round(PROF.rating*10)/10,games:PROF.games|0,w:PROF.w|0,l:PROF.l|0,d:PROF.d|0,rated:(PROF.rated||[]).slice(-150),t:Date.now()}}
+function profData(){const o={name:PROF.name||'',rating:Math.round(PROF.rating*10)/10,games:PROF.games|0,w:PROF.w|0,l:PROF.l|0,d:PROF.d|0,rated:(PROF.rated||[]).slice(-150),t:Date.now()};try{if(FR.loaded){o.friends=FR.friends;o.fout=FR.fout;o.fin=FR.fin}}catch(e){}return o}
 async function acctPull(){if(!FB.user||!FB.user.emailVerified)return;FB.syncing=true;$('acctSync').textContent='データを読み込んでいます…';
   try{const ref=FB.db.collection('users').doc(FB.user.uid);const snap=await ref.get();
-    if(snap.exists){const d=snap.data();
+    if(snap.exists){const d=snap.data();try{frLoad(d)}catch(e){}
       // 対局数が多い方を正とする（この端末で登録前に遊んだ分を失わないため）
       if((d.games|0)>=(PROF.games|0)){PROF.name=d.name||PROF.name;PROF.rating=Number(d.rating)||PROF.rating;PROF.games=d.games|0;PROF.w=d.w|0;PROF.l=d.l|0;PROF.d=d.d|0;PROF.rated=Array.from(new Set([...(PROF.rated||[]),...(d.rated||[])])).slice(-200);_saveProfLocal()}
       else await ref.set(profData())}
-    else await ref.set(profData());
+    else{try{FR.loaded=true}catch(e){}await ref.set(profData())}
+    try{frStart()}catch(e){}
     if(PROF.name){try{const ok=await claimName(PROF.name);if(!ok){$('nameMsg').textContent='「'+PROF.name+'」はほかの人が使っていたので、名前を付け直してください。';PROF.name='';_saveProfLocal();ref.set(profData()).catch(()=>{})}}catch(e){}}
     $('acctSync').textContent='名前・レート・戦績をアカウントに保存しています';if(typeof renderProf==='function')renderProf();render()}
   catch(e){$('acctSync').textContent='読み込めませんでした（'+(e.code||e.message)+'）'}
@@ -1821,6 +1845,97 @@ $('meBtn').addEventListener('click',()=>{fbInit().catch(()=>{})});
 {const mark=()=>{try{localStorage.setItem('bocch-acct','1')}catch(e){}};$('acctLogin').addEventListener('click',mark);$('acctSignup').addEventListener('click',mark)}
 render();
 
+/* フレンド：名前で申請→相手が承認。フレンドの対局（研究以外）を、対局中は観戦、終わったものは12時間以内なら感想戦で見られる。
+   受信箱（bocch-v1-in-<uid>）に申請と承認、自分の公開欄（bocch-v1-fd-<uid>）に対局の様子を流す。中継は12時間保存 */
+const FR={friends:[],fout:[],fin:[],seen:new Set(),feeds:{},loaded:false,pollT:null,inT:null,view:null,viewT:null,lastPost:'',postT:null};
+function okUid(u){return typeof u==='string'&&/^[A-Za-z0-9]{10,40}$/.test(u)}
+const frTopic=(k,uid)=>'bocch-v1-'+k+'-'+uid;
+function myUid(){try{return FB.ready&&FB.user&&FB.user.emailVerified?FB.user.uid:null}catch(e){return null}}
+function frClean(a){return Array.isArray(a)?a.filter(f=>f&&okUid(f.uid)).map(f=>({uid:f.uid,name:cleanName(f.name)||'名無し',t:f.t||0})).slice(0,100):[]}
+function frLoad(d){if(!d)return;FR.friends=frClean(d.friends);FR.fout=frClean(d.fout);FR.fin=frClean(d.fin);FR.loaded=true;
+  try{const v=JSON.parse(localStorage.getItem('bocch-fr-seen-'+myUid())||'[]');FR.seen=new Set(Array.isArray(v)?v:[])}catch(e){FR.seen=new Set()}}
+function frSeenSave(){try{localStorage.setItem('bocch-fr-seen-'+myUid(),JSON.stringify([...FR.seen].slice(-400)))}catch(e){}}
+function frSave(){if(!FR.loaded)return;acctPush()}
+const isFriend=u=>FR.friends.some(f=>f.uid===u);
+async function frRelay(topic,o){try{const r=await fetch(RELAY+topic,{method:'POST',body:JSON.stringify(o)});return r.ok}catch(e){return false}}
+async function frRead(topic,since){try{const t=await (await fetch(RELAY+topic+'/json?poll=1&since='+(since||'12h'),{cache:'no-store'})).text();const out=[];
+  t.split('\n').forEach(l=>{if(!l)return;try{const d=JSON.parse(l),m=JSON.parse(d.message);if(m&&typeof m==='object'){m._id=d.id;m._t=d.time;out.push(m)}}catch(e){}});return out}catch(e){return null}}
+function frMsg(t,err){const m=$('frMsg');m.textContent=t||'';m.hidden=!t;m.classList.toggle('err',!!err)}
+function frBadge(){const b=$('frBadge');b.textContent=String(FR.fin.length);b.hidden=!FR.fin.length}
+function frPostList(){const me=myUid();if(!me)return;frRelay(frTopic('fd',me),{t:'flist',uids:FR.friends.map(f=>f.uid),name:myName()});try{localStorage.setItem('bocch-fr-lp',String(Date.now()))}catch(e){}}
+function frAdd(uid,name){if(!isFriend(uid))FR.friends.push({uid,name:cleanName(name)||'名無し',t:Date.now()});FR.fout=FR.fout.filter(f=>f.uid!==uid);FR.fin=FR.fin.filter(f=>f.uid!==uid)}
+async function frRequest(uid,name){const me=myUid();if(!me){frMsg('フレンド機能は、アカウントにログインすると使えます',true);return false}
+  if(uid===me){frMsg('自分には申請できません',true);return false}if(isFriend(uid)){frMsg(name+' さんはもうフレンドです');return false}
+  if(FR.fin.some(f=>f.uid===uid)){frAccept(uid);return true}
+  const ok=await frRelay(frTopic('in',uid),{t:'freq',uid:me,name:myName()});
+  if(!ok){frMsg('送れませんでした。時間をおいて試してください',true);return false}
+  if(!FR.fout.some(f=>f.uid===uid))FR.fout.push({uid,name:cleanName(name)||'名無し',t:Date.now()});frSave();frMsg(name+' さんに申請しました。承認されるとフレンドになります');frRender();return true}
+async function frByName(nm){nm=cleanName(nm);if(!nm)return;frMsg('探しています…');
+  try{await fbInit();const d=await FB.db.collection('names').doc(nm).get();
+    if(!d.exists||!okUid((d.data()||{}).uid)){frMsg('「'+nm+'」という名前の人は見つかりません。アカウントに登録して名前を付けた人にだけ申請できます',true);return}
+    if(await frRequest(d.data().uid,nm))$('frName').value=''}catch(e){frMsg('調べられませんでした（'+(e.code||e.message)+'）',true)}}
+function frAccept(uid){const f=FR.fin.find(x=>x.uid===uid);if(!f)return;frAdd(uid,f.name);frSave();frRelay(frTopic('in',uid),{t:'facc',uid:myUid(),name:myName()});frPostList();frBadge();frRender();frPollFeeds()}
+function frDecline(uid){FR.fin=FR.fin.filter(x=>x.uid!==uid);frSave();frBadge();frRender()}
+function frRemove(uid){const f=FR.friends.find(x=>x.uid===uid);if(!f)return;if(!confirm(f.name+' さんをフレンドから外しますか？'))return;FR.friends=FR.friends.filter(x=>x.uid!==uid);delete FR.feeds[uid];frSave();frPostList();frRender()}
+function frCancelOut(uid){FR.fout=FR.fout.filter(x=>x.uid!==uid);frSave();frRender()}
+async function frPollInbox(){const me=myUid();if(!me||!FR.loaded)return;const ms=await frRead(frTopic('in',me),'12h');if(!ms||myUid()!==me)return;let ch=false;
+  for(const m of ms){if(FR.seen.has(m._id))continue;FR.seen.add(m._id);ch=true;if(!okUid(m.uid)||m.uid===me)continue;const nm=cleanName(m.name)||'名無し';
+    if(m.t==='freq'){if(isFriend(m.uid))continue;
+      if(FR.fout.some(f=>f.uid===m.uid)){frAdd(m.uid,nm);frRelay(frTopic('in',m.uid),{t:'facc',uid:me,name:myName()});continue}
+      if(!FR.fin.some(f=>f.uid===m.uid))FR.fin.push({uid:m.uid,name:nm,t:Date.now()})}
+    else if(m.t==='facc'){if(FR.fout.some(f=>f.uid===m.uid))frAdd(m.uid,nm)}}
+  if(ch){frSeenSave();frSave();frBadge();frRender();frPostList()}}
+// フレンドと申請先の公開欄を読む（申請先の「フレンド一覧」に自分が入っていたら、承認されたとみなす）
+async function frPollFeeds(){const me=myUid();if(!me)return;const targets=[...FR.friends,...FR.fout];
+  await Promise.all(targets.map(async f=>{const ms=await frRead(frTopic('fd',f.uid),'12h');if(!ms)return;FR.feeds[f.uid]=ms;
+    const lastName=[...ms].reverse().find(m=>m.name);if(lastName){const nm=cleanName(lastName.name);if(nm)f.name=nm}
+    if(FR.fout.some(x=>x.uid===f.uid)&&ms.some(m=>m.t==='flist'&&Array.isArray(m.uids)&&m.uids.includes(me)))frAdd(f.uid,f.name)}));
+  frSave();frRender()}
+function frGames(uid){const ms=FR.feeds[uid]||[],by=new Map();for(const m of ms){if(m.t!=='g'||typeof m.id!=='string'||typeof m.k!=='string')continue;by.set(m.id,m)}
+  return [...by.values()].sort((a,b)=>b._t-a._t)}
+const frLog=k=>{const log=[];if(!/^[0-9a-z]*$/.test(k)||k.length%2)return null;for(let j=0;j<k.length;j+=2)log.push([SQC.indexOf(k[j]),SQC.indexOf(k[j+1])]);return log};
+function frRender(){if(!$('frMain'))return;const me=myUid();$('frNeed').hidden=!!me;$('frMain').hidden=!me;frBadge();if(!me)return;
+  const mk=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
+  const inb=$('frIn');inb.innerHTML='';$('frInSec').hidden=!FR.fin.length;
+  for(const f of FR.fin){const it=mk('div','fr-item'),top=mk('div','fr-top');top.append(mk('b','',f.name));const a=mk('button','primary','承認'),d=mk('button','','断る');a.onclick=()=>frAccept(f.uid);d.onclick=()=>frDecline(f.uid);top.append(a,d);it.append(top);inb.append(it)}
+  const ob=$('frOut');ob.innerHTML='';$('frOutSec').hidden=!FR.fout.length;
+  for(const f of FR.fout){const it=mk('div','fr-item'),top=mk('div','fr-top');top.append(mk('b','',f.name));const c=mk('button','','取り消す');c.onclick=()=>frCancelOut(f.uid);top.append(c);it.append(top,mk('div','fr-st','承認を待っています'));ob.append(it)}
+  const lb=$('frList');lb.innerHTML='';$('frEmpty').hidden=!!FR.friends.length;
+  for(const f of FR.friends){const it=mk('div','fr-item'),top=mk('div','fr-top');top.append(mk('b','',f.name));const x=mk('button','','外す');x.onclick=()=>frRemove(f.uid);top.append(x);it.append(top);
+    const gs=frGames(f.uid),now=Date.now()/1000,live=gs.find(g=>!g.over&&now-g._t<900);
+    const st=mk('div','fr-st'+(live?' live':''),FR.feeds[f.uid]?(live?'● '+MODE_NAME(live.mode)+'で対局中（'+live.k.length/2+'手）':gs.length?'直近12時間の対局 '+gs.length+'局':'直近12時間の対局はありません'):'読み込み中…');it.append(st);
+    const box=mk('div','fr-games');
+    if(live){const b=mk('button','primary',live.room?'▶ 観戦する（オンライン対戦）':'▶ 対局を見る（自動で更新）');b.onclick=()=>live.room?frWatchRoom(live.room):frOpen(f,live,true);box.append(b)}
+    for(const g of gs.filter(g=>g.over).slice(0,5)){const lg=frLog(g.k);if(!lg)continue;const r=g.win===0?'引き分け':g.me?f.name+(g.win===g.me?'の勝ち':'の負け'):(g.win===1?'黒':'白')+'勝ち';
+      const b=mk('button','',fmtDate(g._t*1000)+'　'+MODE_NAME(g.mode)+'　'+r+'（'+lg.length+'手）'+(g.opp?'　相手 '+g.opp:'')+'　感想戦 ›');b.onclick=()=>frOpen(f,g,false);box.append(b)}
+    if(box.children.length)it.append(box);lb.append(it)}}
+function frWatchRoom(room){if(!/^[a-z0-9]{6}$/.test(room))return;try{if(S.mode==='net')leave()}catch(e){}openRoom(room,true);show('game')}
+function frOpen(f,snap,live){const log=frLog(snap.k);if(!log)return;
+  const g={id:'fr:'+f.uid+':'+snap.id,frName:f.name,frLive:!!live,sm:snap.me||0,t:snap._t*1000,mode:snap.mode,me:0,win:snap.over?snap.win:undefined,why:snap.why||'',opp:snap.opp||'',log,an:[]};
+  REV.g=g;REV.pos=buildPos(g);REV.an=[];REV.job++;REV.pv=null;REV.sel=-1;REV.i=log.length;
+  FR.view=live?{uid:f.uid,id:snap.id,n:log.length}:null;clearInterval(FR.viewT);if(live)FR.viewT=setInterval(frViewTick,3000);
+  show('review');renderReview();nextAnalysis()}
+async function frViewTick(){const v=FR.view;if(!v||CUR!=='review'||!REV.g||!REV.g.frLive){clearInterval(FR.viewT);return}
+  const ms=await frRead(frTopic('fd',v.uid),'2h');if(!ms||FR.view!==v)return;let s=null;for(const m of ms)if(m.t==='g'&&m.id===v.id)s=m;if(!s)return;
+  const log=frLog(s.k);if(!log||log.length<REV.g.log.length)return;const atEnd=REV.i>=REV.g.log.length&&!REV.pv;
+  if(log.length===REV.g.log.length&&!s.over)return;
+  REV.g.log=log;REV.pos=buildPos(REV.g);if(s.over){REV.g.win=s.win;REV.g.why=s.why||'';REV.g.frLive=false;clearInterval(FR.viewT)}
+  if(atEnd)REV.i=log.length;renderReview();nextAnalysis()}
+{const _rhF=renderReview;renderReview=function(){_rhF();const g=REV.g;if(g&&g.frName){const h=$('revHead');h.textContent='フレンド '+g.frName+' の対局'+(g.sm?'（'+(g.sm===1?'黒':'白')+'）':'')+'　'+(g.frLive?'対局中・自動で更新　'+MODE_NAME(g.mode):h.textContent)}}}
+// 自分の対局（研究以外）を公開欄に流す。フレンドがいるときだけ
+function frSnap(){if(!myUid()||!FR.friends.length||!S||S.study||!S.log||!S.log.length)return null;
+  if(S.mode==='net'&&(NET.watch||!colorOf(NET.me)||NET.ai))return null;const id=currentGameId();if(!id)return null;
+  return {t:'g',id,mode:S.mode,me:S.mode==='net'?colorOf(NET.me):S.mode===0?0:hcOf(),k:S.log.map(m=>SQC[m[0]]+SQC[m[1]]).join(''),room:S.mode==='net'?NET.code:null,over:S.over?1:0,win:S.over?S.over.win:null,why:S.over?S.over.why||'':'',opp:S.mode==='net'?((NM[oppIdOf()]||{}).name||''):'',name:myName()}}
+function frTick(){const s=frSnap();if(!s)return;const key=s.id+'|'+s.k.length+'|'+s.over;if(key===FR.lastPost)return;clearTimeout(FR.postT);
+  FR.postT=setTimeout(()=>{const s2=frSnap();if(!s2)return;const k2=s2.id+'|'+s2.k.length+'|'+s2.over;if(k2===FR.lastPost)return;FR.lastPost=k2;frRelay(frTopic('fd',myUid()),s2)},s.over?200:1500)}
+function frStart(){if(!myUid())return;FR.loaded=true;frBadge();frPollInbox();clearInterval(FR.inT);FR.inT=setInterval(()=>{if(!document.hidden)frPollInbox()},45000);
+  let lp=0;try{lp=+localStorage.getItem('bocch-fr-lp')||0}catch(e){}if(Date.now()-lp>6*3600e3)frPostList();if(CUR==='friends')frPollFeeds()}
+$('frSend').addEventListener('click',()=>frByName($('frName').value));
+$('frName').addEventListener('keydown',e=>{if(e.key==='Enter')frByName($('frName').value)});
+document.querySelector('[data-go="friends"]').addEventListener('click',()=>{fbInit().catch(()=>{});frRender();frMsg('');frPollFeeds();clearInterval(FR.pollT);FR.pollT=setInterval(()=>{if(CUR!=='friends'){clearInterval(FR.pollT);return}if(!document.hidden)frPollFeeds()},10000)});
+$('frOpp').addEventListener('click',async()=>{const o=NM[oppIdOf()];if(!o||!o.uid)return;const ok=await frRequest(o.uid,o.name);netMsg(ok?o.name+' さんにフレンド申請しました':($('frMsg').textContent||'申請できませんでした'),!ok);render()});
+{const _renderF=render;render=function(){_renderF();try{frTick();const o=S.mode==='net'&&!NET.watch&&NET.code?NM[oppIdOf()]:null;const u=myUid();
+  $('frOpp').hidden=!(o&&o.uid&&u&&o.uid!==u&&!isFriend(o.uid)&&!FR.fout.some(f=>f.uid===o.uid))}catch(e){}}}
 /* 対戦チャット：オンライン対戦では棋譜の場所にチャットを出す。部屋の記録に {t:'chat'} として流す */
 const CHAT={list:[],seen:new Set(),last:0,room:null,mute:false};
 const CHAT_NOTE='対局者と観戦者に見えます。個人情報は書かないでください。';
