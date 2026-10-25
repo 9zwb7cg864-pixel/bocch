@@ -165,6 +165,27 @@ table.mtx{border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-n
 .mtx th{font-weight:700;background:var(--card)}
 .mtx th.rowh{text-align:left;white-space:nowrap}
 .mtx td.self{color:var(--sub)}
+.ex{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px;margin-top:10px}
+.ex-top{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:520px){.ex-top{grid-template-columns:minmax(0,1fr)}.ex-top .board{max-width:300px;width:100%;margin:0 auto}}
+.ex .board .st{font-size:clamp(11px,3.2vw,15px)}
+.ex-path{font-size:13.5px;line-height:1.7}.ex-path b{font-weight:700}
+.ex-path .pm{display:inline-block;margin:0 4px 4px 0;padding:1px 7px;border-radius:5px;background:color-mix(in srgb,var(--gold) 12%,transparent);white-space:nowrap}
+.ex-ev{margin-top:8px;font-size:13.5px;color:var(--sub)}.ex-ev b{color:var(--fg);font-size:18px;font-family:var(--f-disp)}
+.ex-nav{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.ex-nav button,.ex-list button{font:inherit;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:8px;min-height:40px;padding:6px 12px;cursor:pointer}
+.ex-nav button:disabled{opacity:.4;cursor:default}
+.ex-q{margin:14px 0 8px;font-weight:700;font-size:14.5px}
+.ex-list{display:flex;flex-direction:column;gap:6px}
+.ex-list button{display:grid;grid-template-columns:1.2em minmax(0,1fr) auto 3.4em;gap:8px;align-items:center;text-align:left;width:100%}
+.ex-list button .nm small{color:var(--sub);margin-left:6px;font-size:12px}
+.ex-list button .tr{width:70px;height:8px;border-radius:4px;background:color-mix(in srgb,var(--line) 70%,transparent);position:relative;overflow:hidden}
+.ex-list button .tr i{position:absolute;left:0;top:0;bottom:0;background:var(--fg);opacity:.75}
+.ex-list button .pc{font-variant-numeric:tabular-nums;text-align:right;font-weight:700}
+.ex-list button.best{border-color:var(--gold)}.ex-list button.best .mk{color:var(--gold)}
+.ex-list button:hover,.ex-list button:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.ex-end{font-size:13.5px;color:var(--sub);line-height:1.7}
+
 .mtx.lines{font-size:13px;min-width:520px}.mtx.lines td{text-align:left;line-height:1.6}.mtx.lines td:last-child{text-align:center;font-weight:700;white-space:nowrap}
 .mtx.lines code,.keynotes code,.note code{font-family:inherit;background:color-mix(in srgb,var(--gold) 12%,transparent);padding:1px 5px;border-radius:4px;white-space:nowrap}
 /* 上級：手筋 */
@@ -261,16 +282,21 @@ ol.check span{font-size:13.5px;color:var(--sub)}
     <li><b>白は2手目に肩寄せ以外を指すと大きく損</b>：黒の寄り添いに対して、白が肩寄せ以外を指すと、黒は＋77〜＋148点まで有利になります。白の2手目は肩寄せ一択です。</li>
     <li><b>本線は互角</b>：黒の寄り添い → 白の肩寄せ（黒と反対の端）→ 黒が反対の端も寄せる、で評価は0点。ここから本当の勝負です。</li>
   </ul>
-  <h3 style="margin-top:22px">主な流れ</h3>
-  <div class="mtx-wrap"><table class="mtx lines">
-    <tr><th>黒の1手目</th><th>白の2手目</th><th>黒の3手目（最善）</th><th>評価</th></tr>
-    <tr><td>寄り添い <code>1f→2e</code></td><td>肩寄せ <code>6a→5b</code></td><td>反対の端を寄せる <code>6f→5e</code></td><td>0</td></tr>
-    <tr><td>寄り添い <code>1f→2e</code></td><td>肩寄せ <code>1a→2b</code>（同じ側）</td><td>中の石を2歩 <code>2f→2d</code></td><td>＋20</td></tr>
-    <tr><td>隅守り <code>1f→1e</code></td><td>肩寄せ <code>6a→5b</code></td><td>反対の端を寄せる <code>6f→5e</code></td><td>−1</td></tr>
-    <tr><td>隅守り <code>1f→1e</code></td><td>肩寄せ <code>1a→2b</code>（同じ側）</td><td>出した石を内へ <code>1e→2e</code></td><td>0</td></tr>
-    <tr><td>寄り添い <code>1f→2e</code></td><td>中の石を出す <code>3a→3c</code> など</td><td>渡り鳥 <code>2f→4d</code> など</td><td>＋78〜</td></tr>
-  </table></div>
-  <p class="note" style="margin-top:8px">左右対称の手は片側だけ載せています（例：<code>6f→5e</code> から始めた場合は左右を入れ替えて読んでください）。4手目からは定跡がなく、「最強」もその場で読んで指します。</p>
+  <h3 style="margin-top:22px">盤で見る（派生つき）</h3>
+  <p class="note" style="margin-top:4px">候補の手を押すと、盤がその手まで進みます。各手の右の数字は、その手を指したあとの黒の勝率の目安（最新AIの評価）です。★が最善手。</p>
+  <div class="ex" id="ex">
+    <div class="ex-top">
+      <div class="board" id="exB" aria-label="定跡の盤"></div>
+      <div class="ex-side">
+        <div class="ex-path" id="exPath"></div>
+        <div class="ex-ev" id="exEv"></div>
+        <div class="ex-nav"><button type="button" id="exBack">◀ 1手戻る</button><button type="button" id="exReset">最初から</button></div>
+      </div>
+    </div>
+    <div class="ex-q" id="exQ"></div>
+    <div class="ex-list" id="exList"></div>
+  </div>
+  <p class="note" style="margin-top:8px">盤の上の段が白の陣地（黒のゴール）、下の段が黒の陣地です。候補にふれると、その手の動きが盤に出ます。4手目からは定跡がなく、「最強」もその場で読んで指します。</p>
 </section>
 
 <section id="strategy" data-tab="strat">
@@ -585,6 +611,54 @@ TAC.forEach(gr=>{const G=document.createElement('div');G.className='tac-group';G
   let t='basic';try{t=localStorage.getItem('bocch-guide-tab')||'basic'}catch(e){}
   const h=location.hash.slice(1);if(h){const el=document.getElementById(h);const sec=el&&el.closest('[data-tab]');if(sec)t=sec.dataset.tab}
   go(t,false)})();
+</script>
+
+<script>
+/* 3手目までの定跡を盤で見る */
+(function(){
+  const nbx=(b,i)=>{const r=i/6|0,c=i%6;let n=0;for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){if(!dr&&!dc)continue;const rr=r+dr,cc=c+dc;if(rr>=0&&rr<6&&cc>=0&&cc<6&&b[rr*6+cc])n++}return n};
+  function draw(el,rows,marks,opt){const b=[];rows.join('').split('').forEach(ch=>b.push(ch==='B'?1:ch==='W'?2:0));el.style.gridTemplateColumns='repeat(6,minmax(0,1fr))';el.innerHTML='';
+    b.forEach((v,i)=>{const c=document.createElement('div');const r=i/6|0;c.className='cell'+(r===0?' r0':'')+(i%6===0?' c0':'')+((r===0||r===5)?' goal':'');if(marks&&marks[i])c.classList.add(marks[i]);
+      if(v){const d=nbx(b,i);const st=document.createElement('div');st.className='st '+(v===1?'b':'w')+(d?'':' zero');st.textContent=d;c.appendChild(st)}el.appendChild(c)})}
+  const T={"30-24":[-5,{"0-6":[19,35,28],"0-7":[0,24,25],"1-13":[49,35,28],"1-15":[23,24,25],"2-12":[75,35,28],"2-14":[38,24,25],"2-16":[51,35,28],"3-13":[38,35,28],"3-15":[31,35,28],"3-17":[61,35,28],"4-14":[43,35,28],"4-16":[36,24,25],"5-10":[-1,35,28],"5-11":[38,35,28]}],"30-25":[2,{"0-6":[77,31,21],"0-7":[20,31,19],"1-13":[131,35,28],"1-15":[96,31,19],"2-12":[135,35,28],"2-14":[78,31,21],"2-16":[124,35,28],"3-13":[131,35,28],"3-15":[81,35,28],"3-17":[148,35,28],"4-14":[99,35,28],"4-16":[117,31,21],"5-10":[0,35,28],"5-11":[86,35,28]}],"31-19":[-37,{"0-6":[4,35,28],"0-7":[-48,32,25],"1-13":[25,35,28],"1-15":[41,35,28],"2-12":[25,35,28],"2-14":[-21,19,25],"2-16":[34,35,28],"3-13":[-14,35,28],"3-15":[18,35,28],"3-17":[62,35,28],"4-14":[11,19,25],"4-16":[12,35,28],"5-10":[-42,32,25],"5-11":[-17,35,28]}],"31-21":[-29,{"0-6":[7,35,28],"0-7":[-25,35,28],"1-13":[26,35,28],"1-15":[31,35,28],"2-12":[65,35,28],"2-14":[-2,35,28],"2-16":[24,35,28],"3-13":[5,35,28],"3-15":[22,35,28],"3-17":[41,35,28],"4-14":[37,35,28],"4-16":[26,35,28],"5-10":[-51,35,28],"5-11":[0,35,28]}],"32-18":[-56,{"0-6":[-17,30,25],"0-7":[-57,35,28],"1-13":[37,18,25],"1-15":[0,30,25],"2-12":[39,18,25],"2-14":[0,35,28],"2-16":[7,35,28],"3-13":[13,18,25],"3-15":[-27,35,28],"3-17":[46,30,25],"4-14":[-9,30,25],"4-16":[21,30,25],"5-10":[-56,30,25],"5-11":[-13,30,25]}],"32-20":[-37,{"0-6":[21,35,28],"0-7":[-52,35,28],"1-13":[64,30,25],"1-15":[53,35,28],"2-12":[75,30,25],"2-14":[1,30,25],"2-16":[71,30,25],"3-13":[44,35,28],"3-15":[38,35,28],"3-17":[85,35,28],"4-14":[31,35,28],"4-16":[32,30,25],"5-10":[-5,30,25],"5-11":[33,35,28]}],"32-22":[-46,{"0-6":[35,33,28],"0-7":[-48,30,25],"1-13":[41,35,28],"1-15":[36,35,28],"2-12":[71,35,28],"2-14":[0,35,28],"2-16":[20,30,25],"3-13":[41,35,28],"3-15":[8,35,28],"3-17":[37,22,21],"4-14":[34,35,28],"4-16":[63,30,25],"5-10":[-54,35,28],"5-11":[33,35,28]}],"33-19":[-54,{"0-6":[14,30,25],"0-7":[-48,30,25],"1-13":[50,35,28],"1-15":[24,30,25],"2-12":[24,19,20],"2-14":[9,19,25],"2-16":[34,30,25],"3-13":[4,30,25],"3-15":[4,30,25],"3-17":[55,30,25],"4-14":[32,30,25],"4-16":[49,30,25],"5-10":[-44,30,25],"5-11":[31,30,25]}],"33-21":[-37,{"0-6":[55,30,25],"0-7":[-23,35,28],"1-13":[63,30,25],"1-15":[24,30,25],"2-12":[91,30,25],"2-14":[38,30,25],"2-16":[50,30,25],"3-13":[101,30,25],"3-15":[0,30,25],"3-17":[67,35,28],"4-14":[62,30,25],"4-16":[51,30,25],"5-10":[-31,30,25],"5-11":[17,30,25]}],"33-23":[-54,{"0-6":[-15,35,28],"0-7":[-50,30,25],"1-13":[26,35,28],"1-15":[-14,35,28],"2-12":[46,35,28],"2-14":[-14,30,25],"2-16":[14,23,28],"3-13":[-9,30,25],"3-15":[-10,30,25],"3-17":[39,23,28],"4-14":[7,35,28],"4-16":[39,23,28],"5-10":[-88,30,25],"5-11":[-15,30,25]}],"34-20":[-41,{"0-6":[-8,30,25],"0-7":[-32,30,25],"1-13":[39,30,25],"1-15":[49,30,25],"2-12":[43,30,25],"2-14":[24,30,25],"2-16":[12,30,25],"3-13":[24,30,25],"3-15":[1,30,25],"3-17":[53,30,25],"4-14":[26,30,25],"4-16":[30,30,25],"5-10":[-24,30,25],"5-11":[23,30,25]}],"34-22":[-70,{"0-6":[-9,30,25],"0-7":[-64,33,28],"1-13":[32,30,25],"1-15":[9,22,28],"2-12":[48,30,25],"2-14":[1,30,25],"2-16":[-10,32,34],"3-13":[50,30,25],"3-15":[-21,22,28],"3-17":[28,30,25],"4-14":[34,30,25],"4-16":[30,30,25],"5-10":[-44,33,28],"5-11":[-5,30,25]}],"35-28":[0,{"0-6":[92,30,25],"0-7":[5,30,25],"1-13":[113,30,25],"1-15":[84,30,25],"2-12":[151,30,25],"2-14":[77,30,25],"2-16":[111,30,25],"3-13":[122,30,25],"3-15":[56,30,25],"3-17":[148,34,20],"4-14":[90,34,22],"4-16":[106,30,25],"5-10":[19,34,22],"5-11":[90,34,20]}],"35-29":[-20,{"0-6":[23,30,25],"0-7":[-2,29,28],"1-13":[55,29,28],"1-15":[31,30,25],"2-12":[61,30,25],"2-14":[52,30,25],"2-16":[30,30,25],"3-13":[47,29,28],"3-15":[36,29,28],"3-17":[67,30,25],"4-14":[23,30,25],"4-16":[38,30,25],"5-10":[0,29,28],"5-11":[47,30,25]}]};
+  const sq=i=>(i%6+1)+'abcdef'[i/6|0],mv=m=>sq(m[0])+'→'+sq(m[1]);
+  const pct=s=>Math.round(100/(1+Math.exp(-0.013*s)));
+  const NAMES={'0-4-1':'寄り添い','0-4-0':'隅守り','2-3-2':'正面突破','1-3-3':'渡り鳥','2-3-4':'十字路','1-3-1':'一本槍','2-3-0':'はぐれ雲'};
+  function nameOf(m,p){let f=m[0],t=m[1],fr=f/6|0,tr=t/6|0,fc=f%6,tc=t%6;if(p===2){fr=5-fr;tr=5-tr}if(fr!==5)return '';if(fc>2){fc=5-fc;tc=5-tc}
+    const n=NAMES[fc+'-'+tr+'-'+tc]||'';return p===2&&n==='寄り添い'?'肩寄せ':n}
+  const start=()=>{const b=Array(36).fill(0);for(let c=0;c<6;c++){b[c]=2;b[30+c]=1}return b};
+  let path=[],hover=null;
+  const el=id=>document.getElementById(id);
+  function board(){let b=start();path.forEach(m=>{b[m[1]]=b[m[0]];b[m[0]]=0});return b}
+  function rows(b){const r=[];for(let y=0;y<6;y++){let s='';for(let x=0;x<6;x++)s+=b[y*6+x]===1?'B':b[y*6+x]===2?'W':'.';r.push(s)}return r}
+  function render(){const b=board(),mk={};const last=path[path.length-1];
+    const show=hover||last;if(show){mk[show[0]]='from';mk[show[1]]=hover?'tgt':'to'}
+    draw(el('exB'),rows(b),mk,{goalTop:true});
+    el('exPath').innerHTML=path.length?path.map((m,k)=>'<span class="pm">'+(k+1)+'. '+(k%2?'白':'黒')+' '+(nameOf(m,k%2?2:1)||'')+' '+mv(m)+'</span>').join(''):'<b>開始局面</b>（黒の番）';
+    let ev='';
+    if(path.length===1){const s=T[path[0].join('-')][0];ev=s}
+    else if(path.length>=2){const r=T[path[0].join('-')][1][path[1].join('-')];ev=path.length===2?r[0]:r[0]}
+    el('exEv').innerHTML=ev===''?'黒の勝率の目安　<b>互角</b>':'黒の勝率の目安　<b>'+pct(ev)+'％</b>　<span>（評価 '+(ev>0?'+':'')+ev+'）</span>';
+    el('exBack').disabled=!path.length;el('exReset').disabled=!path.length;
+    const L=el('exList'),Q=el('exQ');L.innerHTML='';
+    let opts=[];
+    if(path.length===0){Q.textContent='黒の1手目を選ぶ（14通り）';opts=Object.entries(T).map(([k,v])=>({m:k.split('-').map(Number),s:v[0],p:1}))}
+    else if(path.length===1){Q.textContent='白の2手目を選ぶ（黒の'+(nameOf(path[0],1)||mv(path[0]))+'に対して）';opts=Object.entries(T[path[0].join('-')][1]).map(([k,v])=>({m:k.split('-').map(Number),s:v[0],p:2}))}
+    else if(path.length===2){const r=T[path[0].join('-')][1][path[1].join('-')];Q.textContent='黒の3手目（定跡で読んである最善手）';opts=[{m:[r[1],r[2]],s:r[0],p:1,only:true}]}
+    else{Q.textContent='ここまでが定跡です';L.innerHTML='<p class="ex-end">4手目からは定跡がありません。「最強」もここからはその場で読んで指します。ほかの流れを見るときは「1手戻る」で戻ってください。</p>';return}
+    // 手番側から見てよい順に並べる
+    opts.sort((a,b)=>a.p===1?b.s-a.s:a.s-b.s);const bestS=opts[0].s;
+    opts.forEach(o=>{const btn=document.createElement('button');btn.type='button';const best=o.s===bestS;if(best)btn.classList.add('best');
+      const nm=nameOf(o.m,o.p);const bp=pct(o.s);
+      btn.innerHTML='<span class="mk">'+(best?'★':'')+'</span><span class="nm">'+(nm||'その他')+'<small>'+mv(o.m)+'</small></span><span class="tr"><i style="width:'+bp+'%"></i></span><span class="pc">黒'+bp+'％</span>';
+      btn.addEventListener('mouseenter',()=>{hover=o.m;render2()});btn.addEventListener('mouseleave',()=>{hover=null;render2()});
+      btn.addEventListener('focus',()=>{hover=o.m;render2()});btn.addEventListener('blur',()=>{hover=null;render2()});
+      btn.addEventListener('click',()=>{hover=null;path.push(o.m);render()});L.appendChild(btn)})}
+  // 候補にふれたときは盤だけ描き直す
+  function render2(){const b=board(),mk={};const last=path[path.length-1];const show=hover||last;if(show){mk[show[0]]='from';mk[show[1]]=hover?'tgt':'to'}draw(el('exB'),rows(b),mk,{goalTop:true})}
+  el('exBack').addEventListener('click',()=>{path.pop();hover=null;render()});
+  el('exReset').addEventListener('click',()=>{path=[];hover=null;render()});
+  render()})();
 </script>
 
 </body>
