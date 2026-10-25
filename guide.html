@@ -165,6 +165,8 @@ table.mtx{border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-n
 .mtx th{font-weight:700;background:var(--card)}
 .mtx th.rowh{text-align:left;white-space:nowrap}
 .mtx td.self{color:var(--sub)}
+.mtx.lines{font-size:13px;min-width:520px}.mtx.lines td{text-align:left;line-height:1.6}.mtx.lines td:last-child{text-align:center;font-weight:700;white-space:nowrap}
+.mtx.lines code,.keynotes code,.note code{font-family:inherit;background:color-mix(in srgb,var(--gold) 12%,transparent);padding:1px 5px;border-radius:4px;white-space:nowrap}
 /* 上級：手筋 */
 .legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:12.5px;color:var(--sub);margin:4px 0 18px}
 .legend span{display:inline-flex;align-items:center;gap:6px}
@@ -249,6 +251,26 @@ ol.check span{font-size:13.5px;color:var(--sub)}
   <h2>黒の1手目（定跡）</h2>
   <p class="intro">強くなった「最強」（v1.7）に、14通りの1手目をすべて15秒ずつ（15〜18手先まで）読ませた評価です（左右対称の手はまとめて平均）。端の石を使う<b>寄り添い・隅守りの2つだけが互角</b>で、中の石を2歩出す手はどれも少しずつ損でした。白の2手目は、黒が何を指しても「肩寄せ」（端の石を斜めに寄せる手）が最善です。この読みはゲームの定跡として「最強」に入っています。</p>
   <div class="rank" id="opens"></div>
+</section>
+
+<section data-tab="shape">
+  <h2>3手目までの定跡</h2>
+  <p class="intro">最初の2手の組み合わせ196通りすべてについて、黒の3手目を最新の「最強」で15〜18手先まで読みました。評価は黒から見た点数で、0が互角、＋が黒よし（100点でおよそ勝率78％）です。</p>
+  <ul class="keynotes">
+    <li><b>黒の3手目は「もう片方の端も寄せる」が基本</b>：196通りのうち159通り（81％）で、最善手は端の石を1段内側へ寄せる手でした。1手目で片方の端を寄せたら、3手目で反対の端も寄せて、両端の石を働かせます。</li>
+    <li><b>白は2手目に肩寄せ以外を指すと大きく損</b>：黒の寄り添いに対して、白が肩寄せ以外を指すと、黒は＋77〜＋148点まで有利になります。白の2手目は肩寄せ一択です。</li>
+    <li><b>本線は互角</b>：黒の寄り添い → 白の肩寄せ（黒と反対の端）→ 黒が反対の端も寄せる、で評価は0点。ここから本当の勝負です。</li>
+  </ul>
+  <h3 style="margin-top:22px">主な流れ</h3>
+  <div class="mtx-wrap"><table class="mtx lines">
+    <tr><th>黒の1手目</th><th>白の2手目</th><th>黒の3手目（最善）</th><th>評価</th></tr>
+    <tr><td>寄り添い <code>1f→2e</code></td><td>肩寄せ <code>6a→5b</code></td><td>反対の端を寄せる <code>6f→5e</code></td><td>0</td></tr>
+    <tr><td>寄り添い <code>1f→2e</code></td><td>肩寄せ <code>1a→2b</code>（同じ側）</td><td>中の石を2歩 <code>2f→2d</code></td><td>＋20</td></tr>
+    <tr><td>隅守り <code>1f→1e</code></td><td>肩寄せ <code>6a→5b</code></td><td>反対の端を寄せる <code>6f→5e</code></td><td>−1</td></tr>
+    <tr><td>隅守り <code>1f→1e</code></td><td>肩寄せ <code>1a→2b</code>（同じ側）</td><td>出した石を内へ <code>1e→2e</code></td><td>0</td></tr>
+    <tr><td>寄り添い <code>1f→2e</code></td><td>中の石を出す <code>3a→3c</code> など</td><td>渡り鳥 <code>2f→4d</code> など</td><td>＋78〜</td></tr>
+  </table></div>
+  <p class="note" style="margin-top:8px">左右対称の手は片側だけ載せています（例：<code>6f→5e</code> から始めた場合は左右を入れ替えて読んでください）。4手目からは定跡がなく、「最強」もその場で読んで指します。</p>
 </section>
 
 <section id="strategy" data-tab="strat">
@@ -391,7 +413,7 @@ B=P.block();mode='move';sel=14;document.getElementById('mPut').setAttribute('ari
 const LO=30,HI=70;
 function bar(v){const x=p=>(p-LO)/(HI-LO)*100;const left=Math.min(x(50),x(v)),wd=Math.abs(x(v)-x(50));
   const col=v>=50?'var(--good)':'var(--bad)';
-  return '<div class="bar" role="img" aria-label="勝率'+v+'％"><i style="left:'+left+'%;width:'+wd+'%;background:'+col+'"></i><b style="'+(v>=50?(x(v)>84?'right:calc('+(100-x(v))+'% + 5px);color:#fff':'left:calc('+x(v)+'% + 6px);color:'+col):'right:calc('+(100-x(v))+'% + 6px);color:'+col)+'">'+v+'％</b></div>'}
+  return '<div class="bar" role="img" aria-label="勝率'+v+'％"><i style="left:'+left+'%;width:'+wd+'%;background:'+col+'"></i><b style="'+(v>=50?(x(v)>84?'right:calc('+(100-x(v))+'% + 5px);color:#fff':'left:calc('+x(v)+'% + 6px);color:'+col):(x(v)<16?'left:calc('+Math.max(0,x(v))+'% + 5px);color:#fff':'right:calc('+(100-x(v))+'% + 6px);color:'+col))+'">'+v+'％</b></div>'}
 function rowHTML(top,title,small,desc,v){return '<div class="row'+(top?' top':'')+'"><div class="board"></div><div style="min-width:0"><h3>'+title+(small?'<small>'+small+'</small>':'')+'</h3><p>'+desc+'</p>'+bar(v)+'</div></div>'}
 
 const SH=[
