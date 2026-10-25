@@ -275,7 +275,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.9</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.10</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -713,8 +713,11 @@ function negamax(b,p,depth,alpha,beta){
   return best}
 function cpuMove(b,p,level){
   const ms=allMoves(b,p);if(!ms.length)return null;
+  if(level===1){ // やさしい：先を読まず、見た目の形だけで選ぶ。勝てる手や受けもときどき見逃す
+    if(Math.random()<0.7)for(const m of ms)if(arrived(apply(b,m),p))return m;
+    if(Math.random()<0.3)return ms[Math.random()*ms.length|0];
+    deadline=Infinity;const sc=ms.map(m=>[-negamax(apply(b,m),3-p,0,-Infinity,Infinity)+Math.random()*160,m]);sc.sort((a,c)=>c[0]-a[0]);return sc[0][1]}
   for(const m of ms)if(arrived(apply(b,m),p))return m;
-  if(level===1){deadline=Infinity;const sc=ms.map(m=>[-negamax(apply(b,m),3-p,1,-Infinity,Infinity)+Math.random()*60,m]);sc.sort((a,c)=>c[0]-a[0]);return sc[0][1]}
   const limit=level===2?250:1200,maxD=level===2?3:9;
   deadline=performance.now()+limit;let bestMove=ms[0];
   for(let d=1;d<=maxD;d++){aborted=false;let best=-Infinity,bm=null,alpha=-Infinity;
