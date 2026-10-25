@@ -182,6 +182,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .searching .dot{animation:bob 1.6s ease-in-out infinite}.searching .dot.w{animation-delay:.8s}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 @media (prefers-reduced-motion:reduce){.searching .dot{animation:none}}
+.off-badge{display:inline-flex;vertical-align:-3px;margin-right:4px;flex:none}.prof-note{font-size:12.5px;color:var(--sub);margin:6px 0 0;line-height:1.6}
 .joseki{margin:10px auto 0;display:inline-flex;flex-direction:column;gap:2px;padding:8px 18px;border-top:1px solid var(--gold-soft);border-bottom:1px solid var(--gold-soft)}
 .joseki b{font-family:var(--f-disp);font-weight:700;font-size:18px;letter-spacing:.2em;color:var(--gold)}
 .joseki small{font-size:12px;color:var(--sub);letter-spacing:.06em}
@@ -301,7 +302,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.22</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.23</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -417,7 +418,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
   <div class="card prof">
     <label class="prof-l" for="nameIn">名前（12文字まで）</label>
     <div class="row prof-row"><input type="text" id="nameIn" maxlength="12" autocomplete="nickname" placeholder="名無し"><button id="nameSave" class="primary">保存</button></div>
-    <p class="prof-msg" id="nameMsg"></p>
+    <p class="prof-msg" id="nameMsg"></p><p class="prof-note" id="nameNote"></p>
     <div class="prof-rate"><span>レート</span><b id="profRate"></b><span id="profRank" style="margin-left:10px;color:var(--gold)"></span></div>
     <div class="rank-row" id="rankRow" aria-label="段位ごとの石の縁"></div>
     <p class="rank-note"><span id="rankNext" style="color:var(--gold)"></span><br>レート1000から100上がるごとに石の縁が良くなります（銅→銀→金→白金）。金IVからは数字が金色、金Vからは縁が光ります。オンライン対戦では、相手の石も相手のレートの縁で見えます。</p>
@@ -1585,15 +1586,25 @@ const cleanName=x=>String(x==null?'':x).replace(/[\u0000-\u001f\u007f<>]/g,'').t
 function loadProf(){let p={};try{p=JSON.parse(localStorage.getItem(PKEY)||'{}')||{}}catch(e){}
   return {name:cleanName(p.name)||'',rating:Number.isFinite(p.rating)?p.rating:1500,games:p.games|0,w:p.w|0,l:p.l|0,d:p.d|0,rated:Array.isArray(p.rated)?p.rated.slice(-200):[]}}
 var PROF=loadProf();
-const myName=()=>PROF.name||'名無し';
+/* 役員（メールアドレスで決める）：名前の前に金の家紋バッジ、広告なし */
+const OFFICERS=['officer1','officer2','officer3'];
+function isOff(){try{if(typeof FB!=='undefined'&&FB.ready&&FB.user!==undefined&&FB.user!==null)return !!(FB.user.emailVerified&&OFFICERS.includes(String(FB.user.email||'').toLowerCase()));return localStorage.getItem('bocch-off')==='1'}catch(e){return false}}
+// 好きな名前はメール確認済みのアカウントだけ。未登録の人は自動の名前
+function named(){try{if(typeof FB!=='undefined'&&FB.ready&&FB.user)return !!FB.user.emailVerified;return localStorage.getItem('bocch-named')==='1'}catch(e){return false}}
+let GID='0000';try{GID=localStorage.getItem('bocch-gid')||String(1000+Math.floor(Math.random()*9000));localStorage.setItem('bocch-gid',GID)}catch(e){}
+const guestName=()=>'名無しの石'+GID;
+const myName=()=>named()&&PROF.name?PROF.name:guestName();
+const nameKey=n=>String(n).normalize('NFKC').toLowerCase().replace(/\s+/g,'');
+let OBN=0;function offBadge(px){const sp=document.createElement('span');const gid='obg'+(++OBN);sp.className='off-badge';sp.title='役員';sp.setAttribute('aria-label','役員');px=px||18;
+  sp.innerHTML='<svg width="'+px+'" height="'+px+'" viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f6e2a8"/><stop offset=".5" stop-color="#c9a24e"/><stop offset="1" stop-color="#e9cf86"/></linearGradient></defs><circle cx="20" cy="20" r="19" fill="url(#'+gid+')"/><circle cx="20" cy="20" r="15.5" fill="#15130f"/><circle cx="20" cy="20" r="13.8" fill="none" stroke="url(#'+gid+')" stroke-width=".9"/><text x="20" y="26.2" text-anchor="middle" font-family="Shippori Mincho B1,Hiragino Mincho ProN,Yu Mincho,serif" font-weight="800" font-size="17" fill="url(#'+gid+')">役</text></svg>';return sp}
 function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF))}catch(e){}}
 
 var NM={};
-const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi')){o.name=myName();o.rate=Math.round(PROF.rating)}return _post(o)};
+const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi')){o.name=myName();o.rate=Math.round(PROF.rating);o.off=isOff()?1:0}return _post(o)};
 const _reduce=reduce;reduce=function(m){
   if(m&&m.t==='create'&&m.ai===1){NET.ai=true;if(!NET.watch&&!colorOf(NET.me)){NET.watch=true;NET.claimed=true;clearTimeout(NET.timer);try{history.replaceState(null,'','?watch='+NET.code)}catch(e){}}}
   if(m&&m.t==='next'&&typeof m.room==='string'&&/^[a-z0-9]{6}$/.test(m.room)&&NET.ai){aiFollow(m.room);return}
-  if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500}}
+  if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500,off:m.off===1}}
   return _reduce(m)};
 function oppIdOf(){return NET.me===NET.host?NET.guest:NET.host}
 function rateGame(){
@@ -1610,31 +1621,44 @@ function rateGame(){
   S.rateMsg='レート '+before+' → '+after+'（'+(dl>=0?'+':'')+dl+'）';
   const g=loadGames(),ix=g.findIndex(x=>x.id===id);if(ix>=0){g[ix].rd=dl;g[ix].opp=oppName;g[ix].ra=after;storeGames(g)}}
 $('undo').addEventListener('click',()=>{if(S.mode&&S.mode!=='net')S.noRate=true});
-function plSpan(color,name,rate,you){const sp=document.createElement('span');const d=document.createElement('span');d.className='dot '+(color===1?'b':'w');
-  const b=document.createElement('b');b.textContent=name;sp.append(d,b);if(rate!=null){const r=document.createElement('span');r.className='r';r.textContent=rate;sp.append(r)}
+function plSpan(color,name,rate,you,off){const sp=document.createElement('span');const d=document.createElement('span');d.className='dot '+(color===1?'b':'w');
+  const b=document.createElement('b');b.textContent=name;sp.append(d);if(off)sp.append(offBadge(17));sp.append(b);if(rate!=null){const r=document.createElement('span');r.className='r';r.textContent=rate;sp.append(r)}
   if(you){const y=document.createElement('span');y.className='you';y.textContent='あなた';sp.append(y)}return sp}
 let hiKey='';
 const _renderP=render;render=function(){_renderP();
   if(S.over)rateGame();
   // 自分の名前とレートを部屋に知らせる（席に着いている時だけ）
-  if(S.mode==='net'&&NET.code&&NET.live&&!NET.watch&&colorOf(NET.me)>0){const k=NET.code+'|'+NET.me+'|'+myName()+'|'+Math.round(PROF.rating);if(k!==hiKey&&NET.claimed!==false){hiKey=k;post({t:'hi'})}}
+  if(S.mode==='net'&&NET.code&&NET.live&&!NET.watch&&colorOf(NET.me)>0){const k=NET.code+'|'+NET.me+'|'+myName()+'|'+Math.round(PROF.rating)+'|'+isOff();if(k!==hiKey&&NET.claimed!==false){hiKey=k;post({t:'hi'})}}
   // 相手は盤の左上、自分は盤の右下（観戦中は手前側の黒を右下）
   const pt=$('plTop'),pbt=$('plBot');pt.innerHTML='';pbt.innerHTML='';
   if(S.mode==='net'&&NET.host){const hc=colorOf(NET.host),bId=hc===1?NET.host:NET.guest,wId=hc===1?NET.guest:NET.host;
-    const nm=id=>id?(NM[id]||{name:'…',rate:null}):{name:'待機中',rate:null};const bn=nm(bId),wn=nm(wId);
+    const nm=id=>id?(id===NET.me&&!NET.watch?{name:myName(),rate:Math.round(PROF.rating),off:isOff()}:(NM[id]||{name:'…',rate:null})):{name:'待機中',rate:null};const bn=nm(bId),wn=nm(wId);
     const meW=colorOf(NET.me)===2;
-    const bs=plSpan(1,bn.name,bn.rate,bId&&bId===NET.me),ws=plSpan(2,wn.name,wn.rate,wId&&wId===NET.me);
+    const bs=plSpan(1,bn.name,bn.rate,bId&&bId===NET.me,bn.off),ws=plSpan(2,wn.name,wn.rate,wId&&wId===NET.me,wn.off);
     if(meW){pbt.append(ws);pt.append(bs)}else{pbt.append(bs);pt.append(ws)}pt.hidden=pbt.hidden=false}
-  else if(CPU_RATE[S.mode]){pbt.append(plSpan(hcOf(),myName(),Math.round(PROF.rating),true));pt.append(plSpan(3-hcOf(),MODE_NAME(S.mode),CPU_RATE[S.mode],false));pt.hidden=pbt.hidden=false}
+  else if(CPU_RATE[S.mode]){pbt.append(plSpan(hcOf(),myName(),Math.round(PROF.rating),true,isOff()));pt.append(plSpan(3-hcOf(),MODE_NAME(S.mode),CPU_RATE[S.mode],false));pt.hidden=pbt.hidden=false}
   else pt.hidden=pbt.hidden=true;
   const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?'1手戻しを使ったのでレートは変わりません':'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
-  $('meName').textContent=myName();$('meRate').textContent=Math.round(PROF.rating)};
-function renderProf(){$('nameIn').value=PROF.name;$('profRate').textContent=Math.round(PROF.rating);$('profRank').textContent=rankName(PROF.rating);
+  {const mn=$('meName');mn.textContent=myName();if(isOff())mn.prepend(offBadge(18))}$('meRate').textContent=Math.round(PROF.rating)};
+function renderProf(){const nmd=named();$('nameIn').value=nmd?PROF.name:'';$('nameIn').disabled=!nmd;$('nameSave').disabled=!nmd;$('nameIn').placeholder=nmd?'名前を入れる':guestName();
+  $('nameNote').textContent=nmd?(isOff()?'役員アカウントです。名前の前にバッジが付き、広告は表示されません。':'ほかの人と同じ名前は付けられません。'):'未登録のあいだは「'+guestName()+'」です。アカウントに登録してログインすると、好きな名前を付けられます。';$('profRate').textContent=Math.round(PROF.rating);$('profRank').textContent=rankName(PROF.rating);
   {const cur=rankOf(PROF.rating);$('rankRow').innerHTML=RANKS.map(([min,k,n])=>`<div title="${k?min+'〜':'〜999'}" style="${k===cur?'color:var(--gold);font-weight:700':''}"><div class="stone b${rankCls(k)}"><span>3</span></div>${n}</div>`).join('');
    $('rankNext').textContent=cur<14?'次は '+(1000+cur*100)+' で「'+RANK_NAMES[cur+1]+'」':'最高の段です'}
   $('profRec').textContent=PROF.games?PROF.games+'局　'+PROF.w+'勝 '+PROF.l+'敗'+(PROF.d?' '+PROF.d+'分':''):'まだレート対局がありません'}
 $('meBtn').addEventListener('click',()=>{renderProf();$('nameMsg').textContent=''});
-$('nameSave').addEventListener('click',()=>{PROF.name=cleanName($('nameIn').value);saveProf();renderProf();$('nameMsg').textContent='保存しました：'+myName();render()});
+async function claimName(nm){await fbInit();const u=FB.user;if(!u||!u.emailVerified)throw {code:'need-login'};
+  const ref=FB.db.collection('names').doc(nameKey(nm)),snap=await ref.get();
+  if(snap.exists&&snap.data().uid!==u.uid)return false;if(!snap.exists)await ref.set({uid:u.uid,name:nm,t:Date.now()});return true}
+$('nameSave').addEventListener('click',async()=>{const msg=$('nameMsg');if(!named()){msg.textContent='アカウントに登録してログインすると、好きな名前を付けられます。';return}
+  const nm=cleanName($('nameIn').value),old=PROF.name;if(!nm){msg.textContent='名前を入れてください。';return}
+  if(/^名無し/.test(nm)){msg.textContent='「名無し」で始まる名前は付けられません。';return}
+  if(old&&nameKey(old)===nameKey(nm)&&old===nm){msg.textContent='いまの名前と同じです。';return}
+  msg.textContent='確かめています…';$('nameSave').disabled=true;
+  try{const ok=await claimName(nm);if(!ok){msg.textContent='「'+nm+'」はもう使われています。別の名前にしてください。';return}
+    if(old&&nameKey(old)!==nameKey(nm))FB.db.collection('names').doc(nameKey(old)).delete().catch(()=>{});
+    PROF.name=nm;saveProf();renderProf();msg.textContent='保存しました：'+nm;render()}
+  catch(e){msg.textContent='名前を確かめられませんでした（'+(e&&e.code||e)+'）。時間をおいてもう一度試してください。'}
+  finally{$('nameSave').disabled=!named()}});
 $('nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('nameSave').click()});
 addEventListener('popstate',()=>{if(CUR==='profile')renderProf()});
 
@@ -1691,7 +1715,8 @@ async function fbInit(){if(FB.ready||FB.loading)return FB.loading;FB.loading=(as
   const V='10.12.2';await loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-app-compat.js');
   await Promise.all([loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-auth-compat.js'),loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-firestore-compat.js')]);
   firebase.initializeApp(FB_CONFIG);FB.auth=firebase.auth();FB.auth.languageCode='ja';FB.db=firebase.firestore();FB.ready=true;
-  FB.auth.onAuthStateChanged(u=>{FB.user=u;acctRender();if(u&&u.emailVerified)acctPull()})})();return FB.loading}
+  FB.auth.onAuthStateChanged(u=>{FB.user=u;try{if(u&&u.emailVerified){localStorage.setItem('bocch-named','1');localStorage.setItem('bocch-off',OFFICERS.includes(String(u.email||'').toLowerCase())?'1':'0')}else{localStorage.removeItem('bocch-named');localStorage.removeItem('bocch-off')}}catch(e){}
+    acctRender();if(u&&u.emailVerified)acctPull();if(typeof renderProf==='function'&&CUR==='profile')renderProf();render()})})();return FB.loading}
 const ACCT_ERR={'auth/email-already-in-use':'このメールアドレスはもう登録されています。「ログイン」を押してください。','auth/invalid-email':'メールアドレスの形が正しくありません。','auth/weak-password':'パスワードは6文字以上にしてください。','auth/invalid-credential':'メールアドレスかパスワードが違います。','auth/wrong-password':'メールアドレスかパスワードが違います。','auth/user-not-found':'このメールアドレスは登録されていません。','auth/missing-password':'パスワードを入れてください。','auth/too-many-requests':'試した回数が多すぎます。少し時間をおいてください。','auth/network-request-failed':'通信できませんでした。ネットにつながっているか確かめてください。'};
 function acctMsg(t,err){const m=$('acctMsg');m.textContent=t||'';m.style.color=err?'#e08c7c':''}
 function acctErr(e){acctMsg(ACCT_ERR[e&&e.code]||('うまくいきませんでした（'+(e&&e.code||e)+'）'),true)}
@@ -1706,6 +1731,7 @@ async function acctPull(){if(!FB.user||!FB.user.emailVerified)return;FB.syncing=
       if((d.games|0)>=(PROF.games|0)){PROF.name=d.name||PROF.name;PROF.rating=Number(d.rating)||PROF.rating;PROF.games=d.games|0;PROF.w=d.w|0;PROF.l=d.l|0;PROF.d=d.d|0;PROF.rated=Array.from(new Set([...(PROF.rated||[]),...(d.rated||[])])).slice(-200);_saveProfLocal()}
       else await ref.set(profData())}
     else await ref.set(profData());
+    if(PROF.name){try{const ok=await claimName(PROF.name);if(!ok){$('nameMsg').textContent='「'+PROF.name+'」はほかの人が使っていたので、名前を付け直してください。';PROF.name='';_saveProfLocal();ref.set(profData()).catch(()=>{})}}catch(e){}}
     $('acctSync').textContent='名前・レート・戦績をアカウントに保存しています';if(typeof renderProf==='function')renderProf();render()}
   catch(e){$('acctSync').textContent='読み込めませんでした（'+(e.code||e.message)+'）'}
   FB.syncing=false}
@@ -1806,7 +1832,7 @@ let ADS_READY=false;
   window.adsbygoogle=window.adsbygoogle||[];window.adBreak=window.adConfig=function(o){adsbygoogle.push(o)};
   adConfig({preloadAdBreaks:'on',sound:'on',onReady:()=>{ADS_READY=true}})})();
 // 見えている枠にだけ広告を入れる（隠れた枠に入れると幅0で失敗するため）
-function fillAds(){document.querySelectorAll('.ad-slot').forEach(box=>{
+function fillAds(){if(isOff()){document.querySelectorAll('.ad-slot').forEach(b=>{b.hidden=true});return}document.querySelectorAll('.ad-slot').forEach(box=>{
   const k=box.dataset.ad,visible=k!=='over'||(S&&S.over&&CUR==='game');
   if(k==='over')box.hidden=!(visible&&(ADS.slot||AD_PH));else box.hidden=!(ADS.slot||AD_PH);
   if(box.hidden||box.dataset.filled||!box.offsetParent)return;
@@ -1819,7 +1845,7 @@ if(typeof paint==='function'){const _pt=paint;paint=function(n){_pt(n);setTimeou
 function deepStart(){if(!REV.g)return;REV.g.deep=true;REV.g.unlocked=true;REV.an=[];REV.job++;
   const g=loadGames(),ix=g.findIndex(x=>x.id===REV.g.id);if(ix>=0){g[ix].deep=true;g[ix].unlocked=true;g[ix].an=[];storeGames(g)}
   renderReview();nextAnalysis()}
-const revLocked=()=>!!((ADS.client||ADS.preview)&&REV.g&&!REV.g.unlocked);
+const revLocked=()=>!isOff()&&!!((ADS.client||ADS.preview)&&REV.g&&!REV.g.unlocked);
 function deepRender(){const b=$('deepBtn'),n=$('deepNote');if(!b||!REV.g)return;const g=REV.g,len=g.log.length,done=REV.an.filter(Boolean).length,lock=revLocked();
   $('revGraphBox').classList.toggle('locked',lock);$('graphUnlock').hidden=!lock;document.querySelector('[data-scr=review]').classList.toggle('ev-locked',lock);
   $('deepBox').hidden=lock;
@@ -1827,7 +1853,7 @@ function deepRender(){const b=$('deepBtn'),n=$('deepNote');if(!b||!REV.g)return;
   if(g.deep){b.disabled=true;b.textContent='✓ 最強で深く解析済み';n.textContent='悪手・疑問手と最善手は、深く読んだ結果で表示しています。';return}
   b.disabled=false;b.textContent='▶ 最強で深く再解析';
   n.textContent='ふだんの解析より約3倍長く読み直して、悪手の判定と最善手をより正確にします（1局で1〜2分）。'}
-function showReward(btn,label){if(!ADS.client||typeof adBreak!=='function'){deepStart();return}
+function showReward(btn,label){if(isOff()||!ADS.client||typeof adBreak!=='function'){deepStart();return}
   btn.disabled=true;const old=btn.innerHTML;btn.textContent='広告を読み込んでいます…';let shown=false,got=false;
   setTimeout(()=>{if(!shown&&!got&&REV.g&&!REV.g.unlocked)deepStart()},8000); // 広告が届かないとき（広告ブロックなど）は待たせない
   adBreak({type:'reward',name:'review_unlock',
