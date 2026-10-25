@@ -1459,6 +1459,7 @@ function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n
         note+=`<div class="best-line">ここは <b>${mvTxt(pa.m)}</b> が最善でした（勝率 ${Math.round(mk.loss*100)}% 損）`+(pa.pv&&pa.pv.length?'<br><span class="pv-hint">1手戻って、この手を自分で試せます</span>':'')+'</div>'}
     if(i<n&&a&&a.m)note+=`<div class="best-line">次の${side(p.turn)}の最善手：<b>${mvTxt(a.m)}</b>`+(a.pv&&a.pv.length?'<br><span class="pv-hint">石を動かすと、その手からのAIの読み筋が出ます</span>':'')+'</div>'}
   if(i<n&&!a)note+='<span class="rev-pos">　解析中…</span>';
+  if(REV.msg)note='<span class="mate miss">'+REV.msg+'</span>'+note;
   nt.innerHTML=note;
   const done=REV.an.filter(Boolean).length;$('revProg').textContent=done<n?`解析中 ${done}/${n}`:'解析済み';
   drawGraph();
@@ -1501,11 +1502,12 @@ function exHint(){const v=REV.pv;if(!v)return null;v.hints=v.hints||{};const key
     v.hints[key]=r&&r.move?{m:r.move,pv:(r.pv&&r.pv.length?r.pv:[r.move]).slice(0,6),s:r.score,turn:st.turn}:{none:1};renderReview()},30)}
   return null}
 function revCell(k){if(CUR!=='review'||!REV.g)return;const st=REV.pv?pvState():REV.pos[REV.i];
-  if(REV.pv&&REV.pv.k>0&&revWon(st.b,3-st.turn)){REV.sel=-1;renderReview();return}
-  if(!REV.pv&&REV.i>=REV.g.log.length&&REV.g.win){REV.sel=-1;renderReview();return}
+  if(REV.pv&&REV.pv.k>0&&revWon(st.b,3-st.turn)){REV.sel=-1;revWarn('決着がついた局面です。「◀ 戻る」で手を戻せます');return}
+  if(!REV.pv&&REV.i>=REV.g.log.length&&REV.g.win){REV.sel=-1;revWarn('終局後の局面です。◀で戻ってから石を動かしてください');return}
   if(REV.sel>=0){const m=movesFrom(st.b,REV.sel).find(x=>x[1]===k);if(m){
     if(!REV.pv)pvOpen(REV.i,[[0,0]]),REV.pv.line=[];const v=REV.pv;v.line=v.line.slice(0,v.k).concat([[m[0],m[1]]]);v.k++;REV.sel=-1;renderReview();return}}
-  if(st.b[k]===st.turn&&movesFrom(st.b,k).length){REV.sel=REV.sel===k?-1:k}else REV.sel=-1;renderReview()}
+  if(st.b[k]===st.turn&&movesFrom(st.b,k).length){REV.sel=REV.sel===k?-1:k}else{REV.sel=-1;if(st.b[k]===3-st.turn){revWarn('今は'+(st.turn===1?'黒':'白')+'の番です。'+(st.turn===1?'黒':'白')+'の石を動かしてください');return}if(st.b[k]===st.turn){revWarn('この石は動けません（まわりに石がない「ぼっち」か、行き先がありません）');return}}renderReview()}
+function revWarn(t){REV.msg=t;clearTimeout(REV.msgT);REV.msgT=setTimeout(()=>{REV.msg='';renderReview()},2600);renderReview()}
 $('rgrid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(!c)return;revCell(+c.id.slice(1))});
 $('reviewNow').addEventListener('click',()=>{saveFinished();const id=currentGameId();if(id)openReview(id)});
 document.querySelector('[data-go="history"]').addEventListener('click',renderHistory);
