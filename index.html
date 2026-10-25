@@ -301,7 +301,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.21</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.22</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -1221,11 +1221,17 @@ function fxPillar(g,i,side,p,col){const {x,P,k,H}=g,Q=P[i],up=side===1?(P[0].y<P
 function fxLeaves(g,p,n,cols,slow){const {x,W,H,s}=g;for(let i=0;i<n;i++){const st=fxR(i)*0.35,fp=fxW(p,st,st+(slow?0.65:0.5));if(fp<=0||fp>=1)continue;
   const px=fxR(i+11)*W+Math.sin(fp*6+i)*14*s,py=-10+fp*(H+20);x.save();x.globalAlpha=(1-fxW(fp,0.75,1))*0.9;x.translate(px,py);x.rotate(fp*(slow?3:7)+i);x.fillStyle=cols[i%cols.length];
   if(slow){x.beginPath();x.ellipse(0,0,5*s,2.6*s,0,0,7);x.fill()}else x.fillRect(-3*s,-3*s,6*s,6*s);x.restore()}}
+function fxRipple(g,i,p,col,col1){const {x,P,k,W}=g,Q=P[i],maxR=W*0.62;x.save();x.shadowColor='rgba(70,45,10,.55)';x.shadowBlur=5*k;
+  const c=1-fxW(p,0,0.35);if(c>0){const gl=x.createRadialGradient(Q.x,Q.y,0,Q.x,Q.y,40*k);gl.addColorStop(0,col);gl.addColorStop(1,'rgba(0,0,0,0)');x.globalAlpha=c*0.7;x.fillStyle=gl;x.beginPath();x.arc(Q.x,Q.y,40*k,0,7);x.fill()}
+  for(let n=0;n<5;n++){const rp=fxW(p,n*0.11,0.62+n*0.09);if(rp<=0||rp>=1)continue;const e=1-Math.pow(1-rp,2),r=(22*k)+e*maxR;
+    x.globalAlpha=Math.pow(1-rp,0.6);x.strokeStyle=n%2?col1:col;x.lineWidth=Math.max(1.5,(5-n*0.6)*k*(1-rp*0.5));x.beginPath();x.arc(Q.x,Q.y,r,0,7);x.stroke();
+    x.globalAlpha=(1-rp)*0.25;x.lineWidth=1*k;x.beginPath();x.arc(Q.x,Q.y,r*0.92,0,7);x.stroke()}
+  x.restore()}
 function fxArrive(side,cell,mine){fxQueue(()=>fxArrive0(side,cell,mine))}
 function fxArrive0(side,cell,mine){if(!$('showJos').checked||CUR!=='game')return false;const g=fxBase();if(!g)return false;
-  const col=side===1?'#f6e2a8':'#ffffff',col1=side===1?'#e9c46a':'#dfe6ee',t0=performance.now(),PER=1600;
+  const col=side===1?'#f6e2a8':'#ffffff',col1=side===1?'#e9c46a':'#dfe6ee',t0=performance.now(),PER=2200;
   function f(now){const t=now-t0;if(CUR!=='game'){josStop();return}if(t>PER){fxDone();return}const {x,W,H,dpr}=g;x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
-    fxPillar(g,cell,side,t/PER,col);
+    fxRipple(g,cell,t/PER,col,col1);
     JOS.raf=requestAnimationFrame(f)}JOS.raf=requestAnimationFrame(f);return true}
 function fxEnd(win,why,me){const b=S.b.slice();fxQueue(()=>fxEnd0(win,why,me,b))}
 function fxEnd0(win,why,me,b){if(!$('showJos').checked||CUR!=='game')return false;const g=fxBase();if(!g)return false;
