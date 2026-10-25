@@ -895,14 +895,17 @@ function relaySub(path,since,role){
   const url=RELAY.replace(/^http/,'ws')+path+'/ws?since='+since+(role?'&role='+role:'');let tries=0;
   const retry=()=>{clearTimeout(h.t);if(!h.closed)h.t=setTimeout(conn,Math.min(8000,700*(++tries)))};
   function conn(){if(h.closed)return;let ws;try{ws=new WebSocket(url)}catch(e){retry();return}h.ws=ws;
-    ws.onmessage=e=>{if(h.ws!==ws||e.data==='pong')return;let d;try{d=JSON.parse(e.data)}catch(x){return}
+    ws.onmessage=e=>{if(h.ws!==ws)return;h.lp=Date.now();if(e.data==='pong')return;let d;try{d=JSON.parse(e.data)}catch(x){return}
       if(d.event==='open'){tries=0;h.onopen&&h.onopen();return}
       h.onmessage&&h.onmessage({data:e.data})};
     ws.onclose=()=>{if(h.ws!==ws)return;clearInterval(h.pi);if(h.closed)return;h.onerror&&h.onerror();retry()};
     ws.onerror=()=>{};
-    clearInterval(h.pi);h.pi=setInterval(()=>{try{if(ws.readyState===1)ws.send('ping')}catch(e){}},25000)}
+    ws.onopen=()=>{h.lp=Date.now()};
+    // 返事のない接続（スマホの回線切り替えなどで死んだ接続）は早めに張り直す
+    clearInterval(h.pi);h.pi=setInterval(()=>{try{if(ws.readyState===1){if(Date.now()-(h.lp||0)>32000){ws.close();return}ws.send('ping')}}catch(e){}},12000)}
+  h.kick=()=>{try{if(h.ws&&h.ws.readyState===1)h.ws.close();else{tries=0;clearTimeout(h.t);conn()}}catch(e){}};
   const vis=()=>{if(h.closed){document.removeEventListener('visibilitychange',vis);return}
-    if(!document.hidden&&(!h.ws||h.ws.readyState>1)){tries=0;clearTimeout(h.t);conn()}};
+    if(!document.hidden){if(!h.ws||h.ws.readyState>1){tries=0;clearTimeout(h.t);conn()}else{try{h.ws.send('ping')}catch(e){}const w=h.ws;setTimeout(()=>{if(h.ws===w&&w.readyState===1&&Date.now()-(h.lp||0)>4000)w.close()},3500)}}};
   document.addEventListener('visibilitychange',vis);
   h.close=()=>{h.closed=true;clearTimeout(h.t);clearInterval(h.pi);document.removeEventListener('visibilitychange',vis);try{h.ws&&h.ws.close()}catch(e){}};
   conn();return h}
@@ -941,7 +944,7 @@ function openRoom(code,watch){
     if(d.event&&d.event!=='message')return;if(d.id){if(NET.seen.has(d.id))return;NET.seen.add(d.id)}
     try{m=JSON.parse(d.message)}catch(x){return}
     if(typeof d.time==='number'){const sk=d.time-Date.now()/1000;if(NET.skew==null||sk>NET.skew)NET.skew=sk}
-    if(m&&typeof m==='object'){m._t=d.time;reduce(m);render()}};
+    if(m&&typeof m==='object'){m._t=d.time;if(m.t==='move'&&m.from===NET.me&&NET.echo&&m.g===NET.echo.g&&m.ply===NET.echo.ply)NET.echo=null;reduce(m);render()}};
 }
 async function claimSeat(){
   if(NET.claimed)return;NET.claimed=true;
@@ -968,7 +971,11 @@ function reduce(m){
 function netMove(m){
   if(!human()||NET.sending)return;
   NET.sending=true;S.sel=-1;render();
-  post({t:'move',g:NET.game,ply:S.ply,m}).then(ok=>{if(!ok){NET.sending=false;render()}});
+  const msg={t:'move',g:NET.game,ply:S.ply,m};
+  // 送れたら、中継から戻ってくるのを待たずに自分の盤へすぐ反映する（戻ってきた分は同じ手なので無視される）
+  post(msg).then(ok=>{if(ok&&NET.sending&&msg.g===NET.game&&msg.ply===S.ply&&!S.over){NET.echo={g:msg.g,ply:msg.ply};reduce(Object.assign({},msg,{from:NET.me,local:true,_t:Date.now()/1000+(NET.skew||0)}));render();
+      setTimeout(()=>{if(NET.echo&&NET.echo.g===msg.g&&NET.echo.ply===msg.ply&&NET.es&&NET.es.kick)NET.es.kick()},4000)}
+    else if(!ok){NET.sending=false;render()}});
   setTimeout(()=>{if(NET.sending){NET.sending=false;render()}},8000);
 }
 function resign(){
