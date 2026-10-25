@@ -274,6 +274,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .pvctl{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap}
 .pvctl button{padding:7px 12px;font-size:13px;border-radius:8px;border:1px solid rgba(236,230,216,.25);background:transparent;color:inherit;cursor:pointer}
 .pv-hint{font-size:12px;color:var(--sub)}
+.pv-ai{font-size:13px;margin:0 0 8px;line-height:1.6}
 .rev-board .grid{cursor:pointer}
 .pvctl .pvk{font-family:var(--f-latin);min-width:4.5em;text-align:center;font-size:13px}
 .pvmoves{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-top:8px}
@@ -1405,23 +1406,24 @@ function openReview(id){const g=loadGames().find(x=>x.id===id);if(!g)return;
   REV.g=g;REV.pos=buildPos(g);REV.an=(g.an&&g.an.length)?g.an.map(x=>x&&x.pv!==undefined?x:null):[];REV.job++;
   // 最初の悪手へ飛ぶのは解析後。最初は終局図から
   REV.i=0;show('review');renderReview();if(REV.an.filter(Boolean).length<g.log.length)nextAnalysis()}
-function setRev(i){REV.pv=null;clearInterval(REV.pvT);REV.i=Math.max(0,Math.min(REV.pos.length-1,i));renderReview()}
+function setRev(i){REV.pv=null;REV.sel=-1;clearInterval(REV.pvT);REV.i=Math.max(0,Math.min(REV.pos.length-1,i));renderReview()}
 /* 読み筋の再生：base局面からAIの予想手順を1手ずつ盤に並べる */
 function pvState(){const v=REV.pv,p=REV.pos[v.base];let b=p.b.slice(),turn=p.turn;
   for(let k=0;k<v.k;k++){const [f,t]=v.line[k];b[t]=b[f];b[f]=0;turn=3-turn}return {b,turn}}
-function pvOpen(base,line){if(!line||!line.length)return;clearInterval(REV.pvT);REV.pv={base,line,k:0,auto:false};renderReview()}
-function pvStep(d){const v=REV.pv;if(!v)return;v.k=Math.max(0,Math.min(v.line.length,v.k+d));if(v.k>=v.line.length)pvAuto(false);renderReview()}
+function pvOpen(base,line){if(!line)return;clearInterval(REV.pvT);REV.pv={base,line,k:0,auto:false};renderReview()}
+function pvStep(d){const v=REV.pv;if(!v)return;REV.sel=-1;v.k=Math.max(0,Math.min(v.line.length,v.k+d));if(v.k>=v.line.length)pvAuto(false);renderReview()}
 function pvAuto(on){const v=REV.pv;if(!v)return;clearInterval(REV.pvT);v.auto=on;
   if(on){if(v.k>=v.line.length)v.k=0;REV.pvT=setInterval(()=>{if(!REV.pv||CUR!=='review'){clearInterval(REV.pvT);return}pvStep(1)},900)}}
-function pvClose(){clearInterval(REV.pvT);REV.pv=null;renderReview()}
+function pvClose(){clearInterval(REV.pvT);REV.pv=null;REV.sel=-1;renderReview()}
 function fmtMove(m,n){return (n+1)+'. '+(n%2?'白':'黒')+' '+sqName(m[0])+'→'+sqName(m[1])}
 function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n=g.log.length,PV=REV.pv;
   const p=PV?pvState():REV.pos[i];
   const last=PV?(PV.k>0?PV.line[PV.k-1]:(PV.base>0?g.log[PV.base-1]:null)):(i>0?g.log[i-1]:null),a=REV.an[i];
-  const nextM=PV?(PV.k<PV.line.length?PV.line[PV.k]:null):($('rShowBest').checked&&a&&a.m&&i<n&&!revBadAlt()?a.m:null);
+  const HN=PV?exHint():null;const nextM=PV?(HN&&HN.m?HN.m:null):($('rShowBest').checked&&a&&a.m&&i<n?a.m:null);
+  const OVER=PV?(PV.k>0&&revWon(p.b,3-p.turn)):(i>=n&&g.win);const TG=REV.sel>=0?movesFrom(p.b,REV.sel).map(m=>m[1]):[];
   for(let k=0;k<36;k++){const el=$('r'+k),v=p.b[k],r=k/6|0,d=v?nbCount(p.b,k):0;let cls='cell';
     if(r===0||r===5)cls+=' goal';if(last&&(last[0]===k||last[1]===k))cls+=(PV&&PV.k>0?' pvlast':' last');
-    if(nextM&&nextM[0]===k)cls+=' bestf';if(nextM&&nextM[1]===k)cls+=' bestt';el.className=cls;
+    if(nextM&&nextM[0]===k)cls+=' bestf';if(nextM&&nextM[1]===k)cls+=' bestt';if(!OVER&&v===p.turn)cls+=' mine';if(k===REV.sel)cls+=' sel';if(TG.includes(k))cls+=' target'+((p.turn===1?r===0:r===5)?' fin':'');el.className=cls;
     el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${v===g.me?rankCls(rankOf(myRate())):''}"><span>${d}</span></div>`:''}
   $('rboard').classList.toggle('flip',flip);$('rboard').classList.toggle('hideNum',!$('showNum').checked);$('rboard').classList.toggle('nolab',!$('showLab').checked);
   [...$('rlabTop').children].forEach((e,k)=>e.textContent=String(flip?6-k:k+1));
@@ -1437,19 +1439,21 @@ function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n
   if(bp!=null){const pct=Math.round(bp*100);note+=i===n?'終局。':'';
     if(i<n)note+=pct>=99?'黒の勝ちが読み切れています。':pct<=1?'白の勝ちが読み切れています。':`形勢　黒 ${pct}%・白 ${100-pct}%`}
   note='<span class="rev-pos">'+note+'</span>';
-  if(PV){const tb=REV.pos[PV.base].turn;mv.textContent=PV.k?`読み筋 ${PV.k}手目　${(PV.k%2?tb:3-tb)===1?'黒':'白'} ${mvTxt(PV.line[PV.k-1])}`:'読み筋の開始局面';note=''}
+  if(PV){const tb=REV.pos[PV.base].turn;mv.textContent=PV.k?`検討 ${PV.k}手目　${(PV.k%2?tb:3-tb)===1?'黒':'白'} ${mvTxt(PV.line[PV.k-1])}`:'検討の開始局面';note=''}
   const side=t=>t===1?'黒':'白';
   if(PV){const v=PV,tb=REV.pos[v.base].turn;let mv2='';
     v.line.forEach((m,k)=>{mv2+=`<button data-pvk="${k+1}" class="${k+1===v.k?'cur':''}">${k+1}. ${side(k%2?3-tb:tb)} ${mvTxt(m)}</button>`});
-    note+=`<div class="pvbox"><div class="pv-h">AIの読み筋　${v.base}手目の局面から</div>
+    let hn='';if(HN&&HN.over)hn=`<div class="pv-ai">ここで${side(HN.over)}の勝ちです</div>`;else if(HN&&HN.m){const bp=HN.s>EWIN-1000?1:HN.s<-EWIN+1000?0:sig(EK*HN.s),blk=Math.round((HN.turn===1?bp:1-bp)*100);
+      hn=`<div class="pv-ai">AIの最善手：<b>${side(HN.turn)} ${mvTxt(HN.m)}</b>　形勢 黒${blk}%・白${100-blk}%<br>読み筋：${HN.pv.map((m,q)=>side(q%2?3-HN.turn:HN.turn)+mvTxt(m)).join(' → ')}</div>`}else if(!HN||HN.none===undefined)hn='<div class="pv-ai">AIが考えています…</div>';
+    note+=`<div class="pvbox"><div class="pv-h">検討中　${v.base}手目の局面から（石を動かして試せます）</div>${hn}
       <div class="pvctl"><button data-act="pvprev">◀ 戻る</button><span class="pvk">${v.k} / ${v.line.length}</span><button data-act="pvnext">進む ▶</button>
-      <button data-act="pvclose" class="primary">本筋に戻る</button></div><div class="pv-hint" style="text-align:center;margin-top:6px">盤をタップすると、次の最善手へ進みます</div>
+      <button data-act="pvclose" class="primary">本筋に戻る</button></div>
       <div class="pvmoves">${mv2}</div></div>`}
   else{
     if(i>0){const pa=REV.an[i-1],mk=markOf(i-1),pt=REV.pos[i-1].turn;
       if(pa&&pa.m&&mk&&mk.k!=='best'&&mk.loss>=.03)
-        note+=`<div class="best-line">ここは <b>${mvTxt(pa.m)}</b> が最善でした（勝率 ${Math.round(mk.loss*100)}% 損）`+(pa.pv&&pa.pv.length?'<br><span class="pv-hint">盤をタップすると、この最善手から読み筋が進みます</span>':'')+'</div>'}
-    if(i<n&&a&&a.m)note+=`<div class="best-line">次の${side(p.turn)}の最善手：<b>${mvTxt(a.m)}</b>`+(a.pv&&a.pv.length&&!revBadAlt()?'<br><span class="pv-hint">盤をタップすると、最善の読み筋が進みます</span>':'')+'</div>'}
+        note+=`<div class="best-line">ここは <b>${mvTxt(pa.m)}</b> が最善でした（勝率 ${Math.round(mk.loss*100)}% 損）`+(pa.pv&&pa.pv.length?'<br><span class="pv-hint">1手戻って、この手を自分で試せます</span>':'')+'</div>'}
+    if(i<n&&a&&a.m)note+=`<div class="best-line">次の${side(p.turn)}の最善手：<b>${mvTxt(a.m)}</b>`+(a.pv&&a.pv.length?'<br><span class="pv-hint">石を動かすと、その手からのAIの読み筋が出ます</span>':'')+'</div>'}
   if(i<n&&!a)note+='<span class="rev-pos">　解析中…</span>';
   nt.innerHTML=note;
   const done=REV.an.filter(Boolean).length;$('revProg').textContent=done<n?`解析中 ${done}/${n}`:'解析済み';
@@ -1483,15 +1487,22 @@ $('revNote').addEventListener('click',e=>{const b=e.target.closest('button');if(
   else if(act==='pvB'){const a=REV.an[REV.i];if(a)pvOpen(REV.i,a.pv)}
   else if(act==='pvprev'){pvAuto(false);pvStep(-1)}else if(act==='pvnext'){pvAuto(false);pvStep(1)}
   else if(act==='pvauto'){pvAuto(!REV.pv.auto);renderReview()}else if(act==='pvclose')pvClose()});
-/* 盤をタップして最善の読み筋を進める。悪手・疑問手の局面では、その手の代わりの最善手から進む */
+/* 感想戦の検討：盤の石を自分で動かして試せる。指すたびに、その局面のAIの最善手と読み筋を出す。「本筋に戻る」で実戦へ */
 function revBadAlt(){const i=REV.i;if(i<1)return null;const pa=REV.an[i-1],mk=markOf(i-1);if(pa&&pa.pv&&pa.pv.length&&mk&&(mk.k==='bad'||mk.k==='dub'))return pa;return null}
 function revWon(b,p){let c=0;for(let k=0;k<6;k++)if(b[(p===1?0:30)+k]===p)c++;return c>=2}
-function pvExtend(){const v=REV.pv;if(!v)return false;const st=pvState();const prev=3-st.turn;if(v.k>0&&revWon(st.b,prev))return false;
-  let r=null;try{r=BocchEngine.think(st.b.slice(),st.turn,350,{})}catch(e){}if(!r||!r.move)return false;v.line=v.line.slice(0,v.k).concat([r.move]);return true}
-$('rgrid').addEventListener('click',()=>{if(CUR!=='review'||!REV.g)return;
-  if(!REV.pv){const alt=revBadAlt();if(alt){pvOpen(REV.i-1,alt.pv.slice());REV.pv.k=1;renderReview();return}
-    const a=REV.an[REV.i];if(REV.i<REV.g.log.length&&a&&a.m){pvOpen(REV.i,(a.pv&&a.pv.length?a.pv:[a.m]).slice());REV.pv.k=1;renderReview()}return}
-  pvAuto(false);const v=REV.pv;if(v.k>=v.line.length){if(!pvExtend())return}v.k++;renderReview()});
+function exKey(){const v=REV.pv;return v.base+'|'+v.line.slice(0,v.k).map(m=>m[0]+'-'+m[1]).join(',')}
+function exHint(){const v=REV.pv;if(!v)return null;v.hints=v.hints||{};const key=exKey();if(v.hints[key])return v.hints[key];
+  const st=pvState();if(v.k>0&&revWon(st.b,3-st.turn)){v.hints[key]={over:3-st.turn};return v.hints[key]}
+  if(!v.pend){v.pend=key;setTimeout(()=>{const vv=REV.pv;v.pend=null;if(!vv||vv!==v||exKey()!==key)return;let r=null;try{r=BocchEngine.think(st.b.slice(),st.turn,450,{})}catch(e){}
+    v.hints[key]=r&&r.move?{m:r.move,pv:(r.pv&&r.pv.length?r.pv:[r.move]).slice(0,6),s:r.score,turn:st.turn}:{none:1};renderReview()},30)}
+  return null}
+function revCell(k){if(CUR!=='review'||!REV.g)return;const st=REV.pv?pvState():REV.pos[REV.i];
+  if(REV.pv&&REV.pv.k>0&&revWon(st.b,3-st.turn)){REV.sel=-1;renderReview();return}
+  if(!REV.pv&&REV.i>=REV.g.log.length&&REV.g.win){REV.sel=-1;renderReview();return}
+  if(REV.sel>=0){const m=movesFrom(st.b,REV.sel).find(x=>x[1]===k);if(m){
+    if(!REV.pv)pvOpen(REV.i,[[0,0]]),REV.pv.line=[];const v=REV.pv;v.line=v.line.slice(0,v.k).concat([[m[0],m[1]]]);v.k++;REV.sel=-1;renderReview();return}}
+  if(st.b[k]===st.turn&&movesFrom(st.b,k).length){REV.sel=REV.sel===k?-1:k}else REV.sel=-1;renderReview()}
+$('rgrid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(!c)return;revCell(+c.id.slice(1))});
 $('reviewNow').addEventListener('click',()=>{saveFinished();const id=currentGameId();if(id)openReview(id)});
 document.querySelector('[data-go="history"]').addEventListener('click',renderHistory);
 addEventListener('popstate',()=>{if(CUR==='history')renderHistory();if(CUR!=='review')REV.job++});
