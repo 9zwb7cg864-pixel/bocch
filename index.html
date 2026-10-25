@@ -289,7 +289,9 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .boardwrap{position:relative}
 /* 1台で2人：盤だけを画面の真ん中に。隅に小さく戻る・1手戻す・最初から */
 [data-scr="game"].duo{min-height:100dvh;display:flex;flex-direction:column;justify-content:center}
-[data-scr="game"].duo>*:not(.boardwrap):not(#duoBar){display:none!important}
+[data-scr="game"].duo>*:not(.boardwrap):not(#duoBar):not(#reviewRow){display:none!important}
+[data-scr="game"].duo #reviewRow{position:fixed;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:6;margin:0}
+[data-scr="game"].duo #reviewRow button{min-height:40px;padding:6px 16px}
 [data-scr="game"].duo .boardwrap{width:min(100%,calc(100dvh - 96px))}
 [data-scr="game"].duo .stone{transition:transform .35s ease}[data-scr="game"].duo .board.turnW .stone{transform:rotate(180deg)}
 #duoBar{position:fixed;inset:0;pointer-events:none;z-index:5}
@@ -1247,6 +1249,8 @@ function keyOf(m,p){if(!m)return null;let f=m[0],t=m[1],fr=f/6|0,tr=t/6|0,fc=f%6
 function josekiOf(m){if(!m)return null;let f=m[0],t=m[1],fc=f%6,tc=t%6,tr=t/6|0;if((f/6|0)!==5)return null;if(fc>2){fc=5-fc;tc=5-tc}return JOSEKI[fc+'-'+tr+'-'+tc]||null}
 /* 定跡の演出（金の糸）：1手目・2手目が定跡なら、盤の上に光の演出と定跡名を出す。研究モードでは出さない */
 const JOS={last:'',raf:0,cv:null,busy:false,q:[]};
+// 1台で2人では、演出の文字を指した側（白なら逆さ）に向ける
+let FX_FACE=1;const duoFace=(x,W,H,side)=>{try{if(S&&S.mode===0&&!S.study&&side===2){x.translate(W/2,H/2);x.rotate(Math.PI);x.translate(-W/2,-H/2)}}catch(e){}};
 function fxQueue(fn){if(JOS.busy){if(JOS.q.length<4)JOS.q.push(fn);return}JOS.busy=true;if(!fn())fxDone()}
 function fxDone(){cancelAnimationFrame(JOS.raf);JOS.raf=0;if(JOS.cv)JOS.cv.getContext('2d').clearRect(0,0,JOS.cv.width,JOS.cv.height);$('board').style.transform='';
   while(JOS.q.length){const n=JOS.q.shift();if(n())return}JOS.busy=false;if(JOS.cv)JOS.cv.style.display='none'}
@@ -1300,7 +1304,7 @@ function josPlay0(name,side,mv,b){
       for(const [a,c] of ds){const n=Math.hypot(a,c),dx=a/n,dy=c/n;const lg=x.createLinearGradient(D.x,D.y,D.x+dx*L,D.y+dy*L);lg.addColorStop(0,COL2);lg.addColorStop(1,'rgba(0,0,0,0)');
         x.strokeStyle=lg;x.lineWidth=3*k;x.beginPath();x.moveTo(D.x+dx*26*k,D.y+dy*26*k);x.lineTo(D.x+dx*L,D.y+dy*L);x.stroke()}}}
   function title(p){const a=Math.min(1,p/0.12)*(1-win(p,0.82,1)),y=H/2,bh=W*0.236,s=W/440;
-    x.save();x.globalAlpha=a;x.textAlign='center';x.textBaseline='middle';
+    x.save();duoFace(x,W,H,side);x.globalAlpha=a;x.textAlign='center';x.textBaseline='middle';
     x.fillStyle='rgba(14,15,18,.74)';x.fillRect(0,y-bh/2,W,bh);
     x.fillStyle=LAB;x.font='500 '+Math.round(13*s)+'px "Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif';x.fillText(lab.split('').join(' '),W/2,y-30*s);
     x.fillStyle=COL;x.font='800 '+Math.round(46*s)+'px "Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif';x.fillText(name,W/2,y+12*s);
@@ -1325,7 +1329,7 @@ function fxBase(){const bd=$('board'),grid=$('grid');if(!grid.children.length)re
 const fxE=x=>{x=Math.max(0,Math.min(1,x));return 1-Math.pow(1-x,3)},fxW=(t,a,c)=>Math.max(0,Math.min(1,(t-a)/(c-a))),fxR=n=>{const v=Math.sin(n*127.1)*43758.5453;return v-Math.floor(v)};
 const FX_FONT='"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif';
 function fxBand(g,a,big,lab,col,labcol,bigSize,p){const {x,W,H,s}=g,y=H/2,bh=W*0.25;
-  x.save();x.globalAlpha=a;x.textAlign='center';x.textBaseline='middle';x.fillStyle='rgba(14,15,18,.76)';x.fillRect(0,y-bh/2,W,bh);
+  x.save();duoFace(x,W,H,FX_FACE);x.globalAlpha=a;x.textAlign='center';x.textBaseline='middle';x.fillStyle='rgba(14,15,18,.76)';x.fillRect(0,y-bh/2,W,bh);
   x.fillStyle=labcol;x.font='500 '+Math.round(13*s)+'px '+FX_FONT;x.fillText(lab,W/2,y-32*s);
   x.fillStyle=col;x.font='800 '+Math.round(bigSize*s)+'px '+FX_FONT;x.fillText(big,W/2,y+12*s);
   const tw=x.measureText(big).width,rp=fxE(p/0.25);x.fillRect(W/2-tw/2-18*s-50*s*rp,y+12*s,50*s*rp,1.5*s);x.fillRect(W/2+tw/2+18*s,y+12*s,50*s*rp,1.5*s);x.restore()}
@@ -1343,13 +1347,13 @@ function fxRipple(g,i,p,col,col1){const {x,P,k,W}=g,Q=P[i],maxR=W*0.62;x.save();
     x.globalAlpha=(1-rp)*0.25;x.lineWidth=1*k;x.beginPath();x.arc(Q.x,Q.y,r*0.92,0,7);x.stroke()}
   x.restore()}
 function fxArrive(side,cell,mine){fxQueue(()=>fxArrive0(side,cell,mine))}
-function fxArrive0(side,cell,mine){if(!$('showJos').checked||CUR!=='game')return false;const g=fxBase();if(!g)return false;
+function fxArrive0(side,cell,mine){if(!$('showJos').checked||CUR!=='game')return false;FX_FACE=side;const g=fxBase();if(!g)return false;
   const col=side===1?'#f6e2a8':'#ffffff',col1=side===1?'#e9c46a':'#dfe6ee',t0=performance.now(),PER=2200;
   function f(now){const t=now-t0;if(CUR!=='game'){josStop();return}if(t>PER){fxDone();return}const {x,W,H,dpr}=g;x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
     fxRipple(g,cell,t/PER,col,col1);
     JOS.raf=requestAnimationFrame(f)}JOS.raf=requestAnimationFrame(f);return true}
 function fxEnd(win,why,me){const b=S.b.slice();fxQueue(()=>fxEnd0(win,why,me,b))}
-function fxEnd0(win,why,me,b){if(!$('showJos').checked||CUR!=='game')return false;const g=fxBase();if(!g)return false;
+function fxEnd0(win,why,me,b){if(!$('showJos').checked||CUR!=='game')return false;FX_FACE=win===2?2:1;const g=fxBase();if(!g)return false;
   const cn=win===1?'黒':'白',lose=me&&me!==win,t0=performance.now(),PER=4600,gr=win===1?[0,1,2,3,4,5]:[30,31,32,33,34,35];
   const big=me?(lose?'敗 北':'勝 利'):cn+'の勝ち',lab=me?(lose?cn+'の勝ち・'+why:'あなたの勝ち・'+why):why;
   const col=win===1?'#e9c46a':'#dfe6ee',col2=win===1?'#f6e2a8':'#ffffff';
