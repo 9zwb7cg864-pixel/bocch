@@ -214,7 +214,12 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .why-next{border-color:var(--gold-line)}
 
 .tag-bad{color:#e08c7c}.tag-dub{color:#d9b46a}.tag-best{color:#9fc79a}
-.rev-graph{margin:6px 0 10px}
+.rev-graph{margin:6px 0 10px;position:relative}
+.done-tag{display:inline-block;margin-right:8px;padding:0 7px;border:1px solid var(--gold-line);border-radius:999px;color:var(--gold);font-size:11.5px;font-weight:700;line-height:1.6}.done-tag.part{color:var(--sub);border-color:var(--line);font-weight:400}
+.rev-graph.locked svg{filter:blur(7px) saturate(.6);pointer-events:none}
+.graph-unlock{position:absolute;left:50%;top:42px;transform:translate(-50%,-50%);z-index:2;border:1px solid var(--gold-line);background:rgba(10,10,10,.82);color:var(--gold);font:inherit;font-weight:700;font-size:14px;letter-spacing:.04em;border-radius:10px;padding:9px 16px;cursor:pointer;white-space:nowrap;line-height:1.4}
+.graph-unlock small{display:block;font-weight:400;font-size:11px;color:var(--sub);letter-spacing:0}
+.ev-locked .rev-pos{visibility:hidden}
 .deep-box{margin:10px 0 14px;text-align:center}
 .deep-btn{width:100%;min-height:48px;border:1px solid var(--gold-line);background:color-mix(in srgb,var(--gold) 12%,transparent);color:var(--gold);font:inherit;font-weight:700;letter-spacing:.06em;border-radius:10px;cursor:pointer}
 .deep-btn:disabled{opacity:.55;cursor:default}
@@ -288,7 +293,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.12</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.13</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -378,7 +383,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <p class="rev-move" id="revMove"></p>
     <div class="rev-note" id="revNote"></div>
   </div>
-  <div class="rev-graph"><svg id="revGraph" viewBox="0 0 300 84" preserveAspectRatio="none" role="img" aria-label="形勢のグラフ"></svg><div class="rev-graph-lab"><span>上ほど黒有利・下ほど白有利</span><span id="revProg"></span></div></div>
+  <div class="rev-graph" id="revGraphBox"><button class="graph-unlock" id="graphUnlock" hidden>▶ 広告を見て、形勢グラフを見る<small>最強での深い再解析もつきます</small></button><svg id="revGraph" viewBox="0 0 300 84" preserveAspectRatio="none" role="img" aria-label="形勢のグラフ"></svg><div class="rev-graph-lab"><span>上ほど黒有利・下ほど白有利</span><span id="revProg"></span></div></div>
   <div class="row chks"><label class="chk"><input type="checkbox" id="rShowBest" checked> 最善手を表示</label><label class="chk"><input type="checkbox" id="rOnlyBad"> 悪手だけ追う</label></div>
   <div class="deep-box" id="deepBox"><button id="deepBtn" class="deep-btn"></button><p class="deep-note" id="deepNote"></p></div>
   <div class="rev-list" id="revList"></div>
@@ -1151,6 +1156,7 @@ function renderHistory(){const g=loadGames(),box=$('histList');box.innerHTML='';
     const r=document.createElement('span');r.className='res '+rc;r.textContent=rt;
     const m=document.createElement('span');m.className='meta';const mb=document.createElement('b');mb.textContent=MODE_NAME(x.mode)+(x.mode==='net'&&x.opp?'　対 '+x.opp:'')+(x.rd!=null?'　'+(x.rd>=0?'+':'')+x.rd:'');m.append(mb,document.createElement('br'),document.createTextNode(fmtDate(x.t)+'　'+x.log.length+'手'+(side?'　'+side:'')));
     const bd=document.createElement('span');bd.className='bad';bd.textContent=bad;
+    if(x.deep){const done=(x.an||[]).filter(Boolean).length>=x.log.length,tg=document.createElement('span');tg.className='done-tag'+(done?'':' part');tg.textContent=done?'✓ 解析済み':'解析の途中';bd.prepend(tg)}
     b.append(r,m,bd);b.addEventListener('click',()=>openReview(x.id));box.appendChild(b)})}
 $('histClear').addEventListener('click',()=>{const b=$('histClear');if(b.dataset.arm){storeGames([]);delete b.dataset.arm;b.textContent='履歴をすべて消す';renderHistory()}else{b.dataset.arm='1';b.textContent='もう一度押すと消えます';setTimeout(()=>{delete b.dataset.arm;b.textContent='履歴をすべて消す'},3000)}});
 
@@ -1658,24 +1664,28 @@ let ADS_READY=false;
   window.adsbygoogle=window.adsbygoogle||[];window.adBreak=window.adConfig=function(o){adsbygoogle.push(o)};
   adConfig({preloadAdBreaks:'on',sound:'on',onReady:()=>{ADS_READY=true}});
   if(ADS.homeSlot){const box=$('homeAd');box.hidden=false;box.innerHTML='<ins class="adsbygoogle" style="display:block" data-ad-client="'+ADS.client+'" data-ad-slot="'+ADS.homeSlot+'" data-ad-format="auto" data-full-width-responsive="true"></ins>';try{adsbygoogle.push({})}catch(e){}}})();
-function deepStart(){if(!REV.g)return;REV.g.deep=true;REV.an=[];REV.job++;
-  const g=loadGames(),ix=g.findIndex(x=>x.id===REV.g.id);if(ix>=0){g[ix].deep=true;g[ix].an=[];storeGames(g)}
+function deepStart(){if(!REV.g)return;REV.g.deep=true;REV.g.unlocked=true;REV.an=[];REV.job++;
+  const g=loadGames(),ix=g.findIndex(x=>x.id===REV.g.id);if(ix>=0){g[ix].deep=true;g[ix].unlocked=true;g[ix].an=[];storeGames(g)}
   renderReview();nextAnalysis()}
-function deepRender(){const b=$('deepBtn'),n=$('deepNote');if(!b||!REV.g)return;const g=REV.g,len=g.log.length,done=REV.an.filter(Boolean).length;
+const revLocked=()=>!!(ADS.client&&REV.g&&!REV.g.unlocked);
+function deepRender(){const b=$('deepBtn'),n=$('deepNote');if(!b||!REV.g)return;const g=REV.g,len=g.log.length,done=REV.an.filter(Boolean).length,lock=revLocked();
+  $('revGraphBox').classList.toggle('locked',lock);$('graphUnlock').hidden=!lock;document.querySelector('[data-scr=review]').classList.toggle('ev-locked',lock);
+  $('deepBox').hidden=lock;
   if(g.deep&&done<len){b.disabled=true;b.textContent='最強で深く解析しています… '+done+' / '+len;n.textContent='1手あたり約2.5秒かけて読み直しています。画面はこのまま見ていられます。';return}
   if(g.deep){b.disabled=true;b.textContent='✓ 最強で深く解析済み';n.textContent='悪手・疑問手と最善手は、深く読んだ結果で表示しています。';return}
-  b.disabled=false;b.textContent=ADS.client?'▶ 広告を見て、最強で深く再解析':'▶ 最強で深く再解析';
+  b.disabled=false;b.textContent='▶ 最強で深く再解析';
   n.textContent='ふだんの解析より約3倍長く読み直して、悪手の判定と最善手をより正確にします（1局で1〜2分）。'}
-$('deepBtn').addEventListener('click',()=>{if(!REV.g||REV.g.deep)return;
-  if(!ADS.client||typeof adBreak!=='function'){deepStart();return}
-  const b=$('deepBtn');b.disabled=true;b.textContent='広告を読み込んでいます…';let shown=false;
-  adBreak({type:'reward',name:'deep_review',
+function showReward(btn,label){if(!ADS.client||typeof adBreak!=='function'){deepStart();return}
+  btn.disabled=true;const old=btn.innerHTML;btn.textContent='広告を読み込んでいます…';let shown=false,got=false;
+  setTimeout(()=>{if(!shown&&!got&&REV.g&&!REV.g.unlocked)deepStart()},8000); // 広告が届かないとき（広告ブロックなど）は待たせない
+  adBreak({type:'reward',name:'review_unlock',
     beforeReward:showAdFn=>{shown=true;showAdFn()},
-    adViewed:()=>{deepStart()},
-    adDismissed:()=>{deepRender();$('deepNote').textContent='広告を最後まで見ると、深く再解析できます。'},
-    adBreakDone:info=>{if(!shown){deepStart()}}}); // 広告が用意できなかったときは、そのまま使えるようにする
-});
-// 開き直したときも、深く解析した対局はその考える時間で続きを読む
+    adViewed:()=>{got=true;deepStart()},
+    adDismissed:()=>{btn.disabled=false;btn.innerHTML=old;$('deepNote').textContent='広告を最後まで見ると開きます。'},
+    adBreakDone:()=>{if(!shown&&!got){deepStart()}else if(!got){btn.disabled=false;btn.innerHTML=old}}}); // 広告が用意できなかったときは、そのまま開く
+}
+$('graphUnlock').addEventListener('click',()=>{if(REV.g)showReward($('graphUnlock'))});
+$('deepBtn').addEventListener('click',()=>{if(!REV.g||REV.g.deep)return;showReward($('deepBtn'))});
 {const _rr=renderReview;renderReview=function(){_rr();try{deepRender()}catch(e){}}}
 </script>
 </body>
