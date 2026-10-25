@@ -972,10 +972,11 @@ function netMove(m){
   if(!human()||NET.sending)return;
   NET.sending=true;S.sel=-1;render();
   const msg={t:'move',g:NET.game,ply:S.ply,m};
-  // 送れたら、中継から戻ってくるのを待たずに自分の盤へすぐ反映する（戻ってきた分は同じ手なので無視される）
-  post(msg).then(ok=>{if(ok&&NET.sending&&msg.g===NET.game&&msg.ply===S.ply&&!S.over){NET.echo={g:msg.g,ply:msg.ply};reduce(Object.assign({},msg,{from:NET.me,local:true,_t:Date.now()/1000+(NET.skew||0)}));render();
-      setTimeout(()=>{if(NET.echo&&NET.echo.g===msg.g&&NET.echo.ply===msg.ply&&NET.es&&NET.es.kick)NET.es.kick()},4000)}
-    else if(!ok){NET.sending=false;render()}});
+  // 押した瞬間に自分の盤へ反映し、裏で送る（中継から戻ってきた分は同じ手なので無視される）。送れなかったら元に戻す
+  let snap=null;try{snap=structuredClone(S)}catch(e){snap=null}
+  NET.echo={g:msg.g,ply:msg.ply};reduce(Object.assign({},msg,{from:NET.me,local:true,_t:Date.now()/1000+(NET.skew||0)}));NET.sending=false;render();
+  post(msg).then(ok=>{if(ok){setTimeout(()=>{if(NET.echo&&NET.echo.g===msg.g&&NET.echo.ply===msg.ply&&NET.es&&NET.es.kick)NET.es.kick()},4000);return}
+    if(snap&&S.ply===msg.ply+1&&NET.game===msg.g){S=snap;NET.echo=null;netMsg('送れなかったので、手を元に戻しました。もう一度指してください。',true);render()}});
   setTimeout(()=>{if(NET.sending){NET.sending=false;render()}},8000);
 }
 function resign(){
