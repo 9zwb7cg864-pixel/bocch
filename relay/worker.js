@@ -9,7 +9,7 @@ import { DurableObject } from "cloudflare:workers";
 const KEEP_SEC = 12 * 3600;     // 保存期間
 const KEEP_MAX = 1000;          // 1話題あたりの最大件数
 const BODY_MAX = 4096;          // 1件の最大バイト数
-const ORIGINS = [/^https:\/\/9zwb7cg864-pixel\.github\.io$/, /^http:\/\/localhost(:\d+)?$/, /^http:\/\/127\.0\.0\.1(:\d+)?$/];
+const ORIGINS = [/^https?:\/\/(www\.)?bocchgame\.com$/, /^https:\/\/9zwb7cg864-pixel\.github\.io$/, /^http:\/\/localhost(:\d+)?$/, /^http:\/\/127\.0\.0\.1(:\d+)?$/];
 
 function cors(req) {
   const o = req.headers.get("Origin") || "";
