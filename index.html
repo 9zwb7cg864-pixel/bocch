@@ -293,7 +293,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.13</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.14</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -1655,7 +1655,7 @@ if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('
 <script>
 /* 広告：ホームのバナーと、感想戦のリワード（広告を見ると「最強で深く再解析」）
    AdSense の審査が通ったら、下の client と homeSlot を入れるだけで動く。空のあいだは広告なしで再解析を無料で使える */
-const ADS={client:'',homeSlot:''};
+const ADS={client:'',homeSlot:'',preview:true}; // preview：広告の準備ができるまで、ボタンだけ出して押すとそのまま開く
 let ADS_READY=false;
 (function(){if(!ADS.client)return;
   const sc=document.createElement('script');sc.async=true;sc.crossOrigin='anonymous';
@@ -1667,7 +1667,7 @@ let ADS_READY=false;
 function deepStart(){if(!REV.g)return;REV.g.deep=true;REV.g.unlocked=true;REV.an=[];REV.job++;
   const g=loadGames(),ix=g.findIndex(x=>x.id===REV.g.id);if(ix>=0){g[ix].deep=true;g[ix].unlocked=true;g[ix].an=[];storeGames(g)}
   renderReview();nextAnalysis()}
-const revLocked=()=>!!(ADS.client&&REV.g&&!REV.g.unlocked);
+const revLocked=()=>!!((ADS.client||ADS.preview)&&REV.g&&!REV.g.unlocked);
 function deepRender(){const b=$('deepBtn'),n=$('deepNote');if(!b||!REV.g)return;const g=REV.g,len=g.log.length,done=REV.an.filter(Boolean).length,lock=revLocked();
   $('revGraphBox').classList.toggle('locked',lock);$('graphUnlock').hidden=!lock;document.querySelector('[data-scr=review]').classList.toggle('ev-locked',lock);
   $('deepBox').hidden=lock;
@@ -1684,6 +1684,7 @@ function showReward(btn,label){if(!ADS.client||typeof adBreak!=='function'){deep
     adDismissed:()=>{btn.disabled=false;btn.innerHTML=old;$('deepNote').textContent='広告を最後まで見ると開きます。'},
     adBreakDone:()=>{if(!shown&&!got){deepStart()}else if(!got){btn.disabled=false;btn.innerHTML=old}}}); // 広告が用意できなかったときは、そのまま開く
 }
+if(!ADS.client)$('graphUnlock').querySelector('small').textContent='準備中：いまは広告なしで開きます';
 $('graphUnlock').addEventListener('click',()=>{if(REV.g)showReward($('graphUnlock'))});
 $('deepBtn').addEventListener('click',()=>{if(!REV.g||REV.g.deep)return;showReward($('deepBtn'))});
 {const _rr=renderReview;renderReview=function(){_rr();try{deepRender()}catch(e){}}}
