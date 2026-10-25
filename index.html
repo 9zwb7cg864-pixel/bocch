@@ -231,12 +231,13 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .fr-inv{position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:60;width:min(92vw,380px);background:var(--panel);border:1px solid var(--gold);border-radius:6px;padding:12px 14px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
 .fr-inv p{margin:0 0 10px;font-size:14px}.fr-inv .fr-row button{flex:1}
 .fr-item .fr-play{margin-top:8px;width:100%}
-.fr-c{padding:4px 6px 4px 4px;margin:0 0 6px}.fr-c .fr-top{gap:6px}
-.fr-name{flex:1;min-width:0;display:flex;align-items:center;gap:10px;border:0;background:none;text-align:left;padding:8px 8px;min-height:44px;letter-spacing:0}
+.fr-c{padding:2px 4px 2px 2px;margin:0 0 4px}.fr-c .fr-top{gap:6px}
+.fr-name{flex:1;min-width:0;display:flex;align-items:center;gap:10px;border:0;background:none;text-align:left;padding:6px 8px;min-height:40px;letter-spacing:0}
 .fr-name b{flex:0 1 auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
 .fr-name .fr-st{margin:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fr-chev{font-style:normal;color:var(--sub);font-size:12px}
-.fr-c .fr-play{margin:0;width:auto;min-height:36px;padding:6px 14px}
+.fr-c .fr-play{margin:0;width:auto;min-height:32px;padding:4px 12px;font-size:12.5px}
 .fr-c .fr-games{margin:2px 4px 8px}.fr-rm{align-self:flex-end;font-size:12px;min-height:32px;padding:4px 10px;color:var(--sub)}
+.fr-dot{width:9px;height:9px;border-radius:50%;flex:0 0 9px;background:var(--line);margin-right:-2px}.fr-dot.on{background:#6fcf8a;box-shadow:0 0 0 3px rgba(111,207,138,.18)}
 .fr-find{width:100%;font:inherit;font-size:16px;color:var(--fg);background:var(--soft);border:1px solid var(--line);border-radius:2px;padding:8px 10px;min-height:42px;margin:0 0 8px}
 .hist-ctl{justify-content:center;margin-top:22px}
 .rev-head{text-align:center;color:var(--sub);font-size:13px;margin:-6px 0 10px}
@@ -1905,11 +1906,19 @@ async function frPollInbox(){const me=myUid();if(!me||!FR.loaded)return;const ms
     else if(m.t==='finv'||m.t==='fdec'){m._pre=1;frInvMsg(m)}}
   if(ch){frSeenSave();frSave();frBadge();frRender();frPostList()}}
 // フレンドと申請先の公開欄を読む（申請先の「フレンド一覧」に自分が入っていたら、承認されたとみなす）
-async function frPollFeeds(){const me=myUid();if(!me)return;const targets=[...FR.friends,...FR.fout];
-  await Promise.all(targets.map(async f=>{const ms=await frRead(frTopic('fd',f.uid),'12h');if(!ms)return;FR.feeds[f.uid]=ms;
-    const lastName=[...ms].reverse().find(m=>m.name);if(lastName){const nm=cleanName(lastName.name);if(nm)f.name=nm}
-    if(FR.fout.some(x=>x.uid===f.uid)&&ms.some(m=>m.t==='flist'&&Array.isArray(m.uids)&&m.uids.includes(me)))frAdd(f.uid,f.name)}));
-  frSave();frRender()}
+async function frPollFeeds(){const me=myUid();if(!me)return;const targets=[...FR.friends,...FR.fout];let ch=false;FR.on=FR.on||{};
+  await Promise.all(targets.map(async f=>{
+    if(isFriend(f.uid))frRead(frTopic('on',f.uid),'3m').then(os=>{if(!os)return;const l=os.filter(o=>o.t==='on'||o.t==='off').pop();FR.on[f.uid]=l?(l.t==='on'?l._t:0):0;frRender()});
+    const ms=await frRead(frTopic('fd',f.uid),'12h');if(!ms)return;FR.feeds[f.uid]=ms;
+    const lastName=[...ms].reverse().find(m=>m.name);if(lastName){const nm=cleanName(lastName.name);if(nm&&nm!==f.name){f.name=nm;ch=true}}
+    if(FR.fout.some(x=>x.uid===f.uid)&&ms.some(m=>m.t==='flist'&&Array.isArray(m.uids)&&m.uids.includes(me))){frAdd(f.uid,f.name);ch=true}}));
+  if(ch)frSave();frRender()}
+const frOnline=uid=>!!(FR.on&&FR.on[uid]&&Date.now()/1000-FR.on[uid]<150);
+/* 自分がオンラインであることを、フレンドがいるときだけ1分ごとに知らせる（画面を見ているときだけ） */
+function frBeat(){const me=myUid();if(!me||!FR.friends.length||document.hidden)return;frRelay(frTopic('on',me),{t:'on'})}
+setInterval(frBeat,60000);
+document.addEventListener('visibilitychange',()=>{const me=myUid();if(!me||!FR.friends.length)return;if(document.hidden){try{navigator.sendBeacon(RELAY+frTopic('on',me),JSON.stringify({t:'off'}))}catch(e){}}else frBeat()});
+addEventListener('pagehide',()=>{const me=myUid();if(!me||!FR.friends.length)return;try{navigator.sendBeacon(RELAY+frTopic('on',me),JSON.stringify({t:'off'}))}catch(e){}});
 function frGames(uid){const ms=FR.feeds[uid]||[],by=new Map();for(const m of ms){if(m.t!=='g'||typeof m.id!=='string'||typeof m.k!=='string')continue;by.set(m.id,m)}
   return [...by.values()].sort((a,b)=>b._t-a._t)}
 const frLog=k=>{const log=[];if(!/^[0-9a-z]*$/.test(k)||k.length%2)return null;for(let j=0;j<k.length;j+=2)log.push([SQC.indexOf(k[j]),SQC.indexOf(k[j+1])]);return log};
@@ -1922,11 +1931,11 @@ function frRender(){if(!$('frMain'))return;const me=myUid();$('frNeed').hidden=!
   const lb=$('frList');lb.innerHTML='';$('frEmpty').hidden=!!FR.friends.length;FR.open=FR.open||new Set();
   const fs=$('frFind');fs.hidden=FR.friends.length<8;const q=fs.hidden?'':fs.value.trim().toLowerCase();
   const now=Date.now()/1000,info=FR.friends.map(f=>{const gs=frGames(f.uid);return {f,gs,live:gs.find(g=>!g.over&&now-g._t<900)}});
-  info.sort((a,b)=>(!!b.live-!!a.live)||((b.gs[0]?b.gs[0]._t:0)-(a.gs[0]?a.gs[0]._t:0))||a.f.name.localeCompare(b.f.name,'ja'));
-  for(const {f,gs,live} of info){if(q&&!f.name.toLowerCase().includes(q))continue;const op=FR.open.has(f.uid);
+  info.forEach(x=>x.on=!!x.live||frOnline(x.f.uid));info.sort((a,b)=>(b.on-a.on)||(!!b.live-!!a.live)||((b.gs[0]?b.gs[0]._t:0)-(a.gs[0]?a.gs[0]._t:0))||a.f.name.localeCompare(b.f.name,'ja'));
+  for(const {f,gs,live,on} of info){if(q&&!f.name.toLowerCase().includes(q))continue;const op=FR.open.has(f.uid);
     const it=mk('div','fr-item fr-c'+(op?' open':'')),top=mk('div','fr-top');
-    const nb=mk('button','fr-name');nb.setAttribute('aria-expanded',String(op));const nm=mk('b','',f.name);
-    const st=mk('span','fr-st'+(live?' live':''),FR.feeds[f.uid]?(live?'● 対局中（'+live.k.length/2+'手）':gs.length?'12時間で'+gs.length+'局':''):'');nb.append(nm,st,mk('i','fr-chev',op?'▴':'▾'));
+    const nb=mk('button','fr-name');nb.setAttribute('aria-expanded',String(op));const nm=mk('b','',f.name);nb.append(mk('i','fr-dot'+(on?' on':''),''));nb.lastChild.title=on?'オンライン':'オフライン';
+    const st=mk('span','fr-st'+(live||on?' live':''),live?'対局中（'+live.k.length/2+'手）':on?'オンライン':FR.feeds[f.uid]&&gs.length?'12時間で'+gs.length+'局':'');nb.append(nm,st,mk('i','fr-chev',op?'▴':'▾'));
     nb.onclick=()=>{op?FR.open.delete(f.uid):FR.open.add(f.uid);frRender()};
     const pl=mk('button','fr-play','対戦');pl.onclick=()=>frChallenge(f);top.append(nb,pl);it.append(top);
     if(op){const box=mk('div','fr-games');
@@ -1955,7 +1964,7 @@ function frSnap(){if(!myUid()||!FR.friends.length||!S||S.study||!S.log||!S.log.l
   return {t:'g',id,mode:S.mode,me:S.mode==='net'?colorOf(NET.me):S.mode===0?0:hcOf(),k:S.log.map(m=>SQC[m[0]]+SQC[m[1]]).join(''),room:S.mode==='net'?NET.code:null,over:S.over?1:0,win:S.over?S.over.win:null,why:S.over?S.over.why||'':'',opp:S.mode==='net'?((NM[oppIdOf()]||{}).name||''):'',name:myName()}}
 function frTick(){const s=frSnap();if(!s)return;const key=s.id+'|'+s.k.length+'|'+s.over;if(key===FR.lastPost)return;clearTimeout(FR.postT);
   FR.postT=setTimeout(()=>{const s2=frSnap();if(!s2)return;const k2=s2.id+'|'+s2.k.length+'|'+s2.over;if(k2===FR.lastPost)return;FR.lastPost=k2;frRelay(frTopic('fd',myUid()),s2)},s.over?200:1500)}
-function frStart(){if(!myUid())return;FR.loaded=true;frSubInbox();try{if(CUR==='friends')frRender()}catch(e){}frBadge();frPollInbox();clearInterval(FR.inT);FR.inT=setInterval(()=>{if(!document.hidden)frPollInbox()},45000);
+function frStart(){if(!myUid())return;FR.loaded=true;setTimeout(frBeat,1500);frSubInbox();try{if(CUR==='friends')frRender()}catch(e){}frBadge();frPollInbox();clearInterval(FR.inT);FR.inT=setInterval(()=>{if(!document.hidden)frPollInbox()},45000);
   let lp=0;try{lp=+localStorage.getItem('bocch-fr-lp')||0}catch(e){}if(Date.now()-lp>6*3600e3)frPostList();if(CUR==='friends')frPollFeeds()}
 /* フレンドに対戦を申し込む：部屋を作り、相手の受信箱に招待を送る。相手には画面上に「受ける／断る」が出る */
 function frChallenge(f){if(!myUid())return;try{if(S.mode==='net')leave()}catch(e){}createRoom();if(!NET.code)return;const room=NET.code;show('invite');
