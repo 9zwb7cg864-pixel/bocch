@@ -32,6 +32,20 @@
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
+.chat{margin:10px auto 0;max-width:420px;text-align:left;border:1px solid var(--line);border-radius:2px;padding:6px 10px 8px}
+.chat-head{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--sub)}
+.chat-head b{flex:1;font-weight:500;letter-spacing:.1em}
+.chat-head label{font-size:11.5px;display:flex;align-items:center;gap:4px}
+.chat-log{max-height:9.5em;min-height:3.2em;overflow-y:auto;padding:6px 0;margin-top:4px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:5px}
+.chat-log p{margin:0;max-width:85%;padding:4px 10px;border-radius:10px;background:var(--soft);border:1px solid var(--line);font-size:13.5px;line-height:1.45;word-break:break-word;align-self:flex-start}
+.chat-log p.me{align-self:flex-end;background:rgba(201,169,110,.16);border-color:var(--gold-soft)}
+.chat-log p small{display:block;font-size:10.5px;color:var(--sub)}
+.chat-log .empty{align-self:center;background:none;border:0;color:var(--mute);font-size:12px}
+.chat-form{display:flex;gap:6px}
+.chat-form input{flex:1;min-width:0;font:inherit;font-size:16px;color:var(--fg);background:var(--soft);border:1px solid var(--line);border-radius:2px;padding:6px 10px;min-height:40px}
+.chat-form button{min-height:40px;padding:6px 14px}
+.chat-note{margin:4px 0 0;font-size:10.5px;color:var(--mute)}
+
 html{-webkit-text-size-adjust:100%;background:var(--bg)}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.75;
   padding:max(20px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(40px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
@@ -497,6 +511,12 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <p class="rate-msg" id="rateMsg" hidden></p>
     <p class="joseki" id="joseki" hidden></p>
     <details class="kifu" id="kifuBox" hidden><summary id="kifuSum"></summary><div id="kifu" aria-label="棋譜"></div></details>
+    <div class="chat" id="chatBox" hidden aria-label="チャット">
+      <div class="chat-head"><b>チャット</b><label><input type="checkbox" id="chatMute"> 相手を非表示</label></div>
+      <div class="chat-log" id="chatLog" aria-live="polite"></div>
+      <form class="chat-form" id="chatForm"><input id="chatIn" maxlength="60" autocomplete="off" placeholder="メッセージ（60文字まで）" enterkeyhint="send"><button class="primary" id="chatSend">送信</button></form>
+      <p class="chat-note" id="chatNote">対局者と観戦者に見えます。個人情報は書かないでください。</p>
+    </div>
   </div>
   <div class="study" id="studyPanel" hidden>
     <div class="ev-bar" aria-hidden="true"><i id="evFill"></i></div>
@@ -1749,6 +1769,38 @@ try{if(localStorage.getItem('bocch-acct')==='1')setTimeout(fbInit,300)}catch(e){
 $('meBtn').addEventListener('click',()=>{fbInit().catch(()=>{})});
 {const mark=()=>{try{localStorage.setItem('bocch-acct','1')}catch(e){}};$('acctLogin').addEventListener('click',mark);$('acctSignup').addEventListener('click',mark)}
 render();
+
+/* 対戦チャット：オンライン対戦では棋譜の場所にチャットを出す。部屋の記録に {t:'chat'} として流す */
+const CHAT={list:[],seen:new Set(),last:0,room:null,mute:false};
+const CHAT_NOTE='対局者と観戦者に見えます。個人情報は書かないでください。';
+try{CHAT.mute=localStorage.getItem('bocch-chat-mute')==='1'}catch(e){}
+function chatClean(t){return String(t||'').replace(/[\u0000-\u001f\u007f​-‏‪-‮⁦-⁩]/g,'').replace(/\s+/g,' ').trim().slice(0,60)}
+function chatOn(){return S.mode==='net'&&!!NET.code&&!NET.ai}
+function chatName(id){if(id===NET.me&&!NET.watch)return 'あなた';const o=NM[id];return o?o.name:'名無し'}
+function chatPaint(){
+  const log=$('chatLog');if(!log)return;log.textContent='';
+  const items=CHAT.list.filter(m=>!(CHAT.mute&&m.from!==NET.me));
+  if(!items.length){const p=document.createElement('p');p.className='empty';p.textContent=CHAT.mute?'相手のチャットは非表示にしています':'まだメッセージはありません';log.append(p)}
+  for(const m of items){const p=document.createElement('p');if(m.from===NET.me&&!NET.watch)p.className='me';const sm=document.createElement('small');sm.textContent=chatName(m.from);p.append(sm,document.createTextNode(m.s));log.append(p)}
+  log.scrollTop=log.scrollHeight}
+function chatUI(){
+  const on=chatOn();$('chatBox').hidden=!on;if(!on)return;$('kifuBox').hidden=true;
+  const can=!NET.watch&&colorOf(NET.me)>0;$('chatIn').disabled=!can;$('chatSend').disabled=!can;
+  $('chatIn').placeholder=can?'メッセージ（60文字まで）':'観戦中は読むだけです';$('chatMute').checked=CHAT.mute}
+function chatReset(){CHAT.list=[];CHAT.seen=new Set();CHAT.room=NET.code;chatPaint()}
+$('chatMute').addEventListener('change',e=>{CHAT.mute=e.target.checked;try{localStorage.setItem('bocch-chat-mute',CHAT.mute?'1':'0')}catch(x){}chatPaint()});
+$('chatForm').addEventListener('submit',async e=>{e.preventDefault();const t=chatClean($('chatIn').value);if(!t||NET.watch||!colorOf(NET.me))return;
+  const now=Date.now();if(now-CHAT.last<1500){$('chatNote').textContent='少し間をあけて送ってください。';return}CHAT.last=now;
+  $('chatIn').value='';$('chatNote').textContent=CHAT_NOTE;
+  const ok=await post({t:'chat',s:t,k:newCode()});if(!ok)$('chatIn').value=t});
+const _reduceC=reduce;reduce=function(m){
+  if(m&&m.t==='chat'){
+    if(CHAT.room!==NET.code)chatReset();
+    if(!colorOf(m.from))return;const t=chatClean(m.s);if(!t)return;const key=m.from+'|'+(m.k||'')+'|'+t;if(CHAT.seen.has(key))return;CHAT.seen.add(key);
+    CHAT.list.push({from:m.from,s:t});if(CHAT.list.length>200)CHAT.list.shift();chatPaint();return}
+  return _reduceC(m)};
+const _renderC=render;render=function(){_renderC();try{if(CHAT.room!==NET.code)chatReset();chatUI()}catch(e){}};
+
 </script>
 <script>
 /* AIの手に吹き出しで解説を付ける（CPU戦・研究のAI・AI観戦） */
@@ -1804,7 +1856,7 @@ function drawView(){const n=(S.log||[]).length,i=VIEW.i,v=viewBoard(i),rk=[0,col
   $('hint').textContent=i+'手目の局面を見ています（いまは'+n+'手目）';
   // 戻った局面でも、その局面になった1手の解説を出す
   if(i>0&&$('showTalk').checked){const pv=viewBoard(i-1),m=S.log[i-1],p=pv.b[m[0]];
-    if(p){if(VIEW.bub!==i){VIEW.bub=i;VIEW.txt=talkText(pv.b,p,m)}showBubble(p,m,VIEW.txt,true,(p===1?'黒':'白')+(NET.ai?'AI':'')+'　'+i+'手目')}}
+    if(p&&VIEW.bub!==i){VIEW.bub=i;showBubble(p,m,talkText(pv.b,p,m),true,(p===1?'黒':'白')+(NET.ai?'AI':'')+'　'+i+'手目');clearTimeout(TALK.T);TALK.T=setTimeout(hideBubble,4000)}}
   else hideBubble()}
 function viewSet(i){const n=(S.log||[]).length;if(i==null||i>=n){VIEW.i=null}else VIEW.i=Math.max(0,i);VIEW.bub=-1;hideBubble();render()}
 $('wPrev').addEventListener('click',()=>{const n=(S.log||[]).length;viewSet((VIEW.i==null?n:VIEW.i)-1)});
