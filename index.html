@@ -301,7 +301,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.18</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.19</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -967,14 +967,14 @@ function studyKick(){if(!STUDY.run||S.over)return;const lv=STUDY.lv[S.turn];if(!
   setTimeout(()=>{if(S.study&&STUDY.run&&!S.over&&KICK==='s:'+S.ply+':'+key(S.b,S.turn))cpuPlay(S.turn,STUDY.lv[S.turn])},STUDY.sp)}
 function studyStop(){STUDY.run=false;KICK='';$('stRun').textContent='▶ AIに指させる';render()}
 function evWorker(){if(STUDY.ew!==null)return STUDY.ew;try{const src=$('eng').textContent+'\nonmessage=e=>{const d=e.data;const r=BocchEngine.think(d.b,d.p,d.ms,{history:d.history});postMessage({key:d.key,p:d.p,r})}';
-  STUDY.ew=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));STUDY.ew.onmessage=e=>{const d=e.data;if(d.key!==STUDY.evKey)return;STUDY.ev=d;renderStudy()}}catch(e){STUDY.ew=false}return STUDY.ew}
+  STUDY.ew=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));STUDY.ew.onmessage=e=>{const d=e.data;if(d.key!==STUDY.evKey)return;STUDY.ev=d;try{TALK.ev=d}catch(_){}renderStudy()}}catch(e){STUDY.ew=false}return STUDY.ew}
 function renderStudy(){const on=!!S.study;if(on&&S.over&&STUDY.run){STUDY.run=false;$('stRun').textContent='▶ もう一局AIに指させる'}$('studyPanel').hidden=!on;$('localCtl').classList.toggle('st',on);if(!on)return;
   const showEv=$('stEv').checked;$('studyPanel').querySelector('.ev-bar').hidden=!showEv;$('evTxt').parentElement.hidden=!showEv;$('evPv').hidden=!showEv;
   const k=S.ply+':'+key(S.b,S.turn);
   if(S.over){$('evFill').style.width=(S.over.win===1?100:S.over.win===2?0:50)+'%';$('evTxt').textContent=S.over.win?NAME[S.over.win]+'の勝ち':'引き分け';$('evBest').textContent='';$('evPv').textContent='';return}
   if(showEv&&STUDY.evKey!==k){STUDY.evKey=k;STUDY.ev=null;$('evTxt').textContent='評価値を計算しています…';$('evBest').textContent='';$('evPv').textContent='';
     const w=evWorker(),job={key:k,b:S.b.slice(),p:S.turn,ms:700,history:S.hist.map(h=>({b:h.b,turn:h.turn}))};
-    if(w)w.postMessage(job);else setTimeout(()=>{if(STUDY.evKey!==k)return;STUDY.ev={key:k,p:S.turn,r:BocchEngine.think(job.b,job.p,400,job)};renderStudy()},30)}
+    if(w)w.postMessage(job);else setTimeout(()=>{if(STUDY.evKey!==k)return;STUDY.ev={key:k,p:S.turn,r:BocchEngine.think(job.b,job.p,400,job)};try{TALK.ev=STUDY.ev}catch(_){}renderStudy()},30)}
   const d=STUDY.ev;if(!d||!d.r||d.key!==k)return;
   let sc=d.r.score;if(d.p===2)sc=-sc; // 黒から見た値
   const pb=Math.abs(sc)>=90000?(sc>0?100:0):Math.round(100/(1+Math.exp(-0.013*sc)));
@@ -1634,8 +1634,12 @@ function talkWatch(){
   const g=S.mode==='net'?NET.game:-2;
   if(g!==TALK.game||!S.ply||S.ply<TALK.ply){TALK.game=g;TALK.ply=S.ply;TALK.b=S.b.slice();TALK.turn=S.turn;hideBubble();return}
   if(S.ply===TALK.ply+1&&S.last&&TALK.b){const p=TALK.b[S.last[0]];
-    if(p&&aiMover(p)&&VIEW.i==null)showBubble(p,S.last,talkText(TALK.b,p,S.last))}
-  if(S.ply!==TALK.ply){TALK.ply=S.ply;TALK.b=S.b.slice();TALK.turn=S.turn}}
+    if(p&&aiMover(p)&&VIEW.i==null)showBubble(p,S.last,talkText(TALK.b,p,S.last));
+    // 研究で人が指した手が、評価値の最善手と同じならほめる
+    else if(p&&S.study&&VIEW.i==null&&TALK.ev&&TALK.ev.key===TALK.ply+':'+key(TALK.b,TALK.turn)&&TALK.ev.r&&TALK.ev.r.move){const bm=TALK.ev.r.move;
+      if(bm[0]===S.last[0]&&bm[1]===S.last[1])showBubble(p,S.last,'最善手！ '+talkText(TALK.b,p,S.last),false,(p===1?'黒':'白')+'（あなた）')}}
+  if(S.ply!==TALK.ply){TALK.ply=S.ply;TALK.b=S.b.slice();TALK.turn=S.turn}
+  if(S.study&&STUDY.ev&&STUDY.ev.r&&STUDY.ev.key===S.ply+':'+key(S.b,S.turn))TALK.ev=STUDY.ev}
 
 /* 観戦中に前の手を見返す（感想戦のような戻る・送る） */
 const VIEW={i:null,game:-1};
