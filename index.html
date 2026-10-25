@@ -275,7 +275,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.7</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.8</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -1570,10 +1570,10 @@ function talkText(b,p,m){let F=[];try{F=moveFacts(b,p,m)}catch(e){}
   if(adv<0)return '一度下がって、相手の進む道をふさぐ。';
   return '形を整える手。'}
 function hideBubble(){const e=document.getElementById('aiBub');if(e)e.classList.remove('on')}
-function showBubble(p,m,text){if(!$('showTalk').checked||CUR!=='game')return;
+function showBubble(p,m,text,keep,who){if(!$('showTalk').checked||CUR!=='game')return;
   const wrap=$('board').parentElement;let e=document.getElementById('aiBub');
   if(!e){e=document.createElement('div');e.id='aiBub';e.className='ai-bub';wrap.appendChild(e)}
-  e.innerHTML=`<b class="${p===1?'who-b':'who-w'}">${p===1?'黒':'白'}AI</b>`;e.append(text);
+  e.innerHTML=`<b class="${p===1?'who-b':'who-w'}">${who||((p===1?'黒':'白')+'AI')}</b>`;e.append(text);
   const cell=$('c'+m[1]);if(!cell)return;const wr=wrap.getBoundingClientRect(),cr=cell.getBoundingClientRect();
   e.style.left='0px';e.style.top='0px';e.classList.add('on');
   const bw=e.offsetWidth,bh=e.offsetHeight,cx=cr.left-wr.left+cr.width/2,above=cr.top-wr.top>bh+14;
@@ -1581,7 +1581,7 @@ function showBubble(p,m,text){if(!$('showTalk').checked||CUR!=='game')return;
   e.style.left=x+'px';e.style.setProperty('--tx',Math.max(14,Math.min(bw-14,cx-x))+'px');
   e.classList.toggle('up',above);e.classList.toggle('down',!above);
   e.style.top=(above?cr.top-wr.top-bh-10:cr.bottom-wr.top+10)+'px';
-  clearTimeout(TALK.T);TALK.T=setTimeout(hideBubble,S.mode==='net'?6500:4500)}
+  clearTimeout(TALK.T);if(!keep)TALK.T=setTimeout(hideBubble,S.mode==='net'?6500:4500)}
 function talkWatch(){
   const g=S.mode==='net'?NET.game:-2;
   if(g!==TALK.game||!S.ply||S.ply<TALK.ply){TALK.game=g;TALK.ply=S.ply;TALK.b=S.b.slice();TALK.turn=S.turn;hideBubble();return}
@@ -1597,8 +1597,12 @@ function drawView(){const n=(S.log||[]).length,i=VIEW.i,v=viewBoard(i),rk=[0,col
     if(r===0||r===5)cls+=' goal';if(v.last&&(v.last[0]===k||v.last[1]===k))cls+=' last';el.className=cls;
     el.innerHTML=c?`<div class="stone ${c===1?'b':'w'}${d?'':' zero'}${rankCls(rk[c])}"><span>${d}</span></div>`:''}
   $('board').classList.add('past');
-  $('hint').textContent=i+'手目の局面を見ています（いまは'+n+'手目）'}
-function viewSet(i){const n=(S.log||[]).length;if(i==null||i>=n){VIEW.i=null}else VIEW.i=Math.max(0,i);hideBubble();render()}
+  $('hint').textContent=i+'手目の局面を見ています（いまは'+n+'手目）';
+  // 戻った局面でも、その局面になった1手の解説を出す
+  if(i>0&&$('showTalk').checked){const pv=viewBoard(i-1),m=S.log[i-1],p=pv.b[m[0]];
+    if(p){if(VIEW.bub!==i){VIEW.bub=i;VIEW.txt=talkText(pv.b,p,m)}showBubble(p,m,VIEW.txt,true,(p===1?'黒':'白')+(NET.ai?'AI':'')+'　'+i+'手目')}}
+  else hideBubble()}
+function viewSet(i){const n=(S.log||[]).length;if(i==null||i>=n){VIEW.i=null}else VIEW.i=Math.max(0,i);VIEW.bub=-1;hideBubble();render()}
 $('wPrev').addEventListener('click',()=>{const n=(S.log||[]).length;viewSet((VIEW.i==null?n:VIEW.i)-1)});
 $('wNext').addEventListener('click',()=>{if(VIEW.i!=null)viewSet(VIEW.i+1)});
 $('wLive').addEventListener('click',()=>viewSet(null));
