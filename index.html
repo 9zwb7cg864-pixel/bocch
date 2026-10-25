@@ -301,7 +301,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.20</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.21</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -523,7 +523,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <button id="leave">対戦をやめる</button>
   </div>
   <div class="row" id="reviewRow" hidden><button id="reviewNow">この対局を感想戦 ›</button></div>
-  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 定跡の演出</label></div>
+  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label></div>
   <div class="ad-slot ad-over" data-ad="over" hidden aria-label="広告"></div>
 </section>
 
@@ -1131,16 +1131,20 @@ const JOSEKI2={'0-4-0':['様子見','端の石を一歩だけ出して、黒の�
 function keyOf(m,p){if(!m)return null;let f=m[0],t=m[1],fr=f/6|0,tr=t/6|0,fc=f%6,tc=t%6;if(p===2){if(fr!==0)return null;tr=5-tr}else if(fr!==5)return null;if(fc>2){fc=5-fc;tc=5-tc}return fc+'-'+tr+'-'+tc}
 function josekiOf(m){if(!m)return null;let f=m[0],t=m[1],fc=f%6,tc=t%6,tr=t/6|0;if((f/6|0)!==5)return null;if(fc>2){fc=5-fc;tc=5-tc}return JOSEKI[fc+'-'+tr+'-'+tc]||null}
 /* 定跡の演出（金の糸）：1手目・2手目が定跡なら、盤の上に光の演出と定跡名を出す。研究モードでは出さない */
-const JOS={last:'',raf:0,cv:null};
+const JOS={last:'',raf:0,cv:null,busy:false,q:[]};
+function fxQueue(fn){if(JOS.busy){if(JOS.q.length<4)JOS.q.push(fn);return}JOS.busy=true;if(!fn())fxDone()}
+function fxDone(){cancelAnimationFrame(JOS.raf);JOS.raf=0;if(JOS.cv)JOS.cv.getContext('2d').clearRect(0,0,JOS.cv.width,JOS.cv.height);$('board').style.transform='';
+  while(JOS.q.length){const n=JOS.q.shift();if(n())return}JOS.busy=false;if(JOS.cv)JOS.cv.style.display='none'}
 const JOS_KIND={'寄り添い':'thread','隅守り':'shield','一本槍':'spear','渡り鳥':'bird','はぐれ雲':'cloud','正面突破':'shock','十字路':'cross',
   '肩寄せ':'thread','様子見':'eye','迎え槍':'spear2','渡り返し':'bird','離れ雲':'cloud','正面受け':'shock','交差返し':'xcross'};
 try{if(localStorage.getItem('bocch-jos')==='0')$('showJos').checked=false}catch(e){}
 $('showJos').addEventListener('change',e=>{try{localStorage.setItem('bocch-jos',e.target.checked?'1':'0')}catch(_){}if(!e.target.checked)josStop()});
-function josStop(){cancelAnimationFrame(JOS.raf);JOS.raf=0;if(JOS.cv){JOS.cv.getContext('2d').clearRect(0,0,JOS.cv.width,JOS.cv.height);JOS.cv.style.display='none'}$('board').style.transform=''}
-function josPlay(name,side,mv,b){
-  if(!$('showJos').checked||CUR!=='game')return;
-  const kind=JOS_KIND[name.replace(/^鏡・/,'')];if(!kind)return;
-  const bd=$('board'),grid=$('grid');if(!grid.children.length)return;
+function josStop(){JOS.q=[];JOS.busy=false;cancelAnimationFrame(JOS.raf);JOS.raf=0;if(JOS.cv){JOS.cv.getContext('2d').clearRect(0,0,JOS.cv.width,JOS.cv.height);JOS.cv.style.display='none'}$('board').style.transform=''}
+function josPlay(name,side,mv,b){fxQueue(()=>josPlay0(name,side,mv,b))}
+function josPlay0(name,side,mv,b){
+  if(!$('showJos').checked||CUR!=='game')return false;
+  const kind=JOS_KIND[name.replace(/^鏡・/,'')];if(!kind)return false;
+  const bd=$('board'),grid=$('grid');if(!grid.children.length)return false;
   if(!JOS.cv){const c=document.createElement('canvas');c.setAttribute('aria-hidden','true');c.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:6';bd.appendChild(c);JOS.cv=c}
   const cv=JOS.cv;cv.style.display='block';
   const R=bd.getBoundingClientRect(),W=R.width,H=R.height,dpr=Math.min(2,window.devicePixelRatio||1);
@@ -1188,20 +1192,70 @@ function josPlay(name,side,mv,b){
     const tw=x.measureText(name).width,rp=ease(p/0.25);x.fillRect(W/2-tw/2-18*s-50*s*rp,y+12*s,50*s*rp,1.5*s);x.fillRect(W/2+tw/2+18*s,y+12*s,50*s*rp,1.5*s);
     for(let n=0;n<9;n++){const fp=win(p,rnd(n)*0.3,0.6+rnd(n)*0.4);if(fp<=0||fp>=1)continue;x.save();x.globalAlpha=a*(1-fp);x.translate((60+rnd(n+5)*320)*s,(120+fp*200)*s);x.rotate(fp*6+n);x.fillStyle=n%2?COL:COL2;x.fillRect(-3*s,-3*s,6*s,6*s);x.restore()}
     x.restore()}
-  function frame(now){const t=now-t0;if(t>PER||CUR!=='game'){josStop();return}
+  function frame(now){const t=now-t0;if(CUR!=='game'){josStop();return}if(t>PER){fxDone();return}
     x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
     let sh=0;if(kind==='shock'){const sp=win(t,0,300);if(sp>0&&sp<1)sh=Math.sin(sp*40)*3*(1-sp)}bd.style.transform=sh?'translate('+sh+'px,'+sh*0.5+'px)':'';
     const gp=win(t,0,600);if(gp>0&&gp<1){x.save();x.globalAlpha=(1-gp)*0.9;x.strokeStyle=COL2;x.lineWidth=3*k;x.beginPath();x.arc(D.x,D.y,(26+gp*18)*k,0,7);x.stroke();x.restore()}
     const ep=win(t,0,1200);x.save();x.globalAlpha=1-win(t,1000,1500);if(ep>0)motif(ep);x.restore();
     const np=win(t,350,PER);if(np>0&&np<1)title(np);
     JOS.raf=requestAnimationFrame(frame)}
-  JOS.raf=requestAnimationFrame(frame)}
+  JOS.raf=requestAnimationFrame(frame);return true}
+/* 勝ち・負け・到達の演出（金の糸と同じ見た目）。研究モードでは出さない */
+const FX={gid:'',ply:-1,arr:[0,0,0],over:''};
+function fxBase(){const bd=$('board'),grid=$('grid');if(!grid.children.length)return null;
+  if(!JOS.cv){const c=document.createElement('canvas');c.setAttribute('aria-hidden','true');c.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:6';bd.appendChild(c);JOS.cv=c}
+  const cv=JOS.cv;cv.style.display='block';const R=bd.getBoundingClientRect(),W=R.width,H=R.height,dpr=Math.min(2,window.devicePixelRatio||1);
+  cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);const P=[];for(let i=0;i<36;i++){const r=grid.children[i].getBoundingClientRect();P.push({x:r.left-R.left+r.width/2,y:r.top-R.top+r.height/2,w:r.width})}
+  cancelAnimationFrame(JOS.raf);return{bd,x:cv.getContext('2d'),W,H,dpr,P,k:P[0].w/60,s:W/440}}
+const fxE=x=>{x=Math.max(0,Math.min(1,x));return 1-Math.pow(1-x,3)},fxW=(t,a,c)=>Math.max(0,Math.min(1,(t-a)/(c-a))),fxR=n=>{const v=Math.sin(n*127.1)*43758.5453;return v-Math.floor(v)};
+const FX_FONT='"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif';
+function fxBand(g,a,big,lab,col,labcol,bigSize,p){const {x,W,H,s}=g,y=H/2,bh=W*0.25;
+  x.save();x.globalAlpha=a;x.textAlign='center';x.textBaseline='middle';x.fillStyle='rgba(14,15,18,.76)';x.fillRect(0,y-bh/2,W,bh);
+  x.fillStyle=labcol;x.font='500 '+Math.round(13*s)+'px '+FX_FONT;x.fillText(lab,W/2,y-32*s);
+  x.fillStyle=col;x.font='800 '+Math.round(bigSize*s)+'px '+FX_FONT;x.fillText(big,W/2,y+12*s);
+  const tw=x.measureText(big).width,rp=fxE(p/0.25);x.fillRect(W/2-tw/2-18*s-50*s*rp,y+12*s,50*s*rp,1.5*s);x.fillRect(W/2+tw/2+18*s,y+12*s,50*s*rp,1.5*s);x.restore()}
+function fxPillar(g,i,side,p,col){const {x,P,k,H}=g,Q=P[i],up=side===1?(P[0].y<P[30].y?-1:1):(P[0].y<P[30].y?1:-1);
+  const h=fxE(p/0.35)*H,a=1-fxW(p,0.6,1);const gr=x.createLinearGradient(Q.x,Q.y,Q.x,Q.y+up*h);gr.addColorStop(0,col);gr.addColorStop(1,'rgba(0,0,0,0)');
+  x.save();x.globalAlpha=a*0.55;x.fillStyle=gr;const w=Q.w*0.7;x.fillRect(Q.x-w/2,Math.min(Q.y,Q.y+up*h),w,Math.abs(h));
+  x.globalAlpha=a;x.strokeStyle=col;for(let n=0;n<2;n++){const rp=fxW(p,n*0.12,0.5+n*0.12);if(rp<=0||rp>=1)continue;x.globalAlpha=a*(1-rp);x.lineWidth=(3-n)*k;x.beginPath();x.arc(Q.x,Q.y,(26+rp*60)*k,0,7);x.stroke()}x.restore()}
+function fxLeaves(g,p,n,cols,slow){const {x,W,H,s}=g;for(let i=0;i<n;i++){const st=fxR(i)*0.35,fp=fxW(p,st,st+(slow?0.65:0.5));if(fp<=0||fp>=1)continue;
+  const px=fxR(i+11)*W+Math.sin(fp*6+i)*14*s,py=-10+fp*(H+20);x.save();x.globalAlpha=(1-fxW(fp,0.75,1))*0.9;x.translate(px,py);x.rotate(fp*(slow?3:7)+i);x.fillStyle=cols[i%cols.length];
+  if(slow){x.beginPath();x.ellipse(0,0,5*s,2.6*s,0,0,7);x.fill()}else x.fillRect(-3*s,-3*s,6*s,6*s);x.restore()}}
+function fxArrive(side,cell,mine){fxQueue(()=>fxArrive0(side,cell,mine))}
+function fxArrive0(side,cell,mine){if(!$('showJos').checked||CUR!=='game')return false;const g=fxBase();if(!g)return false;
+  const col=side===1?'#f6e2a8':'#ffffff',col1=side===1?'#e9c46a':'#dfe6ee',t0=performance.now(),PER=1600;
+  function f(now){const t=now-t0;if(CUR!=='game'){josStop();return}if(t>PER){fxDone();return}const {x,W,H,dpr}=g;x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
+    fxPillar(g,cell,side,t/PER,col);
+    JOS.raf=requestAnimationFrame(f)}JOS.raf=requestAnimationFrame(f);return true}
+function fxEnd(win,why,me){const b=S.b.slice();fxQueue(()=>fxEnd0(win,why,me,b))}
+function fxEnd0(win,why,me,b){if(!$('showJos').checked||CUR!=='game')return false;const g=fxBase();if(!g)return false;
+  const cn=win===1?'黒':'白',lose=me&&me!==win,t0=performance.now(),PER=4600,gr=win===1?[0,1,2,3,4,5]:[30,31,32,33,34,35];
+  const big=me?(lose?'敗 北':'勝 利'):cn+'の勝ち',lab=me?(lose?cn+'の勝ち・'+why:'あなたの勝ち・'+why):why;
+  const col=win===1?'#e9c46a':'#dfe6ee',col2=win===1?'#f6e2a8':'#ffffff';
+  function f(now){const t=now-t0;if(CUR!=='game'){josStop();return}if(t>PER){fxDone();return}const {x,W,H,dpr}=g;x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);const p=t/PER;
+    if(lose){x.fillStyle='rgba(8,9,11,'+(0.45*fxE(p/0.25)*(1-fxW(p,0.85,1)))+')';x.fillRect(0,0,W,H);
+      for(const i of gr)if(b[i]===win)fxPillar(g,i,win,Math.min(1,t/2200),'rgba(200,205,212,.8)');
+      fxLeaves(g,p,18,['#8d8a86','#a7a39c','#6f6c69'],true);
+      const np=fxW(t,500,PER);if(np>0&&np<1)fxBand(g,Math.min(1,np/0.2)*(1-fxW(np,0.82,1)),big,lab,'#b9b4aa','#8f8a80',54,np)}
+    else{const gl=x.createRadialGradient(W/2,H/2,0,W/2,H/2,W*0.7);gl.addColorStop(0,win===1?'rgba(246,226,168,.22)':'rgba(255,255,255,.18)');gl.addColorStop(1,'rgba(0,0,0,0)');
+      x.globalAlpha=fxE(p/0.2)*(1-fxW(p,0.8,1));x.fillStyle=gl;x.fillRect(0,0,W,H);x.globalAlpha=1;
+      for(const i of gr)if(b[i]===win)fxPillar(g,i,win,Math.min(1,t/2400),col2);
+      fxLeaves(g,p,40,[col,col2,win===1?'#c9a24e':'#aeb7c0'],false);
+      const np=fxW(t,350,PER);if(np>0&&np<1)fxBand(g,Math.min(1,np/0.1)*(1-fxW(np,0.85,1)),big,lab,col,win===1?'#cdbf98':'#c3cad2',me?58:48,np)}
+    JOS.raf=requestAnimationFrame(f)}JOS.raf=requestAnimationFrame(f);return true}
+function fxMe(){if(S.mode==='net')return NET.ai?0:(colorOf(NET.me)||0);if(S.mode===0||S.study)return 0;return hcOf()}
+function fxCheck(){if(!S||S.study)return;const live=typeof VIEW==='undefined'||VIEW.i==null;const gid=(S.mode==='net'?'n'+(NET.code||'')+'-'+(NET.game||''):S.gid||(S._fx||(S._fx=Math.random().toString(36).slice(2))))+':'+S.mode;
+  const a=[0,arrivedCount(S.b,1),arrivedCount(S.b,2)],ply=S.ply||0;
+  if(gid!==FX.gid||ply<FX.ply){FX.gid=gid;FX.ply=ply;FX.arr=a;FX.over=S.over?gid:'';return}
+  if(S.over&&S.over.win&&FX.over!==gid){FX.over=gid;FX.ply=ply;FX.arr=a;if(live)fxEnd(S.over.win,S.over.why||'',fxMe());return}
+  if(!S.over&&ply===FX.ply+1&&S.last&&live){const m=S.b[S.last[1]];if(m&&a[m]>FX.arr[m]){const me=fxMe();fxArrive(m,S.last[1],me?me===m:undefined)}}
+  if(ply!==FX.ply){FX.ply=ply;FX.arr=a}}
 const _render2=render;
 render=function(){_render2();if(CUR==='game'&&MATCH.on&&S.mode==='net'&&NET.guest)stopMatch();const el=$('joseki');let j=null,lab='';
   if(!S.over&&S.ply===1){j=josekiOf(S.last);lab='1手目 定跡「'}
   else if(!S.over&&S.ply===2){const k2=keyOf(S.last,2),w=k2&&JOSEKI2[k2];if(w){const k1=S.firstKey;j=(k1&&k1===k2)?['鏡・'+w[0],'黒と同じ形で応じる。'+w[1]]:w;lab='2手目 定跡「'}}
   if(S.ply===1&&S.last)S.firstKey=keyOf(S.last,1);
-  el.hidden=true;if(j&&!S.study&&S.last&&(typeof VIEW==='undefined'||VIEW.i==null)){const jk=(S.gid||NET.code||'')+':'+S.ply+':'+S.last.join('-');if(jk!==JOS.last){JOS.last=jk;josPlay(j[0],S.ply===1?1:2,S.last,S.b.slice())}}};
+  el.hidden=true;if(j&&!S.study&&S.last&&(typeof VIEW==='undefined'||VIEW.i==null)){const jk=(S.gid||NET.code||'')+':'+S.ply+':'+S.last.join('-');if(jk!==JOS.last){JOS.last=jk;josPlay(j[0],S.ply===1?1:2,S.last,S.b.slice())}}fxCheck()};
 render();
 
 /* 対局履歴（この端末に保存） */
