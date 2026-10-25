@@ -226,6 +226,9 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .fr-games{display:flex;flex-direction:column;gap:6px;margin-top:8px}.fr-games button{text-align:left;font-size:13px;padding:8px 10px;min-height:38px}
 .fr-msg{font-size:13px;margin:8px 0 0;color:var(--gold)}.fr-msg.err{color:#e08c7c}
 #frOpp{white-space:nowrap}
+.fr-inv{position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:60;width:min(92vw,380px);background:var(--panel);border:1px solid var(--gold);border-radius:6px;padding:12px 14px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.fr-inv p{margin:0 0 10px;font-size:14px}.fr-inv .fr-row button{flex:1}
+.fr-item .fr-play{margin-top:8px;width:100%}
 .hist-ctl{justify-content:center;margin-top:22px}
 .rev-head{text-align:center;color:var(--sub);font-size:13px;margin:-6px 0 10px}
 .rev-board{width:min(100%,calc(100dvh - 420px));min-width:min(100%,240px)}
@@ -1816,7 +1819,7 @@ async function fbInit(){if(FB.ready||FB.loading)return FB.loading;FB.loading=(as
   await Promise.all([loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-auth-compat.js'),loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-firestore-compat.js')]);
   firebase.initializeApp(FB_CONFIG);FB.auth=firebase.auth();FB.auth.languageCode='ja';FB.db=firebase.firestore();FB.ready=true;
   FB.auth.onAuthStateChanged(u=>{FB.user=u;try{if(u&&u.emailVerified){localStorage.setItem('bocch-named','1');localStorage.setItem('bocch-off',OFFICERS.includes(String(u.email||'').toLowerCase())?'1':'0')}else{localStorage.removeItem('bocch-named');localStorage.removeItem('bocch-off')}}catch(e){}
-    acctRender();if(u&&u.emailVerified)acctPull();else{try{FR.friends=[];FR.fout=[];FR.fin=[];FR.loaded=false;FR.feeds={};clearInterval(FR.inT);frBadge()}catch(e){}}if(typeof renderProf==='function'&&CUR==='profile')renderProf();render()})})();return FB.loading}
+    acctRender();if(u&&u.emailVerified)acctPull();else{try{FR.friends=[];FR.fout=[];FR.fin=[];FR.loaded=false;FR.feeds={};clearInterval(FR.inT);try{FR.sub&&FR.sub.close();FR.sub=null}catch(e){}frBadge()}catch(e){}}if(typeof renderProf==='function'&&CUR==='profile')renderProf();render()})})();return FB.loading}
 const ACCT_ERR={'auth/email-already-in-use':'このメールアドレスはもう登録されています。「ログイン」を押してください。','auth/invalid-email':'メールアドレスの形が正しくありません。','auth/weak-password':'パスワードは6文字以上にしてください。','auth/invalid-credential':'メールアドレスかパスワードが違います。','auth/wrong-password':'メールアドレスかパスワードが違います。','auth/user-not-found':'このメールアドレスは登録されていません。','auth/missing-password':'パスワードを入れてください。','auth/too-many-requests':'試した回数が多すぎます。少し時間をおいてください。','auth/network-request-failed':'通信できませんでした。ネットにつながっているか確かめてください。'};
 function acctMsg(t,err){const m=$('acctMsg');m.textContent=t||'';m.style.color=err?'#e08c7c':''}
 function acctErr(e){acctMsg(ACCT_ERR[e&&e.code]||('うまくいきませんでした（'+(e&&e.code||e)+'）'),true)}
@@ -1889,7 +1892,8 @@ async function frPollInbox(){const me=myUid();if(!me||!FR.loaded)return;const ms
     if(m.t==='freq'){if(isFriend(m.uid))continue;
       if(FR.fout.some(f=>f.uid===m.uid)){frAdd(m.uid,nm);frRelay(frTopic('in',m.uid),{t:'facc',uid:me,name:myName()});continue}
       if(!FR.fin.some(f=>f.uid===m.uid))FR.fin.push({uid:m.uid,name:nm,t:Date.now()})}
-    else if(m.t==='facc'){if(FR.fout.some(f=>f.uid===m.uid))frAdd(m.uid,nm)}}
+    else if(m.t==='facc'){if(FR.fout.some(f=>f.uid===m.uid))frAdd(m.uid,nm)}
+    else if(m.t==='finv'||m.t==='fdec'){m._pre=1;frInvMsg(m)}}
   if(ch){frSeenSave();frSave();frBadge();frRender();frPostList()}}
 // フレンドと申請先の公開欄を読む（申請先の「フレンド一覧」に自分が入っていたら、承認されたとみなす）
 async function frPollFeeds(){const me=myUid();if(!me)return;const targets=[...FR.friends,...FR.fout];
@@ -1914,7 +1918,7 @@ function frRender(){if(!$('frMain'))return;const me=myUid();$('frNeed').hidden=!
     if(live){const b=mk('button','primary',live.room?'▶ 観戦する（オンライン対戦）':'▶ 対局を見る（自動で更新）');b.onclick=()=>live.room?frWatchRoom(live.room):frOpen(f,live,true);box.append(b)}
     for(const g of gs.filter(g=>g.over).slice(0,5)){const lg=frLog(g.k);if(!lg)continue;const r=g.win===0?'引き分け':g.me?f.name+(g.win===g.me?'の勝ち':'の負け'):(g.win===1?'黒':'白')+'勝ち';
       const b=mk('button','',fmtDate(g._t*1000)+'　'+MODE_NAME(g.mode)+'　'+r+'（'+lg.length+'手）'+(g.opp?'　相手 '+g.opp:'')+'　感想戦 ›');b.onclick=()=>frOpen(f,g,false);box.append(b)}
-    if(box.children.length)it.append(box);lb.append(it)}}
+    if(box.children.length)it.append(box);const pl=mk('button','primary fr-play','対戦を申し込む');pl.onclick=()=>frChallenge(f);it.append(pl);lb.append(it)}}
 function frWatchRoom(room){if(!/^[a-z0-9]{6}$/.test(room))return;try{if(S.mode==='net')leave()}catch(e){}openRoom(room,true);show('game')}
 function frOpen(f,snap,live){const log=frLog(snap.k);if(!log)return;
   const g={id:'fr:'+f.uid+':'+snap.id,frName:f.name,frLive:!!live,sm:snap.me||0,t:snap._t*1000,mode:snap.mode,me:0,win:snap.over?snap.win:undefined,why:snap.why||'',opp:snap.opp||'',log,an:[]};
@@ -1934,8 +1938,27 @@ function frSnap(){if(!myUid()||!FR.friends.length||!S||S.study||!S.log||!S.log.l
   return {t:'g',id,mode:S.mode,me:S.mode==='net'?colorOf(NET.me):S.mode===0?0:hcOf(),k:S.log.map(m=>SQC[m[0]]+SQC[m[1]]).join(''),room:S.mode==='net'?NET.code:null,over:S.over?1:0,win:S.over?S.over.win:null,why:S.over?S.over.why||'':'',opp:S.mode==='net'?((NM[oppIdOf()]||{}).name||''):'',name:myName()}}
 function frTick(){const s=frSnap();if(!s)return;const key=s.id+'|'+s.k.length+'|'+s.over;if(key===FR.lastPost)return;clearTimeout(FR.postT);
   FR.postT=setTimeout(()=>{const s2=frSnap();if(!s2)return;const k2=s2.id+'|'+s2.k.length+'|'+s2.over;if(k2===FR.lastPost)return;FR.lastPost=k2;frRelay(frTopic('fd',myUid()),s2)},s.over?200:1500)}
-function frStart(){if(!myUid())return;FR.loaded=true;frBadge();frPollInbox();clearInterval(FR.inT);FR.inT=setInterval(()=>{if(!document.hidden)frPollInbox()},45000);
+function frStart(){if(!myUid())return;FR.loaded=true;frSubInbox();frBadge();frPollInbox();clearInterval(FR.inT);FR.inT=setInterval(()=>{if(!document.hidden)frPollInbox()},45000);
   let lp=0;try{lp=+localStorage.getItem('bocch-fr-lp')||0}catch(e){}if(Date.now()-lp>6*3600e3)frPostList();if(CUR==='friends')frPollFeeds()}
+/* フレンドに対戦を申し込む：部屋を作り、相手の受信箱に招待を送る。相手には画面上に「受ける／断る」が出る */
+function frChallenge(f){if(!myUid())return;try{if(S.mode==='net')leave()}catch(e){}createRoom();if(!NET.code)return;const room=NET.code;show('invite');
+  frRelay(frTopic('in',f.uid),{t:'finv',uid:myUid(),name:myName(),room}).then(ok=>netMsg(ok?f.name+' さんに対戦を申し込みました。相手が受けると始まります':'申し込みを送れませんでした。リンクを送って誘ってください',!ok))}
+function frSubInbox(){const me=myUid();if(!me)return;if(FR.sub&&FR.subUid===me)return;try{FR.sub&&FR.sub.close()}catch(e){}FR.subUid=me;
+  const h=relaySub(frTopic('in',me),'2m');FR.sub=h;
+  h.onmessage=e=>{let d,m;try{d=JSON.parse(e.data);m=JSON.parse(d.message)}catch(x){return}if(!m||typeof m!=='object')return;m._id=d.id;m._t=d.time;
+    if(m.t==='finv'||m.t==='fdec'){frInvMsg(m)}else{frPollInbox()}}}
+function frInvMsg(m){if(!m._pre){if(!m._id||FR.seen.has(m._id))return;FR.seen.add(m._id);frSeenSave()}if(!okUid(m.uid)||!isFriend(m.uid))return;
+  const nm=cleanName(m.name)||'名無し',age=Date.now()/1000-(m._t||0);if(age>180)return;
+  if(m.t==='fdec'){if(S.mode==='net'&&NET.code===m.room)netMsg(nm+' さんは今は対戦できないようです');return}
+  if(!/^[a-z0-9]{6}$/.test(m.room||''))return;
+  if(S.mode==='net'&&NET.code&&!NET.watch&&!S.over&&S.log&&S.log.length)return; // 対局中は出さない
+  frInvShow(m.uid,nm,m.room)}
+function frInvShow(uid,nm,room){let el=$('frInv');if(!el){el=document.createElement('div');el.id='frInv';el.className='fr-inv';el.setAttribute('role','alertdialog');document.body.append(el)}
+  el.innerHTML='';const p=document.createElement('p');p.textContent=nm+' さんから対戦の申し込みです';const row=document.createElement('div');row.className='fr-row';
+  const ok=document.createElement('button');ok.className='primary';ok.textContent='受ける';const no=document.createElement('button');no.textContent='断る';row.append(ok,no);el.append(p,row);el.hidden=false;
+  clearTimeout(FR.invT);FR.invT=setTimeout(()=>{el.hidden=true},120000);
+  ok.onclick=()=>{el.hidden=true;try{if(S.mode==='net')leave()}catch(e){}openRoom(room);show('game')};
+  no.onclick=()=>{el.hidden=true;frRelay(frTopic('in',uid),{t:'fdec',uid:myUid(),name:myName(),room})}}
 $('frSend').addEventListener('click',()=>frByName($('frName').value));
 $('frName').addEventListener('keydown',e=>{if(e.key==='Enter')frByName($('frName').value)});
 document.querySelector('[data-go="friends"]').addEventListener('click',()=>{fbInit().catch(()=>{});frRender();frMsg('');frPollFeeds();clearInterval(FR.pollT);FR.pollT=setInterval(()=>{if(CUR!=='friends'){clearInterval(FR.pollT);return}if(!document.hidden)frPollFeeds()},10000)});
