@@ -275,7 +275,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.8</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.9</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -1378,22 +1378,30 @@ function aiWorker(){if(AIW.worker!==null)return AIW.worker;try{const src=$('eng'
   AIW.worker=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));AIW.worker.onmessage=e=>{if(e.data.key===AIW.thinkKey)AIW.res=e.data}}catch(e){AIW.worker=false}return AIW.worker}
 function aiRaw(o){o.from=o.from||NET.me;return fetch(RELAY+TOPIC(NET.code),{method:'POST',body:JSON.stringify(o)}).catch(()=>{})}
 function aiLive(){livePost({t:'live',room:NET.code,g:NET.game,ai:1,names:['最強AI','最強AI']})}
-function aiHost(){const code=newCode();openRoom(code,false);NET.claimed=true;NET.watch=true;NET.ai=true;
+function aiHost(){const code=newCode();openRoom(code,true);NET.claimed=true;NET.watch=true;NET.ai=true;
   AIW.b='ai'+newCode()+'b';AIW.w='ai'+newCode()+'w';AIW.primary=true;
   aiRaw({t:'create',from:AIW.b,name:'最強AI',rate:2100,ai:1}).then(()=>aiRaw({t:'join',from:AIW.w,name:'最強AI',rate:2100,ai:1})).then(()=>{aiLive();AIW.beat=Date.now()});
   aiStart(code)}
+function aiRawTo(code,o){return fetch(RELAY+TOPIC(code),{method:'POST',body:JSON.stringify(o)}).catch(()=>{})}
+// 次の局は新しい部屋で始め、いまの部屋に行き先を書いておく（観ている人は自動でついてくる）
+async function aiNextRoom(){if(AIW.nextFor===NET.code||AIW.followTo)return;const old=NET.code;AIW.nextFor=old;const code=newCode(),b='ai'+newCode()+'b',w='ai'+newCode()+'w';
+  await aiRawTo(code,{t:'create',from:b,name:'最強AI',rate:2100,ai:1});await aiRawTo(code,{t:'join',from:w,name:'最強AI',rate:2100,ai:1});
+  if(AIW.followTo||NET.code!==old)return;
+  await aiRawTo(old,{t:'next',room:code,from:NET.me});livePost({t:'end',room:old,g:NET.game});livePost({t:'live',room:code,g:0,ai:1,names:['最強AI','最強AI']})}
+function aiFollow(code){if(AIW.followTo===code)return;AIW.followTo=code;setTimeout(()=>{if(AIW.followTo!==code)return;const pr=AIW.primary;
+  openRoom(code,true);NET.ai=true;aiStart(code);AIW.primary=pr;AIW.beat=Date.now();AIW.followTo=null;if(typeof VIEW!=='undefined')VIEW.i=null;render()},300)}
 function aiStart(code){AIW.on=true;AIW.code=code;AIW.lastPly=-1;AIW.thinkKey='';AIW.res=null;AIW.overFor=-1}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&AIW.on){AIW.lastPly=-1}if(!document.hidden&&S&&S.study){KICK='';WKkey='';try{kick()}catch(e){}}}); // 画面に戻ったらすぐ再開
 $('aiWatch').addEventListener('click',()=>{stopWatchList();const now=Date.now()/1000;
   const room=[...LV.rooms.entries()].filter(([,r])=>r.ai&&now-r.at<5400).sort((a,b)=>b[1].at-a[1].at)[0];
   if(room){openRoom(room[0],true);AIW.primary=false;aiStart(room[0])}else aiHost();show('game')});
-setInterval(()=>{if(!AIW.on)return;if(S.mode!=='net'||NET.code!==AIW.code){AIW.on=false;return}
+setInterval(()=>{if(!AIW.on){if(S&&S.mode==='net'&&NET.watch&&NET.ai&&NET.code&&!colorOf(NET.me)&&!AIW.followTo){aiStart(NET.code);AIW.primary=false}return}if(S.mode!=='net'||NET.code!==AIW.code){AIW.on=false;return}
   if(!NET.ai||!NET.host||!NET.guest)return;
   const now=Date.now();
   if(AIW.primary&&now-AIW.beat>60000){AIW.beat=now;aiLive()} // 一覧から消えないよう1分ごとに知らせる
   if(S.over){ // 終わったら8秒後に次の局
     if(AIW.overFor!==NET.game){AIW.overFor=NET.game;AIW.lastAt=now;if(AIW.primary)livePost({t:'end',room:NET.code,g:NET.game})}
-    else if(now-AIW.lastAt>(AIW.primary?8000:14000)){AIW.lastAt=now+60000;const g=NET.game+1;aiRaw({t:'rematch',g,from:NET.host}).then(()=>aiRaw({t:'rematch',g,from:NET.guest})).then(()=>{if(AIW.primary){aiLive();AIW.beat=Date.now()}})}
+    else if(now-AIW.lastAt>(AIW.primary?8000:14000)){AIW.lastAt=now+60000;aiNextRoom()}
     return}
   // 見張り：送った手が届かない／考えが返ってこないときは、考え直して送り直す
   if(S.ply===AIW.lastPly&&((AIW.posted&&now-AIW.posted>10000)||(!AIW.posted&&!AIW.res&&now-AIW.thinkAt>25000))){AIW.lastPly=-1}
@@ -1419,7 +1427,8 @@ function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF))}catch(e)
 var NM={};
 const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi')){o.name=myName();o.rate=Math.round(PROF.rating)}return _post(o)};
 const _reduce=reduce;reduce=function(m){
-  if(m&&m.t==='create'&&m.ai===1)NET.ai=true;
+  if(m&&m.t==='create'&&m.ai===1){NET.ai=true;if(!NET.watch&&!colorOf(NET.me)){NET.watch=true;NET.claimed=true;clearTimeout(NET.timer);try{history.replaceState(null,'','?watch='+NET.code)}catch(e){}}}
+  if(m&&m.t==='next'&&typeof m.room==='string'&&/^[a-z0-9]{6}$/.test(m.room)&&NET.ai){aiFollow(m.room);return}
   if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500}}
   return _reduce(m)};
 function oppIdOf(){return NET.me===NET.host?NET.guest:NET.host}
@@ -1495,11 +1504,12 @@ setInterval(()=>{if(S.mode==='net'&&CUR==='game')updClock()},250);
 const AKEY='bocch-active';
 function getActive(){try{const a=JSON.parse(localStorage.getItem(AKEY)||'null');if(a&&a.code&&Date.now()-a.t<30*60*1000)return a}catch(e){}return null}
 function setActive(a){try{a?localStorage.setItem(AKEY,JSON.stringify(a)):localStorage.removeItem(AKEY)}catch(e){}}
-function updResume(){const b=$('resumeBtn');const a=getActive();const show=!!a&&!(S.mode==='net'&&NET.code===a.code);b.hidden=!show;
+function updResume(){const b=$('resumeBtn');let a=getActive();if(a&&a.opp==='最強AI'){setActive(null);a=null} // AI観戦の部屋は「戻る」の対象にしない
+  const show=!!a&&!(S.mode==='net'&&NET.code===a.code);b.hidden=!show;
   {let m=0;try{m=+localStorage.getItem('bocch-matching')||0}catch(e){}$('rematchBtn').hidden=!(m&&Date.now()-m<3*60*1000&&!MATCH.on&&!show)}
   if(show){const nm=a.opp?a.opp+'との':'';b.textContent='▶ '+nm+'対局に戻る（部屋 '+a.code.toUpperCase()+'）'}}
 const _renderA=render;render=function(){_renderA();
-  if(S.mode==='net'&&NET.code&&!NET.watch&&NET.guest&&colorOf(NET.me)>0){
+  if(S.mode==='net'&&NET.code&&!NET.watch&&!NET.ai&&NET.guest&&colorOf(NET.me)>0){
     if(S.over)setActive(null);
     else{const o=typeof NM!=='undefined'&&NM[NET.me===NET.host?NET.guest:NET.host];setActive({code:NET.code,t:Date.now(),opp:o?o.name:''})}}
   updResume()};
