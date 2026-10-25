@@ -188,6 +188,12 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .lab span{display:flex;align-items:center;justify-content:center}
 .lab-top{top:0;left:5%;right:5%;height:5%;grid-template-columns:repeat(6,minmax(0,1fr))}
 .lab-left{left:0;top:5%;bottom:5%;width:5%;grid-template-rows:repeat(6,minmax(0,1fr))}
+/* 1台で2人：向かいの白からも読めるよう、下と右に逆さの座標を足す */
+.lab-bot{bottom:0;left:5%;right:5%;height:5%;grid-template-columns:repeat(6,minmax(0,1fr));display:none}
+.lab-right{right:0;top:5%;bottom:5%;width:5%;grid-template-rows:repeat(6,minmax(0,1fr));display:none}
+.lab-bot span,.lab-right span{transform:rotate(180deg)}
+[data-scr="game"].duo .lab-bot,[data-scr="game"].duo .lab-right{display:grid}
+[data-scr="game"].duo .nolab .lab{display:none}
 .kifu{margin:10px auto 0;max-width:420px;font-size:12.5px;line-height:1.55;color:var(--sub);text-align:left;padding:6px 10px;border:1px solid var(--line);border-radius:2px;font-variant-numeric:tabular-nums}
 .kifu summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:10px;min-height:28px;align-items:center}
 .kifu summary::-webkit-details-marker{display:none}
@@ -281,6 +287,18 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .w-live{min-width:auto!important;padding:10px 14px!important;font-size:13.5px!important;letter-spacing:.06em!important}
 .board.past{filter:saturate(.75) brightness(.92)}
 .boardwrap{position:relative}
+/* 1台で2人：盤だけを画面の真ん中に。隅に小さく戻る・1手戻す・最初から */
+[data-scr="game"].duo{min-height:100dvh;display:flex;flex-direction:column;justify-content:center}
+[data-scr="game"].duo>*:not(.boardwrap):not(#duoBar){display:none!important}
+[data-scr="game"].duo .boardwrap{width:min(100%,calc(100dvh - 96px))}
+[data-scr="game"].duo .stone{transition:transform .35s ease}[data-scr="game"].duo .board.turnW .stone{transform:rotate(180deg)}
+#duoBar{position:fixed;inset:0;pointer-events:none;z-index:5}
+#duoBar button{position:absolute;pointer-events:auto;min-height:40px;min-width:40px;padding:6px 10px;font-size:15px;opacity:.55;background:transparent;border-color:var(--line)}
+#duoBar button:hover,#duoBar button:focus-visible{opacity:1}
+#duoBack{top:max(10px,env(safe-area-inset-top));left:10px}
+#duoUndo{bottom:max(10px,env(safe-area-inset-bottom));left:10px}
+#duoReset{bottom:max(10px,env(safe-area-inset-bottom));right:10px}
+
 .ai-bub{position:absolute;z-index:20;max-width:min(78%,300px);padding:8px 12px;border-radius:12px;background:#f6f0e2;color:#1d1a16;font-size:13.5px;line-height:1.5;box-shadow:0 6px 18px rgba(0,0,0,.45);pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s}
 .ai-bub.on{opacity:1;transform:none}
 .ai-bub b{font-weight:700;margin-right:4px}.ai-bub .who-b{color:#111}.ai-bub .who-w{color:#7a6a45}
@@ -547,9 +565,10 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 
 <!-- 対局 -->
 <section class="scr" data-scr="game" hidden>
+  <div id="duoBar" hidden><button id="duoBack" aria-label="ホームへ">‹</button><button id="duoUndo" aria-label="1手戻す">↶</button><button id="duoReset" aria-label="最初から">↺</button></div>
   <div class="topbar"><button class="back" id="gameBack">‹ ホーム</button><span class="conn" id="conn"><i></i><span id="connTxt"></span></span><button class="back" data-go="rules">ルール</button></div>
   <div class="players top" id="plTop" hidden></div>
-  <div class="boardwrap"><div class="board" id="board"><div class="lab lab-top" id="labTop" aria-hidden="true"></div><div class="lab lab-left" id="labLeft" aria-hidden="true"></div><div class="grid" id="grid" role="grid" aria-label="盤"></div></div></div>
+  <div class="boardwrap"><div class="board" id="board"><div class="lab lab-top" id="labTop" aria-hidden="true"></div><div class="lab lab-left" id="labLeft" aria-hidden="true"></div><div class="lab lab-bot" id="labBot" aria-hidden="true"></div><div class="lab lab-right" id="labRight" aria-hidden="true"></div><div class="grid" id="grid" role="grid" aria-label="盤"></div></div></div>
   <div class="players bot" id="plBot" hidden></div>
   <div class="gameinfo">
     <div class="status" id="status"></div>
@@ -1069,6 +1088,7 @@ $('stRun').addEventListener('click',()=>{if(STUDY.run){studyStop();return}
   STUDY.run=true;KICK='';$('stRun').textContent='⏸ 止める';render()});
 $('stOne').addEventListener('click',()=>{if(S.over||STUDY.run)return;cpuPlay(S.turn,STUDY.lv[S.turn]||3)});
 $('stEv').addEventListener('change',()=>{STUDY.evKey='';render()});$('stBest').addEventListener('change',render);
+$('duoUndo').addEventListener('click',()=>$('undo').click());$('duoReset').addEventListener('click',()=>$('reset').click());
 $('reset').addEventListener('click',()=>{const st=!!S.study;S=initState(S.mode);if(st){S.study=true;STUDY.evKey='';if(STUDY.run)studyStop()}KICK='';render()});
 function renderSide(){document.querySelectorAll('#sideSeg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.side===SIDE)))}
 document.querySelectorAll('#sideSeg button').forEach(b=>b.addEventListener('click',()=>{SIDE=b.dataset.side;try{localStorage.setItem('bocch-side',SIDE)}catch(e){}renderSide()}));renderSide();
@@ -1111,6 +1131,9 @@ $('codeIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&NET.code)show('ga
 $('cancel').addEventListener('click',()=>show('home'));
 $('leave').addEventListener('click',()=>show('home'));
 $('gameBack').addEventListener('click',()=>{if(S.mode==='net')leave();show('home')});
+$('duoBack').addEventListener('click',()=>$('gameBack').click());
+{const _renderD=render;render=function(){_renderD();try{const duo=S.mode===0&&!S.study;document.querySelector('[data-scr="game"]').classList.toggle('duo',duo);$('duoBar').hidden=!(duo&&CUR==='game');$('board').classList.toggle('turnW',duo&&S.turn===2&&!S.over)}catch(e){}}}
+{const _paintD=paint;paint=function(n){_paintD(n);try{$('duoBar').hidden=!(n==='game'&&S.mode===0&&!S.study)}catch(e){}}}
 const _render=render;
 render=function(){_render();
   if(S.mode==='net'){const waiting=!!NET.host&&NET.me===NET.host&&!NET.guest;
@@ -1194,7 +1217,8 @@ function cancelMatch(){if(MATCH.mine)lobbyPost({t:'cancel',room:MATCH.mine});sto
 
 /* 符号（列=1〜6、段=a〜f）と棋譜 */
 const sqName=i=>(i%6+1)+'abcdef'[i/6|0];
-(function(){const t=$('labTop'),l=$('labLeft');for(let i=0;i<6;i++){t.appendChild(document.createElement('span'));l.appendChild(document.createElement('span'))}})();
+(function(){const t=$('labTop'),l=$('labLeft');for(let i=0;i<6;i++){t.appendChild(document.createElement('span'));l.appendChild(document.createElement('span'))}
+  const bt=$('labBot'),rt=$('labRight');for(let i=0;i<6;i++){const a=document.createElement('span');a.textContent=String(i+1);bt.appendChild(a);const c=document.createElement('span');c.textContent='abcdef'[i];rt.appendChild(c)}})();
 const _render3=render;
 render=function(){_render3();try{kick()}catch(e){}try{renderStudy()}catch(e){console.error(e)}
   const flip=$('board').classList.contains('flip');
