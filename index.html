@@ -227,7 +227,9 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .deep-btn:disabled{opacity:.55;cursor:default}
 .deep-note{font-size:12px;color:var(--sub);margin:6px 0 0;line-height:1.6}
 .foot-links{margin-top:6px}.foot-links a{color:inherit;text-decoration:underline;text-underline-offset:3px}
-.home-ad{margin:18px auto 0;width:100%;max-width:468px;min-height:60px}
+.ad-slot{margin:22px auto 0;width:100%;max-width:468px;min-height:60px;clear:both}
+.ad-over{margin-top:36px}
+.ad-slot.ad-ph{display:grid;place-items:center;min-height:90px;border:1px dashed var(--gold-line);border-radius:8px;color:var(--sub);font-size:12px;letter-spacing:.08em}
 .rev-graph svg{display:block;width:100%;height:84px;background:var(--soft);border:1px solid var(--line);border-radius:2px;cursor:pointer;touch-action:none}
 .rev-graph-lab{display:flex;justify-content:space-between;font-size:11px;color:var(--mute);margin-top:3px}
 .rev-nav{justify-content:center;gap:8px;margin-top:10px}
@@ -296,7 +298,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 <body>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.16</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.17</div>
   <div class="home">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <h1>bocch</h1>
@@ -315,7 +317,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     </nav>
     <p class="foot">アカウント不要・リンクを送るだけで対戦</p>
     <p class="foot foot-links"><a href="privacy.html">プライバシーポリシー・お問い合わせ</a></p>
-    <div class="home-ad" id="homeAd" hidden aria-label="広告"></div>
+    <div class="ad-slot" data-ad="home" hidden aria-label="広告"></div>
   </div>
 </section>
 
@@ -363,6 +365,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <p class="lead" id="matchMsg">同じタイミングで探している人と、自動で組み合わせます。</p>
     <p class="elapsed" id="matchTime">0:00</p>
   </div>
+  <div class="ad-slot" data-ad="match" hidden aria-label="広告"></div>
 </section>
 
 <!-- 対局履歴 -->
@@ -372,6 +375,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
   <div class="hist" id="histList"></div>
   <p class="hist-empty" id="histEmpty">まだ対局がありません。</p>
   <div class="row hist-ctl"><button id="histClear" class="danger">履歴をすべて消す</button></div>
+  <div class="ad-slot" data-ad="hist" hidden aria-label="広告"></div>
 </section>
 
 <!-- 感想戦 -->
@@ -457,6 +461,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <button class="big" data-mode="0">1台で2人</button>
     <button class="big" id="studyBtn">研究（AI同士・評価値つき）</button>
   </div>
+  <div class="ad-slot" data-ad="solo" hidden aria-label="広告"></div>
 </section>
 
 <!-- ルール -->
@@ -515,6 +520,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
   </div>
   <div class="row" id="reviewRow" hidden><button id="reviewNow">この対局を感想戦 ›</button></div>
   <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label></div>
+  <div class="ad-slot ad-over" data-ad="over" hidden aria-label="広告"></div>
 </section>
 
 <script id="eng">
@@ -1658,16 +1664,24 @@ if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('
 </script>
 <script>
 /* 広告：ホームのバナーと、感想戦のリワード（広告を見ると「最強で深く再解析」）
-   AdSense の審査が通ったら、下の client と homeSlot を入れるだけで動く。空のあいだは広告なしで再解析を無料で使える */
-const ADS={client:'',homeSlot:'',preview:true}; // preview：広告の準備ができるまで、ボタンだけ出して押すとそのまま開く
+   AdSense の審査が通ったら、下の client と slot を入れるだけで動く。空のあいだは広告なしで再解析を無料で使える */
+const ADS={client:'',slot:'',preview:true}; // client=ca-pub-…、slot=ディスプレイ広告の番号。preview：広告の準備ができるまで、感想戦のボタンだけ出して押すとそのまま開く
+const AD_PH=/[?&]adpreview=1/.test(location.search); // ?adpreview=1 で、広告の位置を点線の枠で確認できる
 let ADS_READY=false;
 (function(){if(!ADS.client)return;
-  const sc=document.createElement('script');sc.async=true;sc.crossOrigin='anonymous';
-  sc.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+ADS.client;
-  sc.setAttribute('data-ad-client',ADS.client);sc.setAttribute('data-ad-frequency-hint','30s');document.head.appendChild(sc);
   window.adsbygoogle=window.adsbygoogle||[];window.adBreak=window.adConfig=function(o){adsbygoogle.push(o)};
-  adConfig({preloadAdBreaks:'on',sound:'on',onReady:()=>{ADS_READY=true}});
-  if(ADS.homeSlot){const box=$('homeAd');box.hidden=false;box.innerHTML='<ins class="adsbygoogle" style="display:block" data-ad-client="'+ADS.client+'" data-ad-slot="'+ADS.homeSlot+'" data-ad-format="auto" data-full-width-responsive="true"></ins>';try{adsbygoogle.push({})}catch(e){}}})();
+  adConfig({preloadAdBreaks:'on',sound:'on',onReady:()=>{ADS_READY=true}})})();
+// 見えている枠にだけ広告を入れる（隠れた枠に入れると幅0で失敗するため）
+function fillAds(){document.querySelectorAll('.ad-slot').forEach(box=>{
+  const k=box.dataset.ad,visible=k!=='over'||(S&&S.over&&CUR==='game');
+  if(k==='over')box.hidden=!(visible&&(ADS.slot||AD_PH));else box.hidden=!(ADS.slot||AD_PH);
+  if(box.hidden||box.dataset.filled||!box.offsetParent)return;
+  if(ADS.client&&ADS.slot){box.dataset.filled='1';box.innerHTML='<ins class="adsbygoogle" style="display:block" data-ad-client="'+ADS.client+'" data-ad-slot="'+ADS.slot+'" data-ad-format="auto" data-full-width-responsive="true"></ins>';try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(e){}}
+  else if(AD_PH){box.dataset.filled='1';box.classList.add('ad-ph');box.textContent='広告（'+k+'）'}})}
+{const _rf=render;render=function(){_rf();try{fillAds()}catch(e){}}}
+addEventListener('popstate',()=>setTimeout(fillAds,0));document.querySelectorAll('[data-go],[data-back]').forEach(b=>b.addEventListener('click',()=>setTimeout(fillAds,0)));
+setTimeout(fillAds,0);
+if(typeof paint==='function'){const _pt=paint;paint=function(n){_pt(n);setTimeout(fillAds,0)}}
 function deepStart(){if(!REV.g)return;REV.g.deep=true;REV.g.unlocked=true;REV.an=[];REV.job++;
   const g=loadGames(),ix=g.findIndex(x=>x.id===REV.g.id);if(ix>=0){g[ix].deep=true;g[ix].unlocked=true;g[ix].an=[];storeGames(g)}
   renderReview();nextAnalysis()}

@@ -37,6 +37,7 @@ p{margin:0}
 .lead{color:var(--sub);margin-top:10px;max-width:38em}
 .eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
 section>.intro{color:var(--sub);max-width:40em;margin-bottom:16px}
+.ad-slot{width:100%;max-width:468px;min-height:60px;margin:0 auto}.ad-slot.ad-ph{display:grid;place-items:center;min-height:90px;border:1px dashed var(--line);border-radius:8px;color:var(--sub);font-size:12px}
 .tabs{position:sticky;top:0;z-index:10;display:flex;gap:4px;margin:-20px 0 -16px;padding:8px 0;background:var(--bg);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tabs button{flex:1 0 auto;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--sub);font:inherit;font-weight:700;font-size:14px;letter-spacing:.04em;cursor:pointer;white-space:nowrap}
@@ -378,6 +379,7 @@ ol.check span{font-size:13.5px;color:var(--sub)}
   </ol>
 </section>
 
+<div class="ad-slot" id="guideAd" hidden aria-label="広告"></div>
 <p class="note src" data-tab="data">集計の出どころ：形の勝率は、AI同士に2,000局打たせ、約4.8万局面で両者を比べた結果です。定跡の評価は最新の「最強」の15〜18手先までの読みで、最後まで解き切ったものではありません。5％程度の差は、読む時間で入れ替わることがあります。</p>
 <p class="note" style="text-align:center;margin-top:8px"><a href="privacy.html" style="color:var(--gold)">プライバシーポリシー・お問い合わせ</a></p>
 </main>
@@ -660,6 +662,13 @@ TAC.forEach(gr=>{const G=document.createElement('div');G.className='tac-group';G
   el('exBack').addEventListener('click',()=>{path.pop();hover=null;render()});
   el('exReset').addEventListener('click',()=>{path=[];hover=null;render()});
   render()})();
+</script>
+<script>
+/* 広告：審査が通ったら client と slot を入れる。?adpreview=1 で位置だけ確認できる */
+(function(){const ADS={client:'',slot:''},ph=/[?&]adpreview=1/.test(location.search),box=document.getElementById('guideAd');
+  if(ADS.client&&ADS.slot){box.hidden=false;const sc=document.createElement('script');sc.async=true;sc.crossOrigin='anonymous';sc.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+ADS.client;document.head.appendChild(sc);
+    box.innerHTML='<ins class="adsbygoogle" style="display:block" data-ad-client="'+ADS.client+'" data-ad-slot="'+ADS.slot+'" data-ad-format="auto" data-full-width-responsive="true"></ins>';try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(e){}}
+  else if(ph){box.hidden=false;box.classList.add('ad-ph');box.textContent='広告（ガイド・各タブの末尾）'}})();
 </script>
 
 </body>
