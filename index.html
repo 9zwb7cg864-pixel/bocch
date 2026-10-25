@@ -275,6 +275,8 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .pvctl button{padding:7px 12px;font-size:13px;border-radius:8px;border:1px solid rgba(236,230,216,.25);background:transparent;color:inherit;cursor:pointer}
 .pv-hint{font-size:12px;color:var(--sub)}
 .pv-ai{font-size:13px;margin:0 0 8px;line-height:1.6}
+.mate{display:block;margin:6px auto 2px;color:#f0cf7a;font-weight:700;font-size:15px;letter-spacing:.06em}
+.mate.miss{color:#e08c7c;font-size:13.5px}
 .rev-board .grid{cursor:pointer}
 .pvctl .pvk{font-family:var(--f-latin);min-width:4.5em;text-align:center;font-size:13px}
 .pvmoves{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-top:8px}
@@ -544,7 +546,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <button id="resign" class="danger">投了する</button>
     <button id="rematch" class="primary" hidden>もう一局</button>
     <button id="reseek" hidden>相手を探し直す</button>
-    <button id="leave">対戦をやめる</button>
+    <button id="leave" hidden>対戦をやめる</button>
   </div>
   <div class="row" id="reviewRow" hidden><button id="reviewNow">この対局を感想戦 ›</button></div>
   <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label></div>
@@ -1439,12 +1441,14 @@ function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n
   if(bp!=null){const pct=Math.round(bp*100);note+=i===n?'終局。':'';
     if(i<n)note+=pct>=99?'黒の勝ちが読み切れています。':pct<=1?'白の勝ちが読み切れています。':`形勢　黒 ${pct}%・白 ${100-pct}%`}
   note='<span class="rev-pos">'+note+'</span>';
+  {const sd=t=>t===1?'黒':'白';if(i<n&&a&&a.s>EWIN-1000)note+=`<span class="mate">詰みがあります（${sd(p.turn)}の${EWIN-Math.round(a.s)}手詰め）</span>`;
+   if(i>0){const pa=REV.an[i-1],pt=REV.pos[i-1].turn;if(pa&&pa.s>EWIN-1000){const kept=i<n?(a&&a.s<-EWIN+1000):g.win===pt;if(!kept)note+=`<span class="mate miss">ここは${sd(pt)}の${EWIN-Math.round(pa.s)}手詰めがありました</span>`}}}
   if(PV){const tb=REV.pos[PV.base].turn;mv.textContent=PV.k?`検討 ${PV.k}手目　${(PV.k%2?tb:3-tb)===1?'黒':'白'} ${mvTxt(PV.line[PV.k-1])}`:'検討の開始局面';note=''}
   const side=t=>t===1?'黒':'白';
   if(PV){const v=PV,tb=REV.pos[v.base].turn;let mv2='';
     v.line.forEach((m,k)=>{mv2+=`<button data-pvk="${k+1}" class="${k+1===v.k?'cur':''}">${k+1}. ${side(k%2?3-tb:tb)} ${mvTxt(m)}</button>`});
     let hn='';if(HN&&HN.over)hn=`<div class="pv-ai">ここで${side(HN.over)}の勝ちです</div>`;else if(HN&&HN.m){const bp=HN.s>EWIN-1000?1:HN.s<-EWIN+1000?0:sig(EK*HN.s),blk=Math.round((HN.turn===1?bp:1-bp)*100);
-      hn=`<div class="pv-ai">AIの最善手：<b>${side(HN.turn)} ${mvTxt(HN.m)}</b>　形勢 黒${blk}%・白${100-blk}%<br>読み筋：${HN.pv.map((m,q)=>side(q%2?3-HN.turn:HN.turn)+mvTxt(m)).join(' → ')}</div>`}else if(!HN||HN.none===undefined)hn='<div class="pv-ai">AIが考えています…</div>';
+      hn=(HN.s>EWIN-1000?`<div class="mate">詰みがあります（${side(HN.turn)}の${EWIN-Math.round(HN.s)}手詰め）</div>`:HN.s<-EWIN+1000?`<div class="mate miss">${side(3-HN.turn)}に詰みがあります（あと${EWIN-Math.round(-HN.s)}手）</div>`:'')+`<div class="pv-ai">AIの最善手：<b>${side(HN.turn)} ${mvTxt(HN.m)}</b>　形勢 黒${blk}%・白${100-blk}%<br>読み筋：${HN.pv.map((m,q)=>side(q%2?3-HN.turn:HN.turn)+mvTxt(m)).join(' → ')}</div>`}else if(!HN||HN.none===undefined)hn='<div class="pv-ai">AIが考えています…</div>';
     note+=`<div class="pvbox"><div class="pv-h">検討中　${v.base}手目の局面から（石を動かして試せます）</div>${hn}
       <div class="pvctl"><button data-act="pvprev">◀ 戻る</button><span class="pvk">${v.k} / ${v.line.length}</span><button data-act="pvnext">進む ▶</button>
       <button data-act="pvclose" class="primary">本筋に戻る</button></div>
@@ -1493,7 +1497,7 @@ function revWon(b,p){let c=0;for(let k=0;k<6;k++)if(b[(p===1?0:30)+k]===p)c++;re
 function exKey(){const v=REV.pv;return v.base+'|'+v.line.slice(0,v.k).map(m=>m[0]+'-'+m[1]).join(',')}
 function exHint(){const v=REV.pv;if(!v)return null;v.hints=v.hints||{};const key=exKey();if(v.hints[key])return v.hints[key];
   const st=pvState();if(v.k>0&&revWon(st.b,3-st.turn)){v.hints[key]={over:3-st.turn};return v.hints[key]}
-  if(!v.pend){v.pend=key;setTimeout(()=>{const vv=REV.pv;v.pend=null;if(!vv||vv!==v||exKey()!==key)return;let r=null;try{r=BocchEngine.think(st.b.slice(),st.turn,450,{})}catch(e){}
+  if(!v.pend){v.pend=key;setTimeout(()=>{const vv=REV.pv;v.pend=null;if(!vv||vv!==v)return;if(exKey()!==key){renderReview();return}let r=null;try{r=BocchEngine.think(st.b.slice(),st.turn,450,{})}catch(e){}
     v.hints[key]=r&&r.move?{m:r.move,pv:(r.pv&&r.pv.length?r.pv:[r.move]).slice(0,6),s:r.score,turn:st.turn}:{none:1};renderReview()},30)}
   return null}
 function revCell(k){if(CUR!=='review'||!REV.g)return;const st=REV.pv?pvState():REV.pos[REV.i];
