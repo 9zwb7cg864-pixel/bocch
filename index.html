@@ -152,6 +152,10 @@ body{min-height:100dvh}
 .home h1{font-size:76px}
 .tag{margin:0 0 26px;color:var(--sub);font-family:var(--f-disp);font-size:15px;letter-spacing:.14em}
 .menu{display:flex;flex-direction:column;gap:12px;width:100%;max-width:340px}
+.sub-menu{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:100%;max-width:340px;margin-top:18px}
+.sub-menu button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px 2px;min-height:72px;font-size:12px;letter-spacing:0;white-space:nowrap;position:relative}
+.sub-menu svg{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:1.6}
+.sub-menu .fr-badge{position:absolute;top:5px;right:6px;margin:0}
 .foot{margin:28px 0 0;font-size:12px;color:var(--mute);letter-spacing:.1em}
 .mark{display:flex;gap:10px;justify-content:center}
 .dot.big{width:34px;height:34px;box-shadow:0 6px 10px rgba(0,0,0,.5)}
@@ -344,11 +348,13 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
       <button class="primary big" id="randomBtn">ランダム対戦</button>
       <button class="big" data-go="friend">友だちと対戦</button>
       <button class="big" data-go="solo">ひとりで遊ぶ</button>
-      <button class="big" data-go="watch">観戦する</button>
-      <button class="big" data-go="friends" id="friendsBtn">フレンド<span class="fr-badge" id="frBadge" hidden></span></button>
-      <button class="big" data-go="history">対局履歴・感想戦</button>
-      <button class="big" data-go="rules">ルール</button>
-      <button class="big" id="guideBtn" onclick="location.href='guide.html'">勝ち方ガイド</button>
+    </nav>
+    <nav class="sub-menu" aria-label="その他">
+      <button data-go="watch" aria-label="観戦する"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>観戦</span></button>
+      <button data-go="friends" id="friendsBtn" aria-label="フレンド"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c3 .2 5.5 2.3 5.5 5.3"/></svg><span>フレンド</span><span class="fr-badge" id="frBadge" hidden></span></button>
+      <button data-go="history" aria-label="対局履歴・感想戦"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>感想戦</span></button>
+      <button data-go="rules" aria-label="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"/><path d="M8 10h8M8 14h8M8 18h5"/></svg><span>ルール</span></button>
+      <button id="guideBtn" onclick="location.href='guide.html'" aria-label="勝ち方ガイド"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg><span>ガイド</span></button>
     </nav>
     <p class="foot">アカウント不要・リンクを送るだけで対戦</p>
     <p class="foot foot-links"><a href="privacy.html">プライバシーポリシー・お問い合わせ</a></p>
