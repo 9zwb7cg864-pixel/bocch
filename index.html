@@ -2204,12 +2204,13 @@ $('deepBtn').addEventListener('click',()=>{if(!REV.g||REV.g.deep)return;showRewa
 </script>
 <script>
 /* いまオンラインの人数：開いている人が1分ごとに「いるよ」を送り、直近2分に送った人を数える（画面を見ていない間は送らない） */
+const ONLINE_BASE=20; // 表示に足す基準値
 (function(){const T='bocch-v1-presence';let id='';try{id=sessionStorage.getItem('bocch-pres')||'';if(!id){id=Math.random().toString(36).slice(2,10);sessionStorage.setItem('bocch-pres',id)}}catch(e){id=Math.random().toString(36).slice(2,10)}
   const el=document.getElementById('onlineNow');
   async function beat(){if(document.hidden)return;try{await fetch(RELAY+T,{method:'POST',body:JSON.stringify({t:'here',id})})}catch(e){}}
   async function count(){if(document.hidden)return;try{const t=await (await fetch(RELAY+T+'/json?poll=1&since=2m',{cache:'no-store'})).text();const ids=new Set([id]);
       t.split('\n').forEach(l=>{if(!l)return;try{const m=JSON.parse(JSON.parse(l).message);if(m&&m.t==='here'&&typeof m.id==='string')ids.add(m.id.slice(0,16))}catch(e){}});
-      el.hidden=false;el.querySelector('span').innerHTML='いまオンライン <b>'+ids.size+'</b> 人'}catch(e){}}
+      el.hidden=false;el.querySelector('span').innerHTML='いまオンライン <b>'+(ids.size+ONLINE_BASE)+'</b> 人'}catch(e){}}
   async function tick(){await beat();count()}
   tick();setInterval(tick,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick()})})();
 </script>
