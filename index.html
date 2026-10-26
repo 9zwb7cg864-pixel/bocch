@@ -1725,7 +1725,7 @@ addEventListener('popstate',()=>{if(CUR==='watch'){if(!LV.on)startWatchList()}el
 var PKEY='bocch-profile',CPU_RATE={1:900,2:1200,3:1500,4:2100};
 const cleanName=x=>String(x==null?'':x).replace(/[\u0000-\u001f\u007f<>]/g,'').trim().slice(0,12);
 function loadProf(){let p={};try{p=JSON.parse(localStorage.getItem(PKEY)||'{}')||{}}catch(e){}
-  return {name:cleanName(p.name)||'',rating:Number.isFinite(p.rating)?p.rating:1500,games:p.games|0,w:p.w|0,l:p.l|0,d:p.d|0,rated:Array.isArray(p.rated)?p.rated.slice(-200):[]}}
+  return {name:cleanName(p.name)||'',rating:Number.isFinite(p.rating)?p.rating:1500,games:p.games|0,w:p.w|0,l:p.l|0,d:p.d|0,rated:Array.isArray(p.rated)?p.rated.slice(-200):[],peak:!!p.peak}}
 var PROF=loadProf();
 /* 役員（メールアドレスで決める）：名前の前に金の家紋バッジ、広告なし */
 const OFFICERS=['officer1','officer2','officer3'];
@@ -1754,8 +1754,10 @@ function rateGame(){
   if(S.mode==='net'){my=colorOf(NET.me);if(!my||NET.watch)return;const o=NM[oppIdOf()];opp=o?o.rate:1500;oppName=o?o.name:'名無し'}
   else if(CPU_RATE[S.mode]){my=hcOf();opp=CPU_RATE[S.mode];oppName=MODE_NAME(S.mode)}else return;
   const id=currentGameId();if(!id||PROF.rated.includes(id))return;
-  const res=S.over.win===0?.5:S.over.win===my?1:0,K=PROF.games<20?40:24;
-  const exp=1/(1+Math.pow(10,(opp-PROF.rating)/400)),before=Math.round(PROF.rating);
+  // チェス（FIDE）と同じ：最初の30局はK=40、それ以降は20、2400に届いた人は10。レート差は最大400として計算する
+  if(PROF.rating>=2400)PROF.peak=true;
+  const res=S.over.win===0?.5:S.over.win===my?1:0,K=PROF.games<30?40:PROF.peak?10:20;
+  const df=Math.max(-400,Math.min(400,opp-PROF.rating)),exp=1/(1+Math.pow(10,df/400)),before=Math.round(PROF.rating);
   PROF.rating=Math.max(100,PROF.rating+K*(res-exp));PROF.games++;if(res===1)PROF.w++;else if(res===0)PROF.l++;else PROF.d++;
   PROF.rated.push(id);PROF.rated=PROF.rated.slice(-200);saveProf();
   const after=Math.round(PROF.rating),dl=after-before;
@@ -1864,12 +1866,12 @@ function acctErr(e){acctMsg(ACCT_ERR[e&&e.code]||('うまくいきませんで�
 function acctRender(){const u=FB.user;$('acctOut').hidden=!!u;$('acctVerify').hidden=!(u&&!u.emailVerified);$('acctIn').hidden=!(u&&u.emailVerified);
   if(u){$('acctVEmail').textContent=u.email;$('acctUEmail').textContent=u.email}
   const me=$('meEdit');if(me)me.textContent=u&&u.emailVerified?'ログイン中 ›':'アカウント ›'}
-function profData(){const o={name:PROF.name||'',rating:Math.round(PROF.rating*10)/10,games:PROF.games|0,w:PROF.w|0,l:PROF.l|0,d:PROF.d|0,rated:(PROF.rated||[]).slice(-150),t:Date.now()};try{if(FR.loaded){o.friends=FR.friends;o.fout=FR.fout;o.fin=FR.fin}}catch(e){}return o}
+function profData(){const o={name:PROF.name||'',rating:Math.round(PROF.rating*10)/10,games:PROF.games|0,w:PROF.w|0,l:PROF.l|0,d:PROF.d|0,rated:(PROF.rated||[]).slice(-150),peak:!!PROF.peak,t:Date.now()};try{if(FR.loaded){o.friends=FR.friends;o.fout=FR.fout;o.fin=FR.fin}}catch(e){}return o}
 async function acctPull(){if(!FB.user||!FB.user.emailVerified)return;FB.syncing=true;$('acctSync').textContent='データを読み込んでいます…';
   try{const ref=FB.db.collection('users').doc(FB.user.uid);const snap=await ref.get();
     if(snap.exists){const d=snap.data();try{frLoad(d)}catch(e){}
       // 対局数が多い方を正とする（この端末で登録前に遊んだ分を失わないため）
-      if((d.games|0)>=(PROF.games|0)){PROF.name=d.name||PROF.name;PROF.rating=Number(d.rating)||PROF.rating;PROF.games=d.games|0;PROF.w=d.w|0;PROF.l=d.l|0;PROF.d=d.d|0;PROF.rated=Array.from(new Set([...(PROF.rated||[]),...(d.rated||[])])).slice(-200);_saveProfLocal()}
+      if((d.games|0)>=(PROF.games|0)){PROF.name=d.name||PROF.name;PROF.rating=Number(d.rating)||PROF.rating;PROF.games=d.games|0;PROF.w=d.w|0;PROF.l=d.l|0;PROF.d=d.d|0;PROF.peak=!!(d.peak||PROF.peak);PROF.rated=Array.from(new Set([...(PROF.rated||[]),...(d.rated||[])])).slice(-200);_saveProfLocal()}
       else await ref.set(profData())}
     else{try{FR.loaded=true}catch(e){}await ref.set(profData())}
     try{frStart()}catch(e){}
