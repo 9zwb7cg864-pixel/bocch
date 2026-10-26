@@ -1918,7 +1918,7 @@ async function frRequest(uid,name){const me=myUid();if(!me){frMsg('フレンド�
   if(!ok){frMsg('送れませんでした。時間をおいて試してください',true);return false}
   if(!FR.fout.some(f=>f.uid===uid))FR.fout.push({uid,name:cleanName(name)||'名無し',t:Date.now()});frSave();frMsg(name+' さんに申請しました。承認されるとフレンドになります');frRender();return true}
 async function frByName(nm){nm=cleanName(nm);if(!nm)return;frMsg('探しています…');
-  try{await fbInit();const d=await FB.db.collection('names').doc(nm).get();
+  try{await fbInit();const d=await FB.db.collection('names').doc(nameKey(nm)).get();if(d.exists&&d.data()&&cleanName(d.data().name))nm=cleanName(d.data().name);
     if(!d.exists||!okUid((d.data()||{}).uid)){frMsg('「'+nm+'」という名前の人は見つかりません。アカウントに登録して名前を付けた人にだけ申請できます',true);return}
     if(await frRequest(d.data().uid,nm))$('frName').value=''}catch(e){frMsg('調べられませんでした（'+(e.code||e.message)+'）',true)}}
 function frAccept(uid){const f=FR.fin.find(x=>x.uid===uid);if(!f)return;frAdd(uid,f.name);frSave();frRelay(frTopic('in',uid),{t:'facc',uid:myUid(),name:myName()});frPostList();frBadge();frRender();frPollFeeds()}
