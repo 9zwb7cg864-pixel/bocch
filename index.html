@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var q=mp(new URLSearchParams(location.search).get('lang'));if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));var n=mp((navigator.languages&&navigator.languages[0])||navigator.language);L=q||s||n||'en'}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=3"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var q=mp(new URLSearchParams(location.search).get('lang'));if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));var n=mp((navigator.languages&&navigator.languages[0])||navigator.language);L=q||s||n||'en'}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=4"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -62,6 +62,11 @@
 .chat-form input{flex:1;min-width:0;font:inherit;font-size:16px;color:var(--fg);background:var(--soft);border:1px solid var(--line);border-radius:2px;padding:6px 10px;min-height:40px}
 .chat-form button{min-height:40px;padding:6px 14px}
 .chat-note{margin:4px 0 0;font-size:10.5px;color:var(--mute)}
+.chat-gate{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:4px 0}
+.chat-gate p{margin:0;flex:1;min-width:10em;font-size:12.5px;color:var(--sub)}
+.chat-gate.ask p{color:var(--gold)}
+.chat-gate.ask button{box-shadow:0 0 0 2px var(--gold);animation:chatPulse 1.4s ease-in-out infinite}
+@keyframes chatPulse{50%{box-shadow:0 0 0 5px rgba(201,169,110,.25)}}
 
 html{-webkit-text-size-adjust:100%;background:var(--bg)}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.75;
@@ -597,9 +602,10 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <details class="kifu" id="kifuBox" hidden><summary id="kifuSum"></summary><div id="kifu" aria-label="棋譜"></div></details>
     <div class="chat" id="chatBox" hidden aria-label="チャット">
       <div class="chat-head"><b>チャット</b><label><input type="checkbox" id="chatMute"> 相手を非表示</label></div>
-      <div class="chat-log" id="chatLog" aria-live="polite"></div>
+      <div class="chat-gate" id="chatGate"><p id="chatGateMsg">チャットは、両方が「チャットしましょう」を押すと始まります。</p><button type="button" id="chatAsk">チャットしましょう</button></div>
+      <div id="chatMain" hidden><div class="chat-log" id="chatLog" aria-live="polite"></div>
       <form class="chat-form" id="chatForm"><input id="chatIn" maxlength="60" autocomplete="off" placeholder="メッセージ（60文字まで）" enterkeyhint="send"><button class="primary" id="chatSend">送信</button></form>
-      <p class="chat-note" id="chatNote">対局者と観戦者に見えます。個人情報は書かないでください。</p>
+      <p class="chat-note" id="chatNote">対局者と観戦者に見えます。個人情報は書かないでください。</p></div>
     </div>
   </div>
   <div class="study" id="studyPanel" hidden>
@@ -2136,11 +2142,13 @@ $('frOpp').addEventListener('click',async()=>{const o=NM[oppIdOf()];if(!o||!o.ui
 {const _renderF=render;render=function(){_renderF();try{frTick();const o=S.mode==='net'&&!NET.watch&&NET.code?NM[oppIdOf()]:null;const u=myUid();
   $('frOpp').hidden=!(o&&o.uid&&u&&o.uid!==u&&!isFriend(o.uid)&&!FR.fout.some(f=>f.uid===o.uid))}catch(e){}}}
 /* 対戦チャット：オンライン対戦では棋譜の場所にチャットを出す。部屋の記録に {t:'chat'} として流す */
-const CHAT={list:[],seen:new Set(),last:0,room:null,mute:false};
+const CHAT={list:[],seen:new Set(),last:0,room:null,mute:false,ok:{}};
 const CHAT_NOTE='対局者と観戦者に見えます。個人情報は書かないでください。';
 try{CHAT.mute=localStorage.getItem('bocch-chat-mute')==='1'}catch(e){}
 function chatClean(t){return String(t||'').replace(/[\u0000-\u001f\u007f​-‏‪-‮⁦-⁩]/g,'').replace(/\s+/g,' ').trim().slice(0,60)}
 function chatOn(){return S.mode==='net'&&!!NET.code&&!NET.ai}
+function chatFriend(){try{const o=NM[oppIdOf()];return !!(o&&o.uid&&FR.friends.some(f=>f.uid===o.uid))}catch(e){return false}}
+function chatOpen(){return chatFriend()||!!(NET.host&&NET.guest&&CHAT.ok[NET.host]&&CHAT.ok[NET.guest])}
 function chatName(id){if(id===NET.me&&!NET.watch)return 'あなた';const o=NM[id];return o?o.name:'名無し'}
 function chatPaint(){
   const log=$('chatLog');if(!log)return;log.textContent='';
@@ -2149,16 +2157,26 @@ function chatPaint(){
   for(const m of items){const p=document.createElement('p');if(m.from===NET.me&&!NET.watch)p.className='me';const sm=document.createElement('small');sm.textContent=chatName(m.from);p.append(sm,document.createTextNode(m.s));log.append(p)}
   log.scrollTop=log.scrollHeight}
 function chatUI(){
-  const on=chatOn();$('chatBox').hidden=!on;if(!on)return;$('kifuBox').hidden=true;
+  let on=chatOn();const open=on&&chatOpen();if(on&&NET.watch&&!open)on=false; // 観戦者には、チャットが始まってから見せる
+  $('chatBox').hidden=!on;if(!on)return;
+  $('chatMain').hidden=!open;$('chatGate').hidden=open;$('kifuBox').hidden=open;
+  if(!open){const me=CHAT.ok[NET.me],opp=CHAT.ok[oppIdOf()],g=$('chatGate'),tx=$('chatGateMsg'),b=$('chatAsk');
+    g.classList.toggle('ask',!!opp&&!me);b.disabled=!!me||!oppIdOf();
+    const t=!oppIdOf()?'相手が来ると、チャットに誘えます。':me?'チャットに誘いました。相手が押すと始まります。':opp?'相手がチャットに誘っています。押すと始まります。':'チャットは、両方が「チャットしましょう」を押すと始まります。';
+    tx.textContent=window.bocchT?window.bocchT(t):t;b.textContent=window.bocchT?window.bocchT('チャットしましょう'):'チャットしましょう';return}
   const can=!NET.watch&&colorOf(NET.me)>0;$('chatIn').disabled=!can;$('chatSend').disabled=!can;
   $('chatIn').placeholder=can?'メッセージ（60文字まで）':'観戦中は読むだけです';$('chatMute').checked=CHAT.mute}
-function chatReset(){CHAT.list=[];CHAT.seen=new Set();CHAT.room=NET.code;chatPaint()}
+function chatReset(){CHAT.list=[];CHAT.seen=new Set();CHAT.ok={};CHAT.room=NET.code;chatPaint()}
+$('chatAsk').addEventListener('click',()=>{if(NET.watch||!colorOf(NET.me)||CHAT.ok[NET.me])return;CHAT.ok[NET.me]=true;chatUI();post({t:'chatok'})});
 $('chatMute').addEventListener('change',e=>{CHAT.mute=e.target.checked;try{localStorage.setItem('bocch-chat-mute',CHAT.mute?'1':'0')}catch(x){}chatPaint()});
 $('chatForm').addEventListener('submit',async e=>{e.preventDefault();const t=chatClean($('chatIn').value);if(!t||NET.watch||!colorOf(NET.me))return;
   const now=Date.now();if(now-CHAT.last<1500){$('chatNote').textContent='少し間をあけて送ってください。';return}CHAT.last=now;
   $('chatIn').value='';$('chatNote').textContent=CHAT_NOTE;
   const ok=await post({t:'chat',s:t,k:newCode()});if(!ok)$('chatIn').value=t});
 const _reduceC=reduce;reduce=function(m){
+  if(m&&m.t==='chatok'){if(CHAT.room!==NET.code)chatReset();if(!colorOf(m.from))return;const was=chatOpen();CHAT.ok[m.from]=true;
+    if(m.from!==NET.me&&!NET.watch&&!was){if(chatOpen())netMsg('チャットが始まりました');else{netMsg('相手がチャットに誘っています（盤の下の「チャットしましょう」）');try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}}setTimeout(()=>{const t=$('netMsg').textContent;if(/チャット/.test(t))netMsg('')},5000)}
+    return}
   if(m&&m.t==='chat'){
     if(CHAT.room!==NET.code)chatReset();
     if(!colorOf(m.from))return;const t=chatClean(m.s);if(!t)return;const key=m.from+'|'+(m.k||'')+'|'+t;if(CHAT.seen.has(key))return;CHAT.seen.add(key);
