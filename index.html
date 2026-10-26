@@ -829,7 +829,7 @@ function initState(mode){const b=startBoard();return {b,turn:1,mode,hc:(typeof m
 let SIDE='b';try{const v=localStorage.getItem('bocch-side');if(v==='b'||v==='w'||v==='r')SIDE=v}catch(e){}
 function pickSide(){return SIDE==='w'?2:SIDE==='r'?(Math.random()<.5?1:2):1}
 const hcOf=()=>S&&S.hc?S.hc:1; // 人間の色（CPU戦）
-let KICK='';function kick(){if(S&&S.study){studyKick();return}if(!S||!S.mode||S.mode==='net'||S.over||S.turn===hcOf())return;const k=S.mode+':'+S.ply+':'+key(S.b,S.turn);if(KICK===k)return;KICK=k;
+let KICK='',KICK_AT=0;function kick(){if(S&&S.study){studyKick();return}if(!S||!S.mode||S.mode==='net'||S.over||S.turn===hcOf())return;const k=S.mode+':'+S.ply+':'+key(S.b,S.turn);if(KICK===k)return;KICK=k;KICK_AT=Date.now();
   setTimeout(()=>{if(S.mode&&S.mode!=='net'&&!S.over&&S.turn!==hcOf()&&KICK===S.mode+':'+S.ply+':'+key(S.b,S.turn))cpuPlay()},380)}
 function nbCount(b,i){const r=i/N|0,c=i%N;let n=0;for(const[x,y]of DIRS)if(ok(r+x,c+y)&&b[(r+x)*N+c+y])n++;return Math.min(4,n)}
 function movesFrom(b,i){const d=nbCount(b,i),r=i/N|0,c=i%N,out=[];if(!d)return out;
@@ -1803,6 +1803,13 @@ async function aiNextRoom(){if(AIW.nextFor===NET.code||AIW.followTo)return;const
 function aiFollow(code){if(AIW.followTo===code)return;AIW.followTo=code;setTimeout(()=>{if(AIW.followTo!==code)return;const pr=AIW.primary;
   openRoom(code,true);NET.ai=true;aiStart(code);AIW.primary=pr;AIW.beat=Date.now();AIW.followTo=null;if(typeof VIEW!=='undefined')VIEW.i=null;render()},300)}
 function aiStart(code){AIW.on=true;AIW.code=code;AIW.lastPly=-1;AIW.thinkKey='';AIW.res=null;AIW.overFor=-1}
+/* CPU戦：スマホでアプリを裏に回すと、考えている途中の処理が止まって消えることがある。
+   画面に戻ったとき・CPUの手番のまま9秒動かないときは、考え直させる（最強の別スレッドも作り直す） */
+function cpuRekick(hard){if(!S||S.study||S.over||!(S.mode>=1&&S.mode<=4)||S.turn===hcOf())return;
+  if(hard&&S.mode===4&&WK){try{WK.terminate()}catch(e){}WK=null}KICK='';WKkey='';kick()}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)cpuRekick(true)});
+addEventListener('pageshow',()=>cpuRekick(true));
+setInterval(()=>{if(!document.hidden&&S&&!S.study&&!S.over&&S.mode>=1&&S.mode<=4&&S.turn!==hcOf()&&KICK&&Date.now()-KICK_AT>9000)cpuRekick(true)},2000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&AIW.on){AIW.lastPly=-1}if(!document.hidden&&S&&S.study){KICK='';WKkey='';try{kick()}catch(e){}}}); // 画面に戻ったらすぐ再開
 $('aiWatch').addEventListener('click',()=>{stopWatchList();const now=Date.now()/1000;
   const room=[...LV.rooms.entries()].filter(([,r])=>r.ai&&now-r.at<5400).sort((a,b)=>b[1].at-a[1].at)[0];
