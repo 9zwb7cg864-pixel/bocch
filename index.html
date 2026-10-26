@@ -1958,7 +1958,16 @@ async function frPollFeeds(){const me=myUid();if(!me)return;const targets=[...FR
     const ms=await frRead(frTopic('fd',f.uid),'12h');if(!ms)return;FR.feeds[f.uid]=ms;
     const lastName=[...ms].reverse().find(m=>m.name);if(lastName){const nm=cleanName(lastName.name);if(nm&&nm!==f.name){f.name=nm;ch=true}}
     if(FR.fout.some(x=>x.uid===f.uid)&&ms.some(m=>m.t==='flist'&&Array.isArray(m.uids)&&m.uids.includes(me))){frAdd(f.uid,f.name);ch=true}}));
-  if(ch)frSave();frRender()}
+  if(ch)frSave();frRender();if(CUR==='friends'&&(FR.subs||[]).length!==2*Math.min(30,FR.friends.length))frSubAll()}
+/* フレンド画面を開いている間は、各フレンドの「オンライン」と「対局」の知らせにつなぎっぱなしにして、すぐ表示を変える */
+function frSubAll(){frUnsubAll();if(!myUid())return;FR.subs=[];let rt=null;const re=()=>{clearTimeout(rt);rt=setTimeout(()=>{if(CUR==='friends')frRender()},150)};
+  for(const f of FR.friends.slice(0,30)){
+    const a=relaySub(frTopic('on',f.uid),'3m');a.onmessage=e=>{let d,m;try{d=JSON.parse(e.data);m=JSON.parse(d.message)}catch(x){return}if(!m||(m.t!=='on'&&m.t!=='off'))return;FR.on=FR.on||{};FR.on[f.uid]=m.t==='on'?d.time:0;re()};
+    const b=relaySub(frTopic('fd',f.uid),'1m');b.onmessage=e=>{let d,m;try{d=JSON.parse(e.data);m=JSON.parse(d.message)}catch(x){return}if(!m||typeof m!=='object')return;m._id=d.id;m._t=d.time;
+      const arr=FR.feeds[f.uid]=FR.feeds[f.uid]||[];if(arr.some(x=>x._id===m._id))return;arr.push(m);if(m.t==='g'){FR.on=FR.on||{};FR.on[f.uid]=Math.max(FR.on[f.uid]||0,d.time)}re()};
+    FR.subs.push(a,b)}}
+function frUnsubAll(){(FR.subs||[]).forEach(h=>{try{h.close()}catch(e){}});FR.subs=[]}
+{const _pF=paint;paint=function(n){_pF(n);try{if(n!=='friends')frUnsubAll();if(n!=='review')frViewSub(null)}catch(e){}}}
 const frOnline=uid=>!!(FR.on&&FR.on[uid]&&Date.now()/1000-FR.on[uid]<150);
 /* 自分がオンラインであることを、フレンドがいるときだけ1分ごとに知らせる（画面を見ているときだけ） */
 function frBeat(){const me=myUid();if(!me||!FR.friends.length||document.hidden)return;frRelay(frTopic('on',me),{t:'on'})}
@@ -1995,13 +2004,18 @@ function frWatchRoom(room){if(!/^[a-z0-9]{6}$/.test(room))return;try{if(S.mode==
 function frOpen(f,snap,live){const log=frLog(snap.k);if(!log)return;
   const g={id:'fr:'+f.uid+':'+snap.id,frName:f.name,frLive:!!live,sm:snap.me||0,t:snap._t*1000,mode:snap.mode,me:0,win:snap.over?snap.win:undefined,why:snap.why||'',opp:snap.opp||'',log,an:[]};
   REV.g=g;REV.pos=buildPos(g);REV.an=[];REV.job++;REV.pv=null;REV.sel=-1;REV.i=log.length;
-  FR.view=live?{uid:f.uid,id:snap.id,n:log.length}:null;clearInterval(FR.viewT);if(live)FR.viewT=setInterval(frViewTick,3000);
+  FR.view=live?{uid:f.uid,id:snap.id,n:log.length}:null;clearInterval(FR.viewT);frViewSub(live?f.uid:null);if(live)FR.viewT=setInterval(frViewTick,15000);
   show('review');renderReview();nextAnalysis()}
-async function frViewTick(){const v=FR.view;if(!v||CUR!=='review'||!REV.g||!REV.g.frLive){clearInterval(FR.viewT);return}
-  const ms=await frRead(frTopic('fd',v.uid),'2h');if(!ms||FR.view!==v)return;let s=null;for(const m of ms)if(m.t==='g'&&m.id===v.id)s=m;if(!s)return;
+async function frViewTick(){const v=FR.view;if(!v||CUR!=='review'||!REV.g||!REV.g.frLive){clearInterval(FR.viewT);frViewSub(null);return}
+  const ms=await frRead(frTopic('fd',v.uid),'2h');if(!ms||FR.view!==v)return;let s=null;for(const m of ms)if(m.t==='g'&&m.id===v.id)s=m;if(!s)return;frViewApply(s)}
+/* フレンドの対局を見ている間は、相手の公開欄につなぎっぱなしにして、指した瞬間に盤へ反映する */
+function frViewSub(uid){try{FR.vsub&&FR.vsub.close()}catch(e){}FR.vsub=null;if(!uid)return;const h=relaySub(frTopic('fd',uid),'1m');FR.vsub=h;
+  h.onmessage=e=>{let d,m;try{d=JSON.parse(e.data);m=JSON.parse(d.message)}catch(x){return}const v=FR.view;if(!v||v.uid!==uid||!m||m.t!=='g'||m.id!==v.id)return;
+    if(CUR!=='review'||!REV.g||!REV.g.frLive){frViewSub(null);return}m._t=d.time;frViewApply(m)}}
+function frViewApply(s){if(!REV.g||!REV.g.frLive)return;
   const log=frLog(s.k);if(!log||log.length<REV.g.log.length)return;const atEnd=REV.i>=REV.g.log.length&&!REV.pv;
   if(log.length===REV.g.log.length&&!s.over)return;
-  REV.g.log=log;REV.pos=buildPos(REV.g);if(s.over){REV.g.win=s.win;REV.g.why=s.why||'';REV.g.frLive=false;clearInterval(FR.viewT)}
+  REV.g.log=log;REV.pos=buildPos(REV.g);if(s.over){REV.g.win=s.win;REV.g.why=s.why||'';REV.g.frLive=false;clearInterval(FR.viewT);frViewSub(null)}
   if(atEnd)REV.i=log.length;renderReview();nextAnalysis()}
 {const _rhF=renderReview;renderReview=function(){_rhF();const g=REV.g;if(g&&g.frName){const h=$('revHead');h.textContent='フレンド '+g.frName+' の対局'+(g.sm?'（'+(g.sm===1?'黒':'白')+'）':'')+'　'+(g.frLive?'対局中・自動で更新　'+MODE_NAME(g.mode):h.textContent)}}}
 // 自分の対局（研究以外）を公開欄に流す。フレンドがいるときだけ
@@ -2009,7 +2023,7 @@ function frSnap(){if(!myUid()||!FR.friends.length||!S||S.study||!S.log||!S.log.l
   if(S.mode==='net'&&(NET.watch||!colorOf(NET.me)||NET.ai))return null;const id=currentGameId();if(!id)return null;
   return {t:'g',id,mode:S.mode,me:S.mode==='net'?colorOf(NET.me):S.mode===0?0:hcOf(),k:S.log.map(m=>SQC[m[0]]+SQC[m[1]]).join(''),room:S.mode==='net'?NET.code:null,over:S.over?1:0,win:S.over?S.over.win:null,why:S.over?S.over.why||'':'',opp:S.mode==='net'?((NM[oppIdOf()]||{}).name||''):'',name:myName()}}
 function frTick(){const s=frSnap();if(!s)return;const key=s.id+'|'+s.k.length+'|'+s.over;if(key===FR.lastPost)return;clearTimeout(FR.postT);
-  FR.postT=setTimeout(()=>{const s2=frSnap();if(!s2)return;const k2=s2.id+'|'+s2.k.length+'|'+s2.over;if(k2===FR.lastPost)return;FR.lastPost=k2;frRelay(frTopic('fd',myUid()),s2)},s.over?200:1500)}
+  FR.postT=setTimeout(()=>{const s2=frSnap();if(!s2)return;const k2=s2.id+'|'+s2.k.length+'|'+s2.over;if(k2===FR.lastPost)return;FR.lastPost=k2;frRelay(frTopic('fd',myUid()),s2)},s.over?100:250)}
 function frStart(){if(!myUid())return;FR.loaded=true;setTimeout(frBeat,1500);frSubInbox();try{if(CUR==='friends')frRender()}catch(e){}frBadge();frPollInbox();clearInterval(FR.inT);FR.inT=setInterval(()=>{if(!document.hidden)frPollInbox()},45000);
   let lp=0;try{lp=+localStorage.getItem('bocch-fr-lp')||0}catch(e){}if(Date.now()-lp>6*3600e3)frPostList();if(CUR==='friends')frPollFeeds()}
 /* フレンドに対戦を申し込む：部屋を作り、相手の受信箱に招待を送る。相手には画面上に「受ける／断る」が出る */
@@ -2034,7 +2048,7 @@ function frInvShow(uid,nm,room){let el=$('frInv');if(!el){el=document.createElem
 $('frSend').addEventListener('click',()=>frByName($('frName').value));
 $('frFind').addEventListener('input',frRender);
 $('frName').addEventListener('keydown',e=>{if(e.key==='Enter')frByName($('frName').value)});
-document.querySelector('[data-go="friends"]').addEventListener('click',()=>{fbInit().catch(()=>{});frRender();frMsg('');frPollFeeds();clearInterval(FR.pollT);FR.pollT=setInterval(()=>{if(CUR!=='friends'){clearInterval(FR.pollT);return}if(!document.hidden)frPollFeeds()},10000)});
+document.querySelector('[data-go="friends"]').addEventListener('click',()=>{fbInit().catch(()=>{});frRender();frMsg('');frPollFeeds();clearInterval(FR.pollT);frSubAll();FR.pollT=setInterval(()=>{if(CUR!=='friends'){clearInterval(FR.pollT);frUnsubAll();return}if(!document.hidden)frPollFeeds()},30000)});
 $('frOpp').addEventListener('click',async()=>{const o=NM[oppIdOf()];if(!o||!o.uid)return;const ok=await frRequest(o.uid,o.name);netMsg(ok?o.name+' さんにフレンド申請しました':($('frMsg').textContent||'申請できませんでした'),!ok);render()});
 {const _renderF=render;render=function(){_renderF();try{frTick();const o=S.mode==='net'&&!NET.watch&&NET.code?NM[oppIdOf()]:null;const u=myUid();
   $('frOpp').hidden=!(o&&o.uid&&u&&o.uid!==u&&!isFriend(o.uid)&&!FR.fout.some(f=>f.uid===o.uid))}catch(e){}}}
