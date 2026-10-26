@@ -402,7 +402,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
       <button data-go="friends" id="friendsBtn" aria-label="フレンド"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c3 .2 5.5 2.3 5.5 5.3"/></svg><span>フレンド</span><span class="fr-badge" id="frBadge" hidden></span></button>
       <button data-go="history" aria-label="対局履歴・感想戦"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>感想戦</span></button>
       <button data-go="rules" aria-label="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"/><path d="M8 10h8M8 14h8M8 18h5"/></svg><span>ルール</span></button>
-      <button id="guideBtn" onclick="location.href='guide.html'" aria-label="勝ち方ガイド"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg><span>ガイド</span></button>
+      <button id="guideBtn" onclick="location.href=(window.BOCCH_PAGES&&window.BOCCH_PAGES.guide)||'guide.html'" aria-label="勝ち方ガイド"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg><span>ガイド</span></button>
     </nav>
     <p class="foot">アカウント不要・リンクを送るだけで対戦</p>
     <p class="foot foot-links"><a href="privacy.html">プライバシーポリシー・お問い合わせ</a></p>
@@ -2198,6 +2198,7 @@ $('deepBtn').addEventListener('click',()=>{if(!REV.g||REV.g.deep)return;showRewa
   async function tick(){await beat();count()}
   tick();setInterval(tick,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick()})})();
 </script>
+<script>/* ガイドとプライバシーポリシーは、選んだ言語のページを開く */(function(){var L=window.BOCCH_LANG||'ja',S={'en':'-en','zh-Hans':'-zh-hans','zh-Hant':'-zh-hant','ko':'-ko','es':'-es'}[L]||'';window.BOCCH_PAGES={guide:'guide'+S+'.html',privacy:'privacy'+S+'.html'};var a=document.querySelector('.foot-links a[href="privacy.html"]');if(a)a.href=window.BOCCH_PAGES.privacy;if(S){var l=document.createElement('link');l.rel='prefetch';l.href=window.BOCCH_PAGES.guide;document.head.appendChild(l)}})();</script>
 <script>/* 言語の切り替え：選んだら保存して読み直す */(function(){var e=document.getElementById('langSel');if(!e)return;e.value=window.BOCCH_LANG||'ja';e.addEventListener('change',function(){try{localStorage.setItem('bocch-lang',e.value)}catch(x){}var u=new URL(location.href);u.searchParams.delete('lang');location.replace(u.toString())})})();</script>
 </body>
 </html>

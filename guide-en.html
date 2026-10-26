@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="The strategy guide for bocch, the board game where a lonely stone can't move. Mechanics, strong shapes, openings, strategies and tactics, explained with board diagrams.">
+<title>bocch Strategy Guide</title>
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="bocch Strategy Guide">
+<meta property="og:description" content="A board game of reading ahead where stones jump exactly as far as the number of stones around them. Free, no sign-up — just send a link to play with friends.">
+<meta property="og:url" content="https://bocchgame.com/guide-en.html">
+<meta property="og:image" content="https://bocchgame.com/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="bocch Strategy Guide">
+<meta name="twitter:description" content="A board game of reading ahead where stones jump exactly as far as the number of stones around them. Free, no sign-up — just send a link to play with friends.">
+<meta name="twitter:image" content="https://bocchgame.com/og.jpg">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/guide.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/guide-en.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/guide-zh-hans.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/guide-zh-hant.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/guide-ko.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/guide-es.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/guide.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+[hidden]{display:none!important}img{max-width:100%}
+/* 構成：盤の図を主役に、一段組で上から「仕組み → 形 → 定跡 → 守り → 毎手の確認」 */
+:root{
+  --bg:#f3efe6; --fg:#24201a; --sub:#6b6457; --line:#d8cfbd; --card:#fbf8f1;
+  --wood:#d9b77e; --wood2:#c79f60; --grid:#8a6a3c;
+  --gold:#9a6f22; --good:#2f7d58; --bad:#b0483a; --blue:#2f6fa8; --amber:#c27a12; --plum:#7d4f9e;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#17150f; --fg:#ece6d8; --sub:#a39b8a; --line:#3a352a; --card:#201d16;
+  --wood:#c9a46a; --wood2:#b28a4e; --grid:#6e5330;
+  --gold:#d6b26e; --good:#6fc39a; --bad:#e08c7c; --blue:#7fb2e0; --amber:#f0b04a; --plum:#c39be0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f; --fg:#ece6d8; --sub:#a39b8a; --line:#3a352a; --card:#201d16;
+  --wood:#c9a46a; --wood2:#b28a4e; --grid:#6e5330;
+  --gold:#d6b26e; --good:#6fc39a; --bad:#e08c7c; --blue:#7fb2e0; --amber:#f0b04a; --plum:#c39be0; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.75;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
+main{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:44px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(28px,7vw,40px);line-height:1.25;margin:0;letter-spacing:.06em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:23px;margin:0 0 6px;letter-spacing:.05em;text-wrap:balance}
+h3{font-size:16px;margin:0;font-weight:700}
+p{margin:0}
+.lead{color:var(--sub);margin-top:10px;max-width:38em}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+section>.intro{color:var(--sub);max-width:40em;margin-bottom:16px}
+.ad-slot{width:100%;max-width:468px;min-height:60px;margin:0 auto}.ad-slot.ad-ph{display:grid;place-items:center;min-height:90px;border:1px dashed var(--line);border-radius:8px;color:var(--sub);font-size:12px}
+.tabs{position:sticky;top:0;z-index:10;display:flex;gap:4px;margin:-20px 0 -16px;padding:8px 0;background:var(--bg);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:1 0 auto;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--sub);font:inherit;font-weight:700;font-size:14px;letter-spacing:.04em;cursor:pointer;white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.tabs button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.note{font-size:12.5px;color:var(--sub)}
+
+/* 盤 */
+.board{display:grid;background:linear-gradient(160deg,var(--wood),var(--wood2));padding:6px;border-radius:6px;gap:0;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.cell{aspect-ratio:1;position:relative;border-right:1px solid var(--grid);border-bottom:1px solid var(--grid);display:grid;place-items:center}
+.board .cell.r0{border-top:1px solid var(--grid)}.board .cell.c0{border-left:1px solid var(--grid)}
+.cell.goal{background:rgba(255,255,255,.13)}
+.st{width:82%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:clamp(11px,3.4vw,17px);
+  font-variant-numeric:tabular-nums;position:relative;z-index:1}
+.st.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.st.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.st.zero{opacity:.55}
+.cell.tgt::after{content:"";position:absolute;inset:16%;border-radius:50%;border:3px solid var(--good);background:rgba(47,125,88,.18)}
+.cell.from::after{content:"";position:absolute;inset:14%;border-radius:50%;border:2px dashed rgba(20,20,20,.55)}
+.cell.sel .st{outline:3px solid var(--blue);outline-offset:2px}
+.cell.x::after{content:"×";position:absolute;font-size:clamp(16px,5vw,24px);color:var(--bad);font-weight:700}
+
+/* 仕組みの試し盤 */
+.lab{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:620px){.lab{grid-template-columns:minmax(0,1fr)}}
+.lab .board{grid-template-columns:repeat(6,1fr);max-width:340px;width:100%}
+.lab .cell{cursor:pointer}
+.ctl{display:flex;flex-direction:column;gap:12px;min-width:0}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;gap:3px;background:var(--card)}
+.seg button{border:0;background:transparent;color:var(--fg);font:inherit;font-size:13.5px;padding:6px 14px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{font:inherit;font-size:13px;padding:5px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+.chips button:hover,.seg button:hover{border-color:var(--gold)}
+button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.say{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;min-height:5.2em}
+
+/* ランキング */
+.rank{display:flex;flex-direction:column;gap:14px}
+.row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.row.top{border-color:var(--gold)}
+@media (max-width:480px){.row{grid-template-columns:96px minmax(0,1fr);gap:12px;padding:12px}}
+.row .board{width:100%;min-width:0;overflow:hidden}
+.row .board .st{font-size:11px;width:78%}
+.row.wide{grid-template-columns:168px minmax(0,1fr)}
+@media (max-width:480px){.row.wide{grid-template-columns:132px minmax(0,1fr)}.row .board .st{font-size:9.5px}}
+.row h3 small{font-weight:400;color:var(--sub);font-size:12.5px;margin-left:6px}
+.row p{font-size:13.5px;color:var(--sub);margin-top:4px}
+.bar{position:relative;height:22px;margin-top:8px;border-radius:4px;background:linear-gradient(to right,transparent calc(50% - .5px),var(--line) calc(50% - .5px),var(--line) calc(50% + .5px),transparent calc(50% + .5px))}
+.bar i{position:absolute;top:4px;bottom:4px;border-radius:3px}
+.bar b{position:absolute;top:0;font-size:12.5px;line-height:22px;font-variant-numeric:tabular-nums}
+.scale{display:flex;justify-content:space-between;font-size:11px;color:var(--sub);font-variant-numeric:tabular-nums;margin-top:2px}
+
+/* 守り */
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:620px){.trio{grid-template-columns:minmax(0,1fr)}}
+.fig{display:flex;flex-direction:column;gap:8px;min-width:0}
+.fig .board{max-width:260px;width:100%}
+.fig p{font-size:13.5px;color:var(--sub)}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;padding:1px 8px;border-radius:999px;border:1px solid currentColor;margin-left:6px;vertical-align:2px}
+.tag.ok{color:var(--good)}.tag.ng{color:var(--bad)}
+
+/* 毎手の確認 */
+ol.check{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;counter-reset:c}
+ol.check li{counter-increment:c;display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:start;padding:12px 14px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 10px 10px 0}
+/* 戦法(序盤の作戦) */
+.strat{display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;align-items:start;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.strat.top{border-color:var(--gold)}
+@media (max-width:480px){.strat{grid-template-columns:118px minmax(0,1fr);gap:12px;padding:12px}}
+.strat .board{width:100%;padding:4px;overflow:hidden}
+.strat .board .st{font-size:10.5px;width:76%}
+.hs{width:80%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%)}
+.strat h3{font-family:var(--f-disp);font-size:18px;letter-spacing:.06em}
+.strat h3 small{font-family:var(--f-body);font-weight:400;font-size:12.5px;color:var(--sub);margin-left:6px;letter-spacing:0}
+.strat p{font-size:13.5px;color:var(--sub);margin-top:4px}
+.strat .op{font-size:12.5px;margin-top:6px;color:var(--fg)}
+.strat .op code{font-family:inherit;background:color-mix(in srgb,var(--gold) 12%,transparent);padding:1px 6px;border-radius:4px;margin-right:4px;white-space:nowrap}
+.mtx-wrap{overflow-x:auto;margin-top:6px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.fact{padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.fact b{display:block;font-family:var(--f-disp);font-size:26px;font-variant-numeric:tabular-nums;color:var(--gold)}
+.fact span{font-size:12.5px;color:var(--sub)}
+.hist{display:flex;align-items:flex-end;gap:4px;height:130px;padding:8px 4px 0;border-bottom:1px solid var(--line);margin-top:8px}
+.hist div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0}
+.hist i{display:block;width:100%;background:var(--gold);opacity:.75;border-radius:3px 3px 0 0}
+.hist small{font-size:10.5px;color:var(--sub);font-variant-numeric:tabular-nums;margin-top:3px;white-space:nowrap}
+.keysq-wrap{display:grid;grid-template-columns:minmax(0,280px) minmax(0,1fr);gap:18px;align-items:start;margin-top:8px}
+@media (max-width:560px){.keysq-wrap{grid-template-columns:minmax(0,1fr)}}
+.keysq{max-width:280px;width:100%}
+.keysq .cell{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;color:#1d1a14}
+.keynotes{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px;font-size:13.5px}
+.keynotes b{font-weight:700}
+.strat{cursor:pointer}
+.strat.sub{margin-left:28px;border-style:dashed;background:color-mix(in srgb,var(--card) 70%,var(--bg))}
+@media (max-width:480px){.strat.sub{margin-left:16px}}
+.strat .subtag{font-size:12px;color:var(--gold);font-weight:700;letter-spacing:.04em;margin-bottom:2px}
+.row.tap{cursor:pointer}.row.tap:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.row .more{font-size:12.5px;color:var(--gold);margin-top:8px;font-weight:700}
+.deriv{grid-column:1/-1;border-top:1px dashed var(--line);padding-top:12px;display:flex;flex-direction:column;gap:8px;cursor:default}
+.deriv .dh{font-size:13px;color:var(--sub)}
+.dv{display:grid;grid-template-columns:4.6em minmax(0,1fr) auto;gap:10px;align-items:center;font-size:13.5px}
+.dv .wr{white-space:nowrap}
+.dv .nm{font-weight:700}
+.dv .track{height:14px;border-radius:3px;background:color-mix(in srgb,var(--line) 60%,transparent);position:relative;overflow:hidden}
+.dv .track i{position:absolute;left:0;top:0;bottom:0;background:var(--gold);opacity:.8;border-radius:3px}
+.dv .wr{font-variant-numeric:tabular-nums;text-align:right}
+.dv .wr.g{color:var(--good);font-weight:700}.dv .wr.b{color:var(--bad)}
+.deriv .rec{font-size:13.5px;border-left:3px solid var(--gold);padding:4px 10px}
+.strat:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.strat .more{font-size:12.5px;color:var(--gold);margin-top:8px;font-weight:700}
+.build{grid-column:1/-1;border-top:1px dashed var(--line);padding-top:12px;display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:16px;align-items:start;cursor:default}
+@media (max-width:520px){.build{grid-template-columns:minmax(0,1fr)}}
+.build .board{max-width:220px;width:100%}
+.build .ctl2{display:flex;flex-direction:column;gap:10px;min-width:0}
+.build .nav{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.build .nav button{font:inherit;font-size:13.5px;padding:7px 14px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--fg);cursor:pointer}
+.build .nav button:disabled{opacity:.4;cursor:default}
+.build .nav .k{font-variant-numeric:tabular-nums;font-size:13.5px;min-width:5em;text-align:center}
+.build .steps{display:flex;flex-wrap:wrap;gap:6px}
+.build .steps button{font:inherit;font-size:12.5px;padding:4px 9px;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--sub);cursor:pointer}
+.build .steps button.cur{border-color:var(--blue);color:var(--fg);font-weight:700}
+.build .say2{font-size:13.5px;min-height:3em}
+table.mtx{border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums;min-width:460px}
+.mtx th,.mtx td{padding:8px 6px;text-align:center;border:1px solid var(--line)}
+.mtx th{font-weight:700;background:var(--card)}
+.mtx th.rowh{text-align:left;white-space:nowrap}
+.mtx td.self{color:var(--sub)}
+.ex{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:14px;margin-top:10px}
+.ex-top{display:grid;grid-template-columns:minmax(0,230px) minmax(0,1fr);gap:14px;align-items:start}
+@media (max-width:520px){.ex-top{grid-template-columns:minmax(0,1fr)}.ex-top .board{max-width:300px;width:100%;margin:0 auto}}
+.ex .board .st{font-size:clamp(11px,3.2vw,15px)}
+.ex-path{font-size:13.5px;line-height:1.7}.ex-path b{font-weight:700}
+.ex-path .pm{display:inline-block;margin:0 4px 4px 0;padding:1px 7px;border-radius:5px;background:color-mix(in srgb,var(--gold) 12%,transparent);white-space:nowrap}
+.ex-ev{margin-top:8px;font-size:13.5px;color:var(--sub)}.ex-ev b{color:var(--fg);font-size:18px;font-family:var(--f-disp)}
+.ex-nav{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.ex-nav button,.ex-list button{font:inherit;border:1px solid var(--line);background:var(--bg);color:var(--fg);border-radius:8px;min-height:40px;padding:6px 12px;cursor:pointer}
+.ex-nav button:disabled{opacity:.4;cursor:default}
+.ex-q{margin:14px 0 8px;font-weight:700;font-size:14.5px}
+.ex-list{display:flex;flex-direction:column;gap:6px}
+.ex-list button{display:grid;grid-template-columns:3.6em minmax(0,1fr) auto 3.4em;gap:8px;align-items:center;text-align:left;width:100%}
+.ex-list button .nm small{color:var(--sub);margin-left:6px;font-size:12px}
+.ex-list button .tr{width:70px;height:8px;border-radius:4px;background:color-mix(in srgb,var(--line) 70%,transparent);position:relative;overflow:hidden}
+.ex-list button .tr i{position:absolute;left:0;top:0;bottom:0;background:var(--fg);opacity:.75}
+.ex-list button .pc{font-variant-numeric:tabular-nums;text-align:right;font-weight:700}
+.ex-list button.best{border-color:var(--gold)}.ex-list button .mk{font-size:12px;font-weight:700;white-space:nowrap}.ex-list button.best .mk{color:var(--gold)}
+.ex-list button.l1 .mk{color:var(--good)}.ex-list button.l3 .mk{color:#c98a2e}.ex-list button.l4 .mk{color:var(--bad)}.ex-list button.l4{border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}
+.ex-legend{margin:8px 0 0;font-size:12.5px;color:var(--sub);line-height:1.7}
+.ex-list button:hover,.ex-list button:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.ex-end{font-size:13.5px;color:var(--sub);line-height:1.7}
+
+.mtx.lines{font-size:13px;min-width:520px}.mtx.lines td{text-align:left;line-height:1.6}.mtx.lines td:last-child{text-align:center;font-weight:700;white-space:nowrap}
+.mtx.lines code,.keynotes code,.note code{font-family:inherit;background:color-mix(in srgb,var(--gold) 12%,transparent);padding:1px 5px;border-radius:4px;white-space:nowrap}
+/* 上級：手筋 */
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:12.5px;color:var(--sub);margin:4px 0 18px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.lg{width:16px;height:16px;border-radius:50%;display:inline-block;background:#2a2a2a}
+.lg.g0{box-shadow:0 0 0 3px var(--good)}.lg.g1{outline:2px dashed var(--amber);outline-offset:2px}.lg.gm{outline:2px dotted var(--plum);outline-offset:2px}
+.lg.tg{background:transparent;border:3px solid var(--good)}.lg.wt{background:transparent;border:3px solid var(--blue)}.lg.to{background:transparent;border:3px solid var(--fg)}
+.st.g0{box-shadow:0 0 0 3px var(--good),0 2px 3px rgba(0,0,0,.3)}
+.st.g1{outline:2px dashed var(--amber);outline-offset:2px}
+.st.gm{outline:2px dotted var(--plum);outline-offset:2px}
+.cell.wt::after{content:"";position:absolute;inset:16%;border-radius:50%;border:3px solid var(--blue);background:rgba(47,111,168,.15)}
+.cell.to::before{content:"";position:absolute;inset:4%;border:2px solid rgba(20,20,20,.75);border-radius:4px}
+.tac-group{display:flex;flex-direction:column;gap:18px}
+.tac-group>h3{font-family:var(--f-disp);font-size:19px;letter-spacing:.05em;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.tac{padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--card);display:flex;flex-direction:column;gap:10px}
+.tac h4{margin:0;font-size:15.5px}.tac h4 .tag{font-weight:700}
+.tac>p{font-size:14px;color:var(--fg);max-width:40em}
+.seq{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-start}
+.step{display:flex;flex-direction:column;gap:6px;width:min(190px,calc(50% - 5px));min-width:0}
+.step .board{width:100%;padding:4px}
+.step .board .st{font-size:11px;width:78%}
+.step p{font-size:12.5px;color:var(--sub);line-height:1.55}
+.rule{font-size:13.5px;border-left:3px solid var(--gold);padding:6px 10px;background:color-mix(in srgb,var(--gold) 8%,transparent)}
+.tree{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:6px}
+.tree a{display:block;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none;font-size:13.5px}
+.tree a b{display:block;font-size:12px;color:var(--gold);letter-spacing:.1em}
+.tree a:hover{border-color:var(--gold)}
+ol.check li::before{content:counter(c);font-family:var(--f-disp);font-weight:700;font-size:22px;color:var(--gold);line-height:1.2}
+ol.check b{display:block}
+ol.check span{font-size:13.5px;color:var(--sub)}
+.src{border-top:1px solid var(--line);padding-top:16px}
+body{overflow-wrap:break-word}
+.tabs button{letter-spacing:0}
+.bar b{white-space:nowrap}
+</style>
+</head>
+<body>
+
+<main>
+<header>
+  <a href="./" style="display:inline-block;margin-bottom:14px;color:var(--gold);text-decoration:none;font-size:14px">‹ Back to the game</a>
+  <div class="eyebrow">A lonely stone can't move</div>
+  <h1>bocch Strategy Guide</h1>
+  <p class="lead">The points the “Strongest” AI weighs most, and the “winning shapes” counted from 30,000 AI-vs-AI games, summarized with board diagrams. The number on a stone is how far it can move.</p>
+  <a class="ytbox" href="https://www.youtube.com/@bocch.official" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;margin:16px 0 0;padding:12px 14px;border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);border-radius:8px;color:inherit;text-decoration:none"><span style="color:var(--gold);font-size:20px">▶</span><span><b style="color:var(--gold)">YouTube “bocch Joseki Lab”</b><br><span style="font-size:14px">Strategies and openings explained in videos (Japanese) ›</span></span></a>
+</header>
+
+<nav class="tabs" id="tabs" role="tablist" aria-label="Guide chapters">
+  <button role="tab" data-t="basic">Basics</button>
+  <button role="tab" data-t="shape">Shapes & openings</button>
+  <button role="tab" data-t="strat">Strategies</button>
+  <button role="tab" data-t="tac">Tactics</button>
+  <button role="tab" data-t="data">Data</button>
+</nav>
+
+<section data-tab="basic">
+  <h2>First, try the mechanics by hand</h2>
+  <p class="intro">The distance a stone can move is “the number of stones in the 8 surrounding squares (either color).” Placing a stone also changes the numbers of the stones next to it. This is the single most important idea in the game.</p>
+  <div class="lab">
+    <div class="board" id="lab" role="grid" aria-label="Practice board"></div>
+    <div class="ctl">
+      <div class="seg" role="group" aria-label="Mode">
+        <button id="mPut" aria-pressed="true">Place stones</button>
+        <button id="mMove" aria-pressed="false">Show moves</button>
+      </div>
+      <div class="chips" aria-label="Set up a shape">
+        <button data-p="start">Start position</button>
+        <button data-p="block">2×2 block</button>
+        <button data-p="lonely">Loner</button>
+        <button data-p="foot">Opponent as foothold</button>
+        <button data-p="threat">Reach</button>
+        <button data-p="clear">Clear all</button>
+      </div>
+      <div class="say" id="say"></div>
+      <p class="note">“Place stones”: each tap on a square cycles Black → White → empty.<br>“Show moves”: tap a stone to see the squares it can reach in green. The top row is Black's goal, the bottom row is White's goal.</p>
+    </div>
+  </div>
+</section>
+
+<section data-tab="shape">
+  <h2>Strong shapes</h2>
+  <p class="intro">In AI-vs-AI games, the share of games won by “the side that had more of that shape than the opponent.” The center line is 50%; the further right the bar, the better the shape.</p>
+  <div class="rank" id="shapes"></div>
+</section>
+
+<section data-tab="shape">
+  <h2>Black's 1st move (openings)</h2>
+  <p class="intro">Evaluations from the improved “Strongest” (v1.7), which read each of the 14 possible first moves for 15 seconds (15–18 moves deep); mirror-image moves are averaged together. Only the two edge-stone moves, <b>Snuggle and Corner Guard, are even</b>; every move that pushes an inner stone two squares loses a little. For White's 2nd move, “Shoulder to Shoulder” (sliding an edge stone diagonally inward) is best no matter what Black plays. These readings are built into “Strongest” as its opening book.</p>
+  <div class="rank" id="opens"></div>
+</section>
+
+<section data-tab="shape">
+  <h2>Openings up to move 3</h2>
+  <p class="intro">For all 196 combinations of the first two moves, the latest “Strongest” read Black's 3rd move 15–18 moves deep. On top of that, it read <b>every possible 3rd move (3,006 in total)</b> for 4 seconds each (11–14 moves deep) and sorted them into strong and weak. Scores are from Black's point of view: 0 is even, + favors Black (100 points ≈ a 78% win rate).</p>
+  <ul class="keynotes">
+    <li><b>Black's 3rd move: “bring in the other edge too” is the rule</b>: in 159 of the 196 cases (81%), the best move slid an edge stone one row inward. If your 1st move brought in one edge, bring in the other edge on move 3 so both edge stones get to work.</li>
+    <li><b>White loses big by playing anything but Shoulder to Shoulder on move 2</b>: against Black's Snuggle, any other White move gives Black an advantage of +77 to +148 points. Shoulder to Shoulder is White's only good 2nd move.</li>
+    <li><b>Move 3: moving a home stone just one row is safe</b>: across all 3,006 moves, moving a home-row stone a single row averaged 43 points behind the best move, with almost no mistakes. Pushing a home stone two rows at once costs 77 points on average, three rows 90 points, and the mistake rate jumps to 8% and 18%. Long jumps in the opening tend to just hand your opponent footholds and time.</li>
+    <li><b>Top-tier moves are rare</b>: of the 3,006 moves, only 16% were best or good (within 20 points). Nearly half were dubious (60–120 points behind). Differences already appear by move 3.</li>
+    <li><b>The main line is even</b>: Black Snuggle → White Shoulder to Shoulder (on the edge opposite Black's) → Black brings in the other edge too, scores 0 points. The real fight starts from here.</li>
+  </ul>
+  <h3 style="margin-top:22px">Explore on the board (with variations)</h3>
+  <p class="note" style="margin-top:4px">Tap a candidate move to advance the board to it. The number to the right of each move is Black's estimated win rate after that move (latest AI evaluation). The mark on the left shows the gap from the best move: ★ best, ◎ good, ○ normal, △ dubious, ✕ mistake. For move 3, every legal move is listed.</p>
+  <div class="ex" id="ex">
+    <div class="ex-top">
+      <div class="board" id="exB" aria-label="Opening board"></div>
+      <div class="ex-side">
+        <div class="ex-path" id="exPath"></div>
+        <div class="ex-ev" id="exEv"></div>
+        <div class="ex-nav"><button type="button" id="exBack">◀ Back 1 move</button><button type="button" id="exReset">Restart</button></div>
+      </div>
+    </div>
+    <div class="ex-q" id="exQ"></div>
+    <div class="ex-list" id="exList"></div>
+  </div>
+  <p class="note" style="margin-top:8px">The top row is White's home (Black's goal) and the bottom row is Black's home. Hover or focus a candidate to see its move on the board. From move 4 on there is no book; “Strongest” reads and plays on the spot.</p>
+</section>
+
+<section id="strategy" data-tab="strat">
+  <h2>Strategies (opening plans)</h2>
+  <p class="intro">We had the latest “Strongest” play itself 26,000 times and grouped both sides' positions at move 8 by similarity: they fell into 5 types. Each diagram shows the typical shape of that type, drawn with 6 stones from the most common arrangement of your own stones at move 8 (opponent stones omitted; your home is at the bottom and the attacking side is on the left).</p>
+  <div class="rank" id="strats"></div>
+  <h3 style="margin-top:22px">Matchups</h3>
+  <p class="note" style="margin-top:4px">The share of games the row strategy won against the column strategy.</p>
+  <div class="mtx-wrap"><table class="mtx" id="mtx"></table></div>
+  <h3 style="margin-top:22px">How the stronger AI plays</h3>
+  <p class="note" style="margin-top:4px">Every time we made the AI stronger, the fashion in how it plays changed. These are the changes in the latest 26,000 games.</p>
+  <ul class="keynotes" style="margin-top:8px">
+    <li><b>All-Out disappeared and Two-Tier emerged</b>: “All-Out,” which pushes nearly all home stones out and spreads them sideways, is now almost never played by the strong AI. Instead, “Two-Tier,” which keeps 2–3 stones at home and lines up the rest vertically in the middle rows, now makes up about 20% of games.</li>
+    <li><b>The gap between Center Tower and Edge Attack widened</b>: Center Tower beats Edge Attack 74% of the time (previously 67%). The stronger the AI, the better it draws out the power of a central cluster and punishes the weakness of the edge files.</li>
+    <li><b>Half Tower became mainstream</b>: the strong AI builds its tower in the center while keeping 2–3 stones at home. Full Tower, which uses almost every home stone, declined, and Half Tower now wins 4 points more often.</li>
+    <li><b>Edge Attack and Fortress declined</b>: in the learned values, stones left on the edges of your home row are a big minus, while stones in the middle of your home row are a plus. The strong AI slides edge stones inward early and keeps central stones at home.</li>
+    <li><b>Stones left at home become defense</b>: they block the opponent's landing squares (the “Home wall” tactic) and also give you room to build your tower one square away from the opponent.</li>
+  </ul>
+  <p class="note" style="margin-top:10px">About 6,000–12,000 players per type (both sides of each game are counted). The shape at move 8 also depends on how the opponent plays, so this does not mean “pick this type and you'll always get this win rate.”</p>
+
+</section>
+
+<section id="data" data-tab="data">
+  <h2>Games as seen in 26,000 games between the latest AIs</h2>
+  <p class="intro">Results counted from 26,000 games between copies of the improved latest “Strongest” (v1.7); the first 2–6 moves were random to vary the positions. The latest AI beats the AI from before the upgrade about 60% of the time.</p>
+  <div class="facts" id="facts"></div>
+  <ul class="keynotes" style="margin-top:12px">
+    <li><b>Stronger play means longer games</b>: both sides block reaches early, so stones don't arrive easily. Half of all games end between moves 31 and 48.</li>
+    <li><b>The first stone is huge</b>: the side that gets a stone across first wins about two-thirds of the time (66.5%). Taking one from a solid defense is worth that much.</li>
+    <li><b>Draws happen too, 6.5%</b>: with deep reading, both sides avoid risky moves and positions tend to repeat.</li>
+  </ul>
+  <h3 style="margin-top:22px">Game length</h3>
+  <p class="note" style="margin-top:4px">Number of games by total moves of both sides (60 or more are grouped).</p>
+  <div class="hist" id="hist" role="img" aria-label="Games by number of moves"></div>
+  <h3 style="margin-top:22px">Win rate of the side that arrives first (by when it arrived)</h3>
+  <p class="note" style="margin-top:4px">Arriving first wins over 60% whenever it happens, but it's worth more the later it is: the side that arrives first at move 24 or later wins nearly 80% (77.6%). In the endgame, with fewer defenders left, that one stone is almost decisive.</p>
+  <div class="rank" id="fa"></div>
+  <h3 style="margin-top:22px">Key squares</h3>
+  <p class="note" style="margin-top:4px">Win rate of the side that had its own stone on that square at move 12 (your home at the bottom; left and right averaged). Greener squares win more, redder squares lose more.</p>
+  <div class="keysq-wrap"><div class="board keysq" id="keysq"></div><ul class="keynotes">
+    <li><b>Arriving in the middle of the opponent's home is strong</b>: a side on 3a or 4a wins 63%. Even the corners (1a, 6a) give 55%.</li>
+    <li><b>The central files are key</b>: 3d/4d give 55%, 3c/4c give 53%. Stones running through the middle lead to wins.</li>
+    <li><b>The edge files are losing files</b>: a side on 1c, 1d, 6c or 6d wins 40–41%. Stones pushed to the edge don't do any work.</li>
+    <li><b>Stones left in the home corners are weak too</b>: 1f/6f give 40%. They tend to sit there until the game ends.</li>
+    <li><b>One row short of the goal (row b) is a losing spot</b>: a side on 2b–5b wins 34–42%, the worst row on the board (a new finding from the 26,000 games). A stone on row b is one row from the goal, so it can only arrive when its number is exactly 1. When neighbors pile up, it jumps past the goal, and it's easy for the opponent to block — a stone that “looks close but can't get in.” Only step onto row b when you can surely arrive on the next move.</li>
+  </ul></div>
+</section>
+
+<section data-tab="basic">
+  <h2>How to stop the opponent's reach</h2>
+  <p class="intro">Black's stone (number 2) reaches the goal two rows up. It reaches in three directions — up, up-right and up-left — so there are up to 3 landing squares.</p>
+  <div class="trio" id="defs"></div>
+</section>
+
+<section id="tactics" data-tab="tac">
+  <h2>Advanced: the system of tactics</h2>
+  <p class="intro">What strong players watch is not the numbers on their own stones but the “gap” of both sides' stones. Every tactic is built from this idea.</p>
+  <div class="rule"><b>Gap = rows to the goal − current number</b><br>A stone with gap 0 reaches the goal (a reach), because straight up or diagonally up, it climbs exactly as many rows as its number. If the number is too big it jumps off the board, so it doesn't reach either.<br>When you move a stone, <b>the stones next to the square you land on lose 1 gap</b>, and <b>the stones next to the square you left gain 1 gap</b>.</div>
+  <div class="legend" aria-label="How to read the diagrams">
+    <span><i class="lg g0"></i>Reach (gap 0)</span><span><i class="lg g1"></i>One more neighbor makes a reach (gap +1)</span><span><i class="lg gm"></i>One fewer neighbor makes a reach (gap −1)</span>
+    <span><i class="lg tg"></i>Goal Black can reach</span><span><i class="lg wt"></i>Goal White can reach</span><span><i class="lg to"></i>Square just landed on</span>
+  </div>
+  <p class="note" style="margin-bottom:14px">Diagrams show the whole board (top row is Black's goal, bottom row is White's goal). Stone numbers, reaches and reachable squares are all computed automatically by the rules.</p>
+  <div class="tree" aria-label="List of tactics">
+    <a href="#t-atk"><b>Attack</b>Switch / Pull-out / Double switch / Saturated reach</a>
+    <a href="#t-def"><b>Defense</b>Push-up / Pull-away / Home wall</a>
+    <a href="#t-trap"><b>Pitfalls</b>Backfire (landing backfire, leaving backfire)</a>
+    <a href="#t-open"><b>Opening</b>How the strong AI builds (clearing the edges, staying home)</a>
+    <a href="#t-both"><b>Attack and defense in one</b>Block and build / Loner hunt</a>
+  </div>
+  <div id="tacbox" style="display:flex;flex-direction:column;gap:34px"></div>
+</section>
+
+<section data-tab="basic">
+  <h2>Moves you must not play</h2>
+  <p class="intro">In 26,000 games between the latest AIs (about 890,000 moves), we counted how often the side that played a given move went on to win. The overall average is about 50%. Even for the strong AI, these moves clearly drop the win rate.</p>
+  <ul class="keynotes">
+    <li><b>Creating the opponent's finishing move yourself (0% win rate)</b>: when the opponent already has one stone across, a move that changes the number of an opponent stone so it can now reach for the second (a backfire). It happened 2,047 times in 26,000 games, and the side that played it never won once. Once the opponent has one stone across, always check before moving: “Is there an opponent stone next to my landing square or next to my starting square?”</li>
+    <li><b>Playing elsewhere while the opponent's finishing move remains (0% win rate)</b>: the opponent has one stone across and a stone that can reach for the second next move, and you don't block it. This includes positions with no way to block, but before it gets there, nipping the opponent's second reach in the bud comes first.</li>
+    <li><b>Moves that leave the moved stone a loner (37% win rate)</b>: a “0” stone with no neighbors can't move. The side that played a move leaving its moved stone a loner won 13 points below average. Moves that leave a stone behind as a loner score 41%. Creating two or more loners at once drops it to 27%.</li>
+    <li><b>Stopping one row short of the goal (46% win rate)</b>: moves onto row b (one row short of your goal) win a bit below average. A row-b stone can only arrive when its number is exactly 1, and if neighbors pile up it jumps past. Unless you can surely arrive next move, it's better to wait on row c than to enter row b.</li>
+    <li><b>Jumping home stones far in the opening</b>: in the analysis of all 3rd-move candidates, pushing a home stone 2–3 rows at once averaged 34–47 points worse than a one-row move and tended to be a mistake (details in “Shapes & openings,” openings up to move 3).</li>
+  </ul>
+  <h3 style="margin-top:22px">Mindset: once you're only defending, you're starting to lose</h3>
+  <ul class="keynotes">
+    <li><b>The side that plays a blocking move wins 34%</b>: blocking the opponent's reach is necessary, but if you're being forced to block, the initiative is theirs. The side that blocked the finishing move after the opponent's first arrival won 27%.</li>
+    <li><b>That's why you “block and build”</b>: a pure blocking move gives the opponent time to plan their next attack. When choosing a block, first look for a landing square that also creates a reach of your own (the “Attack and defense in one” tactic).</li>
+    <li><b>If you have a reach too, you can sometimes ignore the opponent's</b>: sides that left the opponent's reach alone while holding a reach of their own won 60%. Giving up one stone isn't an instant loss. Compare “the opponent gets one across” with “I get one across” and pick whichever is better.</li>
+  </ul>
+</section>
+
+<section data-tab="basic">
+  <h2>The opponent's reach: block it or let it go?</h2>
+  <p class="intro">When the opponent can arrive next move, we counted in 26,000 games how the Strongest AI decides.</p>
+  <ul class="keynotes">
+    <li><b>Always block the opponent's second stone</b>: when the opponent already had one across, a move that could block but let it go never happened even once. The second stone is an immediate loss.</li>
+    <li><b>The opponent's first stone can sometimes be let through</b>: sides that could block but deliberately let it go won 69.8%. In particular, 95.9% when they already had one across themselves, and 72.3% when they had a reach of their own. If you'll get two across first, spend the blocking move on attack instead.</li>
+    <li><b>When neither applies, “block and build”</b>: with no stones across and no reach of your own, sides that blocked while creating a reach won 51.7%. Just blocking: 39.6%; making a reach without blocking: 46.9%; doing neither: 34.1%.</li>
+  </ul>
+  <h3 style="margin-top:22px">There's an order to blocking, too</h3>
+  <ul class="keynotes">
+    <li><b>1. Push-up (49.7% win rate)</b>: place your stone next to the opponent's reach stone to raise its number. The row it reaches changes, so it jumps past the goal.</li>
+    <li><b>2. Pull-away (43.7%)</b>: remove a stone next to the opponent's reach stone to lower its number.</li>
+    <li><b>3. Blocking the landing square (33.8%)</b>: it looks the most natural, but it's the worst way to block. The opponent's number doesn't change, so they just look for another landing square.</li>
+  </ul>
+  <h3 style="margin-top:22px">Moving an arrived stone back out</h3>
+  <ul class="keynotes">
+    <li><b>Moving your arrived stone back out of the opponent's home is a last-ditch defense</b>: the side that did it won 4.6% (7,969 times). 62% of those gave up their first stone to block the opponent's finishing move. If the AI plays this, it's already in trouble.</li>
+    <li><b>Moving sideways within the goal row is a normal move</b>: without losing an arrived stone, it changes neighboring numbers to block the opponent or open the way for your next stone (50.4% win rate).</li>
+  </ul>
+</section>
+
+<section data-tab="basic">
+  <h2>Check these in order, every move</h2>
+  <ol class="check">
+    <li><div><b>Does the opponent have a gap-0 stone (a reach)?</b><span>If so, block it. Use a push-up or pull-away to move its gap off 0.</span></div></li>
+    <li><div><b>Will this move backfire?</b><span>Check that there's no opponent gap +1 stone next to your landing square, and no opponent gap −1 stone next to your starting square.</span></div></li>
+    <li><div><b>Can you block and create your own reach at the same time?</b><span>Look for your own gap +1 stone next to the landing square (attack and defense in one).</span></div></li>
+    <li><div><b>Can you make reaches in two separate places?</b><span>A double reach clustered in one spot can be broken with a single move. The real thing is two separate places.</span></div></li>
+    <li><div><b>Will any of your stones become a loner?</b><span>Sides with many stones that have only 0–1 neighbors drop to around a 45% win rate.</span></div></li>
+  </ol>
+</section>
+
+<div class="ad-slot" id="guideAd" hidden aria-label="Ad"></div>
+<p class="note src" data-tab="data">Data sources: shape win rates come from 2,000 AI-vs-AI games, comparing both sides across about 48,000 positions. Opening evaluations are the latest “Strongest” reading 15–18 moves deep, not a full solve. Differences of about 5% can flip with more thinking time.</p>
+<p class="note" style="text-align:center;margin-top:8px"><a href="privacy-en.html" style="color:var(--gold)">Privacy policy & contact</a></p>
+<p class="note lang-row" style="text-align:center;margin-top:10px"><select id="langSel" aria-label="Language / 言語" style="font:inherit;font-size:13px;color:var(--sub);background:transparent;border:1px solid var(--line);border-radius:6px;padding:4px 8px"><option value="ja">日本語</option><option value="en" selected>English</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="ko">한국어</option><option value="es">Español</option></select></p>
+<script>(function(){var F={"ja": "guide.html", "en": "guide-en.html", "zh-Hans": "guide-zh-hans.html", "zh-Hant": "guide-zh-hant.html", "ko": "guide-ko.html", "es": "guide-es.html"};var e=document.getElementById("langSel");e.addEventListener("change",function(){try{localStorage.setItem("bocch-lang",e.value)}catch(x){}location.href=F[e.value]+location.hash})})();</script>
+</main>
+
+<script>
+(function(){
+const N=6;
+function nb(b,w,h,i){const r=i/w|0,c=i%w;let n=0;for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){if(!dr&&!dc)continue;const rr=r+dr,cc=c+dc;if(rr>=0&&rr<h&&cc>=0&&cc<w&&b[rr*w+cc])n++}return Math.min(4,n)}
+function dests(b,i){const d=nb(b,N,N,i);if(!d)return[];const r=i/N|0,c=i%N,out=[];
+  for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){if(!dr&&!dc)continue;const rr=r+dr*d,cc=c+dc*d;if(rr<0||rr>=N||cc<0||cc>=N)continue;const t=rr*N+cc;if(!b[t])out.push(t)}return out}
+// 図を描く。rows は文字列の配列：B=黒 W=白 .=空き  marks は {index:'tgt'|'from'|'x'}
+function draw(el,rows,marks,opt){opt=opt||{};const h=rows.length,w=rows[0].length;const b=[];rows.join('').split('').forEach(ch=>b.push(ch==='B'?1:ch==='W'?2:0));
+  el.style.gridTemplateColumns='repeat('+w+',minmax(0,1fr))';el.innerHTML='';
+  b.forEach((v,i)=>{const c=document.createElement('div');const r=i/w|0;c.className='cell'+(r===0?' r0':'')+(i%w===0?' c0':'')+((opt.goalTop&&r===0)?' goal':'');
+    if(marks&&marks[i])c.classList.add(marks[i]);
+    if(v){const d=nb(b,w,h,i);const s=document.createElement('div');s.className='st '+(v===1?'b':'w')+(d?'':' zero');s.textContent=d;c.appendChild(s)}
+    el.appendChild(c)});return b}
+const idx=(w,r,c)=>r*w+c;
+
+/* 試し盤 */
+const lab=document.getElementById('lab'),say=document.getElementById('say');let B=new Array(36).fill(0),mode='put',sel=-1;
+const P={
+  start:()=>{const b=new Array(36).fill(0);for(let c=0;c<6;c++){b[c]=2;b[30+c]=1}return b},
+  block:()=>{const b=new Array(36).fill(0);[14,15,20,21].forEach(i=>b[i]=1);return b},
+  lonely:()=>{const b=new Array(36).fill(0);b[20]=1;[30,31].forEach(i=>b[i]=1);return b},
+  foot:()=>{const b=new Array(36).fill(0);b[20]=1;b[19]=2;b[21]=2;return b},
+  threat:()=>{const b=new Array(36).fill(0);b[14]=1;b[19]=1;b[21]=1;return b},
+  clear:()=>new Array(36).fill(0)};
+const MSG={start:'At the start, the edge stones have 2–3 neighbors. The middle four have number 2 and the corner stones have 1.',
+  block:'All four stones of the 2×2 block have number 3. Tap them in “Show moves” and you\'ll see each can jump 3 squares.',
+  lonely:'The black stone in the middle has no neighbors, so it\'s 0 and can\'t move. The two below are 1 for each other.',
+  foot:'Even without friendly stones, Black gets number 2 thanks to the white stones on both sides. This is using the opponent\'s stones as footholds.',
+  threat:'The top black stone has number 2, and the goal is exactly 2 rows up. Tap it in “Show moves” and you\'ll see it reaches 3 goal squares.',
+  clear:'Tap squares to place stones.'};
+function renderLab(){lab.innerHTML='';
+  const ds=sel>=0&&B[sel]?dests(B,sel):[];
+  B.forEach((v,i)=>{const c=document.createElement('div');const r=i/N|0;c.className='cell'+(r===0?' r0':'')+(i%N===0?' c0':'')+((r===0||r===5)?' goal':'');
+    c.setAttribute('role','gridcell');c.tabIndex=0;c.setAttribute('aria-label',(i%N+1)+'abcdef'[r]+(v?(v===1?' Black':' White')+' number '+nb(B,N,N,i):' empty'));
+    if(ds.includes(i))c.classList.add('tgt');if(i===sel)c.classList.add('sel');
+    if(v){const d=nb(B,N,N,i);const s=document.createElement('div');s.className='st '+(v===1?'b':'w')+(d?'':' zero');s.textContent=d;c.appendChild(s)}
+    const act=()=>tap(i);c.addEventListener('click',act);c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();act()}});
+    lab.appendChild(c)})}
+function tap(i){
+  if(mode==='put'){B[i]=(B[i]+1)%3;sel=-1;say.textContent='The placed stone\'s number and its neighbors\' numbers change at the same time.';}
+  else{if(!B[i]){sel=-1;say.textContent='Tap a stone.';}
+    else{sel=i;const d=nb(B,N,N,i),ds=dests(B,i),goal=B[i]===1?0:5,hits=ds.filter(t=>(t/N|0)===goal).length;
+      say.textContent=d===0?'This stone has no neighbors, so it can\'t move (a loner).':
+        'Its number is '+d+', so it moves exactly '+d+' squares in one of 8 directions. Reachable squares: '+ds.length+''+(hits?' (on the goal row: '+hits+').':'.')}}
+  renderLab()}
+function setMode(m){mode=m;sel=-1;document.getElementById('mPut').setAttribute('aria-pressed',m==='put');document.getElementById('mMove').setAttribute('aria-pressed',m==='move');
+  say.textContent=m==='put'?'Tap a square to cycle Black → White → empty.':'Tap a stone to see the squares it can reach in green.';renderLab()}
+document.getElementById('mPut').addEventListener('click',()=>setMode('put'));
+document.getElementById('mMove').addEventListener('click',()=>setMode('move'));
+document.querySelectorAll('[data-p]').forEach(bt=>bt.addEventListener('click',()=>{const k=bt.dataset.p;B=P[k]();sel=-1;
+  if(k==='block'||k==='threat'){mode='move';document.getElementById('mPut').setAttribute('aria-pressed','false');document.getElementById('mMove').setAttribute('aria-pressed','true');sel=14}
+  say.textContent=MSG[k];renderLab()}));
+B=P.block();mode='move';sel=14;document.getElementById('mPut').setAttribute('aria-pressed','false');document.getElementById('mMove').setAttribute('aria-pressed','true');say.textContent=MSG.block;renderLab();
+
+/* 勝率バー(30–70%を全幅、中央が50%) */
+const LO=30,HI=70;
+function bar(v){const x=p=>(p-LO)/(HI-LO)*100;const left=Math.min(x(50),x(v)),wd=Math.abs(x(v)-x(50));
+  const col=v>=50?'var(--good)':'var(--bad)';
+  return '<div class="bar" role="img" aria-label="Win rate '+v+'%"><i style="left:'+left+'%;width:'+wd+'%;background:'+col+'"></i><b style="'+(v>=50?(x(v)>84?'right:calc('+(100-x(v))+'% + 5px);color:#fff':'left:calc('+x(v)+'% + 6px);color:'+col):(x(v)<16?'left:calc('+Math.max(0,x(v))+'% + 5px);color:#fff':'right:calc('+(100-x(v))+'% + 6px);color:'+col))+'">'+v+'%</b></div>'}
+function rowHTML(top,title,small,desc,v){return '<div class="row'+(top?' top':'')+'"><div class="board"></div><div style="min-width:0"><h3>'+title+(small?'<small>'+small+'</small>':'')+'</h3><p>'+desc+'</p>'+bar(v)+'</div></div>'}
+
+const SH=[
+ {t:'2×2 block',s:'2×2 cluster',d:'All four have number 3. Even if one jumps out, the rest hold together — a launch pad.',v:62.3,rows:['....','.BB.','.BB.','....']},
+ {t:'Stone that reaches next',s:'Reach',d:'A stone whose number equals exactly its distance to the goal. Make two and they can\'t be stopped.',v:56.5,rows:['......','......','...B..','..B.B.'],m:{3:'tgt',1:'tgt',5:'tgt'},goal:true},
+ {t:'Stones with number 3+',s:'',d:'On a 6×6 board they can aim at the goal from almost anywhere.',v:55.8,rows:['.B.','BB.','.B.']},
+ {t:'Pair',s:'horizontal, vertical, diagonal',d:'Direction makes almost no difference. The minimum shape to avoid being a loner.',v:54.3,rows:['....','.BB.','....']},
+ {t:'Opponent as foothold',s:'',d:'Even without friends, a stone touching opponent stones can move. And if the opponent moves them away, their own shape breaks.',v:53.8,rows:['...','WBW','...']},
+ {t:'Three in a row',s:'',d:'About as strong as a pair; not as good as a 2×2 block.',v:53.5,rows:['.....','.BBB.','.....']},
+ {t:'Stones with number 1',s:'',d:'They move only one square at a time and are easy for the opponent to stop.',v:45.8,rows:['....','.BB.','....'],weak:true},
+ {t:'Loner',s:'number 0',d:'A stone that can\'t move. The side with more of these tends to lose.',v:45.5,rows:['...','.B.','...']}];
+const shapes=document.getElementById('shapes');
+shapes.innerHTML=SH.map((x,i)=>rowHTML(i===0,x.t,x.s,x.d,x.v)).join('');
+[...shapes.querySelectorAll('.board')].forEach((el,i)=>draw(el,SH[i].rows,SH[i].m,{goalTop:SH[i].goal}));
+
+const DERIV={"Crossroads":{"n":3455,"win":48,"dist":[{"s":"Center Tower","p":24,"win":56},{"s":"Fortress","p":24,"win":44},{"s":"Two-Tier","p":23,"win":43},{"s":"Raid","p":17,"win":49},{"s":"Edge Attack","p":11,"win":45}]},"Frontal Breakthrough":{"n":3533,"win":56,"dist":[{"s":"Two-Tier","p":26,"win":55},{"s":"Center Tower","p":25,"win":65},{"s":"Fortress","p":21,"win":50},{"s":"Raid","p":17,"win":56},{"s":"Edge Attack","p":11,"win":50}]},"Migrating Bird":{"n":3502,"win":49,"dist":[{"s":"Two-Tier","p":28,"win":51},{"s":"Fortress","p":22,"win":47},{"s":"Center Tower","p":19,"win":56},{"s":"Raid","p":18,"win":51},{"s":"Edge Attack","p":13,"win":39}]},"Lone Spear":{"n":3343,"win":41,"dist":[{"s":"Fortress","p":27,"win":35},{"s":"Two-Tier","p":26,"win":42},{"s":"Center Tower","p":19,"win":53},{"s":"Raid","p":15,"win":43},{"s":"Edge Attack","p":13,"win":30}]},"Drifting Cloud":{"n":3404,"win":38,"dist":[{"s":"Fortress","p":26,"win":36},{"s":"Two-Tier","p":21,"win":36},{"s":"Center Tower","p":20,"win":48},{"s":"Edge Attack","p":18,"win":31},{"s":"Raid","p":15,"win":38}]},"Snuggle":{"n":3520,"win":73,"dist":[{"s":"Center Tower","p":34,"win":79},{"s":"Two-Tier","p":21,"win":74},{"s":"Raid","p":20,"win":79},{"s":"Fortress","p":15,"win":61},{"s":"Edge Attack","p":10,"win":59}]},"Corner Guard":{"n":3561,"win":54,"dist":[{"s":"Center Tower","p":26,"win":64},{"s":"Two-Tier","p":24,"win":54},{"s":"Fortress","p":22,"win":47},{"s":"Raid","p":15,"win":55},{"s":"Edge Attack","p":13,"win":46}]}};
+const REPLY={"Crossroads":[{"r":"Shoulder to Shoulder","win":75.2,"n":484},{"r":"Frontal Block","win":58.8,"n":532},{"r":"Wait-and-See","win":52.2,"n":562},{"r":"Return Flight","win":50.7,"n":507},{"r":"Cross Return","win":49.2,"n":510},{"r":"Counter Spear","win":43,"n":521},{"r":"Parting Cloud","win":37.9,"n":577}],"Frontal Breakthrough":[{"r":"Shoulder to Shoulder","win":68,"n":515},{"r":"Frontal Block","win":51.4,"n":553},{"r":"Return Flight","win":44.8,"n":508},{"r":"Wait-and-See","win":44.1,"n":558},{"r":"Cross Return","win":41.2,"n":536},{"r":"Counter Spear","win":34.3,"n":600},{"r":"Parting Cloud","win":27.2,"n":534}],"Migrating Bird":[{"r":"Shoulder to Shoulder","win":67.4,"n":552},{"r":"Wait-and-See","win":56.8,"n":534},{"r":"Frontal Block","win":55.5,"n":521},{"r":"Cross Return","win":50.1,"n":554},{"r":"Return Flight","win":44.7,"n":523},{"r":"Counter Spear","win":42.2,"n":538},{"r":"Parting Cloud","win":36.8,"n":555}],"Lone Spear":[{"r":"Shoulder to Shoulder","win":76.8,"n":527},{"r":"Frontal Block","win":68.2,"n":468},{"r":"Wait-and-See","win":60.2,"n":495},{"r":"Cross Return","win":58.9,"n":557},{"r":"Return Flight","win":52.3,"n":524},{"r":"Counter Spear","win":50.1,"n":513},{"r":"Parting Cloud","win":43.4,"n":485}],"Drifting Cloud":[{"r":"Shoulder to Shoulder","win":80.7,"n":502},{"r":"Frontal Block","win":69.7,"n":571},{"r":"Return Flight","win":66,"n":503},{"r":"Wait-and-See","win":63.8,"n":501},{"r":"Cross Return","win":57.8,"n":532},{"r":"Counter Spear","win":48.8,"n":486},{"r":"Parting Cloud","win":44,"n":539}],"Snuggle":[{"r":"Shoulder to Shoulder","win":49.6,"n":526},{"r":"Return Flight","win":34.2,"n":496},{"r":"Frontal Block","win":31.6,"n":562},{"r":"Wait-and-See","win":24.9,"n":541},{"r":"Cross Return","win":20.5,"n":501},{"r":"Counter Spear","win":20.1,"n":558},{"r":"Parting Cloud","win":13.7,"n":518}],"Corner Guard":[{"r":"Shoulder to Shoulder","win":67.4,"n":533},{"r":"Frontal Block","win":49.7,"n":568},{"r":"Wait-and-See","win":47.5,"n":523},{"r":"Return Flight","win":45,"n":540},{"r":"Cross Return","win":39.9,"n":586},{"r":"Counter Spear","win":37.8,"n":559},{"r":"Parting Cloud","win":34.7,"n":512}]};
+const OP=[
+ {t:'Snuggle',d:'Slides an edge stone diagonally next to a friend, extending its range. Still the best in the latest analysis.',v:50,f:[5,0],to:[4,1]},
+ {t:'Corner Guard',d:'Moves an edge stone just one step forward. A wait-and-see setup; second best after Snuggle.',v:46,f:[5,0],to:[4,0]},
+ {t:'Migrating Bird',d:'Jumps over a friend toward the center.',v:39,f:[5,1],to:[3,3]},
+ {t:'Frontal Breakthrough',d:'A central stone goes two steps straight ahead. Natural, but loses a little on deep reading.',v:38,f:[5,2],to:[3,2]},
+ {t:'Crossroads',d:'An inner stone crosses diagonally to the other side.',v:34,f:[5,2],to:[3,4]},
+ {t:'Lone Spear',d:'Charges straight ahead, leaves its friends and is easy to stop.',v:33,f:[5,1],to:[3,1]},
+ {t:'Drifting Cloud',d:'Heads outward and easily ends up a loner.',v:33,f:[5,2],to:[3,0]}];
+const opens=document.getElementById('opens');
+opens.innerHTML=OP.map((x,i)=>rowHTML(i===0,x.t,'',x.d,x.v).replace('class="row','tabindex="0" role="button" aria-expanded="false" data-i="'+i+'" class="tap row wide').replace(/<\/div><\/div>$/,'<div class="more">▶ Tap to see what follows (which strategy it leads to)</div></div><div class="deriv" hidden></div></div>')).join('');
+opens.addEventListener('click',e=>{const row=e.target.closest('.row.tap');if(!row||e.target.closest('.deriv'))return;const box=row.querySelector('.deriv'),open=box.hidden;
+  if(open&&!box.innerHTML){const D=DERIV[OP[+row.dataset.i].t];const best=D.dist.filter(d=>d.p>=10).sort((a,b)=>b.win-a.win)[0];
+    box.innerHTML='<div class="dh">Of the '+D.n+' games starting with this first move: which strategy it became by move 8 (share), and the win rate with that strategy</div>'+
+      D.dist.map(d=>'<div class="dv"><span class="nm">'+d.s+'</span><span class="track"><i style="width:'+d.p+'%"></i></span><span class="wr '+(d.win>=55?'g':d.win<=45?'b':'')+'">'+d.p+'% · win '+d.win+'%</span></div>').join('')+
+      '<div class="rec">From this first move, building <b>'+best.s+'</b> wins most often (win rate '+best.win+'%).</div>'+
+      (REPLY[OP[+row.dataset.i].t]?'<div class="dh" style="margin-top:6px">With this first move by Black, White\'s win rate for each 2nd move (from the latest AI\'s 26,000 games, 470–600 games each)</div>'+REPLY[OP[+row.dataset.i].t].map(r=>'<div class="dv"><span class="nm">'+r.r+'</span><span class="track"><i style="width:'+Math.max(0,Math.min(100,(r.win-20)/60*100))+'%;background:var(--fg);opacity:.35"></i></span><span class="wr '+(r.win>=55?'g':r.win<=45?'b':'')+'">White wins '+r.win+'%</span></div>').join(''):'')}
+  box.hidden=!open;row.setAttribute('aria-expanded',String(open));row.querySelector('.more').textContent=open?'▼ Close':'▶ Tap to see what follows (which strategy it leads to)'});
+opens.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('tap')){e.preventDefault();e.target.click()}});
+[...opens.querySelectorAll('.board')].forEach((el,i)=>{const o=OP[i];const g=[];for(let r=3;r<6;r++){let s='';for(let c=0;c<6;c++){let v=r===5?'B':'.';if(r===o.f[0]&&c===o.f[1])v='.';if(r===o.to[0]&&c===o.to[1])v='B';s+=v}g.push(s)}
+  const m={};m[idx(6,o.f[0]-3,o.f[1])]='from';draw(el,g,m)});
+
+/* 守り */
+const DF=[
+ {t:'Blocking the landing square',ok:false,d:'Even if White blocks one square, the stone still reaches the other two. Blocking alone doesn\'t stop it.',rows:['..W...','......','..B...','.B.B..'],m:{0:'tgt',4:'tgt'}},
+ {t:'Changing the number by moving next to it',ok:true,d:'When White steps next to it, the number becomes 3, and 3 rows up is off the board. It can no longer reach the goal.',rows:['......','...W..','..B...','.B.B..'],m:{}},
+ {t:'Changing the number by moving away',ok:true,d:'If one of the two neighbors giving Black its number 2 is White, just moving that white stone away makes the number 1, and it can\'t reach the goal.',rows:['......','......','..B...','.B.W..'],m:{0:'tgt',2:'tgt',4:'tgt'}}];
+const defs=document.getElementById('defs');
+defs.innerHTML=DF.map(x=>'<div class="fig"><div class="board"></div><h3>'+x.t+'<span class="tag '+(x.ok?'ok':'ng')+'">'+(x.ok?'Works':'Weak')+'</span></h3><p>'+x.d+'</p></div>').join('');
+[...defs.querySelectorAll('.board')].forEach((el,i)=>draw(el,DF[i].rows,DF[i].m,{goalTop:true}));
+
+
+/* 戦法 */
+const BUILD={"Center Tower": [[30, 25], [31, 19], [35, 28], [34, 20], [28, 21], [33, 26], [26, 2], [32, 26]], "Raid": [[30, 25], [25, 13], [31, 25], [32, 20], [33, 27], [27, 15]], "Two-Tier": [[30, 25], [25, 27], [35, 28], [32, 35], [28, 0], [33, 21]], "Fortress": [[35, 28], [32, 20], [31, 25], [28, 26], [33, 19]], "Edge Attack": [[30, 25], [31, 19], [32, 18], [33, 26], [26, 12], [12, 0]]};
+const BUILD_VAR={"Clashing Tower": [[30, 25], [31, 19], [32, 20], [33, 26], [35, 28], [28, 21]], "Full Tower": [[30, 25], [31, 19], [32, 20], [33, 26], [35, 28], [34, 27], [28, 21]], "Half Tower": [[31, 21], [32, 26], [34, 20], [33, 27]], "One-Side Cluster": [[30, 24], [32, 18], [34, 32], [33, 26], [31, 13], [32, 25], [26, 19]], "Edge Poke": [[30, 24], [31, 19], [32, 25], [25, 13], [19, 7], [7, 0]]};
+const VAR=[
+ {t:'Full Tower',y:'',p:'Center Tower variant',par:'Center Tower',v:55.7,rows:['......','......','......','.BBB..','.BBB..','......'],d:'Uses almost every stone, even home stones (leaving about one), to build a big 2-row × 3-column cluster in the center. With few stones left behind, it tends to collide with opponent stones.'},
+ {t:'Half Tower',y:'',p:'Center Tower variant',par:'Center Tower',v:60.0,rows:['......','......','......','..BB..','..BB..','B....B'],d:'Builds in the center but keeps 2–3 stones on the edges of the home row. In the 26,000 games it beat Full Tower by 4 points. The stones left behind help defend, and the tower is easier to build away from the opponent.'},
+ {t:'Clashing Tower',y:'',p:'Center Tower variant',par:'Center Tower',v:54.0,rows:['......','......','.WW...','.BBB..','.BBW..','....B.'],d:'A shape where the tower got tangled with opponent stones while being built (the white stones are the opponent). The attached opponent stones change your numbers, so you can\'t jump where you planned. The same Center Tower wins 66% when completed without touching the opponent. Build your tower one square away from the opponent.'},
+ {t:'One-Side Cluster',y:'',p:'Edge Attack variant',par:'Edge Attack',v:44.8,rows:['......','......','.B....','BB....','BB....','.....B'],d:'Leans to one side, but the stones stay together. Still playable among Edge Attack shapes.'},
+ {t:'Edge Poke',y:'',p:'Edge Attack variant',par:'Edge Attack',v:42.7,rows:['B.....','......','.B....','......','B.....','...BBB'],d:'Leans to one side with stones scattered. Stones are left over on the other side of the home row. The losingest shape.'}];
+const ST=[
+ {h:3,t:'Center Tower',rows:['..B...','......','......','.BBB..','.BB...','......'],y:'',v:59.9,d:'Builds a 2×2-plus-one cluster on the central files and sends one stone in first from there. Hardly uses the edge files. Leaves the fewest stones at home and has the biggest cluster. In the latest AI\'s 26,000 games it is still the strongest type, winning against every strategy (and also the most chosen).',op:['2f→4d','6f→5e','5f→5d']},
+ {h:0,t:'Raid',rows:['......','......','.B.B..','..B...','.B....','....BB'],y:'',v:52.6,d:'Sends stones into the opponent\'s home early and clashes with their stones to create a melee. Stones are scattered and clusters small. Loses on balance only to Center Tower, and beats Fortress 73% of the time.',op:['5f→3d','1f→2e','2f→2d']},
+ {h:1,t:'Two-Tier',rows:['B.....','......','......','...B..','...B..','.B..BB'],y:'',v:49.2,d:'Keeps 2–3 stones at home and lines the rest up vertically in the middle rows. Medium in both attack and defense. Loses on balance to Raid and Center Tower but beats Fortress and Edge Attack. A type that newly stood out with the latest AI (the former “All-Out” is now almost never played by the strong AI).',op:['1f→2e','2e→4e','6f→5e']},
+ {h:2,t:'Fortress',rows:['......','......','......','.BB...','.BB...','B...B.'],y:'',v:42.8,d:'Builds a 2×2 block near its own side, keeps stones at home too, and barely enters the opponent\'s home. It has the biggest cluster and the longest games, but even a solid defense can\'t hold forever.',op:['2f→2d','6f→5e','3f→2e']},
+ {h:4,t:'Edge Attack',rows:['B.....','......','......','BB....','.B....','....BB'],y:'',v:40.1,d:'Aims to break through using only one edge file. The stones on the other side sit unused at home. Wins on balance only against Fortress (56%) and loses heavily to every other strategy. The type that wins least with the latest AI.',op:['4f→2d','1f→2e','3f→1d']}];
+const strats=document.getElementById('strats');
+Object.assign(BUILD,BUILD_VAR);
+const ALL=[];ST.forEach(x=>{ALL.push(x);VAR.filter(v=>v.par===x.t).forEach(v=>ALL.push(Object.assign({sub:1},v)))});
+strats.innerHTML=ALL.map((x,i)=>'<div class="strat'+(i===0?' top':'')+(x.sub?' sub':'')+'" tabindex="0" role="button" aria-expanded="false" data-i="'+i+'"><div class="board"></div><div style="min-width:0">'+(x.sub?'<div class="subtag">└ '+x.p+'</div>':'')+'<h3>'+x.t+'<small>'+x.y+'</small></h3><p>'+x.d+'</p>'+(x.op?'<div class="op">Common start '+x.op.map(o=>'<code>'+o+'</code>').join('')+'</div>':'')+bar(x.v)+'<div class="more">▶ Tap to see the build order</div></div><div class="build" hidden></div></div>').join('');
+const sqn=i=>(i%6+1)+'abcdef'[i/6|0];
+function boardRows(set){const r=[];for(let y=0;y<6;y++){let s='';for(let x=0;x<6;x++)s+=set.has(y*6+x)?'B':'.';r.push(s)}return r}
+function openBuild(card){const i=+card.dataset.i,box=card.querySelector('.build'),seq=BUILD[ALL[i].t];let k=0;
+  box.innerHTML='<div class="board"></div><div class="ctl2"><div class="nav"><button data-a="p">◀ Back</button><span class="k"></span><button data-a="n">Next ▶</button><button data-a="r">Restart</button></div><div class="say2"></div><div class="steps">'+seq.map((m,j)=>'<button data-j="'+(j+1)+'">'+(j+1)+'. '+sqn(m[0])+'→'+sqn(m[1])+'</button>').join('')+'</div><p class="note">The shortest sequence to build this shape with your own stones alone while the opponent plays elsewhere (legal moves only). In a real game, opponent stones nearby can change your numbers.</p></div>';
+  const render=()=>{const S=new Set([30,31,32,33,34,35]);let mk=null;for(let j=0;j<k;j++){const [f,t]=seq[j];S.delete(f);S.add(t);if(j===k-1)mk={from:f,to:t}}
+    draw(box.querySelector('.board'),boardRows(S),mk?{[mk.from]:'from',[mk.to]:'to'}:null,{goalTop:true});
+    box.querySelector('.k').textContent=k+' / '+seq.length+' moves';box.querySelector('[data-a=p]').disabled=k===0;box.querySelector('[data-a=n]').disabled=k===seq.length;
+    box.querySelector('.say2').textContent=k===0?'Start position. Press “Next” to build it one move at a time.':(k+'. '+sqn(seq[k-1][0])+' → '+sqn(seq[k-1][1])+'.')+(k===seq.length?' That completes the '+ALL[i].t+' shape.':'');
+    box.querySelectorAll('.steps button').forEach(b=>b.classList.toggle('cur',+b.dataset.j===k))};
+  box.addEventListener('click',e=>{e.stopPropagation();const b=e.target.closest('button');if(!b)return;if(b.dataset.a==='p')k=Math.max(0,k-1);else if(b.dataset.a==='n')k=Math.min(seq.length,k+1);else if(b.dataset.a==='r')k=0;else if(b.dataset.j)k=+b.dataset.j;render()});
+  box.addEventListener('keydown',e=>e.stopPropagation());render()}
+strats.addEventListener('click',e=>{const card=e.target.closest('.strat');if(!card||e.target.closest('.build'))return;const box=card.querySelector('.build'),open=box.hidden;
+  if(open&&!box.innerHTML)openBuild(card);box.hidden=!open;card.setAttribute('aria-expanded',String(open));card.querySelector('.more').textContent=open?'▼ Close':'▶ Tap to see the build order'});
+strats.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('strat')){e.preventDefault();e.target.click()}});
+[...strats.querySelectorAll(':scope > .strat > .board')].forEach((el,i)=>draw(el,ALL[i].rows,null,{goalTop:true}));
+const MX=[[50,56,73,44,67],[44,50,61,38,59],[27,39,50,31,44],[56,62,69,50,74],[33,41,56,26,50]];
+const NM=['Raid','Two-Tier','Fortress','Center Tower','Edge Attack'],ORD=[3,0,1,4,2];
+let th='<tr><th></th>'+ORD.map(j=>'<th>'+NM[j]+'</th>').join('')+'</tr>';
+ORD.forEach(i=>{th+='<tr><th class="rowh">'+NM[i]+'</th>'+ORD.map(j=>{if(i===j)return '<td class="self">—</td>';const v=MX[i][j],a=Math.min(.55,Math.abs(v-50)/50*1.6);
+  const col=v>=50?'var(--good)':'var(--bad)';return '<td style="background:color-mix(in srgb,'+col+' '+Math.round(a*100)+'%,transparent);font-weight:'+(Math.abs(v-50)>=10?700:400)+'">'+v+'%</td>'}).join('')+'</tr>'});
+document.getElementById('mtx').innerHTML=th;
+
+/* 最新AI 26,000局のデータ */
+const DATA={"blackWin":51.6,"draw":6.5,"len":{"q1":31,"med":38,"q3":48,"mean":41.4},"firstArr":{"win":66.5,"medPly":13},"faBucket":{"≤9":{"win":68.7,"n":3448},"10–13":{"win":63.1,"n":9135},"18–23":{"win":70.6,"n":3684},"14–17":{"win":65.1,"n":6530},"24+":{"win":77.6,"n":1521}},"lenHist":{"10":7,"15":134,"20":1467,"25":3722,"30":4555,"35":4360,"40":3299,"45":2509,"50":1792,"55":1284,"60":2871},"sq":[54.6,56.4,62.1,63.5,57.2,56.1,41.1,46.3,33.8,34.9,37.2,43.1,39.8,43.6,54,52.1,44.3,39.8,41.5,48.7,54.9,55.9,48.2,40.6,42.9,51.6,52.2,52.7,51.9,45.8,40.1,49.4,49.4,49.4,49.8,40]};
+document.getElementById('facts').innerHTML=[[DATA.blackWin+'%','First player (Black) win rate (excluding draws)'],[DATA.draw+'%','Draws (same position 3 times)'],[DATA.len.med+' moves','Game length (median)'],[DATA.firstArr.win+'%','Win rate of the side that arrives first']].map(x=>'<div class="fact"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('');
+{const H=DATA.lenHist,ks=Object.keys(H).map(Number).sort((a,b)=>a-b),mx=Math.max(...ks.map(k=>H[k]));
+ document.getElementById('hist').innerHTML=ks.map(k=>'<div title="'+H[k]+' games"><i style="height:'+(H[k]/mx*100).toFixed(1)+'%"></i><small>'+(k>=60?'60+':k)+'</small></div>').join('')}
+{const order=['≤9','10–13','14–17','18–23','24+'];document.getElementById('fa').innerHTML=order.filter(k=>DATA.faBucket[k]).map(k=>{const v=DATA.faBucket[k].win;return '<div class="dv" style="grid-template-columns:5.2em minmax(0,1fr) auto"><span class="nm">'+k+'</span><span class="track" title="'+DATA.faBucket[k].n+' games"><i style="width:'+v+'%;background:var(--good)"></i></span><span class="wr g">'+v+'%<small style="color:var(--sub);font-weight:400;margin-left:6px">'+DATA.faBucket[k].n+' games</small></span></div>'}).join('')}
+{const el=document.getElementById('keysq');el.style.gridTemplateColumns='repeat(6,minmax(0,1fr))';const sq=DATA.sq;
+ for(let i=0;i<36;i++){const r=i/6|0,c=i%6,j=r*6+5-c;const a=sq[i],b=sq[j];const v=(a!=null&&b!=null)?(a+b)/2:(a!=null?a:b);const cell=document.createElement('div');
+   cell.className='cell'+(r===0?' r0':'')+(c===0?' c0':'');
+   if(v!=null){const t=Math.max(-1,Math.min(1,(v-50)/12));cell.style.background=t>=0?'color-mix(in srgb,#3f9a6c '+Math.round(t*75)+'%,transparent)':'color-mix(in srgb,#c8563f '+Math.round(-t*75)+'%,transparent)';cell.textContent=Math.round(v)}
+   else{cell.textContent='—';cell.style.opacity='.5'}
+   el.appendChild(cell)}}
+/* 上級：手筋の図(全盤6×6を自動計算) */
+const nb6=(b,i)=>nb(b,6,6,i);
+function threatsOf(b,i){const p=b[i],d=nb6(b,i);const r=i/6|0,c=i%6,gr=p===1?0:5,dist=Math.abs(r-gr);if(!d||dist!==d)return[];
+  const dr=p===1?-1:1,out=[];for(const dc of [-1,0,1]){const rr=r+dr*d,cc=c+dc*d;if(rr>=0&&rr<6&&cc>=0&&cc<6&&!b[rr*6+cc])out.push(rr*6+cc)}return out}
+function drawFull(el,b,mk){el.style.gridTemplateColumns='repeat(6,minmax(0,1fr))';el.innerHTML='';const tg={};
+  b.forEach((v,i)=>{if(v)threatsOf(b,i).forEach(t=>tg[t]=v)});
+  b.forEach((v,i)=>{const c=document.createElement('div');const r=i/6|0;c.className='cell'+(r===0?' r0':'')+(i%6===0?' c0':'')+((r===0||r===5)?' goal':'');
+    if(tg[i])c.classList.add(tg[i]===1?'tgt':'wt');if(mk&&mk.from===i)c.classList.add('from');if(mk&&mk.to===i)c.classList.add('to');
+    if(v){const d=nb6(b,i),gap=Math.abs(r-(v===1?0:5))-d;const s=document.createElement('div');
+      s.className='st '+(v===1?'b':'w')+(d?'':' zero')+(gap===0&&d?' g0':gap===1?' g1':gap===-1?' gm':'');s.textContent=d;c.appendChild(s)}
+    el.appendChild(c)})}
+const PB=rows=>rows.join('').split('').map(ch=>ch==='B'?1:ch==='W'?2:0);
+const TAC=[
+ {id:'t-atk',g:'Attack: making reaches',items:[
+  {t:'Switch',k:'ok',d:'You don\'t need to move the stone that becomes the reach. Just put another stone next to your own gap +1 stone and it becomes a reach. The stone you moved is merely a switch.',
+   rows:['......','......','..B...','.B....','....BB','......'],steps:[{f:[4,4],t:[3,3],c:'Move the bottom-right stone one step diagonally up, next to 3c'}],c0:'3c has number 1, gap +1. It doesn\'t reach yet'},
+  {t:'Pull-out',k:'ok',d:'A stone whose number is too big to reach (gap −1) will reach once you move one of your neighboring stones away. Just stepping away is an attack.',
+   rows:['......','..B...','.B.B..','......','......','......'],steps:[{f:[2,3],t:[2,4],c:'Move 4c one step right and 3b\'s number becomes 1 — a reach'}],c0:'3b is one row from the goal but has number 2 and overshoots'},
+  {t:'Double switch and its weakness',k:'ng',d:'If there are two of your gap +1 stones next to the landing square, one move makes two reaches. But both are near the same square, so the opponent can stop both at once with a single move beside them that raises both numbers.',
+   rows:['......','......','.B.B..','B...B.','..B.W.','.BBB..'],steps:[{f:[4,2],t:[1,2],c:'Black jumps 3 from 3e to 3b. 2c and 4c become reaches at the same time'},{f:[4,4],t:[2,2],c:'When White enters 3c, both become number 3 and are stopped. White gets a reach too'}],c0:'2c and 4c both have gap +1'},
+  {t:'Saturated reach',k:'ok',d:'Numbers only go up to 4, so a stone with 5 or more neighbors stays at 4 even if a neighbor is added or removed. When a stone 4 rows from the goal is like this, you can\'t stop it by changing its number. The only way is to block the landing square (just one in this shape).',
+   rows:['......','......','......','......','.BBB..','.BBB..'],steps:[],c0:'3e has 5 neighbors, number 4, and reaches 3a four rows ahead'}]},
+ {id:'t-def',g:'Defense: erasing reaches',items:[
+  {t:'Push-up',k:'ok',d:'Move next to the reach stone to raise its number by 1. When the number exceeds the rows, it goes off the board and can\'t reach the goal. Even with 3 landing squares, this erases them all at once.',
+   rows:['......','......','..B.B.','.B.B..','......','......'],steps:[{add:[1,1],c:'White enters 2b. 3c becomes number 3 and can\'t reach'}],c0:'3c is a reach (3 goal squares)'},
+  {t:'Pull-away',k:'ok',d:'If one of your stones is propping up the opponent\'s reach, just moving it away lowers the number by 1 and stops it.',
+   rows:['......','......','..B...','.B.W..','......','......'],steps:[{f:[3,3],t:[4,4],c:'White moves away from 4d to 5e. 3c becomes number 1 and can\'t reach'}],c0:'One of 3c\'s two neighbors is a white stone'},
+  {t:'Home wall',k:'ok',d:'Stones remaining on the opponent\'s goal row (your home) block landing squares. If you move a home stone sitting in front of the opponent\'s reach, the landing square opens and they can reach it.',
+   rows:['WWWWWW','......','..B...','.B.B..','......','......'],steps:[{f:[0,2],t:[2,0],c:'If White moves the stone on 3a, 3a opens up and Black reaches it'}],c0:'3c has number 2 and gap 0, but every landing square is blocked'}]},
+ {id:'t-trap',g:'Pitfall: backfire',items:[
+  {t:'Landing backfire',k:'ng',d:'If an opponent gap +1 stone is next to the square where you land your push-up, its number rises too and it becomes a reach. You stop one and create another.',
+   rows:['......','......','..B.B.','.B.B..','......','......'],steps:[{add:[1,3],c:'When White enters 4b, 3c is stopped but 5c becomes a reach'}],c0:'3c is a reach, 5c has gap +1'},
+  {t:'Leaving backfire',k:'ng',d:'If an opponent gap −1 stone is next to the square you leave with a pull-away, its number drops and it becomes a reach.',
+   rows:['......','......','..B..B','.B.WB.','....BB','......'],steps:[{f:[3,3],t:[3,0],c:'When White leaves 4d, 3c is stopped but 5d becomes a reach'}],c0:'3c is a reach, 5d has number 4 and gap −1'}]},
+ {id:'t-open',g:'Opening: how the strong AI builds',items:[
+  {t:'Clearing the edges',k:'ok',d:'In the learned values, stones left on the edges of your home (1f, 6f) were the biggest minus. Slide edge stones diagonally inward in the first few moves. Black\'s top-scoring first move, “Snuggle,” is exactly this clean-up.',
+   rows:['......','......','......','......','......','BBBBBB'],steps:[{f:[5,0],t:[4,1],c:'Move the 1f stone to 2e. It clears the edge and lands next to a central stone'},{f:[5,5],t:[4,4],c:'Same on the other side: 6f to 5e'}],c0:'Start position. The two edge stones are the first to clear'},
+  {t:'Staying home',k:'ok',d:'Don\'t hurry the central home stones (3f, 4f) out. The strong AI builds its tower while keeping 2–3 stones at home (Half Tower). Those stones become a wall blocking the opponent\'s landing squares and give you room to build the tower away from the opponent.',
+   rows:['......','......','......','..BB..','.BB...','..BB..'],steps:[],c0:'A Half Tower built while keeping 3f and 4f. The stones left behind block White\'s landing squares 3f and 4f'}]},
+ {id:'t-both',g:'Attack and defense in one',items:[
+  {t:'Block and build',k:'ok',d:'Look for a square whose neighbors include both “the opponent\'s reach” and “your own gap +1 stone.” One move stops the opponent and creates your own reach.',
+   rows:['......','.....W','..B.WW','.BB...','......','......'],steps:[{add:[1,3],c:'White enters 4b. Black\'s 3c is stopped and White\'s 5c becomes a reach'}],c0:'Black 3c is a reach, White 5c has gap +1'},
+  {t:'Loner hunt',k:'ok',d:'If an opponent stone\'s only neighbors are your stones, moving them away drops it to number 0 and it can\'t move.',
+   rows:['......','......','..W...','...B..','....B.','......'],steps:[{f:[3,3],t:[3,5],c:'When Black moves from 4d to 6d, White\'s 3c becomes number 0 and can\'t move'}],c0:'White 3c\'s only neighbor is Black 4d'}]}
+];
+const box=document.getElementById('tacbox');
+TAC.forEach(gr=>{const G=document.createElement('div');G.className='tac-group';G.id=gr.id;G.innerHTML='<h3>'+gr.g+'</h3>';
+  gr.items.forEach(it=>{const T=document.createElement('div');T.className='tac';
+    T.innerHTML='<h4>'+it.t+'<span class="tag '+it.k+'">'+(it.k==='ok'?'Use':'Caution')+'</span></h4><p>'+it.d+'</p><div class="seq"></div>';
+    const seq=T.querySelector('.seq');let b=PB(it.rows);
+    const add=(bb,mk,cap)=>{const S=document.createElement('div');S.className='step';S.innerHTML='<div class="board"></div><p>'+cap+'</p>';seq.appendChild(S);drawFull(S.querySelector('.board'),bb,mk)};
+    add(b,null,it.c0);
+    it.steps.forEach(st=>{b=b.slice();let mk={};
+      if(st.f){const f=st.f[0]*6+st.f[1],t=st.t[0]*6+st.t[1];b[t]=b[f];b[f]=0;mk={from:f,to:t}}else{const t=st.add[0]*6+st.add[1];b[t]=2;mk={to:t}}
+      add(b,mk,st.c)});
+    G.appendChild(T)});box.appendChild(G)});
+})();
+</script>
+<script>
+/* タブ：章ごとに表示を切り替える(選んだ章は覚えておく) */
+(function(){const tabs=[...document.querySelectorAll('#tabs button')],secs=[...document.querySelectorAll('[data-tab]')];
+  const has=t=>tabs.some(b=>b.dataset.t===t);
+  function go(t,scroll){if(!has(t))t='basic';tabs.forEach(b=>b.setAttribute('aria-selected',String(b.dataset.t===t)));secs.forEach(x=>x.hidden=x.dataset.tab!==t);
+    try{localStorage.setItem('bocch-guide-tab',t)}catch(e){}if(scroll){const n=document.getElementById('tabs');window.scrollTo({top:n.offsetTop-2})}}
+  tabs.forEach(b=>b.addEventListener('click',()=>go(b.dataset.t,true)));
+  // ページ内リンク(#t-atk など)は、その章を開いてから移動
+  document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const el=document.querySelector(a.getAttribute('href'));if(!el)return;const sec=el.closest('[data-tab]');if(sec&&sec.hidden){go(sec.dataset.tab,false);setTimeout(()=>el.scrollIntoView(),0)}});
+  let t='basic';try{t=localStorage.getItem('bocch-guide-tab')||'basic'}catch(e){}
+  const h=location.hash.slice(1);if(h){const el=document.getElementById(h);const sec=el&&el.closest('[data-tab]');if(sec)t=sec.dataset.tab}
+  go(t,false)})();
+</script>
+
+<script>
+/* 3手目までの定跡を盤で見る */
+(function(){
+  const nbx=(b,i)=>{const r=i/6|0,c=i%6;let n=0;for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){if(!dr&&!dc)continue;const rr=r+dr,cc=c+dc;if(rr>=0&&rr<6&&cc>=0&&cc<6&&b[rr*6+cc])n++}return n};
+  function draw(el,rows,marks,opt){const b=[];rows.join('').split('').forEach(ch=>b.push(ch==='B'?1:ch==='W'?2:0));el.style.gridTemplateColumns='repeat(6,minmax(0,1fr))';el.innerHTML='';
+    b.forEach((v,i)=>{const c=document.createElement('div');const r=i/6|0;c.className='cell'+(r===0?' r0':'')+(i%6===0?' c0':'')+((r===0||r===5)?' goal':'');if(marks&&marks[i])c.classList.add(marks[i]);
+      if(v){const d=nbx(b,i);const st=document.createElement('div');st.className='st '+(v===1?'b':'w')+(d?'':' zero');st.textContent=d;c.appendChild(st)}el.appendChild(c)})}
+  const T={"30-24":[-5,{"0-6":[19,35,28],"0-7":[0,24,25],"1-13":[49,35,28],"1-15":[23,24,25],"2-12":[75,35,28],"2-14":[38,24,25],"2-16":[51,35,28],"3-13":[38,35,28],"3-15":[31,35,28],"3-17":[61,35,28],"4-14":[43,35,28],"4-16":[36,24,25],"5-10":[-1,35,28],"5-11":[38,35,28]}],"30-25":[2,{"0-6":[77,31,21],"0-7":[20,31,19],"1-13":[131,35,28],"1-15":[96,31,19],"2-12":[135,35,28],"2-14":[78,31,21],"2-16":[124,35,28],"3-13":[131,35,28],"3-15":[81,35,28],"3-17":[148,35,28],"4-14":[99,35,28],"4-16":[117,31,21],"5-10":[0,35,28],"5-11":[86,35,28]}],"31-19":[-37,{"0-6":[4,35,28],"0-7":[-48,32,25],"1-13":[25,35,28],"1-15":[41,35,28],"2-12":[25,35,28],"2-14":[-21,19,25],"2-16":[34,35,28],"3-13":[-14,35,28],"3-15":[18,35,28],"3-17":[62,35,28],"4-14":[11,19,25],"4-16":[12,35,28],"5-10":[-42,32,25],"5-11":[-17,35,28]}],"31-21":[-29,{"0-6":[7,35,28],"0-7":[-25,35,28],"1-13":[26,35,28],"1-15":[31,35,28],"2-12":[65,35,28],"2-14":[-2,35,28],"2-16":[24,35,28],"3-13":[5,35,28],"3-15":[22,35,28],"3-17":[41,35,28],"4-14":[37,35,28],"4-16":[26,35,28],"5-10":[-51,35,28],"5-11":[0,35,28]}],"32-18":[-56,{"0-6":[-17,30,25],"0-7":[-57,35,28],"1-13":[37,18,25],"1-15":[0,30,25],"2-12":[39,18,25],"2-14":[0,35,28],"2-16":[7,35,28],"3-13":[13,18,25],"3-15":[-27,35,28],"3-17":[46,30,25],"4-14":[-9,30,25],"4-16":[21,30,25],"5-10":[-56,30,25],"5-11":[-13,30,25]}],"32-20":[-37,{"0-6":[21,35,28],"0-7":[-52,35,28],"1-13":[64,30,25],"1-15":[53,35,28],"2-12":[75,30,25],"2-14":[1,30,25],"2-16":[71,30,25],"3-13":[44,35,28],"3-15":[38,35,28],"3-17":[85,35,28],"4-14":[31,35,28],"4-16":[32,30,25],"5-10":[-5,30,25],"5-11":[33,35,28]}],"32-22":[-46,{"0-6":[35,33,28],"0-7":[-48,30,25],"1-13":[41,35,28],"1-15":[36,35,28],"2-12":[71,35,28],"2-14":[0,35,28],"2-16":[20,30,25],"3-13":[41,35,28],"3-15":[8,35,28],"3-17":[37,22,21],"4-14":[34,35,28],"4-16":[63,30,25],"5-10":[-54,35,28],"5-11":[33,35,28]}],"33-19":[-54,{"0-6":[14,30,25],"0-7":[-48,30,25],"1-13":[50,35,28],"1-15":[24,30,25],"2-12":[24,19,20],"2-14":[9,19,25],"2-16":[34,30,25],"3-13":[4,30,25],"3-15":[4,30,25],"3-17":[55,30,25],"4-14":[32,30,25],"4-16":[49,30,25],"5-10":[-44,30,25],"5-11":[31,30,25]}],"33-21":[-37,{"0-6":[55,30,25],"0-7":[-23,35,28],"1-13":[63,30,25],"1-15":[24,30,25],"2-12":[91,30,25],"2-14":[38,30,25],"2-16":[50,30,25],"3-13":[101,30,25],"3-15":[0,30,25],"3-17":[67,35,28],"4-14":[62,30,25],"4-16":[51,30,25],"5-10":[-31,30,25],"5-11":[17,30,25]}],"33-23":[-54,{"0-6":[-15,35,28],"0-7":[-50,30,25],"1-13":[26,35,28],"1-15":[-14,35,28],"2-12":[46,35,28],"2-14":[-14,30,25],"2-16":[14,23,28],"3-13":[-9,30,25],"3-15":[-10,30,25],"3-17":[39,23,28],"4-14":[7,35,28],"4-16":[39,23,28],"5-10":[-88,30,25],"5-11":[-15,30,25]}],"34-20":[-41,{"0-6":[-8,30,25],"0-7":[-32,30,25],"1-13":[39,30,25],"1-15":[49,30,25],"2-12":[43,30,25],"2-14":[24,30,25],"2-16":[12,30,25],"3-13":[24,30,25],"3-15":[1,30,25],"3-17":[53,30,25],"4-14":[26,30,25],"4-16":[30,30,25],"5-10":[-24,30,25],"5-11":[23,30,25]}],"34-22":[-70,{"0-6":[-9,30,25],"0-7":[-64,33,28],"1-13":[32,30,25],"1-15":[9,22,28],"2-12":[48,30,25],"2-14":[1,30,25],"2-16":[-10,32,34],"3-13":[50,30,25],"3-15":[-21,22,28],"3-17":[28,30,25],"4-14":[34,30,25],"4-16":[30,30,25],"5-10":[-44,33,28],"5-11":[-5,30,25]}],"35-28":[0,{"0-6":[92,30,25],"0-7":[5,30,25],"1-13":[113,30,25],"1-15":[84,30,25],"2-12":[151,30,25],"2-14":[77,30,25],"2-16":[111,30,25],"3-13":[122,30,25],"3-15":[56,30,25],"3-17":[148,34,20],"4-14":[90,34,22],"4-16":[106,30,25],"5-10":[19,34,22],"5-11":[90,34,20]}],"35-29":[-20,{"0-6":[23,30,25],"0-7":[-2,29,28],"1-13":[55,29,28],"1-15":[31,30,25],"2-12":[61,30,25],"2-14":[52,30,25],"2-16":[30,30,25],"3-13":[47,29,28],"3-15":[36,29,28],"3-17":[67,30,25],"4-14":[23,30,25],"4-16":[38,30,25],"5-10":[0,29,28],"5-11":[47,30,25]}]};
+  const T3={"30-24":{"0-6":"1288:27,889:15,1135:7,883:-10,1209:-18,1172:-23,1289:-28,1207:-30,894:-32,1137:-32,1244:-38,1174:-42,882:-46,1182:-47,1170:-58,1246:-58,1211:-70","0-7":"1288:4,889:3,883:-43,1172:-45,1209:-65,1244:-67,1135:-73,1174:-87,1289:-88,894:-90,1182:-91,1170:-99,1207:-106,1137:-108,882:-113,1246:-152,1211:-175","1-13":"1288:76,889:57,1135:40,1172:35,883:34,894:6,1209:6,1244:0,1207:-2,1137:-3,1246:-9,882:-10,1289:-12,1174:-14,1170:-24,1182:-35,1211:-39","1-15":"883:41,889:35,1288:35,1135:23,894:2,1172:-13,1244:-24,1289:-27,1137:-31,1174:-35,1170:-43,1209:-47,1182:-48,1207:-49,882:-64,1246:-81,1211:-107","2-12":"889:78,1288:64,883:40,1172:31,1289:29,1209:18,1135:10,1244:8,894:7,1137:3,1174:0,1207:-1,1182:-4,1170:-16,882:-19,1246:-30,1211:-31","2-14":"889:29,1288:10,883:8,1172:-4,1135:-13,1244:-15,1137:-17,1209:-18,894:-19,1207:-36,1289:-38,1246:-41,1170:-54,882:-57,1174:-59,1182:-65,1211:-68","2-16":"889:45,1288:33,883:21,1172:19,1135:5,1137:0,1209:0,1289:-15,1174:-16,882:-23,1182:-25,1244:-28,1207:-40,894:-41,1170:-49,1211:-52,1246:-62","3-13":"1288:42,889:40,1137:11,1172:11,883:2,1209:0,1135:-1,1174:-12,1170:-16,1182:-16,1207:-19,1289:-23,882:-25,894:-28,1244:-31,1246:-37,1211:-40","3-15":"1288:37,1135:10,889:4,894:-3,883:-9,1209:-12,1137:-33,1172:-37,1289:-44,1207:-48,882:-49,1174:-52,1244:-52,1182:-63,1170:-68,1246:-73,1211:-85","3-17":"889:71,1288:61,883:44,1135:43,1289:32,1209:29,1172:28,1137:22,1207:11,894:-2,1170:-3,1244:-5,882:-6,1182:-10,1174:-11,1246:-29,1211:-47","4-14":"889:35,1288:23,883:20,1244:18,1135:11,1172:6,1209:6,894:0,1289:-7,882:-18,1207:-21,1137:-22,1170:-33,1182:-34,1246:-34,1174:-35,1211:-41","4-16":"889:36,1288:35,883:34,1137:20,1209:18,1135:17,894:14,1174:7,1289:4,1172:-12,1246:-14,1182:-17,1170:-25,1244:-26,1211:-27,1207:-30,882:-38","5-10":"1288:-9,889:-11,1172:-49,1135:-55,883:-59,1209:-59,894:-81,1289:-81,1174:-90,1137:-91,1244:-94,1182:-96,1207:-100,1170:-101,882:-113,1246:-122,1211:-173","5-11":"1288:39,889:7,883:-2,1135:-2,1172:-10,1137:-12,1244:-27,1209:-29,1207:-33,1289:-40,1174:-47,894:-49,882:-54,1246:-54,1170:-59,1182:-61,1211:-65"},"30-25":{"0-6":"1137:84,1288:84,1135:43,1166:39,1289:35,1209:30,915:25,1207:17,1244:0,1246:-6,927:-11,913:-13,1211:-23,1169:-26","0-7":"1135:20,1288:7,915:0,1166:-3,1137:-5,1209:-10,1289:-15,913:-35,1207:-45,1244:-49,927:-62,1211:-64,1246:-64,1169:-95","1-13":"1288:103,1137:82,1207:61,915:53,1166:53,1135:48,1289:48,1209:41,1244:36,927:27,1246:25,1211:12,1169:-2","1-15":"1135:94,1137:83,1288:75,1166:46,1289:38,1209:33,1244:32,1207:27,913:0,927:0,1169:-30,1246:-31,1211:-52","2-12":"1137:136,1288:117,1209:88,1289:78,1135:75,915:68,1244:57,1246:39,1166:37,1169:36,927:31,1207:24,1211:21,913:15","2-14":"1288:83,1137:46,1244:43,1289:42,1135:40,1209:29,915:17,1246:7,1169:-8,927:-9,1207:-13,1211:-16,913:-22","2-16":"1288:118,1135:87,1137:74,1166:55,1209:44,927:36,1289:27,1244:21,915:16,1207:12,913:6,1246:1,1169:-1,1211:-8","3-13":"1288:113,1137:102,1209:76,1246:49,1289:42,1207:33,1135:27,915:23,1244:22,1166:14,927:6,1169:-6,1211:-9","3-15":"1137:57,1135:50,1288:45,1209:29,927:20,913:11,1289:2,1244:-1,1207:-10,1166:-17,1246:-22,1169:-33,1211:-34","3-17":"1288:139,1137:120,1135:78,1209:67,1289:65,913:64,927:54,1166:54,915:51,1244:43,1207:39,1246:38,1211:31","4-14":"1288:86,1137:67,1209:67,913:40,1289:31,1135:27,1246:18,915:16,1207:15,1244:12,927:11,1211:-2,1169:-70","4-16":"1137:113,1288:108,1135:87,915:52,913:49,1166:48,1209:47,927:43,1289:38,1207:35,1246:20,1169:16,1211:13,1244:12","5-10":"915:16,1135:1,1137:0,1288:-4,1166:-8,1289:-13,1207:-27,1209:-31,1244:-35,927:-37,913:-50,1246:-64,1211:-69,1169:-113","5-11":"1288:93,1137:64,1135:56,915:44,1166:44,1207:43,1289:34,1209:18,1244:7,1211:-6,913:-7,1246:-20,927:-23,1169:-61"},"31-19":{"0-6":"1288:-9,1219:-20,1177:-21,1183:-42,1244:-49,1289:-49,1179:-51,1178:-58,1209:-85,1246:-99,1211:-104","0-7":"1177:-50,1183:-57,1288:-64,1219:-91,1244:-104,1179:-108,1209:-111,1178:-121,1289:-122,1211:-196,1246:-197","1-13":"1288:27,709:7,1177:3,1183:2,1219:-1,704:-13,1289:-14,698:-19,708:-19,1209:-24,1179:-26,1178:-36,1244:-36,702:-44,696:-60,710:-62,1246:-75,1211:-104","1-15":"1288:20,1177:8,1183:8,1178:-21,1289:-24,1219:-31,1179:-43,1244:-51,1246:-60,1209:-63,1211:-141","2-12":"709:38,1288:30,1177:18,698:5,1183:2,1219:-1,704:-11,708:-20,1244:-23,1289:-26,1179:-30,1178:-34,710:-43,697:-45,1209:-47,702:-66,1211:-69,1246:-76","2-14":"709:-22,1288:-27,708:-34,1244:-40,1177:-41,1219:-45,1183:-47,1289:-56,697:-57,1178:-63,704:-64,1179:-67,710:-73,1209:-73,702:-89,696:-99,1246:-99,1211:-144","2-16":"1288:49,1177:35,1183:6,1178:1,1219:-19,1179:-25,1289:-35,1244:-43,1209:-58,1246:-71,1211:-107","3-13":"709:1,1288:1,1219:-8,704:-26,1183:-28,1177:-30,1289:-33,698:-40,1209:-48,708:-51,710:-51,702:-52,1178:-53,1244:-58,696:-61,1179:-63,1211:-87,1246:-87","3-15":"1288:7,1177:-28,1183:-30,1289:-43,1178:-45,1179:-56,1209:-58,1219:-58,1244:-77,1246:-112,1211:-141","3-17":"1288:47,1177:46,1183:12,1219:1,1178:-1,1289:-12,1179:-18,1244:-18,1209:-41,1246:-80,1211:-93","4-14":"709:0,1177:-8,1183:-25,697:-26,708:-30,1219:-30,1288:-34,1209:-37,704:-43,1244:-45,1178:-50,1246:-51,710:-54,1289:-75,696:-95,1179:-96,702:-121,1211:-148","4-16":"1183:25,1288:25,1177:12,1179:1,1289:-35,1178:-37,1219:-42,1244:-43,1209:-55,1246:-71,1211:-94","5-10":"1177:-64,1288:-64,1183:-85,1289:-87,1219:-101,1178:-114,1179:-114,1209:-115,1244:-119,1246:-205,1211:-207","5-11":"1288:-6,1177:-8,1183:-11,1219:-27,1179:-48,1244:-50,1289:-54,1178:-66,1209:-70,1211:-108,1246:-113"},"31-21":{"0-6":"1288:1,1289:-26,1177:-28,1183:-28,1178:-33,1219:-39,1179:-41,1246:-50,1244:-51,1211:-66,1207:-74","0-7":"1288:-31,1177:-46,1183:-64,1219:-71,1178:-76,1289:-94,1244:-99,1179:-107,1246:-110,1207:-111,1211:-144","1-13":"1288:11,1177:-5,1183:-14,1219:-24,1289:-26,1207:-38,1244:-38,1179:-47,1178:-53,1246:-67,1211:-73","1-15":"1288:23,1289:7,772:-3,776:-10,778:-12,783:-12,1177:-18,782:-21,784:-21,1183:-22,1219:-28,770:-39,1178:-42,1179:-42,1246:-49,1207:-66,1244:-70,1211:-77","2-12":"1288:50,1177:49,1183:27,1179:13,1219:5,1178:1,1289:1,1211:-11,1244:-13,1246:-18,1207:-40","2-14":"1288:-3,1183:-6,1177:-19,1219:-23,1178:-32,771:-36,776:-47,1244:-47,772:-58,1207:-59,784:-64,778:-65,1289:-67,1246:-82,782:-89,783:-92,1179:-97,1211:-120","2-16":"1288:24,1177:13,1183:7,1219:2,770:-11,1178:-11,771:-21,1289:-22,784:-29,782:-39,1179:-53,776:-56,1246:-58,783:-63,1207:-64,778:-66,1244:-68,1211:-73","3-13":"1288:32,1177:22,1179:5,1219:2,1183:-4,1289:-22,1178:-54,1207:-54,1246:-54,1211:-66,1244:-72","3-15":"1288:25,1177:17,1183:1,1289:-8,784:-21,1178:-23,1219:-23,778:-24,783:-28,776:-30,1179:-35,1244:-35,782:-45,1211:-50,770:-55,772:-59,1246:-64,1207:-65","3-17":"1219:36,1288:36,1177:33,1183:23,1289:8,1178:-1,1179:-9,1246:-16,1244:-19,1207:-41,1211:-63","4-14":"1288:46,1177:0,1219:0,1183:-2,784:-29,1179:-29,1246:-36,1289:-37,776:-43,1207:-44,778:-50,771:-51,783:-59,782:-64,1244:-71,1178:-73,772:-76,1211:-85","4-16":"1183:40,1219:37,1288:35,1177:25,784:24,770:-4,1178:-4,1289:-6,783:-7,776:-8,771:-12,782:-20,1179:-24,778:-30,1211:-37,1207:-40,1244:-40,1246:-40","5-10":"1288:-39,1289:-58,1183:-61,1177:-67,1179:-84,1178:-86,1219:-86,1246:-108,1207:-111,1244:-120,1211:-142","5-11":"1288:-2,1183:-6,1177:-18,1178:-33,1289:-33,1219:-34,1179:-43,1244:-51,1246:-51,1211:-67,1207:-79"},"32-18":{"0-6":"1105:-23,1288:-27,1141:-40,1140:-48,1216:-57,1104:-58,1289:-58,1220:-64,1244:-69,1214:-71,1256:-76,1215:-78,1148:-100,1142:-104,1246:-124","0-7":"1105:-43,1288:-74,1141:-99,1214:-102,1104:-108,1256:-129,1140:-130,1220:-131,1244:-142,1216:-150,1215:-154,1142:-158,1148:-169,1289:-174,1246:-221","1-13":"1105:23,673:21,1288:19,667:14,1216:-8,1141:-12,1104:-17,1214:-20,672:-25,1220:-33,1289:-33,1215:-34,660:-38,1142:-44,1244:-45,1256:-49,1140:-61,1148:-66,1246:-79","1-15":"1105:17,1288:3,1141:-22,1216:-47,1289:-47,1220:-52,1214:-58,1104:-59,1140:-71,1148:-74,1244:-83,1142:-92,1256:-100,1215:-104,1246:-109","2-12":"673:39,1288:18,672:6,1105:2,667:-5,661:-9,1289:-10,1220:-14,1141:-20,1216:-20,1214:-22,1256:-23,1104:-25,1140:-25,1215:-32,1142:-54,1244:-62,1148:-73,1246:-83","2-14":"1105:-32,1288:-40,1256:-41,1141:-55,1216:-58,1140:-64,1104:-67,1220:-68,1244:-74,1214:-79,1215:-80,1289:-88,1142:-98,1148:-98,1246:-149","2-16":"1105:8,1288:-9,1141:-30,1104:-33,1140:-33,1289:-33,1216:-37,1214:-44,1256:-59,1142:-63,1220:-69,1215:-76,1244:-82,1148:-87,1246:-87","3-13":"673:21,1105:15,1288:8,1104:-21,667:-23,1141:-23,1220:-24,1140:-26,672:-29,1256:-35,660:-36,1214:-39,1215:-46,1216:-48,1148:-52,1289:-55,1142:-71,1244:-73,1246:-118","3-15":"1288:-20,1105:-34,1141:-59,1216:-65,1104:-73,1140:-81,1214:-83,1289:-88,1244:-106,1142:-108,1215:-114,1148:-117,1256:-118,1220:-120,1246:-160","3-17":"1105:35,1288:22,1141:11,1140:7,1104:3,1214:-7,1244:-25,1216:-32,1289:-35,1215:-38,1142:-41,1256:-51,1148:-55,1220:-69,1246:-84","4-14":"1105:-19,1220:-30,1256:-36,1104:-44,1215:-61,1214:-62,1288:-64,1141:-66,1244:-76,1140:-82,1216:-83,1142:-103,1148:-107,1289:-116,1246:-131","4-16":"1288:35,1105:12,1214:2,1141:-8,1140:-18,1216:-31,1142:-34,1104:-36,1289:-41,1244:-52,1246:-75,1256:-75,1220:-77,1215:-89,1148:-90","5-10":"1288:-61,1105:-72,1104:-83,1214:-114,1216:-119,1141:-120,1256:-122,1220:-129,1244:-129,1140:-135,1142:-144,1148:-162,1215:-167,1289:-174,1246:-177","5-11":"1105:-12,1288:-23,1289:-56,1140:-58,1141:-58,1104:-62,1220:-63,1244:-66,1256:-69,1216:-71,1215:-81,1214:-90,1142:-94,1148:-109,1246:-113"},"32-20":{"0-6":"1105:34,1288:15,1216:3,1220:-6,1141:-10,1104:-17,1289:-34,1214:-39,1256:-39,1140:-40,1215:-40,1148:-55,1246:-65,1142:-67","0-7":"1288:-37,1105:-38,1141:-44,1216:-56,1256:-58,1220:-59,1289:-60,1140:-66,1215:-68,1104:-80,1142:-91,1214:-98,1148:-102,1246:-119","1-13":"1288:64,1105:58,1141:42,1220:40,1104:38,1216:38,745:25,1140:24,1289:15,735:11,1214:8,739:5,1215:5,734:-2,1256:-6,741:-7,1148:-18,746:-26,1142:-26,747:-32,1246:-49","1-15":"1105:67,1288:51,1289:21,1141:12,746:8,1214:7,745:4,1140:0,1216:0,734:-2,739:-2,1148:-7,1220:-7,1215:-14,1104:-19,741:-24,1142:-25,733:-29,1246:-37,1256:-40,747:-41","2-12":"1105:70,1288:60,1216:50,1104:35,1214:33,1220:28,1289:24,1141:22,1215:17,1256:15,1140:2,1142:-4,1148:-23,1246:-45","2-14":"1105:22,1288:14,1220:-12,1256:-16,741:-18,1216:-19,745:-23,1141:-23,1289:-23,1104:-29,1140:-33,735:-37,739:-41,1214:-43,733:-47,1215:-47,747:-49,1148:-54,746:-62,1246:-65,1142:-74","2-16":"1105:74,1288:72,1216:29,1214:19,1220:8,1104:3,1141:0,1289:-1,1140:-2,1256:-15,1142:-21,1148:-42,1215:-44,1246:-66","3-13":"1105:46,1288:44,1216:28,1104:21,745:19,1220:8,735:3,734:0,1141:0,1289:0,741:-4,1215:-5,1140:-13,739:-22,746:-23,1148:-24,1214:-31,747:-35,1142:-35,1256:-36,1246:-58","3-15":"1105:32,1288:23,741:-5,1220:-6,1141:-10,739:-20,1104:-23,1140:-24,1216:-24,745:-26,733:-29,1289:-36,1142:-45,734:-49,1148:-50,1256:-51,1214:-52,1215:-53,746:-55,747:-58,1246:-68","3-17":"1105:79,1288:64,1141:39,1104:38,1216:38,1140:33,1214:24,1220:23,1215:7,1289:6,1256:-11,1148:-15,1142:-19,1246:-47","4-14":"1105:27,1288:16,741:0,745:0,1104:0,739:-13,1256:-16,733:-20,1141:-24,747:-30,735:-34,1220:-42,1148:-43,1216:-43,746:-51,1215:-51,1289:-60,1140:-61,1142:-81,1214:-83,1246:-84","4-16":"1105:41,1288:32,1142:2,1141:0,1214:-6,1104:-7,1220:-7,1289:-8,1140:-13,1256:-15,1216:-16,1148:-19,1215:-19,1246:-41","5-10":"1105:-17,1216:-34,1288:-37,1141:-47,1256:-56,1104:-59,1289:-74,1220:-77,1215:-85,1140:-87,1142:-91,1214:-92,1148:-98,1246:-138","5-11":"1288:38,1105:28,1216:16,1141:5,1220:-14,1140:-20,1214:-23,1104:-24,1256:-31,1289:-34,1215:-36,1148:-54,1142:-57,1246:-57"},"32-22":{"0-6":"1216:30,1288:30,1105:-5,1220:-8,1214:-27,1140:-28,1289:-32,1141:-35,1104:-38,1142:-38,1215:-44,1148:-52,1256:-54,1244:-66","0-7":"1105:-23,1220:-43,1216:-45,1288:-46,1141:-66,1289:-75,1215:-78,1148:-80,1214:-85,1142:-119,1104:-120,1140:-120,1256:-124,1244:-138","1-13":"1105:30,1288:27,1216:12,1220:12,1104:-10,1214:-10,1256:-12,1141:-17,1215:-23,1289:-26,1140:-34,1142:-35,1148:-35,1244:-41","1-15":"1105:30,1288:27,1141:1,808:-2,1216:-6,1289:-6,820:-9,1215:-12,1220:-21,813:-22,1142:-22,1148:-22,1214:-22,815:-25,821:-35,1244:-37,809:-39,1140:-39,819:-43,1104:-43,1256:-43","2-12":"1105:36,1216:30,1288:29,1220:25,1289:12,1214:7,1142:0,1104:-8,1141:-8,1215:-9,1148:-14,1140:-32,1256:-35,1244:-41","2-14":"1216:-7,1288:-8,1105:-12,1220:-23,1289:-31,1256:-41,1215:-51,1141:-56,1140:-59,1214:-62,1104:-68,1244:-76,1148:-80,1142:-108","2-16":"820:23,1105:11,1288:11,1216:9,813:4,1104:-7,1214:-7,807:-8,1141:-16,1289:-18,1220:-22,815:-24,1256:-28,821:-30,809:-35,819:-36,1140:-39,1215:-44,1142:-50,1148:-55,1244:-60","3-13":"1288:27,1216:12,1105:8,1220:-11,1141:-12,1214:-13,1104:-15,1289:-15,1142:-25,1215:-28,1148:-30,1256:-31,1140:-37,1244:-60","3-15":"813:-1,1142:-4,820:-5,1105:-12,1288:-20,1148:-29,1215:-33,1289:-35,808:-36,1216:-38,1141:-40,1214:-45,1104:-50,815:-57,1220:-58,1256:-58,821:-59,809:-60,1244:-63,819:-64,1140:-68","3-17":"807:37,1105:37,1288:34,813:23,1216:19,820:14,1214:10,819:9,1289:9,1141:4,1220:2,821:0,1104:0,808:-5,1142:-10,1215:-19,1140:-21,1148:-22,1256:-26,815:-30,1244:-38","4-14":"1105:33,1288:26,1216:5,1220:-1,1215:-21,1256:-24,1289:-25,1214:-28,1104:-32,1141:-36,1148:-56,1140:-74,1142:-81,1244:-100","4-16":"1105:60,1288:49,820:43,813:38,1216:26,1141:12,1289:12,807:11,1220:11,1214:10,1140:9,1215:5,1104:-2,1142:-5,815:-7,821:-14,819:-17,1256:-18,809:-26,1148:-26,1244:-43","5-10":"1216:-27,1105:-37,1288:-45,1220:-49,1141:-66,1148:-71,1214:-76,1215:-84,1289:-105,1104:-108,1142:-118,1256:-122,1140:-138,1244:-141","5-11":"1288:23,1105:-5,1216:-5,1289:-13,1141:-28,1104:-42,1215:-44,1148:-47,1214:-48,1256:-54,1142:-55,1220:-55,1140:-58,1244:-86"},"33-19":{"0-6":"1105:27,1288:27,1177:7,1252:-16,1251:-27,1257:-27,1104:-29,1179:-30,1253:-34,1289:-41,1178:-51,1149:-54,1137:-55,1185:-55","0-7":"1105:-32,1288:-40,1177:-51,1185:-64,1252:-66,1179:-82,1251:-89,1257:-89,1104:-100,1178:-102,1289:-104,1149:-123,1253:-129,1137:-135","1-13":"1105:49,1288:39,709:34,1177:30,704:22,698:19,1185:16,1178:14,1252:13,1104:11,1253:9,1179:5,1289:-2,702:-7,1257:-14,708:-17,1149:-18,1251:-24,710:-27,696:-29,1137:-41","1-15":"1105:35,1288:18,1185:8,1177:7,1289:-17,1178:-25,1104:-34,1252:-34,1149:-36,1179:-38,1257:-49,1137:-63,1251:-69,1253:-74","2-12":"704:41,1105:40,698:25,1288:25,709:17,1177:8,1185:2,710:0,1179:0,1252:0,1289:0,697:-6,1104:-9,1257:-9,708:-11,1251:-14,1149:-17,1253:-18,1178:-19,702:-30,1137:-44","2-14":"1105:4,709:-5,704:-10,1251:-11,1257:-20,1288:-23,1177:-32,1178:-33,1104:-37,1289:-40,1179:-45,708:-46,1252:-46,1185:-47,1149:-56,697:-57,710:-58,1137:-60,1253:-63,696:-72,702:-81","2-16":"1105:12,1177:7,1288:7,1179:-2,1289:-9,1104:-12,1149:-23,1185:-24,1252:-27,1251:-34,1257:-35,1178:-53,1137:-58,1253:-60","3-13":"1288:15,1177:11,709:8,1105:7,1104:-2,704:-4,1179:-7,1252:-7,698:-10,1289:-11,1178:-21,708:-28,696:-30,1149:-37,1253:-39,1185:-42,710:-49,1251:-50,1137:-51,1257:-51,702:-60","3-15":"1105:0,1177:-18,1288:-19,1185:-25,1104:-45,1149:-47,1178:-50,1252:-51,1253:-59,1179:-62,1137:-65,1257:-65,1289:-76,1251:-85","3-17":"1288:47,1105:44,1185:25,1177:13,1179:9,1178:7,1104:5,1252:-8,1289:-8,1251:-14,1257:-17,1149:-27,1253:-32,1137:-41","4-14":"1105:27,1288:26,1177:11,1252:-4,697:-5,1251:-5,1257:-19,1104:-21,1149:-21,1179:-22,1178:-23,1185:-23,702:-25,709:-25,696:-28,704:-33,1137:-34,1253:-34,708:-35,1289:-43,710:-49","4-16":"1288:35,1105:32,1177:12,1289:-10,1149:-12,1185:-14,1179:-21,1178:-23,1104:-28,1251:-29,1252:-29,1257:-41,1137:-49,1253:-53","5-10":"1105:-37,1177:-42,1288:-51,1252:-66,1104:-71,1179:-72,1257:-75,1178:-77,1185:-79,1289:-116,1251:-118,1149:-122,1253:-125,1137:-129","5-11":"1105:46,1177:43,1288:-2,1185:-9,1252:-22,1289:-25,1251:-27,1179:-28,1104:-33,1257:-43,1253:-45,1149:-54,1178:-54,1137:-74"},"33-21":{"0-6":"1105:28,1288:28,1177:8,1252:7,1253:1,1289:-21,1149:-26,1185:-28,1178:-32,1104:-33,1179:-35,1257:-50,1251:-55,1135:-71","0-7":"1288:0,1105:-38,1252:-53,1104:-65,1177:-65,1185:-66,1178:-69,1257:-71,1289:-74,1179:-77,1149:-80,1253:-89,1251:-91,1135:-138","1-13":"1105:50,1288:33,1177:14,1252:12,1289:0,1104:-1,1179:-6,1257:-6,1251:-11,1185:-14,1149:-21,1253:-21,1178:-31,1135:-38","1-15":"1105:19,1288:11,1149:5,776:0,784:0,1289:0,1185:-8,772:-26,1252:-26,770:-29,1177:-30,778:-32,782:-36,1104:-40,783:-44,1178:-44,1257:-45,1253:-51,1135:-66,1179:-85,1251:-100","2-12":"1288:87,1105:82,1252:39,1177:38,1178:38,1289:36,1253:35,1185:25,1104:15,1179:12,1257:3,1149:-15,1251:-18,1135:-44","2-14":"1288:35,1105:34,776:-5,1185:-13,1104:-14,1177:-14,1289:-14,1252:-16,1253:-24,772:-29,784:-29,1257:-41,778:-43,1179:-49,1251:-49,783:-50,1178:-51,771:-52,1149:-56,782:-58,1135:-71","2-16":"1288:50,1105:45,1289:23,784:19,1177:13,1185:13,1252:8,770:-1,771:-4,1104:-6,783:-10,776:-12,1149:-13,1178:-21,1253:-22,1257:-27,1179:-32,782:-36,778:-46,1251:-49,1135:-69","3-13":"1105:76,1288:71,1177:34,1179:19,1252:14,1104:13,1289:9,1253:-2,1185:-4,1251:-16,1149:-18,1178:-27,1135:-51,1257:-66","3-15":"1288:29,1105:12,1185:-11,1252:-16,1177:-17,783:-19,784:-22,1104:-22,1289:-23,776:-29,772:-34,770:-37,1149:-38,778:-44,1178:-45,1253:-45,782:-49,1257:-52,1179:-54,1135:-65,1251:-65","3-17":"1288:80,1105:74,1178:39,1177:38,1289:34,1179:32,1104:31,1252:27,1185:17,1149:11,1251:5,1253:4,1257:-22,1135:-41","4-14":"1105:51,1288:45,1179:14,1104:6,778:0,1177:0,1185:0,1253:0,771:-2,1252:-2,784:-5,776:-9,783:-11,772:-14,1257:-14,1289:-22,1251:-26,1178:-29,1135:-34,782:-43,1149:-43","4-16":"1288:58,1105:56,1177:48,1104:37,784:34,1252:32,1289:30,1253:20,770:19,778:7,1178:7,1185:6,1149:0,776:-2,1179:-4,771:-18,783:-20,1257:-22,1251:-25,782:-27,1135:-49","5-10":"1105:-33,1288:-44,1252:-55,1149:-58,1289:-62,1185:-63,1104:-68,1257:-68,1177:-69,1251:-80,1178:-81,1253:-84,1179:-98,1135:-119","5-11":"1288:28,1177:16,1105:4,1252:-2,1185:-7,1104:-21,1289:-27,1253:-32,1257:-34,1149:-38,1179:-39,1178:-47,1135:-71,1251:-81"},"33-23":{"0-6":"1288:-9,1105:-31,1177:-49,1252:-51,1104:-54,1179:-55,1289:-56,1149:-61,1137:-65,1253:-67,1185:-77,1257:-87,1178:-92,1251:-93,1135:-122","0-7":"1105:-69,1288:-81,1252:-89,1289:-104,1179:-115,1185:-120,1149:-122,1177:-133,1251:-137,1137:-142,1253:-148,1257:-157,1178:-167,1104:-173,1135:-203","1-13":"1105:35,1288:35,1179:-2,1252:-8,1289:-12,1253:-18,1177:-22,1104:-37,1149:-55,1251:-55,1137:-58,1178:-60,1257:-62,1185:-77,1135:-99","1-15":"1149:-24,1185:-25,1288:-25,1289:-33,1178:-49,1105:-55,1179:-60,1252:-65,1137:-70,1253:-81,1177:-98,1104:-104,1251:-109,1257:-112,1135:-117","2-12":"1288:35,1105:12,1252:11,1253:3,1289:-1,1179:-5,1104:-24,1177:-24,1137:-34,1251:-35,1178:-36,1185:-42,1257:-44,1149:-47,1135:-76","2-14":"1105:-5,1288:-34,1177:-62,1252:-67,1253:-69,1104:-70,1289:-72,1179:-81,1137:-93,1251:-102,1149:-105,1257:-107,1185:-124,1178:-133,1135:-138","2-16":"1105:8,1288:8,856:7,1289:-17,1253:-19,857:-22,1252:-24,850:-25,1185:-30,1177:-32,1179:-37,845:-43,1257:-52,1178:-60,1149:-61,1137:-64,1104:-65,1251:-67,1135:-118","3-13":"1288:8,1105:-5,1252:-21,1289:-27,1104:-34,1253:-35,1179:-43,1177:-48,1185:-53,1149:-59,1251:-70,1257:-70,1135:-79,1137:-82,1178:-88","3-15":"1105:-11,1288:-35,1149:-36,1252:-58,1177:-59,1289:-62,1137:-66,1253:-70,1185:-71,1179:-79,1251:-83,1104:-88,1178:-92,1257:-98,1135:-141","3-17":"1288:32,856:30,1105:29,850:2,844:0,857:-7,1177:-13,1289:-14,1149:-26,1185:-31,1252:-34,1179:-36,1178:-37,1104:-39,1253:-42,1137:-48,1257:-58,1251:-68,1135:-75","4-14":"1105:15,1288:11,1252:-21,1289:-39,1104:-47,1177:-52,1179:-58,1253:-64,1185:-68,1257:-70,1251:-81,1137:-87,1149:-92,1178:-109,1135:-112","4-16":"1105:29,856:24,1288:22,850:5,1252:-5,857:-13,1177:-18,1104:-25,1185:-25,845:-27,1178:-28,1289:-28,1179:-29,1149:-37,1251:-40,1137:-51,1257:-54,1253:-59,1135:-82","5-10":"1105:-77,1288:-85,1252:-103,1289:-107,1179:-117,1185:-120,1137:-127,1149:-132,1251:-145,1253:-148,1177:-154,1257:-160,1178:-171,1104:-174,1135:-221","5-11":"1288:-16,1105:-23,1252:-52,1177:-57,1179:-61,1185:-63,1149:-69,1253:-70,1289:-70,1137:-73,1104:-75,1178:-78,1251:-93,1257:-103,1135:-126"},"34-20":{"0-6":"1222:5,1216:0,1105:-12,1186:-16,1215:-26,1104:-43,1135:-49,1214:-50,1174:-64,1170:-67,1137:-68","0-7":"1105:-43,1104:-53,1222:-59,1216:-60,1215:-74,1186:-81,1214:-83,1137:-107,1174:-110,1135:-119,1170:-139","1-13":"1216:44,1105:36,1222:23,745:21,1186:18,735:2,1215:0,741:-3,746:-3,1104:-10,734:-12,1214:-22,747:-29,739:-30,1137:-38,1170:-45,1135:-48,1174:-55","1-15":"1105:32,1186:14,1216:0,1222:0,741:-26,1214:-29,1174:-34,745:-35,739:-39,1104:-41,734:-50,1135:-51,1137:-54,746:-58,747:-61,733:-66,1170:-79,1215:-80","2-12":"1105:37,1186:31,1216:28,1222:22,1104:15,1215:8,1214:-10,1137:-19,1135:-23,1174:-41,1170:-62","2-14":"1105:35,1216:-2,1222:-9,746:-23,1215:-23,739:-24,735:-26,1186:-26,1214:-31,745:-33,1104:-36,1137:-36,1135:-44,1174:-45,747:-50,741:-53,1170:-65,733:-67","2-16":"1105:35,1216:23,1186:7,1222:2,1214:-5,1104:-13,1174:-51,1215:-51,1135:-65,1137:-69,1170:-81","3-13":"1105:24,1222:21,1216:14,1186:0,735:-3,1215:-12,745:-27,1104:-27,734:-30,741:-35,747:-42,1214:-45,1137:-49,1135:-58,1174:-58,739:-63,746:-66,1170:-80","3-15":"1216:-12,1105:-17,1222:-29,1137:-36,1186:-40,734:-46,1104:-51,1215:-51,741:-58,739:-64,745:-64,1174:-69,1135:-72,733:-74,1214:-81,747:-86,746:-88,1170:-102","3-17":"1216:49,1105:43,1186:29,1222:24,1214:13,1104:2,1215:1,1137:-10,1135:-18,1170:-29,1174:-43","4-14":"1105:26,1104:12,741:-2,745:-8,1216:-8,1222:-8,733:-10,739:-14,747:-23,1214:-28,746:-29,1215:-31,735:-34,1186:-35,1174:-58,1137:-70,1170:-71,1135:-72","4-16":"1105:22,1222:-7,1186:-12,1216:-18,1104:-21,1137:-30,1214:-36,1174:-37,1215:-50,1135:-52,1170:-52","5-10":"1105:-35,1222:-53,1216:-59,1186:-64,1215:-76,1104:-81,1214:-96,1137:-99,1135:-110,1174:-124,1170:-144","5-11":"1105:-2,1222:-6,1215:-17,1216:-27,1104:-33,1214:-41,1186:-42,1137:-48,1135:-51,1174:-51,1170:-68"},"34-22":{"0-6":"1105:12,1216:-9,1222:-19,1186:-23,1104:-42,1137:-50,1214:-58,1215:-61,1172:-74,1135:-117,1170:-119","0-7":"1216:-39,1222:-58,1105:-64,1214:-104,1104:-116,1186:-117,1137:-118,1172:-130,1215:-130,1135:-184,1170:-205","1-13":"1222:13,1105:12,1216:0,1214:-7,1104:-12,1215:-18,1186:-42,1172:-64,1137:-77,1135:-84,1170:-90","1-15":"820:3,1105:-24,1186:-24,1222:-24,1216:-27,813:-33,821:-34,808:-35,1172:-36,1137:-59,1104:-60,819:-64,1215:-68,1135:-71,809:-78,1214:-92,815:-119,1170:-143","2-12":"1105:46,1216:41,1222:12,1186:-8,1215:-11,1104:-17,1137:-18,1214:-18,1172:-47,1170:-75,1135:-83","2-14":"1105:7,1216:-25,1222:-33,1104:-47,1214:-49,1172:-56,1215:-62,1137:-63,1186:-76,1135:-79,1170:-149","2-16":"820:1,1105:1,1186:-13,813:-27,1216:-30,807:-37,1222:-45,821:-47,815:-48,1104:-50,1214:-50,819:-51,809:-61,1172:-66,1215:-69,1137:-73,1135:-74,1170:-90","3-13":"1105:42,1216:28,1222:-16,1186:-17,1104:-31,1215:-47,1137:-51,1214:-54,1135:-63,1172:-69,1170:-104","3-15":"820:-21,1104:-35,1105:-37,1216:-41,821:-43,1222:-47,1186:-50,813:-58,808:-64,1137:-67,1214:-68,1215:-74,819:-78,1172:-80,1135:-86,809:-99,815:-106,1170:-137","3-17":"820:38,1105:30,1222:6,1216:3,821:-1,1186:-2,1215:-15,1137:-16,807:-17,813:-23,1214:-30,808:-34,819:-34,1172:-38,1104:-39,1170:-68,815:-71,1135:-72","4-14":"1105:22,1216:9,1222:-1,1186:-16,1104:-18,1214:-34,1215:-47,1137:-51,1135:-58,1172:-80,1170:-144","4-16":"1105:25,1216:20,820:16,1222:13,1186:12,821:-1,1214:-11,813:-13,1104:-19,807:-28,1137:-31,1215:-33,1172:-37,819:-51,809:-65,815:-65,1135:-82,1170:-89","5-10":"1216:-40,1222:-44,1105:-64,1137:-108,1215:-116,1214:-121,1104:-122,1186:-123,1172:-138,1135:-187,1170:-196","5-11":"1105:-15,1186:-25,1216:-34,1137:-50,1222:-58,1104:-64,1215:-64,1172:-67,1214:-71,1135:-104,1170:-109"},"35-28":{"0-6":"1105:84,1244:65,1022:46,1246:45,1203:42,1174:35,1104:32,1172:25,1137:15,1024:-5,1135:-7,1034:-23,1170:-23,1200:-42","0-7":"1203:7,1022:2,1246:1,1105:0,1244:-6,1104:-15,1137:-19,1172:-25,1174:-37,1034:-45,1024:-56,1135:-64,1170:-78,1200:-103","1-13":"1105:123,1244:103,1246:79,1172:68,1024:62,1104:54,1022:52,1203:52,1034:32,1174:30,1135:21,1137:21,1170:11,1200:0","1-15":"1105:89,1172:67,1244:63,1246:43,1104:34,1174:28,1022:27,1024:23,1135:21,1170:18,1034:5,1137:0,1200:-74","2-12":"1105:127,1244:120,1246:78,1104:76,1172:74,1024:64,1022:52,1137:50,1034:49,1203:44,1135:38,1174:31,1170:2","2-14":"1246:69,1105:65,1244:38,1104:17,1024:13,1172:12,1034:8,1174:-1,1137:-17,1203:-17,1200:-26,1170:-28,1135:-38","2-16":"1105:112,1244:101,1172:58,1135:43,1246:40,1022:33,1104:29,1034:10,1137:10,1174:8,1203:7,1200:-16,1170:-19","3-13":"1105:119,1244:72,1203:61,1246:61,1172:45,1104:35,1137:20,1034:18,1022:13,1170:8,1174:8,1135:1,1024:-1,1200:-5","3-15":"1105:88,1244:84,1246:44,1137:34,1104:31,1172:20,1022:19,1135:12,1024:-7,1034:-10,1174:-16,1200:-16,1170:-21","3-17":"1105:138,1244:138,1104:78,1022:68,1172:68,1246:62,1203:45,1174:38,1135:37,1137:36,1034:32,1200:25,1170:18,1024:14","4-14":"1244:83,1105:75,1246:56,1137:46,1203:42,1172:38,1104:31,1174:28,1034:0,1024:-1,1135:-21,1200:-34,1170:-82","4-16":"1105:122,1244:82,1022:58,1203:57,1246:51,1174:42,1137:39,1104:36,1172:34,1034:28,1200:13,1135:12,1170:12","5-10":"1246:17,1105:2,1022:1,1203:-3,1104:-5,1172:-10,1244:-15,1137:-33,1174:-36,1034:-43,1024:-44,1170:-64,1135:-78,1200:-79","5-11":"1244:93,1105:85,1022:46,1246:43,1203:34,1104:32,1172:30,1174:22,1137:-2,1170:-8,1024:-9,1135:-9,1034:-14,1200:-26"},"35-29":{"0-6":"1105:50,1066:17,1246:12,1072:7,1244:-3,1209:-15,1172:-29,1067:-34,1104:-34,1079:-35,1174:-36,1137:-38,1207:-42,1170:-50,1135:-58,1211:-62,1223:-66","0-7":"1105:3,1072:-4,1066:-50,1246:-58,1209:-59,1104:-64,1172:-69,1223:-70,1137:-77,1174:-91,1079:-97,1211:-98,1244:-99,1067:-108,1135:-112,1207:-114,1170:-174","1-13":"1072:58,1105:36,1066:34,1172:33,1104:27,1079:9,1207:9,1244:6,1209:-4,1246:-4,1211:-8,1223:-17,1174:-20,1135:-26,1137:-26,1067:-38,1170:-39","1-15":"1072:31,1105:27,1066:18,1246:18,1137:9,1079:6,1172:0,1104:-7,1174:-8,1067:-21,1244:-23,1207:-26,1209:-30,1223:-33,1135:-34,1170:-47,1211:-56","2-12":"1105:76,1072:44,1209:38,1246:33,1066:31,1104:19,1172:17,1244:16,1079:9,1174:4,1223:4,1067:1,1207:0,1211:0,1137:-17,1170:-23,1135:-26","2-14":"1105:25,1072:13,1066:12,1246:3,1104:-16,1209:-20,1172:-21,1079:-30,1174:-31,1244:-31,1207:-46,1137:-51,1067:-53,1135:-56,1211:-68,1170:-69,1223:-73","2-16":"1105:42,1072:32,1172:20,1209:20,1066:10,1104:1,1244:0,1246:-4,1174:-5,1137:-15,1223:-15,1207:-17,1135:-21,1067:-22,1079:-24,1211:-33,1170:-35","3-13":"1072:26,1246:18,1066:16,1105:16,1172:0,1244:0,1209:-3,1207:-10,1067:-15,1137:-15,1104:-16,1079:-27,1211:-27,1223:-36,1174:-40,1135:-50,1170:-62","3-15":"1072:23,1066:18,1105:17,1246:-1,1104:-10,1209:-23,1137:-26,1244:-26,1079:-30,1174:-36,1172:-43,1135:-47,1067:-50,1223:-53,1211:-62,1207:-64,1170:-88","3-17":"1072:77,1105:65,1209:35,1172:29,1104:26,1066:23,1246:23,1079:17,1137:13,1244:4,1174:0,1067:-7,1207:-8,1170:-24,1223:-24,1135:-28,1211:-39","4-14":"1066:35,1072:35,1246:35,1105:27,1079:0,1244:-2,1104:-7,1174:-12,1209:-22,1137:-30,1067:-42,1207:-43,1172:-44,1211:-45,1135:-49,1223:-55,1170:-116","4-16":"1105:53,1072:42,1066:39,1209:26,1246:22,1174:11,1079:2,1104:-1,1172:-1,1067:-2,1137:-5,1244:-8,1135:-17,1211:-17,1223:-21,1207:-26,1170:-36","5-10":"1072:-7,1105:-8,1066:-47,1246:-55,1209:-65,1172:-69,1079:-81,1104:-83,1137:-83,1223:-83,1244:-88,1174:-93,1207:-104,1211:-105,1135:-106,1067:-114,1170:-177","5-11":"1105:39,1072:15,1246:-1,1066:-2,1244:-6,1174:-12,1209:-14,1172:-31,1104:-34,1079:-39,1207:-41,1137:-47,1223:-48,1067:-53,1135:-58,1211:-62,1170:-70"}};
+  const t3list=(a,b)=>T3[a.join('-')][b.join('-')].split(',').map(x=>{const q=x.split(':');return{m:[(+q[0]/36)|0,+q[0]%36],s:+q[1],p:1}});
+  const sq=i=>(i%6+1)+'abcdef'[i/6|0],mv=m=>sq(m[0])+'→'+sq(m[1]);
+  const pct=s=>Math.round(100/(1+Math.exp(-0.013*s)));
+  const NAMES={'0-4-1':'Snuggle','0-4-0':'Corner Guard','2-3-2':'Frontal Breakthrough','1-3-3':'Migrating Bird','2-3-4':'Crossroads','1-3-1':'Lone Spear','2-3-0':'Drifting Cloud'};
+  function nameOf(m,p){let f=m[0],t=m[1],fr=f/6|0,tr=t/6|0,fc=f%6,tc=t%6;if(p===2){fr=5-fr;tr=5-tr}if(fr!==5)return '';if(fc>2){fc=5-fc;tc=5-tc}
+    const n=NAMES[fc+'-'+tr+'-'+tc]||'';return p===2&&n==='Snuggle'?'Shoulder to Shoulder':n}
+  const start=()=>{const b=Array(36).fill(0);for(let c=0;c<6;c++){b[c]=2;b[30+c]=1}return b};
+  let path=[],hover=null;
+  const el=id=>document.getElementById(id);
+  function board(){let b=start();path.forEach(m=>{b[m[1]]=b[m[0]];b[m[0]]=0});return b}
+  function rows(b){const r=[];for(let y=0;y<6;y++){let s='';for(let x=0;x<6;x++)s+=b[y*6+x]===1?'B':b[y*6+x]===2?'W':'.';r.push(s)}return r}
+  function render(){const b=board(),mk={};const last=path[path.length-1];
+    const show=hover||last;if(show){mk[show[0]]='from';mk[show[1]]=hover?'tgt':'to'}
+    draw(el('exB'),rows(b),mk,{goalTop:true});
+    el('exPath').innerHTML=path.length?path.map((m,k)=>'<span class="pm">'+(k+1)+'. '+(k%2?'White':'Black')+' '+(nameOf(m,k%2?2:1)||'')+' '+mv(m)+'</span>').join(''):'<b>Start position</b> (Black to move)';
+    let ev='';
+    if(path.length===1){const s=T[path[0].join('-')][0];ev=s}
+    else if(path.length===2){ev=T[path[0].join('-')][1][path[1].join('-')][0]}
+    else if(path.length>=3){const c=t3list(path[0],path[1]).find(o=>o.m[0]===path[2][0]&&o.m[1]===path[2][1]);ev=c?c.s:''}
+    el('exEv').innerHTML=ev===''?'Black\'s estimated win rate <b>Even</b>':'Black\'s estimated win rate <b>'+pct(ev)+'%</b> <span>(eval '+(ev>0?'+':'')+ev+')</span>';
+    el('exBack').disabled=!path.length;el('exReset').disabled=!path.length;
+    const L=el('exList'),Q=el('exQ');L.innerHTML='';
+    let opts=[];
+    if(path.length===0){Q.textContent='Choose Black\'s 1st move (14 options)';opts=Object.entries(T).map(([k,v])=>({m:k.split('-').map(Number),s:v[0],p:1}))}
+    else if(path.length===1){Q.textContent='Choose White\'s 2nd move (against Black\'s '+(nameOf(path[0],1)||mv(path[0]))+')';opts=Object.entries(T[path[0].join('-')][1]).map(([k,v])=>({m:k.split('-').map(Number),s:v[0],p:2}))}
+    else if(path.length===2){opts=t3list(path[0],path[1]);Q.textContent='Choose Black\'s 3rd move (all '+opts.length+' moves, strongest first)'}
+    else{Q.textContent='That\'s the end of the book';L.innerHTML='<p class="ex-end">There\'s no book from move 4 on; “Strongest” reads and plays on the spot from here. To explore other lines, go back with “Back 1 move.”</p>';return}
+    // 手番側から見てよい順に並べる
+    opts.sort((a,b)=>a.p===1?b.s-a.s:a.s-b.s);const bestS=opts[0].s;
+    const LV=[['★ Best',''],['◎ Good','l1'],['○ Normal','l2'],['△ Dubious','l3'],['✕ Mistake','l4']],lvOf=d=>d<=0?0:d<=20?1:d<=60?2:d<=120?3:4;
+    opts.forEach(o=>{const btn=document.createElement('button');btn.type='button';const best=o.s===bestS;if(best)btn.classList.add('best');const lv=lvOf(Math.abs(o.s-bestS));if(LV[lv][1])btn.classList.add(LV[lv][1]);
+      const nm=nameOf(o.m,o.p);const bp=pct(o.s);
+      btn.innerHTML='<span class="mk">'+LV[lv][0]+'</span><span class="nm">'+(nm||'Other')+'<small>'+mv(o.m)+'</small></span><span class="tr"><i style="width:'+bp+'%"></i></span><span class="pc">B '+bp+'%</span>';
+      btn.addEventListener('mouseenter',()=>{hover=o.m;render2()});btn.addEventListener('mouseleave',()=>{hover=null;render2()});
+      btn.addEventListener('focus',()=>{hover=o.m;render2()});btn.addEventListener('blur',()=>{hover=null;render2()});
+      btn.addEventListener('click',()=>{hover=null;path.push(o.m);render()});L.appendChild(btn)});
+    const lg=document.createElement('p');lg.className='ex-legend';lg.textContent='★ best · ◎ good (within 20 points of best) · ○ normal (within 60) · △ dubious (within 120) · ✕ mistake (more). Points are “Strongest”\'s evaluation; a 100-point gap is roughly 28 percentage points of win rate.';L.appendChild(lg)}
+  // 候補にふれたときは盤だけ描き直す
+  function render2(){const b=board(),mk={};const last=path[path.length-1];const show=hover||last;if(show){mk[show[0]]='from';mk[show[1]]=hover?'tgt':'to'}draw(el('exB'),rows(b),mk,{goalTop:true})}
+  el('exBack').addEventListener('click',()=>{path.pop();hover=null;render()});
+  el('exReset').addEventListener('click',()=>{path=[];hover=null;render()});
+  render()})();
+</script>
+<script>
+/* 広告：審査が通ったら client と slot を入れる。?adpreview=1 で位置だけ確認できる */
+(function(){const ADS={client:'',slot:''},ph=/[?&]adpreview=1/.test(location.search),box=document.getElementById('guideAd');
+  if(ADS.client&&ADS.slot){box.hidden=false;const sc=document.createElement('script');sc.async=true;sc.crossOrigin='anonymous';sc.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+ADS.client;document.head.appendChild(sc);
+    box.innerHTML='<ins class="adsbygoogle" style="display:block" data-ad-client="'+ADS.client+'" data-ad-slot="'+ADS.slot+'" data-ad-format="auto" data-full-width-responsive="true"></ins>';try{(window.adsbygoogle=window.adsbygoogle||[]).push({})}catch(e){}}
+  else if(ph){box.hidden=false;box.classList.add('ad-ph');box.textContent='Ad (end of guide · each tab)'}})();
+</script>
+
+</body>
+</html>
