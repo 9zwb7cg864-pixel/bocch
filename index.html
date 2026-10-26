@@ -1273,7 +1273,7 @@ function shadowPick(b,p,level,hist){
   for(const x of cand){const [f,t]=x.m;const fw=(p===1?(f/6|0)-(t/6|0):(t/6|0)-(f/6|0));x.h=x.v+fw*4+(last&&last[1]===f?-6:0)+(nbCount(apply(b,x.m),t)===0?-8:0)+(Math.random()-0.5)*6}
   cand.sort((u,v)=>v.h-u.h);
   if(S.ply<=2){const top=cand.slice(0,5);return {m:top[Math.random()*top.length|0].m,info}}
-  const best=cand[0].h,T=level===1?70:40;
+  const best=cand[0].h,T=level===1?70:32;
   const ws=cand.map(x=>Math.exp((x.h-best)/T));const tot=ws.reduce((u,v)=>u+v,0);let r=Math.random()*tot;
   let pick=cand[0];for(let i=0;i<cand.length;i++){r-=ws[i];if(r<=0){pick=cand[i];break}}
   info.few=cand.length<=4||(cand[1]&&best-cand[1].h>60);
