@@ -1217,7 +1217,7 @@ async function take(room){
 }
 // 組み合わせのあと、相手が部屋に来ないとき（同時に取り合った等）は、自動で探し直す
 function armWait(){clearTimeout(NET.waitT);NET.waitT=setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.watch&&!NET.guest&&!S.over){netMsg('相手が来なかったので、探し直します…');setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.guest)startMatch()},1200)}},12000)}
-/* 影の相手：ランダム対戦で30〜60秒だれも来なければ、CPU（ふつう相当）が「名無しの石」として部屋に入る。
+/* 影の相手：ランダム対戦で30〜60秒だれも来なければ、CPU（やさしい61%・ふつう39%）が「名無しの石」として部屋に入る。
    部屋の記録に普通の参加者として join・move・rematch を流すので、時計・チャット・再戦・レート計算はオンライン対戦のまま動く */
 const SHADOW={bot:null,timer:null,key:''};
 function shadowPost(o){if(!SHADOW.bot)return Promise.resolve();o.from=SHADOW.bot.id;return fetch(RELAY+TOPIC(SHADOW.bot.room),{method:'POST',body:JSON.stringify(o)}).catch(()=>{})}
@@ -1226,7 +1226,7 @@ function shadowCheck(){
   if(Date.now()-MATCH.t0<MATCH.botAt)return;
   if(NET.code!==MATCH.mine||NET.guest||NET.host!==NET.me)return;
   const code=MATCH.mine;
-  SHADOW.bot={id:'nn'+newCode()+newCode(),room:code,name:'名無しの石'+String(1000+Math.floor(Math.random()*9000)),rate:1400+Math.floor(Math.random()*101),level:2};
+  SHADOW.bot={id:'nn'+newCode()+newCode(),room:code,name:'名無しの石'+String(1000+Math.floor(Math.random()*9000)),rate:1400+Math.floor(Math.random()*101),level:Math.random()<0.39?2:1};
   lobbyPost({t:'cancel',room:code});clearInterval(MATCH.hb);
   $('matchTitle').textContent='相手が見つかりました';$('matchMsg').textContent='対局を始めます…';
   stopMatch();NET.auto=false;clearTimeout(NET.waitT);
