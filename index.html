@@ -1012,7 +1012,7 @@ async function post(obj){
     await new Promise(r=>setTimeout(r,800))}
   netMsg('送れませんでした。ネットにつながっているか確かめてください。',true);return false}
 function closeNet(){if(NET.es){NET.es.close()}clearTimeout(NET.timer);clearTimeout(NET.waitT);NET.auto=false;NET.want={};
-  Object.assign(NET,{code:null,es:null,seen:new Set(),host:null,guest:null,game:0,over:null,live:false,sending:false,claimed:false,watch:false});
+  Object.assign(NET,{code:null,es:null,seen:new Set(),host:null,guest:null,game:0,over:null,live:false,sending:false,claimed:false,watch:false,clk:null,rxAt:0,want:{}});
   $('netIdle').hidden=false}
 function openRoom(code,watch){
   code=(code||'').toLowerCase().replace(/[^a-z0-9]/g,'');
