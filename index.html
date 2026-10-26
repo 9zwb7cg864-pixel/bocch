@@ -1172,7 +1172,7 @@ function stopMatch(){MATCH.on=false;try{localStorage.removeItem('bocch-matching'
 function startMatch(){
   stopMatch();if(S.mode==='net')leave();
   try{localStorage.setItem('bocch-matching',String(Date.now()))}catch(e){}
-  Object.assign(MATCH,{on:true,seen:new Set(),seeks:new Map(),takes:new Map(),cancels:new Set(),mine:null,taking:null,decided:false,t0:Date.now(),botAt:30000+Math.random()*30000});
+  Object.assign(MATCH,{on:true,seen:new Set(),seeks:new Map(),takes:new Map(),cancels:new Set(),mine:null,taking:null,decided:false,t0:Date.now(),botAt:20000+Math.random()*40000});
   $('matchTitle').textContent='相手を探しています';$('matchMsg').textContent='同じタイミングで探している人と、自動で組み合わせます。';
   show('match');
   MATCH.tick=setInterval(()=>{const t=Math.floor((Date.now()-MATCH.t0)/1000);$('matchTime').textContent=Math.floor(t/60)+':'+String(t%60).padStart(2,'0');
@@ -1217,7 +1217,7 @@ async function take(room){
 }
 // 組み合わせのあと、相手が部屋に来ないとき（同時に取り合った等）は、自動で探し直す
 function armWait(){clearTimeout(NET.waitT);NET.waitT=setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.watch&&!NET.guest&&!S.over){netMsg('相手が来なかったので、探し直します…');setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.guest)startMatch()},1200)}},12000)}
-/* 影の相手：ランダム対戦で30〜60秒だれも来なければ、CPU（やさしい61%・ふつう39%）が「名無しの石」として部屋に入る。
+/* 影の相手：ランダム対戦で20〜60秒だれも来なければ、CPU（やさしい61%・ふつう39%）が「名無しの石」として部屋に入る。
    部屋の記録に普通の参加者として join・move・rematch を流すので、時計・チャット・再戦・レート計算はオンライン対戦のまま動く */
 const SHADOW={bot:null,timer:null,key:''};
 function shadowPost(o){if(!SHADOW.bot)return Promise.resolve();o.from=SHADOW.bot.id;return fetch(RELAY+TOPIC(SHADOW.bot.room),{method:'POST',body:JSON.stringify(o)}).catch(()=>{})}
