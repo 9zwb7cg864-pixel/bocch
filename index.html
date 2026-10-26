@@ -2,9 +2,10 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('en')===0)return 'en';return null};var q=mp(new URLSearchParams(location.search).get('lang'));if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));var n=mp((navigator.languages&&navigator.languages[0])||navigator.language);L=q||s||n||'en'}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=2"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var q=mp(new URLSearchParams(location.search).get('lang'));if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));var n=mp((navigator.languages&&navigator.languages[0])||navigator.language);L=q||s||n||'en'}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=3"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
 <title>bocch</title>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="bocch">
@@ -406,7 +407,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     </nav>
     <p class="foot">アカウント不要・リンクを送るだけで対戦</p>
     <p class="foot foot-links"><a href="privacy.html">プライバシーポリシー・お問い合わせ</a></p>
-    <p class="foot lang-row"><select id="langSel" class="no-i18n" aria-label="Language / 言語"><option value="ja">日本語</option><option value="en">English</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="ko">한국어</option><option value="es">Español</option></select></p>
+    <p class="foot lang-row"><select id="langSel" class="no-i18n" aria-label="Language / 言語"><option value="ja">日本語</option><option value="en">English</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="ko">한국어</option><option value="es">Español</option><option value="de">Deutsch</option></select></p>
     <div class="ad-slot" data-ad="home" hidden aria-label="広告"></div>
   </div>
 </section>
@@ -2212,7 +2213,7 @@ $('deepBtn').addEventListener('click',()=>{if(!REV.g||REV.g.deep)return;showRewa
   async function tick(){await beat();count()}
   tick();setInterval(tick,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick()})})();
 </script>
-<script>/* ガイドとプライバシーポリシーは、選んだ言語のページを開く */(function(){var L=window.BOCCH_LANG||'ja',S={'en':'-en','zh-Hans':'-zh-hans','zh-Hant':'-zh-hant','ko':'-ko','es':'-es'}[L]||'';window.BOCCH_PAGES={guide:'guide'+S+'.html',privacy:'privacy'+S+'.html'};var a=document.querySelector('.foot-links a[href="privacy.html"]');if(a)a.href=window.BOCCH_PAGES.privacy;if(S){var l=document.createElement('link');l.rel='prefetch';l.href=window.BOCCH_PAGES.guide;document.head.appendChild(l)}})();</script>
+<script>/* ガイドとプライバシーポリシーは、選んだ言語のページを開く */(function(){var L=window.BOCCH_LANG||'ja',S={'en':'-en','zh-Hans':'-zh-hans','zh-Hant':'-zh-hant','ko':'-ko','es':'-es','de':'-de'}[L]||'';window.BOCCH_PAGES={guide:'guide'+S+'.html',privacy:'privacy'+S+'.html'};var a=document.querySelector('.foot-links a[href="privacy.html"]');if(a)a.href=window.BOCCH_PAGES.privacy;if(S){var l=document.createElement('link');l.rel='prefetch';l.href=window.BOCCH_PAGES.guide;document.head.appendChild(l)}})();</script>
 <script>/* 言語の切り替え：選んだら保存して読み直す */(function(){var e=document.getElementById('langSel');if(!e)return;e.value=window.BOCCH_LANG||'ja';e.addEventListener('change',function(){try{localStorage.setItem('bocch-lang',e.value)}catch(x){}var u=new URL(location.href);u.searchParams.delete('lang');location.replace(u.toString())})})();</script>
 </body>
 </html>
