@@ -3,6 +3,7 @@
 //   POST /<話題>                       … メッセージを送る（本文はそのまま保存）
 //   GET  /<話題>/json?poll=1&since=…   … 保存分を1行1件で返す
 //   GET  /<話題>/ws?since=…            … WebSocketで保存分＋以後の新着を受け取る
+//   GET/POST /bocch-v1-bots/kv          … 名前付きボットのレート（無期限に保存）
 // since は all / 90s / 15m / 3h / UNIX秒。
 import { DurableObject } from "cloudflare:workers";
 
@@ -109,6 +110,22 @@ export class Topic extends DurableObject {
       server.send(JSON.stringify({ event: "open", topic, time: now }));
       for (const r of this.rows(since)) server.send(JSON.stringify(this.ev(topic, r)));
       return new Response(null, { status: 101, webSocket: client });
+    }
+
+    // 名前付きボットのレート置き場（話題 bocch-v1-bots だけ）。GET /kv で全部、POST /kv {k,v} で1件保存。保存期間は無期限
+    if (topic === "bocch-v1-bots" && action === "kv") {
+      if (req.method === "GET") {
+        const m = await this.ctx.storage.list({ prefix: "kv:" });
+        const o = {}; for (const [k, v] of m) o[k.slice(3)] = v;
+        return new Response(JSON.stringify(o), { headers: { ...h, "Content-Type": "application/json" } });
+      }
+      if (req.method === "POST") {
+        let b; try { b = JSON.parse(await req.text()); } catch (e) { return new Response("bad\n", { status: 400, headers: h }); }
+        const k = String(b && b.k || "").slice(0, 24), v = Number(b && b.v);
+        if (!k || !Number.isFinite(v) || v < 100 || v > 4000) return new Response("bad\n", { status: 400, headers: h });
+        await this.ctx.storage.put("kv:" + k, Math.round(v));
+        return new Response(JSON.stringify({ k, v: Math.round(v) }), { headers: { ...h, "Content-Type": "application/json" } });
+      }
     }
 
     return new Response("not found\n", { status: 404, headers: h });

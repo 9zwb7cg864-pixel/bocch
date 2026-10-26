@@ -1172,7 +1172,7 @@ function stopMatch(){MATCH.on=false;try{localStorage.removeItem('bocch-matching'
 function startMatch(){
   stopMatch();if(S.mode==='net')leave();
   try{localStorage.setItem('bocch-matching',String(Date.now()))}catch(e){}
-  Object.assign(MATCH,{on:true,seen:new Set(),seeks:new Map(),takes:new Map(),cancels:new Set(),mine:null,taking:null,decided:false,t0:Date.now(),botAt:20000+Math.random()*40000});
+  Object.assign(MATCH,{on:true,seen:new Set(),seeks:new Map(),takes:new Map(),cancels:new Set(),mine:null,taking:null,decided:false,t0:Date.now(),botAt:30000+Math.random()*20000});
   $('matchTitle').textContent='相手を探しています';$('matchMsg').textContent='同じタイミングで探している人と、自動で組み合わせます。';
   show('match');
   MATCH.tick=setInterval(()=>{const t=Math.floor((Date.now()-MATCH.t0)/1000);$('matchTime').textContent=Math.floor(t/60)+':'+String(t%60).padStart(2,'0');
@@ -1217,23 +1217,67 @@ async function take(room){
 }
 // 組み合わせのあと、相手が部屋に来ないとき（同時に取り合った等）は、自動で探し直す
 function armWait(){clearTimeout(NET.waitT);NET.waitT=setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.watch&&!NET.guest&&!S.over){netMsg('相手が来なかったので、探し直します…');setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.guest)startMatch()},1200)}},12000)}
-/* 影の相手：ランダム対戦で20〜60秒だれも来なければ、CPU（やさしい61%・ふつう39%）が「名無しの石」として部屋に入る。
+/* 影の相手：ランダム対戦で30〜50秒だれも来なければ、CPU（やさしい61%・ふつう39%）が「名無しの石」として部屋に入る。
    部屋の記録に普通の参加者として join・move・rematch を流すので、時計・チャット・再戦・レート計算はオンライン対戦のまま動く */
-const SHADOW={bot:null,timer:null,key:''};
+const SHADOW={bot:null,timer:null,key:'',rates:null};
+// ふつうのときに名乗る名前（それぞれ自分のレートを持ち、勝ち負けで増減する）。やさしいのときは「名無しの石」のまま
+const BOT_NAMES=['サタン二世','ピコまる','パワーボマー','どら焼き三太郎','ノルマンディー上陸作戦','防人','屯田兵受かりました','Kebin67','beckman','tompson','ketty','婦真理','ネギトロ','がちぼっち','ぷらごみ募集','このげーむおもろい','あらびっくり','さいばいまん','これ毒かも！','私に嘘はつかないでえ','藤井壮太','大','The sun','tiny rion','Mac','死して尚','歌人チャンネル','明日は我が身','迷惑メール'];
+const BOTS_KV=RELAY+'bocch-v1-bots/kv';
+async function botRates(){try{const r=await fetch(BOTS_KV,{cache:'no-store'});if(!r.ok)return null;const j=await r.json();return j&&typeof j==='object'?j:null}catch(e){return null}}
+function botSaveRate(name,v){try{fetch(BOTS_KV,{method:'POST',body:JSON.stringify({k:name,v:Math.round(v)})}).catch(()=>{})}catch(e){}}
 function shadowPost(o){if(!SHADOW.bot)return Promise.resolve();o.from=SHADOW.bot.id;return fetch(RELAY+TOPIC(SHADOW.bot.room),{method:'POST',body:JSON.stringify(o)}).catch(()=>{})}
 function shadowCheck(){
   if(!MATCH.on||MATCH.decided!==true||!MATCH.mine||MATCH.taking||document.hidden)return;
   if(Date.now()-MATCH.t0<MATCH.botAt)return;
   if(NET.code!==MATCH.mine||NET.guest||NET.host!==NET.me)return;
   const code=MATCH.mine;
-  SHADOW.bot={id:'nn'+newCode()+newCode(),room:code,name:'名無しの石'+String(1000+Math.floor(Math.random()*9000)),rate:1400+Math.floor(Math.random()*101),level:Math.random()<0.39?2:1};
+  const level=Math.random()<0.39?2:1;
+  SHADOW.bot={id:'nn'+newCode()+newCode(),room:code,name:'名無しの石'+String(1000+Math.floor(Math.random()*9000)),rate:1400+Math.floor(Math.random()*101),level,named:false};
   lobbyPost({t:'cancel',room:code});clearInterval(MATCH.hb);
   $('matchTitle').textContent='相手が見つかりました';$('matchMsg').textContent='対局を始めます…';
   stopMatch();NET.auto=false;clearTimeout(NET.waitT);
-  setTimeout(()=>{if(SHADOW.bot&&NET.code===code&&!NET.guest)shadowPost({t:'join',name:SHADOW.bot.name,rate:SHADOW.bot.rate,off:0}).then(()=>{setTimeout(()=>{if(NET.code===code)show('game',true)},600)})},800+Math.random()*1200);
+  const b=SHADOW.bot;
+  const prep=level===2?botRates().then(kv=>{if(SHADOW.bot!==b)return;const nm=BOT_NAMES[Math.random()*BOT_NAMES.length|0];b.name=nm;b.named=true;
+    if(kv&&Number.isFinite(kv[nm]))b.rate=kv[nm];else{b.rate=1400+Math.floor(Math.random()*101);if(kv)botSaveRate(nm,b.rate)}}):Promise.resolve();
+  prep.then(()=>setTimeout(()=>{if(SHADOW.bot===b&&NET.code===code&&!NET.guest)shadowPost({t:'join',name:b.name,rate:b.rate,off:0}).then(()=>{setTimeout(()=>{if(NET.code===code)show('game',true)},600)})},800+Math.random()*1200));
 }
 function shadowStop(){clearTimeout(SHADOW.timer);SHADOW.timer=null;SHADOW.bot=null;SHADOW.key=''}
-// 手番が来たら、3〜15秒ほど考えてから指す（序盤は短め）。終局後に相手が「もう一局」を押したら少し待って応じる
+// 考える時間：人間同士の実測（序盤1〜10秒・中盤10〜45秒で中央値18秒・長考30秒超が約15%・形が決まると即指し）に合わせる
+function shadowRemain(c){const k=NET.clk;if(!k||k.g!==NET.game)return CLOCK_SEC;let u=k.used[c]||0;if(S.turn===c&&k.last)u+=Math.max(0,Date.now()/1000+(NET.skew||0)-k.last);return CLOCK_SEC-u}
+function shadowWait(info){
+  const ply=S.ply,remain=shadowRemain(colorOf(SHADOW.bot.id));
+  const logn=(med,sig)=>med*Math.exp(sig*(Math.random()+Math.random()+Math.random()-1.5)*1.6);
+  let w;
+  if(info.instant)w=1.2+Math.random()*2.2;                 // 勝ちが見えている・一本道
+  else if(ply<=2)w=logn(3.2,0.5);
+  else if(ply<=6)w=logn(4.5,0.55);
+  else{w=logn(16,0.55);if(Math.random()<0.15)w=30+Math.random()*30;   // 長考
+    if(info.threat)w*=1.25;if(info.few)w*=0.6}
+  if(Math.random()<0.08)w*=0.3;                            // たまにノータイム
+  if(remain<90)w=Math.min(w,8);if(remain<40)w=Math.min(w,3);
+  w=Math.min(w,Math.max(2,remain-45));                      // 時間切れにはしない
+  return Math.max(1.0,w)*1000}
+// 手の選び方：上位候補から温度付きで選ぶ。勝ち筋をたまに見逃す、相手のリーチをたまに無視する、序盤は散らす、同じ石ばかり動かさない
+function shadowPick(b,p,level,hist){
+  const ms=allMoves(b,p);if(!ms.length)return null;const info={};
+  const wins=ms.filter(m=>arrived(apply(b,m),p));
+  if(wins.length&&Math.random()<(level===1?0.7:0.85)){info.instant=true;return {m:wins[Math.random()*wins.length|0],info}}
+  const depth=level===1?1:2;deadline=performance.now()+600;
+  const sc=ms.map(m=>{aborted=false;let v=-negamax(apply(b,m),3-p,depth-1,-Infinity,Infinity);if(aborted)v=evaluate(apply(b,m),p);return {m,v}});
+  // 相手の即勝ちを許す手（受けないといけない局面）を見つける
+  const losing=sc.filter(x=>x.v<=-90000);info.threat=losing.length>0&&losing.length<sc.length;
+  let cand=sc;
+  if(info.threat){const ignore=Math.random()<(level===1?0.45:0.25);if(!ignore)cand=sc.filter(x=>x.v>-90000)}
+  // 人間っぽい癖：前に出る手を少し好む、直前に動かした石をまた動かすのは少し避ける、ぼっちを作る手は少し避ける
+  const last=hist&&hist.length>=2?hist[hist.length-2]:null; // 2手前＝自分の前の手
+  for(const x of cand){const [f,t]=x.m;const fw=(p===1?(f/6|0)-(t/6|0):(t/6|0)-(f/6|0));x.h=x.v+fw*4+(last&&last[1]===f?-6:0)+(nbCount(apply(b,x.m),t)===0?-8:0)+(Math.random()-0.5)*6}
+  cand.sort((u,v)=>v.h-u.h);
+  if(S.ply<=2){const top=cand.slice(0,5);return {m:top[Math.random()*top.length|0].m,info}}
+  const best=cand[0].h,T=level===1?70:40;
+  const ws=cand.map(x=>Math.exp((x.h-best)/T));const tot=ws.reduce((u,v)=>u+v,0);let r=Math.random()*tot;
+  let pick=cand[0];for(let i=0;i<cand.length;i++){r-=ws[i];if(r<=0){pick=cand[i];break}}
+  info.few=cand.length<=4||(cand[1]&&best-cand[1].h>60);
+  return {m:pick.m,info}}
 function shadowTick(){
   const b=SHADOW.bot;if(!b)return;
   if(S.mode!=='net'||NET.code!==b.room){shadowStop();return}
@@ -1241,15 +1285,17 @@ function shadowTick(){
   if(NET.guest!==b.id)return;
   const my=colorOf(b.id);
   if(S.over){
+    const ek='e'+NET.game;if(b.named&&SHADOW.ekey!==ek&&S.log&&S.log.length>=2){SHADOW.ekey=ek;
+      const res=S.over.win===0?.5:S.over.win===my?1:0,opp=Math.round(PROF.rating),df=Math.max(-400,Math.min(400,opp-b.rate)),exp=1/(1+Math.pow(10,df/400));
+      b.rate=Math.max(100,Math.min(4000,Math.round(b.rate+20*(res-exp))));botSaveRate(b.name,b.rate)}
     const k='r'+NET.game;if(SHADOW.key===k)return;
-    if(NET.want&&NET.want[NET.me]===NET.game+1&&!(NET.want[b.id]===NET.game+1)){SHADOW.key=k;SHADOW.timer=setTimeout(()=>{if(SHADOW.bot===b&&S.over&&NET.want&&NET.want[NET.me]===NET.game+1)shadowPost({t:'rematch',g:NET.game+1})},2000+Math.random()*3000)}
+    if(NET.want&&NET.want[NET.me]===NET.game+1&&!(NET.want[b.id]===NET.game+1)){SHADOW.key=k;SHADOW.timer=setTimeout(()=>{if(SHADOW.bot===b&&S.over&&NET.want&&NET.want[NET.me]===NET.game+1)shadowPost({t:'rematch',g:NET.game+1})},2000+Math.random()*4000)}
     return}
   if(S.turn!==my)return;
   const k=NET.game+':'+S.ply;if(SHADOW.key===k)return;SHADOW.key=k;
-  const early=S.ply<4;const wait=(early?1500:3000)+Math.random()*(early?3000:9000)+(Math.random()<0.15?3000:0);
   const g=NET.game,ply=S.ply;
-  SHADOW.timer=setTimeout(()=>{if(SHADOW.bot!==b||S.over||NET.game!==g||S.ply!==ply||S.turn!==my)return;
-    const m=cpuMove(S.b,my,b.level);if(!m)return;shadowPost({t:'move',g,ply,m})},wait);
+  const r=shadowPick(S.b,my,b.level,S.log);if(!r)return;
+  SHADOW.timer=setTimeout(()=>{if(SHADOW.bot!==b||S.over||NET.game!==g||S.ply!==ply||S.turn!==my)return;shadowPost({t:'move',g,ply,m:r.m})},shadowWait(r.info));
 }
 const _renderS=render;render=function(){_renderS();try{shadowTick()}catch(e){}};
 const _closeNetS=closeNet;closeNet=function(){shadowStop();return _closeNetS()};
@@ -1359,7 +1405,7 @@ function josPlay0(name,side,mv,b){
   function title(p){const a=Math.min(1,p/0.12)*(1-win(p,0.82,1)),y=H/2,bh=W*0.236,s=W/440;
     x.save();duoFace(x,W,H,side);x.globalAlpha=a;x.textAlign='center';x.textBaseline='middle';
     x.fillStyle='rgba(14,15,18,.74)';x.fillRect(0,y-bh/2,W,bh);
-    x.fillStyle=LAB;x.font='500 '+Math.round(13*s)+'px "Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif';x.fillText(lab.split('').join(' '),W/2,y-30*s);
+    x.fillStyle=LAB;x.font='500 '+Math.round(13*s)+'px "Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif';x.fillText((window.BOCCH_LANG&&window.BOCCH_LANG!=='ja'&&window.bocchT)?window.bocchT(lab):lab.split('').join(' '),W/2,y-30*s);
     x.fillStyle=COL;x.font='800 '+Math.round(46*s)+'px "Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif';x.fillText(name,W/2,y+12*s);
     const tw=x.measureText(name).width,rp=ease(p/0.25);x.fillRect(W/2-tw/2-18*s-50*s*rp,y+12*s,50*s*rp,1.5*s);x.fillRect(W/2+tw/2+18*s,y+12*s,50*s*rp,1.5*s);
     for(let n=0;n<9;n++){const fp=win(p,rnd(n)*0.3,0.6+rnd(n)*0.4);if(fp<=0||fp>=1)continue;x.save();x.globalAlpha=a*(1-fp);x.translate((60+rnd(n+5)*320)*s,(120+fp*200)*s);x.rotate(fp*6+n);x.fillStyle=n%2?COL:COL2;x.fillRect(-3*s,-3*s,6*s,6*s);x.restore()}
@@ -2099,7 +2145,7 @@ function chatName(id){if(id===NET.me&&!NET.watch)return 'あなた';const o=NM[i
 function chatPaint(){
   const log=$('chatLog');if(!log)return;log.textContent='';
   const items=CHAT.list.filter(m=>!(CHAT.mute&&m.from!==NET.me));
-  if(!items.length){const p=document.createElement('p');p.className='empty';p.textContent=CHAT.mute?'相手のチャットは非表示にしています':'まだメッセージはありません';log.append(p)}
+  if(!items.length){const p=document.createElement('p');p.className='empty';{const tx=CHAT.mute?'相手のチャットは非表示にしています':'まだメッセージはありません';p.textContent=window.bocchT?window.bocchT(tx):tx}log.append(p)}
   for(const m of items){const p=document.createElement('p');if(m.from===NET.me&&!NET.watch)p.className='me';const sm=document.createElement('small');sm.textContent=chatName(m.from);p.append(sm,document.createTextNode(m.s));log.append(p)}
   log.scrollTop=log.scrollHeight}
 function chatUI(){
