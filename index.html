@@ -1030,6 +1030,7 @@ function openRoom(code,watch){
     if(d.event&&d.event!=='message')return;if(d.id){if(NET.seen.has(d.id))return;NET.seen.add(d.id)}
     try{m=JSON.parse(d.message)}catch(x){return}
     if(typeof d.time==='number'){const sk=d.time-Date.now()/1000;if(NET.skew==null||sk>NET.skew)NET.skew=sk}
+    NET.rxAt=Date.now();
     if(m&&typeof m==='object'){m._t=d.time;if(m.t==='move'&&m.from===NET.me&&NET.echo&&m.g===NET.echo.g&&m.ply===NET.echo.ply)NET.echo=null;reduce(m);render()}};
 }
 async function claimSeat(){
@@ -1918,6 +1919,7 @@ const _reduceT=reduce;reduce=function(m){
   if(S.mode==='net'&&m&&typeof m._t==='number'){
     if(m.t==='join'){const had=NET.guest;const r=_reduceT(m);if(!had&&NET.guest)clockReset(m._t);return r}
     if(m.t==='rematch'){const g0=NET.game;const r=_reduceT(m);if(NET.game!==g0)clockReset(m._t);return r}
+    if(m.t==='move'&&S.over&&S.over.local&&NET.clk&&NET.clk.g===NET.game&&m.g===NET.game&&colorOf(m.from)===S.turn&&m.ply===S.ply&&NET.clk.used[S.turn]+Math.max(0,m._t-NET.clk.last)<=CLOCK_SEC+1)S.over=null;
     if(m.t==='move'&&NET.clk&&NET.clk.g===NET.game&&!S.over&&m.g===NET.game&&colorOf(m.from)===S.turn&&m.ply===S.ply){
       const c=S.turn,spent=Math.max(0,m._t-NET.clk.last);
       if(NET.clk.used[c]+spent>CLOCK_SEC+1){S.over={win:3-c,why:flagWhy(c)};NET.sending=false;return}
@@ -1931,7 +1933,7 @@ function updClock(){
   if(!on){document.querySelectorAll('.players .clk').forEach(e=>e.remove());return}
   for(const c of [1,2]){const dot=document.querySelector('.players .dot.'+(c===1?'b':'w'));if(!dot)continue;const sp=dot.parentElement;let el=sp.querySelector('.clk');
     if(!el){el=document.createElement('span');el.className='clk';sp.appendChild(el)}const r=remain(c);el.textContent=fmtT(r);el.classList.toggle('run',!S.over&&S.turn===c);el.classList.toggle('low',r<=30)}
-  if(!S.over&&remain(S.turn)<-2){const c=S.turn;S.over={win:3-c,why:flagWhy(c)};NET.sending=false;render()}}
+  if(!S.over&&remain(S.turn)<-2&&NET.live&&Date.now()-(NET.rxAt||0)>2500){const c=S.turn;S.over={win:3-c,why:flagWhy(c),local:1};NET.sending=false;render()}}
 const _netMoveT=netMove;netMove=function(m){if(NET.clk&&NET.clk.g===NET.game&&remain(colorOf(NET.me))<=0)return;return _netMoveT(m)};
 const _renderT=render;render=function(){_renderT();updClock()};
 setInterval(()=>{if(S.mode==='net'&&CUR==='game')updClock()},250);
