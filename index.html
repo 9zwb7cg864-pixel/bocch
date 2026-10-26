@@ -1172,11 +1172,11 @@ function stopMatch(){MATCH.on=false;try{localStorage.removeItem('bocch-matching'
 function startMatch(){
   stopMatch();if(S.mode==='net')leave();
   try{localStorage.setItem('bocch-matching',String(Date.now()))}catch(e){}
-  Object.assign(MATCH,{on:true,seen:new Set(),seeks:new Map(),takes:new Map(),cancels:new Set(),mine:null,taking:null,decided:false,t0:Date.now()});
+  Object.assign(MATCH,{on:true,seen:new Set(),seeks:new Map(),takes:new Map(),cancels:new Set(),mine:null,taking:null,decided:false,t0:Date.now(),botAt:30000+Math.random()*30000});
   $('matchTitle').textContent='相手を探しています';$('matchMsg').textContent='同じタイミングで探している人と、自動で組み合わせます。';
   show('match');
   MATCH.tick=setInterval(()=>{const t=Math.floor((Date.now()-MATCH.t0)/1000);$('matchTime').textContent=Math.floor(t/60)+':'+String(t%60).padStart(2,'0');
-    if(t===45)$('matchMsg').textContent='まだ見つかりません。このまま待つか、「友だちと対戦」でリンクを送ってみてください。'},1000);
+    if(t===45)$('matchMsg').textContent='まだ見つかりません。このまま待つか、「友だちと対戦」でリンクを送ってみてください。';shadowCheck()},1000);
   const es=relaySub('bocch-v1-lobby','140s');MATCH.es=es;
   es.onopen=()=>{if(!MATCH.decided){clearTimeout(MATCH.timer);MATCH.timer=setTimeout(()=>{MATCH.decided=true;consider();if(MATCH.on&&!MATCH.mine&&!MATCH.taking)postSeek()},1600)}};
   es.onerror=()=>{if(MATCH.on)$('matchMsg').textContent='通信を再接続しています…'};
@@ -1217,6 +1217,42 @@ async function take(room){
 }
 // 組み合わせのあと、相手が部屋に来ないとき（同時に取り合った等）は、自動で探し直す
 function armWait(){clearTimeout(NET.waitT);NET.waitT=setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.watch&&!NET.guest&&!S.over){netMsg('相手が来なかったので、探し直します…');setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.guest)startMatch()},1200)}},12000)}
+/* 影の相手：ランダム対戦で30〜60秒だれも来なければ、CPU（ふつう相当）が「名無しの石」として部屋に入る。
+   部屋の記録に普通の参加者として join・move・rematch を流すので、時計・チャット・再戦・レート計算はオンライン対戦のまま動く */
+const SHADOW={bot:null,timer:null,key:''};
+function shadowPost(o){if(!SHADOW.bot)return Promise.resolve();o.from=SHADOW.bot.id;return fetch(RELAY+TOPIC(SHADOW.bot.room),{method:'POST',body:JSON.stringify(o)}).catch(()=>{})}
+function shadowCheck(){
+  if(!MATCH.on||MATCH.decided!==true||!MATCH.mine||MATCH.taking||document.hidden)return;
+  if(Date.now()-MATCH.t0<MATCH.botAt)return;
+  if(NET.code!==MATCH.mine||NET.guest||NET.host!==NET.me)return;
+  const code=MATCH.mine;
+  SHADOW.bot={id:'nn'+newCode()+newCode(),room:code,name:'名無しの石'+String(1000+Math.floor(Math.random()*9000)),rate:1400+Math.floor(Math.random()*101),level:2};
+  lobbyPost({t:'cancel',room:code});clearInterval(MATCH.hb);
+  $('matchTitle').textContent='相手が見つかりました';$('matchMsg').textContent='対局を始めます…';
+  stopMatch();NET.auto=false;clearTimeout(NET.waitT);
+  setTimeout(()=>{if(SHADOW.bot&&NET.code===code&&!NET.guest)shadowPost({t:'join',name:SHADOW.bot.name,rate:SHADOW.bot.rate,off:0}).then(()=>{setTimeout(()=>{if(NET.code===code)show('game',true)},600)})},800+Math.random()*1200);
+}
+function shadowStop(){clearTimeout(SHADOW.timer);SHADOW.timer=null;SHADOW.bot=null;SHADOW.key=''}
+// 手番が来たら、3〜15秒ほど考えてから指す（序盤は短め）。終局後に相手が「もう一局」を押したら少し待って応じる
+function shadowTick(){
+  const b=SHADOW.bot;if(!b)return;
+  if(S.mode!=='net'||NET.code!==b.room){shadowStop();return}
+  if(NET.guest&&NET.guest!==b.id){shadowStop();return} // 人が先に入っていた
+  if(NET.guest!==b.id)return;
+  const my=colorOf(b.id);
+  if(S.over){
+    const k='r'+NET.game;if(SHADOW.key===k)return;
+    if(NET.want&&NET.want[NET.me]===NET.game+1&&!(NET.want[b.id]===NET.game+1)){SHADOW.key=k;SHADOW.timer=setTimeout(()=>{if(SHADOW.bot===b&&S.over&&NET.want&&NET.want[NET.me]===NET.game+1)shadowPost({t:'rematch',g:NET.game+1})},2000+Math.random()*3000)}
+    return}
+  if(S.turn!==my)return;
+  const k=NET.game+':'+S.ply;if(SHADOW.key===k)return;SHADOW.key=k;
+  const early=S.ply<4;const wait=(early?1500:3000)+Math.random()*(early?3000:9000)+(Math.random()<0.15?3000:0);
+  const g=NET.game,ply=S.ply;
+  SHADOW.timer=setTimeout(()=>{if(SHADOW.bot!==b||S.over||NET.game!==g||S.ply!==ply||S.turn!==my)return;
+    const m=cpuMove(S.b,my,b.level);if(!m)return;shadowPost({t:'move',g,ply,m})},wait);
+}
+const _renderS=render;render=function(){_renderS();try{shadowTick()}catch(e){}};
+const _closeNetS=closeNet;closeNet=function(){shadowStop();return _closeNetS()};
 // 取った部屋の相手（部屋を作った人）が本当にいるか確かめる。応答がなければ、その部屋は捨てて探し直す
 function checkHost(room){NET.pingN=newCode();NET.alive=false;const n=NET.pingN;let tries=0;
   const ping=()=>{if(NET.code!==room||NET.alive||NET.pingN!==n)return;if(NET.live&&NET.claimed)post({t:'ping',n});if(++tries<4)setTimeout(ping,2500)};
