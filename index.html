@@ -996,6 +996,9 @@ function komaPlay(force){if((!KOMA.on&&!force)||document.hidden)return;const now
     else{const a=b.cloneNode();a.volume=0.025;a.play().catch(()=>{})}}catch(e){}}
 function doMove(m){
   if(S.mode==='net'){netMove(m);return}
+  // 学ぶ：勝ち負けは付けず、自由に動かし続けられる（次の色が動けなければ同じ色が続けて指す）
+  if(S.learn){S.hist.push({b:S.b,turn:S.turn,last:S.last,reps:{...S.reps},ply:S.ply});const b=apply(S.b,m);let t=3-S.turn;if(!allMoves(b,t).length)t=S.turn;
+    Object.assign(S,{b,turn:t,last:m,over:null,ply:(S.ply||0)+1,log:[...(S.log||[]),m]});S.sel=-1;render();return}
   S.hist.push({b:S.b,turn:S.turn,last:S.last,reps:{...S.reps},ply:S.ply});
   Object.assign(S,nextState(S,m));S.sel=-1;render();
   kick();
