@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var q=mp(new URLSearchParams(location.search).get('lang'));if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));var n=mp((navigator.languages&&navigator.languages[0])||navigator.language);L=q||s||n||'en'}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=5"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var q=mp(new URLSearchParams(location.search).get('lang'));if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));var n=mp((navigator.languages&&navigator.languages[0])||navigator.language);L=q||s||n||'en'}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=6"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -453,6 +453,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .cell.heat{position:relative}.cell.heat .hv{position:absolute;right:3px;bottom:2px;font-size:11px;font-weight:700;color:#1d1a14;font-variant-numeric:tabular-nums;pointer-events:none}
 
 /* 講座 */
+.cs-yt{display:flex;align-items:center;gap:12px;margin:4px 0 14px;padding:12px 14px;border:1px solid rgba(201,169,110,.45);color:inherit;text-decoration:none}.cs-yt .pl{color:#e05a4a;font-size:22px}.cs-yt b{display:block;color:var(--gold);font-size:14px}.cs-yt small{display:block;color:var(--sub);font-size:12px;margin-top:2px}
 .cs-tot{color:var(--gold);font-size:14px;text-align:right}
 .cs-prog{height:6px;background:rgba(255,255,255,.08);margin:6px 0 4px}.cs-prog i{display:block;height:100%;background:var(--gold);width:0}
 .cs-progt{font-size:12px;color:var(--sub);text-align:right;margin:0 0 6px}
@@ -505,9 +506,9 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
       <h3>ルール</h3>
       <ol>
         <li>自分の石を1つ選び、縦・横・斜めにまっすぐ動かす</li>
-        <li>進む距離は、まわり8マスにいる石の数（色は問わない・5以上は4）と<b>ぴったり同じ</b>。隣に誰もいない石は動けない</li>
+        <li>進む距離は、まわり8マスにいる石の数（色は問わない・5以上は4）とぴったり同じ。隣に誰もいない石は動けない</li>
         <li>途中の石は飛び越えてよい。石は取られない</li>
-        <li>向こう岸に自分の石が<b>2つ</b>着いたら勝ち</li>
+        <li>向こう岸に自分の石が2つ着いたら勝ち</li>
       </ol>
       <div class="row"><button id="hrLearn">盤で試す ›</button><button class="primary" id="hrOk">わかった</button></div>
     </div>
@@ -595,6 +596,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 <section class="scr" data-scr="course" hidden>
   <div class="topbar"><button class="back" id="csBack">‹ 戻る</button><h2 id="csTitle">学ぶ</h2><span class="sp cs-tot" id="csTot"></span></div>
   <div id="csMap">
+    <a class="cs-yt" href="https://www.youtube.com/@bocch.official" target="_blank" rel="noopener"><span class="pl">▶</span><span><b>YouTube「bocch定跡研究」</b><small>戦法や定跡を、動画でも解説しています ›</small></span></a>
     <div class="cs-prog"><i id="csBar"></i></div><p class="cs-progt" id="csProgT"></p>
     <div id="csList"></div>
     <button class="cs-ref" id="csRef">資料 ›<small>勝ち方ガイド：試し盤・定跡を盤で見る・手筋の図・26,000局のデータ</small></button>
@@ -2719,7 +2721,7 @@ $('hrOk').addEventListener('click',()=>{try{localStorage.setItem('bocch-rules-se
 $('hrLearn').addEventListener('click',()=>{try{localStorage.setItem('bocch-rules-seen','1')}catch(e){}homeRulesInit();show('course');csOpen('move',0)});
 $('rulesLink').addEventListener('click',e=>{e.stopPropagation();const h=$('homeRules');const open=h.hidden||!h.classList.contains('pop');h.classList.toggle('pop',open);h.hidden=!open;$('rulesLink').classList.toggle('on',open)});
 document.addEventListener('click',e=>{const h=$('homeRules');if(h&&!h.hidden&&h.classList.contains('pop')&&!h.contains(e.target)){h.hidden=true;h.classList.remove('pop');$('rulesLink').classList.remove('on')}});
-$('learnBtn').addEventListener('click',()=>{if((window.BOCCH_LANG||'ja')!=='ja'){location.href=(window.BOCCH_PAGES&&window.BOCCH_PAGES.guide)||'guide.html';return}show('course');csMap()});
+$('learnBtn').addEventListener('click',()=>{show('course');csMap()});
 addEventListener('popstate',()=>{if(CUR==='course')csMap()});
 try{homeRulesInit()}catch(e){}
 
@@ -2796,7 +2798,7 @@ $('csRetry').addEventListener('click',()=>{if(CS.c)csLoad()});
 $('csHint').addEventListener('click',()=>{if(CS.c){CS.wrong=Math.max(CS.wrong,1);csMsg('ヒント：'+CS.c.lv[CS.i].hint,'hint')}});
 $('csNext').addEventListener('click',()=>{if(!CS.c)return;if(CS.i<CS.c.lv.length-1){CS.i++;csLoad()}else csMap()});
 $('csBack').addEventListener('click',()=>{if(!$('csLv').hidden){csMap()}else history.back()});
-$('csRef').addEventListener('click',()=>{const f=$('refFrame');if(!f.src)f.src='guide.html?embed=1';show('ref')});
+$('csRef').addEventListener('click',()=>{const f=$('refFrame');if(!f.src){const G={'en':'guide-en.html','zh-Hans':'guide-zh-hans.html','zh-Hant':'guide-zh-hant.html','ko':'guide-ko.html','es':'guide-es.html','de':'guide-de.html'};f.src=(G[window.BOCCH_LANG]||'guide.html')+'?embed=1'}show('ref')});
 
 /* 資料：読むだけのページ（盤なし） */
 const RF={tab:'basic',path:[]};

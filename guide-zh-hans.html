@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="zh-Hans">
 <head>
+<script>if(/[?&]embed=1/.test(location.search)){document.documentElement.setAttribute("data-theme","app");document.documentElement.classList.add("embed")}</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="bocch（孤单的棋子动不了的对战棋盘游戏）获胜攻略。用棋盘图解说规则机制、强势形状、定式、战法与手筋体系。">
@@ -43,6 +44,12 @@
   --bg:#17150f; --fg:#ece6d8; --sub:#a39b8a; --line:#3a352a; --card:#201d16;
   --wood:#c9a46a; --wood2:#b28a4e; --grid:#6e5330;
   --gold:#d6b26e; --good:#6fc39a; --bad:#e08c7c; --blue:#7fb2e0; --amber:#f0b04a; --plum:#c39be0; color-scheme:dark}}
+:root[data-theme="app"]{
+  --bg:#0e1311; --fg:#ece6d8; --sub:#9a9484; --line:#2a332e; --card:#131a17;
+  --wood:#d9b878; --wood2:#c9a463; --grid:#5e4220;
+  --gold:#c9a96e; --good:#7fc59d; --bad:#e08c7c; --blue:#7fb2e0; --amber:#f0b04a; --plum:#c39be0; color-scheme:dark}
+html.embed header>a:first-child,html.embed .lang-row,html.embed #guideAd,html.embed .ytbox{display:none!important}
+html.embed body{background:var(--bg)}
 :root[data-theme="dark"]{
   --bg:#17150f; --fg:#ece6d8; --sub:#a39b8a; --line:#3a352a; --card:#201d16;
   --wood:#c9a46a; --wood2:#b28a4e; --grid:#6e5330;
