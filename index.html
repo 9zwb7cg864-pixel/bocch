@@ -2106,11 +2106,27 @@ function bdToast(ids){BDQ.push(...ids);if(BDT)return;const next=()=>{const id=BD
 // 初めて開いたとき：この端末に残っている対局から数え直す
 (function bdInit(){const s=bdStats();if(!PROF.bdInit){for(const g of loadGames()){if(g.id&&!s.done.includes(g.id)){bdCount(s,g);s.done.push(g.id)}}PROF.bdInit=1;bdCheck(true);saveProf()}})();
 // 対局が終わったら1回だけ数える
+/* 利用状況の集計：遊んだ時間・終局・訪問を中継サーバーに送る。送るのは端末ごとのランダムIDと数だけ（名前・メール・棋譜は送らない） */
+const STAT={pend:0,u:'',acc:false};
+function statId(){try{let v=localStorage.getItem('bocch-sid');if(!v||!/^[a-z0-9]{8,32}$/.test(v)){v=(Math.random().toString(36).slice(2,10)+Date.now().toString(36)).replace(/[^a-z0-9]/g,'');localStorage.setItem('bocch-sid',v)}return v}catch(e){return ''}}
+function statSend(o,beacon){try{const d=statId();if(!d||/[?&]nostat/.test(location.search))return;const body=JSON.stringify(Object.assign({d,u:STAT.u},o)),url=RELAY+TOPIC('stats')+'/hit';
+  if(beacon&&navigator.sendBeacon&&navigator.sendBeacon(url,body))return;fetch(url,{method:'POST',body,keepalive:true}).catch(()=>{})}catch(e){}}
+// 対局画面を開いていて、終局していない間の時間を15秒ごとに数える
+setInterval(()=>{try{if(!document.hidden&&CUR==='game'&&S&&!S.over&&!S.study&&!(S.mode==='net'&&(NET.watch||!NET.guest)))STAT.pend+=15}catch(e){}},15000);
+function statFlush(g,m,beacon){const s=Math.min(3600,STAT.pend);STAT.pend=0;if(!s&&!g)return;statSend({s,g:g?1:0,m:m||''},beacon)}
+addEventListener('pagehide',()=>statFlush(0,'',true));
+document.addEventListener('visibilitychange',()=>{if(document.hidden)statFlush(0,'',true)});
+setTimeout(()=>statSend({o:1}),4000); // 開いた端末を数える（表示が落ち着いてから）
+async function statAccount(uid){try{if(STAT.acc||!uid||!crypto.subtle)return;STAT.acc=true;const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('bocch:'+uid));
+  STAT.u=[...new Uint8Array(h)].slice(0,12).map(x=>x.toString(16).padStart(2,'0')).join('');statSend({})}catch(e){}}
+// 終局1回につき1つ。オンラインは同じ対局を2人とも送るので、黒の人（影の相手との対局は本人）だけが数える
+function statGameEnd(){try{const net=S.mode==='net';const count=!net||colorOf(NET.me)===1||!!SHADOW.bot;
+  const m=net?(SHADOW.bot?'shadow':'net'):S.mode===0?'local':'cpu'+S.mode;statFlush(count,m)}catch(e){}}
 function bdGameEnd(){if(!S||!S.over||S.study||!S.log||!S.log.length)return;const id=currentGameId();if(!id)return;const s=bdStats();if(s.done.includes(id))return;
   const me=S.mode==='net'?(NET.watch?0:colorOf(NET.me)):S.mode===0?0:hcOf();if(S.mode==='net'&&!me)return;
   bdCount(s,{mode:S.mode,me,win:S.over.win,log:S.log,noRate:S.noRate});
   if(S.mode==='net'&&me){if(S.over.win===me){s.streak++;s.stMax=Math.max(s.stMax,s.streak)}else if(S.over.win)s.streak=0}
-  s.done.push(id);s.done=s.done.slice(-300);saveProf();bdCheck()}
+  s.done.push(id);s.done=s.done.slice(-300);saveProf();bdCheck();statGameEnd()}
 function bdRender(){const box=$('bdList');if(!box)return;bdCheck(true);const own=new Set(bdOwned()),sel=bdSel();$('bdCount').textContent=own.size+' / '+BADGES.length;box.innerHTML='';let cat='',grid=null;
   for(const b of BADGES){if(b[0]!==cat){cat=b[0];const h=document.createElement('div');h.className='bd-cat';h.textContent=cat;box.append(h);grid=document.createElement('div');grid.className='bd-grid';box.append(grid)}
     const it=document.createElement('button');it.className='bd-it'+(own.has(b[1])?'':' lock')+(sel===b[1]?' on':'');it.innerHTML=bdSVG(b[1],36)+'<span><b></b><small></small></span>';it.querySelector('b').textContent=b[3];it.querySelector('small').textContent=b[4];
@@ -2210,7 +2226,7 @@ async function fbInit(){if(FB.ready||FB.loading)return FB.loading;FB.loading=(as
   const V='10.12.2';await loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-app-compat.js');
   await Promise.all([loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-auth-compat.js'),loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-firestore-compat.js')]);
   firebase.initializeApp(FB_CONFIG);FB.auth=firebase.auth();FB.auth.languageCode='ja';FB.db=firebase.firestore();FB.ready=true;
-  FB.auth.onAuthStateChanged(u=>{FB.user=u;try{if(u&&u.emailVerified){localStorage.setItem('bocch-named','1');localStorage.setItem('bocch-off',OFFICERS.includes(String(u.email||'').toLowerCase())?'1':'0')}else{localStorage.removeItem('bocch-named');localStorage.removeItem('bocch-off')}}catch(e){}
+  FB.auth.onAuthStateChanged(u=>{FB.user=u;if(u&&u.emailVerified)statAccount(u.uid);try{if(u&&u.emailVerified){localStorage.setItem('bocch-named','1');localStorage.setItem('bocch-off',OFFICERS.includes(String(u.email||'').toLowerCase())?'1':'0')}else{localStorage.removeItem('bocch-named');localStorage.removeItem('bocch-off')}}catch(e){}
     acctRender();if(u&&u.emailVerified)acctPull();else{try{FR.friends=[];FR.fout=[];FR.fin=[];FR.loaded=false;FR.feeds={};clearInterval(FR.inT);try{FR.sub&&FR.sub.close();FR.sub=null}catch(e){}frBadge()}catch(e){}}if(typeof renderProf==='function'&&CUR==='profile')renderProf();render()})})();return FB.loading}
 const ACCT_ERR={'auth/email-already-in-use':'このメールアドレスはもう登録されています。「ログイン」を押してください。','auth/invalid-email':'メールアドレスの形が正しくありません。','auth/weak-password':'パスワードは6文字以上にしてください。','auth/invalid-credential':'メールアドレスかパスワードが違います。','auth/wrong-password':'メールアドレスかパスワードが違います。','auth/user-not-found':'このメールアドレスは登録されていません。','auth/missing-password':'パスワードを入れてください。','auth/too-many-requests':'試した回数が多すぎます。少し時間をおいてください。','auth/network-request-failed':'通信できませんでした。ネットにつながっているか確かめてください。'};
 function acctMsg(t,err){const m=$('acctMsg');m.textContent=t||'';m.style.color=err?'#e08c7c':''}
@@ -2238,7 +2254,7 @@ async function acctPull(){if(!FB.user||!FB.user.emailVerified)return;FB.syncing=
   FB.syncing=false}
 function acctPush(){if(!FB.ready||!FB.user||!FB.user.emailVerified||FB.syncing)return;clearTimeout(FB.saveT);FB.saveT=setTimeout(()=>{FB.db.collection('users').doc(FB.user.uid).set(profData()).catch(()=>{})},800)}
 const _saveProfLocal=saveProf;saveProf=function(){_saveProfLocal();acctPush()};
-$('acctSignup').addEventListener('click',async()=>{acctMsg('登録しています…');try{await fbInit();const c=await FB.auth.createUserWithEmailAndPassword($('acctEmail').value.trim(),$('acctPass').value);await c.user.sendEmailVerification();acctMsg('確認メールを送りました。迷惑メールのフォルダも見てください。')}catch(e){acctErr(e)}});
+$('acctSignup').addEventListener('click',async()=>{acctMsg('登録しています…');try{await fbInit();const c=await FB.auth.createUserWithEmailAndPassword($('acctEmail').value.trim(),$('acctPass').value);await c.user.sendEmailVerification();statSend({su:1});acctMsg('確認メールを送りました。迷惑メールのフォルダも見てください。')}catch(e){acctErr(e)}});
 $('acctLogin').addEventListener('click',async()=>{acctMsg('ログインしています…');try{await fbInit();await FB.auth.signInWithEmailAndPassword($('acctEmail').value.trim(),$('acctPass').value);acctMsg('')}catch(e){acctErr(e)}});
 $('acctReset').addEventListener('click',async()=>{const em=$('acctEmail').value.trim();if(!em){acctMsg('上にメールアドレスを入れてから押してください。',true);return}try{await fbInit();await FB.auth.sendPasswordResetEmail(em);acctMsg('パスワードを決め直すメールを送りました。')}catch(e){acctErr(e)}});
 $('acctResend').addEventListener('click',async()=>{try{await FB.user.sendEmailVerification();acctMsg('確認メールを送り直しました。')}catch(e){acctErr(e)}});

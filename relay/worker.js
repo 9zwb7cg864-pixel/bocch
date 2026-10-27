@@ -4,6 +4,8 @@
 //   GET  /<話題>/json?poll=1&since=…   … 保存分を1行1件で返す
 //   GET  /<話題>/ws?since=…            … WebSocketで保存分＋以後の新着を受け取る
 //   GET/POST /bocch-v1-bots/kv          … 名前付きボットのレート（無期限に保存）
+//   POST /bocch-v1-stats/hit             … 遊んだ時間・終局・訪問の集計（端末はランダムIDのみ。個人は特定しない）
+//   GET  /bocch-v1-stats/view            … 集計を見る（ヘッダー X-Pass が秘密 STATS_PASS と一致したときだけ）
 // since は all / 90s / 15m / 3h / UNIX秒。
 import { DurableObject } from "cloudflare:workers";
 
@@ -128,7 +130,54 @@ export class Topic extends DurableObject {
       }
     }
 
+    // 利用状況の集計（話題 bocch-v1-stats だけ）
+    if (topic === "bocch-v1-stats" && action === "hit" && req.method === "POST") return this.statHit(req, h);
+    if (topic === "bocch-v1-stats" && action === "view" && req.method === "GET") return this.statView(req, h);
+
     return new Response("not found\n", { status: 404, headers: h });
+  }
+
+  // ---- 利用状況の集計 ----
+  // 合計：sec（遊んだ秒）・games（終局）・visitors（開いた端末）・players（遊んだ端末）・accounts（ログインした登録アカウント）・signups（新規登録）
+  // 日ごと（日本時間）：day:YYYY-MM-DD に同じ項目。モード別の終局数は gm:<モード>
+  async statHit(req, h) {
+    let b; try { b = JSON.parse(await req.text()); } catch (e) { return new Response("bad\n", { status: 400, headers: h }); }
+    const d = String(b && b.d || "").slice(0, 32), u = String(b && b.u || "").slice(0, 32);
+    if (!/^[a-z0-9]{8,32}$/.test(d)) return new Response("bad\n", { status: 400, headers: h });
+    const sec = Math.max(0, Math.min(3600, Math.round(Number(b.s) || 0)));
+    const g = b.g ? 1 : 0, o = b.o ? 1 : 0, su = b.su ? 1 : 0;
+    const m = String(b.m || "").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 12);
+    const day = new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+    const st = this.ctx.storage;
+    const T = (await st.get("tot")) || { sec: 0, games: 0, visitors: 0, players: 0, accounts: 0, signups: 0 };
+    const D = (await st.get("day:" + day)) || { sec: 0, games: 0, visitors: 0, players: 0, accounts: 0, signups: 0 };
+    T.sec += sec; D.sec += sec; T.games += g; D.games += g; T.signups += su; D.signups += su;
+    const put = {};
+    if (g && m) put["gm:" + m] = ((await st.get("gm:" + m)) || 0) + 1;
+    // 初めての端末・アカウントだけ数える（合計と、その日の分）
+    const once = async (key, field) => {
+      if (!(await st.get(key))) { put[key] = 1; T[field]++; }
+      if (!(await st.get(key + ":" + day))) { put[key + ":" + day] = 1; D[field]++; }
+    };
+    if (o || sec || g) await once("v:" + d, "visitors");
+    if (sec || g) await once("p:" + d, "players");
+    if (/^[a-f0-9]{16,32}$/.test(u)) await once("a:" + u, "accounts");
+    put.tot = T; put["day:" + day] = D;
+    await st.put(put);
+    return new Response("ok\n", { headers: h });
+  }
+  async statView(req, h) {
+    const pass = this.env.STATS_PASS || "";
+    const got = req.headers.get("X-Pass") || "";
+    const a = new TextEncoder().encode(got), c = new TextEncoder().encode(pass);
+    let same = pass.length >= 6 && a.length === c.length;
+    if (same) { let x = 0; for (let i = 0; i < a.length; i++) x |= a[i] ^ c[i]; same = x === 0; }
+    if (!same) { await new Promise(r => setTimeout(r, 800)); return new Response("forbidden\n", { status: 401, headers: h }); }
+    const st = this.ctx.storage;
+    const tot = (await st.get("tot")) || {};
+    const days = {}; for (const [k, v] of await st.list({ prefix: "day:", reverse: true, limit: 60 })) days[k.slice(4)] = v;
+    const modes = {}; for (const [k, v] of await st.list({ prefix: "gm:" })) modes[k.slice(3)] = v;
+    return new Response(JSON.stringify({ tot, days, modes, now: Date.now() }), { headers: { ...h, "Content-Type": "application/json", "Cache-Control": "no-store" } });
   }
 
   // 部屋にいる対局者（観戦者は除く）の数
