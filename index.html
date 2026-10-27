@@ -884,19 +884,19 @@ function nextState(st,m){
     else if(reps[k]>=3)over={win:0,why:'同じ局面が3回'};}
   return {b,turn,last:m,over,reps,ply:(st.ply||0)+1,log:[...(st.log||[]),m]}
 }
-/* 駒音：石が動くたびに、録音した4つの音からランダムで1つ鳴らす（同じ音は続けない） */
+/* 駒音：石が動くたびに、選んだ録音（2番・4番）からランダムで1つ鳴らす */
 const KOMA={ctx:null,buf:[],on:true,last:0,prev:-1,loading:false};
 try{KOMA.on=localStorage.getItem('bocch-koma')!=='0'}catch(e){}
 function komaLoad(){if(KOMA.loading)return;KOMA.loading=true;const AC=window.AudioContext||window.webkitAudioContext;
   if(AC){try{KOMA.ctx=new AC()}catch(e){KOMA.ctx=null}}
-  [1,2,3,4].forEach(i=>{const url='sounds/koma'+i+'.mp3';
+  [2,4].forEach(i=>{const url='sounds/koma'+i+'.mp3';
     if(KOMA.ctx)fetch(url).then(r=>r.arrayBuffer()).then(a=>new Promise((ok,ng)=>KOMA.ctx.decodeAudioData(a,ok,ng))).then(b=>KOMA.buf.push(b)).catch(()=>{});
     else{try{const a=new Audio(url);a.preload='auto';KOMA.buf.push(a)}catch(e){}}})}
 function komaUnlock(){komaLoad();if(KOMA.ctx&&KOMA.ctx.state==='suspended')KOMA.ctx.resume().catch(()=>{})}
 ['pointerdown','touchstart','touchend','click','keydown'].forEach(ev=>addEventListener(ev,komaUnlock,{passive:true,capture:true}));
 try{komaLoad()}catch(e){} // ページを開いた時点で音を読み込んでおく（鳴らすのは画面に触れてから）
 function komaPlay(force){if((!KOMA.on&&!force)||document.hidden)return;const now=performance.now();if(now-KOMA.last<70)return;KOMA.last=now;komaLoad();const n=KOMA.buf.length;if(!n)return;
-  let k=Math.random()*n|0;if(n>1&&k===KOMA.prev)k=(k+1+(Math.random()*(n-1)|0))%n;KOMA.prev=k;const b=KOMA.buf[k];
+  let k=Math.random()*n|0;if(n>2&&k===KOMA.prev)k=(k+1+(Math.random()*(n-1)|0))%n;KOMA.prev=k;const b=KOMA.buf[k];
   try{if(KOMA.ctx){if(KOMA.ctx.state==='suspended')KOMA.ctx.resume().catch(()=>{});const src=KOMA.ctx.createBufferSource(),g=KOMA.ctx.createGain();src.buffer=b;g.gain.value=0.025;src.connect(g);g.connect(KOMA.ctx.destination);src.start()}
     else{const a=b.cloneNode();a.volume=0.025;a.play().catch(()=>{})}}catch(e){}}
 function doMove(m){
