@@ -5,13 +5,14 @@
 //   GET  /<話題>/ws?since=…            … WebSocketで保存分＋以後の新着を受け取る
 //   GET/POST /bocch-v1-bots/kv          … 名前付きボットのレート（無期限に保存）
 //   POST /bocch-v1-stats/hit             … 遊んだ時間・終局・訪問の集計（端末はランダムIDのみ。個人は特定しない）
-//   GET  /bocch-v1-stats/view            … 集計を見る（ヘッダー X-Pass が秘密 STATS_PASS と一致したときだけ）
+//   GET  /bocch-v1-stats/view            … 集計を見る（ヘッダー X-Pass のパスワードが合うときだけ）
 // since は all / 90s / 15m / 3h / UNIX秒。
 import { DurableObject } from "cloudflare:workers";
 
 const KEEP_SEC = 12 * 3600;     // 保存期間
 const KEEP_MAX = 1000;          // 1話題あたりの最大件数
 const BODY_MAX = 4096;          // 1件の最大バイト数
+const STATS_HASH = "c301ac70fe153803d6486e1b8651e4369b180c2b20904f6c57b70c17169a7055";   // 利用状況ページのパスワードの SHA-256
 const ORIGINS = [/^https?:\/\/(www\.)?bocchgame\.com$/, /^https:\/\/9zwb7cg864-pixel\.github\.io$/, /^http:\/\/localhost(:\d+)?$/, /^http:\/\/127\.0\.0\.1(:\d+)?$/];
 
 function cors(req) {
@@ -167,11 +168,10 @@ export class Topic extends DurableObject {
     return new Response("ok\n", { headers: h });
   }
   async statView(req, h) {
-    const pass = this.env.STATS_PASS || "";
+    // パスワードそのものは置かず、SHA-256 の値だけを持つ（秘密 STATS_PASS があればそちらでも可）
     const got = req.headers.get("X-Pass") || "";
-    const a = new TextEncoder().encode(got), c = new TextEncoder().encode(pass);
-    let same = pass.length >= 6 && a.length === c.length;
-    if (same) { let x = 0; for (let i = 0; i < a.length; i++) x |= a[i] ^ c[i]; same = x === 0; }
+    const dg = [...new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(got)))].map(x => x.toString(16).padStart(2, "0")).join("");
+    let same = got.length >= 6 && (dg === STATS_HASH || (!!this.env.STATS_PASS && got === this.env.STATS_PASS));
     if (!same) { await new Promise(r => setTimeout(r, 800)); return new Response("forbidden\n", { status: 401, headers: h }); }
     const st = this.ctx.storage;
     const tot = (await st.get("tot")) || {};
