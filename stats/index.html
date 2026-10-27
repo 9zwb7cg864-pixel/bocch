@@ -59,6 +59,8 @@ th:first-child,td:first-child{text-align:left}
     </div>
     <h2>モード別の対局数</h2>
     <div class="modes" id="modes"></div>
+    <h2>登録アカウント（名前を付けた人）</h2>
+    <div class="wrapT"><table><thead><tr><th>名前</th><th>名前を付けた日</th><th>レート</th></tr></thead><tbody id="names"><tr><td colspan="3">読み込み中…</td></tr></tbody></table></div>
     <h2>日ごと（日本時間）</h2>
     <div class="wrapT"><table><thead><tr><th>日付</th><th>プレイ時間</th><th>遊んだ人</th><th>対局</th><th>開いた人</th><th>新規登録</th></tr></thead><tbody id="days"></tbody></table></div>
     <p class="note" id="note"></p>
@@ -66,7 +68,7 @@ th:first-child,td:first-child{text-align:left}
 </div>
 <script>
 const RELAY='https://bocch.9zwb7cg864.workers.dev/';
-const FS='https://firestore.googleapis.com/v1/projects/bocch-7072d/databases/(default)/documents:runAggregationQuery?key=AIzaSyDKnPBLV0t4wid2mwtrT-mVc39jLnoQgXY';
+const FKEY='AIzaSyDKnPBLV0t4wid2mwtrT-mVc39jLnoQgXY',FSB='https://firestore.googleapis.com/v1/projects/bocch-7072d/databases/(default)/documents',FS=FSB+':runAggregationQuery?key='+FKEY;
 const $=id=>document.getElementById(id);
 const fmt=n=>(n||0).toLocaleString('ja-JP');
 const hm=s=>{s=s||0;const h=Math.floor(s/3600),m=Math.round(s%3600/60);return h?h.toLocaleString('ja-JP')+'<small>時間</small>'+m+'<small>分</small>':m+'<small>分</small>'};
@@ -93,7 +95,15 @@ async function load(){
   $('kAcc').innerHTML=fmt(Math.max(t.accounts||0,named||0))+'<small>件</small>';
   $('kAccS').textContent='ログイン確認 '+fmt(t.accounts)+'件'+(named!=null?'・名前付き '+fmt(named)+'件':'')+'・新規 '+fmt(t.signups)+'件';
   // ランキングに載った人（記録前の分も含む）
-  try{const k=await (await fetch(RELAY+'bocch-v1-bots/kv',{cache:'no-store'})).json();$('kRk').innerHTML=fmt(Object.entries(k).filter(([n,v])=>n.startsWith('p:')&&v!==100).length)+'<small>人</small>'}catch(e){$('kRk').textContent='—'}
+  let kv={};try{kv=await (await fetch(RELAY+'bocch-v1-bots/kv',{cache:'no-store'})).json();$('kRk').innerHTML=fmt(Object.entries(kv).filter(([n,v])=>n.startsWith('p:')&&v!==100).length)+'<small>人</small>'}catch(e){$('kRk').textContent='—'}
+  // 名前を付けた登録アカウントの一覧（Firebase の names。名前を付けていないアカウントは載らない）
+  try{const rows=[];let tok='';do{const j=await (await fetch(FSB+'/names?pageSize=300&key='+FKEY+(tok?'&pageToken='+tok:''))).json();
+      for(const d of j.documents||[]){const f=d.fields||{};rows.push({n:(f.name&&f.name.stringValue)||'',t:+((f.t&&(f.t.integerValue||f.t.doubleValue))||0)})}tok=j.nextPageToken||''}while(tok);
+    rows.sort((a,b)=>b.t-a.t);const tb=$('names');tb.innerHTML='';
+    if(!rows.length)tb.innerHTML='<tr><td colspan="3">まだいません</td></tr>';
+    for(const r of rows){const tr=document.createElement('tr');const rt=kv['p:'+r.n];
+      [r.n,r.t?new Date(r.t).toLocaleDateString('ja-JP'):'—',rt&&rt!==100?String(rt):'—'].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.append(td)});tb.append(tr)}
+  }catch(e){$('names').innerHTML='<tr><td colspan="3">読み込めませんでした</td></tr>'}
 }
 async function unlock(){$('err').textContent='確かめています…';$('go').disabled=true;
   try{await load();try{sessionStorage.setItem('bocch-stats-pw',PW)}catch(e){}$('lock').hidden=true;$('main').hidden=false;$('err').textContent=''}
