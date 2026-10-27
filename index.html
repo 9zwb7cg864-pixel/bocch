@@ -387,9 +387,22 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .players .clk.low{color:#e08c7c;border-color:#e08c7c}.players .clk.run.low{background:#e08c7c;color:#16130d}
 .rate-msg{margin:6px 0 0;font-size:14px;color:var(--gold);font-family:var(--f-latin)}
 @media (prefers-reduced-motion:reduce){.stone,button{transition:none}}
+
+/* バッジ */
+.bdg{display:inline-flex;vertical-align:-3px;margin:0 3px;flex:none}
+.bd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:10px}
+.bd-it{display:flex;gap:10px;align-items:center;text-align:left;padding:8px 10px;min-height:0;letter-spacing:0;border:1px solid rgba(201,169,110,.18);background:rgba(19,26,23,.6)}
+.bd-it b{display:block;font-size:13px;color:var(--fg)}.bd-it small{display:block;font-size:11px;color:var(--sub);line-height:1.35;margin-top:2px}
+.bd-it svg{flex:none;width:36px;height:36px}.bd-it.lock{opacity:.42}.bd-it.lock svg{filter:grayscale(1)}
+.bd-it.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset;background:rgba(201,169,110,.10)}
+.bd-cat{font-size:12px;letter-spacing:.25em;color:var(--gold);margin:14px 0 2px}
+.bd-head{display:flex;justify-content:space-between;align-items:baseline}.bd-head small{color:var(--sub);font-size:12px}
+#bdToast{position:fixed;left:50%;top:max(14px,env(safe-area-inset-top));transform:translateX(-50%) translateY(-140%);z-index:50;display:flex;gap:12px;align-items:center;background:#131a17;border:1px solid var(--gold);padding:10px 18px 10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.6);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+#bdToast.show{transform:translateX(-50%) translateY(0)}#bdToast b{display:block;color:var(--gold);font-size:12px;letter-spacing:.2em}#bdToast span{font-size:15px}
 </style>
 </head>
 <body>
+<div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
   <div class="ver" id="ver" aria-label="バージョン">v1.23</div>
@@ -528,6 +541,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
     <div class="rank-row" id="rankRow" aria-label="段位ごとの石の縁"></div>
     <p class="rank-note"><span id="rankNext" style="color:var(--gold)"></span><br>レート1000から100上がるごとに石の縁が良くなります（銅→銀→金→白金）。金IVからは数字が金色、金Vからは縁が光ります。オンライン対戦では、相手の石も相手のレートの縁で見えます。</p>
     <p class="prof-rec" id="profRec"></p>
+    <div class="bd-head"><label class="prof-l">バッジ</label><small id="bdCount"></small></div><p class="prof-note">持っているバッジを押すと、名前の横に出ます。もう一度押すと外れます。</p><div id="bdList"></div>
     <p class="note">レートはオンライン対戦とCPU戦（1手戻しを使わなかった対局）で上下します。CPUのレートは やさしい 900・ふつう 1200・つよい 1500・最強 2100 として計算します。名前とレートはオンライン対戦では相手と観戦者に表示されます。</p>
   </div>
   <div class="card prof acct" id="acct">
@@ -1035,7 +1049,7 @@ async function post(obj){
 function closeNet(){if(NET.es){NET.es.close()}clearTimeout(NET.timer);clearTimeout(NET.waitT);NET.auto=false;NET.want={};
   Object.assign(NET,{code:null,es:null,seen:new Set(),host:null,guest:null,game:0,over:null,live:false,sending:false,claimed:false,watch:false,clk:null,rxAt:0,want:{}});
   $('netIdle').hidden=false}
-function openRoom(code,watch){
+function openRoom(code,watch){if(watch){try{bdStats().watch++;saveProf();bdCheck()}catch(e){}}
   code=(code||'').toLowerCase().replace(/[^a-z0-9]/g,'');
   if(code.length!==6){netMsg('部屋コードは6文字です。',true);return}
   closeNet();NET.auto=false;NET.ai=false;clearTimeout(NET.waitT);NET.code=code;NET.watch=!!watch;NET.me=watch?'w'+newCode()+newCode():myId(code);
@@ -1625,7 +1639,7 @@ function onAnalysis(d){if(d.job!==REV.job||!REV.g)return;
   {const g=loadGames(),ix=g.findIndex(x=>x.id===REV.g.id);if(ix>=0){g[ix].an=REV.an;storeGames(g)}}
   renderReview();nextAnalysis()}
 function finishAnalysis(){const g=loadGames(),ix=g.findIndex(x=>x.id===REV.g.id);if(ix>=0){g[ix].an=REV.an;storeGames(g)}REV.g.an=REV.an;renderReview()}
-function openReview(id){const g=loadGames().find(x=>x.id===id);if(!g)return;
+function openReview(id){const g=loadGames().find(x=>x.id===id);if(!g)return;try{bdStats().rev++;saveProf();bdCheck()}catch(e){}
   REV.g=g;REV.pos=buildPos(g);REV.an=(g.an&&g.an.length)?g.an.map(x=>x&&x.pv!==undefined?x:null):[];REV.job++;
   // 最初の悪手へ飛ぶのは解析後。最初は終局図から
   REV.i=0;show('review');renderReview();if(REV.an.filter(Boolean).length<g.log.length)nextAnalysis()}
@@ -1860,7 +1874,7 @@ addEventListener('popstate',()=>{if(CUR==='watch'){if(!LV.on)startWatchList()}el
 var PKEY='bocch-profile',CPU_RATE={1:900,2:1200,3:1500,4:2100};
 const cleanName=x=>String(x==null?'':x).replace(/[\u0000-\u001f\u007f<>]/g,'').trim().slice(0,12);
 function loadProf(){let p={};try{p=JSON.parse(localStorage.getItem(PKEY)||'{}')||{}}catch(e){}
-  return {name:cleanName(p.name)||'',rating:Number.isFinite(p.rating)?p.rating:1500,games:p.games|0,w:p.w|0,l:p.l|0,d:p.d|0,rated:Array.isArray(p.rated)?p.rated.slice(-200):[],peak:!!p.peak}}
+  return {name:cleanName(p.name)||'',rating:Number.isFinite(p.rating)?p.rating:1500,games:p.games|0,w:p.w|0,l:p.l|0,d:p.d|0,rated:Array.isArray(p.rated)?p.rated.slice(-200):[],peak:!!p.peak,st:p.st||{},bd:Array.isArray(p.bd)?p.bd:[],sel:typeof p.sel==='string'?p.sel:'',bdInit:p.bdInit|0}}
 var PROF=loadProf();
 /* 役員（メールアドレスで決める）：名前の前に金の家紋バッジ、広告なし */
 const OFFICERS=['officer1','officer2','officer3'];
@@ -1877,11 +1891,11 @@ let OBN=0;function offBadge(px){const sp=document.createElement('span');const gi
 function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF))}catch(e){}}
 
 var NM={};
-const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi')){o.name=myName();o.rate=Math.round(PROF.rating);o.off=isOff()?1:0;try{if(FB.ready&&FB.user&&FB.user.emailVerified)o.uid=FB.user.uid}catch(e){}}return _post(o)};
+const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi')){o.name=myName();o.rate=Math.round(PROF.rating);o.off=isOff()?1:0;o.bd=bdSel();try{if(FB.ready&&FB.user&&FB.user.emailVerified)o.uid=FB.user.uid}catch(e){}}return _post(o)};
 const _reduce=reduce;reduce=function(m){
   if(m&&m.t==='create'&&m.ai===1){NET.ai=true;if(!NET.watch&&!colorOf(NET.me)){NET.watch=true;NET.claimed=true;clearTimeout(NET.timer);try{history.replaceState(null,'','?watch='+NET.code)}catch(e){}}}
   if(m&&m.t==='next'&&typeof m.room==='string'&&/^[a-z0-9]{6}$/.test(m.room)&&NET.ai){aiFollow(m.room);return}
-  if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500,off:m.off===1,uid:typeof m.uid==='string'&&/^[A-Za-z0-9]{10,40}$/.test(m.uid)?m.uid:null}}
+  if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500,off:m.off===1,bd:typeof m.bd==='string'&&BD[m.bd]?m.bd:'',uid:typeof m.uid==='string'&&/^[A-Za-z0-9]{10,40}$/.test(m.uid)?m.uid:null}}
   return _reduce(m)};
 function oppIdOf(){return NET.me===NET.host?NET.guest:NET.host}
 function rateGame(){
@@ -1900,31 +1914,93 @@ function rateGame(){
   S.rateMsg='レート '+before+' → '+after+'（'+(dl>=0?'+':'')+dl+'）';
   const g=loadGames(),ix=g.findIndex(x=>x.id===id);if(ix>=0){g[ix].rd=dl;g[ix].opp=oppName;g[ix].ra=after;storeGames(g)}}
 $('undo').addEventListener('click',()=>{if(S.mode&&S.mode!=='net')S.noRate=true});
-function plSpan(color,name,rate,you,off){const sp=document.createElement('span');const d=document.createElement('span');d.className='dot '+(color===1?'b':'w');
-  const b=document.createElement('b');b.textContent=name;sp.append(d);if(off)sp.append(offBadge(17));sp.append(b);if(rate!=null){const r=document.createElement('span');r.className='r';r.textContent=rate;sp.append(r)}
+
+/* バッジ：条件を満たすともらえ、1つ選ぶと名前の横に出る（オンラインの相手にも見える） */
+const BD_T={bronze:['#7a4a2a','#d08b5b','#3a2416'],silver:['#6d7378','#e1e5e8','#2a2e31'],gold:['#8a6a3a','#f2d78f','#2b2312'],special:['#7a1f1a','#ffcf7a','#2a0d0b']};
+const BADGES=[
+ ['対局','first','初','初勝利','どのモードでも1勝','bronze',s=>s.wins>=1],
+ ['対局','w10','十','十勝','合計10勝','bronze',s=>s.wins>=10],
+ ['対局','w100','百','百勝','合計100勝','silver',s=>s.wins>=100],
+ ['対局','g1000','千','千局','合計1000局を指す','gold',s=>s.games>=1000],
+ ['CPU','c1','易','やさしい撃破','CPUやさしいに勝つ（1手戻しなし）','bronze',s=>s.cpu[1]>=1],
+ ['CPU','c2','普','ふつう撃破','CPUふつうに勝つ（1手戻しなし）','silver',s=>s.cpu[2]>=1],
+ ['CPU','c3','強','つよい撃破','CPUつよいに勝つ（1手戻しなし）','gold',s=>s.cpu[3]>=1],
+ ['CPU','c4','極','最強撃破','CPU最強に勝つ（1手戻しなし）','special',s=>s.cpu[4]>=1],
+ ['オンライン','n1','網','初陣','オンラインで1勝','bronze',s=>s.net>=1],
+ ['オンライン','r16','昇','昇段','レート1600に到達','silver',s=>s.rmax>=1600],
+ ['オンライン','r18','達','達人','レート1800に到達','gold',s=>s.rmax>=1800],
+ ['オンライン','r20','王','頂点','レート2000に到達','special',s=>s.rmax>=2000],
+ ['オンライン','st5','連','五連勝','オンラインで5連勝','silver',s=>s.stMax>=5],
+ ['オンライン','wk1','冠','週間一位','週間ランキング1位（準備中）','special',s=>!!s.wk1],
+ ['毎日の1問','d7','日','一週間','7日連続で正解（準備中）','bronze',s=>s.daily>=7],
+ ['毎日の1問','d30','月','ひと月','30日連続で正解（準備中）','silver',s=>s.daily>=30],
+ ['毎日の1問','d100','年','百日','100日連続で正解（準備中）','gold',s=>s.daily>=100],
+ ['技','fast','速','速攻','20手以内で勝つ','silver',s=>s.fast>=1],
+ ['技','yori','寄','寄り添い使い','初手寄り添いで20勝','silver',s=>s.yori>=20],
+ ['技','long','粘','粘り勝ち','80手以上の対局で勝つ','silver',s=>s.long>=1],
+ ['技','hunt','孤','ぼっち狩り','相手の石を3つ以上ぼっちにして勝つ','gold',s=>s.hunt>=1],
+ ['交流','rev','研','研究熱心','感想戦を20局開く','bronze',s=>s.rev>=20],
+ ['交流','watch','観','観戦好き','観戦を20回','bronze',s=>s.watch>=20],
+ ['交流','fr5','友','友の輪','フレンド5人','bronze',s=>s.fr>=5]];
+const BD=Object.fromEntries(BADGES.map(b=>[b[1],b]));
+let BDN=0;
+function bdSVG(id,px){const b=BD[id];if(!b)return '';const [d,l,bg]=BD_T[b[5]],g='bdg'+(++BDN);
+  return `<svg width="${px}" height="${px}" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${l}"/><stop offset=".55" stop-color="${d}"/><stop offset="1" stop-color="${l}"/></linearGradient></defs><circle cx="50" cy="50" r="47" fill="url(#${g})"/><circle cx="50" cy="50" r="40" fill="${bg}"/><circle cx="50" cy="50" r="40" fill="none" stroke="${l}" stroke-width="1.5" opacity=".6"/>${b[5]==='special'?`<circle cx="50" cy="50" r="34" fill="none" stroke="${l}" stroke-width="1" stroke-dasharray="2 4" opacity=".7"/>`:''}<text x="50" y="52" text-anchor="middle" dominant-baseline="central" font-family="Shippori Mincho B1,Hiragino Mincho ProN,Yu Mincho,serif" font-weight="800" font-size="46" fill="${l}">${b[2]}</text></svg>`}
+function bdBadge(id,px){const b=BD[id];if(!b)return null;const sp=document.createElement('span');sp.className='bdg';sp.title=b[3];sp.setAttribute('aria-label',b[3]);sp.innerHTML=bdSVG(id,px||16);return sp}
+function bdStats(){const s=PROF.st=PROF.st||{};for(const k of ['wins','games','net','streak','stMax','rmax','fast','yori','long','hunt','rev','watch','fr','daily'])s[k]=s[k]|0;s.cpu=Array.isArray(s.cpu)?s.cpu.map(x=>x|0).concat([0,0,0,0,0]).slice(0,5):[0,0,0,0,0];s.done=Array.isArray(s.done)?s.done.slice(-300):[];return s}
+function bdOwned(){return Array.isArray(PROF.bd)?PROF.bd.filter(id=>BD[id]):[]}
+function bdSel(){return BD[PROF.sel]&&bdOwned().includes(PROF.sel)?PROF.sel:''}
+// 1局の結果を数える（g は保存した対局の形：mode, me, win, log, noRate）
+function bdCount(s,g){if(!g||g.mode==='study'||!g.log||!g.log.length)return;s.games++;
+  const me=g.me|0;if(!me||g.win!==me)return; // 1台で2人（me=0）は局数だけ
+  s.wins++;if(CPU_RATE[g.mode]&&!g.noRate)s.cpu[g.mode]++;if(g.mode==='net')s.net++;
+  const n=g.log.length;if(n<=20)s.fast++;if(n>=80)s.long++;
+  const f=g.log[me===1?0:1];if(f){const k=f[0]+'-'+f[1];if(me===1?(k==='30-25'||k==='35-28'):(k==='0-7'||k==='5-10'))s.yori++}
+  let b=startBoard();for(const m of g.log)b=apply(b,m);let lone=0;for(let i=0;i<36;i++)if(b[i]===3-me&&!nbCount(b,i))lone++;if(lone>=3)s.hunt++}
+function bdCheck(quiet){const s=bdStats();s.rmax=Math.max(s.rmax,Math.round(PROF.rating));try{if(FR&&FR.friends)s.fr=Math.max(s.fr,FR.friends.length)}catch(e){}
+  const own=new Set(bdOwned()),neu=[];for(const b of BADGES)if(!own.has(b[1])&&b[6](s)){own.add(b[1]);neu.push(b[1])}
+  PROF.bd=[...own];if(neu.length){saveProf();if(!quiet)bdToast(neu)}return neu}
+let BDQ=[],BDT=null;
+function bdToast(ids){BDQ.push(...ids);if(BDT)return;const next=()=>{const id=BDQ.shift(),t=$('bdToast');if(!id){BDT=null;t.classList.remove('show');return}
+  t.innerHTML='';t.append(bdBadge(id,40));const d=document.createElement('div');d.innerHTML='<b>バッジ獲得</b><span></span>';d.querySelector('span').textContent=BD[id][3];t.append(d);t.classList.add('show');
+  BDT=setTimeout(()=>{t.classList.remove('show');BDT=setTimeout(next,500)},2600)};next()}
+// 初めて開いたとき：この端末に残っている対局から数え直す
+(function bdInit(){const s=bdStats();if(!PROF.bdInit){for(const g of loadGames()){if(g.id&&!s.done.includes(g.id)){bdCount(s,g);s.done.push(g.id)}}PROF.bdInit=1;bdCheck(true);saveProf()}})();
+// 対局が終わったら1回だけ数える
+function bdGameEnd(){if(!S||!S.over||S.study||!S.log||!S.log.length)return;const id=currentGameId();if(!id)return;const s=bdStats();if(s.done.includes(id))return;
+  const me=S.mode==='net'?(NET.watch?0:colorOf(NET.me)):S.mode===0?0:hcOf();if(S.mode==='net'&&!me)return;
+  bdCount(s,{mode:S.mode,me,win:S.over.win,log:S.log,noRate:S.noRate});
+  if(S.mode==='net'&&me){if(S.over.win===me){s.streak++;s.stMax=Math.max(s.stMax,s.streak)}else if(S.over.win)s.streak=0}
+  s.done.push(id);s.done=s.done.slice(-300);saveProf();bdCheck()}
+function bdRender(){const box=$('bdList');if(!box)return;bdCheck(true);const own=new Set(bdOwned()),sel=bdSel();$('bdCount').textContent=own.size+' / '+BADGES.length;box.innerHTML='';let cat='',grid=null;
+  for(const b of BADGES){if(b[0]!==cat){cat=b[0];const h=document.createElement('div');h.className='bd-cat';h.textContent=cat;box.append(h);grid=document.createElement('div');grid.className='bd-grid';box.append(grid)}
+    const it=document.createElement('button');it.className='bd-it'+(own.has(b[1])?'':' lock')+(sel===b[1]?' on':'');it.innerHTML=bdSVG(b[1],36)+'<span><b></b><small></small></span>';it.querySelector('b').textContent=b[3];it.querySelector('small').textContent=b[4];
+    it.disabled=!own.has(b[1]);it.addEventListener('click',()=>{PROF.sel=bdSel()===b[1]?'':b[1];saveProf();bdRender();render()});grid.append(it)}}
+function plSpan(color,name,rate,you,off,bd){const sp=document.createElement('span');const d=document.createElement('span');d.className='dot '+(color===1?'b':'w');
+  const b=document.createElement('b');b.textContent=name;sp.append(d);if(off)sp.append(offBadge(17));sp.append(b);if(bd&&BD[bd])sp.append(bdBadge(bd,16));if(rate!=null){const r=document.createElement('span');r.className='r';r.textContent=rate;sp.append(r)}
   if(you){const y=document.createElement('span');y.className='you';y.textContent='あなた';sp.append(y)}return sp}
 let hiKey='';
 const _renderP=render;render=function(){_renderP();
-  if(S.over)rateGame();
+  if(S.over){rateGame();try{bdGameEnd()}catch(e){console.error(e)}}
   // 自分の名前とレートを部屋に知らせる（席に着いている時だけ）
-  if(S.mode==='net'&&NET.code&&NET.live&&!NET.watch&&colorOf(NET.me)>0){const k=NET.code+'|'+NET.me+'|'+myName()+'|'+Math.round(PROF.rating)+'|'+isOff();if(k!==hiKey&&NET.claimed!==false){hiKey=k;post({t:'hi'})}}
+  if(S.mode==='net'&&NET.code&&NET.live&&!NET.watch&&colorOf(NET.me)>0){const k=NET.code+'|'+NET.me+'|'+myName()+'|'+Math.round(PROF.rating)+'|'+isOff()+'|'+bdSel();if(k!==hiKey&&NET.claimed!==false){hiKey=k;post({t:'hi'})}}
   // 相手は盤の左上、自分は盤の右下（観戦中は手前側の黒を右下）
   const pt=$('plTop'),pbt=$('plBot');pt.innerHTML='';pbt.innerHTML='';
   if(S.mode==='net'&&NET.host){const hc=colorOf(NET.host),bId=hc===1?NET.host:NET.guest,wId=hc===1?NET.guest:NET.host;
-    const nm=id=>id?(id===NET.me&&!NET.watch?{name:myName(),rate:Math.round(PROF.rating),off:isOff()}:(NM[id]||{name:'…',rate:null})):{name:'待機中',rate:null};const bn=nm(bId),wn=nm(wId);
+    const nm=id=>id?(id===NET.me&&!NET.watch?{name:myName(),rate:Math.round(PROF.rating),off:isOff(),bd:bdSel()}:(NM[id]||{name:'…',rate:null})):{name:'待機中',rate:null};const bn=nm(bId),wn=nm(wId);
     const meW=colorOf(NET.me)===2;
-    const bs=plSpan(1,bn.name,bn.rate,bId&&bId===NET.me,bn.off),ws=plSpan(2,wn.name,wn.rate,wId&&wId===NET.me,wn.off);
+    const bs=plSpan(1,bn.name,bn.rate,bId&&bId===NET.me,bn.off,bn.bd),ws=plSpan(2,wn.name,wn.rate,wId&&wId===NET.me,wn.off,wn.bd);
     if(meW){pbt.append(ws);pt.append(bs)}else{pbt.append(bs);pt.append(ws)}pt.hidden=pbt.hidden=false}
-  else if(CPU_RATE[S.mode]){pbt.append(plSpan(hcOf(),myName(),Math.round(PROF.rating),true,isOff()));pt.append(plSpan(3-hcOf(),MODE_NAME(S.mode),CPU_RATE[S.mode],false));pt.hidden=pbt.hidden=false}
+  else if(CPU_RATE[S.mode]){pbt.append(plSpan(hcOf(),myName(),Math.round(PROF.rating),true,isOff(),bdSel()));pt.append(plSpan(3-hcOf(),MODE_NAME(S.mode),CPU_RATE[S.mode],false));pt.hidden=pbt.hidden=false}
   else pt.hidden=pbt.hidden=true;
   const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?'1手戻しを使ったのでレートは変わりません':'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
-  {const mn=$('meName');mn.textContent=myName();if(isOff())mn.prepend(offBadge(18))}$('meRate').textContent=Math.round(PROF.rating)};
+  {const mn=$('meName');mn.textContent=myName();if(isOff())mn.prepend(offBadge(18));const sb=bdSel();if(sb)mn.append(bdBadge(sb,17))}$('meRate').textContent=Math.round(PROF.rating)};
 function renderProf(){const nmd=named();$('nameIn').value=nmd?PROF.name:'';$('nameIn').disabled=!nmd;$('nameSave').disabled=!nmd;$('nameIn').placeholder=nmd?'名前を入れる':guestName();
   $('nameNote').textContent=nmd?(isOff()?'役員アカウントです。名前の前にバッジが付き、広告は表示されません。':'ほかの人と同じ名前は付けられません。'):'未登録のあいだは「'+guestName()+'」です。アカウントに登録してログインすると、好きな名前を付けられます。';$('profRate').textContent=Math.round(PROF.rating);$('profRank').textContent=rankName(PROF.rating);
   {const cur=rankOf(PROF.rating);$('rankRow').innerHTML=RANKS.map(([min,k,n])=>`<div title="${k?min+'〜':'〜999'}" style="${k===cur?'color:var(--gold);font-weight:700':''}"><div class="stone b${rankCls(k)}"><span>3</span></div>${n}</div>`).join('');
    $('rankNext').textContent=cur<14?'次は '+(1000+cur*100)+' で「'+RANK_NAMES[cur+1]+'」':'最高の段です'}
   $('profRec').textContent=PROF.games?PROF.games+'局　'+PROF.w+'勝 '+PROF.l+'敗'+(PROF.d?' '+PROF.d+'分':''):'まだレート対局がありません'}
-$('meBtn').addEventListener('click',()=>{renderProf();$('nameMsg').textContent=''});
+$('meBtn').addEventListener('click',()=>{renderProf();bdRender();$('nameMsg').textContent=''});
 async function claimName(nm){await fbInit();const u=FB.user;if(!u||!u.emailVerified)throw {code:'need-login'};
   const ref=FB.db.collection('names').doc(nameKey(nm)),snap=await ref.get();
   if(snap.exists&&snap.data().uid!==u.uid)return false;if(!snap.exists)await ref.set({uid:u.uid,name:nm,t:Date.now()});return true}
@@ -2003,13 +2079,18 @@ function acctErr(e){acctMsg(ACCT_ERR[e&&e.code]||('うまくいきませんで�
 function acctRender(){const u=FB.user;$('acctOut').hidden=!!u;$('acctVerify').hidden=!(u&&!u.emailVerified);$('acctIn').hidden=!(u&&u.emailVerified);
   if(u){$('acctVEmail').textContent=u.email;$('acctUEmail').textContent=u.email}
   const me=$('meEdit');if(me)me.textContent=u&&u.emailVerified?'ログイン中 ›':'アカウント ›'}
-function profData(){const o={name:PROF.name||'',rating:Math.round(PROF.rating*10)/10,games:PROF.games|0,w:PROF.w|0,l:PROF.l|0,d:PROF.d|0,rated:(PROF.rated||[]).slice(-150),peak:!!PROF.peak,t:Date.now()};try{if(FR.loaded){o.friends=FR.friends;o.fout=FR.fout;o.fin=FR.fin}}catch(e){}return o}
+function profData(){const o={name:PROF.name||'',rating:Math.round(PROF.rating*10)/10,games:PROF.games|0,w:PROF.w|0,l:PROF.l|0,d:PROF.d|0,rated:(PROF.rated||[]).slice(-150),peak:!!PROF.peak,st:PROF.st||{},bd:PROF.bd||[],sel:PROF.sel||'',t:Date.now()};try{if(FR.loaded){o.friends=FR.friends;o.fout=FR.fout;o.fin=FR.fin}}catch(e){}return o}
+
+// アカウントのバッジと記録を、この端末のものと合わせる（大きい方・両方持っている方を残す）
+function bdMerge(d){if(!d)return;const a=bdStats(),b=d.st||{};for(const k of ['wins','games','net','stMax','rmax','fast','yori','long','hunt','rev','watch','fr','daily'])a[k]=Math.max(a[k]|0,b[k]|0);
+  if(Array.isArray(b.cpu))for(let i=0;i<5;i++)a.cpu[i]=Math.max(a.cpu[i]|0,b.cpu[i]|0);if(Array.isArray(b.done))a.done=Array.from(new Set([...a.done,...b.done])).slice(-300);if(b.wk1)a.wk1=1;
+  PROF.bd=Array.from(new Set([...bdOwned(),...(Array.isArray(d.bd)?d.bd.filter(x=>BD[x]):[])]));if(!PROF.sel&&typeof d.sel==='string')PROF.sel=d.sel}
 async function acctPull(){if(!FB.user||!FB.user.emailVerified)return;FB.syncing=true;$('acctSync').textContent='データを読み込んでいます…';
   try{const ref=FB.db.collection('users').doc(FB.user.uid);const snap=await ref.get();
     if(snap.exists){const d=snap.data();try{frLoad(d)}catch(e){}
       // 対局数が多い方を正とする（この端末で登録前に遊んだ分を失わないため）
-      if((d.games|0)>=(PROF.games|0)){PROF.name=d.name||PROF.name;PROF.rating=Number(d.rating)||PROF.rating;PROF.games=d.games|0;PROF.w=d.w|0;PROF.l=d.l|0;PROF.d=d.d|0;PROF.peak=!!(d.peak||PROF.peak);PROF.rated=Array.from(new Set([...(PROF.rated||[]),...(d.rated||[])])).slice(-200);_saveProfLocal()}
-      else await ref.set(profData())}
+      if((d.games|0)>=(PROF.games|0)){PROF.name=d.name||PROF.name;PROF.rating=Number(d.rating)||PROF.rating;PROF.games=d.games|0;PROF.w=d.w|0;PROF.l=d.l|0;PROF.d=d.d|0;PROF.peak=!!(d.peak||PROF.peak);PROF.rated=Array.from(new Set([...(PROF.rated||[]),...(d.rated||[])])).slice(-200);bdMerge(d);_saveProfLocal()}
+      else{bdMerge(d);await ref.set(profData())}}
     else{try{FR.loaded=true}catch(e){}await ref.set(profData())}
     try{frStart()}catch(e){}
     if(PROF.name){try{const ok=await claimName(PROF.name);if(!ok){$('nameMsg').textContent='「'+PROF.name+'」はほかの人が使っていたので、名前を付け直してください。';PROF.name='';_saveProfLocal();ref.set(profData()).catch(()=>{})}}catch(e){}}
