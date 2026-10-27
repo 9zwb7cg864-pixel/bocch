@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var q=mp(new URLSearchParams(location.search).get('lang'));if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));var n=mp((navigator.languages&&navigator.languages[0])||navigator.language);L=q||s||n||'en'}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=6"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var q=mp(new URLSearchParams(location.search).get('lang'));if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));var n=mp((navigator.languages&&navigator.languages[0])||navigator.language);L=q||s||n||'en'}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=7"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -49,6 +49,7 @@
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
+.wchat{border-color:rgba(201,169,110,.45)}.wchat .chat-head b{color:var(--gold)}.wchat .chat-log{min-height:1.6em}
 .chat{margin:10px auto 0;max-width:420px;text-align:left;border:1px solid var(--line);border-radius:2px;padding:6px 10px 8px}
 .chat-head{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--sub)}
 .chat-head b{flex:1;font-weight:500;letter-spacing:.1em}
@@ -754,6 +755,12 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
       <div id="chatMain" hidden><div class="chat-log" id="chatLog" aria-live="polite"></div>
       <form class="chat-form" id="chatForm"><input id="chatIn" maxlength="60" autocomplete="off" placeholder="メッセージ（60文字まで）" enterkeyhint="send"><button class="primary" id="chatSend">送信</button></form>
       <p class="chat-note" id="chatNote">対局者と観戦者に見えます。個人情報は書かないでください。</p></div>
+    </div>
+    <div class="chat wchat" id="wBox" hidden aria-label="フレンドへの観戦コメント">
+      <div class="chat-head"><b id="wHead">フレンドにだけ送る</b></div>
+      <div class="chat-log" id="wLog" aria-live="polite"></div>
+      <form class="chat-form" id="wForm"><input id="wIn" maxlength="60" autocomplete="off" placeholder="フレンドへのメッセージ（60文字まで）" enterkeyhint="send"><button class="primary" id="wSend">送信</button></form>
+      <p class="chat-note" id="wNote"></p><p class="chat-note" id="wTo"></p>
     </div>
   </div>
   <div class="learn" id="learnPanel" hidden>
@@ -2450,6 +2457,34 @@ const _reduceC=reduce;reduce=function(m){
     if(!colorOf(m.from))return;const t=chatClean(m.s);if(!t)return;const key=m.from+'|'+(m.k||'')+'|'+t;if(CHAT.seen.has(key))return;CHAT.seen.add(key);
     CHAT.list.push({from:m.from,s:t});if(CHAT.list.length>200)CHAT.list.shift();chatPaint();return}
   return _reduceC(m)};
+/* 観戦中のフレンドだけに届くチャット。部屋に {t:'wchat',to:[宛先のuid]} として流し、宛先に入っていて、送り主が自分のフレンドの人だけが表示する */
+const WCH={room:null,list:[],seen:new Set(),last:0};
+function wTargets(){if(S.mode!=='net'||!NET.code||!NET.watch||NET.ai)return[];const me=myUid();if(!me)return[];const out=[];
+  for(const id of [NET.host,NET.guest]){const o=id&&NM[id];if(o&&okUid(o.uid)&&o.uid!==me&&isFriend(o.uid)&&!out.some(x=>x.uid===o.uid))out.push({uid:o.uid,name:cleanName(o.name)||'名無し'})}return out}
+function wReset(){WCH.room=NET.code;WCH.list=[];WCH.seen=new Set();const l=$('wLog');if(l)l.textContent=''}
+function wPaint(){const log=$('wLog');if(!log)return;log.textContent='';
+  for(const m of WCH.list){const p=document.createElement('p');if(m.mine)p.className='me';const sm=document.createElement('small');sm.textContent=m.mine?'あなた → '+m.toNames:m.name+'（観戦中）';p.append(sm,document.createTextNode(m.s));log.append(p)}
+  log.scrollTop=log.scrollHeight}
+function wUI(){const box=$('wBox');if(!box)return;if(WCH.room!==NET.code)wReset();
+  const net=S&&S.mode==='net'&&!!NET.code&&!NET.ai,tg=net?wTargets():[];
+  const sender=net&&NET.watch&&tg.length>0,reader=net&&WCH.list.length>0;
+  box.hidden=!(sender||reader);if(box.hidden)return;
+  $('wForm').hidden=!sender;
+  const head=NET.watch?'フレンドにだけ送る':'観戦中のフレンドから';if($('wHead').dataset.k!==head){$('wHead').dataset.k=head;$('wHead').textContent=head}
+  const note=NET.watch?(sender?'このメッセージは、対局中のフレンドにだけ見えます':''):'あなたにだけ見えています。相手もフレンドなら相手にも見えます';if($('wNote').dataset.k!==note){$('wNote').dataset.k=note;$('wNote').textContent=note}
+  const to=sender?'宛先：'+tg.map(x=>x.name).join('、'):'';if($('wTo').dataset.k!==to){$('wTo').dataset.k=to;$('wTo').textContent=to}}
+$('wForm').addEventListener('submit',async e=>{e.preventDefault();const t=chatClean($('wIn').value),tg=wTargets();if(!t||!tg.length)return;
+  const now=Date.now();if(now-WCH.last<1500)return;WCH.last=now;$('wIn').value='';
+  const ok=await post({t:'wchat',s:t,k:newCode(),to:tg.map(x=>x.uid),tn:tg.map(x=>x.name),uid:myUid(),name:myName()});if(!ok)$('wIn').value=t});
+const _reduceW=reduce;reduce=function(m){
+  if(m&&m.t==='wchat'){if(WCH.room!==NET.code)wReset();const t=chatClean(m.s);if(!t||!Array.isArray(m.to))return;
+    const key=(m.k||'')+'|'+m.from;if(WCH.seen.has(key))return;WCH.seen.add(key);
+    const mine=m.from===NET.me,me=myUid();
+    if(!mine&&!(me&&m.to.includes(me)&&okUid(m.uid)&&isFriend(m.uid)))return; // 自分宛てで、送り主が自分のフレンドのときだけ
+    WCH.list.push({s:t,mine,name:cleanName(m.name)||'名無し',toNames:(Array.isArray(m.tn)?m.tn:[]).map(x=>cleanName(x)||'名無し').join('、')});if(WCH.list.length>100)WCH.list.shift();
+    wPaint();wUI();if(!mine&&!NET.watch){try{navigator.vibrate&&navigator.vibrate(40)}catch(e){}}return}
+  return _reduceW(m)};
+{const _renderW=render;render=function(){_renderW();try{wUI()}catch(e){}}}
 const _renderC=render;render=function(){_renderC();try{if(CHAT.room!==NET.code)chatReset();chatUI()}catch(e){}};
 
 </script>
