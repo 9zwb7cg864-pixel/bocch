@@ -551,11 +551,10 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 <!-- 感想戦 -->
 <section class="scr" data-scr="rank" hidden>
   <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>ランキング</h2><span class="sp"></span></div>
-  <div class="seg rk-seg" id="rkSeg"><button data-k="all" aria-pressed="true">総合</button><button data-k="week" aria-pressed="false">今週</button></div>
   <p class="note rk-note" id="rkNote"></p>
   <ol class="rk-list" id="rkList"></ol>
   <p class="hist-empty" id="rkEmpty" hidden>まだ載っている人がいません。</p>
-  <p class="note rk-note">載るのは、アカウントに登録して名前を付けた人です。レートはオンライン対戦とCPU戦で変わります。「今週」は月曜から今日までにレート対局を指した人の、レートの順です。先週の1位には「週間一位」のバッジが付きます。</p>
+  <p class="note rk-note">bocchを開いた人のレートが、高い順に並びます。レートはオンライン対戦とCPU戦（1手戻しなし）で変わります。1位には「ランキング一位」のバッジが付きます。</p>
 </section>
 <section class="scr" data-scr="daily" hidden>
   <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>毎日の1問</h2><span class="sp"></span></div>
@@ -1991,7 +1990,7 @@ function rateGame(){
   PROF.rating=Math.max(100,PROF.rating+K*(res-exp));PROF.games++;if(res===1)PROF.w++;else if(res===0)PROF.l++;else PROF.d++;
   PROF.rated.push(id);PROF.rated=PROF.rated.slice(-200);saveProf();
   const after=Math.round(PROF.rating),dl=after-before;
-  S.rateMsg='レート '+before+' → '+after+'（'+(dl>=0?'+':'')+dl+'）';try{const k=wkKey();if(!PROF.wk||PROF.wk.k!==k)PROF.wk={k,base:after,last:after};PROF.wk.played=1;saveProf();rankPost()}catch(e){}
+  S.rateMsg='レート '+before+' → '+after+'（'+(dl>=0?'+':'')+dl+'）';try{rankPost()}catch(e){}
   const g=loadGames(),ix=g.findIndex(x=>x.id===id);if(ix>=0){g[ix].rd=dl;g[ix].opp=oppName;g[ix].ra=after;storeGames(g)}}
 $('undo').addEventListener('click',()=>{if(S.mode&&S.mode!=='net')S.noRate=true});
 
@@ -2011,7 +2010,7 @@ const BADGES=[
  ['オンライン','r18','達','達人','レート1800に到達','gold',s=>s.rmax>=1800],
  ['オンライン','r20','王','頂点','レート2000に到達','special',s=>s.rmax>=2000],
  ['オンライン','st5','連','五連勝','オンラインで5連勝','silver',s=>s.stMax>=5],
- ['オンライン','wk1','冠','週間一位','週間ランキングで1位になる','special',s=>!!s.wk1],
+ ['オンライン','wk1','冠','ランキング一位','ランキングで1位になる','special',s=>!!s.wk1],
  ['毎日の1問','d7','日','一週間','7日連続で正解','bronze',s=>s.daily>=7],
  ['毎日の1問','d30','月','ひと月','30日連続で正解','silver',s=>s.daily>=30],
  ['毎日の1問','d100','年','百日','100日連続で正解','gold',s=>s.daily>=100],
@@ -2528,24 +2527,19 @@ $('revImg').addEventListener('click',()=>{const g=REV.g;if(!g)return;const p=REV
   const last=REV.pv?(REV.pv.k>0?REV.pv.line[REV.pv.k-1]:null):(i>0?g.log[i-1]:null);
   shareImage({b:p.b,last,title:i>=n?rt+(g.why?'（'+g.why+'）':''):i+'手目の局面',sub:MODE_NAME(g.mode)+'　'+rt,black:g.me===1?myName():g.me===2?(g.opp||'相手'):'黒',white:g.me===2?myName():g.me===1?(g.opp||'相手'):'白',ply:n,flip:g.me===2})});
 
-/* ランキング：名前を付けた人のレートを中継サーバーに置く（総合＝レート、今週＝月曜からの上がり幅） */
+/* ランキング：開いた人のレートを中継サーバーに置く（名前を変えたら前の名前は 100 にして隠す） */
 function wkKey(d){d=d?new Date(d):new Date();const day=(d.getDay()+6)%7;d.setHours(0,0,0,0);d.setDate(d.getDate()-day);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function wkPrev(){const d=new Date();d.setDate(d.getDate()-7);return wkKey(d)}
-function rankPost(){try{if(!named()||!PROF.name)return;const r=Math.round(PROF.rating),k=wkKey();
-  if(!PROF.wk||PROF.wk.k!==k){PROF.wk={k,base:PROF.wk&&PROF.wk.last!=null?PROF.wk.last:r,last:r};saveProf()}PROF.wk.last=r;
-  botSaveRate('p:'+PROF.name,r);if(PROF.wk.played)botSaveRate('w:'+k.slice(2)+':'+PROF.name,r)}catch(e){}}
+function rankPost(){try{const nm=myName(),r=Math.round(PROF.rating);if(!nm)return;if(PROF.rkName&&PROF.rkName!==nm)botSaveRate('p:'+PROF.rkName,100);if(PROF.rkName!==nm){PROF.rkName=nm;saveProf()}botSaveRate('p:'+nm,r)}catch(e){}}
 const RK={k:'all',data:null};
-async function rankOpen(){$('rkNote').textContent='読み込んでいます…';$('rkList').innerHTML='';rankPost();const kv=await botRates();RK.data=kv||{};$('rkNote').textContent=kv?'':'読み込めませんでした。通信を確かめてください。';
-  // 先週の1位なら「週間一位」
-  try{const pk='w:'+wkPrev().slice(2)+':';const top=Object.entries(RK.data).filter(([k])=>k.startsWith(pk)).sort((a,b)=>b[1]-a[1])[0];if(top&&named()&&top[0]===pk+PROF.name){bdStats().wk1=1;saveProf();bdCheck()}}catch(e){}
-  rankRender()}
-function rankRender(){const d=RK.data||{},me=named()?PROF.name:'',box=$('rkList');box.innerHTML='';let rows;
-  if(RK.k==='all')rows=Object.entries(d).filter(([k])=>k.startsWith('p:')).map(([k,v])=>[k.slice(2),v,String(v)]);
-  else{const pk='w:'+wkKey().slice(2)+':';rows=Object.entries(d).filter(([k])=>k.startsWith(pk)).map(([k,v])=>[k.slice(pk.length),v,String(v)])}
-  rows.sort((a,b)=>b[1]-a[1]);rows=rows.slice(0,100);$('rkEmpty').hidden=!!rows.length;
-  rows.forEach(([nm,v,t],i)=>{const li=document.createElement('li');if(nm===me)li.className='me';li.innerHTML='<span class="n"></span><span class="nm"></span><span class="v"></span>';li.querySelector('.n').textContent=i+1;li.querySelector('.nm').textContent=nm;li.querySelector('.v').textContent=t;box.append(li)})}
-document.querySelectorAll('#rkSeg button').forEach(b=>b.addEventListener('click',()=>{RK.k=b.dataset.k;document.querySelectorAll('#rkSeg button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));rankRender()}));
+async function rankOpen(){$('rkNote').textContent='読み込んでいます…';$('rkList').innerHTML='';rankPost();const kv=await botRates();RK.data=kv||{};$('rkNote').textContent=kv?'':'読み込めませんでした。通信を確かめてください。';rankRender()}
+function rankRender(){const d=RK.data||{},me=myName(),box=$('rkList');box.innerHTML='';
+  let rows=Object.entries(d).filter(([k,v])=>k.startsWith('p:')&&v>100).map(([k,v])=>[k.slice(2),v]);rows.sort((a,b)=>b[1]-a[1]);
+  if(rows.length&&rows[0][0]===me&&rows.length>=3){bdStats().wk1=1;saveProf();bdCheck()}
+  rows=rows.slice(0,100);$('rkEmpty').hidden=!!rows.length;
+  rows.forEach(([nm,v],i)=>{const li=document.createElement('li');if(nm===me)li.className='me';li.innerHTML='<span class="n"></span><span class="nm"></span><span class="v"></span>';li.querySelector('.n').textContent=i+1;li.querySelector('.nm').textContent=nm;li.querySelector('.v').textContent=v;box.append(li)})}
 $('rankBtn').addEventListener('click',rankOpen);
+setTimeout(()=>{try{rankPost()}catch(e){}},4000);
 addEventListener('popstate',()=>{if(CUR==='rank')rankOpen()});
 
 /* ===== 学ぶ：研究の盤＋ルール・勝ち方ガイド。項目を押すと盤にその形が並び、そこから自由に動かして評価値を見られる ===== */
