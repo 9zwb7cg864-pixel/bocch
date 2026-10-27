@@ -253,10 +253,10 @@ const threat=b=>[...new Set(winsNow(b,2).map(m=>m[0]))];
 
 /* ===== 進行 ===== */
 function loadQ(){const q=QS[G.order[G.k]];G.q=q;G.start=q.b.split('').map(Number);G.b=G.start.slice();G.prev=null;G.stage=0;G.sel=-1;G.busy=false;G.mark={};
-  $('qlabel').textContent='Q'+(G.order[G.k]+1)+'　IQ '+q.iq+'｜'+q.name;$('mtext').textContent=q.mission;
+  $('qlabel').textContent=(G.single?'':(G.done.filter(Boolean).length+1)+'問目／5　')+'IQ '+q.iq+'｜'+q.name;$('mtext').textContent=q.mission;
   say(threat(G.b).length?'赤い印の白は、次の1手でゴールしてしまう。止めるだけでなく、勝ちまで読もう':'黒い石をタップして、動かしてみよう',null,threat(G.b).length?'⚠️':'👆');
   G.mark={danger:threat(G.b)};G.lone1=[];
-  G.qStart=Date.now();dotsRender();render();try{history.replaceState(null,'','?q='+(G.order[G.k]+1))}catch(e){}}
+  G.qStart=Date.now();$('dots').hidden=!!G.single;dotsRender();render()}
 function tap(i){if(G.busy||G.stage>=2)return;const b=G.b;
   if(b[i]===1){if(G.sel===i){G.sel=-1;render();return}
     if(!movesFrom(b,i).length){cells[i].classList.add('shake');setTimeout(()=>cells[i].classList.remove('shake'),400);
@@ -295,8 +295,11 @@ async function win(m,b0){const q=G.q,qi=G.order[G.k];G.stage=2;const b=G.b;
   say(stuck?'白は1手も動けない。黒の勝ち！':'2個目がゴール。黒の勝ち！','good','🏆');
   G.tq[qi]=(Date.now()-G.qStart)/1000;G.done=G.done||[];G.done[qi]=true;dotsRender();
   await sleep(stuck||G.mark.lone.length?1300:800);
-  $('cBig').textContent=q.big.split(' (')[0];$('cSub').textContent='('+q.big.split(' (')[1];$('cWhy').textContent=q.why;$('nextBtn').textContent=G.k<4?'次の問題へ ›':'結果を見る ›';$('clear').hidden=false;$('nextBtn').focus()}
-$('nextBtn').addEventListener('click',()=>{$('clear').hidden=true;if(G.k<4){G.k++;loadQ()}else showResult()});
+  $('cBig').textContent=q.big.split(' (')[0];$('cSub').textContent='('+q.big.split(' (')[1];$('cWhy').textContent=q.why;$('nextBtn').textContent=G.single?'5問のIQテストに挑戦する ›':G.k<G.order.length-1?'次の問題へ ›':'結果を見る ›';$('clear').hidden=false;$('nextBtn').focus()}
+$('nextBtn').addEventListener('click',()=>{$('clear').hidden=true;if(G.single){const qi=G.order[0];G.single=false;try{history.replaceState(null,'',location.pathname)}catch(e){}
+    // 解いた1問の結果は引き継ぎ、残り4問を第1問から
+    G.order=[0,1,2,3,4].filter(x=>x!==qi);G.k=0;loadQ();scrollTo(0,0);return}
+  if(G.k<G.order.length-1){G.k++;loadQ()}else showResult()});
 $('resetBtn').addEventListener('click',()=>{if(G.busy||G.stage>=2)return;G.b=G.start.slice();G.prev=null;G.stage=0;G.sel=-1;G.mark={danger:threat(G.b)};render();say('最初の局面に戻した',null,'↺')});
 $('hintBtn').addEventListener('click',()=>say('ヒント：'+G.q.hint,null,'💡'));
 
@@ -324,10 +327,11 @@ function showResult(){G.finished=true;dotsRender();const tot=G.tq.reduce((a,b)=>
   $('play').hidden=true;$('result').hidden=false;scrollTo(0,0);try{history.replaceState(null,'',location.pathname)}catch(e){}}
 $('againBtn').addEventListener('click',()=>{start(0)});
 
-function start(first){G.order=[];for(let k=0;k<5;k++)G.order.push((first+k)%5);G.k=0;G.miss=[0,0,0,0,0];G.tq=[0,0,0,0,0];G.done=[];G.finished=false;
+// 共有リンク（?q=3 など）から来た人は、その1問だけ解いてから、第1問からの5問テストへ
+function start(first,single){G.single=!!single;G.order=single?[first]:[0,1,2,3,4];G.k=0;G.miss=[0,0,0,0,0];G.tq=[0,0,0,0,0];G.done=[];G.finished=false;
   $('result').hidden=true;$('play').hidden=false;loadQ()}
 build();
-let q0=parseInt(new URLSearchParams(location.search).get('q'),10);start(q0>=1&&q0<=5?q0-1:0);
+let q0=parseInt(new URLSearchParams(location.search).get('q'),10);if(q0>=1&&q0<=5)start(q0-1,true);else start(0);
 </script>
 </body>
 </html>
