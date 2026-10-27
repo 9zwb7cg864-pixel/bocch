@@ -894,6 +894,7 @@ function komaLoad(){if(KOMA.loading)return;KOMA.loading=true;const AC=window.Aud
     else{try{const a=new Audio(url);a.preload='auto';KOMA.buf.push(a)}catch(e){}}})}
 function komaUnlock(){komaLoad();if(KOMA.ctx&&KOMA.ctx.state==='suspended')KOMA.ctx.resume().catch(()=>{})}
 ['pointerdown','touchstart','touchend','click','keydown'].forEach(ev=>addEventListener(ev,komaUnlock,{passive:true,capture:true}));
+try{komaLoad()}catch(e){} // ページを開いた時点で音を読み込んでおく（鳴らすのは画面に触れてから）
 function komaPlay(force){if((!KOMA.on&&!force)||document.hidden)return;const now=performance.now();if(now-KOMA.last<70)return;KOMA.last=now;komaLoad();const n=KOMA.buf.length;if(!n)return;
   let k=Math.random()*n|0;if(n>1&&k===KOMA.prev)k=(k+1+(Math.random()*(n-1)|0))%n;KOMA.prev=k;const b=KOMA.buf[k];
   try{if(KOMA.ctx){if(KOMA.ctx.state==='suspended')KOMA.ctx.resume().catch(()=>{});const src=KOMA.ctx.createBufferSource(),g=KOMA.ctx.createGain();src.buffer=b;g.gain.value=0.05;src.connect(g);g.connect(KOMA.ctx.destination);src.start()}
@@ -2286,7 +2287,7 @@ const KW={};
 function boardSig(id){const g=$(id);if(!g)return '';let s='';for(const c of g.children){if(!c.classList||!c.classList.contains('cell'))continue;const st=c.firstElementChild;s+=st?(st.classList.contains('b')?'b':'w'):'.'}return s}
 function komaWatch(id,ctx,visible){if(!visible){if(KW[id])KW[id].ctx=null;return}const sig=boardSig(id),now=performance.now(),o=KW[id];
   if(!o||o.ctx!==ctx){KW[id]={ctx,sig,at:now};return}
-  if(o.sig!==sig){o.sig=sig;if(now-o.at>1200)komaPlay()}}
+  if(o.sig!==sig){o.sig=sig;if(!(id==='grid'&&S.mode==='net')||now-o.at>1200)komaPlay()}}
 {const _rk=render;render=function(){_rk();try{komaWatch('grid',[S.mode,NET.code||'',NET.game||0,S.study?1:0].join('|'),CUR==='game')}catch(e){}}}
 {const _rr=renderReview;renderReview=function(){_rr();try{komaWatch('rgrid',REV.g?REV.g.id||REV.g.t:'',CUR==='review')}catch(e){}}}
 render();
