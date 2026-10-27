@@ -398,7 +398,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .bd-cat{font-size:12px;letter-spacing:.25em;color:var(--gold);margin:14px 0 2px}
 .bd-head{display:flex;justify-content:space-between;align-items:baseline}.bd-head small{color:var(--sub);font-size:12px}
 #bdToast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 12px);transform:translateX(-50%) translateY(calc(-100% - 12px - env(safe-area-inset-top,0px)));z-index:50;display:flex;gap:12px;align-items:center;background:#131a17;border:1px solid var(--gold);padding:10px 18px 10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.6);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
-#bdToast.show{transform:translateX(-50%) translateY(0)}#bdToast b{display:block;color:var(--gold);font-size:12px;letter-spacing:.2em}#bdToast span{font-size:15px}
+#bdToast{visibility:hidden;transition:transform .45s cubic-bezier(.2,.8,.2,1),visibility 0s .45s}#bdToast.show{visibility:visible;transition:transform .45s cubic-bezier(.2,.8,.2,1),visibility 0s;transform:translateX(-50%) translateY(0)}#bdToast b{display:block;color:var(--gold);font-size:12px;letter-spacing:.2em}#bdToast span{font-size:15px}
 
 /* 毎日の1問 */
 .dq-msg{text-align:center;min-height:1.6em;font-size:16px;margin:10px 0 4px}.dq-msg.ok{color:var(--win)}.dq-msg.ng{color:#e08c7c}
@@ -447,6 +447,9 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .ln-ex button small{display:block;color:var(--sub);font-size:11px}.ln-ex .tr{height:6px;background:rgba(255,255,255,.08);position:relative}.ln-ex .tr i{position:absolute;left:0;top:0;bottom:0;background:var(--gold)}
 .ln-ex .best{border-color:var(--gold)}.ln-ex .l3{opacity:.75}.ln-ex .l4{opacity:.6}.ln-ex .pc{text-align:right;font-size:12px;color:var(--sub)}
 .ln-note{font-size:12px;color:var(--sub);line-height:1.6}
+
+[data-scr="game"].learning .boardwrap{position:sticky;top:0;z-index:5;background:var(--bg);max-width:330px;margin-left:auto;margin-right:auto;padding-bottom:6px}
+.cell.heat{position:relative}.cell.heat .hv{position:absolute;right:3px;bottom:2px;font-size:11px;font-weight:700;color:#1d1a14;font-variant-numeric:tabular-nums;pointer-events:none}
 </style>
 </head>
 <body>
@@ -2594,11 +2597,21 @@ const LN_TEXT={
  miss:['止めるか見逃すか','<ul><li><b>相手の2個目は必ず止める</b>：最強AIが、止められるのに見逃したことは1回もありません。</li><li><b>相手の1個目は、見逃してよいことがある</b>：あえて見逃した側の勝率は69.8%。自分がもう1個着いているときは95.9%、自分もリーチを持っているときは72.3%。</li><li><b>どちらでもないときは「止めながら作る」</b>：止めて自分のリーチも作った側は51.7%。止めるだけだと39.6%、止めずにリーチだけ作ると46.9%、どちらもしないと34.1%。</li><li><b>止める手を指した側の勝率は34％</b>：止めさせられている時点で、主導権は相手にあります。</li></ul>'],
  check:['毎手、この順で確かめる','<ol><li><b>相手のズレ0（リーチ）はあるか</b>：あれば止めます。押し上げか引き抜きで。</li><li><b>その手で誘爆しないか</b>：着地点の隣に相手のズレ+1、出発点の隣に相手のズレ−1がないか。</li><li><b>止めながら自分のリーチも作れないか</b>：着地点の隣に、自分のズレ+1の石を探します。</li><li><b>離れた2か所にリーチを作れるか</b>：同じ場所に固まったダブルリーチは1手で崩されます。</li><li><b>自分の石がぼっちにならないか</b>：隣が0〜1個の石が多い側は、勝率が45％前後まで落ちます。</li></ol><p class="ln-note">ズレ＝ゴールまでの段数−今の数字。ズレ0の石は届きます（リーチ）。1手で動かすと、着いたマスの隣の石はズレが1減り、離れたマスの隣の石はズレが1増えます。</p>'],
  facts:['26,000局で見る対局','<p>最新の「最強」同士に26,000局打たせて数えた結果です。</p><ul><li><b>強くなるほど対局が長くなる</b>：半分の対局は31〜48手で終わります。</li><li><b>1個目はとても大きい</b>：先に1個着いた側が66.5％勝ちます。24手目以降に先着した側は77.6％。</li><li><b>引き分けも6.5％ある</b>：読みが深いと、同じ局面をくり返しやすくなります。</li></ul>'],
- keysq:['急所のマス','<p>12手目にそのマスに自分の石があった側の勝率です（自分の陣地が下）。</p><ul><li><b>相手陣の真ん中に着くと強い</b>：3a・4aは63％、端の1a・6aでも55％。</li><li><b>中央の筋が急所</b>：3d・4dは55％、3c・4cは53％。</li><li><b>端の筋は負け筋</b>：1c・1d・6c・6dは40〜41％。</li><li><b>陣地の角に残った石も弱い</b>：1f・6fは40％。</li><li><b>ゴールの1段手前（b段）は負け筋</b>：2b〜5bは34〜42％で、盤でいちばん悪い段。</li></ul>'],
+ keysq:['急所のマス','<p>盤の色と数字は、12手目にそのマスに自分の石があった側の勝率（％）です。<b style="color:#7fc59d">緑</b>ほど勝ちやすく、<b style="color:#e08c7c">赤</b>ほど負けやすいマス。下の段が自分の陣地です。</p><ul><li><b>相手陣の真ん中に着くと強い</b>：3a・4aは63％、端の1a・6aでも55％。</li><li><b>中央の筋が急所</b>：3d・4dは55％、3c・4cは53％。</li><li><b>端の筋は負け筋</b>：1c・1d・6c・6dは40〜41％。</li><li><b>陣地の角に残った石も弱い</b>：1f・6fは40％。</li><li><b>ゴールの1段手前（b段）は負け筋</b>：2b〜5bは34〜42％で、盤でいちばん悪い段。</li></ul>'],
  strat:['戦法（序盤の作戦）','<p>最強同士の26,000局を8手目の形で分けると、5つの型になりました。</p><ul><li><b>中央櫓は端攻めに74％勝つ</b>：強いAIほど真ん中の固まりの強さを引き出します。</li><li><b>半櫓が主流</b>：陣地に2〜3個残したまま真ん中に櫓を組む形が、全部出す総櫓より4ポイント上。</li><li><b>二段構えが増えた</b>：陣地に2〜3個残して中段に縦に並べる形が約2割。</li><li><b>端攻めと籠城が減った</b>：端の石は早めに内側へ寄せ、真ん中の石を陣地に残します。</li></ul>']};
 const LN_LIST={basic:[['mech','仕組み'],['stop','止め方'],['order','止め方の順番'],['ng','やってはいけない手'],['miss','止めるか見逃すか'],['check','毎手の確認']],
   tac:LN_TAC.flatMap(([g,items])=>[['#'+g],...items.map(it=>['tac:'+it[0],it[0]])]),
   jos:[['jos','3手目までの定跡']],data:[['facts','26,000局で見る対局'],['keysq','急所のマス'],['strat','戦法']]};
+
+// 急所のマス：12手目にそのマスに自分の石があった側の勝率（自分の陣地が下、左右は平均）
+const LN_KSQ=[54.6,56.4,62.1,63.5,57.2,56.1,41.1,46.3,33.8,34.9,37.2,43.1,39.8,43.6,54,52.1,44.3,39.8,41.5,48.7,54.9,55.9,48.2,40.6,42.9,51.6,52.2,52.7,51.9,45.8,40.1,49.4,49.4,49.4,49.8,40];
+function lnHeat(){const on=!!(S&&S.learn&&LN.id==='keysq');document.querySelector('[data-scr="game"]').classList.toggle('learning',!!(S&&S.learn));
+  for(let i=0;i<36;i++){const el=$('c'+i);if(!el)continue;let lab=el.querySelector('.hv');
+    if(!on){if(el.style.background)el.style.background='';if(lab)lab.remove();continue}
+    const r=i/6|0,c=i%6,v=(LN_KSQ[i]+LN_KSQ[r*6+5-c])/2,t=Math.max(-1,Math.min(1,(v-50)/12));
+    el.style.background=t>=0?'color-mix(in srgb,#3f9a6c '+Math.round(t*75)+'%,transparent)':'color-mix(in srgb,#c8563f '+Math.round(-t*75)+'%,transparent)';
+    el.classList.add('heat');if(!lab){lab=document.createElement('span');lab.className='hv';el.append(lab)}lab.textContent=Math.round(v)}}
+{const _rH=render;render=function(){_rH();try{lnHeat()}catch(e){}}}
 function learnSet(b,turn,last){S=initState(0);S.study=true;S.learn=true;S.b=b.slice();S.turn=turn||1;S.hist=[];S.log=[];S.ply=0;S.reps={};S.over=null;S.sel=-1;S.last=last||null;STUDY.run=false;STUDY.evKey='';KICK='';WKkey='';render()}
 function learnStart(id){if(S.mode==='net')leave();LN.id=id||LN.id||'mech';LN.tab=Object.keys(LN_LIST).find(k=>LN_LIST[k].some(x=>x[0]===LN.id))||'basic';learnLoad();show('game')}
 function learnLoad(){const id=LN.id;LN.steps=null;LN.k=0;LN.edit=false;
@@ -2606,6 +2619,7 @@ function learnLoad(){const id=LN.id;LN.steps=null;LN.k=0;LN.edit=false;
   else if(id==='stop'){const f=LN_DF[LN.fig|0];learnSet(rowsToB(f.rows),2)}
   else if(id.startsWith('tac:')){const it=LN_TAC.flatMap(x=>x[1]).find(x=>'tac:'+x[0]===id);LN.steps=it[4];learnSet(rowsToB(it[3]),1)}
   else if(id==='jos'){LN.path=LN.path||[];let b=startBoard();for(const m of LN.path)b=apply(b,m);learnSet(b,LN.path.length%2?2:1,LN.path[LN.path.length-1])}
+  else if(id==='keysq')learnSet(Array(36).fill(0),1);
   else if(!S||!S.learn)learnSet(startBoard(),1);
   learnPanel()}
 function lnStep(){const it=LN.steps&&LN.steps[LN.k];if(!it)return;const b=S.b.slice();let last;if(it.add){const i=it.add[0]*6+it.add[1];b[i]=2;last=[i,i]}else{const f=it.f[0]*6+it.f[1],t=it.t[0]*6+it.t[1];b[t]=b[f];b[f]=0;last=[f,t]}LN.k++;const k=LN.k;learnSet(b,S.turn,last);LN.k=k;learnPanel()}
