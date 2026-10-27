@@ -411,6 +411,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 
 /* ランキング */
 .rk-seg{grid-template-columns:repeat(2,minmax(0,1fr))!important;max-width:260px;margin:6px auto 4px}.rk-seg button[aria-pressed="true"]{background:var(--gold);color:#1a140a;border-color:var(--gold)}
+.rk-prev{text-align:center;color:var(--gold);font-size:14px;margin:8px 0 0;min-height:1em}
 .rk-note{text-align:center;max-width:440px;margin:8px auto}
 .rk-list{list-style:none;margin:6px auto;padding:0;max-width:460px;width:100%}
 .rk-list li{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);font-size:15px}
@@ -551,10 +552,11 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 <!-- 感想戦 -->
 <section class="scr" data-scr="rank" hidden>
   <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>ランキング</h2><span class="sp"></span></div>
+  <p class="rk-prev" id="rkPrev"></p>
   <p class="note rk-note" id="rkNote"></p>
   <ol class="rk-list" id="rkList"></ol>
   <p class="hist-empty" id="rkEmpty" hidden>まだ載っている人がいません。</p>
-  <p class="note rk-note">bocchを開いた人のレートが、高い順に並びます。レートはオンライン対戦とCPU戦（1手戻しなし）で変わります。1位には「ランキング一位」のバッジが付きます。</p>
+  <p class="note rk-note">bocchを開いた人のレートが、高い順に並びます。レートはオンライン対戦とCPU戦（1手戻しなし）で変わります。月が変わるときに1位だった人には「月間一位」のバッジが付きます。</p>
 </section>
 <section class="scr" data-scr="daily" hidden>
   <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>毎日の1問</h2><span class="sp"></span></div>
@@ -2013,7 +2015,7 @@ const BADGES=[
  ['オンライン','r18','達','達人','レート1800に到達','gold',s=>s.rmax>=1800],
  ['オンライン','r20','王','頂点','レート2000に到達','special',s=>s.rmax>=2000],
  ['オンライン','st5','連','五連勝','オンラインで5連勝','silver',s=>s.stMax>=5],
- ['オンライン','wk1','冠','ランキング一位','ランキングで1位になる','special',s=>!!s.wk1],
+ ['オンライン','wk1','冠','月間一位','月が変わるときにランキング1位','special',s=>!!s.wk1],
  ['毎日の1問','d7','日','一週間','7日連続で正解','bronze',s=>s.daily>=7],
  ['毎日の1問','d30','月','ひと月','30日連続で正解','silver',s=>s.daily>=30],
  ['毎日の1問','d100','年','百日','100日連続で正解','gold',s=>s.daily>=100],
@@ -2538,12 +2540,23 @@ const RK={k:'all',data:null};
 async function rankOpen(){$('rkNote').textContent='読み込んでいます…';$('rkList').innerHTML='';rankPost();const kv=await botRates();RK.data=kv||{};$('rkNote').textContent=kv?'':'読み込めませんでした。通信を確かめてください。';
   // 名前付きのボット：まだレートが決まっていなければ、ランダム対戦と同じ1400〜1500で決めて保存
   if(kv)for(const nm of BOT_NAMES)if(!Number.isFinite(kv[nm])){const r=1400+Math.floor(Math.random()*101);RK.data[nm]=r;botSaveRate(nm,r)}
+  try{monCheck(RK.data)}catch(e){}
+  $('rkPrev').textContent=RK.prev?'先月（'+(+monPrev().slice(5))+'月）の1位：'+RK.prev:'';
   rankRender()}
 function rankRender(){const d=RK.data||{},me=myName(),box=$('rkList');box.innerHTML='';
   let rows=Object.entries(d).filter(([k,v])=>k.startsWith('p:')&&v>100).map(([k,v])=>[k.slice(2),v]);for(const nm of BOT_NAMES)if(Number.isFinite(d[nm]))rows.push([nm,d[nm]]);rows.sort((a,b)=>b[1]-a[1]);
-  if(rows.length&&rows[0][0]===me&&rows.length>=3){bdStats().wk1=1;saveProf();bdCheck()}
   rows=rows.slice(0,100);$('rkEmpty').hidden=!!rows.length;
   rows.forEach(([nm,v],i)=>{const li=document.createElement('li');if(nm===me)li.className='me';li.innerHTML='<span class="n"></span><span class="nm"></span><span class="v"></span>';li.querySelector('.n').textContent=i+1;li.querySelector('.nm').textContent=nm;li.querySelector('.v').textContent=v;box.append(li)})}
+
+/* 月間一位：新しい月に最初に開いた人が、その時点の1位を「先月の1位」としてサーバーに記録する（m:YYYY-MM:名前）。自分が記録されていればバッジ */
+function monKey(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
+function monPrev(){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return monKey(d)}
+function rankRows(d){const rows=Object.entries(d).filter(([k,v])=>k.startsWith('p:')&&v>100).map(([k,v])=>[k.slice(2),v]);for(const nm of BOT_NAMES)if(Number.isFinite(d[nm]))rows.push([nm,d[nm]]);return rows.sort((a,b)=>b[1]-a[1])}
+function monCheck(kv){if(!kv)return;const pm=monPrev(),pk='m:'+pm+':';if(pm<'2026-10'){RK.prev='';return} // 最初の記録は10月の1位からlet w=Object.entries(kv).filter(([k])=>k.startsWith(pk)).sort((a,b)=>b[1]-a[1])[0];
+  if(!w){const top=rankRows(kv)[0];if(top){botSaveRate(pk+top[0],top[1]);kv[pk+top[0]]=top[1];w=[pk+top[0],top[1]]}}
+  RK.prev=w?w[0].slice(pk.length):'';
+  const me=myName();if(Object.keys(kv).some(k=>/^m:\d{4}-\d{2}:/.test(k)&&k.slice(10)===me)){const s=bdStats();if(!s.wk1){s.wk1=1;saveProf();bdCheck()}}}
+setTimeout(async()=>{try{const kv=await botRates();monCheck(kv)}catch(e){}},5000);
 $('rankBtn').addEventListener('click',rankOpen);
 setTimeout(()=>{try{if(typeof FB!=='undefined'&&(FB.syncing||(FB.user&&FB.user.emailVerified&&!PROF.name)))return;rankPost()}catch(e){}},4000);
 addEventListener('popstate',()=>{if(CUR==='rank')rankOpen()});
