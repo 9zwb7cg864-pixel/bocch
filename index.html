@@ -174,7 +174,7 @@ body{min-height:100dvh}
 .home h1{font-size:76px}
 .tag{margin:0 0 26px;color:var(--sub);font-family:var(--f-disp);font-size:15px;letter-spacing:.14em}
 .menu{display:flex;flex-direction:column;gap:12px;width:100%;max-width:340px}
-.sub-menu{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;width:100%;max-width:400px;margin-top:18px}
+.sub-menu{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;width:100%;max-width:440px;margin-top:18px}
 .sub-menu button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:10px 2px;min-height:72px;font-size:12px;letter-spacing:0;white-space:nowrap;position:relative}
 .sub-menu svg{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:1.6}
 .sub-menu .fr-badge{position:absolute;top:5px;right:6px;margin:0}
@@ -408,6 +408,17 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .dq-note{text-align:center;max-width:420px;margin:8px auto 0}
 
 .rbtns{display:flex;gap:2px}#reviewRow{gap:10px;flex-wrap:wrap}
+
+/* ランキング */
+.rk-seg{grid-template-columns:repeat(2,minmax(0,1fr))!important;max-width:260px;margin:6px auto 4px}.rk-seg button[aria-pressed="true"]{background:var(--gold);color:#1a140a;border-color:var(--gold)}
+.rk-note{text-align:center;max-width:440px;margin:8px auto}
+.rk-list{list-style:none;margin:6px auto;padding:0;max-width:460px;width:100%}
+.rk-list li{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);font-size:15px}
+.rk-list li .n{width:28px;text-align:right;font-family:"Shippori Mincho B1","Hiragino Mincho ProN",serif;color:var(--sub)}
+.rk-list li:nth-child(-n+3) .n{color:var(--gold);font-weight:700}
+.rk-list li .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rk-list li .v{font-family:"Shippori Mincho B1","Hiragino Mincho ProN",serif;color:var(--gold)}
+.rk-list li.me{background:rgba(201,169,110,.10)}
 </style>
 </head>
 <body>
@@ -433,6 +444,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
       <button data-go="friends" id="friendsBtn" aria-label="フレンド"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c3 .2 5.5 2.3 5.5 5.3"/></svg><span>フレンド</span><span class="fr-badge" id="frBadge" hidden></span></button>
       <button data-go="history" aria-label="対局履歴・感想戦"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>感想戦</span></button>
       <button data-go="daily" id="dailyBtn" aria-label="毎日の1問"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span>1問</span><span class="fr-badge" id="dailyDot" hidden></span></button>
+      <button data-go="rank" id="rankBtn" aria-label="ランキング"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V12h4v8M10 20V6h4v14M15 20v-5h4v5"/></svg><span>順位</span></button>
       <button data-go="rules" aria-label="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11l3 3v13H5z"/><path d="M8 10h8M8 14h8M8 18h5"/></svg><span>ルール</span></button>
       <button id="guideBtn" onclick="location.href=(window.BOCCH_PAGES&&window.BOCCH_PAGES.guide)||'guide.html'" aria-label="勝ち方ガイド"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg><span>ガイド</span></button>
     </nav>
@@ -501,6 +513,14 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 </section>
 
 <!-- 感想戦 -->
+<section class="scr" data-scr="rank" hidden>
+  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>ランキング</h2><span class="sp"></span></div>
+  <div class="seg rk-seg" id="rkSeg"><button data-k="all" aria-pressed="true">総合</button><button data-k="week" aria-pressed="false">今週</button></div>
+  <p class="note rk-note" id="rkNote"></p>
+  <ol class="rk-list" id="rkList"></ol>
+  <p class="hist-empty" id="rkEmpty" hidden>まだ載っている人がいません。</p>
+  <p class="note rk-note">載るのは、アカウントに登録して名前を付けた人です。レートはオンライン対戦とCPU戦で変わります。「今週」は月曜から今日までにレートをいくつ上げたかの順で、先週の1位には「週間一位」のバッジが付きます。</p>
+</section>
 <section class="scr" data-scr="daily" hidden>
   <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>毎日の1問</h2><span class="sp"></span></div>
   <p class="rev-head" id="dqHead"></p>
@@ -1893,7 +1913,7 @@ addEventListener('popstate',()=>{if(CUR==='watch'){if(!LV.on)startWatchList()}el
 var PKEY='bocch-profile',CPU_RATE={1:900,2:1200,3:1500,4:2100};
 const cleanName=x=>String(x==null?'':x).replace(/[\u0000-\u001f\u007f<>]/g,'').trim().slice(0,12);
 function loadProf(){let p={};try{p=JSON.parse(localStorage.getItem(PKEY)||'{}')||{}}catch(e){}
-  return {name:cleanName(p.name)||'',rating:Number.isFinite(p.rating)?p.rating:1500,games:p.games|0,w:p.w|0,l:p.l|0,d:p.d|0,rated:Array.isArray(p.rated)?p.rated.slice(-200):[],peak:!!p.peak,st:p.st||{},bd:Array.isArray(p.bd)?p.bd:[],sel:typeof p.sel==='string'?p.sel:'',bdInit:p.bdInit|0}}
+  return {name:cleanName(p.name)||'',rating:Number.isFinite(p.rating)?p.rating:1500,games:p.games|0,w:p.w|0,l:p.l|0,d:p.d|0,rated:Array.isArray(p.rated)?p.rated.slice(-200):[],peak:!!p.peak,wk:p.wk&&typeof p.wk.k==='string'?p.wk:null,st:p.st||{},bd:Array.isArray(p.bd)?p.bd:[],sel:typeof p.sel==='string'?p.sel:'',bdInit:p.bdInit|0}}
 var PROF=loadProf();
 /* 役員（メールアドレスで決める）：名前の前に金の家紋バッジ、広告なし */
 const OFFICERS=['officer1','officer2','officer3'];
@@ -1930,7 +1950,7 @@ function rateGame(){
   PROF.rating=Math.max(100,PROF.rating+K*(res-exp));PROF.games++;if(res===1)PROF.w++;else if(res===0)PROF.l++;else PROF.d++;
   PROF.rated.push(id);PROF.rated=PROF.rated.slice(-200);saveProf();
   const after=Math.round(PROF.rating),dl=after-before;
-  S.rateMsg='レート '+before+' → '+after+'（'+(dl>=0?'+':'')+dl+'）';
+  S.rateMsg='レート '+before+' → '+after+'（'+(dl>=0?'+':'')+dl+'）';try{rankPost()}catch(e){}
   const g=loadGames(),ix=g.findIndex(x=>x.id===id);if(ix>=0){g[ix].rd=dl;g[ix].opp=oppName;g[ix].ra=after;storeGames(g)}}
 $('undo').addEventListener('click',()=>{if(S.mode&&S.mode!=='net')S.noRate=true});
 
@@ -1950,7 +1970,7 @@ const BADGES=[
  ['オンライン','r18','達','達人','レート1800に到達','gold',s=>s.rmax>=1800],
  ['オンライン','r20','王','頂点','レート2000に到達','special',s=>s.rmax>=2000],
  ['オンライン','st5','連','五連勝','オンラインで5連勝','silver',s=>s.stMax>=5],
- ['オンライン','wk1','冠','週間一位','週間ランキング1位（準備中）','special',s=>!!s.wk1],
+ ['オンライン','wk1','冠','週間一位','週間ランキングで1位になる','special',s=>!!s.wk1],
  ['毎日の1問','d7','日','一週間','7日連続で正解','bronze',s=>s.daily>=7],
  ['毎日の1問','d30','月','ひと月','30日連続で正解','silver',s=>s.daily>=30],
  ['毎日の1問','d100','年','百日','100日連続で正解','gold',s=>s.daily>=100],
@@ -2466,6 +2486,26 @@ $('imgNow').addEventListener('click',()=>{if(!S.over)return;const w=S.over.win;s
 $('revImg').addEventListener('click',()=>{const g=REV.g;if(!g)return;const p=REV.pv?pvState():REV.pos[REV.i],n=g.log.length,i=REV.i,[rt]=resultOf(g);
   const last=REV.pv?(REV.pv.k>0?REV.pv.line[REV.pv.k-1]:null):(i>0?g.log[i-1]:null);
   shareImage({b:p.b,last,title:i>=n?rt+(g.why?'（'+g.why+'）':''):i+'手目の局面',sub:MODE_NAME(g.mode)+'　'+rt,black:g.me===1?myName():g.me===2?(g.opp||'相手'):'黒',white:g.me===2?myName():g.me===1?(g.opp||'相手'):'白',ply:n,flip:g.me===2})});
+
+/* ランキング：名前を付けた人のレートを中継サーバーに置く（総合＝レート、今週＝月曜からの上がり幅） */
+function wkKey(d){d=d?new Date(d):new Date();const day=(d.getDay()+6)%7;d.setHours(0,0,0,0);d.setDate(d.getDate()-day);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function wkPrev(){const d=new Date();d.setDate(d.getDate()-7);return wkKey(d)}
+function rankPost(){try{if(!named()||!PROF.name)return;const r=Math.round(PROF.rating),k=wkKey();
+  if(!PROF.wk||PROF.wk.k!==k){PROF.wk={k,base:PROF.wk&&PROF.wk.last!=null?PROF.wk.last:r,last:r};saveProf()}PROF.wk.last=r;
+  const gain=r-PROF.wk.base;botSaveRate('p:'+PROF.name,r);if(gain!==0||PROF.wk.sent)botSaveRate('w:'+k.slice(2)+':'+PROF.name,2000+Math.max(-1900,Math.min(1900,gain)));if(gain!==0)PROF.wk.sent=1}catch(e){}}
+const RK={k:'all',data:null};
+async function rankOpen(){$('rkNote').textContent='読み込んでいます…';$('rkList').innerHTML='';rankPost();const kv=await botRates();RK.data=kv||{};$('rkNote').textContent=kv?'':'読み込めませんでした。通信を確かめてください。';
+  // 先週の1位なら「週間一位」
+  try{const pk='w:'+wkPrev().slice(2)+':';const top=Object.entries(RK.data).filter(([k])=>k.startsWith(pk)).sort((a,b)=>b[1]-a[1])[0];if(top&&top[1]>2000&&named()&&top[0]===pk+PROF.name){bdStats().wk1=1;saveProf();bdCheck()}}catch(e){}
+  rankRender()}
+function rankRender(){const d=RK.data||{},me=named()?PROF.name:'',box=$('rkList');box.innerHTML='';let rows;
+  if(RK.k==='all')rows=Object.entries(d).filter(([k])=>k.startsWith('p:')).map(([k,v])=>[k.slice(2),v,String(v)]);
+  else{const pk='w:'+wkKey().slice(2)+':';rows=Object.entries(d).filter(([k,v])=>k.startsWith(pk)&&v!==2000).map(([k,v])=>[k.slice(pk.length),v,(v>=2000?'+':'')+(v-2000)])}
+  rows.sort((a,b)=>b[1]-a[1]);rows=rows.slice(0,100);$('rkEmpty').hidden=!!rows.length;
+  rows.forEach(([nm,v,t],i)=>{const li=document.createElement('li');if(nm===me)li.className='me';li.innerHTML='<span class="n"></span><span class="nm"></span><span class="v"></span>';li.querySelector('.n').textContent=i+1;li.querySelector('.nm').textContent=nm;li.querySelector('.v').textContent=t;box.append(li)})}
+document.querySelectorAll('#rkSeg button').forEach(b=>b.addEventListener('click',()=>{RK.k=b.dataset.k;document.querySelectorAll('#rkSeg button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));rankRender()}));
+$('rankBtn').addEventListener('click',rankOpen);
+addEventListener('popstate',()=>{if(CUR==='rank')rankOpen()});
 /* 駒音：盤に並んでいる石が変わったら鳴らす（指す・戻す・進む・感想戦・観戦、どこでも）。
    画面を開いた直後や部屋に入った直後（まとめて読み込む間）は鳴らさない */
 const KW={};
