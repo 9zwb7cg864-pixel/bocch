@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>bocch 利用状況</title>
+<link rel="icon" href="/icon-192.png">
+<style>
+:root{--bg:#0e1311;--panel:#131a17;--fg:#ece6d8;--sub:#9a9484;--mute:#6f6a5e;--gold:#c9a96e;--gold-soft:rgba(201,169,110,.28);--line:rgba(236,230,216,.14);--soft:#18201c;--bad:#e0846c;color-scheme:dark}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;font-size:15px;line-height:1.6;padding:max(16px,env(safe-area-inset-top)) 16px 40px}
+.app{max-width:720px;margin:0 auto}
+h1{font-size:20px;margin:4px 0 16px;letter-spacing:.06em}h1 b{color:var(--gold)}
+.lock{max-width:340px;margin:12vh auto 0;text-align:center}
+.lock input{width:100%;font:inherit;font-size:16px;color:var(--fg);background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:12px;margin:14px 0 10px}
+button{font:inherit;cursor:pointer}
+.btn{width:100%;min-height:46px;border:0;border-radius:4px;background:var(--gold);color:#17120a;font-weight:700}
+.err{color:var(--bad);font-size:13px;min-height:20px}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:640px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.k{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px}
+.k .l{font-size:12px;color:var(--sub)}
+.k .v{font-size:28px;font-weight:700;line-height:1.25;font-variant-numeric:tabular-nums;color:#f3d995;margin-top:2px}
+.k .v small{font-size:14px;color:var(--fg);font-weight:500;margin-left:2px}
+.k .s{font-size:11.5px;color:var(--mute);margin-top:2px}
+h2{font-size:14px;color:var(--gold);letter-spacing:.08em;margin:24px 0 8px;font-weight:700}
+table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{padding:6px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{color:var(--sub);font-weight:500;font-size:12px}
+th:first-child,td:first-child{text-align:left}
+.bar{display:inline-block;height:8px;background:var(--gold);border-radius:2px;vertical-align:middle;margin-left:6px;opacity:.75}
+.wrapT{overflow-x:auto}
+.note{font-size:12px;color:var(--mute);margin-top:18px;line-height:1.7}
+.top{display:flex;align-items:center;gap:10px}.top .r{margin-left:auto;display:flex;gap:8px}
+.top button{background:transparent;border:1px solid var(--line);color:var(--sub);border-radius:4px;padding:6px 10px;font-size:12.5px}
+.modes{display:flex;flex-wrap:wrap;gap:6px}.modes span{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:3px 10px;font-size:12.5px}.modes b{color:#f3d995;margin-left:4px}
+</style>
+</head>
+<body>
+<div class="app">
+  <form class="lock" id="lock">
+    <h1><b>bocch</b> 利用状況</h1>
+    <div style="color:var(--sub);font-size:13px">パスワードを知っている人だけ見られます</div>
+    <input type="password" id="pw" autocomplete="current-password" placeholder="パスワード" required>
+    <div class="err" id="err"></div>
+    <button class="btn" id="go">見る</button>
+  </form>
+
+  <main id="main" hidden>
+    <div class="top"><h1><b>bocch</b> 利用状況</h1><div class="r"><button id="reload">↻ 更新</button><button id="out">閉じる</button></div></div>
+    <div class="kpis">
+      <div class="k"><div class="l">総プレイ時間</div><div class="v" id="kSec"></div><div class="s" id="kSecS"></div></div>
+      <div class="k"><div class="l">遊んだ人の数</div><div class="v" id="kPl"></div><div class="s" id="kPlS"></div></div>
+      <div class="k"><div class="l">総対局数</div><div class="v" id="kG"></div><div class="s" id="kGS"></div></div>
+      <div class="k"><div class="l">登録アカウント数</div><div class="v" id="kAcc"></div><div class="s" id="kAccS"></div></div>
+      <div class="k"><div class="l">サイトを開いた人</div><div class="v" id="kV"></div><div class="s" id="kVS"></div></div>
+      <div class="k"><div class="l">ランキングに載った人</div><div class="v" id="kRk"></div><div class="s">記録を始める前の分も含む</div></div>
+    </div>
+    <h2>モード別の対局数</h2>
+    <div class="modes" id="modes"></div>
+    <h2>日ごと（日本時間）</h2>
+    <div class="wrapT"><table><thead><tr><th>日付</th><th>プレイ時間</th><th>遊んだ人</th><th>対局</th><th>開いた人</th><th>新規登録</th></tr></thead><tbody id="days"></tbody></table></div>
+    <p class="note" id="note"></p>
+  </main>
+</div>
+<script>
+const RELAY='https://bocch.9zwb7cg864.workers.dev/';
+const FS='https://firestore.googleapis.com/v1/projects/bocch-7072d/databases/(default)/documents:runAggregationQuery?key=AIzaSyDKnPBLV0t4wid2mwtrT-mVc39jLnoQgXY';
+const $=id=>document.getElementById(id);
+const fmt=n=>(n||0).toLocaleString('ja-JP');
+const hm=s=>{s=s||0;const h=Math.floor(s/3600),m=Math.round(s%3600/60);return h?h.toLocaleString('ja-JP')+'<small>時間</small>'+m+'<small>分</small>':m+'<small>分</small>'};
+const MODE={net:'オンライン（人）',shadow:'オンライン（影の相手）',local:'1台で2人',cpu1:'CPU やさしい',cpu2:'CPU ふつう',cpu3:'CPU つよい',cpu4:'CPU 最強'};
+let PW='';try{PW=sessionStorage.getItem('bocch-stats-pw')||''}catch(e){}
+
+async function load(){
+  const r=await fetch(RELAY+'bocch-v1-stats/view',{headers:{'X-Pass':PW},cache:'no-store'});
+  if(r.status===401)throw 'pw';if(!r.ok)throw 'net';const j=await r.json();
+  const t=j.tot||{},days=j.days||{},keys=Object.keys(days).sort().reverse(),today=keys[0]&&days[keys[0]]||{};
+  $('kSec').innerHTML=hm(t.sec);$('kSecS').textContent='今日 '+Math.round((today.sec||0)/60)+'分・1人あたり '+(t.players?Math.round(t.sec/t.players/60):0)+'分';
+  $('kPl').innerHTML=fmt(t.players)+'<small>人</small>';$('kPlS').textContent='今日 '+fmt(today.players)+'人（端末ごとに数える）';
+  $('kG').innerHTML=fmt(t.games)+'<small>局</small>';$('kGS').textContent='今日 '+fmt(today.games)+'局';
+  $('kV').innerHTML=fmt(t.visitors)+'<small>人</small>';$('kVS').textContent='今日 '+fmt(today.visitors)+'人';
+  $('kAcc').innerHTML='…';$('kAccS').textContent='';
+  const ms=Object.entries(j.modes||{}).sort((a,b)=>b[1]-a[1]);$('modes').innerHTML=ms.length?ms.map(([k,v])=>'<span>'+(MODE[k]||k)+'<b>'+fmt(v)+'</b></span>').join(''):'<span>まだありません</span>';
+  const mx=Math.max(1,...keys.map(k=>days[k].sec||0));
+  $('days').innerHTML=keys.slice(0,45).map(k=>{const d=days[k];return '<tr><td>'+k.slice(5).replace('-','/')+'</td><td>'+Math.round((d.sec||0)/60)+'分<span class="bar" style="width:'+Math.round(60*(d.sec||0)/mx)+'px"></span></td><td>'+fmt(d.players)+'</td><td>'+fmt(d.games)+'</td><td>'+fmt(d.visitors)+'</td><td>'+fmt(d.signups)+'</td></tr>'}).join('')||'<tr><td colspan="6">まだ記録がありません</td></tr>';
+  const first=keys[keys.length-1];
+  $('note').innerHTML='集計の開始：'+(first||'—')+'。それより前のプレイ時間・対局数・人数は記録されていません。<br>人数は端末（ブラウザ）ごとに数えるので、同じ人がスマホとパソコンで遊ぶと2人になります。オンライン対戦は1局を1回だけ数えます。<br>最終更新：'+new Date(j.now).toLocaleString('ja-JP');
+  // 登録アカウント：ログインを確認できた数（集計開始以後）と、名前を付けたアカウント（過去分も含む）
+  let named=null;try{const fr=await fetch(FS,{method:'POST',body:JSON.stringify({structuredAggregationQuery:{structuredQuery:{from:[{collectionId:'names'}]},aggregations:[{alias:'n',count:{}}]}})});
+    if(fr.ok){const a=await fr.json();named=+(a[0]&&a[0].result&&a[0].result.aggregateFields.n.integerValue)}}catch(e){}
+  $('kAcc').innerHTML=fmt(Math.max(t.accounts||0,named||0))+'<small>件</small>';
+  $('kAccS').textContent='ログイン確認 '+fmt(t.accounts)+'件'+(named!=null?'・名前付き '+fmt(named)+'件':'')+'・新規 '+fmt(t.signups)+'件';
+  // ランキングに載った人（記録前の分も含む）
+  try{const k=await (await fetch(RELAY+'bocch-v1-bots/kv',{cache:'no-store'})).json();$('kRk').innerHTML=fmt(Object.entries(k).filter(([n,v])=>n.startsWith('p:')&&v!==100).length)+'<small>人</small>'}catch(e){$('kRk').textContent='—'}
+}
+async function unlock(){$('err').textContent='確かめています…';$('go').disabled=true;
+  try{await load();try{sessionStorage.setItem('bocch-stats-pw',PW)}catch(e){}$('lock').hidden=true;$('main').hidden=false;$('err').textContent=''}
+  catch(e){$('err').textContent=e==='pw'?'パスワードが違います':'読み込めませんでした。少し待ってからもう一度';PW='';try{sessionStorage.removeItem('bocch-stats-pw')}catch(x){}}
+  $('go').disabled=false}
+$('lock').addEventListener('submit',e=>{e.preventDefault();PW=$('pw').value;unlock()});
+$('reload').addEventListener('click',()=>load().catch(()=>{}));
+$('out').addEventListener('click',()=>{PW='';try{sessionStorage.removeItem('bocch-stats-pw')}catch(e){}$('main').hidden=true;$('lock').hidden=false;$('pw').value=''});
+if(PW)unlock();
+</script>
+</body>
+</html>
