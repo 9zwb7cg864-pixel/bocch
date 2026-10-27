@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var q=mp(new URLSearchParams(location.search).get('lang'));if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));var n=mp((navigator.languages&&navigator.languages[0])||navigator.language);L=q||s||n||'en'}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=4"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var q=mp(new URLSearchParams(location.search).get('lang'));if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));var n=mp((navigator.languages&&navigator.languages[0])||navigator.language);L=q||s||n||'en'}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=5"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -635,7 +635,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
     <button id="frOpp" hidden>＋フレンド申請</button>
   </div>
   <div class="row" id="reviewRow" hidden><button id="reviewNow">この対局を感想戦 ›</button></div>
-  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label></div>
+  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 駒音</label></div>
   <div class="ad-slot ad-over" data-ad="over" hidden aria-label="広告"></div>
 </section>
 
@@ -881,10 +881,24 @@ function nextState(st,m){
     else if(reps[k]>=3)over={win:0,why:'同じ局面が3回'};}
   return {b,turn,last:m,over,reps,ply:(st.ply||0)+1,log:[...(st.log||[]),m]}
 }
+/* 駒音：石が動くたびに、録音した4つの音からランダムで1つ鳴らす（同じ音は続けない） */
+const KOMA={ctx:null,buf:[],on:true,last:0,prev:-1,loading:false};
+try{KOMA.on=localStorage.getItem('bocch-koma')!=='0'}catch(e){}
+function komaLoad(){if(KOMA.loading)return;KOMA.loading=true;const AC=window.AudioContext||window.webkitAudioContext;
+  if(AC){try{KOMA.ctx=new AC()}catch(e){KOMA.ctx=null}}
+  [1,2,3,4].forEach(i=>{const url='sounds/koma'+i+'.mp3';
+    if(KOMA.ctx)fetch(url).then(r=>r.arrayBuffer()).then(a=>new Promise((ok,ng)=>KOMA.ctx.decodeAudioData(a,ok,ng))).then(b=>KOMA.buf.push(b)).catch(()=>{});
+    else{try{const a=new Audio(url);a.preload='auto';KOMA.buf.push(a)}catch(e){}}})}
+function komaUnlock(){komaLoad();if(KOMA.ctx&&KOMA.ctx.state==='suspended')KOMA.ctx.resume().catch(()=>{})}
+['pointerdown','touchstart','keydown'].forEach(ev=>addEventListener(ev,komaUnlock,{passive:true}));
+function komaPlay(force){if((!KOMA.on&&!force)||document.hidden)return;const now=performance.now();if(now-KOMA.last<70)return;KOMA.last=now;komaLoad();const n=KOMA.buf.length;if(!n)return;
+  let k=Math.random()*n|0;if(n>1&&k===KOMA.prev)k=(k+1+(Math.random()*(n-1)|0))%n;KOMA.prev=k;const b=KOMA.buf[k];
+  try{if(KOMA.ctx){if(KOMA.ctx.state==='suspended')KOMA.ctx.resume().catch(()=>{});const src=KOMA.ctx.createBufferSource(),g=KOMA.ctx.createGain();src.buffer=b;g.gain.value=0.9;src.connect(g);g.connect(KOMA.ctx.destination);src.start()}
+    else{const a=b.cloneNode();a.volume=0.9;a.play().catch(()=>{})}}catch(e){}}
 function doMove(m){
   if(S.mode==='net'){netMove(m);return}
   S.hist.push({b:S.b,turn:S.turn,last:S.last,reps:{...S.reps},ply:S.ply});
-  Object.assign(S,nextState(S,m));S.sel=-1;render();
+  Object.assign(S,nextState(S,m));S.sel=-1;render();komaPlay();
   kick();
 }
 
@@ -1045,7 +1059,7 @@ function reduce(m){
   if(m.t==='move'){
     if(m.g!==NET.game||S.over||colorOf(m.from)!==S.turn||m.ply!==S.ply||!Array.isArray(m.m))return;
     const mv=[m.m[0]|0,m.m[1]|0];if(S.b[mv[0]]!==S.turn||!movesFrom(S.b,mv[0]).some(x=>x[1]===mv[1]))return;
-    Object.assign(S,nextState(S,mv));S.sel=-1;if(m.from===NET.me)NET.sending=false;return}
+    Object.assign(S,nextState(S,mv));S.sel=-1;komaPlay();if(m.from===NET.me)NET.sending=false;return}
   if(m.t==='resign'){const c=colorOf(m.from);if(m.g===NET.game&&!S.over&&c){S.over={win:3-c,why:(m.from===NET.me?'あなた':'相手')+'が投了'}}return}
   if(m.t==='rematch'){ // 「もう一局」は両方が押したら始まる
     if(m.g===NET.game+1&&S.over&&colorOf(m.from)){NET.want=NET.want||{};NET.want[m.from]=m.g;
@@ -1124,6 +1138,7 @@ $('undo').addEventListener('click',()=>{
   while(steps--&&S.hist.length){const h=S.hist.pop();S.b=h.b;S.turn=h.turn;S.last=h.last;S.reps=h.reps;S.ply=h.ply}
   S.over=null;S.sel=-1;S.log=(S.log||[]).slice(0,S.ply||0);KICK='';render()});
 $('showNum').addEventListener('change',render);
+$('komaOn').checked=KOMA.on;$('komaOn').addEventListener('change',e=>{KOMA.on=e.target.checked;try{localStorage.setItem('bocch-koma',KOMA.on?'1':'0')}catch(_){}if(KOMA.on){komaUnlock();setTimeout(()=>komaPlay(true),120)}});
 try{localStorage.removeItem('bocch-skin');localStorage.removeItem('bocch-hibinum')}catch(e){} // 廃止したスキンの設定を消す
 $('create').addEventListener('click',createRoom);
 $('join').addEventListener('click',()=>joinRoom($('codeIn').value));
