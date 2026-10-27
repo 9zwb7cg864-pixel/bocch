@@ -328,6 +328,9 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .ai-bub::after{content:"";position:absolute;left:var(--tx,50%);margin-left:-7px;border:7px solid transparent}
 .ai-bub.up::after{top:100%;border-top-color:#f6f0e2}.ai-bub.down::after{bottom:100%;border-bottom-color:#f6f0e2}
 .rev-nav button{min-width:84px;padding:12px 0;font-size:17px;letter-spacing:0}
+/* 連打してもダブルタップで拡大されないように（ピンチ拡大はできる） */
+html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
+.rev-nav button{min-width:96px;min-height:52px;font-size:19px}
 .rev-ply{min-width:5.5em;text-align:center;font-size:13px;color:var(--sub);font-variant-numeric:tabular-nums}
 .rev-list{display:flex;flex-wrap:wrap;gap:4px;margin:14px 0 0;font-size:12.5px;font-variant-numeric:tabular-nums}
 .rev-list button{min-height:32px;padding:4px 8px;font-size:12.5px;letter-spacing:.02em;border-color:var(--line)}
@@ -890,15 +893,15 @@ function komaLoad(){if(KOMA.loading)return;KOMA.loading=true;const AC=window.Aud
     if(KOMA.ctx)fetch(url).then(r=>r.arrayBuffer()).then(a=>new Promise((ok,ng)=>KOMA.ctx.decodeAudioData(a,ok,ng))).then(b=>KOMA.buf.push(b)).catch(()=>{});
     else{try{const a=new Audio(url);a.preload='auto';KOMA.buf.push(a)}catch(e){}}})}
 function komaUnlock(){komaLoad();if(KOMA.ctx&&KOMA.ctx.state==='suspended')KOMA.ctx.resume().catch(()=>{})}
-['pointerdown','touchstart','keydown'].forEach(ev=>addEventListener(ev,komaUnlock,{passive:true}));
+['pointerdown','touchstart','touchend','click','keydown'].forEach(ev=>addEventListener(ev,komaUnlock,{passive:true,capture:true}));
 function komaPlay(force){if((!KOMA.on&&!force)||document.hidden)return;const now=performance.now();if(now-KOMA.last<70)return;KOMA.last=now;komaLoad();const n=KOMA.buf.length;if(!n)return;
   let k=Math.random()*n|0;if(n>1&&k===KOMA.prev)k=(k+1+(Math.random()*(n-1)|0))%n;KOMA.prev=k;const b=KOMA.buf[k];
-  try{if(KOMA.ctx){if(KOMA.ctx.state==='suspended')KOMA.ctx.resume().catch(()=>{});const src=KOMA.ctx.createBufferSource(),g=KOMA.ctx.createGain();src.buffer=b;g.gain.value=0.15;src.connect(g);g.connect(KOMA.ctx.destination);src.start()}
-    else{const a=b.cloneNode();a.volume=0.15;a.play().catch(()=>{})}}catch(e){}}
+  try{if(KOMA.ctx){if(KOMA.ctx.state==='suspended')KOMA.ctx.resume().catch(()=>{});const src=KOMA.ctx.createBufferSource(),g=KOMA.ctx.createGain();src.buffer=b;g.gain.value=0.22;src.connect(g);g.connect(KOMA.ctx.destination);src.start()}
+    else{const a=b.cloneNode();a.volume=0.22;a.play().catch(()=>{})}}catch(e){}}
 function doMove(m){
   if(S.mode==='net'){netMove(m);return}
   S.hist.push({b:S.b,turn:S.turn,last:S.last,reps:{...S.reps},ply:S.ply});
-  Object.assign(S,nextState(S,m));S.sel=-1;render();komaPlay();
+  Object.assign(S,nextState(S,m));S.sel=-1;render();
   kick();
 }
 
@@ -1059,7 +1062,7 @@ function reduce(m){
   if(m.t==='move'){
     if(m.g!==NET.game||S.over||colorOf(m.from)!==S.turn||m.ply!==S.ply||!Array.isArray(m.m))return;
     const mv=[m.m[0]|0,m.m[1]|0];if(S.b[mv[0]]!==S.turn||!movesFrom(S.b,mv[0]).some(x=>x[1]===mv[1]))return;
-    Object.assign(S,nextState(S,mv));S.sel=-1;komaPlay();if(m.from===NET.me)NET.sending=false;return}
+    Object.assign(S,nextState(S,mv));S.sel=-1;if(m.from===NET.me)NET.sending=false;return}
   if(m.t==='resign'){const c=colorOf(m.from);if(m.g===NET.game&&!S.over&&c){S.over={win:3-c,why:(m.from===NET.me?'あなた':'相手')+'が投了'}}return}
   if(m.t==='rematch'){ // 「もう一局」は両方が押したら始まる
     if(m.g===NET.game+1&&S.over&&colorOf(m.from)){NET.want=NET.want||{};NET.want[m.from]=m.g;
@@ -2277,6 +2280,15 @@ const _renderV=render;render=function(){_renderV();
   if(watching&&n>0){$('wPly').textContent=(VIEW.i==null?n:VIEW.i)+' / '+n+'手';$('wNext').disabled=VIEW.i==null;$('wPrev').disabled=VIEW.i===0;$('wLive').hidden=VIEW.i==null}
   if(VIEW.i!=null)drawView();else $('board').classList.remove('past');
   try{talkWatch()}catch(e){console.error(e)}};
+/* 駒音：盤に並んでいる石が変わったら鳴らす（指す・戻す・進む・感想戦・観戦、どこでも）。
+   画面を開いた直後や部屋に入った直後（まとめて読み込む間）は鳴らさない */
+const KW={};
+function boardSig(id){const g=$(id);if(!g)return '';let s='';for(const c of g.children){if(!c.classList||!c.classList.contains('cell'))continue;const st=c.firstElementChild;s+=st?(st.classList.contains('b')?'b':'w'):'.'}return s}
+function komaWatch(id,ctx,visible){if(!visible){if(KW[id])KW[id].ctx=null;return}const sig=boardSig(id),now=performance.now(),o=KW[id];
+  if(!o||o.ctx!==ctx){KW[id]={ctx,sig,at:now};return}
+  if(o.sig!==sig){o.sig=sig;if(now-o.at>1200)komaPlay()}}
+{const _rk=render;render=function(){_rk();try{komaWatch('grid',[S.mode,NET.code||'',NET.game||0,S.study?1:0].join('|'),CUR==='game')}catch(e){}}}
+{const _rr=renderReview;renderReview=function(){_rr();try{komaWatch('rgrid',REV.g?REV.g.id||REV.g.t:'',CUR==='review')}catch(e){}}}
 render();
 // ホーム画面アプリ用（つながらないときもCPU戦などが開けるように）
 if('serviceWorker' in navigator&&location.protocol==='https:')addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})});
