@@ -893,8 +893,8 @@ function komaUnlock(){komaLoad();if(KOMA.ctx&&KOMA.ctx.state==='suspended')KOMA.
 ['pointerdown','touchstart','keydown'].forEach(ev=>addEventListener(ev,komaUnlock,{passive:true}));
 function komaPlay(force){if((!KOMA.on&&!force)||document.hidden)return;const now=performance.now();if(now-KOMA.last<70)return;KOMA.last=now;komaLoad();const n=KOMA.buf.length;if(!n)return;
   let k=Math.random()*n|0;if(n>1&&k===KOMA.prev)k=(k+1+(Math.random()*(n-1)|0))%n;KOMA.prev=k;const b=KOMA.buf[k];
-  try{if(KOMA.ctx){if(KOMA.ctx.state==='suspended')KOMA.ctx.resume().catch(()=>{});const src=KOMA.ctx.createBufferSource(),g=KOMA.ctx.createGain();src.buffer=b;g.gain.value=0.3;src.connect(g);g.connect(KOMA.ctx.destination);src.start()}
-    else{const a=b.cloneNode();a.volume=0.3;a.play().catch(()=>{})}}catch(e){}}
+  try{if(KOMA.ctx){if(KOMA.ctx.state==='suspended')KOMA.ctx.resume().catch(()=>{});const src=KOMA.ctx.createBufferSource(),g=KOMA.ctx.createGain();src.buffer=b;g.gain.value=0.15;src.connect(g);g.connect(KOMA.ctx.destination);src.start()}
+    else{const a=b.cloneNode();a.volume=0.15;a.play().catch(()=>{})}}catch(e){}}
 function doMove(m){
   if(S.mode==='net'){netMove(m);return}
   S.hist.push({b:S.b,turn:S.turn,last:S.last,reps:{...S.reps},ply:S.ply});
