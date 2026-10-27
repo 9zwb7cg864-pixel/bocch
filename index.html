@@ -420,6 +420,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .rk-list li .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rk-list li .v{font-family:"Shippori Mincho B1","Hiragino Mincho ProN",serif;color:var(--gold)}
 .rk-list li .crown{width:20px;height:20px;vertical-align:-4px;margin-right:6px}.rk-list li.top1 .nm{color:#f2d78f;font-weight:700}
+.rk-list li.gap{justify-content:center;color:var(--sub);padding:2px;border-bottom:0}
 .rk-list li.me{background:rgba(201,169,110,.10)}
 
 /* ホームのルール */
@@ -556,7 +557,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 <!-- 感想戦 -->
 <section class="scr" data-scr="rank" hidden>
   <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>ランキング</h2><span class="sp"></span></div>
-  <p class="note rk-note">bocchを開いた人のレートが、高い順に並びます。レートはオンライン対戦とCPU戦（1手戻しなし）で変わります。月が変わるときに1位だった人には「月間一位」のバッジが付きます。</p>
+  <p class="note rk-note">bocchを開いた人のレートの、上位10人と自分の順位です。レートはオンライン対戦とCPU戦（1手戻しなし）で変わります。月が変わるときに1位だった人には「月間一位」のバッジが付きます。</p>
   <p class="rk-prev" id="rkPrev"></p>
   <p class="note rk-note" id="rkNote"></p>
   <ol class="rk-list" id="rkList"></ol>
@@ -2549,8 +2550,9 @@ async function rankOpen(){$('rkNote').textContent='読み込んでいます…';
   rankRender()}
 function rankRender(){const d=RK.data||{},me=myName(),box=$('rkList');box.innerHTML='';
   let rows=Object.entries(d).filter(([k,v])=>k.startsWith('p:')&&v>100).map(([k,v])=>[k.slice(2),v]);for(const nm of BOT_NAMES)if(Number.isFinite(d[nm]))rows.push([nm,d[nm]]);rows.sort((a,b)=>b[1]-a[1]);
-  rows=rows.slice(0,100);$('rkEmpty').hidden=!!rows.length;
-  rows.forEach(([nm,v],i)=>{const li=document.createElement('li');if(nm===me)li.className='me';li.innerHTML='<span class="n"></span><span class="nm"></span><span class="v"></span>';li.querySelector('.n').textContent=i+1;li.querySelector('.nm').textContent=nm;if(i===0){li.classList.add('top1');li.querySelector('.nm').insertAdjacentHTML('afterbegin','<svg class="crown" viewBox="0 0 24 24" aria-label="1位"><path d="M3 18 L5 8 L9.5 12 L12 5 L14.5 12 L19 8 L21 18 Z" fill="#e9c46a" stroke="#8a6a3a" stroke-width="1" stroke-linejoin="round"/><circle cx="5" cy="7.5" r="1.4" fill="#d23b2f"/><circle cx="12" cy="4.5" r="1.5" fill="#d23b2f"/><circle cx="19" cy="7.5" r="1.4" fill="#d23b2f"/><rect x="3" y="18" width="18" height="2.4" rx="1" fill="#c9a24e"/></svg>')}li.querySelector('.v').textContent=v;box.append(li)})}
+  $('rkEmpty').hidden=!!rows.length;const myI=rows.findIndex(r=>r[0]===me);
+  const show=rows.slice(0,10).map((r,i)=>[r,i]);if(myI>=10){show.push(null);show.push([rows[myI],myI])}
+  show.forEach(x=>{if(!x){const li=document.createElement('li');li.className='gap';li.textContent='…';box.append(li);return}const [[nm,v],i]=x;const li=document.createElement('li');if(nm===me)li.className='me';li.innerHTML='<span class="n"></span><span class="nm"></span><span class="v"></span>';li.querySelector('.n').textContent=i+1;li.querySelector('.nm').textContent=nm;if(i===0){li.classList.add('top1');li.querySelector('.nm').insertAdjacentHTML('afterbegin','<svg class="crown" viewBox="0 0 24 24" aria-label="1位"><path d="M3 18 L5 8 L9.5 12 L12 5 L14.5 12 L19 8 L21 18 Z" fill="#e9c46a" stroke="#8a6a3a" stroke-width="1" stroke-linejoin="round"/><circle cx="5" cy="7.5" r="1.4" fill="#d23b2f"/><circle cx="12" cy="4.5" r="1.5" fill="#d23b2f"/><circle cx="19" cy="7.5" r="1.4" fill="#d23b2f"/><rect x="3" y="18" width="18" height="2.4" rx="1" fill="#c9a24e"/></svg>')}li.querySelector('.v').textContent=v;box.append(li)})}
 
 /* 月間一位：新しい月に最初に開いた人が、その時点の1位を「先月の1位」としてサーバーに記録する（m:YYYY-MM:名前）。自分が記録されていればバッジ */
 function monKey(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
