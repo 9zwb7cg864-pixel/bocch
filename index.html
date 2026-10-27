@@ -476,6 +476,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 #cboard.shake{animation:cshake .35s}@keyframes cshake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 #cboard.clear{box-shadow:0 0 0 3px var(--win),0 0 30px rgba(127,197,157,.4)}
 
+.ref-frame{display:block;width:100%;height:calc(100dvh - 90px);border:0;background:var(--bg)}
 .rf-body{margin-top:12px}.rf-body section{padding:12px 0;border-bottom:1px solid var(--line)}.rf-body section:last-child{border-bottom:0}
 .rf-steps{margin:6px 0 0;padding-left:20px;font-size:13.5px;color:var(--sub)}.rf-sec{font-size:12px;letter-spacing:.25em;color:var(--gold);margin:14px 0 0}
 .ks-tbl{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;max-width:260px;margin:8px 0}.ks-tbl span{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#1d1a14;border-radius:2px}
@@ -596,7 +597,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
   <div id="csMap">
     <div class="cs-prog"><i id="csBar"></i></div><p class="cs-progt" id="csProgT"></p>
     <div id="csList"></div>
-    <button class="cs-ref" id="csRef">資料 ›<small>止め方・手筋・3手目までの定跡・26,000局のデータ</small></button>
+    <button class="cs-ref" id="csRef">資料 ›<small>勝ち方ガイド：試し盤・定跡を盤で見る・手筋の図・26,000局のデータ</small></button>
   </div>
   <div id="csLv" hidden>
     <div class="cs-dots" id="csDots"></div>
@@ -608,8 +609,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 </section>
 <section class="scr" data-scr="ref" hidden>
   <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>資料</h2><span class="sp"></span></div>
-  <div class="ln-tabs" id="rfTabs" role="tablist"><button data-t="basic">基本</button><button data-t="tac">手筋</button><button data-t="jos">定跡</button><button data-t="data">データ</button></div>
-  <div class="rf-body ln-body" id="rfBody"></div>
+  <iframe id="refFrame" title="資料（勝ち方ガイド）" class="ref-frame" loading="lazy"></iframe>
 </section>
 <section class="scr" data-scr="daily" hidden>
   <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>毎日の1問</h2><span class="sp"></span></div>
@@ -2796,8 +2796,7 @@ $('csRetry').addEventListener('click',()=>{if(CS.c)csLoad()});
 $('csHint').addEventListener('click',()=>{if(CS.c){CS.wrong=Math.max(CS.wrong,1);csMsg('ヒント：'+CS.c.lv[CS.i].hint,'hint')}});
 $('csNext').addEventListener('click',()=>{if(!CS.c)return;if(CS.i<CS.c.lv.length-1){CS.i++;csLoad()}else csMap()});
 $('csBack').addEventListener('click',()=>{if(!$('csLv').hidden){csMap()}else history.back()});
-$('csRef').addEventListener('click',()=>{show('ref');refRender()});
-addEventListener('popstate',()=>{if(CUR==='ref')refRender()});
+$('csRef').addEventListener('click',()=>{const f=$('refFrame');if(!f.src)f.src='guide.html?embed=1';show('ref')});
 
 /* 資料：読むだけのページ（盤なし） */
 const RF={tab:'basic',path:[]};
