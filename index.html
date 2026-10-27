@@ -1346,7 +1346,7 @@ function armWait(){clearTimeout(NET.waitT);NET.waitT=setTimeout(()=>{if(S.mode==
    部屋の記録に普通の参加者として join・move・rematch を流すので、時計・チャット・再戦・レート計算はオンライン対戦のまま動く */
 const SHADOW={bot:null,timer:null,key:'',rates:null};
 // ふつうのときに名乗る名前（それぞれ自分のレートを持ち、勝ち負けで増減する）。やさしいのときは「名無しの石」のまま
-const BOT_NAMES=['サタン二世','ピコまる','パワーボマー','どら焼き三太郎','ノルマンディー上陸作戦','防人','屯田兵受かりました','Kebin67','beckman','tompson','ketty','婦真理','ネギトロ','がちぼっち','ぷらごみ募集','このげーむおもろい','あらびっくり','さいばいまん','これ毒かも！','私に嘘はつかないでえ','藤井壮太','大','The sun','tiny rion','Mac','死して尚','歌人チャンネル','明日は我が身','迷惑メール'];
+const BOT_NAMES=['サタン二世','ピコまる','パワーボマー','どら焼き三太郎','ノルマンディー上陸作戦','防人','屯田兵受かりました','Kebin67','beckman','tompson','ketty','婦真理','ネギトロ','がちぼっち','ぷらごみ募集','このげーむおもろい','あらびっくり','さいばいまん','これ毒かも！','私に嘘はつかないでえ','藤井壮太','大','The sun','tiny rion','Mac','死して尚','歌人チャンネル','明日は我が身','迷惑メール','ルーキー１２３４'];
 const BOTS_KV=RELAY+'bocch-v1-bots/kv';
 async function botRates(){try{const r=await fetch(BOTS_KV,{cache:'no-store'});if(!r.ok)return null;const j=await r.json();return j&&typeof j==='object'?j:null}catch(e){return null}}
 function botSaveRate(name,v){try{fetch(BOTS_KV,{method:'POST',body:JSON.stringify({k:name,v:Math.round(v)})}).catch(()=>{})}catch(e){}}
