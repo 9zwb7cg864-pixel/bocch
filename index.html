@@ -2176,7 +2176,7 @@ async function acctPull(){if(!FB.user||!FB.user.emailVerified)return;FB.syncing=
     else{try{FR.loaded=true}catch(e){}await ref.set(profData())}
     try{frStart()}catch(e){}
     if(PROF.name){try{const ok=await claimName(PROF.name);if(!ok){$('nameMsg').textContent='「'+PROF.name+'」はほかの人が使っていたので、名前を付け直してください。';PROF.name='';_saveProfLocal();ref.set(profData()).catch(()=>{})}}catch(e){}}
-    $('acctSync').textContent='名前・レート・戦績をアカウントに保存しています';if(typeof renderProf==='function')renderProf();render()}
+    $('acctSync').textContent='名前・レート・戦績をアカウントに保存しています';if(typeof renderProf==='function')renderProf();render();try{rankPost()}catch(e){}}
   catch(e){$('acctSync').textContent='読み込めませんでした（'+(e.code||e.message)+'）'}
   FB.syncing=false}
 function acctPush(){if(!FB.ready||!FB.user||!FB.user.emailVerified||FB.syncing)return;clearTimeout(FB.saveT);FB.saveT=setTimeout(()=>{FB.db.collection('users').doc(FB.user.uid).set(profData()).catch(()=>{})},800)}
@@ -2542,7 +2542,7 @@ function rankRender(){const d=RK.data||{},me=myName(),box=$('rkList');box.innerH
   rows=rows.slice(0,100);$('rkEmpty').hidden=!!rows.length;
   rows.forEach(([nm,v],i)=>{const li=document.createElement('li');if(nm===me)li.className='me';li.innerHTML='<span class="n"></span><span class="nm"></span><span class="v"></span>';li.querySelector('.n').textContent=i+1;li.querySelector('.nm').textContent=nm;li.querySelector('.v').textContent=v;box.append(li)})}
 $('rankBtn').addEventListener('click',rankOpen);
-setTimeout(()=>{try{rankPost()}catch(e){}},4000);
+setTimeout(()=>{try{if(typeof FB!=='undefined'&&(FB.syncing||(FB.user&&FB.user.emailVerified&&!PROF.name)))return;rankPost()}catch(e){}},4000);
 addEventListener('popstate',()=>{if(CUR==='rank')rankOpen()});
 
 /* ===== 学ぶ：研究の盤＋ルール・勝ち方ガイド。項目を押すと盤にその形が並び、そこから自由に動かして評価値を見られる ===== */
