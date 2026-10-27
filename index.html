@@ -888,16 +888,18 @@ function nextState(st,m){
 const KOMA={ctx:null,buf:[],on:true,last:0,prev:-1,loading:false};
 try{KOMA.on=localStorage.getItem('bocch-koma')!=='0'}catch(e){}
 function komaLoad(){if(KOMA.loading)return;KOMA.loading=true;const AC=window.AudioContext||window.webkitAudioContext;
-  if(AC){try{KOMA.ctx=new AC()}catch(e){KOMA.ctx=null}}
+  if(AC){try{KOMA.ctx=new AC();if(KOMA.ctx.state==='running')komaSleep()}catch(e){KOMA.ctx=null}}
   [2,4].forEach(i=>{const url='sounds/koma'+i+'.mp3';
     if(KOMA.ctx)fetch(url).then(r=>r.arrayBuffer()).then(a=>new Promise((ok,ng)=>KOMA.ctx.decodeAudioData(a,ok,ng))).then(b=>KOMA.buf.push(b)).catch(()=>{});
     else{try{const a=new Audio(url);a.preload='auto';KOMA.buf.push(a)}catch(e){}}})}
-function komaUnlock(){komaLoad();if(KOMA.ctx&&KOMA.ctx.state==='suspended')KOMA.ctx.resume().catch(()=>{})}
+function komaSleep(){clearTimeout(KOMA.st);KOMA.st=setTimeout(()=>{if(KOMA.ctx&&KOMA.ctx.state==='running')KOMA.ctx.suspend().catch(()=>{})},1500)}
+// 最初に画面に触れたときに一度だけ音を使えるようにし、すぐ止めておく（以後は鳴らすときだけ動かす）
+function komaUnlock(){komaLoad();if(KOMA.unlocked||!KOMA.ctx)return;KOMA.ctx.resume().then(()=>{KOMA.unlocked=true;komaSleep()}).catch(()=>{})}
 ['pointerdown','touchstart','touchend','click','keydown'].forEach(ev=>addEventListener(ev,komaUnlock,{passive:true,capture:true}));
 try{komaLoad()}catch(e){} // ページを開いた時点で音を読み込んでおく（鳴らすのは画面に触れてから）
 function komaPlay(force){if((!KOMA.on&&!force)||document.hidden)return;const now=performance.now();if(now-KOMA.last<70)return;KOMA.last=now;komaLoad();const n=KOMA.buf.length;if(!n)return;
   let k=Math.random()*n|0;if(n>2&&k===KOMA.prev)k=(k+1+(Math.random()*(n-1)|0))%n;KOMA.prev=k;const b=KOMA.buf[k];
-  try{if(KOMA.ctx){if(KOMA.ctx.state==='suspended')KOMA.ctx.resume().catch(()=>{});const src=KOMA.ctx.createBufferSource(),g=KOMA.ctx.createGain();src.buffer=b;g.gain.value=0.025;src.connect(g);g.connect(KOMA.ctx.destination);src.start()}
+  try{if(KOMA.ctx){const go=()=>{const src=KOMA.ctx.createBufferSource(),g=KOMA.ctx.createGain();src.buffer=b;g.gain.value=0.025;src.connect(g);g.connect(KOMA.ctx.destination);src.start();komaSleep()};if(KOMA.ctx.state==='running')go();else KOMA.ctx.resume().then(go).catch(()=>{})}
     else{const a=b.cloneNode();a.volume=0.025;a.play().catch(()=>{})}}catch(e){}}
 function doMove(m){
   if(S.mode==='net'){netMove(m);return}
@@ -936,6 +938,8 @@ function onCell(i){
   if(S.sel>=0){const m=movesFrom(S.b,S.sel).find(x=>x[1]===i);if(m){doMove(m);return}}
   if(S.b[i]===S.turn){S.sel=S.sel===i?-1:i;render()}else if(S.sel>=0){S.sel=-1;render()}
 }
+/* 盤のマス：変わったところだけ書き換える（毎回36マスを作り直さない） */
+function setCell(el,cls,html,aria){if(el.className!==cls)el.className=cls;if(el._h!==html){el.innerHTML=html;el._h=html}if(aria!=null&&el._a!==aria){el.setAttribute('aria-label',aria);el._a=aria}}
 const NAME={1:'黒',2:'白'};
 function render(){
   const b=S.b,targets=S.sel>=0?movesFrom(b,S.sel).map(m=>m[1]):[];
@@ -944,9 +948,8 @@ function render(){
   for(let i=0;i<N*N;i++){const el=$('c'+i),v=b[i],r=i/N|0,d=v?nbCount(b,i):0;
     let cls='cell';if(r===0||r===N-1)cls+=' goal';if(S.last&&(S.last[0]===i||S.last[1]===i))cls+=' last';
     if(canAct&&v===S.turn)cls+=' mine';if(i===S.sel)cls+=' sel';if(nbs.has(i))cls+=' nb';
-    if(targets.includes(i))cls+=' target'+(r===goalRow(S.turn)?' fin':'');el.className=cls;
-    el.setAttribute('aria-label',(v?NAME[v]+'の石、射程'+d:'空き')+'、'+(N-r)+'段'+(i%N+1)+'列');
-    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${rankCls(rk[v])}"><span>${d}</span></div>`:'';}
+    if(targets.includes(i))cls+=' target'+(r===goalRow(S.turn)?' fin':'');
+    setCell(el,cls,v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${rankCls(rk[v])}"><span>${d}</span></div>`:'',(v?NAME[v]+'の石、射程'+d:'空き')+'、'+(N-r)+'段'+(i%N+1)+'列');}
   const net=S.mode==='net';
   $('board').classList.toggle('flip',net?colorOf(NET.me)===2:(!!S.mode&&hcOf()===2));
   $('board').classList.toggle('hideNum',!$('showNum').checked);
@@ -1465,7 +1468,7 @@ function fxPillar(g,i,side,p,col){const {x,P,k,H}=g,Q=P[i],up=side===1?(P[0].y<P
 function fxLeaves(g,p,n,cols,slow){const {x,W,H,s}=g;for(let i=0;i<n;i++){const st=fxR(i)*0.35,fp=fxW(p,st,st+(slow?0.65:0.5));if(fp<=0||fp>=1)continue;
   const px=fxR(i+11)*W+Math.sin(fp*6+i)*14*s,py=-10+fp*(H+20);x.save();x.globalAlpha=(1-fxW(fp,0.75,1))*0.9;x.translate(px,py);x.rotate(fp*(slow?3:7)+i);x.fillStyle=cols[i%cols.length];
   if(slow){x.beginPath();x.ellipse(0,0,5*s,2.6*s,0,0,7);x.fill()}else x.fillRect(-3*s,-3*s,6*s,6*s);x.restore()}}
-function fxRipple(g,i,p,col,col1,big){big=big||1;const {x,P,k,W}=g,Q=P[i],maxR=W*0.62*big,RN=big>1?7:5;x.save();x.shadowColor='rgba(70,45,10,.55)';x.shadowBlur=5*k;
+function fxRipple(g,i,p,col,col1,big){big=big||1;const {x,P,k,W}=g,Q=P[i],maxR=W*0.62*big,RN=big>1?7:5;x.save();
   const c=1-fxW(p,0,0.35),GR=40*k*big;if(c>0){const gl=x.createRadialGradient(Q.x,Q.y,0,Q.x,Q.y,GR);gl.addColorStop(0,col);gl.addColorStop(1,'rgba(0,0,0,0)');x.globalAlpha=c*0.7;x.fillStyle=gl;x.beginPath();x.arc(Q.x,Q.y,GR,0,7);x.fill()}
   for(let n=0;n<RN;n++){const rp=fxW(p,n*(big>1?0.08:0.11),0.62+n*(big>1?0.06:0.09));if(rp<=0||rp>=1)continue;const e=1-Math.pow(1-rp,2),r=(22*k)+e*maxR;
     x.globalAlpha=Math.pow(1-rp,0.6);x.strokeStyle=n%2?col1:col;x.lineWidth=Math.max(1.5,(5-n*0.6)*k*big*(1-rp*0.5));x.beginPath();x.arc(Q.x,Q.y,r,0,7);x.stroke();
@@ -1643,8 +1646,8 @@ function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n
   const OVER=PV?(PV.k>0&&revWon(p.b,3-p.turn)):(i>=n&&g.win);const TG=REV.sel>=0?movesFrom(p.b,REV.sel).map(m=>m[1]):[];
   for(let k=0;k<36;k++){const el=$('r'+k),v=p.b[k],r=k/6|0,d=v?nbCount(p.b,k):0;let cls='cell';
     if(r===0||r===5)cls+=' goal';if(last&&(last[0]===k||last[1]===k))cls+=(PV&&PV.k>0?' pvlast':' last');
-    if(nextM&&nextM[0]===k)cls+=' bestf';if(nextM&&nextM[1]===k)cls+=' bestt';if(!OVER&&v===p.turn)cls+=' mine';if(k===REV.sel)cls+=' sel';if(TG.includes(k))cls+=' target'+((p.turn===1?r===0:r===5)?' fin':'');el.className=cls;
-    el.innerHTML=v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${v===g.me?rankCls(rankOf(myRate())):''}"><span>${d}</span></div>`:''}
+    if(nextM&&nextM[0]===k)cls+=' bestf';if(nextM&&nextM[1]===k)cls+=' bestt';if(!OVER&&v===p.turn)cls+=' mine';if(k===REV.sel)cls+=' sel';if(TG.includes(k))cls+=' target'+((p.turn===1?r===0:r===5)?' fin':'');
+    setCell(el,cls,v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${v===g.me?rankCls(rankOf(myRate())):''}"><span>${d}</span></div>`:'')}
   $('rboard').classList.toggle('flip',flip);$('rboard').classList.toggle('hideNum',!$('showNum').checked);$('rboard').classList.toggle('nolab',!$('showLab').checked);
   [...$('rlabTop').children].forEach((e,k)=>e.textContent=String(flip?6-k:k+1));
   [...$('rlabLeft').children].forEach((e,k)=>e.textContent='abcdef'[flip?5-k:k]);
@@ -2261,8 +2264,8 @@ const VIEW={i:null,game:-1};
 function viewBoard(i){let b=startBoard(),turn=1;for(let k=0;k<i;k++){b=apply(b,S.log[k]);turn=3-turn}return {b,turn,last:i>0?S.log[i-1]:null}}
 function drawView(){const n=(S.log||[]).length,i=VIEW.i,v=viewBoard(i),rk=[0,colorRank(1),colorRank(2)];
   for(let k=0;k<36;k++){const el=$('c'+k),c=v.b[k],r=k/6|0,d=c?nbCount(v.b,k):0;let cls='cell';
-    if(r===0||r===5)cls+=' goal';if(v.last&&(v.last[0]===k||v.last[1]===k))cls+=' last';el.className=cls;
-    el.innerHTML=c?`<div class="stone ${c===1?'b':'w'}${d?'':' zero'}${rankCls(rk[c])}"><span>${d}</span></div>`:''}
+    if(r===0||r===5)cls+=' goal';if(v.last&&(v.last[0]===k||v.last[1]===k))cls+=' last';
+    setCell(el,cls,c?`<div class="stone ${c===1?'b':'w'}${d?'':' zero'}${rankCls(rk[c])}"><span>${d}</span></div>`:'')}
   $('board').classList.add('past');
   $('hint').textContent=i+'手目の局面を見ています（いまは'+n+'手目）';
   // 戻った局面でも、その局面になった1手の解説を出す
