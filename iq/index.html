@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>bocch IQテスト｜この盤面、1手で勝てたらIQ130</title>
+<meta name="description" content="盤面に直接さわって解く、5問のIQテスト。登録なし・すぐ遊べる。あなたの推定 bocch IQ と思考タイプを判定します。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="bocch IQテスト｜この盤面、逆転できたらIQ130">
+<meta property="og:description" content="前に進むと負ける。盤面にさわって解く5問の詰めパズル。あなたの bocch IQ は？">
+<meta property="og:url" content="https://bocchgame.com/iq/">
+<meta property="og:image" content="https://bocchgame.com/og-iq.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="bocch IQテスト｜この盤面、逆転できたらIQ130">
+<meta name="twitter:image" content="https://bocchgame.com/og-iq.jpg">
+<meta name="theme-color" content="#0e1311">
+<link rel="canonical" href="https://bocchgame.com/iq/">
+<link rel="icon" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@700&family=Zen+Kaku+Gothic+New:wght@500;700&display=swap">
+<style>
+/* bocch 本編と同じ配色：漆の黒緑に金の細線、榧の盤、那智黒と蛤の石 */
+:root{
+  --bg:#0e1311;--panel:#131a17;--fg:#ece6d8;--sub:#9a9484;--mute:#6f6a5e;
+  --gold:#c9a96e;--gold-soft:rgba(201,169,110,.28);--gold-line:rgba(201,169,110,.18);
+  --line:rgba(236,230,216,.14);--soft:#18201c;
+  --wood:#d9b878;--wood-line:#5e4220;--wood-edge:#c9a463;
+  --win:#8fbf9a;--lose:#e0846c;--dot:#1d2a25;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+  color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.6;
+  padding:max(10px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.app{max-width:460px;margin:0 auto}
+button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+
+/* 上：ロゴ・進み具合・ミッション */
+.top{display:flex;align-items:center;gap:10px;height:34px}
+.logo{font-family:var(--f-disp);font-size:15px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.logo b{color:var(--gold);font-weight:700}
+.dots{display:flex;gap:6px;margin-left:auto}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--soft);border:1px solid var(--line)}
+.dots i.now{background:var(--gold);border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft)}
+.dots i.g{background:#5fae6e;border-color:#5fae6e}.dots i.y{background:#d8b44a;border-color:#d8b44a}.dots i.r{background:#c8604a;border-color:#c8604a}
+.mission{margin:6px 0 8px;padding:9px 12px;border:1px solid var(--gold-line);border-left:3px solid var(--gold);background:var(--panel);font-weight:700;font-size:15.5px;line-height:1.45}
+.mission small{display:block;font-weight:500;font-size:11.5px;color:var(--gold);letter-spacing:.06em}
+
+/* 盤（本編と同じ描き方） */
+.edge{display:flex;justify-content:space-between;font-size:11px;color:var(--sub);padding:0 4px;height:18px;align-items:center}
+.edge b{color:var(--fg);font-weight:500}
+.board{position:relative;width:100%;padding-bottom:100%;overflow:hidden;background:var(--wood);
+  background-image:repeating-linear-gradient(92deg,rgba(120,82,34,.07) 0 2px,transparent 2px 9px),repeating-linear-gradient(88deg,rgba(255,240,200,.10) 0 1px,transparent 1px 23px);
+  border-radius:4px;box-shadow:0 18px 40px rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,236,190,.35),inset 0 0 0 7px var(--wood-edge),inset 0 0 0 8px rgba(90,60,25,.5)}
+.grid{position:absolute;top:5%;left:5%;right:5%;bottom:5%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));border-top:1.5px solid var(--wood-line);border-left:1.5px solid var(--wood-line)}
+.cell{position:relative;border:0;border-right:1.5px solid var(--wood-line);border-bottom:1.5px solid var(--wood-line);background:transparent;padding:0;margin:0;display:flex;align-items:center;justify-content:center;border-radius:0;cursor:default}
+.cell.goal{background:rgba(110,74,28,.13)}
+.cell.last{background:rgba(29,42,37,.18)}
+.cell.wlast{background:rgba(200,80,60,.22)}
+.stone{width:80%;height:80%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--f-disp);font-weight:700;font-variant-numeric:lining-nums;font-size:clamp(17px,5.4vw,28px);line-height:1;box-shadow:0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3);transition:filter .4s,opacity .4s}
+.stone.b{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%);color:#e4e5e6}
+.stone.w{background:radial-gradient(circle at 34% 28%,#ffffff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c}
+.stone.zero{opacity:.5}
+.mine{cursor:pointer}
+.sel .stone{box-shadow:0 0 0 3px var(--wood),0 0 0 5px var(--gold),0 4px 6px rgba(0,0,0,.38)}
+.target{cursor:pointer}
+.target::after{content:"";position:absolute;width:22%;height:22%;border-radius:50%;background:var(--dot);box-shadow:0 0 0 3px rgba(29,42,37,.25)}
+.target.fin::after{width:84%;height:84%;background:transparent;border:2px solid var(--dot);box-shadow:inset 0 0 0 3px rgba(201,169,110,.6)}
+/* 数字が変わった石：足し算は金、引き算は赤 */
+.up .stone{animation:up .9s ease-out}
+@keyframes up{0%{box-shadow:0 0 0 0 rgba(240,200,110,.95)}60%{box-shadow:0 0 0 9px rgba(240,200,110,0)}100%{box-shadow:0 4px 6px rgba(0,0,0,.38)}}
+.dn .stone{animation:dn .9s ease-out}
+@keyframes dn{0%{box-shadow:0 0 0 0 rgba(220,90,70,.95)}60%{box-shadow:0 0 0 9px rgba(220,90,70,0)}100%{box-shadow:0 4px 6px rgba(0,0,0,.38)}}
+/* ぼっちにされた白：暗く沈み、赤い点線で囲む */
+.lone .stone{filter:brightness(.42) saturate(.4);opacity:1}
+.lone::before{content:"";position:absolute;inset:4%;border-radius:50%;border:2.5px dashed #e0583e;animation:spin 6s linear infinite;z-index:2}
+.lone::after{content:"ぼっち";position:absolute;bottom:-2%;left:50%;transform:translateX(-50%);font-size:clamp(9px,2.4vw,11px);font-weight:700;color:#fff;background:#c8442c;padding:0 5px;border-radius:7px;line-height:1.5;z-index:3;white-space:nowrap}
+@keyframes spin{to{transform:rotate(360deg)}}
+.danger::before{content:"";position:absolute;inset:2%;border-radius:50%;border:3px solid #e0583e;animation:pulse .7s ease-in-out infinite alternate;z-index:2}
+@keyframes pulse{from{transform:scale(.88);opacity:.5}to{transform:scale(1.04);opacity:1}}
+.goalin .stone{box-shadow:0 0 0 3px #f0d488,0 0 18px 4px rgba(240,212,136,.7)}
+.ax{position:absolute;font-size:clamp(8px,2.2vw,10px);line-height:1;color:rgba(70,45,15,.75);font-weight:700;transform:translate(-50%,-50%);pointer-events:none}.ax.col{top:2.6%}.ax.row{left:2.6%}
+.fly{position:absolute;z-index:10;pointer-events:none;display:flex;align-items:center;justify-content:center;transition:transform .42s cubic-bezier(.3,.7,.3,1)}
+.fly .stone{width:80%;height:80%}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+
+/* 下：反応・一行ルール */
+.say{min-height:52px;margin-top:10px;padding:8px 12px;border-radius:3px;background:var(--panel);border:1px solid var(--line);font-size:14.5px;line-height:1.5;display:flex;align-items:center;gap:10px}
+.say.bad{border-color:rgba(224,132,108,.6);background:rgba(224,132,108,.10)}
+.say.good{border-color:rgba(143,191,154,.6);background:rgba(143,191,154,.10)}
+.say .ic{font-size:20px;flex:none}
+.tools{display:flex;gap:8px;margin-top:8px}
+.tools button{flex:1;min-height:40px;border-radius:3px;border:1px solid var(--line);background:transparent;color:var(--sub);font-size:13px;cursor:pointer}
+.rule{margin:10px 2px 0;font-size:12px;color:var(--sub);line-height:1.65}
+.rule b{color:var(--fg);font-weight:500}
+
+/* クリア表示 */
+.clear{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(6,9,8,.55);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+.clear .box{width:100%;max-width:420px;background:var(--panel);border:1px solid var(--gold-soft);border-radius:6px;padding:22px 20px 18px;text-align:center;box-shadow:0 30px 60px rgba(0,0,0,.6);animation:pop .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.7);opacity:0}}
+.clear .big{font-family:var(--f-disp);font-size:clamp(26px,8vw,36px);line-height:1.2;color:#f3d995;text-shadow:0 0 22px rgba(240,200,110,.45);letter-spacing:.02em}
+.clear .sub{font-size:14px;color:var(--gold);letter-spacing:.08em;margin-top:2px}
+.clear .why{margin:12px 0 16px;font-size:13.5px;color:var(--fg);text-align:left;line-height:1.7}
+.btn{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;min-height:50px;padding:8px 12px;border-radius:4px;border:0;background:var(--gold);color:#17120a;font-weight:700;font-size:16px;line-height:1.3;cursor:pointer;text-decoration:none;text-align:center}
+.btn small{font-size:11.5px;font-weight:500;opacity:.8}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line);margin-top:8px;font-weight:500;font-size:14px}
+
+/* 結果カード */
+.result{text-align:center;padding-top:8px}
+.card{border:1px solid var(--gold-soft);border-radius:8px;padding:22px 18px;background:radial-gradient(circle at 50% 0%,rgba(201,169,110,.18),transparent 60%),var(--panel)}
+.card .lbl{font-size:12px;color:var(--gold);letter-spacing:.14em}
+.card .iq{font-family:var(--f-disp);font-size:64px;line-height:1.1;color:#f3d995;margin:4px 0}
+.card .iq small{font-size:22px;color:var(--fg);margin-right:6px}
+.card .pct{font-size:14px;color:var(--fg)}
+.card .grid5{font-size:26px;letter-spacing:4px;margin:12px 0 4px}
+.card .ttl{margin-top:14px;font-family:var(--f-disp);font-size:21px;line-height:1.4}
+.card .ttl em{display:block;font-style:normal;font-family:var(--f-body);font-size:13px;color:var(--gold);margin-top:2px}
+.card .ttl small{display:block;font-family:var(--f-body);font-size:12.5px;color:var(--sub);margin-top:4px}
+.card .meta{margin-top:12px;font-size:12px;color:var(--mute)}
+.result .btn{margin-top:14px}
+.xbtn{background:#f2f2f2;color:#111}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><a class="logo" href="/">bocch <b>IQテスト</b></a><div class="dots" id="dots"></div></div>
+
+  <main id="play">
+    <div class="mission" id="mission"><small id="qlabel"></small><span id="mtext"></span></div>
+    <div class="edge"><span>▲ <b>黒のゴール</b></span><span id="arrB"></span></div>
+    <div class="board" id="board"><div class="grid" id="grid" role="grid" aria-label="盤面"></div></div>
+    <div class="edge"><span>▼ 白のゴール</span><span id="arrW"></span></div>
+    <div class="say" id="say" aria-live="polite"><span class="ic">👆</span><span id="sayT">黒い石をタップして、動かしてみよう</span></div>
+    <div class="tools"><button id="resetBtn">↺ 最初から</button><button id="hintBtn">💡 ヒント</button></div>
+    <p class="rule">石は<b>「隣にいる石の数」だけ、まっすぐ跳ぶ</b>（縦横斜め8方向・敵味方とも数える・飛び越えOK）。<b>0の石＝ぼっちは動けない</b>。ゴールに2個着くか、相手を1手も動けなくしたら勝ち。</p>
+  </main>
+
+  <section class="result" id="result" hidden>
+    <div class="card" id="card">
+      <div class="lbl">あなたの推定 bocch IQ</div>
+      <div class="iq"><small>IQ</small><span id="rIQ"></span></div>
+      <div class="pct" id="rPct"></div>
+      <div class="grid5" id="rGrid"></div>
+      <div class="ttl"><span id="rTitle"></span><em id="rType"></em><small id="rDesc"></small></div>
+      <div class="meta" id="rMeta"></div>
+    </div>
+    <a class="btn xbtn" id="shareX" target="_blank" rel="noopener">𝕏 で結果をポストする</a>
+    <a class="btn" href="/">この頭脳で本編を遊ぶ ›<small>CPU戦・オンライン戦・友だちと対戦（無料・登録なし）</small></a>
+    <button class="btn ghost" id="againBtn">もう一度挑戦する</button>
+  </section>
+</div>
+
+<div class="clear" id="clear" hidden><div class="box">
+  <div class="big" id="cBig"></div><div class="sub" id="cSub"></div>
+  <p class="why" id="cWhy"></p>
+  <button class="btn" id="nextBtn">次の問題へ ›</button>
+</div></div>
+
+<script>
+/* ===== 盤のルール（本編 index.html と同じ判定をこのページ用に写したもの。本編のコードには触れない） ===== */
+const N=6,DIRS=[[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]],NEED=2;
+const ok=(r,c)=>r>=0&&r<N&&c>=0&&c<N;
+function nbCount(b,i){const r=i/N|0,c=i%N;let n=0;for(const[x,y]of DIRS)if(ok(r+x,c+y)&&b[(r+x)*N+c+y])n++;return Math.min(4,n)}
+function movesFrom(b,i){const d=nbCount(b,i),r=i/N|0,c=i%N,out=[];if(!d)return out;for(const[x,y]of DIRS){const rr=r+x*d,cc=c+y*d;if(ok(rr,cc)&&!b[rr*N+cc])out.push([i,rr*N+cc])}return out}
+function allMoves(b,p){const m=[];for(let i=0;i<N*N;i++)if(b[i]===p)m.push(...movesFrom(b,i));return m}
+const apply=(b,[f,t])=>{const n=b.slice();n[t]=n[f];n[f]=0;return n};
+const goalRow=p=>p===1?0:N-1;
+function arrivedCount(b,p){const r=goalRow(p);let n=0;for(let c=0;c<N;c++)if(b[r*N+c]===p)n++;return n}
+// p が m を指した結果：'arrive'（2個目が着いた）/'stuck'（相手が動けない）/null
+function result(b,p,m){const a=apply(b,m);if(arrivedCount(a,p)>=NEED)return 'arrive';if(!allMoves(a,3-p).length)return 'stuck';return null}
+const winsNow=(b,p)=>allMoves(b,p).filter(m=>result(b,p,m));
+// 2手で勝つ手か：白がどう受けても（白が先に勝たず）黒に即勝ちが残る
+function mate2(b,m){if(result(b,1,m))return false;const a=apply(b,m);for(const r of allMoves(a,2)){if(result(a,2,r))return false;if(!winsNow(apply(a,r),1).length)return false}return true}
+
+/* ===== 5問（総当たりで「正解は1手だけ」を確認済み） ===== */
+const QS=[
+ {iq:95,name:'跳躍の基本',type:'combo',kind:1,b:'220100010200001021012000002000100000',
+  mission:'黒番。1手で2個目をゴールに入れて勝て！',big:'!! 跳躍成功 (IQ 95+)',
+  hint:'ゴールに近い石ほど届くとは限らない。数字＝跳ぶマス数。飛び越えてもいい',
+  why:'2dは隣に3個（黒3c・白3d・白3e）＝3マス跳べる。黒3cと白4bをまとめて飛び越え、斜めに5aへ着地。ゴール目前の2bは数字が3で、行き過ぎてしまう。'},
+ {iq:115,name:'足し算の踏み台',type:'combo',kind:2,b:'100000200002001220100002021010100000',
+  mission:'黒番。白がどう受けても、2手で勝て！',big:'!! 踏み台コンボ (IQ 115+)',
+  hint:'自分の石の数字を「増やす」手を探そう。白の石の隣に飛び込むのも、ありかもしれない',
+  why:'1dを白1bの隣（2c）へ飛び込ませる。2cは隣2個で2a・4aの2か所に届き、隣の3cも1→2に増えて3aを狙う。狙いが多すぎて、白はどう受けても1か所しか止められない。'},
+ {iq:130,name:'引き算のぼっち化',type:'lock',kind:2,b:'001000202000000010000212020101001002',
+  mission:'白はあと1手でゴール。逆転して2手で勝て！',big:'!! 天才の一手 (IQ 130+)',
+  hint:'前に進む・ふさぐ・隣に寄せる…はすべて負け。白2eの数字は、誰が作っている？',
+  why:'白2eの隣にいるのは黒3fだけ。3fが横へ離れた瞬間、2eは0＝ぼっちになり動けない。ふさいだり寄せたりすると、別の白に踏み台を与えて負ける。しかも着地した5fで6eが3→4になり、次は黒が6aへ決める。'},
+ {iq:140,name:'一石二鳥の歯車',type:'gear',kind:2,b:'000210020021010000000102102000200010',
+  mission:'白のリーチを消しながら、2手で勝て！',big:'!! 一石二鳥 (IQ 140+)',
+  hint:'守るだけの手はたくさんある。動かした石の「移動元」と「移動先」の両方で得をする1手は？',
+  why:'4dが離れると、白3eの隣は空っぽ＝ぼっちでリーチ消滅（引き算）。着地した3cで2cが1→2、3cも2になり、1a・2a・3a・4aを同時に狙う（足し算）。守りと攻めが1手で噛み合う。'},
+ {iq:150,name:'全員ぼっち処刑',type:'lock',kind:1,b:'020200000002010210010002101000100002',
+  mission:'ゴールせずに、1手で白を全員ぼっちにして勝て！',big:'!! 完全包囲 (IQ 150+)',
+  hint:'白の石の隣にいる黒は、どれ？ その石がどこへ着地すると、白に踏み台を与えない？',
+  why:'5cが離れると、白4c・6b・6dの隣が空っぽに。もともと孤立していた白も合わせて6個すべてが0＝ぼっち。白は1手も指せず、黒の勝ち。真下の5fへ下がると白6fの隣に着いてしまい、勝てない。'}
+];
+const MARK=n=>n===0?'🟩':n===1?'🟨':'🟥';
+
+/* ===== 状態 ===== */
+const $=id=>document.getElementById(id);
+const G={order:[],k:0,b:null,start:null,stage:0,sel:-1,busy:false,miss:[0,0,0,0,0],t0:0,tq:[0,0,0,0,0],qStart:0,prev:null,mark:{}};
+const sqn=i=>(i%6+1)+'abcdef'[i/6|0];
+
+/* 駒音：本編の録音（2番・4番）を同じ小さめの音量で */
+const SND={ctx:null,buf:[]};
+function sndInit(){if(SND.ctx)return;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;try{SND.ctx=new AC()}catch(e){return}
+  [2,4].forEach(i=>fetch('/sounds/koma'+i+'.mp3').then(r=>r.arrayBuffer()).then(a=>new Promise((y,n)=>SND.ctx.decodeAudioData(a,y,n))).then(b=>SND.buf.push(b)).catch(()=>{}))}
+function snd(){const c=SND.ctx;if(!c||!SND.buf.length)return;const go=()=>{const s=c.createBufferSource(),g=c.createGain();s.buffer=SND.buf[Math.random()*SND.buf.length|0];g.gain.value=0.025;s.connect(g);g.connect(c.destination);s.start()};
+  if(c.state==='running')go();else c.resume().then(go).catch(()=>{})}
+addEventListener('pointerdown',sndInit,{once:true,passive:true});
+
+/* ===== 描画 ===== */
+const cells=[];
+function build(){const g=$('grid'),bd=$('board');for(let k=0;k<6;k++){const x=document.createElement('span');x.className='ax col';x.style.left=(5+90*(k+.5)/6)+'%';x.textContent=k+1;bd.appendChild(x);const y=document.createElement('span');y.className='ax row';y.style.top=(5+90*(k+.5)/6)+'%';y.textContent='abcdef'[k];bd.appendChild(y)}for(let i=0;i<36;i++){const c=document.createElement('button');c.className='cell';c.type='button';c.dataset.i=i;c.addEventListener('click',()=>tap(i));g.appendChild(c);cells.push(c)}}
+function render(){const b=G.b,prev=G.prev;const tg=G.sel>=0?movesFrom(b,G.sel).map(m=>m[1]):[];
+  for(let i=0;i<36;i++){const c=cells[i],v=b[i];let cls='cell';if((i/6|0)===0)cls+=' goal';
+    if(G.mark.last&&G.mark.last.includes(i))cls+=' last';if(G.mark.wlast&&G.mark.wlast.includes(i))cls+=' wlast';
+    if(v===1&&!G.busy&&G.stage<2)cls+=' mine';if(i===G.sel)cls+=' sel';
+    if(tg.includes(i))cls+=' target'+((i/6|0)===0&&arrivedCount(b,1)>=1?' fin':'');
+    let h='',lab=sqn(i);
+    if(v){const n=nbCount(b,i);h='<span class="stone '+(v===1?'b':'w')+(n===0?' zero':'')+'"><span>'+n+'</span></span>';lab+=(v===1?' 黒':' 白')+n;
+      if(prev&&prev[i]===v){const pn=nbCount(prev,i);if(n>pn)cls+=' up';else if(n<pn)cls+=' dn'}
+      if(G.mark.lone&&G.mark.lone.includes(i))cls+=' lone';
+      if(G.mark.danger&&G.mark.danger.includes(i))cls+=' danger';
+      if(G.mark.goal&&G.mark.goal.includes(i))cls+=' goalin'}
+    else lab+=' 空き';
+    if(c.className!==cls)c.className=cls;if(c.innerHTML!==h)c.innerHTML=h;c.setAttribute('aria-label',lab)}
+  $('arrB').textContent='黒 '+arrivedCount(b,1)+'/2';$('arrW').textContent='白 '+arrivedCount(b,2)+'/2'}
+function say(t,kind,ic){$('say').className='say'+(kind?' '+kind:'');$('say').querySelector('.ic').textContent=ic||(kind==='bad'?'💥':kind==='good'?'✨':'👆');$('sayT').textContent=t}
+function dotsRender(){const d=$('dots');d.innerHTML='';for(let q=0;q<5;q++){const i=document.createElement('i');const done=G.done&&G.done[q];
+  if(done)i.className=G.miss[q]===0?'g':G.miss[q]===1?'y':'r';if(G.order[G.k]===q&&!G.finished)i.className='now';d.appendChild(i)}}
+
+/* 石がすべるアニメーション */
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function slide(m,color){const bd=$('board').getBoundingClientRect(),a=cells[m[0]].getBoundingClientRect(),z=cells[m[1]].getBoundingClientRect();
+  const f=document.createElement('div');f.className='fly';Object.assign(f.style,{left:(a.left-bd.left)+'px',top:(a.top-bd.top)+'px',width:a.width+'px',height:a.height+'px'});
+  f.innerHTML='<span class="stone '+(color===1?'b':'w')+'"><span>'+nbCount(G.b,m[0])+'</span></span>';
+  const keep=cells[m[0]].innerHTML;cells[m[0]].innerHTML='';$('board').appendChild(f);f.getBoundingClientRect();
+  f.style.transform='translate('+(z.left-a.left)+'px,'+(z.top-a.top)+'px)';await sleep(440);f.remove();snd()}
+async function play(m,color){G.busy=true;G.sel=-1;render();await slide(m,color);G.prev=G.b;G.b=apply(G.b,m);
+  if(color===1)G.mark={last:[m[0],m[1]]};else G.mark={wlast:[m[0],m[1]]};render()}
+
+/* ぼっち（0）か、動けない白 */
+const loneWhites=b=>[...b.keys()].filter(i=>b[i]===2&&nbCount(b,i)===0);
+// 次の1手でゴールできる白（リーチ）
+const threat=b=>[...new Set(winsNow(b,2).map(m=>m[0]))];
+
+/* ===== 進行 ===== */
+function loadQ(){const q=QS[G.order[G.k]];G.q=q;G.start=q.b.split('').map(Number);G.b=G.start.slice();G.prev=null;G.stage=0;G.sel=-1;G.busy=false;G.mark={};
+  $('qlabel').textContent='Q'+(G.order[G.k]+1)+'　IQ '+q.iq+'｜'+q.name;$('mtext').textContent=q.mission;
+  say(threat(G.b).length?'赤い印の白は、次の1手でゴールしてしまう。止めるだけでなく、勝ちまで読もう':'黒い石をタップして、動かしてみよう',null,threat(G.b).length?'⚠️':'👆');
+  G.mark={danger:threat(G.b)};G.lone1=[];
+  G.qStart=Date.now();dotsRender();render();try{history.replaceState(null,'','?q='+(G.order[G.k]+1))}catch(e){}}
+function tap(i){if(G.busy||G.stage>=2)return;const b=G.b;
+  if(b[i]===1){if(G.sel===i){G.sel=-1;render();return}
+    if(!movesFrom(b,i).length){cells[i].classList.add('shake');setTimeout(()=>cells[i].classList.remove('shake'),400);
+      say(nbCount(b,i)===0?'その石は隣が0＝ぼっち。動けない':'その石は行き先がふさがっていて動けない','', '🚫');return}
+    G.sel=i;render();return}
+  if(G.sel>=0&&movesFrom(b,G.sel).some(m=>m[1]===i)){move([G.sel,i]);return}
+  if(G.sel>=0){G.sel=-1;render()}}
+async function move(m){const q=G.q,b0=G.b;
+  if(G.stage===0){
+    const ok1=q.kind===1?!!result(b0,1,m):mate2(b0,m);
+    if(ok1&&q.kind===1){await play(m,1);return win(m,b0)}
+    if(ok1){await play(m,1);G.stage=1;const lone=loneWhites(G.b).filter(i=>nbCount(b0,i)>0);G.mark.lone=lone;render();
+      say(lone.length?'リーチ消滅！白を「ぼっち」にした。白の番…':'いい手！ 白の番…','good','✨');await sleep(1300);
+      // 白はいちばん粘る受け（黒の勝ち手が最も少なくなる手）を指す
+      const a=G.b;let best=null,bn=99;for(const r of allMoves(a,2)){const n=winsNow(apply(a,r),1).length;if(n<bn){bn=n;best=r}}
+      G.lone1=lone;await play(best,2);G.mark.lone=lone.filter(i=>G.b[i]===2&&nbCount(G.b,i)===0);G.after=G.b.slice();G.busy=false;render();
+      say('あと1手。勝ちを決めろ！',null,'🎯');return}
+    return wrong(m,b0,true)}
+  // 2手目
+  if(result(b0,1,m)){await play(m,1);return win(m,b0)}
+  return wrong(m,b0,false)}
+async function wrong(m,b0,first){const q=G.q;G.miss[G.order[G.k]]++;await play(m,1);const a=G.b;
+  const wins=winsNow(a,2);let r,msg;
+  if(wins.length){r=wins.find(x=>result(a,2,x)==='arrive')||wins[0];msg=result(a,2,r)==='arrive'?'その手だと、白が赤い印へ跳んでゴール。白の勝ち！':'その手だと、黒が1手も動けなくなって負け…'}
+  else{const refs=allMoves(a,2).filter(x=>!winsNow(apply(a,x),1).length);r=refs[0]||allMoves(a,2)[0];
+    if(!first)msg='惜しい！ その手では決まらない。白に受けられてしまう';
+    else if(q.kind===1)msg=winsNow(b0,1).length&&!result(b0,1,m)?'その手では勝てない。白はこう逃げて、勝負は続いてしまう':'その手では勝てない';
+    else msg='その手だと、白にここ（赤い印）で受けられて、次で勝てなくなる'}
+  await sleep(250);if(r){await play(r,2);G.mark.danger=[r[1]];render()}
+  say(msg,'bad','💥');await sleep(2300);
+  G.b=first?G.start.slice():G.after.slice();G.prev=null;G.mark=first?{danger:threat(G.b)}:{};G.busy=false;render();
+  const n=G.miss[G.order[G.k]];say(n>=2?'ヒント：'+q.hint:'もう一度。'+(first?'最初の局面に戻した':'1手前に戻した'),'', n>=2?'💡':'↺')}
+async function win(m,b0){const q=G.q,qi=G.order[G.k];G.stage=2;const b=G.b;
+  const lone=loneWhites(b);const stuck=!allMoves(b,2).length;G.mark.lone=stuck?lone:(G.lone1||[]).filter(i=>b[i]===2&&nbCount(b,i)===0);
+  if(!stuck)G.mark.goal=[...b.keys()].filter(i=>b[i]===1&&(i/6|0)===0);render();
+  say(stuck?'白は1手も動けない。黒の勝ち！':'2個目がゴール。黒の勝ち！','good','🏆');
+  G.tq[qi]=(Date.now()-G.qStart)/1000;G.done=G.done||[];G.done[qi]=true;dotsRender();
+  await sleep(stuck||G.mark.lone.length?1300:800);
+  $('cBig').textContent=q.big.split(' (')[0];$('cSub').textContent='('+q.big.split(' (')[1];$('cWhy').textContent=q.why;$('nextBtn').textContent=G.k<4?'次の問題へ ›':'結果を見る ›';$('clear').hidden=false;$('nextBtn').focus()}
+$('nextBtn').addEventListener('click',()=>{$('clear').hidden=true;if(G.k<4){G.k++;loadQ()}else showResult()});
+$('resetBtn').addEventListener('click',()=>{if(G.busy||G.stage>=2)return;G.b=G.start.slice();G.prev=null;G.stage=0;G.sel=-1;G.mark={danger:threat(G.b)};render();say('最初の局面に戻した',null,'↺')});
+$('hintBtn').addEventListener('click',()=>say('ヒント：'+G.q.hint,null,'💡'));
+
+/* ===== 判定カード ===== */
+const W=[5,9,12,13,16]; // 各問の配点（全問ノーミスで 100+55=155）
+function phi(z){const t=1/(1+.2316419*Math.abs(z)),d=.3989423*Math.exp(-z*z/2),p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return z>0?1-p:p}
+function showResult(){G.finished=true;dotsRender();const tot=G.tq.reduce((a,b)=>a+b,0);
+  let iq=100;for(let q=0;q<5;q++){const n=G.miss[q];iq+=W[q]*(n===0?1:n===1?.55:n===2?.25:0)}
+  if(tot>300)iq-=Math.min(6,(tot-300)/60);iq=Math.max(100,Math.min(155,Math.round(iq)));
+  const top=(1-phi((iq-100)/15))*100;const pct=top<.1?top.toFixed(2):top<1?top.toFixed(1):top<10?top.toFixed(1):Math.round(top);
+  const clean=q=>G.miss[q]===0,lock=[2,4].filter(clean).length,combo=[0,1].filter(clean).length,miss=G.miss.reduce((a,b)=>a+b,0);
+  let t,d;
+  if(miss===0&&tot<150){t='盤上の神算鬼謀（全能型頭脳）';d='跳躍も、ぼっち化も、歯車も。すべてを最短で読み切った'}
+  else if(miss>=7){t='前のめりの特攻隊長（直感型頭脳）';d='まず動く。失敗から最速で学ぶ実戦タイプ'}
+  else if(lock===2&&combo<2){t='冷酷なぼっち製造機（ロック型頭脳）';d='相手の足場を奪い、何もさせずに勝つ'}
+  else if(combo===2&&lock<2){t='空間を歪める大跳躍（コンボ型頭脳）';d='数字を足して、盤の端から端まで跳ぶ'}
+  else if(lock===2&&combo===2){t='静と動の二刀流（ハイブリッド型頭脳）';d='止める手と跳ぶ手を、場面で使い分ける'}
+  else if(clean(3)){t='一石二鳥の歯車師（連鎖型頭脳）';d='1手で守りと攻めを同時に噛み合わせる'}
+  else{t='読みの伸びしろ無限大（成長型頭脳）';d='直感の罠を知った今、次はもっと伸びる'}
+  const grid=G.miss.map(MARK).join('');
+  $('rIQ').textContent=iq;$('rPct').textContent='上位 '+pct+'%';$('rGrid').textContent=grid;const tm=t.match(/^(.*)（(.*)）$/);$('rTitle').textContent=tm[1];$('rType').textContent=tm[2];$('rDesc').textContent=d;
+  $('rMeta').textContent='ミス '+miss+'回・合計 '+Math.round(tot)+'秒';
+  const txt='🧠 bocch IQテスト: IQ '+iq+' ['+grid+']\n称号：'+t+'\n上位'+pct+'%の頭脳。あなたは解ける？\n#bocch #IQテスト\n';
+  $('shareX').href='https://twitter.com/intent/tweet?text='+encodeURIComponent(txt)+'&url='+encodeURIComponent('https://bocchgame.com/iq/');
+  $('play').hidden=true;$('result').hidden=false;scrollTo(0,0);try{history.replaceState(null,'',location.pathname)}catch(e){}}
+$('againBtn').addEventListener('click',()=>{start(0)});
+
+function start(first){G.order=[];for(let k=0;k<5;k++)G.order.push((first+k)%5);G.k=0;G.miss=[0,0,0,0,0];G.tq=[0,0,0,0,0];G.done=[];G.finished=false;
+  $('result').hidden=true;$('play').hidden=false;loadQ()}
+build();
+let q0=parseInt(new URLSearchParams(location.search).get('q'),10);start(q0>=1&&q0<=5?q0-1:0);
+</script>
+</body>
+</html>
