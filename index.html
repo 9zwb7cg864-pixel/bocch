@@ -406,6 +406,8 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .dq-streak{display:flex;justify-content:center;gap:36px;margin:14px 0 6px}.dq-streak div{display:flex;flex-direction:column;align-items:center}
 .dq-streak b{font-family:"Shippori Mincho B1","Hiragino Mincho ProN",serif;font-size:34px;color:var(--gold);line-height:1.1}.dq-streak span{font-size:12px;color:var(--sub);letter-spacing:.15em}
 .dq-note{text-align:center;max-width:420px;margin:8px auto 0}
+
+.rbtns{display:flex;gap:2px}#reviewRow{gap:10px;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -509,7 +511,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
   <p class="note dq-note">相手がどう受けても、2手で勝てる手が1つだけあります。その日の最初の挑戦だけが連続記録に入ります（2回目からは練習）。問題は毎日0時に変わります。</p>
 </section>
 <section class="scr" data-scr="review" hidden>
-  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>感想戦</h2><button class="back rshare" id="revShare">共有 ↗</button></div>
+  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>感想戦</h2><span class="rbtns"><button class="back rshare" id="revImg">画像 ↗</button><button class="back rshare" id="revShare">共有 ↗</button></span></div>
   <p class="rev-head" id="revHead"></p>
   <p class="rev-share-msg" id="revShareMsg" hidden></p>
   <div class="boardwrap rev-board"><div class="board" id="rboard"><div class="lab lab-top" id="rlabTop" aria-hidden="true"></div><div class="lab lab-left" id="rlabLeft" aria-hidden="true"></div><div class="grid" id="rgrid" aria-label="感想戦の盤"></div></div></div>
@@ -668,7 +670,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
     <button id="leave" hidden>対戦をやめる</button>
     <button id="frOpp" hidden>＋フレンド申請</button>
   </div>
-  <div class="row" id="reviewRow" hidden><button id="reviewNow">この対局を感想戦 ›</button></div>
+  <div class="row" id="reviewRow" hidden><button id="reviewNow">この対局を感想戦 ›</button><button id="imgNow">画像で共有 ↗</button></div>
   <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 駒音</label></div>
   <div class="ad-slot ad-over" data-ad="over" hidden aria-label="広告"></div>
 </section>
@@ -2436,6 +2438,34 @@ $('dqAns').addEventListener('click',dqShow);
 $('dailyBtn').addEventListener('click',()=>{dqOpen()});
 addEventListener('popstate',()=>{if(CUR==='daily')dqOpen()});
 try{dqDot()}catch(e){}
+
+/* 対局の画像：盤面・勝敗・名前を1枚の縦長画像にして、共有メニュー（なければ保存）へ */
+async function shareImage(o){// o:{b, last, title, sub, black, white, ply, flip}
+  try{await document.fonts.ready}catch(e){}
+  const W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');const SER='"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif',SAN='"Hiragino Sans","Noto Sans JP",sans-serif';
+  const bg=x.createRadialGradient(W*.4,H*.35,50,W*.5,H*.5,H*.8);bg.addColorStop(0,'#17221d');bg.addColorStop(1,'#080b0a');x.fillStyle=bg;x.fillRect(0,0,W,H);
+  x.textAlign='center';x.fillStyle='#ece6d8';x.font='italic 700 92px '+SER;x.fillText('bocch',W/2,130);
+  x.fillStyle='#c9a96e';x.font='500 30px '+SER;x.fillText(o.title||'',W/2,200);x.fillStyle='#9a9484';x.font='400 24px '+SAN;x.fillText(o.sub||'',W/2,242);
+  const S=760,L=(W-S)/2,T=290,cs=S/6;x.fillStyle='#c9a463';x.fillRect(L-18,T-18,S+36,S+36);x.fillStyle='#d9b878';x.fillRect(L,T,S,S);
+  for(let r=0;r<6;r++)for(let cc=0;cc<6;cc++){const i=o.flip?35-(r*6+cc):r*6+cc,rr=i/6|0;x.fillStyle=(rr===0||rr===5)?'rgba(94,66,32,.10)':'rgba(0,0,0,0)';x.fillRect(L+cc*cs,T+r*cs,cs,cs);
+    if(o.last&&(o.last[0]===i||o.last[1]===i)){x.fillStyle='rgba(201,169,110,.45)';x.fillRect(L+cc*cs+3,T+r*cs+3,cs-6,cs-6)}}
+  x.strokeStyle='#5e4220';x.lineWidth=3;for(let k=0;k<=6;k++){x.beginPath();x.moveTo(L+k*cs,T);x.lineTo(L+k*cs,T+S);x.stroke();x.beginPath();x.moveTo(L,T+k*cs);x.lineTo(L+S,T+k*cs);x.stroke()}
+  for(let r=0;r<6;r++)for(let cc=0;cc<6;cc++){const i=o.flip?35-(r*6+cc):r*6+cc,v=o.b[i];if(!v)continue;const cx=L+cc*cs+cs/2,cy=T+r*cs+cs/2,R=cs*.4,n=nbCount(o.b,i);
+    x.fillStyle='rgba(0,0,0,.35)';x.beginPath();x.arc(cx+3,cy+6,R,0,7);x.fill();const g=x.createRadialGradient(cx-R*.35,cy-R*.4,R*.1,cx,cy,R);
+    if(v===1){g.addColorStop(0,'#5a5c5e');g.addColorStop(.5,'#232526');g.addColorStop(1,'#0c0d0e')}else{g.addColorStop(0,'#ffffff');g.addColorStop(.5,'#e4e5e6');g.addColorStop(1,'#c3c5c7')}
+    x.fillStyle=g;x.globalAlpha=n?1:.75;x.beginPath();x.arc(cx,cy,R,0,7);x.fill();x.globalAlpha=1;x.fillStyle=v===1?'#e4e5e6':'#1a1b1c';x.font='700 '+Math.round(R*.95)+'px '+SER;x.textBaseline='middle';x.fillText(String(n),cx,cy+2);x.textBaseline='alphabetic'}
+  const pl=(y,col,nm)=>{x.textAlign='left';x.fillStyle=col===1?'#0c0d0e':'#e4e5e6';x.beginPath();x.arc(L+14,y-10,14,0,7);x.fill();x.strokeStyle='#9a9484';x.lineWidth=1.5;x.stroke();x.fillStyle='#ece6d8';x.font='500 32px '+SAN;x.fillText(nm||'',L+42,y)};
+  pl(T+S+92,1,o.black);pl(T+S+142,2,o.white);x.textAlign='right';x.fillStyle='#9a9484';x.font='400 26px '+SAN;x.fillText(o.ply?o.ply+'手':'',L+S,T+S+92);
+  x.textAlign='center';x.fillStyle='#c9a96e';x.font='500 26px '+SER;x.fillText('bocchgame.com',W/2,H-40);
+  const blob=await new Promise(r=>c.toBlob(r,'image/png'));const file=new File([blob],'bocch.png',{type:'image/png'});
+  try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'bocch',text:(o.title||'')+' #bocch'});return 'shared'}}catch(e){if(e&&e.name==='AbortError')return 'cancel'}
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='bocch.png';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000);return 'saved'}
+function playerLabel(color){try{if(S.mode==='net'&&NET.host){const hc=colorOf(NET.host),id=color===1?(hc===1?NET.host:NET.guest):(hc===1?NET.guest:NET.host);if(id===NET.me&&!NET.watch)return myName()+'　'+Math.round(PROF.rating);const n=NM[id];return n?n.name+'　'+n.rate:'名無し'}
+  if(CPU_RATE[S.mode])return color===hcOf()?myName()+'　'+Math.round(PROF.rating):MODE_NAME(S.mode)+'　'+CPU_RATE[S.mode];return color===1?'黒':'白'}catch(e){return ''}}
+$('imgNow').addEventListener('click',()=>{if(!S.over)return;const w=S.over.win;shareImage({b:S.b,last:S.last,title:w?(w===1?'黒':'白')+'の勝ち':'引き分け',sub:(S.over.why||'')+'　'+MODE_NAME(S.mode),black:playerLabel(1),white:playerLabel(2),ply:(S.log||[]).length,flip:S.mode==='net'?colorOf(NET.me)===2:(!!S.mode&&hcOf()===2)})});
+$('revImg').addEventListener('click',()=>{const g=REV.g;if(!g)return;const p=REV.pv?pvState():REV.pos[REV.i],n=g.log.length,i=REV.i,[rt]=resultOf(g);
+  const last=REV.pv?(REV.pv.k>0?REV.pv.line[REV.pv.k-1]:null):(i>0?g.log[i-1]:null);
+  shareImage({b:p.b,last,title:i>=n?rt+(g.why?'（'+g.why+'）':''):i+'手目の局面',sub:MODE_NAME(g.mode)+'　'+rt,black:g.me===1?myName():g.me===2?(g.opp||'相手'):'黒',white:g.me===2?myName():g.me===1?(g.opp||'相手'):'白',ply:n,flip:g.me===2})});
 /* 駒音：盤に並んでいる石が変わったら鳴らす（指す・戻す・進む・感想戦・観戦、どこでも）。
    画面を開いた直後や部屋に入った直後（まとめて読み込む間）は鳴らさない */
 const KW={};
