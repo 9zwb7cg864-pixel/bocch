@@ -2535,9 +2535,12 @@ function wkKey(d){d=d?new Date(d):new Date();const day=(d.getDay()+6)%7;d.setHou
 function wkPrev(){const d=new Date();d.setDate(d.getDate()-7);return wkKey(d)}
 function rankPost(){try{const nm=myName(),r=Math.round(PROF.rating);if(!nm)return;if(PROF.rkName&&PROF.rkName!==nm)botSaveRate('p:'+PROF.rkName,100);if(PROF.rkName!==nm){PROF.rkName=nm;saveProf()}botSaveRate('p:'+nm,r)}catch(e){}}
 const RK={k:'all',data:null};
-async function rankOpen(){$('rkNote').textContent='読み込んでいます…';$('rkList').innerHTML='';rankPost();const kv=await botRates();RK.data=kv||{};$('rkNote').textContent=kv?'':'読み込めませんでした。通信を確かめてください。';rankRender()}
+async function rankOpen(){$('rkNote').textContent='読み込んでいます…';$('rkList').innerHTML='';rankPost();const kv=await botRates();RK.data=kv||{};$('rkNote').textContent=kv?'':'読み込めませんでした。通信を確かめてください。';
+  // 名前付きのボット：まだレートが決まっていなければ、ランダム対戦と同じ1400〜1500で決めて保存
+  if(kv)for(const nm of BOT_NAMES)if(!Number.isFinite(kv[nm])){const r=1400+Math.floor(Math.random()*101);RK.data[nm]=r;botSaveRate(nm,r)}
+  rankRender()}
 function rankRender(){const d=RK.data||{},me=myName(),box=$('rkList');box.innerHTML='';
-  let rows=Object.entries(d).filter(([k,v])=>k.startsWith('p:')&&v>100).map(([k,v])=>[k.slice(2),v]);rows.sort((a,b)=>b[1]-a[1]);
+  let rows=Object.entries(d).filter(([k,v])=>k.startsWith('p:')&&v>100).map(([k,v])=>[k.slice(2),v]);for(const nm of BOT_NAMES)if(Number.isFinite(d[nm]))rows.push([nm,d[nm]]);rows.sort((a,b)=>b[1]-a[1]);
   if(rows.length&&rows[0][0]===me&&rows.length>=3){bdStats().wk1=1;saveProf();bdCheck()}
   rows=rows.slice(0,100);$('rkEmpty').hidden=!!rows.length;
   rows.forEach(([nm,v],i)=>{const li=document.createElement('li');if(nm===me)li.className='me';li.innerHTML='<span class="n"></span><span class="nm"></span><span class="v"></span>';li.querySelector('.n').textContent=i+1;li.querySelector('.nm').textContent=nm;li.querySelector('.v').textContent=v;box.append(li)})}
