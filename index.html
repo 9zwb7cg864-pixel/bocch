@@ -475,6 +475,10 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .cs-btns{justify-content:center;gap:10px}
 #cboard.shake{animation:cshake .35s}@keyframes cshake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 #cboard.clear{box-shadow:0 0 0 3px var(--win),0 0 30px rgba(127,197,157,.4)}
+
+.rf-body{margin-top:12px}.rf-body section{padding:12px 0;border-bottom:1px solid var(--line)}.rf-body section:last-child{border-bottom:0}
+.rf-steps{margin:6px 0 0;padding-left:20px;font-size:13.5px;color:var(--sub)}.rf-sec{font-size:12px;letter-spacing:.25em;color:var(--gold);margin:14px 0 0}
+.ks-tbl{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;max-width:260px;margin:8px 0}.ks-tbl span{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#1d1a14;border-radius:2px}
 </style>
 </head>
 <body>
@@ -592,7 +596,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
   <div id="csMap">
     <div class="cs-prog"><i id="csBar"></i></div><p class="cs-progt" id="csProgT"></p>
     <div id="csList"></div>
-    <button class="cs-ref" id="csRef">資料・研究盤 ›<small>定跡の表、26,000局のデータ、手筋の図、自由に動かせる盤</small></button>
+    <button class="cs-ref" id="csRef">資料 ›<small>止め方・手筋・3手目までの定跡・26,000局のデータ</small></button>
   </div>
   <div id="csLv" hidden>
     <div class="cs-dots" id="csDots"></div>
@@ -601,6 +605,11 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
     <p class="cs-msg" id="csMsg"></p>
     <div class="row cs-btns"><button id="csRetry">やり直し</button><button id="csHint">ヒント</button><button class="primary" id="csNext" hidden>次へ ›</button></div>
   </div>
+</section>
+<section class="scr" data-scr="ref" hidden>
+  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>資料</h2><span class="sp"></span></div>
+  <div class="ln-tabs" id="rfTabs" role="tablist"><button data-t="basic">基本</button><button data-t="tac">手筋</button><button data-t="jos">定跡</button><button data-t="data">データ</button></div>
+  <div class="rf-body ln-body" id="rfBody"></div>
 </section>
 <section class="scr" data-scr="daily" hidden>
   <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>毎日の1問</h2><span class="sp"></span></div>
@@ -2765,7 +2774,22 @@ $('csRetry').addEventListener('click',()=>{if(CS.c)csLoad()});
 $('csHint').addEventListener('click',()=>{if(CS.c){CS.wrong=Math.max(CS.wrong,1);csMsg('ヒント：'+CS.c.lv[CS.i].hint,'hint')}});
 $('csNext').addEventListener('click',()=>{if(!CS.c)return;if(CS.i<CS.c.lv.length-1){CS.i++;csLoad()}else csMap()});
 $('csBack').addEventListener('click',()=>{if(!$('csLv').hidden){csMap()}else history.back()});
-$('csRef').addEventListener('click',()=>learnStart(LN.id||'mech'));
+$('csRef').addEventListener('click',()=>{show('ref');refRender()});
+addEventListener('popstate',()=>{if(CUR==='ref')refRender()});
+
+/* 資料：読むだけのページ（盤なし） */
+const RF={tab:'basic',path:[]};
+function refRender(){[...$('rfTabs').children].forEach(b=>b.setAttribute('aria-selected',String(b.dataset.t===RF.tab)));const B=$('rfBody');let h='';
+  const txt=id=>'<section><h3>'+LN_TEXT[id][0]+'</h3>'+LN_TEXT[id][1]+'</section>';
+  if(RF.tab==='basic'){h+='<section><h3>相手のリーチの止め方</h3><p>黒の石（数字2）が2マス上のゴールに届く形。着地点は最大3か所あります。</p><ul>'+LN_DF.map(f=>'<li><b>'+f.t+'</b>（'+(f.ok?'効く':'効きにくい')+'）：'+f.d+'</li>').join('')+'</ul></section>'+['order','ng','miss','check'].map(txt).join('')}
+  else if(RF.tab==='tac'){for(const [g,items] of LN_TAC){h+='<div class="rf-sec">'+g+'</div>';for(const it of items)h+='<section><h3>'+it[0]+'<span class="tag '+(it[1]==='ok'?'ok':'ng')+'">'+(it[1]==='ok'?'使う':'注意')+'</span></h3><p>'+it[2]+'</p><div class="cap">'+it[5]+'</div>'+(it[4].length?'<ol class="rf-steps">'+it[4].map(st=>'<li>'+st.c+'</li>').join('')+'</ol>':'')+'</section>'}}
+  else if(RF.tab==='jos'){LN.path=RF.path;h+=lnJos().replace('手を押すと盤が進みます。','手を押すと次の手の一覧に進みます。').replace('盤の上で自由に動かしても評価値が出ます。','').replace('盤の上でそのまま続きを試せます。','')}
+  else{h+=txt('facts');const ks=LN_KSQ.map((v,i)=>{const r=i/6|0,c=i%6,a=(v+LN_KSQ[r*6+5-c])/2,t=Math.max(-1,Math.min(1,(a-50)/12));return '<span style="background:'+(t>=0?'color-mix(in srgb,#3f9a6c '+Math.round(t*75)+'%,#d9b878)':'color-mix(in srgb,#c8563f '+Math.round(-t*75)+'%,#d9b878)')+'">'+Math.round(a)+'</span>'}).join('');
+    h+='<section><h3>急所のマス</h3><p>12手目にそのマスに自分の石があった側の勝率（％）。上がa段（相手の陣地）、下が自分の陣地。緑ほど勝ちやすく、赤ほど負けやすいマスです。</p><div class="ks-tbl">'+ks+'</div>'+LN_TEXT.keysq[1].replace(/<p>.*?<\/p>/,'')+'</section>'+txt('strat')}
+  B.innerHTML=h;
+  B.querySelectorAll('[data-jm]').forEach(b=>b.addEventListener('click',()=>{RF.path.push(b.dataset.jm.split('-').map(Number));refRender()}));
+  const jb=$('lnJBack');if(jb)jb.addEventListener('click',()=>{RF.path.pop();refRender()})}
+document.querySelectorAll('#rfTabs button').forEach(b=>b.addEventListener('click',()=>{RF.tab=b.dataset.t;if(RF.tab==='jos')RF.path=[];refRender()}));
 /* 駒音：盤に並んでいる石が変わったら鳴らす（指す・戻す・進む・感想戦・観戦、どこでも）。
    画面を開いた直後や部屋に入った直後（まとめて読み込む間）は鳴らさない */
 const KW={};
