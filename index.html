@@ -2036,7 +2036,7 @@ render=function(){_render2();if(CUR==='game'&&MATCH.on&&S.mode==='net'&&NET.gues
   if(!S.over&&S.ply===1){j=josekiOf(S.last);lab='1手目 定跡「'}
   else if(!S.over&&S.ply===2){const k2=keyOf(S.last,2),w=k2&&JOSEKI2[k2];if(w){const k1=S.firstKey;j=(k1&&k1===k2)?['鏡・'+w[0],'黒と同じ形で応じる。'+w[1]]:w;lab='2手目 定跡「'}}
   if(S.ply===1&&S.last)S.firstKey=keyOf(S.last,1);
-  el.hidden=true;if(j&&!S.study&&S.last&&(typeof VIEW==='undefined'||VIEW.i==null)){const jk=(S.gid||NET.code||'')+':'+S.ply+':'+S.last.join('-');if(jk!==JOS.last){JOS.last=jk;josPlay(j[0],S.ply===1?1:2,S.last,S.b.slice())}}
+  el.hidden=true;if(j&&!S.study&&S.last&&(typeof VIEW==='undefined'||VIEW.i==null)){const jk=(S.gid||NET.code||'')+':'+S.ply+':'+S.last.join('-');if(jk!==JOS.last){JOS.last=jk}/* 1手目・2手目の定跡の演出は出さない（戦法の演出だけ残す） */}
   if(!S.over&&!S.study&&S.log&&S.log.length===S.ply&&(typeof VIEW==='undefined'||VIEW.i==null)){
     if(S.ply===1||S.ply===2)spPre(S.last,S.ply);
     else if(S.ply===3||S.ply===4){const sd=S.ply-2,i=senpoOf(S.log[sd-1],S.log[sd+1],sd);if(i>=0){const sk=(S.gid||NET.code||'')+':sp'+S.ply+':'+S.last.join('-');if(sk!==JOS.spk){JOS.spk=sk;senPlay(i,sd,S.log[sd-1],S.last,S.b.slice())}}}}
