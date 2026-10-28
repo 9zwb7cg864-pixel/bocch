@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var q=mp(new URLSearchParams(location.search).get('lang'));if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));var n=mp((navigator.languages&&navigator.languages[0])||navigator.language);L=q||s||n||'en'}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=7"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var q=mp(new URLSearchParams(location.search).get('lang'));if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));var n=mp((navigator.languages&&navigator.languages[0])||navigator.language);L=q||s||n||'en'}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=8"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -1912,6 +1912,54 @@ function josPlay0(name,side,mv,b){
     const np=win(t,350,PER);if(np>0&&np<1)title(np);
     JOS.raf=requestAnimationFrame(frame)}
   JOS.raf=requestAnimationFrame(frame);return true}
+/* 戦法の演出：自分の2手目で、1手目と2手目の組み合わせが戦法なら、絵が浮かび上がって戦法名を出す（黒は金、白は銀）。研究モードでは出さない */
+const SENPO=[['双璧','30-25,35-28'],['盾槍','30-25,31-19'],['送り鳥','30-25,31-21'],['双刃','30-25,34-20'],['先駆け','32-20,35-28'],['片隅','30-24,35-28'],['手損定跡','30-24,24-25'],['迷子','32-18,30-25'],['撃龍槍','31-19,33-21'],['浮浪雲','31-21,33-23']];
+const SP_IMG={};
+function spImg(i,side){const k=(i<9?'0':'')+(i+1)+(side===1?'g':'s');if(!SP_IMG[k]){const im=new Image();im.decoding='async';im.src='senpo/'+k+'.webp';SP_IMG[k]=im}return SP_IMG[k]}
+const spVf=(i,side)=>side===2?(5-(i/6|0))*6+i%6:i,spMr=i=>(i/6|0)*6+5-i%6;
+function senpoOf(m1,m2,side){if(!m1||!m2)return -1;const a=[spVf(m1[0],side),spVf(m1[1],side)],b=[spVf(m2[0],side),spVf(m2[1],side)];
+  const k1=a.join('-')+','+b.join('-'),k2=a.map(spMr).join('-')+','+b.map(spMr).join('-');return SENPO.findIndex(s=>s[1]===k1||s[1]===k2)}
+// 1手目を指した時点で、その手から始まる戦法の絵だけ先に読み込んでおく
+function spPre(m1,side){if(!m1)return;const a=[spVf(m1[0],side),spVf(m1[1],side)],k1=a.join('-'),k2=a.map(spMr).join('-');SENPO.forEach((s,i)=>{const f=s[1].split(',')[0];if(f===k1||f===k2)spImg(i,side)})}
+function senPlay(i,side,m1,m2,b){fxQueue(()=>senPlay0(i,side,m1,m2,b))}
+function senPlay0(idx,side,m1,m2,b){
+  if(!$('showJos').checked||CUR!=='game')return false;
+  const g=fxBase();if(!g)return false;const {bd,x,W,H,dpr,P,k}=g,s=g.s,im=spImg(idx,side),name=SENPO[idx][0];
+  const gold=side===1,COL=gold?'#e9c46a':'#dfe6ee',COL2=gold?'#f6e2a8':'#ffffff',LAB=gold?'#cdbf98':'#c3cad2',PER=3900;
+  const quake=name==='撃龍槍',t0=performance.now();
+  const stones=[P[m1[1]],P[m2[1]]];
+  function frame(now){const t=now-t0;if(CUR!=='game'){josStop();return}if(t>PER){fxDone();return}
+    x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
+    // 盤が少し寄る（撃龍槍は揺れる）
+    const zp=fxW(t,0,900),zs=1+0.035*Math.sin(Math.PI*zp);let tf='scale('+zs.toFixed(4)+')';
+    if(quake){const sp=fxW(t,350,1100);if(sp>0&&sp<1){const sh=Math.sin(sp*46)*4*(1-sp);tf+=' translate('+sh.toFixed(2)+'px,'+(sh*0.6).toFixed(2)+'px)'}}
+    bd.style.transform=zp<1||quake&&t<1100?tf:'';
+    const fade=1-fxW(t,PER-600,PER);
+    // 動かした2つの石から光が昇る
+    for(let n=0;n<2;n++){const Q=stones[n],p=fxW(t,n*160,900+n*160);if(p<=0)continue;const a=(1-fxW(t,900,1700))*fade;if(a<=0)continue;
+      const up=(P[0].y<P[30].y?-1:1)*(side===1?1:-1),h=fxE(p)*H*0.9;const gr=x.createLinearGradient(Q.x,Q.y,Q.x,Q.y+up*h);gr.addColorStop(0,COL2);gr.addColorStop(1,'rgba(0,0,0,0)');
+      x.save();x.globalAlpha=a*0.5;x.fillStyle=gr;const w=Q.w*0.55;x.fillRect(Q.x-w/2,Math.min(Q.y,Q.y+up*h),w,Math.abs(h));
+      x.globalAlpha=a;x.strokeStyle=COL2;x.lineWidth=3*k;x.beginPath();x.arc(Q.x,Q.y,(24+fxE(p)*30)*k,0,7);x.stroke();x.restore()}
+    // 絵が下から浮かび上がる
+    const ip=fxE(fxW(t,350,1500)),cx=W/2,cy=H*0.40,sz=Math.min(W,H)*0.70*(0.82+0.18*ip);
+    if(ip>0){x.save();duoFace(x,W,H,side);
+      const dg=x.createRadialGradient(cx,cy,0,cx,cy,sz*0.72);dg.addColorStop(0,'rgba(14,15,18,0.62)');dg.addColorStop(0.7,'rgba(14,15,18,0.38)');dg.addColorStop(1,'rgba(14,15,18,0)');x.globalAlpha=ip*fade;x.fillStyle=dg;x.beginPath();x.arc(cx,cy,sz*0.72,0,7);x.fill();
+      const hg=x.createRadialGradient(cx,cy,0,cx,cy,sz*0.62);hg.addColorStop(0,gold?'rgba(233,196,106,0.30)':'rgba(223,230,238,0.26)');hg.addColorStop(1,'rgba(0,0,0,0)');
+      x.globalAlpha=ip*fade*(0.85+0.15*Math.sin(t/180));x.fillStyle=hg;x.beginPath();x.arc(cx,cy,sz*0.62,0,7);x.fill();
+      x.globalAlpha=ip*fade;if(im.complete&&im.naturalWidth)x.drawImage(im,cx-sz/2,cy-sz/2+(1-ip)*H*0.16,sz,sz);
+      // 光の粒
+      for(let n=0;n<16;n++){const fp=fxW(t,350+fxR(n)*900,1600+fxR(n)*1400);if(fp<=0||fp>=1)continue;x.globalAlpha=fade*(1-fp)*0.9;x.fillStyle=n%2?COL:COL2;
+        const px=cx+(fxR(n+3)-0.5)*sz*1.1,py=cy+sz*0.5-fp*sz*1.1;x.fillRect(px-2*s,py-2*s,4*s,4*s)}
+      x.restore()}
+    // 戦法名
+    const np=fxW(t,1000,PER);if(np>0&&np<1){const a=Math.min(1,np/0.1)*(1-fxW(np,0.84,1)),y=H*0.78,bh=W*0.21;
+      x.save();duoFace(x,W,H,side);x.globalAlpha=a;x.textAlign='center';x.textBaseline='middle';
+      x.fillStyle='rgba(14,15,18,.76)';x.fillRect(0,y-bh/2,W,bh);
+      const lab='戦法';x.fillStyle=LAB;x.font='500 '+Math.round(13*s)+'px '+FX_FONT;x.fillText((window.BOCCH_LANG&&window.BOCCH_LANG!=='ja'&&window.bocchT)?window.bocchT(lab):lab.split('').join(' '),W/2,y-26*s);
+      x.fillStyle=COL;x.font='800 '+Math.round(44*s)+'px '+FX_FONT;x.fillText(name,W/2,y+12*s);
+      const tw=x.measureText(name).width,rp=fxE(np/0.25);x.fillRect(W/2-tw/2-18*s-50*s*rp,y+12*s,50*s*rp,1.5*s);x.fillRect(W/2+tw/2+18*s,y+12*s,50*s*rp,1.5*s);x.restore()}
+    JOS.raf=requestAnimationFrame(frame)}
+  JOS.raf=requestAnimationFrame(frame);return true}
 /* 勝ち・負け・到達の演出（金の糸と同じ見た目）。研究モードでは出さない */
 const FX={gid:'',ply:-1,arr:[0,0,0],over:''};
 function fxBase(){const bd=$('board'),grid=$('grid');if(!grid.children.length)return null;
@@ -1973,7 +2021,11 @@ render=function(){_render2();if(CUR==='game'&&MATCH.on&&S.mode==='net'&&NET.gues
   if(!S.over&&S.ply===1){j=josekiOf(S.last);lab='1手目 定跡「'}
   else if(!S.over&&S.ply===2){const k2=keyOf(S.last,2),w=k2&&JOSEKI2[k2];if(w){const k1=S.firstKey;j=(k1&&k1===k2)?['鏡・'+w[0],'黒と同じ形で応じる。'+w[1]]:w;lab='2手目 定跡「'}}
   if(S.ply===1&&S.last)S.firstKey=keyOf(S.last,1);
-  el.hidden=true;if(j&&!S.study&&S.last&&(typeof VIEW==='undefined'||VIEW.i==null)){const jk=(S.gid||NET.code||'')+':'+S.ply+':'+S.last.join('-');if(jk!==JOS.last){JOS.last=jk;josPlay(j[0],S.ply===1?1:2,S.last,S.b.slice())}}fxCheck()};
+  el.hidden=true;if(j&&!S.study&&S.last&&(typeof VIEW==='undefined'||VIEW.i==null)){const jk=(S.gid||NET.code||'')+':'+S.ply+':'+S.last.join('-');if(jk!==JOS.last){JOS.last=jk;josPlay(j[0],S.ply===1?1:2,S.last,S.b.slice())}}
+  if(!S.over&&!S.study&&S.log&&S.log.length===S.ply&&(typeof VIEW==='undefined'||VIEW.i==null)){
+    if(S.ply===1||S.ply===2)spPre(S.last,S.ply);
+    else if(S.ply===3||S.ply===4){const sd=S.ply-2,i=senpoOf(S.log[sd-1],S.log[sd+1],sd);if(i>=0){const sk=(S.gid||NET.code||'')+':sp'+S.ply+':'+S.last.join('-');if(sk!==JOS.spk){JOS.spk=sk;senPlay(i,sd,S.log[sd-1],S.last,S.b.slice())}}}}
+  fxCheck()};
 render();
 
 /* 対局履歴（この端末に保存） */
