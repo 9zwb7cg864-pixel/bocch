@@ -1961,7 +1961,7 @@ function senPlay0(idx,side,m1,m2,b){
     // 戦法名
     const np=fxW(t,1000,PER);if(np>0&&np<1){const a=Math.min(1,np/0.1)*(1-fxW(np,0.84,1)),y=H*0.78,bh=W*0.25,tc=spNameTint(idx,side);
       x.save();duoFace(x,W,H,side);x.globalAlpha=a;x.textAlign='center';x.textBaseline='middle';
-      x.fillStyle='rgba(14,15,18,.76)';x.fillRect(0,y-bh/2,W,bh);
+      x.fillStyle='rgba(14,15,18,.88)';x.fillRect(0,y-bh/2,W,bh);
       const lab='戦法';x.fillStyle=LAB;x.font='500 '+Math.round(13*s)+'px '+FX_FONT;x.fillText((window.BOCCH_LANG&&window.BOCCH_LANG!=='ja'&&window.bocchT)?window.bocchT(lab):lab.split('').join(' '),W/2,y-35*s);
       if(tc){// 筆文字：左から右へ書くように現れ、そのあと薄い光
         let nh=62*s,nw=nh*tc.width/tc.height;if(nw>W*0.82){nw=W*0.82;nh=nw*tc.height/tc.width}
