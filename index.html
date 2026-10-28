@@ -1916,11 +1916,18 @@ function josPlay0(name,side,mv,b){
 const SENPO=[['双璧','30-25,35-28'],['盾槍','30-25,31-19'],['送り鳥','30-25,31-21'],['双刃','30-25,34-20'],['先駆け','32-20,35-28'],['片隅','30-24,35-28'],['手損定跡','30-24,24-25'],['迷子','32-18,30-25'],['撃龍槍','31-19,33-21'],['浮浪雲','31-21,33-23']];
 const SP_IMG={};
 function spImg(i,side){const k=(i<9?'0':'')+(i+1)+(side===1?'g':'s');if(!SP_IMG[k]){const im=new Image();im.decoding='async';im.src='senpo/'+k+'.webp';SP_IMG[k]=im}return SP_IMG[k]}
+// 戦法名の筆文字（白・透明背景）。黒番は金、白番は銀のグラデーションに色づけしたものを一度だけ作って使い回す
+function spNameImg(i){const k=(i<9?'0':'')+(i+1)+'n';if(!SP_IMG[k]){const im=new Image();im.decoding='async';im.src='senpo/'+k+'.webp';SP_IMG[k]=im}return SP_IMG[k]}
+const SP_TINT={};
+function spNameTint(i,side){const key=i+'_'+side;if(SP_TINT[key])return SP_TINT[key];const im=spNameImg(i);if(!im.complete||!im.naturalWidth)return null;
+  const w=im.naturalWidth,h=im.naturalHeight,c=document.createElement('canvas');c.width=w;c.height=h;const cx=c.getContext('2d');cx.drawImage(im,0,0);
+  cx.globalCompositeOperation='source-in';const gr=cx.createLinearGradient(0,0,0,h),cs=side===1?['#fff4cc','#e9c46a','#b07f2c']:['#ffffff','#dfe6ee','#9aa6b2'];
+  gr.addColorStop(0,cs[0]);gr.addColorStop(0.5,cs[1]);gr.addColorStop(1,cs[2]);cx.fillStyle=gr;cx.fillRect(0,0,w,h);return SP_TINT[key]=c}
 const spVf=(i,side)=>side===2?(5-(i/6|0))*6+i%6:i,spMr=i=>(i/6|0)*6+5-i%6;
 function senpoOf(m1,m2,side){if(!m1||!m2)return -1;const a=[spVf(m1[0],side),spVf(m1[1],side)],b=[spVf(m2[0],side),spVf(m2[1],side)];
   const k1=a.join('-')+','+b.join('-'),k2=a.map(spMr).join('-')+','+b.map(spMr).join('-');return SENPO.findIndex(s=>s[1]===k1||s[1]===k2)}
 // 1手目を指した時点で、その手から始まる戦法の絵だけ先に読み込んでおく
-function spPre(m1,side){if(!m1)return;const a=[spVf(m1[0],side),spVf(m1[1],side)],k1=a.join('-'),k2=a.map(spMr).join('-');SENPO.forEach((s,i)=>{const f=s[1].split(',')[0];if(f===k1||f===k2)spImg(i,side)})}
+function spPre(m1,side){if(!m1)return;const a=[spVf(m1[0],side),spVf(m1[1],side)],k1=a.join('-'),k2=a.map(spMr).join('-');SENPO.forEach((s,i)=>{const f=s[1].split(',')[0];if(f===k1||f===k2){spImg(i,side);spNameImg(i)}})}
 function senPlay(i,side,m1,m2,b){fxQueue(()=>senPlay0(i,side,m1,m2,b))}
 function senPlay0(idx,side,m1,m2,b){
   if(!$('showJos').checked||CUR!=='game')return false;
@@ -1952,12 +1959,20 @@ function senPlay0(idx,side,m1,m2,b){
         const px=cx+(fxR(n+3)-0.5)*sz*1.1,py=cy+sz*0.5-fp*sz*1.1;x.fillRect(px-2*s,py-2*s,4*s,4*s)}
       x.restore()}
     // 戦法名
-    const np=fxW(t,1000,PER);if(np>0&&np<1){const a=Math.min(1,np/0.1)*(1-fxW(np,0.84,1)),y=H*0.78,bh=W*0.21;
+    const np=fxW(t,1000,PER);if(np>0&&np<1){const a=Math.min(1,np/0.1)*(1-fxW(np,0.84,1)),y=H*0.78,bh=W*0.25,tc=spNameTint(idx,side);
       x.save();duoFace(x,W,H,side);x.globalAlpha=a;x.textAlign='center';x.textBaseline='middle';
       x.fillStyle='rgba(14,15,18,.76)';x.fillRect(0,y-bh/2,W,bh);
-      const lab='戦法';x.fillStyle=LAB;x.font='500 '+Math.round(13*s)+'px '+FX_FONT;x.fillText((window.BOCCH_LANG&&window.BOCCH_LANG!=='ja'&&window.bocchT)?window.bocchT(lab):lab.split('').join(' '),W/2,y-26*s);
-      x.fillStyle=COL;x.font='800 '+Math.round(44*s)+'px '+FX_FONT;x.fillText(name,W/2,y+12*s);
-      const tw=x.measureText(name).width,rp=fxE(np/0.25);x.fillRect(W/2-tw/2-18*s-50*s*rp,y+12*s,50*s*rp,1.5*s);x.fillRect(W/2+tw/2+18*s,y+12*s,50*s*rp,1.5*s);x.restore()}
+      const lab='戦法';x.fillStyle=LAB;x.font='500 '+Math.round(13*s)+'px '+FX_FONT;x.fillText((window.BOCCH_LANG&&window.BOCCH_LANG!=='ja'&&window.bocchT)?window.bocchT(lab):lab.split('').join(' '),W/2,y-35*s);
+      if(tc){// 筆文字：左から右へ書くように現れ、そのあと薄い光
+        let nh=62*s,nw=nh*tc.width/tc.height;if(nw>W*0.82){nw=W*0.82;nh=nw*tc.height/tc.width}
+        const nx=W/2-nw/2,ny=y+13*s-nh/2,wp=fxE(np/0.3),pad=12*s;
+        x.save();x.beginPath();x.rect(nx-pad,ny-pad,(nw+pad*2)*wp,nh+pad*2);x.clip();
+        x.shadowColor='rgba(0,0,0,.85)';x.shadowBlur=10*s;x.drawImage(tc,nx,ny,nw,nh);
+        const gp=fxW(np,0.25,0.75);if(gp>0&&gp<1){x.globalAlpha=a*0.55*Math.sin(Math.PI*gp);x.shadowColor=gold?'rgba(246,226,168,.9)':'rgba(255,255,255,.85)';x.shadowBlur=18*s;x.drawImage(tc,nx,ny,nw,nh)}
+        x.restore()}
+      else{x.fillStyle=COL;x.font='800 '+Math.round(44*s)+'px '+FX_FONT;x.fillText(name,W/2,y+13*s);
+        const tw=x.measureText(name).width,rp=fxE(np/0.25);x.fillRect(W/2-tw/2-18*s-50*s*rp,y+13*s,50*s*rp,1.5*s);x.fillRect(W/2+tw/2+18*s,y+13*s,50*s*rp,1.5*s)}
+      x.restore()}
     JOS.raf=requestAnimationFrame(frame)}
   JOS.raf=requestAnimationFrame(frame);return true}
 /* 勝ち・負け・到達の演出（金の糸と同じ見た目）。研究モードでは出さない */
