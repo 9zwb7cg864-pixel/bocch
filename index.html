@@ -1942,11 +1942,6 @@ function senPlay0(idx,side,m1,m2,b){
     if(quake){const sp=fxW(t,350,1100);if(sp>0&&sp<1){const sh=Math.sin(sp*46)*4*(1-sp);tf+=' translate('+sh.toFixed(2)+'px,'+(sh*0.6).toFixed(2)+'px)'}}
     bd.style.transform=zp<1||quake&&t<1100?tf:'';
     const fade=1-fxW(t,PER-600,PER);
-    // 動かした2つの石から光が昇る
-    for(let n=0;n<2;n++){const Q=stones[n],p=fxW(t,n*160,900+n*160);if(p<=0)continue;const a=(1-fxW(t,900,1700))*fade;if(a<=0)continue;
-      const up=(P[0].y<P[30].y?-1:1)*(side===1?1:-1),h=fxE(p)*H*0.9;const gr=x.createLinearGradient(Q.x,Q.y,Q.x,Q.y+up*h);gr.addColorStop(0,COL2);gr.addColorStop(1,'rgba(0,0,0,0)');
-      x.save();x.globalAlpha=a*0.5;x.fillStyle=gr;const w=Q.w*0.55;x.fillRect(Q.x-w/2,Math.min(Q.y,Q.y+up*h),w,Math.abs(h));
-      x.globalAlpha=a;x.strokeStyle=COL2;x.lineWidth=3*k;x.beginPath();x.arc(Q.x,Q.y,(24+fxE(p)*30)*k,0,7);x.stroke();x.restore()}
     // 絵が下から浮かび上がる
     const ip=fxE(fxW(t,350,1500)),cx=W/2,cy=H*0.40,sz=Math.min(W,H)*0.70*(0.82+0.18*ip);
     if(ip>0){x.save();duoFace(x,W,H,side);
