@@ -1364,6 +1364,7 @@ function komaPlay(force){if((!KOMA.on&&!force)||document.hidden)return;const now
   try{if(KOMA.ctx){const go=()=>{const src=KOMA.ctx.createBufferSource(),g=KOMA.ctx.createGain();src.buffer=b;g.gain.value=0.025;src.connect(g);g.connect(KOMA.ctx.destination);src.start();komaSleep()};if(KOMA.ctx.state==='running')go();else KOMA.ctx.resume().then(go).catch(()=>{})}
     else{const a=b.cloneNode();a.volume=0.025;a.play().catch(()=>{})}}catch(e){}}
 function doMove(m){
+  try{if(S&&!S.study&&!S.learn&&!S.over)statFirst('bocch-fs','fs')}catch(e){}
   if(S.mode==='net'){netMove(m);return}
   // 学ぶ：勝ち負けは付けず、自由に動かし続けられる（次の色が動けなければ同じ色が続けて指す）
   if(S.learn){S.hist.push({b:S.b,turn:S.turn,last:S.last,reps:{...S.reps},ply:S.ply});const b=apply(S.b,m);let t=3-S.turn;if(!allMoves(b,t).length)t=S.turn;
@@ -2490,11 +2491,17 @@ setInterval(()=>{try{if(!document.hidden&&CUR==='game'&&S&&!S.over&&!S.study&&!(
 function statFlush(g,m,beacon){const s=Math.min(3600,STAT.pend);STAT.pend=0;if(!s&&!g)return;statSend({s,g:g?1:0,m:m||''},beacon)}
 addEventListener('pagehide',()=>statFlush(0,'',true));
 document.addEventListener('visibilitychange',()=>{if(document.hidden)statFlush(0,'',true)});
-setTimeout(()=>statSend({o:1}),4000); // 開いた端末を数える（表示が落ち着いてから）
+// 初めての人の流れ：初めて開いた日を覚えておき、次の日・7日以内にまた来たかを1回だけ送る
+function statVisit(){const o={o:1};try{const jd=x=>new Date(x+9*3600e3).toISOString().slice(0,10),today=jd(Date.now());let fd=localStorage.getItem('bocch-fd');
+  if(!fd){fd=today;localStorage.setItem('bocch-fd',fd);o.nv=1}else if(fd!==today){const diff=Math.round((Date.parse(today)-Date.parse(fd))/864e5);
+    if(diff===1&&!localStorage.getItem('bocch-r1')){localStorage.setItem('bocch-r1','1');o.r1=1}
+    if(diff>=1&&diff<=7&&!localStorage.getItem('bocch-r7')){localStorage.setItem('bocch-r7','1');o.r7=1}}}catch(e){}return o}
+setTimeout(()=>statSend(statVisit()),4000); // 開いた端末を数える（表示が落ち着いてから）
+function statFirst(k,f){try{if(localStorage.getItem(k))return;localStorage.setItem(k,'1');statSend({[f]:1})}catch(e){}}
 async function statAccount(uid){try{if(STAT.acc||!uid||!crypto.subtle)return;STAT.acc=true;const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('bocch:'+uid));
   STAT.u=[...new Uint8Array(h)].slice(0,12).map(x=>x.toString(16).padStart(2,'0')).join('');statSend({})}catch(e){}}
 // 終局1回につき1つ。オンラインは同じ対局を2人とも送るので、黒の人（影の相手との対局は本人）だけが数える
-function statGameEnd(){try{const net=S.mode==='net';const count=!net||colorOf(NET.me)===1||!!SHADOW.bot;
+function statGameEnd(){statFirst('bocch-fg','fg');try{const net=S.mode==='net';const count=!net||colorOf(NET.me)===1||!!SHADOW.bot;
   const m=net?(SHADOW.bot?'shadow':'net'):S.mode===0?'local':'cpu'+S.mode;statFlush(count,m)}catch(e){}}
 function bdGameEnd(){if(!S||!S.over||S.study||!S.log||!S.log.length)return;const id=currentGameId();if(!id)return;const s=bdStats();if(s.done.includes(id))return;
   const me=S.mode==='net'?(NET.watch?0:colorOf(NET.me)):S.mode===0?0:hcOf();if(S.mode==='net'&&!me)return;

@@ -168,6 +168,10 @@ export class Topic extends DurableObject {
     if (o || sec || g) await once("v:" + d, "visitors");
     if (sec || g) await once("p:" + d, "players");
     if (/^[a-f0-9]{16,32}$/.test(u)) await once("a:" + u, "accounts");
+    // 初めての人の流れ：nv 初めて開いた・fs 1局目を始めた・fg 1局目を終えた・r1 次の日に来た・r7 7日以内にまた来た（端末ごとに1回だけ）
+    for (const f of ["nv", "fs", "fg", "r1", "r7"]) {
+      if (b[f] && !(await st.get(f + ":" + d))) { put[f + ":" + d] = 1; T[f] = (T[f] || 0) + 1; D[f] = (D[f] || 0) + 1; }
+    }
     put.tot = T; put["day:" + day] = D;
     await st.put(put);
     return new Response("ok\n", { headers: h });
