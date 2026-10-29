@@ -2550,7 +2550,9 @@ $('nameSave').addEventListener('click',async()=>{const msg=$('nameMsg');if(!name
   msg.textContent='確かめています…';$('nameSave').disabled=true;
   try{const ok=await claimName(nm);if(!ok){msg.textContent='「'+nm+'」はもう使われています。別の名前にしてください。';return}
     if(old&&nameKey(old)!==nameKey(nm))FB.db.collection('names').doc(nameKey(old)).delete().catch(()=>{});
-    PROF.name=nm;saveProf();renderProf();msg.textContent='保存しました：'+nm;render()}
+    // ランキング：前の名前の行を必ず外して、新しい名前で載せ直す（別の端末で載せていた分も消えるように、前の名前そのものを外す）
+    try{if(old&&old!==nm)botSaveRate('p:'+old,100);if(PROF.rkName&&PROF.rkName!==nm&&PROF.rkName!==old)botSaveRate('p:'+PROF.rkName,100)}catch(e){}
+    PROF.name=nm;saveProf();renderProf();try{rankPost()}catch(e){}msg.textContent='保存しました：'+nm;render()}
   catch(e){msg.textContent='名前を確かめられませんでした（'+(e&&e.code||e)+'）。時間をおいてもう一度試してください。'}
   finally{$('nameSave').disabled=!named()}});
 $('nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('nameSave').click()});
