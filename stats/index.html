@@ -57,6 +57,9 @@ th:first-child,td:first-child{text-align:left}
       <div class="k"><div class="l">サイトを開いた人</div><div class="v" id="kV"></div><div class="s" id="kVS"></div></div>
       <div class="k"><div class="l">ランキングに載った人</div><div class="v" id="kRk"></div><div class="s">記録を始める前の分も含む</div></div>
     </div>
+    <h2>初めての人の流れ（直近7日）</h2>
+    <div class="wrapT"><table><thead><tr><th>段階</th><th>人数</th><th>前の段階から</th><th>開いた人から</th></tr></thead><tbody id="funnel"><tr><td colspan="4">読み込み中…</td></tr></tbody></table></div>
+    <p class="note">数え始め：2026年10月29日。初めて開いた日から数えるので、記録を始める前に来たことがある端末は入りません。</p>
     <h2>モード別の対局数</h2>
     <div class="modes" id="modes"></div>
     <h2>登録アカウント（名前を付けた人）</h2>
@@ -85,6 +88,8 @@ async function load(){
   $('kV').innerHTML=fmt(t.visitors)+'<small>人</small>';$('kVS').textContent='今日 '+fmt(today.visitors)+'人';
   $('kAcc').innerHTML='…';$('kAccS').textContent='';
   const ms=Object.entries(j.modes||{}).sort((a,b)=>b[1]-a[1]);$('modes').innerHTML=ms.length?ms.map(([k,v])=>'<span>'+(MODE[k]||k)+'<b>'+fmt(v)+'</b></span>').join(''):'<span>まだありません</span>';
+  {const F=[['nv','初めて開いた'],['fs','1局目を始めた'],['fg','1局目を最後まで指した'],['r1','次の日にまた来た'],['r7','7日以内にまた来た']];const sum={};for(const k of keys.slice(0,7))for(const [f] of F)sum[f]=(sum[f]||0)+(days[k][f]||0);
+   const pc=(a,b)=>b?Math.round(100*a/b)+'%':'—';$('funnel').innerHTML=F.map(([f,lab],i)=>'<tr><td>'+lab+'</td><td>'+fmt(sum[f])+'</td><td>'+(i===0?'—':pc(sum[f],sum[F[i===4?0:i-1][0]]))+'</td><td>'+(i===0?'—':pc(sum[f],sum.nv))+'</td></tr>').join('')}
   const mx=Math.max(1,...keys.map(k=>days[k].sec||0));
   $('days').innerHTML=keys.slice(0,45).map(k=>{const d=days[k];return '<tr><td>'+k.slice(5).replace('-','/')+'</td><td>'+Math.round((d.sec||0)/60)+'分<span class="bar" style="width:'+Math.round(60*(d.sec||0)/mx)+'px"></span></td><td>'+fmt(d.players)+'</td><td>'+fmt(d.games)+'</td><td>'+fmt(d.visitors)+'</td><td>'+fmt(d.signups)+'</td></tr>'}).join('')||'<tr><td colspan="6">まだ記録がありません</td></tr>';
   const first=keys[keys.length-1];
