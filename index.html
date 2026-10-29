@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var q=mp(new URLSearchParams(location.search).get('lang'));if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));var n=mp((navigator.languages&&navigator.languages[0])||navigator.language);L=q||s||n||'en'}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=9"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var q=mp(new URLSearchParams(location.search).get('lang'));if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));var n=mp((navigator.languages&&navigator.languages[0])||navigator.language);L=q||s||n||'en'}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=10"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -403,7 +403,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 
 /* 毎日の1問 */
 .dq-msg{text-align:center;min-height:1.6em;font-size:16px;margin:10px 0 4px}.dq-msg.ok{color:var(--win)}.dq-msg.ng{color:#e08c7c}
-.dq-btns{justify-content:center;gap:10px}
+.dq-btns{justify-content:center;gap:10px}.dq-share{margin:2px 0 10px}
 .dq-streak{display:flex;justify-content:center;gap:36px;margin:14px 0 6px}.dq-streak div{display:flex;flex-direction:column;align-items:center}
 .dq-streak b{font-family:"Shippori Mincho B1","Hiragino Mincho ProN",serif;font-size:34px;color:var(--gold);line-height:1.1}.dq-streak span{font-size:12px;color:var(--sub);letter-spacing:.15em}
 .dq-note{text-align:center;max-width:420px;margin:8px auto 0}
@@ -454,7 +454,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .cell.heat{position:relative}.cell.heat .hv{position:absolute;right:3px;bottom:2px;font-size:11px;font-weight:700;color:#1d1a14;font-variant-numeric:tabular-nums;pointer-events:none}
 
 /* 講座 */
-.cs-yt{display:flex;align-items:center;gap:12px;margin:4px 0 14px;padding:12px 14px;border:1px solid rgba(201,169,110,.45);color:inherit;text-decoration:none}.cs-yt .pl{color:#e05a4a;font-size:22px}.cs-yt b{display:block;color:var(--gold);font-size:14px}.cs-yt small{display:block;color:var(--sub);font-size:12px;margin-top:2px}
+.cs-yt{display:flex;align-items:center;gap:12px;margin:4px 0 14px;padding:12px 14px;border:1px solid rgba(201,169,110,.45);color:inherit;text-decoration:none}.cs-yt .pl{color:#e05a4a;font-size:22px}.cs-yt b{display:block;color:var(--gold);font-size:14px}.cs-yt small{display:block;color:var(--sub);font-size:12px;margin-top:2px}.cs-x .pl{color:var(--fg,#e8e6e1);font-size:20px;width:22px;text-align:center}
 .cs-tot{color:var(--gold);font-size:14px;text-align:right}
 .cs-prog{height:6px;background:rgba(255,255,255,.08);margin:6px 0 4px}.cs-prog i{display:block;height:100%;background:var(--gold);width:0}
 .cs-progt{font-size:12px;color:var(--sub);text-align:right;margin:0 0 6px}
@@ -598,6 +598,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
   <div class="topbar"><button class="back" id="csBack">‹ 戻る</button><h2 id="csTitle">学ぶ</h2><span class="sp cs-tot" id="csTot"></span></div>
   <div id="csMap">
     <a class="cs-yt" href="https://www.youtube.com/@bocch.official" target="_blank" rel="noopener"><span class="pl">▶</span><span><b>YouTube「bocch定跡研究」</b><small>戦法や定跡を、動画でも解説しています ›</small></span></a>
+    <a class="cs-yt cs-x" href="https://x.com/" target="_blank" rel="noopener"><span class="pl">𝕏</span><span><b>X（公式）</b><small>新しい動画や機能のお知らせ ›</small></span></a>
     <div class="cs-prog"><i id="csBar"></i></div><p class="cs-progt" id="csProgT"></p>
     <div id="csList"></div>
     <button class="cs-ref" id="csRef">資料 ›<small>勝ち方ガイド：試し盤・定跡を盤で見る・手筋の図・26,000局のデータ</small></button>
@@ -619,6 +620,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
   <p class="rev-head" id="dqHead"></p>
   <div class="boardwrap rev-board"><div class="board" id="dboard"><div class="lab lab-top" id="dlabTop" aria-hidden="true"></div><div class="lab lab-left" id="dlabLeft" aria-hidden="true"></div><div class="grid" id="dgrid" aria-label="毎日の1問の盤"></div></div></div>
   <p class="dq-msg" id="dqMsg"></p>
+  <div class="row dq-btns dq-share" id="dqShareRow" hidden><button class="primary" id="dqShare">結果をXでシェア</button></div>
   <div class="row dq-btns"><button id="dqRetry">はじめから</button><button id="dqAns">答えを見る</button></div>
   <div class="dq-streak"><div><b id="dqCur">0</b><span>日連続</span></div><div><b id="dqMax">0</b><span>最高</span></div></div>
   <p class="note dq-note">相手がどう受けても、2手で勝てる手が1つだけあります。その日の最初の挑戦だけが連続記録に入ります（2回目からは練習）。問題は毎日0時に変わります。</p>
@@ -2939,7 +2941,7 @@ const _renderV=render;render=function(){_renderV();
   try{talkWatch()}catch(e){console.error(e)}};
 
 /* 毎日の1問：相手がどう受けても2手で勝てる局面（前もって作った401問）。その日の最初の挑戦だけ連続記録に入る */
-const DQ={list:null,q:null,b:null,turn:1,phase:'',sel:-1,last:null,first:false,busy:false};
+const DQ={list:null,q:null,b:null,turn:1,phase:'',sel:-1,last:null,first:false,busy:false,res:null,ply:2};
 function dqDay(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function dqIndex(){const d=new Date(),t0=new Date(2026,9,27);return Math.floor((new Date(d.getFullYear(),d.getMonth(),d.getDate())-t0)/86400000)}
 function dqYest(){const d=new Date();d.setDate(d.getDate()-1);return dqDay(d)}
@@ -2951,7 +2953,7 @@ async function dqLoad(){if(DQ.list)return DQ.list;try{DQ.list=await fetch('puzzl
 async function dqOpen(){const L=await dqLoad();if(!L.length){$('dqHead').textContent='問題を読み込めませんでした。通信を確かめてください。';return}
   const n=dqIndex(),q=L[((n%L.length)+L.length)%L.length];DQ.q={b:q[0].split('').map(Number),p:q[1],ans:[q[2],q[3]],n:n+1};dqReset();
   const s=bdStats();DQ.first=s.dlast!==dqDay();dqRender()}
-function dqReset(){DQ.b=DQ.q.b.slice();DQ.turn=DQ.q.p;DQ.phase='p1';DQ.sel=-1;DQ.last=null;DQ.busy=false;$('dqMsg').textContent='';$('dqMsg').className='dq-msg'}
+function dqReset(){DQ.res=null;dqShareUpd();DQ.b=DQ.q.b.slice();DQ.turn=DQ.q.p;DQ.phase='p1';DQ.sel=-1;DQ.last=null;DQ.busy=false;$('dqMsg').textContent='';$('dqMsg').className='dq-msg'}
 function dqRender(){if(!DQ.q)return;const b=DQ.b,p=DQ.q.p,flip=p===2,tg=DQ.sel>=0?movesFrom(b,DQ.sel).map(m=>m[1]):[];const my=(DQ.phase==='p1'||DQ.phase==='p2')&&!DQ.busy;
   const d=new Date();$('dqHead').textContent=(d.getMonth()+1)+'月'+d.getDate()+'日の問題（第'+DQ.q.n+'問）　'+(p===1?'黒':'白')+'番・2手で勝ち';
   for(let i=0;i<36;i++){const v=b[i],r=i/6|0,n=v?nbCount(b,i):0;let cls='cell';if(r===0||r===5)cls+=' goal';if(DQ.last&&(DQ.last[0]===i||DQ.last[1]===i))cls+=' last';
@@ -2961,7 +2963,7 @@ function dqRender(){if(!DQ.q)return;const b=DQ.b,p=DQ.q.p,flip=p===2,tg=DQ.sel>=
   [...$('dlabTop').children].forEach((e,k)=>e.textContent=String(flip?6-k:k+1));[...$('dlabLeft').children].forEach((e,k)=>e.textContent='abcdef'[flip?5-k:k]);
   const s=bdStats();$('dqCur').textContent=dqCur();$('dqMax').textContent=s.daily|0;try{komaWatch('dgrid',DQ.q.n,CUR==='daily')}catch(e){}}
 function dqMsg(t,k){const m=$('dqMsg');m.textContent=t;m.className='dq-msg'+(k?' '+k:'')}
-function dqRecord(ok){if(!DQ.first)return;DQ.first=false;const s=bdStats(),t=dqDay();if(s.dlast===t)return;
+function dqRecord(ok){DQ.res=ok?'ok':'ng';dqShareUpd();if(!DQ.first)return;DQ.first=false;const s=bdStats(),t=dqDay();if(s.dlast===t)return;
   s.dcur=ok?((s.dlast===dqYest()?(s.dcur|0):0)+1):0;s.dlast=t;s.daily=Math.max(s.daily|0,s.dcur);saveProf();bdCheck();dqDot()}
 function dqMove(m){DQ.b=apply(DQ.b,m);DQ.last=m;DQ.sel=-1;dqRender()}
 function dqCell(i){if(CUR!=='daily'||!DQ.q||DQ.busy||!(DQ.phase==='p1'||DQ.phase==='p2'))return;const b=DQ.b,p=DQ.q.p;
@@ -2969,9 +2971,9 @@ function dqCell(i){if(CUR!=='daily'||!DQ.q||DQ.busy||!(DQ.phase==='p1'||DQ.phase
   DQ.sel=(b[i]===p&&movesFrom(b,i).length&&DQ.sel!==i)?i:-1;dqRender()}
 function dqPlay(m){const p=DQ.q.p;
   if(DQ.phase==='p1'){const ok=m[0]===DQ.q.ans[0]&&m[1]===DQ.q.ans[1];dqMove(m);
-    if(dqWinNow(DQ.q.b,p,m)){DQ.phase='done';dqMsg('勝ち！（この局面は1手で勝てました）','ok');dqRecord(true);return}
+    if(dqWinNow(DQ.q.b,p,m)){DQ.phase='done';DQ.ply=1;dqMsg('勝ち！（この局面は1手で勝てました）','ok');dqRecord(true);return}
     DQ.busy=true;dqMsg(ok?'いい手です。相手の番……':'相手の番……');
-    setTimeout(()=>{const b=DQ.b,rs=allMoves(b,3-p);if(!rs.length){DQ.busy=false;DQ.phase='done';dqMsg('相手は動けません。勝ち！','ok');dqRecord(true);return}
+    setTimeout(()=>{const b=DQ.b,rs=allMoves(b,3-p);if(!rs.length){DQ.busy=false;DQ.phase='done';DQ.ply=1;dqMsg('相手は動けません。勝ち！','ok');dqRecord(true);return}
       // 相手は一番しぶとい受け：自分の即勝ちがあればそれ、なければ次にこちらの勝ち手がいちばん少なくなる手
       let best=rs.find(r=>dqWinNow(b,3-p,r));if(!best){let mn=1e9;for(const r of rs){const c=apply(b,r),k=allMoves(c,p).filter(x=>dqWinNow(c,p,x)).length;if(k<mn){mn=k;best=r}}}
       dqMove(best);DQ.busy=false;
@@ -2979,14 +2981,25 @@ function dqPlay(m){const p=DQ.q.p;
       const can=allMoves(DQ.b,p).some(x=>dqWinNow(DQ.b,p,x));
       if(!can){DQ.phase='done';dqMsg('ここからは勝ちきれません。答えを見てみましょう','ng');dqRecord(false);return}
       DQ.phase='p2';dqMsg('あと1手。勝ちを決めてください');dqRender()},650);return}
-  if(DQ.phase==='p2'){const win=dqWinNow(DQ.b,p,m);dqMove(m);DQ.phase='done';if(win){dqMsg('正解！','ok');dqRecord(true)}else{dqMsg('惜しい。勝ちの手はほかにありました','ng');dqRecord(false)}dqRender()}}
+  if(DQ.phase==='p2'){const win=dqWinNow(DQ.b,p,m);DQ.ply=2;dqMove(m);DQ.phase='done';if(win){dqMsg('正解！','ok');dqRecord(true)}else{dqMsg('惜しい。勝ちの手はほかにありました','ng');dqRecord(false)}dqRender()}}
 function dqShow(){if(!DQ.q||DQ.busy)return;dqRecord(false);dqReset();DQ.busy=true;DQ.phase='show';dqRender();const p=DQ.q.p;dqMsg('答え：'+(p===1?'黒':'白')+' '+sqName(DQ.q.ans[0])+'→'+sqName(DQ.q.ans[1]));
   setTimeout(()=>{dqMove(DQ.q.ans);setTimeout(()=>{const b=DQ.b,rs=allMoves(b,3-p);let best=rs[0],mn=1e9;for(const r of rs){const c=apply(b,r),k=allMoves(c,p).filter(x=>dqWinNow(c,p,x)).length;if(k<mn){mn=k;best=r}}
-    if(best)dqMove(best);setTimeout(()=>{const w=allMoves(DQ.b,p).find(x=>dqWinNow(DQ.b,p,x));if(w)dqMove(w);DQ.busy=false;DQ.phase='done';dqMsg('答え：'+sqName(DQ.q.ans[0])+'→'+sqName(DQ.q.ans[1])+'　相手がどう受けても、次の1手で勝てます','ok')},900)},900)},500)}
+    if(best)dqMove(best);setTimeout(()=>{const w=allMoves(DQ.b,p).find(x=>dqWinNow(DQ.b,p,x));if(w)dqMove(w);DQ.busy=false;DQ.phase='done';DQ.res='ng';dqShareUpd();dqMsg('答え：'+sqName(DQ.q.ans[0])+'→'+sqName(DQ.q.ans[1])+'　相手がどう受けても、次の1手で勝てます','ok')},900)},900)},500)}
 function dqDot(){const s=bdStats();$('dailyDot').hidden=s.dlast===dqDay();if(!$('dailyDot').hidden)$('dailyDot').textContent='!'}
 $('dgrid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(!c)return;dqCell(+c.id.slice(1))});
 $('dqRetry').addEventListener('click',()=>{if(!DQ.q||DQ.busy)return;dqReset();dqRender()});
 $('dqAns').addEventListener('click',dqShow);
+/* 結果をXでシェア：投稿画面を開くだけ（APIは使わない）。正解の手は書かない。盤は解く人に見えている向きのまま、上の段から6行 */
+function dqShareUpd(){const r=$('dqShareRow');if(!r)return;r.hidden=!DQ.res;$('dqShare').textContent=window.BOCCH_LANG&&window.BOCCH_LANG!=='ja'?'Share on X':'結果をXでシェア'}
+function dqShareText(){const q=DQ.q,p=q.p,en=!!(window.BOCCH_LANG&&window.BOCCH_LANG!=='ja'),flip=p===2,rows=[];
+  for(let r=0;r<6;r++){let t='';for(let c=0;c<6;c++){const i=flip?35-(r*6+c):r*6+c,v=q.b[i];t+=v===1?'●':v===2?'○':'・'}rows.push(t)}
+  const tail='https://bocchgame.com\n#bocch';
+  if(DQ.res==='ok'){const k=DQ.ply,st=dqCur();
+    return en?'bocch Daily Puzzle #'+q.n+' solved!\n'+(p===1?'Black':'White')+' to move · won in '+k+' / '+st+'-day streak\n'+rows.join('\n')+'\n'+tail
+      :'bocch 今日の1問（第'+q.n+'問）解けた！\n'+(p===1?'黒':'白')+'番・'+k+'手で勝ち／'+st+'日連続\n'+rows.join('\n')+'\n'+tail}
+  return en?'bocch Daily Puzzle #'+q.n+' — couldn\'t solve it…\nThe answer was a win in 2. A new puzzle is out at midnight.\n'+tail
+    :'bocch 今日の1問（第'+q.n+'問）解けなかった…\n正解は2手で勝ちでした。明日の問題は0時に出ます\n'+tail}
+$('dqShare').addEventListener('click',()=>{if(!DQ.q||!DQ.res)return;window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(dqShareText()),'_blank','noopener')});
 $('dailyBtn').addEventListener('click',()=>{dqOpen()});
 addEventListener('popstate',()=>{if(CUR==='daily')dqOpen()});
 try{dqDot()}catch(e){}
