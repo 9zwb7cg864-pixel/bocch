@@ -1346,7 +1346,7 @@ const mvL=n=>mvSvg().querySelector('[data-l="'+n+'"]');
 function mvMe(){try{const m=fxMe();return m||0}catch(e){return 0}}
 /* 次の手でゴールに届く石：自分（見ている側）は金、相手は赤。選んでいる間と終局後は出さない */
 function mvReach(b){const o={s:{},t:{}};if(S.over||S.sel>=0||S.learn||!mvLive())return o;const me=mvMe()||1;
-  for(let i=0;i<N*N;i++){const p=b[i];if(!p)continue;const g=goalRow(p);for(const m of movesFrom(b,i))if((m[1]/N|0)===g){const k=p===me?'G':'R';o.s[i]=k;o.t[m[1]]=k}}return o}
+  for(let i=0;i<N*N;i++){const p=b[i];if(!p)continue;const g=goalRow(p);if((i/N|0)===g)continue;for(const m of movesFrom(b,i))if((m[1]/N|0)===g){const k=p===me?'G':'R';o.s[i]=k;o.t[m[1]]=k}}return o}
 function mvPre(){const P=MV.prev,cur={S,ply:S.ply||0,b:S.b.slice(),last:S.last};MV.prev=cur;
   if(P&&P.S!==S){const e=$('mvEnd');if(e)e.hidden=true}
   if(!P||P.S!==S||cur.ply!==P.ply+1||!S.last){if(!P||P.S!==S||cur.ply!==P.ply){mvStop();MV.badge={}}return}
