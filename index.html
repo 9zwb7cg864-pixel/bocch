@@ -2570,7 +2570,10 @@ function flagWhy(c){const my=colorOf(NET.me);return my&&!NET.watch?(c===my?'あ�
 const _reduceT=reduce;reduce=function(m){
   if(S.mode==='net'&&m&&typeof m._t==='number'){
     if(m.t==='join'){const had=NET.guest;const r=_reduceT(m);if(!had&&NET.guest)clockReset(m._t);return r}
-    if(m.t==='rematch'){const g0=NET.game;const r=_reduceT(m);if(NET.game!==g0)clockReset(m._t);return r}
+    // 時間切れは記録に残らず各画面が時計で決めるので、あとから記録をまとめて読む人（途中から観戦・読み込み直し）は、
+    // 「もう一局」が届いた時点ではまだ終局していないことがある。届いた時刻で時間切れを確かめてから受け付ける
+    if(m.t==='rematch'){if(!S.over&&NET.clk&&NET.clk.g===NET.game&&m.g===NET.game+1){const c=S.turn;if(NET.clk.used[c]+Math.max(0,m._t-NET.clk.last)>CLOCK_SEC+1)S.over={win:3-c,why:flagWhy(c)}}
+      const g0=NET.game;const r=_reduceT(m);if(NET.game!==g0)clockReset(m._t);return r}
     if(m.t==='move'&&S.over&&S.over.local&&NET.clk&&NET.clk.g===NET.game&&m.g===NET.game&&colorOf(m.from)===S.turn&&m.ply===S.ply&&NET.clk.used[S.turn]+Math.max(0,m._t-NET.clk.last)<=CLOCK_SEC+1)S.over=null;
     if(m.t==='move'&&NET.clk&&NET.clk.g===NET.game&&!S.over&&m.g===NET.game&&colorOf(m.from)===S.turn&&m.ply===S.ply){
       const c=S.turn,spent=Math.max(0,m._t-NET.clk.last);
