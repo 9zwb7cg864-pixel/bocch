@@ -2483,7 +2483,7 @@ function bdToast(ids){BDQ.push(...ids);if(BDT)return;const next=()=>{const id=BD
 /* 利用状況の集計：遊んだ時間・終局・訪問を中継サーバーに送る。送るのは端末ごとのランダムIDと数だけ（名前・メール・棋譜は送らない） */
 const STAT={pend:0,u:'',acc:false};
 function statId(){try{let v=localStorage.getItem('bocch-sid');if(!v||!/^[a-z0-9]{8,32}$/.test(v)){v=(Math.random().toString(36).slice(2,10)+Date.now().toString(36)).replace(/[^a-z0-9]/g,'');localStorage.setItem('bocch-sid',v)}return v}catch(e){return ''}}
-function statSend(o,beacon){try{const d=statId();if(!d||/[?&]nostat/.test(location.search))return;const body=JSON.stringify(Object.assign({d,u:STAT.u},o)),url=RELAY+TOPIC('stats')+'/hit';
+function statSend(o,beacon){try{const d=statId();if(!d||/[?&]nostat/.test(location.search))return;const body=JSON.stringify(Object.assign({d,u:STAT.u},o)),url=RELAY+TOPIC('tally')+'/note'; // 「stats」「hit」は広告ブロッカーに止められやすいので別名で送る
   if(beacon&&navigator.sendBeacon&&navigator.sendBeacon(url,body))return;fetch(url,{method:'POST',body,keepalive:true}).catch(()=>{})}catch(e){}}
 // 対局画面を開いていて、終局していない間の時間を15秒ごとに数える
 setInterval(()=>{try{if(!document.hidden&&CUR==='game'&&S&&!S.over&&!S.study&&!(S.mode==='net'&&(NET.watch||!NET.guest)))STAT.pend+=15}catch(e){}},15000);
