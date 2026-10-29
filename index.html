@@ -1348,7 +1348,7 @@ function mvPre(){const P=MV.prev,cur={S,ply:S.ply||0,b:S.b.slice(),last:S.last};
   MV.badge=bd;mvStop();
   if(MV.skip===cur.ply){MV.skip=-1;MV.pop=t;return}
   if(!mvLive()||MV_RM.matches||document.hidden)return;
-  MV.hide=t;MV.run={f,t,p:P.b[f],d0:nbCount(P.b,f),rk:0}}
+  MV.hide=t;let rk='';try{rk=rankCls(colorRank(P.b[f]))}catch(e){}MV.run={f,t,p:P.b[f],d0:nbCount(P.b,f),rk}}
 function mvPost(){mvCand();if(MV.pop>=0){const s=$('c'+MV.pop).querySelector('.stone');MV.pop=-1;if(s&&!MV_RM.matches)s.animate([{scale:'1.1'},{scale:'1'}],{duration:160,easing:'ease-out'})}
   if(MV.run&&!MV.run.go){MV.run.go=true;mvFly(MV.run)}}
 function mvStop(){if(MV.run){const r=MV.run;MV.run=null;try{r.fl&&r.fl.remove()}catch(e){}try{mvL('move').replaceChildren()}catch(e){}if(MV.hide>=0){const h=MV.hide;MV.hide=-1;const c=$('c'+h);if(c)c._h=null}}}
@@ -1379,7 +1379,7 @@ function mvCand(){let key='';const can=S.sel>=0&&mvLive()&&human();if(can)key=S.
 /* 指したときの動き：線が伸びる→石が線をなぞって跳ぶ→線は後ろから消える */
 function mvFly(R){const L=mvL('move');const ln=mvLine(L,R.f,R.t,1);const W=gridEl.clientWidth,H=gridEl.clientHeight,size=W/N*.8;
   const fl=document.createElement('div');fl.className='mvfly';fl.style.width=size+'px';fl.style.height=size+'px';
-  const src=$('c'+R.f);fl.innerHTML=`<div class="stone ${R.p===1?'b':'w'}${R.d0?'':' zero'}"><span>${R.d0}</span></div>`;
+  const src=$('c'+R.f);fl.innerHTML=`<div class="stone ${R.p===1?'b':'w'}${R.d0?'':' zero'}${R.rk||''}"><span>${R.d0}</span></div>`;
   const pt=v=>[v[0]/600*W-size/2,v[1]/600*H-size/2];const [A,B,Q]=ln.c.full,fr=[];
   for(let s=0;s<=14;s++){const u=s/14,e=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2,q=pt(mvBz(A,Q,B,e));fr.push({transform:'translate('+q[0]+'px,'+q[1]+'px) scale('+(1+.12*Math.sin(Math.PI*u)).toFixed(3)+')',offset:u})}
   fl.style.transform=fr[0].transform;gridEl.appendChild(fl);R.fl=fl;
@@ -1395,7 +1395,7 @@ gridEl.addEventListener('pointerdown',ev=>{const c=ev.target.closest('.cell');if
 gridEl.addEventListener('pointermove',ev=>{const D=MV.drag;if(!D||ev.pointerId!==D.id)return;const p=mvPt(ev);
   if(!D.on){if(Math.hypot(p[0]-D.p0[0],p[1]-D.p0[1])<8)return;if(!human()){MV.drag=null;return}D.on=true;try{gridEl.setPointerCapture(ev.pointerId)}catch(e){}
     const cw=gridEl.clientWidth/N,size=cw*.8,v=S.b[D.i],d0=nbCount(S.b,D.i);S.sel=D.i;MV.hov=-1;MV.hide=D.i;render();
-    const fl=document.createElement('div');fl.className='mvfly drag';fl.style.width=size+'px';fl.style.height=size+'px';fl.innerHTML=`<div class="stone ${v===1?'b':'w'}${d0?'':' zero'}"><span>${d0}</span></div>`;gridEl.appendChild(fl);Object.assign(D,{fl,size,cw})}
+    const fl=document.createElement('div');fl.className='mvfly drag';fl.style.width=size+'px';fl.style.height=size+'px';let rk='';try{rk=rankCls(colorRank(v))}catch(e){}fl.innerHTML=`<div class="stone ${v===1?'b':'w'}${d0?'':' zero'}${rk}"><span>${d0}</span></div>`;gridEl.appendChild(fl);Object.assign(D,{fl,size,cw})}
   ev.preventDefault();const lift=D.touch?D.cw*.45:0,q=[p[0],p[1]-lift*($('board').classList.contains('flip')?-1:1)];
   const tg=movesFrom(S.b,D.i).map(m=>m[1]);let best=-1,bd=1e9;for(const t of tg){const c=mvCtr(t),d=Math.hypot(q[0]-c[0],q[1]-c[1]);if(d<bd){bd=d;best=t}}
   const f=bd<D.cw*.75?best:-1;let x=q[0],y=q[1];if(f>=0){const c=mvCtr(f);x=c[0]+(q[0]-c[0])*.18;y=c[1]+(q[1]-c[1])*.18}
