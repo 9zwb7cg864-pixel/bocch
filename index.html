@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=12"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=13"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -110,6 +110,13 @@ svg.mvfx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;ov
 .mvfly .stone{width:100%;height:100%}.mvfly.drag .stone{box-shadow:0 14px 18px rgba(0,0,0,.45),0 0 0 2px rgba(240,216,150,.9)}
 .cell.mine{touch-action:none}
 @media (prefers-reduced-motion:reduce){.reachG .stone,.reachR .stone,.mvb{animation:none}}
+.endrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.endrow[hidden]{display:none}
+.endb{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 12px;border:1px solid rgba(216,189,126,.55);border-radius:0;background:rgba(216,189,126,.05);color:var(--fg);font-family:var(--f-disp);font-size:15px;letter-spacing:.1em}
+.endb:hover{background:rgba(216,189,126,.12);border-color:var(--gold)}
+.endb.main{background:var(--gold);border-color:var(--gold);color:#1c140b;font-weight:800}.endb.main:hover{background:var(--gold-hi)}
+.endb.main::before,.endb.main::after{content:"";position:absolute;width:8px;height:8px;pointer-events:none}
+.endb.main::before{left:-5px;top:-5px;border-left:2px solid var(--gold-hi);border-top:2px solid var(--gold-hi)}.endb.main::after{right:-5px;bottom:-5px;border-right:2px solid var(--gold-hi);border-bottom:2px solid var(--gold-hi)}
+.endb span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* 勝ち負けの画面 */
 .mvend{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow:hidden;padding:max(20px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(20px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:rgba(14,11,9,.78);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);text-align:center}
 .mvend .mvk{font-family:"Yuji Boku","Shippori Mincho B1",serif;font-size:min(52vw,210px);line-height:1;color:var(--gold-hi);text-shadow:0 0 40px rgba(240,216,150,.45),0 6px 0 rgba(0,0,0,.35);animation:mvInk .9s ease-out both}
@@ -837,7 +844,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
     <button id="leave" hidden>対戦をやめる</button>
     <button id="frOpp" hidden>＋フレンド申請</button>
   </div>
-  <div class="row" id="reviewRow" hidden><button id="reviewNow">この対局を感想戦 ›</button><button id="imgNow">画像で共有 ↗</button></div>
+  <div class="endrow" id="reviewRow" hidden><button id="reviewNow" class="endb main"><span>感想戦で振り返る</span></button><button id="xNow" class="endb"><span>Xで共有</span></button></div>
   <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 駒音</label></div>
   <div class="ad-slot ad-over" data-ad="over" hidden aria-label="広告"></div>
 </section>
@@ -2142,10 +2149,14 @@ function fxEnd0(win,why,me,b,cell){if(!$('showJos').checked||CUR!=='game')return
   let e=$('mvEnd');if(!e){e=document.createElement('div');e.id='mvEnd';e.className='mvend';e.setAttribute('role','dialog');e.setAttribute('aria-modal','true');document.body.appendChild(e);
     e.addEventListener('click',ev=>{const a=ev.target.closest('[data-a]');if(!a)return;e.hidden=true;if(a.dataset.a==='again'){const r=S.mode==='net'?$('rematch'):$('reset');if(r&&!r.hidden)r.click()}})}
   const lose=me&&me!==win,mine=me&&me===win,cn=win===1?'黒':'白';let h='';
+  /* 大きな字は言語ごとの筆文字で */
+  const LG=window.BOCCH_LANG||'ja',BK={en:['WIN','LOSE','Kaushan Script'],es:['VICTORIA','DERROTA','Kaushan Script'],de:['SIEG','NIEDERLAGE','Kaushan Script'],ko:['승','패','Nanum Brush Script'],'zh-Hans':['胜','负','Ma Shan Zheng']}[LG];
+  let bigT=lose?'負':'勝',bigSt='';if(BK){bigT=BK[lose?1:0];const fam=BK[2];if(!document.getElementById('mvFont')){const l=document.createElement('link');l.id='mvFont';l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+fam.replace(/ /g,'+')+'&display=swap';document.head.appendChild(l)}
+    const n=[...bigT].length,k=n<=1?1:Math.min(1,1.55/(n*(/[A-Z]/.test(bigT)?.62:.95)));bigSt=' style="font-family:\''+fam+'\',\'Yuji Boku\',serif;font-size:calc(min(52vw,210px)*'+k.toFixed(3)+')"'}
   if(!lose)for(let k=0;k<28;k++){const z=4+(k*7)%9;h+='<span class="mvflake" aria-hidden="true" style="left:'+((k*37+11)%100)+'%;top:'+((k*53+7)%80)+'%;width:'+z+'px;height:'+Math.round(z*.7)+'px;transform:rotate('+(k*37%180)+'deg);animation-delay:'+((k*13)%20)/10+'s"></span>'}
   else for(let k=0;k<8;k++)h+='<span class="mvdrop" aria-hidden="true" style="left:'+(10+(k*23)%80)+'%;top:'+(15+(k*29)%60)+'%;height:'+(10+(k*5)%10)+'px;animation-delay:'+k*.6+'s"></span>';
   const canAgain=S.mode!=='net'||(!NET.watch&&colorOf(NET.me)>0);
-  h+='<div class="mvk">'+(lose?'負':'勝')+'</div><div class="mvwho">'+(mine?'あなたの勝ち':cn+'の勝ち')+'</div><div class="mvwhy">'+esc0(why)+'　'+(S.ply||0)+'手</div><div class="mvrow">';
+  h+='<div class="mvk"'+bigSt+'>'+bigT+'</div><div class="mvwho">'+(mine?'あなたの勝ち':cn+'の勝ち')+'</div><div class="mvwhy">'+esc0(why)+'　'+(S.ply||0)+'手</div><div class="mvrow">';
   h+=lose?'<button class="mvbtn solid" type="button" data-a="look">盤面を振り返る</button>'+(canAgain?'<button class="mvbtn" type="button" data-a="again">もう一局</button>':'')
          :(canAgain?'<button class="mvbtn solid" type="button" data-a="again">もう一局</button>':'')+'<button class="mvbtn'+(canAgain?'':' solid')+'" type="button" data-a="look">盤面を見る</button>';
   e.className='mvend'+(lose?' lose':'');e.innerHTML=h+'</div>';e.hidden=false;try{e.querySelector('.mvbtn').focus({preventScroll:true})}catch(x){}
@@ -3185,7 +3196,15 @@ async function shareImage(o){// o:{b, last, title, sub, black, white, ply, flip}
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='bocch.png';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000);return 'saved'}
 function playerLabel(color){try{if(S.mode==='net'&&NET.host){const hc=colorOf(NET.host),id=color===1?(hc===1?NET.host:NET.guest):(hc===1?NET.guest:NET.host);if(id===NET.me&&!NET.watch)return myName()+'　'+Math.round(PROF.rating);const n=NM[id];return n?n.name+'　'+n.rate:'名無し'}
   if(CPU_RATE[S.mode])return color===hcOf()?myName()+'　'+Math.round(PROF.rating):MODE_NAME(S.mode)+'　'+CPU_RATE[S.mode];return color===1?'黒':'白'}catch(e){return ''}}
-$('imgNow').addEventListener('click',()=>{if(!S.over)return;const w=S.over.win;shareImage({b:S.b,last:S.last,title:w?(w===1?'黒':'白')+'の勝ち':'引き分け',sub:(S.over.why||'')+'　'+MODE_NAME(S.mode),black:playerLabel(1),white:playerLabel(2),ply:(S.log||[]).length,flip:S.mode==='net'?colorOf(NET.me)===2:(!!S.mode&&hcOf()===2)})});
+$('xNow').addEventListener('click',()=>{if(!S.over)return;const L=window.BOCCH_LANG||'ja',w=S.over.win,me=fxMe(),n=(S.log||[]).length;
+  const T=t=>{try{return window.bocchT?window.bocchT(t):t}catch(e){return t}},why=T(S.over.why||'');
+  const R={ja:['勝ちました！','負けました…','黒の勝ち','白の勝ち','引き分け','bocchで%r（%w・%n手）'],en:['I won!','I lost…','Black wins','White wins','Draw','bocch: %r (%w, %n moves)'],
+    'zh-Hans':['我赢了！','我输了…','黑方胜','白方胜','平局','bocch：%r（%w，%n手）'],'zh-Hant':['我贏了！','我輸了…','黑方勝','白方勝','平局','bocch：%r（%w，%n手）'],
+    ko:['이겼다!','졌다…','흑의 승리','백의 승리','무승부','bocch: %r (%w, %n수)'],es:['¡Gané!','Perdí…','Ganan las negras','Ganan las blancas','Empate','bocch: %r (%w, %n jugadas)'],
+    de:['Gewonnen!','Verloren…','Schwarz gewinnt','Weiß gewinnt','Remis','bocch: %r (%w, %n Züge)']}[L]||null;const Q=R||['勝ちました！','負けました…','黒の勝ち','白の勝ち','引き分け','bocchで%r（%w・%n手）'];
+  const r=!w?Q[4]:me?(me===w?Q[0]:Q[1]):(w===1?Q[2]:Q[3]);
+  const t=Q[5].replace('%r',r).replace('%w',why).replace('%n',n)+'\n#bocch\nhttps://bocchgame.com';
+  window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(t),'_blank','noopener')});
 $('revImg').addEventListener('click',()=>{const g=REV.g;if(!g)return;const p=REV.pv?pvState():REV.pos[REV.i],n=g.log.length,i=REV.i,[rt]=resultOf(g);
   const last=REV.pv?(REV.pv.k>0?REV.pv.line[REV.pv.k-1]:null):(i>0?g.log[i-1]:null);
   shareImage({b:p.b,last,title:i>=n?rt+(g.why?'（'+g.why+'）':''):i+'手目の局面',sub:MODE_NAME(g.mode)+'　'+rt,black:g.me===1?myName():g.me===2?(g.opp||'相手'):'黒',white:g.me===2?myName():g.me===1?(g.opp||'相手'):'白',ply:n,flip:g.me===2})});
