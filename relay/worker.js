@@ -5,6 +5,7 @@
 //   GET  /<話題>/ws?since=…            … WebSocketで保存分＋以後の新着を受け取る
 //   GET/POST /bocch-v1-bots/kv          … 名前付きボットのレート（無期限に保存）
 //   POST /bocch-v1-stats/hit             … 遊んだ時間・終局・訪問の集計（端末はランダムIDのみ。個人は特定しない）
+//   POST /bocch-v1-tally/note            … 上の別名（広告ブロッカー対策。ゲームはこちらを使う）
 //   GET  /bocch-v1-stats/view            … 集計を見る（ヘッダー X-Pass のパスワードが合うときだけ）
 // since は all / 90s / 15m / 3h / UNIX秒。
 import { DurableObject } from "cloudflare:workers";
@@ -33,7 +34,11 @@ export default {
   async fetch(req, env) {
     if (req.method === "OPTIONS") return new Response(null, { headers: cors(req) });
     const url = new URL(req.url);
-    const parts = url.pathname.split("/").filter(Boolean);
+    let parts = url.pathname.split("/").filter(Boolean);
+    // 広告ブロッカーに止められにくい別名：/bocch-v1-tally/note → /bocch-v1-stats/hit（同じ集計に入る）
+    if (parts[0] === "bocch-v1-tally" && parts[1] === "note") {
+      url.pathname = "/bocch-v1-stats/hit"; req = new Request(url.toString(), req); parts = ["bocch-v1-stats", "hit"];
+    }
     const topic = parts[0] || "";
     if (!/^[A-Za-z0-9_-]{1,64}$/.test(topic)) {
       return new Response("bocch relay ok\n", { headers: { ...cors(req), "Content-Type": "text/plain; charset=utf-8" } });
