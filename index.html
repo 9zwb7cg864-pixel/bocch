@@ -3001,8 +3001,8 @@ const DQ_SHARE={
   ja:{ok:(n,b,k,d)=>'bocch 今日の1問（第'+n+'問）解けた！\n'+(b?'黒':'白')+'番・'+k+'手で勝ち／'+d+'日連続',ng:(n,k)=>'bocch 今日の1問（第'+n+'問）解けなかった…\n正解は'+k+'手で勝ちでした。明日の問題は0時に出ます'},
   en:{ok:(n,b,k,d)=>'bocch Daily Puzzle #'+n+' solved!\n'+(b?'Black':'White')+' to move · won in '+k+' / '+d+'-day streak',ng:(n,k)=>'bocch Daily Puzzle #'+n+' — couldn\'t solve it…\nThe answer was a win in '+k+'. A new puzzle is out at midnight.'},
   ko:{ok:(n,b,k,d)=>'bocch 오늘의 문제 (제'+n+'문) 풀었다!\n'+(b?'흑':'백')+' 차례 · '+k+'수 만에 승리 / '+d+'일 연속',ng:(n,k)=>'bocch 오늘의 문제 (제'+n+'문) 못 풀었다…\n정답은 '+k+'수 만에 승리였습니다. 내일 문제는 0시에 나옵니다'},
-  'zh-Hans':{ok:(n,b,k,d)=>'bocch 每日一题（第'+n+'题）解开了！\n'+(b?'黑方':'白方')+'先走 · '+k+'步获胜／连续'+d+'天',ng:(n,k)=>'bocch 每日一题（第'+n+'题）没解开…\n正解是'+k+'步获胜。明天的题目0点更新'},
-  'zh-Hant':{ok:(n,b,k,d)=>'bocch 每日一題（第'+n+'題）解開了！\n'+(b?'黑方':'白方')+'先走・'+k+'步獲勝／連續'+d+'天',ng:(n,k)=>'bocch 每日一題（第'+n+'題）沒解開…\n正解是'+k+'步獲勝。明天的題目0點更新'},
+  'zh-Hans':{ok:(n,b,k,d)=>'bocch 每日一题（第'+n+'题）解开了！\n'+'轮到'+(b?'黑方':'白方')+' · '+k+'步获胜／连续'+d+'天',ng:(n,k)=>'bocch 每日一题（第'+n+'题）没解开…\n正解是'+k+'步获胜。明天的题目0点更新'},
+  'zh-Hant':{ok:(n,b,k,d)=>'bocch 每日一題（第'+n+'題）解開了！\n'+'輪到'+(b?'黑方':'白方')+'・'+k+'步獲勝／連續'+d+'天',ng:(n,k)=>'bocch 每日一題（第'+n+'題）沒解開…\n正解是'+k+'步獲勝。明天的題目0點更新'},
   es:{ok:(n,b,k,d)=>'bocch Problema del día (n.º '+n+') ¡resuelto!\nJuegan '+(b?'negras':'blancas')+' · victoria en '+k+' / '+d+(d===1?' día seguido':' días seguidos'),ng:(n,k)=>'bocch Problema del día (n.º '+n+'): no lo resolví…\nLa respuesta era ganar en '+k+'. El próximo problema sale a medianoche.'},
   de:{ok:(n,b,k,d)=>'bocch Tagesaufgabe Nr. '+n+' gelöst!\n'+(b?'Schwarz':'Weiß')+' am Zug · Sieg in '+k+' / '+d+(d===1?' Tag':' Tage')+' in Folge',ng:(n,k)=>'bocch Tagesaufgabe Nr. '+n+' nicht gelöst…\nDie Lösung war ein Sieg in '+k+' Zügen. Die nächste Aufgabe kommt um Mitternacht.'}};
 $('dqShare').addEventListener('click',()=>{if(!DQ.q||!DQ.res)return;window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(dqShareText()),'_blank','noopener')});
