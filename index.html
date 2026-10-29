@@ -1915,14 +1915,16 @@ function josPlay0(name,side,mv,b){
   JOS.raf=requestAnimationFrame(frame);return true}
 /* 戦法の演出：自分の2手目で、1手目と2手目の組み合わせが戦法なら、絵が浮かび上がって戦法名を出す（黒は金、白は銀）。研究モードでは出さない */
 const SENPO=[['双璧','30-25,35-28'],['盾槍','30-25,31-19'],['送り鳥','30-25,31-21'],['双刃','30-25,34-20'],['先駆け','32-20,35-28'],['片隅','30-24,35-28'],['手損定跡','30-24,24-25'],['迷子','32-18,30-25'],['撃龍槍','31-19,33-21'],['浮浪雲','31-21,33-23']];
-// 戦法名の各言語版（筆文字の下に小さく添える。日本語では出さない）
-const SP_LOC={"en": ["Sōheki · Twin Walls", "Tateyari · Shield & Spear", "Okuridori · Fledgling", "Sōjin · Twin Blades", "Sakigake · Vanguard", "Katasumi · Lone Corner", "Tezon · Lost Tempo", "Maigo · Lost Child", "Gekiryūsō · Dragon Piercer", "Furōun · Drifting Cloud"], "zh-Hans": ["双璧", "盾枪", "送鸟", "双刃", "先锋", "一隅", "损先定式", "迷途", "击龙枪", "浮云"], "zh-Hant": ["雙璧", "盾槍", "送鳥", "雙刃", "先鋒", "一隅", "損先定式", "迷途", "擊龍槍", "浮雲"], "ko": ["쌍벽", "방패창", "둥지새", "쌍검", "선봉", "한구석", "한 수 손해 정석", "미아", "격룡창", "뜬구름"], "es": ["Muralla Doble", "Escudo y Lanza", "Vuelo del Nido", "Doble Filo", "Vanguardia", "Rincón", "Tiempo Perdido", "Extraviado", "Lanza Matadragones", "Nube Errante"], "de": ["Doppelwall", "Schild und Speer", "Nestflug", "Zwillingsklingen", "Vorhut", "Stille Ecke", "Tempoverlust", "Verirrt", "Drachenspeer", "Wanderwolke"]};
+// 戦法名の各言語版：その言語の筆文字画像（senpo/<言語>/NNn.webp）を使う。漢字が日本語と同じものは日本語の画像のまま
+const SP_LANG_IMG={en:[0,1,2,3,4,5,6,7,8,9],es:[0,1,2,3,4,5,6,7,8,9],de:[0,1,2,3,4,5,6,7,8,9],ko:[0,1,2,3,4,5,6,7,8,9],'zh-Hans':[1,2,4,5,6,7,8,9],'zh-Hant':[0,2,3,4,6,8,9]};
+// アルファベットの言語では、日本語での読みを小さく添える
+const SP_ROMA=['Sōheki','Tateyari','Okuridori','Sōjin','Sakigake','Katasumi','Tezon','Maigo','Gekiryūsō','Furōun'],SP_ROMA_L={en:1,es:1,de:1};
 const SP_IMG={};
 function spImg(i,side){const k=(i<9?'0':'')+(i+1)+(side===1?'g':'s');if(!SP_IMG[k]){const im=new Image();im.decoding='async';im.src='senpo/'+k+'.webp';SP_IMG[k]=im}return SP_IMG[k]}
 // 戦法名の筆文字（白・透明背景）。黒番は金、白番は銀のグラデーションに色づけしたものを一度だけ作って使い回す
-function spNameImg(i){const k=(i<9?'0':'')+(i+1)+'n';if(!SP_IMG[k]){const im=new Image();im.decoding='async';im.src='senpo/'+k+'.webp';SP_IMG[k]=im}return SP_IMG[k]}
+function spNameImg(i){const L=window.BOCCH_LANG,dir=(SP_LANG_IMG[L]||[]).includes(i)?L+'/':'',k=dir+(i<9?'0':'')+(i+1)+'n';if(!SP_IMG[k]){const im=new Image();im.decoding='async';im.src='senpo/'+k+'.webp';SP_IMG[k]=im}return SP_IMG[k]}
 const SP_TINT={};
-function spNameTint(i,side){const key=i+'_'+side;if(SP_TINT[key])return SP_TINT[key];const im=spNameImg(i);if(!im.complete||!im.naturalWidth)return null;
+function spNameTint(i,side){const key=i+'_'+side+'_'+(window.BOCCH_LANG||'ja');if(SP_TINT[key])return SP_TINT[key];const im=spNameImg(i);if(!im.complete||!im.naturalWidth)return null;
   const w=im.naturalWidth,h=im.naturalHeight,c=document.createElement('canvas');c.width=w;c.height=h;const cx=c.getContext('2d');cx.drawImage(im,0,0);
   cx.globalCompositeOperation='source-in';const gr=cx.createLinearGradient(0,0,0,h),cs=side===1?['#fff4cc','#e9c46a','#b07f2c']:['#ffffff','#dfe6ee','#9aa6b2'];
   gr.addColorStop(0,cs[0]);gr.addColorStop(0.5,cs[1]);gr.addColorStop(1,cs[2]);cx.fillStyle=gr;cx.fillRect(0,0,w,h);return SP_TINT[key]=c}
@@ -1957,7 +1959,7 @@ function senPlay0(idx,side,m1,m2,b){
         const px=cx+(fxR(n+3)-0.5)*sz*1.1,py=cy+sz*0.5-fp*sz*1.1;x.fillRect(px-2*s,py-2*s,4*s,4*s)}
       x.restore()}
     // 戦法名
-    const np=fxW(t,1000,PER);if(np>0&&np<1){const loc=(SP_LOC[window.BOCCH_LANG]||[])[idx]||'';const a=Math.min(1,np/0.1)*(1-fxW(np,0.84,1)),y=H*0.78-(loc?6*s:0),bh=W*(loc?0.30:0.25),tc=spNameTint(idx,side);
+    const np=fxW(t,1000,PER);if(np>0&&np<1){const loc=SP_ROMA_L[window.BOCCH_LANG]?SP_ROMA[idx]:'';const a=Math.min(1,np/0.1)*(1-fxW(np,0.84,1)),y=H*0.78-(loc?6*s:0),bh=W*(loc?0.30:0.25),tc=spNameTint(idx,side);
       x.save();duoFace(x,W,H,side);x.globalAlpha=a;x.textAlign='center';x.textBaseline='middle';
       x.fillStyle='rgba(14,15,18,.88)';x.fillRect(0,y-bh/2,W,bh);
       const lab='戦法';x.fillStyle=LAB;x.font='500 '+Math.round(13*s)+'px '+FX_FONT;x.fillText((window.BOCCH_LANG&&window.BOCCH_LANG!=='ja'&&window.bocchT)?window.bocchT(lab):lab.split('').join(' '),W/2,y-35*s);
