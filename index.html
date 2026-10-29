@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=11"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=12"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -32,16 +32,16 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&family=Shippori+Mincho+B1:wght@500;700;800&family=Yuji+Boku&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
 <link rel="prefetch" href="guide.html">
 <style>
-/* 漆の黒緑に金の細線、榧の盤、那智黒と蛤の石 */
+/* 墨と金箔：和紙の墨色に金の細線、焦げ茶の木目の盤、那智黒と蛤の石 */
 :root{
-  --bg:#0e1311; --panel:#131a17; --fg:#ece6d8; --sub:#9a9484; --mute:#6f6a5e;
-  --gold:#c9a96e; --gold-soft:rgba(201,169,110,.28); --gold-line:rgba(201,169,110,.18);
-  --line:rgba(236,230,216,.14); --soft:#18201c;
-  --wood:#d9b878; --wood-line:#5e4220; --wood-edge:#c9a463;
-  --ai:#c9a96e; --win:#8fbf9a; --lose:#d9a08b; --dot:#1d2a25;
+  --bg:#14110e; --panel:#1a1612; --fg:#ede4d0; --sub:#a89e8a; --mute:#766d5e;
+  --gold:#d8bd7e; --gold-hi:#f0d896; --gold-soft:rgba(216,189,126,.3); --gold-line:rgba(216,189,126,.2);
+  --line:rgba(237,228,208,.14); --soft:#201b16;
+  --wood:#7a5634; --wood-line:rgba(20,12,8,.85); --wood-edge:#4a3220;
+  --ai:#d8bd7e; --win:#8fbf9a; --lose:#d9a08b; --dot:rgba(240,216,150,.85);
   --f-latin:"Cormorant Garamond","Times New Roman",serif;
   --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
   --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
@@ -70,27 +70,67 @@
 @keyframes chatPulse{50%{box-shadow:0 0 0 5px rgba(201,169,110,.25)}}
 
 html{-webkit-text-size-adjust:100%;background:var(--bg)}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.75;
+body{margin:0;background-color:var(--bg);background-image:repeating-linear-gradient(115deg,rgba(237,228,208,.025) 0 1px,transparent 1px 9px),repeating-linear-gradient(25deg,rgba(237,228,208,.02) 0 1px,transparent 1px 13px);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.75;
   padding:max(20px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(40px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
 header{max-width:1040px;margin:0 auto 22px;padding-bottom:18px;border-bottom:1px solid var(--gold-line);display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
 h1{font-family:var(--f-latin);font-style:italic;font-weight:600;font-size:46px;line-height:1;margin:0;letter-spacing:.02em}
 header p{margin:0;color:var(--sub);font-family:var(--f-disp);font-size:14px;letter-spacing:.12em}
 .wrap{max-width:1040px;margin:0 auto;display:grid;grid-template-columns:minmax(0,580px) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:start}
 @media (max-width:860px){.wrap{grid-template-columns:minmax(0,1fr)}}
-.board{position:relative;width:100%;height:0;padding:0 0 100% 0;overflow:hidden;background:var(--wood);
-  background-image:repeating-linear-gradient(92deg,rgba(120,82,34,.07) 0 2px,transparent 2px 9px),repeating-linear-gradient(88deg,rgba(255,240,200,.10) 0 1px,transparent 1px 23px);
-  border-radius:4px;box-shadow:0 30px 60px rgba(0,0,0,.55),inset 0 0 0 1px rgba(255,236,190,.35),inset 0 0 0 7px var(--wood-edge),inset 0 0 0 8px rgba(90,60,25,.5)}
+.board{position:relative;width:100%;height:0;padding:0 0 100% 0;overflow:hidden;background-color:var(--wood-edge);
+  background-image:repeating-linear-gradient(92deg,rgba(0,0,0,.12) 0 2px,transparent 2px 9px),repeating-linear-gradient(88deg,rgba(255,220,170,.05) 0 1px,transparent 1px 17px);
+  border-radius:2px;box-shadow:0 22px 44px rgba(0,0,0,.6),inset 0 0 0 1px rgba(216,189,126,.35)}
+.grid{background-color:var(--wood);background-image:repeating-linear-gradient(90deg,rgba(0,0,0,.07) 0 1px,transparent 1px 6px),repeating-linear-gradient(90deg,rgba(255,230,190,.04) 0 2px,transparent 2px 23px);box-shadow:0 0 0 2px #1b120c}
 .grid{position:absolute;top:5%;left:5%;right:5%;bottom:5%;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));border-top:1.5px solid var(--wood-line);border-left:1.5px solid var(--wood-line)}
 .cell{position:relative;border:0;border-right:1.5px solid var(--wood-line);border-bottom:1.5px solid var(--wood-line);background:transparent;padding:0;margin:0;cursor:default;display:flex;align-items:center;justify-content:center;font:inherit;color:inherit;border-radius:0;-webkit-tap-highlight-color:transparent}
 .grid .cell,.grid .cell:hover,.grid .cell:active,.grid .cell:focus{border-color:var(--wood-line);transition:none}
 .grid .cell:not(.goal):not(.last):hover{background:transparent}
-.cell.goal{background:rgba(110,74,28,.10)}
+.cell.goal{background-image:linear-gradient(180deg,rgba(216,189,126,.30),rgba(216,189,126,.14))}
 .cell:focus-visible{outline:2px solid var(--dot);outline-offset:-3px;z-index:3}
-.cell.last{background:rgba(29,42,37,.16)}
-.stone{width:80%;height:80%;min-width:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--f-disp);font-weight:700;font-variant-numeric:lining-nums;font-size:clamp(16px,4.2vw,28px);line-height:1;transition:transform .15s;box-shadow:0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
-.stone.b{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%);color:#e4e5e6}
-.stone.w{background:radial-gradient(circle at 34% 28%,#ffffff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c}
-.stone.zero{opacity:.45}
+.cell.last{background:transparent}
+/* 最後の手：行き先は四隅の金の印、元はごく薄い輪 */
+.cell.lastTo::before{content:"";position:absolute;inset:7%;pointer-events:none;z-index:2;--c:rgba(240,216,150,.85);--l:22%;--w:2px;
+  background:linear-gradient(var(--c),var(--c)) 0 0/var(--l) var(--w),linear-gradient(var(--c),var(--c)) 0 0/var(--w) var(--l),linear-gradient(var(--c),var(--c)) 100% 0/var(--l) var(--w),linear-gradient(var(--c),var(--c)) 100% 0/var(--w) var(--l),
+  linear-gradient(var(--c),var(--c)) 0 100%/var(--l) var(--w),linear-gradient(var(--c),var(--c)) 0 100%/var(--w) var(--l),linear-gradient(var(--c),var(--c)) 100% 100%/var(--l) var(--w),linear-gradient(var(--c),var(--c)) 100% 100%/var(--w) var(--l);background-repeat:no-repeat}
+.cell.lastFrom::before{content:"";position:absolute;inset:16%;border-radius:50%;border:1px solid rgba(240,216,150,.22);pointer-events:none}
+/* 次の手でゴールに届く石（自分の色は金、相手は赤）と、届くマス */
+.reachG .stone{animation:mvGold 1.6s ease-in-out infinite}.reachR .stone{animation:mvRed 1.6s ease-in-out infinite}
+@keyframes mvGold{0%,100%{box-shadow:0 0 0 2px rgba(240,216,150,.95),0 0 14px 3px rgba(240,216,150,.5)}50%{box-shadow:0 0 0 2px rgba(240,216,150,.55),0 0 24px 7px rgba(240,216,150,.25)}}
+@keyframes mvRed{0%,100%{box-shadow:0 0 0 2px rgba(214,92,70,.95),0 0 14px 3px rgba(214,92,70,.5)}50%{box-shadow:0 0 0 2px rgba(214,92,70,.55),0 0 24px 7px rgba(214,92,70,.25)}}
+.goalG::before,.goalR::before{content:"";position:absolute;inset:20%;border-radius:50%;border:2px dotted rgba(240,216,150,.95);pointer-events:none}.goalR::before{border-color:rgba(214,92,70,.95)}
+/* 数字が変わった石に +1 / −1 */
+.mvb{position:absolute;z-index:3;top:2px;right:1px;font-family:var(--f-disp);font-size:clamp(10px,2.8vw,13px);font-weight:800;line-height:1;padding:3px 4px;text-shadow:0 0 6px rgba(0,0,0,.9);pointer-events:none;animation:mvUp 1.8s ease-out both}
+.mvb.up{color:var(--gold-hi)}.mvb.dn{color:#f2b3a4}.flip .mvb{transform:rotate(180deg);top:auto;right:auto;bottom:2px;left:1px;animation-name:mvUpF}
+@keyframes mvUp{0%{transform:translateY(4px);opacity:0}15%{opacity:1}75%{opacity:1}100%{transform:translateY(-5px);opacity:0}}
+@keyframes mvUpF{0%{transform:rotate(180deg) translateY(4px);opacity:0}15%{opacity:1}75%{opacity:1}100%{transform:rotate(180deg) translateY(-5px);opacity:0}}
+.mvghost{position:absolute;width:80%;height:80%;border-radius:50%;opacity:.2;pointer-events:none}
+.mvghost.b{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%)}.mvghost.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%)}
+svg.mvfx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:4}
+.mvfly{position:absolute;left:0;top:0;z-index:5;pointer-events:none;display:flex;align-items:center;justify-content:center}
+.mvfly .stone{width:100%;height:100%}.mvfly.drag .stone{box-shadow:0 14px 18px rgba(0,0,0,.45),0 0 0 2px rgba(240,216,150,.9)}
+.cell.mine{touch-action:none}
+@media (prefers-reduced-motion:reduce){.reachG .stone,.reachR .stone,.mvb{animation:none}}
+/* 勝ち負けの画面 */
+.mvend{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow:hidden;padding:max(20px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(20px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:rgba(14,11,9,.78);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);text-align:center}
+.mvend .mvk{font-family:"Yuji Boku","Shippori Mincho B1",serif;font-size:min(52vw,210px);line-height:1;color:var(--gold-hi);text-shadow:0 0 40px rgba(240,216,150,.45),0 6px 0 rgba(0,0,0,.35);animation:mvInk .9s ease-out both}
+.mvend.lose .mvk{color:#cfc6b4;text-shadow:0 6px 0 rgba(0,0,0,.4);animation-duration:1.6s}
+.mvend .mvwho{font-family:var(--f-disp);font-size:24px;font-weight:800;letter-spacing:.16em;color:var(--fg)}
+.mvend .mvwhy{font-size:13px;color:var(--sub)}
+.mvend .mvrow{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;justify-content:center}
+.mvbtn{position:relative;min-height:46px;padding:0 22px;background:rgba(216,189,126,.06);color:var(--fg);border:1px solid rgba(216,189,126,.6);border-radius:0;font-family:var(--f-disp);font-size:15px;letter-spacing:.1em;cursor:pointer}
+.mvbtn.solid{background:var(--gold);color:#1c140b;border:0;font-weight:800}
+@keyframes mvInk{0%{opacity:0;filter:blur(8px);transform:scale(1.08)}100%{opacity:1;filter:blur(0);transform:scale(1)}}
+.mvflake{position:absolute;pointer-events:none;background:linear-gradient(135deg,#fff3c4,#d8bd7e 55%,#a8833f);animation:mvFall 3.4s ease-in infinite}
+@keyframes mvFall{0%{transform:translateY(-40px) rotate(0);opacity:0}15%{opacity:1}100%{transform:translateY(80px) rotate(220deg);opacity:.85}}
+.mvdrop{position:absolute;width:3px;border-radius:0 0 3px 3px;background:linear-gradient(180deg,rgba(120,110,95,0),rgba(150,140,120,.7));animation:mvDrip 4.5s ease-in infinite;pointer-events:none}
+@keyframes mvDrip{0%{transform:translateY(-20px);opacity:0}20%{opacity:.8}100%{transform:translateY(90px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.mvflake,.mvdrop,.mvend .mvk{animation:none}}
+
+.stone{width:80%;height:80%;min-width:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--f-disp);font-weight:800;font-variant-numeric:lining-nums;font-size:clamp(16px,4.2vw,28px);line-height:1;transition:transform .15s;box-shadow:0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
+.stone.b{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%);color:var(--gold-hi)}
+.stone.w{background:radial-gradient(circle at 34% 28%,#ffffff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#2a1d14}
+.stone{position:relative}.stone span{position:relative;z-index:1}
+.stone.zero{opacity:.85;box-shadow:none}.stone.zero::before{content:"";position:absolute;inset:0;border-radius:50%;background:rgba(110,140,165,.5);pointer-events:none}.stone.b.zero{color:#b6c6d2}.stone.w.zero{color:#5f7385}
 .ver{position:absolute;top:10px;right:14px;font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums;letter-spacing:.04em}
 /* レートで変わる石の縁：100ごとに1段。相手の石は相手のレートで決まる */
 .stone.rk{box-sizing:border-box;border:var(--bw,2px) solid transparent;box-shadow:inset 0 0 0 var(--g1,0px) var(--gi),inset 0 0 0 var(--g2,0px) var(--gc,#e2bd62),0 0 var(--gl,0px) var(--gs,0px) var(--gw,rgba(240,205,120,.55)),0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
@@ -119,8 +159,8 @@ header p{margin:0;color:var(--sub);font-family:var(--f-disp);font-size:14px;lett
 .sel .stone{box-shadow:0 0 0 3px var(--wood),0 0 0 5px var(--gold),0 4px 6px rgba(0,0,0,.38)}
 .nb .stone{box-shadow:0 0 0 2px var(--gold),0 4px 6px rgba(0,0,0,.38)}
 .target{cursor:pointer}
-.target::after{content:"";position:absolute;width:20%;height:20%;border-radius:50%;background:var(--dot);box-shadow:0 0 0 3px rgba(29,42,37,.25)}
-.target.fin::after{width:84%;height:84%;background:transparent;border:2px solid var(--dot);box-shadow:inset 0 0 0 3px rgba(201,169,110,.6)}
+.target::after{content:"";position:absolute;width:18%;height:18%;border-radius:50%;background:var(--dot)}.target.mvhov::after{opacity:0}
+.target.fin::after{width:62%;height:62%;background:transparent;border:1px solid var(--dot)}
 .flip .grid{transform:rotate(180deg)}.flip .stone{transform:rotate(180deg)}
 .hideNum .stone span{visibility:hidden}
 .side{display:flex;flex-direction:column;gap:18px;min-width:0}
@@ -205,7 +245,7 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .gameinfo .status{justify-content:center}
 .gameinfo .hint{margin:4px 0 0}
 #localCtl,#netCtl{justify-content:center;margin-bottom:10px}
-.lab{position:absolute;display:grid;font-family:var(--f-disp);font-weight:700;font-size:clamp(9px,2.4vw,13px);color:#6b4b22;pointer-events:none;line-height:1}
+.lab{position:absolute;display:grid;font-family:var(--f-disp);font-weight:700;font-size:clamp(9px,2.4vw,13px);color:rgba(216,189,126,.6);pointer-events:none;line-height:1}
 .lab span{display:flex;align-items:center;justify-content:center}
 .lab-top{top:0;left:5%;right:5%;height:5%;grid-template-columns:repeat(6,minmax(0,1fr))}
 .lab-left{left:0;top:5%;bottom:5%;width:5%;grid-template-rows:repeat(6,minmax(0,1fr))}
@@ -392,13 +432,13 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 /* バッジ */
 .bdg{display:inline-flex;vertical-align:-3px;margin:0 3px;flex:none}
 .bd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:10px}
-.bd-it{display:flex;gap:10px;align-items:center;text-align:left;padding:8px 10px;min-height:0;letter-spacing:0;border:1px solid rgba(201,169,110,.18);background:rgba(19,26,23,.6)}
+.bd-it{display:flex;gap:10px;align-items:center;text-align:left;padding:8px 10px;min-height:0;letter-spacing:0;border:1px solid rgba(201,169,110,.18);background:rgba(26,22,18,.6)}
 .bd-it b{display:block;font-size:13px;color:var(--fg)}.bd-it small{display:block;font-size:11px;color:var(--sub);line-height:1.35;margin-top:2px}
 .bd-it svg{flex:none;width:36px;height:36px}.bd-it.lock{opacity:.42}.bd-it.lock svg{filter:grayscale(1)}
 .bd-it.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset;background:rgba(201,169,110,.10)}
 .bd-cat{font-size:12px;letter-spacing:.25em;color:var(--gold);margin:14px 0 2px}
 .bd-head{display:flex;justify-content:space-between;align-items:baseline}.bd-head small{color:var(--sub);font-size:12px}
-#bdToast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 12px);transform:translateX(-50%) translateY(calc(-100% - 12px - env(safe-area-inset-top,0px)));z-index:50;display:flex;gap:12px;align-items:center;background:#131a17;border:1px solid var(--gold);padding:10px 18px 10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.6);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+#bdToast{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 12px);transform:translateX(-50%) translateY(calc(-100% - 12px - env(safe-area-inset-top,0px)));z-index:50;display:flex;gap:12px;align-items:center;background:#1a1612;border:1px solid var(--gold);padding:10px 18px 10px 12px;box-shadow:0 10px 30px rgba(0,0,0,.6);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
 #bdToast{visibility:hidden;transition:transform .45s cubic-bezier(.2,.8,.2,1),visibility 0s .45s}#bdToast.show{visibility:visible;transition:transform .45s cubic-bezier(.2,.8,.2,1),visibility 0s;transform:translateX(-50%) translateY(0)}#bdToast b{display:block;color:var(--gold);font-size:12px;letter-spacing:.2em}#bdToast span{font-size:15px}
 
 /* 毎日の1問 */
@@ -425,8 +465,8 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .rk-list li.me{background:rgba(201,169,110,.10)}
 
 /* ホームのルール */
-.home-rules{width:100%;max-width:420px;margin:14px 0 4px;padding:14px 16px;border:1px solid rgba(201,169,110,.45);background:rgba(19,26,23,.7)}
-.home-rules.pop{position:absolute;top:40px;right:8px;width:min(340px,calc(100% - 16px));margin:0;z-index:6;background:#131a17;box-shadow:0 14px 40px rgba(0,0,0,.6)}
+.home-rules{width:100%;max-width:420px;margin:14px 0 4px;padding:14px 16px;border:1px solid rgba(201,169,110,.45);background:rgba(26,22,18,.7)}
+.home-rules.pop{position:absolute;top:40px;right:8px;width:min(340px,calc(100% - 16px));margin:0;z-index:6;background:#1a1612;box-shadow:0 14px 40px rgba(0,0,0,.6)}
 .home-rules h3{margin:0 0 6px;font-family:"Shippori Mincho B1","Hiragino Mincho ProN",serif;color:var(--gold);letter-spacing:.2em;font-size:16px}
 .home-rules ol{text-align:left;margin:0;padding-left:20px;font-size:13.5px;line-height:1.7}.home-rules b{color:var(--gold)}
 .home-rules .row{justify-content:flex-end;gap:8px;margin-top:10px}.home-rules .row button{min-height:38px;padding:6px 14px}
@@ -460,7 +500,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .cs-progt{font-size:12px;color:var(--sub);text-align:right;margin:0 0 6px}
 .cs-sec{font-size:12px;letter-spacing:.3em;color:var(--gold);margin:16px 0 8px}
 .cs-card{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;letter-spacing:0;min-height:0}
-.cs-card .ic{width:44px;height:44px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Shippori Mincho B1","Hiragino Mincho ProN",serif;font-weight:800;font-size:22px;color:var(--gold);border:1.5px solid rgba(201,169,110,.5);background:rgba(19,26,23,.8)}
+.cs-card .ic{width:44px;height:44px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Shippori Mincho B1","Hiragino Mincho ProN",serif;font-weight:800;font-size:22px;color:var(--gold);border:1.5px solid rgba(201,169,110,.5);background:rgba(26,22,18,.8)}
 .cs-card.done .ic{background:var(--gold);color:#1a140a}
 .cs-card b{display:block;font-size:15px;color:var(--fg)}.cs-card small{display:block;font-size:12px;color:var(--sub);margin-top:2px}
 .cs-card .st{margin-left:auto;font-size:13px;color:var(--gold);white-space:nowrap}
@@ -1288,6 +1328,88 @@ function colorRank(c){if(S.mode==='net'){const id=[NET.host,NET.guest].find(x=>x
   if(typeof CPU_RATE!=='undefined'&&CPU_RATE[S.mode])return c===hcOf()?rankOf(myRate()):rankOf(CPU_RATE[S.mode]);return 0}
 const myRate=()=>typeof PROF!=='undefined'?PROF.rating:1500;
 const gridEl=$('grid');
+/* ===== 盤の上の動き：候補の金糸・跳ぶ動き・ドラッグ・+1/−1・届く石の光 ===== */
+const MV={hide:-1,pop:-1,badge:{},prev:null,run:null,skip:-1,cand:'',hov:-1,drag:null,noClick:false};
+const MV_NS='http://www.w3.org/2000/svg',MV_RM=matchMedia('(prefers-reduced-motion: reduce)');
+let MV_SVG=null,MV_UID=0;
+function mvLive(){try{return CUR==='game'&&(typeof VIEW==='undefined'||VIEW.i==null)}catch(e){return false}}
+function mvSvg(){if(!MV_SVG||!MV_SVG.isConnected){MV_SVG=document.createElementNS(MV_NS,'svg');MV_SVG.setAttribute('class','mvfx');MV_SVG.setAttribute('viewBox','0 0 600 600');MV_SVG.setAttribute('preserveAspectRatio','none');MV_SVG.setAttribute('aria-hidden','true');
+  MV_SVG.innerHTML='<g data-l="cand"></g><g data-l="move"></g>';gridEl.appendChild(MV_SVG)}return MV_SVG}
+const mvL=n=>mvSvg().querySelector('[data-l="'+n+'"]');
+function mvMe(){try{const m=fxMe();return m||0}catch(e){return 0}}
+/* 次の手でゴールに届く石：自分（見ている側）は金、相手は赤。選んでいる間と終局後は出さない */
+function mvReach(b){const o={s:{},t:{}};if(S.over||S.sel>=0||S.learn||!mvLive())return o;const me=mvMe()||1;
+  for(let i=0;i<N*N;i++){const p=b[i];if(!p)continue;const g=goalRow(p);for(const m of movesFrom(b,i))if((m[1]/N|0)===g){const k=p===me?'G':'R';o.s[i]=k;o.t[m[1]]=k}}return o}
+function mvPre(){const P=MV.prev,cur={S,ply:S.ply||0,b:S.b.slice(),last:S.last};MV.prev=cur;
+  if(P&&P.S!==S){const e=$('mvEnd');if(e)e.hidden=true}
+  if(!P||P.S!==S||cur.ply!==P.ply+1||!S.last){if(!P||P.S!==S||cur.ply!==P.ply){mvStop();MV.badge={}}return}
+  const [f,t]=S.last;if(!P.b[f]||P.b[t]||S.b[t]!==P.b[f]){mvStop();MV.badge={};return}
+  const bd={};for(let i=0;i<N*N;i++)if(S.b[i]&&i!==t&&P.b[i]){const d=nbCount(S.b,i)-nbCount(P.b,i);if(d)bd[i]=d}
+  MV.badge=bd;mvStop();
+  if(MV.skip===cur.ply){MV.skip=-1;MV.pop=t;return}
+  if(!mvLive()||MV_RM.matches||document.hidden)return;
+  MV.hide=t;MV.run={f,t,p:P.b[f],d0:nbCount(P.b,f),rk:0}}
+function mvPost(){mvCand();if(MV.pop>=0){const s=$('c'+MV.pop).querySelector('.stone');MV.pop=-1;if(s&&!MV_RM.matches)s.animate([{scale:'1.1'},{scale:'1'}],{duration:160,easing:'ease-out'})}
+  if(MV.run&&!MV.run.go){MV.run.go=true;mvFly(MV.run)}}
+function mvStop(){if(MV.run){const r=MV.run;MV.run=null;try{r.fl&&r.fl.remove()}catch(e){}try{mvL('move').replaceChildren()}catch(e){}if(MV.hide>=0){const h=MV.hide;MV.hide=-1;const c=$('c'+h);if(c)c._h=null}}}
+/* 金糸：石のふちから出て、行き先の手前で止まる。どの向きも同じ割合で曲がる */
+const mvC=i=>[(i%N)*100+50,(i/N|0)*100+50];
+function mvCurve(f,t){const A=mvC(f),B=mvC(t),dx=B[0]-A[0],dy=B[1]-A[1],L=Math.hypot(dx,dy),ux=dx/L,uy=dy/L,nx=-uy,ny=ux;
+  const A2=[A[0]+ux*46,A[1]+uy*46],B2=[B[0]-ux*16,B[1]-uy*16],k=.24*(L-62);
+  return {A:A2,B:B2,Q:[(A2[0]+B2[0])/2+nx*k,(A2[1]+B2[1])/2+ny*k],full:[A,B,[(A[0]+B[0])/2+nx*.24*L,(A[1]+B[1])/2+ny*.24*L]]}}
+const mvBz=(A,Q,B,t)=>[(1-t)*(1-t)*A[0]+2*(1-t)*t*Q[0]+t*t*B[0],(1-t)*(1-t)*A[1]+2*(1-t)*t*Q[1]+t*t*B[1]];
+function mvTaper(A,Q,B,w0,off){const L=[],R=[],n=24;for(let s=0;s<=n;s++){const t=s/n,p=mvBz(A,Q,B,t),dx=2*(1-t)*(Q[0]-A[0])+2*t*(B[0]-Q[0]),dy=2*(1-t)*(Q[1]-A[1])+2*t*(B[1]-Q[1]),l=Math.hypot(dx,dy)||1,nx=-dy/l,ny=dx/l,w=w0*Math.pow(1-t,.85)+.05;
+  L.push((p[0]+nx*(off+w)).toFixed(1)+' '+(p[1]+ny*(off+w)).toFixed(1));R.unshift((p[0]+nx*(off-w)).toFixed(1)+' '+(p[1]+ny*(off-w)).toFixed(1))}return 'M'+L.join(' L')+' L'+R.join(' L')+' Z'}
+function mvEl(tag,a){const e=document.createElementNS(MV_NS,tag);for(const k in a)e.setAttribute(k,a[k]);return e}
+function mvLine(layer,f,t,op){const c=mvCurve(f,t),id='mvm'+(++MV_UID),gid='mvg'+MV_UID,g=mvEl('g',{opacity:op==null?1:op});
+  const defs=mvEl('defs',{}),lg=mvEl('linearGradient',{id:gid,gradientUnits:'userSpaceOnUse',x1:c.A[0],y1:c.A[1],x2:c.B[0],y2:c.B[1]});
+  lg.append(mvEl('stop',{offset:'0','stop-color':'#d8bd7e','stop-opacity':'0'}),mvEl('stop',{offset:'.35','stop-color':'#d8bd7e','stop-opacity':'.85'}),mvEl('stop',{offset:'1','stop-color':'#fff6d6'}));
+  const mk=mvEl('mask',{id,maskUnits:'userSpaceOnUse',x:'-100',y:'-100',width:'800',height:'800'}),mp=mvEl('path',{d:'M'+c.A.join(' ')+' Q'+c.Q.join(' ')+' '+c.B.join(' '),fill:'none',stroke:'#fff','stroke-width':'34',pathLength:'1','stroke-dasharray':'1','stroke-dashoffset':'0'});
+  mk.append(mp);defs.append(lg,mk);g.append(defs,mvEl('path',{d:mvTaper(c.A,c.Q,c.B,1.4,8),fill:'rgba(240,216,150,.26)',mask:'url(#'+id+')'}),mvEl('path',{d:mvTaper(c.A,c.Q,c.B,1.8,0),fill:'url(#'+gid+')',mask:'url(#'+id+')',style:'filter:drop-shadow(0 0 2px rgba(240,216,150,.6))'}));
+  layer.append(g);return {g,mp,c}}
+function mvBrackets(layer,t){const [x,y]=mvC(t),o=42,l=16,g=mvEl('g',{fill:'none',stroke:'#f0d896','stroke-width':'2.2','stroke-linecap':'square'});
+  for(const[sx,sy]of[[-1,-1],[1,-1],[1,1],[-1,1]])g.append(mvEl('path',{d:'M'+(x+sx*o)+' '+(y+sy*(o-l))+' V'+(y+sy*o)+' H'+(x+sx*(o-l))}));layer.append(g)}
+/* 候補：選んだ石から行ける先すべてへ淡く。指（カーソル）が乗った1本だけ明るく */
+function mvCand(){let key='';const can=S.sel>=0&&mvLive()&&human();if(can)key=S.sel+':'+(S.ply||0)+':'+MV.hov;
+  if(key===MV.cand)return;const first=can&&(MV.cand.split(':').slice(0,2).join(':')!==S.sel+':'+(S.ply||0));MV.cand=key;const L=mvL('cand');L.replaceChildren();
+  document.querySelectorAll('.mvghost').forEach(x=>x.remove());document.querySelectorAll('.mvhov').forEach(x=>x.classList.remove('mvhov'));if(!can)return;
+  const tg=movesFrom(S.b,S.sel).map(m=>m[1]);tg.forEach((t,k)=>{const on=MV.hov===t;const ln=mvLine(L,S.sel,t,MV.hov>=0?(on?1:.22):.55);
+    if(first&&!MV_RM.matches)ln.mp.animate([{strokeDashoffset:1},{strokeDashoffset:1,offset:Math.min(.5,k*.08)},{strokeDashoffset:0}],{duration:320,easing:'cubic-bezier(.16,1,.3,1)',fill:'forwards'})});
+  if(MV.hov>=0&&tg.includes(MV.hov)){mvBrackets(L,MV.hov);const c=$('c'+MV.hov);if(c){c.classList.add('mvhov');const gh=document.createElement('span');gh.className='mvghost '+(S.turn===1?'b':'w');c.prepend(gh)}}}
+/* 指したときの動き：線が伸びる→石が線をなぞって跳ぶ→線は後ろから消える */
+function mvFly(R){const L=mvL('move');const ln=mvLine(L,R.f,R.t,1);const W=gridEl.clientWidth,H=gridEl.clientHeight,size=W/N*.8;
+  const fl=document.createElement('div');fl.className='mvfly';fl.style.width=size+'px';fl.style.height=size+'px';
+  const src=$('c'+R.f);fl.innerHTML=`<div class="stone ${R.p===1?'b':'w'}${R.d0?'':' zero'}"><span>${R.d0}</span></div>`;
+  const pt=v=>[v[0]/600*W-size/2,v[1]/600*H-size/2];const [A,B,Q]=ln.c.full,fr=[];
+  for(let s=0;s<=14;s++){const u=s/14,e=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2,q=pt(mvBz(A,Q,B,e));fr.push({transform:'translate('+q[0]+'px,'+q[1]+'px) scale('+(1+.12*Math.sin(Math.PI*u)).toFixed(3)+')',offset:u})}
+  fl.style.transform=fr[0].transform;gridEl.appendChild(fl);R.fl=fl;
+  ln.mp.animate([{strokeDashoffset:1},{strokeDashoffset:0}],{duration:130,easing:'cubic-bezier(.16,1,.3,1)',fill:'forwards'});
+  setTimeout(()=>{if(MV.run!==R)return;ln.mp.animate([{strokeDashoffset:0},{strokeDashoffset:-1}],{duration:300,easing:'cubic-bezier(.5,0,.2,1)',fill:'forwards'});
+    fl.animate(fr,{duration:300,fill:'forwards'}).onfinish=()=>{if(MV.run!==R)return;mvStop();MV.pop=R.t;render()}},120)}
+/* ドラッグ：石が指に付いてきて、行き先の近くで吸い付く。行き先でなければ元に戻る */
+function mvPt(ev){const r=gridEl.getBoundingClientRect();let x=(ev.clientX-r.left)/r.width*gridEl.clientWidth,y=(ev.clientY-r.top)/r.height*gridEl.clientHeight;
+  if($('board').classList.contains('flip')){x=gridEl.clientWidth-x;y=gridEl.clientHeight-y}return [x,y]}
+const mvCtr=i=>{const w=gridEl.clientWidth/N;return [(i%N+.5)*w,((i/N|0)+.5)*w]};
+gridEl.addEventListener('pointerdown',ev=>{const c=ev.target.closest('.cell');if(!c||!c.classList.contains('mine')||!human()||MV.run)return;const i=+c.id.slice(1);
+  MV.drag={i,id:ev.pointerId,p0:mvPt(ev),on:false,focus:-1,touch:ev.pointerType!=='mouse'}});
+gridEl.addEventListener('pointermove',ev=>{const D=MV.drag;if(!D||ev.pointerId!==D.id)return;const p=mvPt(ev);
+  if(!D.on){if(Math.hypot(p[0]-D.p0[0],p[1]-D.p0[1])<8)return;if(!human()){MV.drag=null;return}D.on=true;try{gridEl.setPointerCapture(ev.pointerId)}catch(e){}
+    const cw=gridEl.clientWidth/N,size=cw*.8,v=S.b[D.i],d0=nbCount(S.b,D.i);S.sel=D.i;MV.hov=-1;MV.hide=D.i;render();
+    const fl=document.createElement('div');fl.className='mvfly drag';fl.style.width=size+'px';fl.style.height=size+'px';fl.innerHTML=`<div class="stone ${v===1?'b':'w'}${d0?'':' zero'}"><span>${d0}</span></div>`;gridEl.appendChild(fl);Object.assign(D,{fl,size,cw})}
+  ev.preventDefault();const lift=D.touch?D.cw*.45:0,q=[p[0],p[1]-lift*($('board').classList.contains('flip')?-1:1)];
+  const tg=movesFrom(S.b,D.i).map(m=>m[1]);let best=-1,bd=1e9;for(const t of tg){const c=mvCtr(t),d=Math.hypot(q[0]-c[0],q[1]-c[1]);if(d<bd){bd=d;best=t}}
+  const f=bd<D.cw*.75?best:-1;let x=q[0],y=q[1];if(f>=0){const c=mvCtr(f);x=c[0]+(q[0]-c[0])*.18;y=c[1]+(q[1]-c[1])*.18}
+  D.fl.style.transition=f!==D.focus?'transform .09s ease-out':'none';D.fl.style.transform='translate('+(x-D.size/2)+'px,'+(y-D.size/2)+'px) scale('+(f>=0?1.04:1.12)+')';
+  if(f!==D.focus){D.focus=f;MV.hov=f;mvCand()}},{passive:false});
+function mvDragEnd(ev){const D=MV.drag;if(!D||(ev&&ev.pointerId!==D.id))return;MV.drag=null;if(!D.on)return;MV.noClick=true;setTimeout(()=>MV.noClick=false,0);
+  const to=D.focus>=0&&human()&&S.sel===D.i?D.focus:-1,c=mvCtr(to>=0?to:D.i);
+  const a=D.fl.animate([{transform:D.fl.style.transform},{transform:'translate('+(c[0]-D.size/2)+'px,'+(c[1]-D.size/2)+'px) scale(1)'}],{duration:MV_RM.matches?0:(to>=0?110:180),easing:to>=0?'ease-out':'cubic-bezier(.3,1.4,.5,1)',fill:'forwards'});
+  a.onfinish=()=>{D.fl.remove();MV.hide=-1;MV.hov=-1;const cc=$('c'+D.i);if(cc)cc._h=null;if(to>=0){MV.skip=(S.ply||0)+1;onCell(to)}else render()}}
+gridEl.addEventListener('pointerup',mvDragEnd);gridEl.addEventListener('pointercancel',mvDragEnd);
+gridEl.addEventListener('click',ev=>{if(MV.noClick){ev.stopPropagation();ev.preventDefault()}},true);
+gridEl.addEventListener('pointerover',ev=>{if(MV.drag||ev.pointerType==='touch'||S.sel<0)return;const c=ev.target.closest('.cell');const i=c?+c.id.slice(1):-1;
+  const t=movesFrom(S.b,S.sel).some(m=>m[1]===i)?i:-1;if(t!==MV.hov){MV.hov=t;mvCand()}});
+gridEl.addEventListener('pointerleave',()=>{if(!MV.drag&&MV.hov>=0){MV.hov=-1;mvCand()}});
 let S;
 const key=(b,t)=>b.join('')+t;
 const ok=(r,c)=>r>=0&&r<N&&c>=0&&c<N;
@@ -1413,12 +1535,14 @@ const NAME={1:'黒',2:'白'};
 function render(){
   const b=S.b,targets=S.sel>=0?movesFrom(b,S.sel).map(m=>m[1]):[];
   const nbs=new Set();if(S.sel>=0){const r=S.sel/N|0,c=S.sel%N;for(const[x,y]of DIRS)if(ok(r+x,c+y)&&b[(r+x)*N+c+y])nbs.add((r+x)*N+c+y)}
-  const canAct=human(),rk=[0,colorRank(1),colorRank(2)];
+  const canAct=human(),rk=[0,colorRank(1),colorRank(2)];mvPre();const RCH=mvReach(b);
   for(let i=0;i<N*N;i++){const el=$('c'+i),v=b[i],r=i/N|0,d=v?nbCount(b,i):0;
-    let cls='cell';if(r===0||r===N-1)cls+=' goal';if(S.last&&(S.last[0]===i||S.last[1]===i))cls+=' last';
+    let cls='cell';if(r===0||r===N-1)cls+=' goal';if(S.last&&(S.last[0]===i||S.last[1]===i))cls+=' last '+(S.last[1]===i?'lastTo':'lastFrom');
+    if(RCH.s[i])cls+=' reach'+RCH.s[i];if(RCH.t[i])cls+=' goal'+RCH.t[i];
     if(canAct&&v===S.turn)cls+=' mine';if(i===S.sel)cls+=' sel';if(nbs.has(i))cls+=' nb';
     if(targets.includes(i))cls+=' target'+(r===goalRow(S.turn)?' fin':'');
-    setCell(el,cls,v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${rankCls(rk[v])}"><span>${d}</span></div>`:'',(v?NAME[v]+'の石、射程'+d:'空き')+'、'+(N-r)+'段'+(i%N+1)+'列');}
+    const bd=MV.badge[i];setCell(el,cls,(v&&i!==MV.hide?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${rankCls(rk[v])}"><span>${d}</span></div>`:'')+(bd?`<span class="mvb ${bd>0?'up':'dn'}" aria-hidden="true">${bd>0?'+':'−'}${Math.abs(bd)}</span>`:''),(v?NAME[v]+'の石、射程'+d:'空き')+'、'+(N-r)+'段'+(i%N+1)+'列');}
+  mvPost();
   const net=S.mode==='net';
   $('board').classList.toggle('flip',net?colorOf(NET.me)===2:(!!S.mode&&hcOf()===2));
   $('board').classList.toggle('hideNum',!$('showNum').checked);
@@ -2013,21 +2137,20 @@ function fxArrive0(side,cell,mine){if(!$('showJos').checked||CUR!=='game')return
     fxRipple(g,cell,t/PER,col,col1);
     JOS.raf=requestAnimationFrame(f)}JOS.raf=requestAnimationFrame(f);return true}
 function fxEnd(win,why,me){const b=S.b.slice(),cell=S.last?S.last[1]:-1;fxQueue(()=>fxEnd0(win,why,me,b,cell))}
-function fxEnd0(win,why,me,b,cell){if(!$('showJos').checked||CUR!=='game')return false;FX_FACE=win===2?2:1;const g=fxBase();if(!g)return false;
-  const cn=win===1?'黒':'白',lose=me&&me!==win,t0=performance.now(),PER=4600,gr=win===1?[0,1,2,3,4,5]:[30,31,32,33,34,35],rip=cell>=0&&b[cell]===win&&gr.includes(cell);
-  const big=me?(lose?'敗 北':'勝 利'):cn+'の勝ち',lab=me?(lose?cn+'の勝ち・'+why:'あなたの勝ち・'+why):why;
-  const col=win===1?'#e9c46a':'#dfe6ee',col2=win===1?'#f6e2a8':'#ffffff';
-  function f(now){const t=now-t0;if(CUR!=='game'){josStop();return}if(t>PER){fxDone();return}const {x,W,H,dpr}=g;x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);const p=t/PER;
-    if(lose){x.fillStyle='rgba(8,9,11,'+(0.45*fxE(p/0.25)*(1-fxW(p,0.85,1)))+')';x.fillRect(0,0,W,H);
-      if(rip)fxRipple(g,cell,Math.min(1,t/3000),'rgba(200,205,212,.85)','rgba(150,155,162,.8)',1.7);
-      fxLeaves(g,p,18,['#8d8a86','#a7a39c','#6f6c69'],true);
-      const np=fxW(t,500,PER);if(np>0&&np<1)fxBand(g,Math.min(1,np/0.2)*(1-fxW(np,0.82,1)),big,lab,'#b9b4aa','#8f8a80',54,np)}
-    else{const gl=x.createRadialGradient(W/2,H/2,0,W/2,H/2,W*0.7);gl.addColorStop(0,win===1?'rgba(246,226,168,.22)':'rgba(255,255,255,.18)');gl.addColorStop(1,'rgba(0,0,0,0)');
-      x.globalAlpha=fxE(p/0.2)*(1-fxW(p,0.8,1));x.fillStyle=gl;x.fillRect(0,0,W,H);x.globalAlpha=1;
-      if(rip)fxRipple(g,cell,Math.min(1,t/3000),col2,col,1.7);
-      fxLeaves(g,p,40,[col,col2,win===1?'#c9a24e':'#aeb7c0'],false);
-      const np=fxW(t,350,PER);if(np>0&&np<1)fxBand(g,Math.min(1,np/0.1)*(1-fxW(np,0.85,1)),big,lab,col,win===1?'#cdbf98':'#c3cad2',me?58:48,np)}
-    JOS.raf=requestAnimationFrame(f)}JOS.raf=requestAnimationFrame(f);return true}
+function fxEnd0(win,why,me,b,cell){if(!$('showJos').checked||CUR!=='game')return false;
+  /* 勝ち負けの画面（試作どおり）：勝ちは金箔と筆の「勝」、負けは墨のしずくと薄墨の「負」 */
+  let e=$('mvEnd');if(!e){e=document.createElement('div');e.id='mvEnd';e.className='mvend';e.setAttribute('role','dialog');e.setAttribute('aria-modal','true');document.body.appendChild(e);
+    e.addEventListener('click',ev=>{const a=ev.target.closest('[data-a]');if(!a)return;e.hidden=true;if(a.dataset.a==='again'){const r=S.mode==='net'?$('rematch'):$('reset');if(r&&!r.hidden)r.click()}})}
+  const lose=me&&me!==win,mine=me&&me===win,cn=win===1?'黒':'白';let h='';
+  if(!lose)for(let k=0;k<28;k++){const z=4+(k*7)%9;h+='<span class="mvflake" aria-hidden="true" style="left:'+((k*37+11)%100)+'%;top:'+((k*53+7)%80)+'%;width:'+z+'px;height:'+Math.round(z*.7)+'px;transform:rotate('+(k*37%180)+'deg);animation-delay:'+((k*13)%20)/10+'s"></span>'}
+  else for(let k=0;k<8;k++)h+='<span class="mvdrop" aria-hidden="true" style="left:'+(10+(k*23)%80)+'%;top:'+(15+(k*29)%60)+'%;height:'+(10+(k*5)%10)+'px;animation-delay:'+k*.6+'s"></span>';
+  const canAgain=S.mode!=='net'||(!NET.watch&&colorOf(NET.me)>0);
+  h+='<div class="mvk">'+(lose?'負':'勝')+'</div><div class="mvwho">'+(mine?'あなたの勝ち':cn+'の勝ち')+'</div><div class="mvwhy">'+esc0(why)+'　'+(S.ply||0)+'手</div><div class="mvrow">';
+  h+=lose?'<button class="mvbtn solid" type="button" data-a="look">盤面を振り返る</button>'+(canAgain?'<button class="mvbtn" type="button" data-a="again">もう一局</button>':'')
+         :(canAgain?'<button class="mvbtn solid" type="button" data-a="again">もう一局</button>':'')+'<button class="mvbtn'+(canAgain?'':' solid')+'" type="button" data-a="look">盤面を見る</button>';
+  e.className='mvend'+(lose?' lose':'');e.innerHTML=h+'</div>';e.hidden=false;try{e.querySelector('.mvbtn').focus({preventScroll:true})}catch(x){}
+  return false}
+function esc0(t){return String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function fxMe(){if(S.mode==='net')return NET.ai?0:(colorOf(NET.me)||0);if(S.mode===0||S.study)return 0;return hcOf()}
 function fxCheck(){if(!S||S.study)return;const live=typeof VIEW==='undefined'||VIEW.i==null;const gid=(S.mode==='net'?'n'+(NET.code||'')+'-'+(NET.game||''):S.gid||(S._fx||(S._fx=Math.random().toString(36).slice(2))))+':'+S.mode;
   const a=[0,arrivedCount(S.b,1),arrivedCount(S.b,2)],ply=S.ply||0;
