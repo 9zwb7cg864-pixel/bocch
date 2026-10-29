@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var q=mp(new URLSearchParams(location.search).get('lang'));if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));var n=mp((navigator.languages&&navigator.languages[0])||navigator.language);L=q||s||n||'en'}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=8"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var q=mp(new URLSearchParams(location.search).get('lang'));if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));var n=mp((navigator.languages&&navigator.languages[0])||navigator.language);L=q||s||n||'en'}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=9"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -511,7 +511,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
         <li>途中の石は飛び越えてよい。石は取られない</li>
         <li>向こう岸に自分の石が2つ着いたら勝ち</li>
       </ol>
-      <div class="row"><button id="hrLearn">盤で試す ›</button><button class="primary" id="hrOk">わかった</button></div>
+      <div class="row"><button id="hrOk">読んだ</button><button class="primary" id="hrLearn">4問で覚える ›</button></div>
     </div>
     <nav class="sub-menu" aria-label="その他">
       <button data-go="watch" aria-label="観戦する"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>観戦</span></button>
@@ -3136,7 +3136,11 @@ function learnPanel0(){const P=$('learnPanel');if(P)P.hidden=!(S&&S.learn)}
 function rulesSeen(){try{return localStorage.getItem('bocch-rules-seen')==='1'}catch(e){return true}}
 function homeRulesInit(){$('homeRules').hidden=rulesSeen();$('rulesLink').classList.toggle('on',!$('homeRules').hidden)}
 $('hrOk').addEventListener('click',()=>{try{localStorage.setItem('bocch-rules-seen','1')}catch(e){}$('homeRules').hidden=true;$('homeRules').classList.remove('pop');$('rulesLink').classList.remove('on')});
-$('hrLearn').addEventListener('click',()=>{try{localStorage.setItem('bocch-rules-seen','1')}catch(e){}homeRulesInit();show('course');csOpen('move',0)});
+/* はじめての4問：初めての人は、講座から4問だけ解いて、そのまま「CPU やさしい」と対局する */
+const FIRST_PATH=[['move',0],['move',3],['bocchi',1],['win',1]];let FP=-1;
+function fpGo(){FP++;if(FP>=FIRST_PATH.length){FP=-1;try{localStorage.setItem('bocch-first-done','1')}catch(e){}show('game');S=initState(1);KICK='';render();try{kick()}catch(e){}return}
+  const [id,i]=FIRST_PATH[FP];show('course');csOpen(id,i);const t=(window.BOCCH_LANG&&window.BOCCH_LANG!=='ja'&&window.bocchT)?window.bocchT('はじめての4問'):'はじめての4問';$('csTitle').textContent=t+'　'+(FP+1)+' / '+FIRST_PATH.length}
+$('hrLearn').addEventListener('click',()=>{try{localStorage.setItem('bocch-rules-seen','1')}catch(e){}homeRulesInit();FP=-1;fpGo()});
 $('rulesLink').addEventListener('click',e=>{e.stopPropagation();const h=$('homeRules');const open=h.hidden||!h.classList.contains('pop');h.classList.toggle('pop',open);h.hidden=!open;$('rulesLink').classList.toggle('on',open)});
 document.addEventListener('click',e=>{const h=$('homeRules');if(h&&!h.hidden&&h.classList.contains('pop')&&!h.contains(e.target)){h.hidden=true;h.classList.remove('pop');$('rulesLink').classList.remove('on')}});
 $('learnBtn').addEventListener('click',()=>{show('course');csMap()});
@@ -3153,7 +3157,7 @@ const CS={c:null,i:0,b:null,got:null,moves:0,sel:-1,done:false,wrong:0,busy:fals
 const csIdx=s=>(+s[0]-1)+'abcdef'.indexOf(s[1])*6;
 function csProg(){PROF.cs=PROF.cs&&typeof PROF.cs==='object'?PROF.cs:{};return PROF.cs}
 function csCourse(id){return CS_BASIC.find(c=>c.id===id)}
-function csMap(){$('csMap').hidden=false;$('csLv').hidden=true;$('csTitle').textContent='学ぶ';const P=csProg(),box=$('csList');box.innerHTML='';let got=0,all=0;
+function csMap(){FP=-1;$('csMap').hidden=false;$('csLv').hidden=true;$('csTitle').textContent='学ぶ';const P=csProg(),box=$('csList');box.innerHTML='';let got=0,all=0;
   for(const [sec,ids] of CS_SECTIONS){const h=document.createElement('div');h.className='cs-sec';h.textContent=sec;box.append(h);
     for(const id of ids){const c=csCourse(id),b=document.createElement('button');b.className='cs-card';
       if(!c){b.classList.add('soon');b.disabled=true;b.innerHTML='<span class="ic">・</span><span><b></b><small>準備中</small></span>';b.querySelector('b').textContent=CS_SOON[id];box.append(b);continue}
@@ -3210,11 +3214,11 @@ function csMove(m){const l=CS.c.lv[CS.i],prev=CS.b.slice();CS.b=apply(CS.b,m);CS
 function csClear(){const l=CS.c.lv[CS.i];CS.done=true;const extra=CS.moves-l.par+CS.wrong;const st=extra<=0?3:extra<=2?2:1;
   const P=csProg(),arr=(P[CS.c.id]||[]).slice();arr[CS.i]=Math.max(arr[CS.i]|0,st);P[CS.c.id]=arr;saveProf();
   csDraw();$('cboard').classList.add('clear');csMsg(['','クリア','いいね！','完ぺき！'][st]+'　'+'★'.repeat(st)+'☆'.repeat(3-st)+(st<3?'（最短'+l.par+'手）':''),'ok');
-  $('csHint').hidden=true;$('csNext').hidden=false;$('csNext').textContent=CS.i<CS.c.lv.length-1?'次へ ›':'講座の一覧へ ›'}
+  $('csHint').hidden=true;$('csNext').hidden=false;$('csNext').textContent=CS.i<CS.c.lv.length-1?'次へ ›':'講座の一覧へ ›';if(FP>=0)$('csNext').textContent=FP<FIRST_PATH.length-1?'次へ ›':'CPUと対局する ›'}
 $('cgrid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(c)csCell(+c.id.slice(1))});
 $('csRetry').addEventListener('click',()=>{if(CS.c)csLoad()});
 $('csHint').addEventListener('click',()=>{if(CS.c){CS.wrong=Math.max(CS.wrong,1);csMsg('ヒント：'+CS.c.lv[CS.i].hint,'hint')}});
-$('csNext').addEventListener('click',()=>{if(!CS.c)return;if(CS.i<CS.c.lv.length-1){CS.i++;csLoad()}else csMap()});
+$('csNext').addEventListener('click',()=>{if(!CS.c)return;if(FP>=0){fpGo();return}if(CS.i<CS.c.lv.length-1){CS.i++;csLoad()}else csMap()});
 $('csBack').addEventListener('click',()=>{if(!$('csLv').hidden){csMap()}else history.back()});
 $('csRef').addEventListener('click',()=>{const f=$('refFrame');if(!f.src){const G={'en':'guide-en.html','zh-Hans':'guide-zh-hans.html','zh-Hant':'guide-zh-hant.html','ko':'guide-ko.html','es':'guide-es.html','de':'guide-de.html'};f.src=(G[window.BOCCH_LANG]||'guide.html')+'?embed=1'}show('ref')});
 
