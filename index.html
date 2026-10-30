@@ -3158,7 +3158,13 @@ async function dqBoardPng(){try{await document.fonts.ready}catch(e){}
   return await new Promise(r=>c.toBlob(r,'image/png'))}
 function dqNote(t){const e=$('dqShareNote');e.textContent=t;e.hidden=!t}
 /* Xの投稿画面を開く：新しいタブが止められたとき（ホーム画面のアプリ・アプリ内ブラウザ）は、この画面のまま移る */
-function openX(u){let w=null;try{w=window.open(u,'_blank')}catch(e){}if(w){try{w.opener=null}catch(e){}}else location.href=u}
+function openX(u){
+  /* スマホ：Xのアプリを直接開く（ブラウザ版だとログイン画面になるため）。アプリがなければ1.5秒後にブラウザ版へ */
+  if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){let t='';try{t=new URL(u).searchParams.get('text')||''}catch(e){}
+    let left=false;const h=()=>{if(document.hidden)left=true};document.addEventListener('visibilitychange',h);
+    setTimeout(()=>{document.removeEventListener('visibilitychange',h);if(!left&&!document.hidden)location.href=u},1500);
+    location.href='twitter://post?message='+encodeURIComponent(t);return}
+  let w=null;try{w=window.open(u,'_blank')}catch(e){}if(w){try{w.opener=null}catch(e){}}else location.href=u}
 $('dqShare').addEventListener('click',async()=>{if(!DQ.q||!DQ.res)return;const intent=t=>'https://x.com/intent/post?text='+encodeURIComponent(t);
   // 押したらすぐXの投稿画面へ。盤面の画像は、問題ごとのページ（/d/番号/）のリンクカードで出る
   openX(intent(dqShareText(true)))});
