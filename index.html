@@ -2881,7 +2881,7 @@ function acctErr(e){acctMsg(ACCT_ERR[e&&e.code]||('うまくいきませんで�
 function acctRender(){const u=FB.user;$('acctOut').hidden=!!u;$('acctVerify').hidden=!(u&&!u.emailVerified);$('acctIn').hidden=!(u&&u.emailVerified);
   if(u){$('acctVEmail').textContent=u.email;$('acctUEmail').textContent=u.email}
   const me=$('meEdit');if(me)me.textContent=u&&u.emailVerified?'ログイン中 ›':'アカウント ›'}
-function profData(){const o={name:PROF.name||'',rating:Math.round(PROF.rating*10)/10,games:PROF.games|0,w:PROF.w|0,l:PROF.l|0,d:PROF.d|0,rated:(PROF.rated||[]).slice(-150),peak:!!PROF.peak,cs:PROF.cs||{},st:PROF.st||{},bd:PROF.bd||[],sel:PROF.sel||'',t:Date.now()};try{if(FR.loaded){o.friends=FR.friends;o.fout=FR.fout;o.fin=FR.fin}}catch(e){}return o}
+function profData(){const o={name:PROF.name||'',rating:Math.round(PROF.rating*10)/10,games:PROF.games|0,w:PROF.w|0,l:PROF.l|0,d:PROF.d|0,rated:(PROF.rated||[]).slice(-150),peak:!!PROF.peak,cs:PROF.cs||{},st:PROF.st||{},bd:PROF.bd||[],sel:PROF.sel||'',t:Date.now()};if(KF_SYNC.ok)o.kifu=kifuPack();try{if(FR.loaded){o.friends=FR.friends;o.fout=FR.fout;o.fin=FR.fin}}catch(e){}return o}
 
 // アカウントのバッジと記録を、この端末のものと合わせる（大きい方・両方持っている方を残す）
 function bdMerge(d){if(!d)return;try{const P=csProg();if(d.cs&&typeof d.cs==='object')for(const k in d.cs){const a=P[k]||[],b=Array.isArray(d.cs[k])?d.cs[k]:[];P[k]=Array.from({length:Math.max(a.length,b.length)},(_,i)=>Math.max(a[i]|0,b[i]|0))}}catch(e){}const a=bdStats(),b=d.st||{};for(const k of ['wins','games','net','stMax','rmax','fast','yori','long','hunt','rev','watch','fr','daily'])a[k]=Math.max(a[k]|0,b[k]|0);
@@ -2889,17 +2889,34 @@ function bdMerge(d){if(!d)return;try{const P=csProg();if(d.cs&&typeof d.cs==='ob
   PROF.bd=Array.from(new Set([...bdOwned(),...(Array.isArray(d.bd)?d.bd.filter(x=>BD[x]):[])]));if(!PROF.sel&&typeof d.sel==='string')PROF.sel=d.sel}
 async function acctPull(){if(!FB.user||!FB.user.emailVerified)return;FB.syncing=true;$('acctSync').textContent='データを読み込んでいます…';
   try{const ref=FB.db.collection('users').doc(FB.user.uid);const snap=await ref.get();
-    if(snap.exists){const d=snap.data();try{frLoad(d)}catch(e){}
+    if(snap.exists){const d=snap.data();try{frLoad(d)}catch(e){}try{kifuMerge(d.kifu)}catch(e){}
       // 対局数が多い方を正とする（この端末で登録前に遊んだ分を失わないため）
       if((d.games|0)>=(PROF.games|0)){PROF.name=d.name||PROF.name;PROF.rating=Number(d.rating)||PROF.rating;PROF.games=d.games|0;PROF.w=d.w|0;PROF.l=d.l|0;PROF.d=d.d|0;PROF.peak=!!(d.peak||PROF.peak);PROF.rated=Array.from(new Set([...(PROF.rated||[]),...(d.rated||[])])).slice(-200);bdMerge(d);_saveProfLocal()}
-      else{bdMerge(d);await ref.set(profData())}}
-    else{try{FR.loaded=true}catch(e){}await ref.set(profData())}
+      else{bdMerge(d);await kifuProbe(ref);await ref.set(profData())}}
+    else{try{FR.loaded=true}catch(e){}try{kifuMerge(null)}catch(e){}await kifuProbe(ref);await ref.set(profData())}
     try{frStart()}catch(e){}
+    if(!KF_SYNC.ok){await kifuProbe(ref)}else kifuPush();
     if(PROF.name){try{const ok=await claimName(PROF.name);if(!ok){$('nameMsg').textContent='「'+PROF.name+'」はほかの人が使っていたので、名前を付け直してください。';PROF.name='';_saveProfLocal();ref.set(profData()).catch(()=>{})}}catch(e){}}
     $('acctSync').textContent='名前・レート・戦績をアカウントに保存しています';if(typeof renderProf==='function')renderProf();render();try{rankPost()}catch(e){}}
   catch(e){$('acctSync').textContent='読み込めませんでした（'+(e.code||e.message)+'）'}
   FB.syncing=false}
 function acctPush(){if(!FB.ready||!FB.user||!FB.user.emailVerified||FB.syncing)return;clearTimeout(FB.saveT);FB.saveT=setTimeout(()=>{FB.db.collection('users').doc(FB.user.uid).set(profData()).catch(()=>{})},800)}
+/* 対局の記録（直近100局）もアカウントに保存して、別の端末でも見られるようにする。
+   1局は「手を2文字ずつ」に縮める。書き込めるか最初に確かめ、だめなら名前やレートの保存には混ぜない */
+const KF_SYNC={ok:false,t:0},KC='0123456789abcdefghijklmnopqrstuvwxyz',KUID='bocch-games-uid';
+function kifuPack(){return loadGames().filter(g=>g&&g.log&&g.log.length&&g.mode!=='study').slice(0,GMAX).map(g=>{const o={i:g.id,t:g.t|0,m:g.mode,me:g.me|0,w:g.win|0,y:g.why||'',l:g.log.map(m=>KC[m[0]]+KC[m[1]]).join('')};if(g.rd!=null)o.rd=g.rd;if(g.opp)o.o=g.opp;if(g.ra!=null)o.ra=g.ra;return o})}
+function kifuUnpack(o){if(!o||typeof o.i!=='string'||typeof o.l!=='string')return null;const log=[];for(let k=0;k+1<o.l.length;k+=2){const f=KC.indexOf(o.l[k]),t=KC.indexOf(o.l[k+1]);if(f<0||t<0||f>35||t>35)return null;log.push([f,t])}
+  const g={id:o.i,t:+o.t||0,mode:o.m,me:o.me|0,win:o.w|0,why:o.y||'',log,an:null};if(o.rd!=null)g.rd=o.rd;if(o.o)g.opp=o.o;if(o.ra!=null)g.ra=o.ra;return g}
+function kifuMerge(remote){const uid=FB.user&&FB.user.uid;if(!uid)return;let tag='';try{tag=localStorage.getItem(KUID)||''}catch(e){}
+  // この端末の記録が別のアカウントのものなら混ぜずに、アカウントの記録に置き換える
+  let local=tag&&tag!==uid?[]:loadGames();const map=new Map(local.map(g=>[g.id,g]));
+  if(Array.isArray(remote))for(const o of remote){const g=kifuUnpack(o);if(g&&!map.has(g.id))map.set(g.id,g)}
+  const all=[...map.values()].sort((a,b)=>(b.t||0)-(a.t||0)).slice(0,GMAX);_storeGamesLocal(all);try{localStorage.setItem(KUID,uid)}catch(e){}
+  try{if(CUR==='profile'||CUR==='kifu'||CUR==='home')kfHome()}catch(e){}}
+async function kifuProbe(ref){try{await ref.set({kifu:kifuPack()},{merge:true});KF_SYNC.ok=true}catch(e){KF_SYNC.ok=false;console.warn('対局の記録をアカウントに保存できません',e&&e.code)}}
+function kifuPush(){if(!KF_SYNC.ok||!FB.ready||!FB.user||!FB.user.emailVerified||FB.syncing)return;clearTimeout(KF_SYNC.t);
+  KF_SYNC.t=setTimeout(()=>{FB.db.collection('users').doc(FB.user.uid).set({kifu:kifuPack()},{merge:true}).catch(()=>{})},2500)}
+const _storeGamesLocal=storeGames;storeGames=function(a){_storeGamesLocal(a);try{if(FB.user&&FB.user.uid)localStorage.setItem(KUID,FB.user.uid)}catch(e){}kifuPush()};
 const _saveProfLocal=saveProf;saveProf=function(){_saveProfLocal();acctPush()};
 $('acctSignup').addEventListener('click',async()=>{acctMsg('登録しています…');try{await fbInit();const c=await FB.auth.createUserWithEmailAndPassword($('acctEmail').value.trim(),$('acctPass').value);await c.user.sendEmailVerification();statSend({su:1});acctMsg('確認メールを送りました。迷惑メールのフォルダも見てください。')}catch(e){acctErr(e)}});
 $('acctLogin').addEventListener('click',async()=>{acctMsg('ログインしています…');try{await fbInit();await FB.auth.signInWithEmailAndPassword($('acctEmail').value.trim(),$('acctPass').value);acctMsg('')}catch(e){acctErr(e)}});
