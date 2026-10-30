@@ -3162,7 +3162,9 @@ $('dqShare').addEventListener('click',async()=>{if(!DQ.q||!DQ.res)return;const i
   // 解けなかったときは盤面を出さない（文章だけ）
   if(DQ.res!=='ok'){openX(intent(dqShareText()));return}
   // 新しいタブは押した直後に開く（あとで開くとポップアップとして止められるため）
-  const mobile=!!(navigator.canShare&&navigator.share&&/Android|iPhone|iPad|iPod/i.test(navigator.userAgent));const win=mobile?null:window.open('about:blank','_blank');
+  // スマホは共有シートを出さず、すぐXの投稿画面へ（盤面は文字の図で入れる）
+  if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){openX(intent(dqShareText()));return}
+  const mobile=false;const win=window.open('about:blank','_blank');
   let blob=null;try{blob=await dqBoardPng()}catch(e){}
   const text=dqShareText(true);
   if(blob&&mobile){const file=new File([blob],'bocch-daily.png',{type:'image/png'});
