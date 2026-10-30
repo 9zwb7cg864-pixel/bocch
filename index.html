@@ -2429,6 +2429,7 @@ function openShared(){let q;try{q=new URLSearchParams(location.search);if(!q.get
 {const _rh=renderReview;renderReview=function(){_rh();const g=REV.g;if(g&&g.shared){const h=$('revHead');h.textContent='共有された対局'+(g.sm?'（送った人は'+(g.sm===1?'黒':'白')+(g.opp?'・相手 '+g.opp:'')+'）':'')+'　'+h.textContent}}}
 addEventListener('hashchange',()=>{if(/kifu=/.test(location.hash))openShared()});
 if(/kifu=/.test(location.search+location.hash))setTimeout(openShared,0);
+if(/[?&]dq=/.test(location.search)){const go=()=>{try{show('daily',true);dqOpen()}catch(e){}};if(document.readyState==='complete')setTimeout(go,0);else addEventListener('load',go,{once:true})}
 
 if(CUR==='history')renderHistory();
 
@@ -3089,7 +3090,7 @@ async function dqLoad(){if(DQ.list)return DQ.list;try{DQ.list=await fetch('puzzl
 (function(){const t=$('dlabTop'),l=$('dlabLeft'),gr=$('dgrid');for(let i=0;i<6;i++){t.appendChild(document.createElement('span'));l.appendChild(document.createElement('span'))}
   for(let i=0;i<36;i++){const d=document.createElement('div');d.className='cell';d.id='q'+i;gr.appendChild(d)}})();
 async function dqOpen(){const L=await dqLoad();if(!L.length){$('dqHead').textContent='問題を読み込めませんでした。通信を確かめてください。';return}
-  const n=dqIndex(),q=L[((n%L.length)+L.length)%L.length];DQ.q={b:q[0].split('').map(Number),p:q[1],ans:[q[2],q[3]],n:n+1};dqReset();
+  const n=dqIndex(),qi=((n%L.length)+L.length)%L.length,q=L[qi];DQ.q={b:q[0].split('').map(Number),p:q[1],ans:[q[2],q[3]],n:n+1,k:qi+1};dqReset();
   const s=bdStats();DQ.first=s.dlast!==dqDay();dqRender()}
 function dqReset(){DQ.res=null;dqShareUpd();DQ.b=DQ.q.b.slice();DQ.turn=DQ.q.p;DQ.phase='p1';DQ.sel=-1;DQ.last=null;DQ.busy=false;$('dqMsg').textContent='';$('dqMsg').className='dq-msg'}
 function dqRender(){if(!DQ.q)return;const b=DQ.b,p=DQ.q.p,flip=p===2,tg=DQ.sel>=0?movesFrom(b,DQ.sel).map(m=>m[1]):[];const my=(DQ.phase==='p1'||DQ.phase==='p2')&&!DQ.busy;
@@ -3131,7 +3132,7 @@ $('dqAns').addEventListener('click',dqShow);
 function dqShareUpd(){const r=$('dqShareRow');if(!r)return;r.hidden=!DQ.res;if(!DQ.res)$('dqShareNote').hidden=true;$('dqShare').textContent=window.BOCCH_LANG&&window.BOCCH_LANG!=='ja'?'Share on X':'結果をXでシェア'}
 function dqShareText(noGrid){const q=DQ.q,p=q.p,L=window.BOCCH_LANG||'ja',flip=p===2,rows=[];
   for(let r=0;r<6;r++){let t='';for(let c=0;c<6;c++){const i=flip?35-(r*6+c):r*6+c,v=q.b[i];t+=v===1?'●':v===2?'○':'・'}rows.push(t)}
-  const T=DQ_SHARE[L]||DQ_SHARE.en,n=q.n,tail='https://bocchgame.com\n#bocch';
+  const T=DQ_SHARE[L]||DQ_SHARE.en,n=q.n,tail='https://bocchgame.com/d/'+(q.k||1)+'/\n#bocch';
   if(DQ.res==='ok')return T.ok(n,p===1,DQ.ply,dqCur())+'\n'+(noGrid?'':rows.join('\n')+'\n')+tail;
   return T.ng(n,2)+'\n'+tail}
 // シェア文（言語ごと）。ok(問題番号, 黒番か, 手数, 連続日数) / ng(問題番号, 手数)
@@ -3159,20 +3160,8 @@ function dqNote(t){const e=$('dqShareNote');e.textContent=t;e.hidden=!t}
 /* Xの投稿画面を開く：新しいタブが止められたとき（ホーム画面のアプリ・アプリ内ブラウザ）は、この画面のまま移る */
 function openX(u){let w=null;try{w=window.open(u,'_blank')}catch(e){}if(w){try{w.opener=null}catch(e){}}else location.href=u}
 $('dqShare').addEventListener('click',async()=>{if(!DQ.q||!DQ.res)return;const intent=t=>'https://x.com/intent/post?text='+encodeURIComponent(t);
-  // 解けなかったときは盤面を出さない（文章だけ）
-  if(DQ.res!=='ok'){openX(intent(dqShareText()));return}
-  // 新しいタブは押した直後に開く（あとで開くとポップアップとして止められるため）
-  // スマホは共有シートを出さず、すぐXの投稿画面へ（盤面は文字の図で入れる）
-  if(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)){openX(intent(dqShareText()));return}
-  const mobile=false;const win=window.open('about:blank','_blank');
-  let blob=null;try{blob=await dqBoardPng()}catch(e){}
-  const text=dqShareText(true);
-  if(blob&&mobile){const file=new File([blob],'bocch-daily.png',{type:'image/png'});
-    try{if(navigator.canShare({files:[file]})){await navigator.share({files:[file],text});return}}catch(e){if(e&&e.name==='AbortError')return}}
-  let copied=false;if(blob&&navigator.clipboard&&window.ClipboardItem){try{await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);copied=true}catch(e){}}
-  if(!copied&&blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='bocch-daily.png';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000)}
-  const u=intent(blob?text:dqShareText());if(win&&!win.closed)win.location.href=u;else openX(u);
-  dqNote(!blob?'':copied?'盤面の画像をコピーしました。投稿画面で貼り付けてください（Ctrl+V）':'盤面の画像を保存しました。投稿画面で画像を添付してください')});
+  // 押したらすぐXの投稿画面へ。盤面の画像は、問題ごとのページ（/d/番号/）のリンクカードで出る
+  openX(intent(dqShareText(true)))});
 $('dailyBtn').addEventListener('click',()=>{dqOpen()});
 addEventListener('popstate',()=>{if(CUR==='daily')dqOpen()});
 try{dqDot()}catch(e){}
