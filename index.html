@@ -2758,7 +2758,7 @@ async function fbInit(){if(FB.ready||FB.loading)return FB.loading;FB.loading=(as
   const V='10.12.2';await loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-app-compat.js');
   await Promise.all([loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-auth-compat.js'),loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-firestore-compat.js')]);
   firebase.initializeApp(FB_CONFIG);FB.auth=firebase.auth();FB.auth.languageCode='ja';FB.db=firebase.firestore();FB.ready=true;
-  FB.auth.onAuthStateChanged(u=>{FB.user=u;if(u&&u.emailVerified)statAccount(u.uid);try{if(u&&u.emailVerified){localStorage.setItem('bocch-named','1');mailHash(u.email).then(h=>{OFF_H.v=h;try{localStorage.setItem('bocch-off',OFFICERS_H.includes(h)?'1':'0');localStorage.setItem('bocch-own',h===OWNER_H?'1':'0')}catch(e){}try{render()}catch(e){}})}else{OFF_H.v=null;localStorage.removeItem('bocch-named');localStorage.removeItem('bocch-off');localStorage.removeItem('bocch-own')}}catch(e){}
+  FB.auth.onAuthStateChanged(u=>{FB.user=u;if(u&&u.emailVerified)statAccount(u.uid);try{if(u&&u.emailVerified){localStorage.setItem('bocch-named','1');mailHash(u.email).then(h=>{OFF_H.v=h;try{localStorage.setItem('bocch-off',OFFICERS_H.includes(h)?'1':'0');localStorage.setItem('bocch-own',h===OWNER_H?'1':'0')}catch(e){}try{render()}catch(e){}try{if(h===OWNER_H&&window.bocchOnline)window.bocchOnline()}catch(e){}})}else{OFF_H.v=null;localStorage.removeItem('bocch-named');localStorage.removeItem('bocch-off');localStorage.removeItem('bocch-own')}}catch(e){}
     acctRender();if(u&&u.emailVerified)acctPull();else{try{FR.friends=[];FR.fout=[];FR.fin=[];FR.loaded=false;FR.feeds={};clearInterval(FR.inT);try{FR.sub&&FR.sub.close();FR.sub=null}catch(e){}frBadge()}catch(e){}}if(typeof renderProf==='function'&&CUR==='profile')renderProf();render()})})();return FB.loading}
 const ACCT_ERR={'auth/email-already-in-use':'このメールアドレスはもう登録されています。「ログイン」を押してください。','auth/invalid-email':'メールアドレスの形が正しくありません。','auth/weak-password':'パスワードは6文字以上にしてください。','auth/invalid-credential':'メールアドレスかパスワードが違います。','auth/wrong-password':'メールアドレスかパスワードが違います。','auth/user-not-found':'このメールアドレスは登録されていません。','auth/missing-password':'パスワードを入れてください。','auth/too-many-requests':'試した回数が多すぎます。少し時間をおいてください。','auth/network-request-failed':'通信できませんでした。ネットにつながっているか確かめてください。'};
 function acctMsg(t,err){const m=$('acctMsg');m.textContent=t||'';m.style.color=err?'#e08c7c':''}
@@ -3509,6 +3509,7 @@ const ONLINE_MIN=10; // この人数に届かないときは表示しない
   async function count(){if(document.hidden)return;try{const t=await (await fetch(RELAY+T+'/json?poll=1&since=2m',{cache:'no-store'})).text();const ids=new Set([id]);
       t.split('\n').forEach(l=>{if(!l)return;try{const m=JSON.parse(JSON.parse(l).message);if(m&&m.t==='here'&&typeof m.id==='string')ids.add(m.id.slice(0,16))}catch(e){}});
       const n=ids.size+ONLINE_BASE;el.hidden=n<ONLINE_MIN&&!(typeof isOwner==='function'&&isOwner());if(!el.hidden)el.querySelector('span').innerHTML='いまオンライン <b>'+n+'</b> 人'}catch(e){}}
+  window.bocchOnline=count;
   async function tick(){await beat();count()}
   tick();setInterval(tick,60000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)tick()})})();
 </script>
