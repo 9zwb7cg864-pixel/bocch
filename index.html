@@ -117,6 +117,16 @@ svg.mvfx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;ov
 .endb.main::before,.endb.main::after{content:"";position:absolute;width:8px;height:8px;pointer-events:none}
 .endb.main::before{left:-5px;top:-5px;border-left:2px solid var(--gold-hi);border-top:2px solid var(--gold-hi)}.endb.main::after{right:-5px;bottom:-5px;border-right:2px solid var(--gold-hi);border-bottom:2px solid var(--gold-hi)}
 .endb span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kf .kf-type{font-family:var(--f-disp);font-size:26px;font-weight:800;letter-spacing:.06em;color:var(--gold-hi);margin:6px 0 2px}
+.kf .kf-desc{margin:0 0 10px;font-size:14px;color:var(--fg)}
+.kf .kf-wrap{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.kf svg{width:min(260px,100%);height:auto;flex:none}
+.kf .kf-list{flex:1;min-width:150px;display:flex;flex-direction:column;gap:6px;font-size:13px}
+.kf .kf-row{display:grid;grid-template-columns:5.5em 1fr 2.2em;gap:8px;align-items:center}
+.kf .kf-bar{height:6px;background:rgba(216,189,126,.15);position:relative}.kf .kf-bar i{position:absolute;left:0;top:0;bottom:0;background:var(--gold)}
+.kf .kf-row b{font-variant-numeric:tabular-nums;text-align:right;font-weight:500;color:var(--sub)}
+.kf .kf-meta{font-size:12.5px;color:var(--sub);margin:10px 0 0}
+.kf .kf-share{margin-top:12px}
 /* 勝ち負けの画面 */
 .mvend{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow:hidden;padding:max(20px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(20px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:rgba(14,11,9,.78);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);text-align:center}
 .mvend .mvk{font-family:"Yuji Boku","Shippori Mincho B1",serif;font-size:min(52vw,210px);line-height:1;color:var(--gold-hi);text-shadow:0 0 40px rgba(240,216,150,.45),0 6px 0 rgba(0,0,0,.35);animation:mvInk .9s ease-out both}
@@ -725,6 +735,10 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
     <p class="prof-rec" id="profRec"></p>
     <div class="bd-head"><label class="prof-l">バッジ</label><small id="bdCount"></small></div><p class="prof-note">持っているバッジを押すと、名前の横に出ます。もう一度押すと外れます。</p><div id="bdList"></div>
     <p class="note">レートはオンライン対戦とCPU戦（1手戻しを使わなかった対局）で上下します。CPUのレートは やさしい 900・ふつう 1200・つよい 1500・最強 2100 として計算します。名前とレートはオンライン対戦では相手と観戦者に表示されます。</p>
+  </div>
+  <div class="card prof kf" id="kfCard">
+    <h3 class="acct-h">あなたの棋風</h3>
+    <div id="kfBody"></div>
   </div>
   <div class="card prof acct" id="acct">
     <h3 class="acct-h">メールでアカウント登録</h3>
@@ -2677,6 +2691,52 @@ const _renderP=render;render=function(){_renderP();
   else pt.hidden=pbt.hidden=true;
   const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?'1手戻しを使ったのでレートは変わりません':'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
   {const mn=$('meName');mn.textContent=myName();if(isOff())mn.prepend(offBadge(18));const sb=bdSel();if(sb)mn.append(bdBadge(sb,17))}$('meRate').textContent=Math.round(PROF.rating)};
+/* ===== 棋風診断：その端末に残っている対局の手順から、将棋の棋風の分け方を参考に6つの物差しで測る ===== */
+const KF_BASE={fwd:[.5413,.107],def:[.2406,.1305],big:[.208,.0927],coh:[1.2705,.262],bind:[.1771,.0881],first:[16.9,10.13],len:[43.69,14.9],open:[.5844,.2789]}; // AI同士480局面ぶんの平均と散らばり
+const KF_COME=.336; // 相手に先に着かれた対局からの逆転勝ち（AI同士）
+const KF_AX=[ // [キー, 高いときの名前, 低いときの名前, 低い側も名前にするか]
+ ['seme','攻め将棋','受け将棋',1],['kyu','急戦','持久戦',1],['atsu','厚み','さばき',1],['jo','定跡','力戦',1],['osa','押さえ込み','',0],['neb','粘り','',0]];
+const KF_LAB=['攻め','急戦','厚み','定跡','押さえ込み','粘り'];
+const KF_DESC={'攻め将棋':'向こう岸へ向かう手が多く、自分から仕掛けるタイプ。','受け将棋':'相手の届く石を消す手が多く、守りから入るタイプ。','急戦':'早いうちに1つ目を着けにいくタイプ。','持久戦':'じっくり形を作り、長い勝負に持ち込むタイプ。',
+ '厚み':'石どうしを寄せて、まとまって進むタイプ。','さばき':'大きく跳ぶ手が多く、軽く動き回るタイプ。','定跡':'双璧や送り鳥など、名前のある序盤をよく使うタイプ。','力戦':'定跡を外れた自分の形で戦うタイプ。',
+ '押さえ込み':'相手の石を数字4や動けない石にして縛るタイプ。','粘り':'先に着かれてからの逆転が多いタイプ。'};
+const KF_ID={'攻め将棋':'seme','受け将棋':'uke','急戦':'kyusen','持久戦':'jikyu','厚み':'atsumi','さばき':'sabaki','定跡':'joseki','力戦':'rikisen','押さえ込み':'osae','粘り':'nebari'};
+function kfGame(log,me){let b=startBoard(),t=1;const opp=3-me,g=goalRow(me);
+  const reach=(b,p)=>{const gr=goalRow(p);let n=0;for(let i=0;i<36;i++)if(b[i]===p&&(i/6|0)!==gr&&movesFrom(b,i).some(m=>(m[1]/6|0)===gr))n++;return n};
+  const bound=(b,p)=>{let n=0;for(let i=0;i<36;i++)if(b[i]===p&&(nbCount(b,i)===4||!movesFrom(b,i).length))n++;return n};
+  const own=(b,i)=>{const r=i/6|0,c=i%6;let n=0;for(const[x,y]of DIRS)if(ok(r+x,c+y)&&b[(r+x)*6+c+y]===b[i])n++;return n};
+  let mv=0,fwd=0,def=0,big=0,coh=0,cohN=0,bind=0,first=0,oppFirst=0;
+  for(let k=0;k<log.length;k++){const m=log[k];
+    if(t===me){const f=m[0],to=m[1];if(Math.abs((f/6|0)-g)>Math.abs((to/6|0)-g))fwd++;
+      const n=apply(b,m);if(reach(n,opp)<reach(b,opp))def++;if(bound(n,opp)>bound(b,opp))bind++;
+      if(Math.max(Math.abs((f/6|0)-(to/6|0)),Math.abs(f%6-to%6))>=3)big++;mv++;
+      for(let i=0;i<36;i++)if(n[i]===me){coh+=own(n,i);cohN++}b=n;if(!first&&arrivedCount(b,me)>0)first=k+1}
+    else{b=apply(b,m);if(!first&&!oppFirst&&arrivedCount(b,opp)>0)oppFirst=k+1}t=3-t}
+  if(!mv)return null;let sp=-1;try{sp=me===1?senpoOf(log[0],log[2],1):senpoOf(log[1],log[3],2)}catch(e){}
+  return {fwd:fwd/mv,def:def/mv,big:big/mv,coh:coh/Math.max(1,cohN),bind:bind/mv,first:first||log.length+10,len:log.length,open:sp>=0?1:0,sp,behind:!!oppFirst}}
+function kfCalc(){const gs=loadGames().filter(g=>g&&g.mode!=='study'&&(g.me===1||g.me===2)&&g.log&&g.log.length>=6).slice(0,30);
+  const rs=[];let bh=0,bw=0;const spc={};for(const g of gs){const r=kfGame(g.log,g.me);if(!r)continue;rs.push(r);if(r.behind){bh++;if(g.win===g.me)bw++}if(r.sp>=0)spc[r.sp]=(spc[r.sp]||0)+1}
+  if(rs.length<5)return {n:rs.length};
+  const avg=k=>rs.reduce((a,r)=>a+r[k],0)/rs.length,z=k=>(avg(k)-KF_BASE[k][0])/(KF_BASE[k][1]*.6);
+  const Z=[(z('fwd')-z('def'))/1.4,(-z('first')-z('len'))/1.4,(z('coh')-z('big'))/1.4,z('open'),z('bind'),bh>=2?((bw/bh)-KF_COME)/.25:0];
+  const sc=Z.map(v=>Math.max(4,Math.min(96,Math.round(50+16*v))));
+  const cand=[];Z.forEach((v,i)=>{const a=KF_AX[i];if(v>=0)cand.push([v,a[1]]);else if(a[3])cand.push([-v,a[2]])});cand.sort((x,y)=>y[0]-x[0]);
+  const p=cand[0][1],q=cand[1]?cand[1][1]:'';let fav='';const top=Object.entries(spc).sort((a,b)=>b[1]-a[1])[0];if(top&&top[1]>=2)fav=SENPO[+top[0]][0]+'（'+top[1]+'局）';
+  return {n:rs.length,sc,p,q,name:p+(q?'・'+q:'')+'型',fav}}
+function kfRadar(sc){const cx=130,cy=120,R=88,ang=i=>-Math.PI/2+i*Math.PI/3,P=(i,r)=>[cx+Math.cos(ang(i))*r,cy+Math.sin(ang(i))*r];
+  let o='';for(const f of [1,.66,.33])o+=`<polygon points="${[0,1,2,3,4,5].map(i=>P(i,R*f).join(',')).join(' ')}" fill="none" stroke="rgba(216,189,126,.2)"/>`;
+  for(let i=0;i<6;i++){const[x,y]=P(i,R);o+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="rgba(216,189,126,.15)"/>`;const[lx,ly]=P(i,R+18);o+=`<text x="${lx}" y="${ly+4}" text-anchor="middle" font-size="11" fill="#a89e8a">${KF_LAB[i]}</text>`}
+  o+=`<polygon points="${sc.map((v,i)=>P(i,R*v/100).join(',')).join(' ')}" fill="rgba(216,189,126,.28)" stroke="#f0d896" stroke-width="2"/>`;
+  return `<svg viewBox="0 0 260 240" role="img" aria-label="棋風のレーダー図">${o}</svg>`}
+function kfRender(){const el=$('kfBody');if(!el)return;const k=kfCalc();
+  if(!k.sc){el.innerHTML=`<p class="kf-desc">あと${5-k.n}局指すと、あなたの棋風を診断します（この端末の対局から、直近30局まで）。</p>`;return}
+  el.innerHTML=`<div class="kf-type">${k.name}</div><p class="kf-desc">${KF_DESC[k.p]}${k.q?KF_DESC[k.q].replace('タイプ。','面もあります。'):''}</p>
+   <div class="kf-wrap">${kfRadar(k.sc)}<div class="kf-list">${k.sc.map((v,i)=>`<div class="kf-row"><span>${KF_LAB[i]}</span><span class="kf-bar"><i style="width:${v}%"></i></span><b>${v}</b></div>`).join('')}</div></div>
+   <p class="kf-meta">直近${k.n}局から診断${k.fav?'　よく使う戦法：'+k.fav:''}　50がふつう</p>
+   <button class="endb kf-share" id="kfShare" type="button">Xで共有</button>`;
+  $('kfShare').onclick=()=>{const id=KF_ID[k.p]+(k.q?'-'+KF_ID[k.q]:'');openX('https://x.com/intent/post?text='+encodeURIComponent('bocchで棋風を診断したら「'+k.name+'」でした。\n'+KF_DESC[k.p]+'\nhttps://bocchgame.com/k/'+id+'/\n#bocch'))}}
+{const _rp=renderProf;renderProf=function(){_rp();try{kfRender()}catch(e){console.error(e)}}}
+{const _pk=paint;paint=function(n){_pk(n);if(n==='profile')try{kfRender()}catch(e){console.error(e)}}}
 function renderProf(){const nmd=named();$('nameIn').value=nmd?PROF.name:'';$('nameIn').disabled=!nmd;$('nameSave').disabled=!nmd;$('nameIn').placeholder=nmd?'名前を入れる':guestName();
   $('nameNote').textContent=nmd?(isOff()?'役員アカウントです。名前の前にバッジが付き、広告は表示されません。':'ほかの人と同じ名前は付けられません。'):'未登録のあいだは「'+guestName()+'」です。アカウントに登録してログインすると、好きな名前を付けられます。';$('profRate').textContent=Math.round(PROF.rating);$('profRank').textContent=rankName(PROF.rating);
   {const cur=rankOf(PROF.rating);$('rankRow').innerHTML=RANKS.map(([min,k,n])=>`<div title="${k?min+'〜':'〜999'}" style="${k===cur?'color:var(--gold);font-weight:700':''}"><div class="stone b${rankCls(k)}"><span>3</span></div>${n}</div>`).join('');
