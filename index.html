@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=13"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=14"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -118,14 +118,14 @@ svg.mvfx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;ov
 .endb.main::before{left:-5px;top:-5px;border-left:2px solid var(--gold-hi);border-top:2px solid var(--gold-hi)}.endb.main::after{right:-5px;bottom:-5px;border-right:2px solid var(--gold-hi);border-bottom:2px solid var(--gold-hi)}
 .endb span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .kf .kf-type{font-family:var(--f-disp);font-size:26px;font-weight:800;letter-spacing:.06em;color:var(--gold-hi);margin:6px 0 2px}
-.kf .kf-desc{margin:0 0 10px;font-size:14px;color:var(--fg)}
+.kf .kf-desc{margin:0 0 10px;font-size:14px;color:var(--fg)}.kf .kf-desc span+span{margin-left:.3em}
 .kf .kf-wrap{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
 .kf svg{width:min(260px,100%);height:auto;flex:none}
 .kf .kf-list{flex:1;min-width:150px;display:flex;flex-direction:column;gap:6px;font-size:13px}
 .kf .kf-row{display:grid;grid-template-columns:5.5em 1fr 2.2em;gap:8px;align-items:center}
 .kf .kf-bar{height:6px;background:rgba(216,189,126,.15);position:relative}.kf .kf-bar i{position:absolute;left:0;top:0;bottom:0;background:var(--gold)}
 .kf .kf-row b{font-variant-numeric:tabular-nums;text-align:right;font-weight:500;color:var(--sub)}
-.kf .kf-meta{font-size:12.5px;color:var(--sub);margin:10px 0 0}
+.kf .kf-meta{font-size:12.5px;color:var(--sub);margin:10px 0 0}.kf .kf-meta span{display:inline-block;margin-right:1em}
 .kf .kf-share{margin-top:12px}
 .kf-chip{display:flex;align-items:center;gap:10px;margin:-14px auto 22px;padding:6px 14px 6px 8px;min-height:44px;border:1px solid var(--gold-line);background:transparent;color:var(--fg);font-size:14px;letter-spacing:.04em;text-align:left}
 .kf-chip svg{width:34px;height:34px;flex:none}
@@ -2748,11 +2748,11 @@ function kfRadar(sc){const cx=130,cy=120,R=88,ang=i=>-Math.PI/2+i*Math.PI/3,P=(i
   return `<svg viewBox="0 0 260 240" role="img" aria-label="棋風のレーダー図">${o}</svg>`}
 function kfRender(){const el=$('kfBody');if(!el)return;const k=kfCalc();
   if(!k.sc){el.innerHTML=`<p class="kf-desc">あと${5-k.n}局指すと、あなたの棋風を診断します（この端末の対局から、直近100局まで）。</p>`;return}
-  el.innerHTML=`<div class="kf-type">${k.name}</div><p class="kf-desc">${KF_DESC[k.p]}${k.q?KF_DESC[k.q].replace('タイプ。','面もあります。'):''}</p>
+  el.innerHTML=`<div class="kf-type">${k.name}</div><p class="kf-desc"><span>${KF_DESC[k.p]}</span>${k.q?'<span>'+KF_DESC[k.q].replace('タイプ。','面もあります。')+'</span>':''}</p>
    <div class="kf-wrap">${kfRadar(k.sc)}<div class="kf-list">${k.sc.map((v,i)=>`<div class="kf-row"><span>${KF_LAB[i]}</span><span class="kf-bar"><i style="width:${v}%"></i></span><b>${v}</b></div>`).join('')}</div></div>
-   <p class="kf-meta">直近${k.n}局から診断${k.fav?'　よく使う戦法：'+k.fav:''}　50がふつう</p>
+   <p class="kf-meta"><span>直近${k.n}局から診断</span>${k.fav?'<span>よく使う戦法：'+k.fav+'</span>':''}<span>50がふつう</span></p>
    <button class="endb kf-share" id="kfShare" type="button">Xで共有</button>`;
-  $('kfShare').onclick=()=>{const id=KF_ID[k.p]+(k.q?'-'+KF_ID[k.q]:'');openX('https://x.com/intent/post?text='+encodeURIComponent('bocchで棋風を診断したら「'+k.name+'」でした。\n'+KF_DESC[k.p]+'\nhttps://bocchgame.com/k/'+id+'/\n#bocch'))}}
+  $('kfShare').onclick=()=>{const id=KF_ID[k.p]+(k.q?'-'+KF_ID[k.q]:'');const T=window.bocchT||(x=>x);openX('https://x.com/intent/post?text='+encodeURIComponent(T('bocchで棋風を診断したら「'+k.name+'」でした。')+'\n'+T(KF_DESC[k.p])+'\nhttps://bocchgame.com/k/'+id+'/\n#bocch'))}}
 {const _rp=renderProf;renderProf=function(){_rp();try{kfHome()}catch(e){console.error(e)}}}
 const KF_AXD=['高いほど向こう岸へ進む手が多い。低いほど、相手の届く石を消す守りの手が多い。','高いほど早く1つ目を着けて、短い対局で決める。低いほど、じっくり長い勝負になる。','高いほど石どうしを寄せて、まとまって進む。低いほど、大きく跳ぶ軽い手が多い。','高いほど双璧や送り鳥など、名前のある序盤を使う。低いほど自分の形で戦う。','高いほど、相手の石を数字4や動けない石にして縛る。','先に1つ着かれた対局から、どれだけ逆転したか。'];
 function kfMini(sc){const c=17,R=15,P=(i,r)=>[c+Math.cos(-Math.PI/2+i*Math.PI/3)*r,c+Math.sin(-Math.PI/2+i*Math.PI/3)*r];
