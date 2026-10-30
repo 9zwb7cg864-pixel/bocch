@@ -3156,9 +3156,11 @@ async function dqBoardPng(){try{await document.fonts.ready}catch(e){}
   x.textBaseline='alphabetic';x.textAlign='right';x.fillStyle='#c9a96e';x.font='500 26px '+SER;x.fillText('bocchgame.com',W-P,H-20);
   return await new Promise(r=>c.toBlob(r,'image/png'))}
 function dqNote(t){const e=$('dqShareNote');e.textContent=t;e.hidden=!t}
-$('dqShare').addEventListener('click',async()=>{if(!DQ.q||!DQ.res)return;const intent=t=>'https://twitter.com/intent/tweet?text='+encodeURIComponent(t);
+/* Xの投稿画面を開く：新しいタブが止められたとき（ホーム画面のアプリ・アプリ内ブラウザ）は、この画面のまま移る */
+function openX(u){let w=null;try{w=window.open(u,'_blank')}catch(e){}if(w){try{w.opener=null}catch(e){}}else location.href=u}
+$('dqShare').addEventListener('click',async()=>{if(!DQ.q||!DQ.res)return;const intent=t=>'https://x.com/intent/post?text='+encodeURIComponent(t);
   // 解けなかったときは盤面を出さない（文章だけ）
-  if(DQ.res!=='ok'){window.open(intent(dqShareText()),'_blank','noopener');return}
+  if(DQ.res!=='ok'){openX(intent(dqShareText()));return}
   // 新しいタブは押した直後に開く（あとで開くとポップアップとして止められるため）
   const mobile=!!(navigator.canShare&&navigator.share&&/Android|iPhone|iPad|iPod/i.test(navigator.userAgent));const win=mobile?null:window.open('about:blank','_blank');
   let blob=null;try{blob=await dqBoardPng()}catch(e){}
@@ -3167,7 +3169,7 @@ $('dqShare').addEventListener('click',async()=>{if(!DQ.q||!DQ.res)return;const i
     try{if(navigator.canShare({files:[file]})){await navigator.share({files:[file],text});return}}catch(e){if(e&&e.name==='AbortError')return}}
   let copied=false;if(blob&&navigator.clipboard&&window.ClipboardItem){try{await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);copied=true}catch(e){}}
   if(!copied&&blob){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='bocch-daily.png';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000)}
-  const u=intent(blob?text:dqShareText());if(win&&!win.closed)win.location.href=u;else window.open(u,'_blank','noopener');
+  const u=intent(blob?text:dqShareText());if(win&&!win.closed)win.location.href=u;else openX(u);
   dqNote(!blob?'':copied?'盤面の画像をコピーしました。投稿画面で貼り付けてください（Ctrl+V）':'盤面の画像を保存しました。投稿画面で画像を添付してください')});
 $('dailyBtn').addEventListener('click',()=>{dqOpen()});
 addEventListener('popstate',()=>{if(CUR==='daily')dqOpen()});
@@ -3204,7 +3206,7 @@ $('xNow').addEventListener('click',()=>{if(!S.over)return;const L=window.BOCCH_L
     de:['Gewonnen!','Verloren…','Schwarz gewinnt','Weiß gewinnt','Remis','bocch: %r (%w, %n Züge)']}[L]||null;const Q=R||['勝ちました！','負けました…','黒の勝ち','白の勝ち','引き分け','bocchで%r（%w・%n手）'];
   const r=!w?Q[4]:me?(me===w?Q[0]:Q[1]):(w===1?Q[2]:Q[3]);
   const t=Q[5].replace('%r',r).replace('%w',why).replace('%n',n)+'\n#bocch\nhttps://bocchgame.com';
-  window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(t),'_blank','noopener')});
+  openX('https://x.com/intent/post?text='+encodeURIComponent(t))});
 $('revImg').addEventListener('click',()=>{const g=REV.g;if(!g)return;const p=REV.pv?pvState():REV.pos[REV.i],n=g.log.length,i=REV.i,[rt]=resultOf(g);
   const last=REV.pv?(REV.pv.k>0?REV.pv.line[REV.pv.k-1]:null):(i>0?g.log[i-1]:null);
   shareImage({b:p.b,last,title:i>=n?rt+(g.why?'（'+g.why+'）':''):i+'手目の局面',sub:MODE_NAME(g.mode)+'　'+rt,black:g.me===1?myName():g.me===2?(g.opp||'相手'):'黒',white:g.me===2?myName():g.me===1?(g.opp||'相手'):'白',ply:n,flip:g.me===2})});
