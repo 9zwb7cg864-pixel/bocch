@@ -127,6 +127,15 @@ svg.mvfx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;ov
 .kf .kf-row b{font-variant-numeric:tabular-nums;text-align:right;font-weight:500;color:var(--sub)}
 .kf .kf-meta{font-size:12.5px;color:var(--sub);margin:10px 0 0}
 .kf .kf-share{margin-top:12px}
+.kf-chip{display:flex;align-items:center;gap:10px;margin:-14px auto 22px;padding:6px 14px 6px 8px;min-height:44px;border:1px solid var(--gold-line);background:transparent;color:var(--fg);font-size:14px;letter-spacing:.04em;text-align:left}
+.kf-chip svg{width:34px;height:34px;flex:none}
+.kf-chip small{display:block;font-size:11px;color:var(--sub);letter-spacing:.2em}
+.kf-chip b{display:block;font-family:var(--f-disp);font-weight:800;font-size:16px;color:var(--gold-hi)}
+.kf-chip .kf-go{margin-left:6px;color:var(--gold)}
+.kf-chip.pending b{font-family:inherit;font-weight:400;font-size:13px;color:var(--sub)}
+.kf-chip-prof{width:100%;margin:0 0 14px;padding:10px 14px}.kf-chip-prof .kf-go{margin-left:auto}
+.kf-ax{display:grid;grid-template-columns:5.5em 2.2em 1fr;gap:4px 10px;align-items:baseline;font-size:13px;padding:8px 0;border-bottom:1px solid var(--line)}.kf-ax:last-child{border-bottom:0}
+.kf-ax span{color:var(--gold)}.kf-ax b{font-weight:500;font-variant-numeric:tabular-nums;text-align:right}.kf-ax p{margin:0;color:var(--sub);line-height:1.6}
 /* 勝ち負けの画面 */
 .mvend{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow:hidden;padding:max(20px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(20px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:rgba(14,11,9,.78);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);text-align:center}
 .mvend .mvk{font-family:"Yuji Boku","Shippori Mincho B1",serif;font-size:min(52vw,210px);line-height:1;color:var(--gold-hi);text-shadow:0 0 40px rgba(240,216,150,.45),0 6px 0 rgba(0,0,0,.35);animation:mvInk .9s ease-out both}
@@ -553,6 +562,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
     <p class="tag">ひとりぼっちの石は、動けない。</p>
     <p class="online" id="onlineNow" hidden><i></i><span></span></p>
     <button class="me-btn" id="meBtn" data-go="profile"><span id="meName"></span><span class="me-rate" id="meRate"></span><span class="me-edit" id="meEdit">アカウント ›</span></button>
+    <button class="kf-chip" id="kfChip" data-go="kifu" type="button" hidden></button>
     <nav class="menu" aria-label="メニュー">
       <button class="big resume" id="resumeBtn" hidden></button>
       <button class="big resume" id="rematchBtn" hidden>▶ マッチングに復帰（相手を探し直す）</button>
@@ -723,6 +733,17 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 </section>
 
 <!-- プロフィール -->
+<section class="scr" data-scr="kifu" hidden>
+  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>あなたの棋風</h2><span class="sp"></span></div>
+  <div class="card prof kf" id="kfCard">
+    <div id="kfBody"></div>
+  </div>
+  <div class="card prof kf" id="kfAxCard" hidden>
+    <h3 class="acct-h">6つの目もりの見方</h3>
+    <div id="kfAx"></div>
+  </div>
+</section>
+
 <section class="scr" data-scr="profile" hidden>
   <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>アカウント</h2><span class="sp"></span></div>
   <div class="card prof">
@@ -736,10 +757,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
     <div class="bd-head"><label class="prof-l">バッジ</label><small id="bdCount"></small></div><p class="prof-note">持っているバッジを押すと、名前の横に出ます。もう一度押すと外れます。</p><div id="bdList"></div>
     <p class="note">レートはオンライン対戦とCPU戦（1手戻しを使わなかった対局）で上下します。CPUのレートは やさしい 900・ふつう 1200・つよい 1500・最強 2100 として計算します。名前とレートはオンライン対戦では相手と観戦者に表示されます。</p>
   </div>
-  <div class="card prof kf" id="kfCard">
-    <h3 class="acct-h">あなたの棋風</h3>
-    <div id="kfBody"></div>
-  </div>
+  <button class="kf-chip kf-chip-prof" data-go="kifu" id="kfChipProf" type="button"></button>
   <div class="card prof acct" id="acct">
     <h3 class="acct-h">メールでアカウント登録</h3>
     <p class="note" id="acctLead">登録すると、名前・レート・戦績がアカウントに保存され、別の端末でもログインすれば同じものを使えます。一度ログインすれば、ログアウトするまでこの端末ではログインしたままです。</p>
@@ -2735,8 +2753,19 @@ function kfRender(){const el=$('kfBody');if(!el)return;const k=kfCalc();
    <p class="kf-meta">直近${k.n}局から診断${k.fav?'　よく使う戦法：'+k.fav:''}　50がふつう</p>
    <button class="endb kf-share" id="kfShare" type="button">Xで共有</button>`;
   $('kfShare').onclick=()=>{const id=KF_ID[k.p]+(k.q?'-'+KF_ID[k.q]:'');openX('https://x.com/intent/post?text='+encodeURIComponent('bocchで棋風を診断したら「'+k.name+'」でした。\n'+KF_DESC[k.p]+'\nhttps://bocchgame.com/k/'+id+'/\n#bocch'))}}
-{const _rp=renderProf;renderProf=function(){_rp();try{kfRender()}catch(e){console.error(e)}}}
-{const _pk=paint;paint=function(n){_pk(n);if(n==='profile')try{kfRender()}catch(e){console.error(e)}}}
+{const _rp=renderProf;renderProf=function(){_rp();try{kfHome()}catch(e){console.error(e)}}}
+const KF_AXD=['高いほど向こう岸へ進む手が多い。低いほど、相手の届く石を消す守りの手が多い。','高いほど早く1つ目を着けて、短い対局で決める。低いほど、じっくり長い勝負になる。','高いほど石どうしを寄せて、まとまって進む。低いほど、大きく跳ぶ軽い手が多い。','高いほど双璧や送り鳥など、名前のある序盤を使う。低いほど自分の形で戦う。','高いほど、相手の石を数字4や動けない石にして縛る。','先に1つ着かれた対局から、どれだけ逆転したか。'];
+function kfMini(sc){const c=17,R=15,P=(i,r)=>[c+Math.cos(-Math.PI/2+i*Math.PI/3)*r,c+Math.sin(-Math.PI/2+i*Math.PI/3)*r];
+  return `<svg viewBox="0 0 34 34" aria-hidden="true"><polygon points="${[0,1,2,3,4,5].map(i=>P(i,R).join(',')).join(' ')}" fill="none" stroke="rgba(216,189,126,.35)"/><polygon points="${sc.map((v,i)=>P(i,R*v/100).join(',')).join(' ')}" fill="rgba(216,189,126,.35)" stroke="#f0d896" stroke-width="1.2"/></svg>`}
+function kfHome(){let k;try{k=kfCalc()}catch(e){return}
+  const h=k.sc?`${kfMini(k.sc)}<span><small>あなたの棋風</small><b>${k.name}</b></span><span class="kf-go">›</span>`
+    :`${kfMini([20,20,20,20,20,20])}<span><small>あなたの棋風</small><b>あと${5-k.n}局で診断</b></span><span class="kf-go">›</span>`;
+  for(const id of ['kfChip','kfChipProf']){const el=$(id);if(!el)continue;el.innerHTML=h;el.classList.toggle('pending',!k.sc);if(id==='kfChip')el.hidden=!k.sc&&k.n<1}}
+function kfAxRender(){const k=kfCalc(),c=$('kfAxCard');if(!c)return;c.hidden=!k.sc;if(!k.sc)return;
+  $('kfAx').innerHTML=KF_LAB.map((l,i)=>`<div class="kf-ax"><span>${l}</span><b>${k.sc[i]}</b><p>${KF_AXD[i]}</p></div>`).join('')}
+{const _pk=paint;paint=function(n){_pk(n);if(n==='kifu')try{kfRender();kfAxRender()}catch(e){console.error(e)}
+  if(n==='home'||n==='profile')try{kfHome()}catch(e){console.error(e)}}}
+try{kfHome()}catch(e){}
 function renderProf(){const nmd=named();$('nameIn').value=nmd?PROF.name:'';$('nameIn').disabled=!nmd;$('nameSave').disabled=!nmd;$('nameIn').placeholder=nmd?'名前を入れる':guestName();
   $('nameNote').textContent=nmd?(isOff()?'役員アカウントです。名前の前にバッジが付き、広告は表示されません。':'ほかの人と同じ名前は付けられません。'):'未登録のあいだは「'+guestName()+'」です。アカウントに登録してログインすると、好きな名前を付けられます。';$('profRate').textContent=Math.round(PROF.rating);$('profRank').textContent=rankName(PROF.rating);
   {const cur=rankOf(PROF.rating);$('rankRow').innerHTML=RANKS.map(([min,k,n])=>`<div title="${k?min+'〜':'〜999'}" style="${k===cur?'color:var(--gold);font-weight:700':''}"><div class="stone b${rankCls(k)}"><span>3</span></div>${n}</div>`).join('');
