@@ -2714,7 +2714,7 @@ function kfGame(log,me){let b=startBoard(),t=1;const opp=3-me,g=goalRow(me);
     else{b=apply(b,m);if(!first&&!oppFirst&&arrivedCount(b,opp)>0)oppFirst=k+1}t=3-t}
   if(!mv)return null;let sp=-1;try{sp=me===1?senpoOf(log[0],log[2],1):senpoOf(log[1],log[3],2)}catch(e){}
   return {fwd:fwd/mv,def:def/mv,big:big/mv,coh:coh/Math.max(1,cohN),bind:bind/mv,first:first||log.length+10,len:log.length,open:sp>=0?1:0,sp,behind:!!oppFirst}}
-function kfCalc(){const gs=loadGames().filter(g=>g&&g.mode!=='study'&&(g.me===1||g.me===2)&&g.log&&g.log.length>=6).slice(0,30);
+function kfCalc(){const gs=loadGames().filter(g=>g&&g.mode!=='study'&&(g.me===1||g.me===2)&&g.log&&g.log.length>=6).slice(0,100);
   const rs=[];let bh=0,bw=0;const spc={};for(const g of gs){const r=kfGame(g.log,g.me);if(!r)continue;rs.push(r);if(r.behind){bh++;if(g.win===g.me)bw++}if(r.sp>=0)spc[r.sp]=(spc[r.sp]||0)+1}
   if(rs.length<5)return {n:rs.length};
   const avg=k=>rs.reduce((a,r)=>a+r[k],0)/rs.length,z=k=>(avg(k)-KF_BASE[k][0])/(KF_BASE[k][1]*.6);
@@ -2729,7 +2729,7 @@ function kfRadar(sc){const cx=130,cy=120,R=88,ang=i=>-Math.PI/2+i*Math.PI/3,P=(i
   o+=`<polygon points="${sc.map((v,i)=>P(i,R*v/100).join(',')).join(' ')}" fill="rgba(216,189,126,.28)" stroke="#f0d896" stroke-width="2"/>`;
   return `<svg viewBox="0 0 260 240" role="img" aria-label="棋風のレーダー図">${o}</svg>`}
 function kfRender(){const el=$('kfBody');if(!el)return;const k=kfCalc();
-  if(!k.sc){el.innerHTML=`<p class="kf-desc">あと${5-k.n}局指すと、あなたの棋風を診断します（この端末の対局から、直近30局まで）。</p>`;return}
+  if(!k.sc){el.innerHTML=`<p class="kf-desc">あと${5-k.n}局指すと、あなたの棋風を診断します（この端末の対局から、直近100局まで）。</p>`;return}
   el.innerHTML=`<div class="kf-type">${k.name}</div><p class="kf-desc">${KF_DESC[k.p]}${k.q?KF_DESC[k.q].replace('タイプ。','面もあります。'):''}</p>
    <div class="kf-wrap">${kfRadar(k.sc)}<div class="kf-list">${k.sc.map((v,i)=>`<div class="kf-row"><span>${KF_LAB[i]}</span><span class="kf-bar"><i style="width:${v}%"></i></span><b>${v}</b></div>`).join('')}</div></div>
    <p class="kf-meta">直近${k.n}局から診断${k.fav?'　よく使う戦法：'+k.fav:''}　50がふつう</p>
