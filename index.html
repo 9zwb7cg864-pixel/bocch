@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=16"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=17"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -147,6 +147,8 @@ canvas.mvcv{position:absolute;left:-10%;top:-10%;width:120%;height:120%;will-cha
 .mvend .mvrow{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;justify-content:center}
 .mvbtn{position:relative;min-height:46px;padding:0 22px;background:rgba(216,189,126,.06);color:var(--fg);border:1px solid rgba(216,189,126,.6);border-radius:0;font-family:var(--f-disp);font-size:15px;letter-spacing:.1em;cursor:pointer}
 .mvbtn.solid{background:var(--gold);color:#1c140b;border:0;font-weight:800}
+.rkup{z-index:61}.rkup .mvk{font-size:min(30vw,150px)}.rkup.isdan .mvk{font-size:min(38vw,190px)}html:not([lang="ja"]) .rkup .mvk{font-size:min(17vw,96px)!important;font-family:"Kaushan Script","Ma Shan Zheng","Nanum Brush Script","Yuji Boku",serif}
+.rkup .rkstone{width:92px;height:92px;font-size:38px;margin:4px 0 8px}.rkup .mvwho{color:var(--gold-hi)}
 @keyframes mvInk{0%{opacity:0;filter:blur(8px);transform:scale(1.08)}100%{opacity:1;filter:blur(0);transform:scale(1)}}
 .mvflake{position:absolute;pointer-events:none;background:linear-gradient(135deg,#fff3c4,#d8bd7e 55%,#a8833f);animation:mvFall 3.4s ease-in infinite}
 @keyframes mvFall{0%{transform:translateY(-40px) rotate(0);opacity:0}15%{opacity:1}100%{transform:translateY(80px) rotate(220deg);opacity:.85}}
@@ -165,20 +167,51 @@ canvas.mvcv{position:absolute;left:-10%;top:-10%;width:120%;height:120%;will-cha
 .stone.b.rk{--gi:#0c0d0e;background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%) padding-box,var(--ring) border-box}
 .stone.w.rk{--gi:#e4e5e6;background:radial-gradient(circle at 34% 28%,#ffffff 0%,#e4e5e6 38%,#c3c5c7 72%) padding-box,var(--ring) border-box}
 .stone.b.rk.gn{color:#e8cf8e}.stone.w.rk.gn{color:#6a4c12}
-.r1{--ring:conic-gradient(from 20deg,#f6d2b0,#a8653a 14%,#e9b98f 26%,#6e3a1c 40%,#dca27a 55%,#8a4e2a 70%,#f3caa6 84%,#a8653a 92%,#f6d2b0);--bw:1.5px}
-.r2{--ring:conic-gradient(from 20deg,#f6d2b0,#a8653a 14%,#e9b98f 26%,#6e3a1c 40%,#dca27a 55%,#8a4e2a 70%,#f3caa6 84%,#a8653a 92%,#f6d2b0);--bw:2.5px}
-.r3{--ring:conic-gradient(from 20deg,#ffffff,#a7b0b8 14%,#f2f5f7 26%,#6c757d 40%,#e9edf0 55%,#8e979f 70%,#ffffff 84%,#a7b0b8 92%,#ffffff);--bw:1.5px}
-.r4{--ring:conic-gradient(from 20deg,#ffffff,#a7b0b8 14%,#f2f5f7 26%,#6c757d 40%,#e9edf0 55%,#8e979f 70%,#ffffff 84%,#a7b0b8 92%,#ffffff);--bw:2.5px}
-.r5{--ring:conic-gradient(from 20deg,#ffffff,#a7b0b8 14%,#f2f5f7 26%,#6c757d 40%,#e9edf0 55%,#8e979f 70%,#ffffff 84%,#a7b0b8 92%,#ffffff);--bw:2.5px;--g1:1.5px;--g2:3px;--gc:#d5dbe0}
-.r6{--ring:conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#f6d77c 55%,#a8761e 70%,#fff3c4 84%,#c9952e 92%,#fff6d0);--bw:1.5px}
-.r7{--ring:conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#f6d77c 55%,#a8761e 70%,#fff3c4 84%,#c9952e 92%,#fff6d0);--bw:2.5px}
-.r8{--ring:conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#f6d77c 55%,#a8761e 70%,#fff3c4 84%,#c9952e 92%,#fff6d0);--bw:2.5px;--g1:1.5px;--g2:3px}
-.r9{--ring:conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#f6d77c 55%,#a8761e 70%,#fff3c4 84%,#c9952e 92%,#fff6d0);--bw:2.5px;--g1:1.5px;--g2:3px}
-.r10{--ring:conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#f6d77c 55%,#a8761e 70%,#fff3c4 84%,#c9952e 92%,#fff6d0);--bw:2.5px;--g1:1.5px;--g2:3px;--gl:8px;--gs:1px}
-.r11{--ring:conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#f6d77c 55%,#a8761e 70%,#fff3c4 84%,#c9952e 92%,#fff6d0);--bw:3px;--g1:1.5px;--g2:3px;--gl:12px;--gs:2px}
-.r12{--ring:conic-gradient(from 20deg,#ffffff,#b9d4e6 12%,#f4f8ff 24%,#8aa3b8 38%,#ffffff 50%,#c7d9f0 62%,#7f97ad 76%,#eef4ff 88%,#ffffff);--bw:3px;--g1:1.5px;--g2:3px;--gc:#e6eef8;--gl:12px;--gs:2px;--gw:rgba(190,220,255,.6)}
-.r13{--ring:conic-gradient(from 20deg,#ffffff,#b9d4e6 12%,#f4f8ff 24%,#8aa3b8 38%,#ffffff 50%,#c7d9f0 62%,#7f97ad 76%,#eef4ff 88%,#ffffff);--bw:3px;--g1:1.5px;--g2:3px;--gl:14px;--gs:3px;--gw:rgba(190,220,255,.7)}
-.r14{--ring:conic-gradient(from 20deg,#ffffff,#b9d4e6 12%,#f4f8ff 24%,#8aa3b8 38%,#ffffff 50%,#c7d9f0 62%,#7f97ad 76%,#eef4ff 88%,#ffffff);--bw:3px;--g1:1.5px;--g2:3px;--gl:16px;--gs:4px;--gw:rgba(255,215,130,.75)}
+.lv0{--ring:conic-gradient(from 20deg,#d6d2cc,#8e8a85 14%,#bdb8b2 26%,#6a6662 40%,#bdb8b2 55%,#8e8a85 70%,#d6d2cc 84%,#8e8a85 92%,#d6d2cc);--bw:1.5px}
+.lv1{--ring:conic-gradient(from 20deg,#d6d2cc,#8e8a85 14%,#bdb8b2 26%,#6a6662 40%,#bdb8b2 55%,#8e8a85 70%,#d6d2cc 84%,#8e8a85 92%,#d6d2cc);--bw:2.5px}
+.lv2{--ring:conic-gradient(from 20deg,#d6d2cc,#8e8a85 14%,#bdb8b2 26%,#6a6662 40%,#bdb8b2 55%,#8e8a85 70%,#d6d2cc 84%,#8e8a85 92%,#d6d2cc);--bw:2px;--g1:1.5px;--g2:3px;--gc:#bdb8b2}
+.lv3{--ring:conic-gradient(from 20deg,#d6d2cc,#8e8a85 14%,#bdb8b2 26%,#6a6662 40%,#bdb8b2 55%,#8e8a85 70%,#d6d2cc 84%,#8e8a85 92%,#d6d2cc);--bw:2.5px;--g1:1.5px;--g2:3px;--gc:#bdb8b2;--gl:5px;--gs:0px;--gw:rgba(189,184,178,.55)}
+.lv4{--ring:conic-gradient(from 20deg,#d6d2cc,#8e8a85 14%,#bdb8b2 26%,#6a6662 40%,#bdb8b2 55%,#8e8a85 70%,#d6d2cc 84%,#8e8a85 92%,#d6d2cc);--bw:3px;--g1:1.5px;--g2:3.5px;--gc:#bdb8b2;--gl:8px;--gs:1px;--gw:rgba(189,184,178,.7)}
+.lv5{--ring:conic-gradient(from 20deg,#e8c49a,#9a6a3e 14%,#d0a476 26%,#6b4524 40%,#d0a476 55%,#9a6a3e 70%,#e8c49a 84%,#9a6a3e 92%,#e8c49a);--bw:1.5px}
+.lv6{--ring:conic-gradient(from 20deg,#e8c49a,#9a6a3e 14%,#d0a476 26%,#6b4524 40%,#d0a476 55%,#9a6a3e 70%,#e8c49a 84%,#9a6a3e 92%,#e8c49a);--bw:2.5px}
+.lv7{--ring:conic-gradient(from 20deg,#e8c49a,#9a6a3e 14%,#d0a476 26%,#6b4524 40%,#d0a476 55%,#9a6a3e 70%,#e8c49a 84%,#9a6a3e 92%,#e8c49a);--bw:2px;--g1:1.5px;--g2:3px;--gc:#d0a476}
+.lv8{--ring:conic-gradient(from 20deg,#e8c49a,#9a6a3e 14%,#d0a476 26%,#6b4524 40%,#d0a476 55%,#9a6a3e 70%,#e8c49a 84%,#9a6a3e 92%,#e8c49a);--bw:2.5px;--g1:1.5px;--g2:3px;--gc:#d0a476;--gl:5px;--gs:0px;--gw:rgba(208,164,118,.55)}
+.lv9{--ring:conic-gradient(from 20deg,#e8c49a,#9a6a3e 14%,#d0a476 26%,#6b4524 40%,#d0a476 55%,#9a6a3e 70%,#e8c49a 84%,#9a6a3e 92%,#e8c49a);--bw:3px;--g1:1.5px;--g2:3.5px;--gc:#d0a476;--gl:8px;--gs:1px;--gw:rgba(208,164,118,.7)}
+.lv10{--ring:conic-gradient(from 20deg,#c4d6f0,#4f6a96 14%,#9fb6d8 26%,#33476b 40%,#9fb6d8 55%,#4f6a96 70%,#c4d6f0 84%,#4f6a96 92%,#c4d6f0);--bw:1.5px}
+.lv11{--ring:conic-gradient(from 20deg,#c4d6f0,#4f6a96 14%,#9fb6d8 26%,#33476b 40%,#9fb6d8 55%,#4f6a96 70%,#c4d6f0 84%,#4f6a96 92%,#c4d6f0);--bw:2.5px}
+.lv12{--ring:conic-gradient(from 20deg,#c4d6f0,#4f6a96 14%,#9fb6d8 26%,#33476b 40%,#9fb6d8 55%,#4f6a96 70%,#c4d6f0 84%,#4f6a96 92%,#c4d6f0);--bw:2px;--g1:1.5px;--g2:3px;--gc:#9fb6d8}
+.lv13{--ring:conic-gradient(from 20deg,#c4d6f0,#4f6a96 14%,#9fb6d8 26%,#33476b 40%,#9fb6d8 55%,#4f6a96 70%,#c4d6f0 84%,#4f6a96 92%,#c4d6f0);--bw:2.5px;--g1:1.5px;--g2:3px;--gc:#9fb6d8;--gl:5px;--gs:0px;--gw:rgba(159,182,216,.55)}
+.lv14{--ring:conic-gradient(from 20deg,#c4d6f0,#4f6a96 14%,#9fb6d8 26%,#33476b 40%,#9fb6d8 55%,#4f6a96 70%,#c4d6f0 84%,#4f6a96 92%,#c4d6f0);--bw:3px;--g1:1.5px;--g2:3.5px;--gc:#9fb6d8;--gl:8px;--gs:1px;--gw:rgba(159,182,216,.7)}
+.lv15{--ring:conic-gradient(from 20deg,#ffd8b4,#c06a34 14%,#f0b88a 26%,#7e3e18 40%,#f0b88a 55%,#c06a34 70%,#ffd8b4 84%,#c06a34 92%,#ffd8b4);--bw:1.5px}
+.lv16{--ring:conic-gradient(from 20deg,#ffd8b4,#c06a34 14%,#f0b88a 26%,#7e3e18 40%,#f0b88a 55%,#c06a34 70%,#ffd8b4 84%,#c06a34 92%,#ffd8b4);--bw:2.5px}
+.lv17{--ring:conic-gradient(from 20deg,#ffd8b4,#c06a34 14%,#f0b88a 26%,#7e3e18 40%,#f0b88a 55%,#c06a34 70%,#ffd8b4 84%,#c06a34 92%,#ffd8b4);--bw:2px;--g1:1.5px;--g2:3px;--gc:#f0b88a}
+.lv18{--ring:conic-gradient(from 20deg,#ffd8b4,#c06a34 14%,#f0b88a 26%,#7e3e18 40%,#f0b88a 55%,#c06a34 70%,#ffd8b4 84%,#c06a34 92%,#ffd8b4);--bw:2.5px;--g1:1.5px;--g2:3px;--gc:#f0b88a;--gl:5px;--gs:0px;--gw:rgba(240,184,138,.55)}
+.lv19{--ring:conic-gradient(from 20deg,#ffd8b4,#c06a34 14%,#f0b88a 26%,#7e3e18 40%,#f0b88a 55%,#c06a34 70%,#ffd8b4 84%,#c06a34 92%,#ffd8b4);--bw:3px;--g1:1.5px;--g2:3.5px;--gc:#f0b88a;--gl:8px;--gs:1px;--gw:rgba(240,184,138,.7)}
+.lv20{--ring:conic-gradient(from 20deg,#ffffff,#b8c2ca 14%,#f2f5f7 26%,#7d878f 40%,#f2f5f7 55%,#b8c2ca 70%,#ffffff 84%,#b8c2ca 92%,#ffffff);--bw:1.5px}
+.lv21{--ring:conic-gradient(from 20deg,#ffffff,#b8c2ca 14%,#f2f5f7 26%,#7d878f 40%,#f2f5f7 55%,#b8c2ca 70%,#ffffff 84%,#b8c2ca 92%,#ffffff);--bw:2.5px}
+.lv22{--ring:conic-gradient(from 20deg,#ffffff,#b8c2ca 14%,#f2f5f7 26%,#7d878f 40%,#f2f5f7 55%,#b8c2ca 70%,#ffffff 84%,#b8c2ca 92%,#ffffff);--bw:2px;--g1:1.5px;--g2:3px;--gc:#e8edf1}
+.lv23{--ring:conic-gradient(from 20deg,#ffffff,#b8c2ca 14%,#f2f5f7 26%,#7d878f 40%,#f2f5f7 55%,#b8c2ca 70%,#ffffff 84%,#b8c2ca 92%,#ffffff);--bw:2.5px;--g1:1.5px;--g2:3px;--gc:#e8edf1;--gl:5px;--gs:0px;--gw:rgba(232,237,241,.55)}
+.lv24{--ring:conic-gradient(from 20deg,#ffffff,#b8c2ca 14%,#f2f5f7 26%,#7d878f 40%,#f2f5f7 55%,#b8c2ca 70%,#ffffff 84%,#b8c2ca 92%,#ffffff);--bw:3px;--g1:1.5px;--g2:3.5px;--gc:#e8edf1;--gl:8px;--gs:1px;--gw:rgba(232,237,241,.7)}
+.lv25{--ring:conic-gradient(from 20deg,#fff6d0,#d6b46a 14%,#f6e3ae 26%,#a5833f 40%,#f6e3ae 55%,#d6b46a 70%,#fff6d0 84%,#d6b46a 92%,#fff6d0);--bw:1.5px}
+.lv26{--ring:conic-gradient(from 20deg,#fff6d0,#d6b46a 14%,#f6e3ae 26%,#a5833f 40%,#f6e3ae 55%,#d6b46a 70%,#fff6d0 84%,#d6b46a 92%,#fff6d0);--bw:2.5px}
+.lv27{--ring:conic-gradient(from 20deg,#fff6d0,#d6b46a 14%,#f6e3ae 26%,#a5833f 40%,#f6e3ae 55%,#d6b46a 70%,#fff6d0 84%,#d6b46a 92%,#fff6d0);--bw:2px;--g1:1.5px;--g2:3px;--gc:#f3dc9a}
+.lv28{--ring:conic-gradient(from 20deg,#fff6d0,#d6b46a 14%,#f6e3ae 26%,#a5833f 40%,#f6e3ae 55%,#d6b46a 70%,#fff6d0 84%,#d6b46a 92%,#fff6d0);--bw:2.5px;--g1:1.5px;--g2:3px;--gc:#f3dc9a;--gl:5px;--gs:0px;--gw:rgba(243,220,154,.55)}
+.lv29{--ring:conic-gradient(from 20deg,#fff6d0,#d6b46a 14%,#f6e3ae 26%,#a5833f 40%,#f6e3ae 55%,#d6b46a 70%,#fff6d0 84%,#d6b46a 92%,#fff6d0);--bw:3px;--g1:1.5px;--g2:3.5px;--gc:#f3dc9a;--gl:8px;--gs:1px;--gw:rgba(243,220,154,.7)}
+.lv30{--ring:conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#fbe7a4 55%,#c9952e 70%,#fff6d0 84%,#c9952e 92%,#fff6d0);--bw:4.0px;--g1:2px;--g2:4px;--gc:#f3d27a;--gl:10px;--gs:1px;--gw:rgba(250,210,110,.7);--sheen:conic-gradient(transparent 0 66%,rgba(255,244,200,.95) 76%,transparent 86%);--spd:6s}
+.lv31{--ring:conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#fbe7a4 55%,#c9952e 70%,#fff6d0 84%,#c9952e 92%,#fff6d0);--bw:4.5px;--g1:2px;--g2:4px;--gc:#f3d27a;--gl:15px;--gs:2px;--gw:rgba(250,210,110,.7);--sheen:conic-gradient(transparent 0 66%,rgba(255,244,200,.95) 76%,transparent 86%);--spd:5s}
+.lv32{--ring:conic-gradient(from 20deg,#fff6d0,#c9952e 14%,#fbe7a4 26%,#8a5e12 40%,#fbe7a4 55%,#c9952e 70%,#fff6d0 84%,#c9952e 92%,#fff6d0);--bw:5.0px;--g1:2px;--g2:4px;--gc:#f3d27a;--gl:20px;--gs:3px;--gw:rgba(250,210,110,.7);--sheen:conic-gradient(transparent 0 66%,rgba(255,244,200,.95) 76%,transparent 86%);--spd:4s}
+.lv33{--ring:conic-gradient(from 20deg,#ffffff,#b9d4e6 12%,#f4f8ff 24%,#8aa3b8 38%,#ffffff 50%,#c7d9f0 62%,#7f97ad 76%,#eef4ff 88%,#ffffff);--bw:4.5px;--g1:2px;--g2:4px;--gc:#eef4ff;--gl:14px;--gs:2px;--gw:rgba(200,228,255,.8);--sheen:conic-gradient(transparent 0 64%,rgba(255,255,255,.95) 75%,transparent 86%);--spd:4s}
+.lv34{--ring:conic-gradient(from 20deg,#ffffff,#b9d4e6 12%,#f4f8ff 24%,#8aa3b8 38%,#ffffff 50%,#c7d9f0 62%,#7f97ad 76%,#eef4ff 88%,#ffffff);--bw:5.0px;--g1:2px;--g2:4px;--gc:#eef4ff;--gl:18px;--gs:3px;--gw:rgba(200,228,255,.8);--sheen:conic-gradient(transparent 0 64%,rgba(255,255,255,.95) 75%,transparent 86%);--spd:4s}
+.lv35{--ring:conic-gradient(from 20deg,#ffffff,#b9d4e6 12%,#f4f8ff 24%,#8aa3b8 38%,#ffffff 50%,#c7d9f0 62%,#7f97ad 76%,#eef4ff 88%,#ffffff);--bw:5.5px;--g1:2px;--g2:4px;--gc:#eef4ff;--gl:22px;--gs:4px;--gw:rgba(200,228,255,.8);--sheen:conic-gradient(transparent 0 64%,rgba(255,255,255,.95) 75%,transparent 86%);--spd:4s}
+.lv36{--ring:conic-gradient(from 20deg,#ffe2b8,#c0392b 14%,#ffd27a 28%,#7a1410 42%,#ffb36b 56%,#a32116 70%,#fff0c8 84%,#c0392b 92%,#ffe2b8);--bw:5.5px;--g1:2px;--g2:4.5px;--gc:#ffcf7a;--gl:20px;--gs:3px;--gw:rgba(255,160,80,.8);--sheen:conic-gradient(transparent 0 60%,rgba(255,235,180,.95) 74%,transparent 88%);--sheen2:conic-gradient(transparent 0 70%,rgba(255,120,80,.8) 80%,transparent 90%);--spd:3.5s}
+.lv37{--ring:conic-gradient(from 20deg,#ffe2b8,#c0392b 14%,#ffd27a 28%,#7a1410 42%,#ffb36b 56%,#a32116 70%,#fff0c8 84%,#c0392b 92%,#ffe2b8);--bw:6.0px;--g1:2px;--g2:4.5px;--gc:#ffcf7a;--gl:25px;--gs:4px;--gw:rgba(255,160,80,.8);--sheen:conic-gradient(transparent 0 60%,rgba(255,235,180,.95) 74%,transparent 88%);--sheen2:conic-gradient(transparent 0 70%,rgba(255,120,80,.8) 80%,transparent 90%);--spd:3.5s}
+.lv38{--ring:conic-gradient(from 20deg,#f6e2ff,#6b2a9c 14%,#ffe7a0 26%,#3a0f5e 40%,#d9a8ff 55%,#7a3bb0 70%,#fff3c4 84%,#6b2a9c 92%,#f6e2ff);--bw:6.5px;--g1:2px;--g2:5px;--gc:#fff3c4;--gl:30px;--gs:6px;--gw:rgba(255,215,120,.9);--sheen:conic-gradient(transparent 0 62%,rgba(255,236,170,.98) 74%,transparent 86%);--sheen2:conic-gradient(transparent 0 60%,rgba(255,255,255,.95) 72%,transparent 84%);--spd:3s}
+.stone.dan::before{content:"";position:absolute;inset:-4px;border-radius:50%;pointer-events:none;background:var(--sheen);-webkit-mask:radial-gradient(circle,transparent 60%,#000 62%,#000 71%,transparent 73%);mask:radial-gradient(circle,transparent 60%,#000 62%,#000 71%,transparent 73%);animation:lvSp var(--spd,5s) linear infinite}
+.cell:not(.reachG):not(.reachR) .stone.dan.two::after,.rank-row .stone.dan.two::after,.rkup .stone.dan.two::after{content:"";position:absolute;inset:-4px;border-radius:50%;pointer-events:none;background:var(--sheen2);-webkit-mask:radial-gradient(circle,transparent 60%,#000 62%,#000 71%,transparent 73%);mask:radial-gradient(circle,transparent 60%,#000 62%,#000 71%,transparent 73%);animation:lvSp 7s linear infinite reverse}
+.stone.dan.pulse{animation:lvPl 2.4s ease-in-out infinite}
+@keyframes lvSp{to{transform:rotate(360deg)}}
+@keyframes lvPl{0%,100%{box-shadow:inset 0 0 0 var(--g1,0px) var(--gi),inset 0 0 0 var(--g2,0px) var(--gc,#e2bd62),0 0 var(--gl,0px) var(--gs,0px) var(--gw),0 4px 6px rgba(0,0,0,.38)}50%{box-shadow:inset 0 0 0 var(--g1,0px) var(--gi),inset 0 0 0 var(--g2,0px) var(--gc,#e2bd62),0 0 calc(var(--gl,0px)*1.8) calc(var(--gs,0px) + 4px) var(--gw),0 4px 6px rgba(0,0,0,.38)}}
+@media (prefers-reduced-motion:reduce){.stone.dan::before,.stone.dan::after,.stone.dan.pulse{animation:none}}
 .sel .stone.rk{box-shadow:inset 0 0 0 var(--g1,0px) var(--gi),inset 0 0 0 var(--g2,0px) var(--gc,#e2bd62),0 0 0 3px var(--wood),0 0 0 5px var(--gold),0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
 .nb .stone.rk{box-shadow:inset 0 0 0 var(--g1,0px) var(--gi),inset 0 0 0 var(--g2,0px) var(--gc,#e2bd62),0 0 0 2px var(--gold),0 4px 6px rgba(0,0,0,.38),0 1px 1px rgba(0,0,0,.3)}
 .rank-note{font-size:12.5px;color:var(--sub);margin:8px 0 0;line-height:1.7}
@@ -674,7 +707,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 <!-- 感想戦 -->
 <section class="scr" data-scr="rank" hidden>
   <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>ランキング</h2><span class="sp"></span></div>
-  <p class="note rk-note">bocchを開いた人のレートの、上位10人と自分の順位です。レートはオンライン対戦とCPU戦（1手戻しなし）で変わります。月が変わるときに1位だった人には「月間一位」のバッジが付きます。</p>
+  <p class="note rk-note">bocchを開いた人の段級の、上位10人と自分の順位です。段級はオンライン対戦とCPU戦（1手戻しなし）で変わります。月が変わるときに1位だった人には「月間一位」のバッジが付きます。</p>
   <p class="rk-prev" id="rkPrev"></p>
   <p class="note rk-note" id="rkNote"></p>
   <ol class="rk-list" id="rkList"></ol>
@@ -769,12 +802,12 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
     <label class="prof-l" for="nameIn">名前（12文字まで）</label>
     <div class="row prof-row"><input type="text" id="nameIn" maxlength="12" autocomplete="nickname" placeholder="名無し"><button id="nameSave" class="primary">保存</button></div>
     <p class="prof-msg" id="nameMsg"></p><p class="prof-note" id="nameNote"></p>
-    <div class="prof-rate"><span>レート</span><b id="profRate"></b><span id="profRank" style="margin-left:10px;color:var(--gold)"></span></div>
+    <div class="prof-rate"><span>段級</span><b id="profRate"></b><span id="profRank" style="margin-left:10px;color:var(--gold)"></span></div>
     <div class="rank-row" id="rankRow" aria-label="段位ごとの石の縁"></div>
-    <p class="rank-note"><span id="rankNext" style="color:var(--gold)"></span><br>レート1000から100上がるごとに石の縁が良くなります（銅→銀→金→白金）。金IVからは数字が金色、金Vからは縁が光ります。オンライン対戦では、相手の石も相手のレートの縁で見えます。</p>
+    <p class="rank-note"><span id="rankNext" style="color:var(--gold)"></span><br>30級から始まり、勝つと達成率が上がって、100%で昇級・昇段します。強い相手に勝つほど大きく上がり、上の段級ほど上がりにくくなります。0%になってからさらに5連敗すると、1つ下がります。段級ごとに石の縁が変わり、初段からは光る縁になります。オンライン対戦では、相手の石も相手の段級の縁で見えます。</p>
     <p class="prof-rec" id="profRec"></p>
     <div class="bd-head"><label class="prof-l">バッジ</label><small id="bdCount"></small></div><p class="prof-note">持っているバッジを押すと、名前の横に出ます。もう一度押すと外れます。</p><div id="bdList"></div>
-    <p class="note">レートはオンライン対戦とCPU戦（1手戻しを使わなかった対局）で上下します。CPUのレートは やさしい 900・ふつう 1200・つよい 1500・最強 2100 として計算します。名前とレートはオンライン対戦では相手と観戦者に表示されます。</p>
+    <p class="note">段級はオンライン対戦とCPU戦（1手戻しを使わなかった対局）で上下します。名前と段級はオンライン対戦では相手と観戦者に表示されます。</p>
   </div>
   <button class="kf-chip kf-chip-prof" data-go="kifu" id="kfChipProf" type="button"></button>
   <div class="card prof acct" id="acct">
@@ -1377,14 +1410,22 @@ const $=id=>document.getElementById(id);
 // レートの段位：石の縁の格。1399まで初段、1400二段、1600三段、1800四段、2000名人
 // レートの段：1000から100ごとに1段（〜999は縁なし、2300以上は「極」）
 const RANK_NAMES=['無印','銅I','銅II','銀I','銀II','銀III','金I','金II','金III','金IV','金V','名人','白金I','白金II','極'];
+/* 段級（30級〜九段、0〜38）。表示は段級と達成率だけ。レートは見えない内部の強さとして残す */
+const DAN_N=['初段','二段','三段','四段','五段','六段','七段','八段','九段'],LV_MAX=38;
+const lvC=l=>Math.max(0,Math.min(LV_MAX,Math.round(Number(l)||0)));
+const lvName=l=>{l=lvC(l);return l<30?(30-l)+'級':DAN_N[l-30]};
+const lvOfRate=r=>{r=Number(r);if(!Number.isFinite(r))return 0;return lvC((r-500)/33.3)};
 const RANKS=RANK_NAMES.map((n,k)=>[k?900+k*100:0,k,n]);
 const rankOf=r=>{r=Number(r);if(!Number.isFinite(r))return 0;return Math.max(0,Math.min(14,Math.floor(r/100)-9))};
 const rankName=r=>RANK_NAMES[rankOf(r)];
-const rankCls=k=>k>0?' rk r'+k+(k>=9?' gn':''):'';
+const rankCls=l=>(l==null||l<0)?'':' rk lv'+l+(l>=30?' gn dan'+(l>=33?' pulse':'')+(l>=36?' two':''):'');
 // その色の石を持つ人の段位（オンラインは相手が知らせたレート、CPU戦はCPUのレート）
-function colorRank(c){if(S.mode==='net'){const id=[NET.host,NET.guest].find(x=>x&&colorOf(x)===c);if(!id)return 0;if(id===NET.me&&!NET.watch)return rankOf(myRate());const o=typeof NM!=='undefined'&&NM[id];return o?rankOf(o.rate):0}
-  if(typeof CPU_RATE!=='undefined'&&CPU_RATE[S.mode])return c===hcOf()?rankOf(myRate()):rankOf(CPU_RATE[S.mode]);return 0}
+function colorRank(c){if(S.mode==='net'){const id=[NET.host,NET.guest].find(x=>x&&colorOf(x)===c);if(!id)return -1;if(id===NET.me&&!NET.watch)return myLv();const o=typeof NM!=='undefined'&&NM[id];return o?oppLv(o):-1}
+  if(typeof CPU_RATE!=='undefined'&&CPU_RATE[S.mode])return c===hcOf()?myLv():lvOfRate(CPU_RATE[S.mode]);return -1}
 const myRate=()=>typeof PROF!=='undefined'?PROF.rating:1500;
+const myLv=()=>typeof PROF!=='undefined'&&PROF.dan?PROF.dan.lv:0;
+const oppLv=o=>o?(o.lv!=null?lvC(o.lv):(o.rate!=null?lvOfRate(o.rate):-1)):-1;
+const lvTxt=l=>l==null||l<0?null:lvName(l);
 const gridEl=$('grid');
 /* ===== 盤の上の動き：候補の金糸・跳ぶ動き・ドラッグ・+1/−1・届く石の光 ===== */
 const MV={hide:-1,pop:-1,badge:{},prev:null,run:null,skip:-1,cand:'',hov:-1,drag:null,noClick:false};
@@ -2286,7 +2327,7 @@ function renderHistory(){const g=loadGames(),box=$('histList');box.innerHTML='';
     const side=x.me===1?'あなたは黒':x.me===2?'あなたは白':'';
     let bad='';if(x.an){const c=countMarks(x);bad=c.bad||c.dub?`悪手 ${c.bad}・疑問手 ${c.dub}${x.me?'（あなた）':''}`:'悪手なし'}else bad='未解析';
     const r=document.createElement('span');r.className='res '+rc;r.textContent=rt;
-    const m=document.createElement('span');m.className='meta';const mb=document.createElement('b');mb.textContent=MODE_NAME(x.mode)+(x.mode==='net'&&x.opp?'　対 '+x.opp:'')+(x.rd!=null?'　'+(x.rd>=0?'+':'')+x.rd:'');m.append(mb,document.createElement('br'),document.createTextNode(fmtDate(x.t)+'　'+x.log.length+'手'+(side?'　'+side:'')));
+    const m=document.createElement('span');m.className='meta';const mb=document.createElement('b');mb.textContent=MODE_NAME(x.mode)+(x.mode==='net'&&x.opp?'　対 '+x.opp:'')+(x.dn?'　'+x.dn:'');m.append(mb,document.createElement('br'),document.createTextNode(fmtDate(x.t)+'　'+x.log.length+'手'+(side?'　'+side:'')));
     const bd=document.createElement('span');bd.className='bad';bd.textContent=bad;
     if(x.deep){const done=(x.an||[]).filter(Boolean).length>=x.log.length,tg=document.createElement('span');tg.className='done-tag'+(done?'':' part');tg.textContent=done?'✓ 解析済み':'解析の途中';bd.prepend(tg)}
     b.append(r,m,bd);b.addEventListener('click',()=>openReview(x.id));box.appendChild(b)})}
@@ -2392,7 +2433,7 @@ function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n
   for(let k=0;k<36;k++){const el=$('r'+k),v=p.b[k],r=k/6|0,d=v?nbCount(p.b,k):0;let cls='cell';
     if(r===0||r===5)cls+=' goal';if(last&&(last[0]===k||last[1]===k))cls+=(PV&&PV.k>0?' pvlast':' last');
     if(nextM&&nextM[0]===k)cls+=' bestf';if(nextM&&nextM[1]===k)cls+=' bestt';if(!OVER&&v===p.turn)cls+=' mine';if(k===REV.sel)cls+=' sel';if(TG.includes(k))cls+=' target'+((p.turn===1?r===0:r===5)?' fin':'');
-    setCell(el,cls,v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${v===g.me?rankCls(rankOf(myRate())):''}"><span>${d}</span></div>`:'')}
+    setCell(el,cls,v?`<div class="stone ${v===1?'b':'w'}${d?'':' zero'}${v===g.me?rankCls(myLv()):''}"><span>${d}</span></div>`:'')}
   $('rboard').classList.toggle('flip',flip);$('rboard').classList.toggle('hideNum',!$('showNum').checked);$('rboard').classList.toggle('nolab',!$('showLab').checked);
   [...$('rlabTop').children].forEach((e,k)=>e.textContent=String(flip?6-k:k+1));
   [...$('rlabLeft').children].forEach((e,k)=>e.textContent='abcdef'[flip?5-k:k]);
@@ -2606,7 +2647,8 @@ addEventListener('popstate',()=>{if(CUR==='watch'){if(!LV.on)startWatchList()}el
 var PKEY='bocch-profile',CPU_RATE={1:900,2:1200,3:1500,4:2100};
 const cleanName=x=>String(x==null?'':x).replace(/[\u0000-\u001f\u007f<>]/g,'').trim().slice(0,12);
 function loadProf(){let p={};try{p=JSON.parse(localStorage.getItem(PKEY)||'{}')||{}}catch(e){}
-  return {name:cleanName(p.name)||'',rating:Number.isFinite(p.rating)?p.rating:1500,games:p.games|0,w:p.w|0,l:p.l|0,d:p.d|0,rated:Array.isArray(p.rated)?p.rated.slice(-200):[],peak:!!p.peak,cs:p.cs&&typeof p.cs==='object'?p.cs:{},wk:p.wk&&typeof p.wk.k==='string'?p.wk:null,st:p.st||{},bd:Array.isArray(p.bd)?p.bd:[],sel:typeof p.sel==='string'?p.sel:'',bdInit:p.bdInit|0}}
+  return {name:cleanName(p.name)||'',rating:Number.isFinite(p.rating)?p.rating:1500,games:p.games|0,w:p.w|0,l:p.l|0,d:p.d|0,rated:Array.isArray(p.rated)?p.rated.slice(-200):[],peak:!!p.peak,cs:p.cs&&typeof p.cs==='object'?p.cs:{},wk:p.wk&&typeof p.wk.k==='string'?p.wk:null,st:p.st||{},bd:Array.isArray(p.bd)?p.bd:[],sel:typeof p.sel==='string'?p.sel:'',bdInit:p.bdInit|0,dan:danP(p.dan)}}
+function danP(x){return {lv:lvC(x&&x.lv),pct:Math.max(0,Math.min(100,Number(x&&x.pct)||0)),z:Math.max(0,(x&&x.z)|0)}}
 var PROF=loadProf();
 /* 役員（メールアドレスで決める）：名前の前に金の家紋バッジ、広告なし */
 const OFFICERS_H=['b6da2635da3d44b7d11cf2a95793762381ef20f0ab05861706b9a460c790b315','f92bd5cb543f24093dcdc7a576e227b2fbbfad6f78dd377dd5948145c8f8aac3','c456eecd7b8f88e455b24fa3ea6a79afc110e4fcdc4a13ea732a5816e0644567']; // 役員のメールアドレスのSHA-256（アドレスそのものはコードに置かない）
@@ -2626,11 +2668,11 @@ let OBN=0;function offBadge(px){const sp=document.createElement('span');const gi
 function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF))}catch(e){}}
 
 var NM={};
-const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi')){o.name=myName();o.rate=Math.round(PROF.rating);o.off=isOff()?1:0;o.bd=bdSel();try{if(FB.ready&&FB.user&&FB.user.emailVerified)o.uid=FB.user.uid}catch(e){}}return _post(o)};
+const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi')){o.name=myName();o.rate=Math.round(PROF.rating);o.lv=PROF.dan.lv;o.off=isOff()?1:0;o.bd=bdSel();try{if(FB.ready&&FB.user&&FB.user.emailVerified)o.uid=FB.user.uid}catch(e){}}return _post(o)};
 const _reduce=reduce;reduce=function(m){
   if(m&&m.t==='create'&&m.ai===1){NET.ai=true;if(!NET.watch&&!colorOf(NET.me)){NET.watch=true;NET.claimed=true;clearTimeout(NET.timer);try{history.replaceState(null,'','?watch='+NET.code)}catch(e){}}}
   if(m&&m.t==='next'&&typeof m.room==='string'&&/^[a-z0-9]{6}$/.test(m.room)&&NET.ai){aiFollow(m.room);return}
-  if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500,off:m.off===1,bd:typeof m.bd==='string'&&BD[m.bd]?m.bd:'',uid:typeof m.uid==='string'&&/^[A-Za-z0-9]{10,40}$/.test(m.uid)?m.uid:null}}
+  if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500,lv:(m.lv!=null&&Number.isFinite(+m.lv))?lvC(m.lv):null,off:m.off===1,bd:typeof m.bd==='string'&&BD[m.bd]?m.bd:'',uid:typeof m.uid==='string'&&/^[A-Za-z0-9]{10,40}$/.test(m.uid)?m.uid:null}}
   return _reduce(m)};
 function oppIdOf(){return NET.me===NET.host?NET.guest:NET.host}
 function rateGame(){
@@ -2644,10 +2686,31 @@ function rateGame(){
   const res=S.over.win===0?.5:S.over.win===my?1:0,K=PROF.games<30?40:PROF.peak?10:20;
   const df=Math.max(-400,Math.min(400,opp-PROF.rating)),exp=1/(1+Math.pow(10,df/400)),before=Math.round(PROF.rating);
   PROF.rating=Math.max(100,PROF.rating+K*(res-exp));PROF.games++;if(res===1)PROF.w++;else if(res===0)PROF.l++;else PROF.d++;
+  const D=PROF.dan,b0={lv:D.lv,pct:D.pct};danStep(D,res,exp);
   PROF.rated.push(id);PROF.rated=PROF.rated.slice(-200);saveProf();
-  const after=Math.round(PROF.rating),dl=after-before;
-  S.rateMsg='レート '+before+' → '+after+'（'+(dl>=0?'+':'')+dl+'）';try{rankPost()}catch(e){}
-  const g=loadGames(),ix=g.findIndex(x=>x.id===id);if(ix>=0){g[ix].rd=dl;g[ix].opp=oppName;g[ix].ra=after;storeGames(g)}}
+  const fp=x=>Math.floor(x);S.danUp=null;
+  if(D.lv>b0.lv){S.rateMsg=lvName(D.lv)+(D.lv>=30?'に昇段！':'に昇級！');S.danUp=D.lv;setTimeout(()=>{try{danFx(D.lv)}catch(e){}},1700)}
+  else if(D.lv<b0.lv)S.rateMsg=lvName(D.lv)+(b0.lv>=30?'に降段':'に降級');
+  else if(D.lv<10)S.rateMsg=lvName(D.lv)+'（勝つと昇級します）';
+  else{const dd=fp(D.pct)-fp(b0.pct);S.rateMsg=lvName(D.lv)+' '+fp(b0.pct)+'% → '+lvName(D.lv)+' '+fp(D.pct)+'%（'+(dd>=0?'+':'')+dd+'%）'}
+  try{rankPost();bdCheck()}catch(e){}
+  const g=loadGames(),ix=g.findIndex(x=>x.id===id);if(ix>=0){g[ix].dn=lvName(D.lv);g[ix].opp=oppName;delete g[ix].rd;storeGames(g)}}
+/* 段級の上下（将棋ウォーズに近い形）：30〜21級は勝つたびに昇級。それ以外は達成率0〜100%で、100%で昇級・昇段（20%から再開）。
+   同じ強さの相手に1勝で +25%（20〜11級）/+15%（10〜1級）/+10%（初段〜三段）/+6%（四段〜六段）/+4%（七段・八段）。強い相手ほど大きく、弱い相手に負けるほど大きく下がる。
+   0%になってからさらに5連敗で1つ下がる（50%から）。30〜21級は下がらない */
+function danStep(D,res,exp){const lv=D.lv;
+  if(lv<10){if(res===1){D.lv=lv+1;D.pct=D.lv>=10?20:0;D.z=0}return}
+  const base=lv<20?25:lv<30?15:lv<33?10:lv<36?6:4,was0=D.pct<=0;
+  const dl=res===1?base*2*(1-exp):res===0?-base*2*exp:base*2*(.5-exp);
+  if(res===1)D.z=0;D.pct+=dl;
+  if(D.pct>=100){if(lv<LV_MAX){D.lv=lv+1;D.pct=20;D.z=0}else D.pct=100}
+  else if(D.pct<=0){D.pct=0;if(res===0&&was0){D.z++;if(D.z>=5){D.lv=lv-1;D.pct=50;D.z=0}}}
+  D.pct=Math.round(D.pct*10)/10}
+/* 昇級・昇段の演出：金の筆文字で新しい段級と、その縁の石 */
+function danFx(lv){let e=$('rkUp');if(!e){e=document.createElement('div');e.id='rkUp';e.setAttribute('role','dialog');e.setAttribute('aria-modal','true');document.body.appendChild(e);e.addEventListener('click',()=>{e.hidden=true})}
+  const dan=lv>=30;let h='';for(let k=0;k<(dan?40:22);k++){const z=4+(k*7)%9;h+='<span class="mvflake" aria-hidden="true" style="left:'+((k*37+11)%100)+'%;top:'+((k*53+7)%80)+'%;width:'+z+'px;height:'+Math.round(z*.7)+'px;transform:rotate('+(k*37%180)+'deg);animation-delay:'+((k*13)%20)/10+'s"></span>'}
+  h+='<div class="stone b rkstone'+rankCls(lv)+'"><span>4</span></div><div class="mvk">'+lvName(lv)+'</div><div class="mvwho">'+(dan?'昇段しました':'昇級しました')+'</div><div class="mvwhy">'+(dan?'おめでとうございます':'この調子で')+'</div><div class="mvrow"><button class="mvbtn solid" type="button">閉じる</button></div>';
+  e.className='mvend rkup'+(dan?' isdan':'');e.innerHTML=h;e.hidden=false;clearTimeout(e._t);e._t=setTimeout(()=>{e.hidden=true},dan?7000:4500)}
 $('undo').addEventListener('click',()=>{if(S.mode&&S.mode!=='net')S.noRate=true});
 
 /* バッジ：条件を満たすともらえ、1つ選ぶと名前の横に出る（オンラインの相手にも見える） */
@@ -2662,9 +2725,9 @@ const BADGES=[
  ['CPU','c3','強','つよい撃破','CPUつよいに勝つ（1手戻しなし）','gold',s=>s.cpu[3]>=1],
  ['CPU','c4','極','最強撃破','CPU最強に勝つ（1手戻しなし）','special',s=>s.cpu[4]>=1],
  ['オンライン','n1','網','初陣','オンラインで1勝','bronze',s=>s.net>=1],
- ['オンライン','r16','昇','昇段','レート1600に到達','silver',s=>s.rmax>=1600],
- ['オンライン','r18','達','達人','レート1800に到達','gold',s=>s.rmax>=1800],
- ['オンライン','r20','王','頂点','レート2000に到達','special',s=>s.rmax>=2000],
+ ['オンライン','r16','昇','昇段','初段に到達','silver',s=>s.rmax>=1600||s.dmax>=30],
+ ['オンライン','r18','達','達人','四段に到達','gold',s=>s.rmax>=1800||s.dmax>=33],
+ ['オンライン','r20','王','頂点','九段に到達','special',s=>s.rmax>=2000||s.dmax>=38],
  ['オンライン','st5','連','五連勝','オンラインで5連勝','silver',s=>s.stMax>=5],
  ['オンライン','mon1','冠','月間一位','月が変わるときにランキング1位','special',s=>!!s.mon1],
  ['毎日の1問','d7','日','一週間','7日連続で正解','bronze',s=>s.daily>=7],
@@ -2682,7 +2745,7 @@ let BDN=0;
 function bdSVG(id,px){const b=BD[id];if(!b)return '';const [d,l,bg]=BD_T[b[5]],g='bdg'+(++BDN);
   return `<svg width="${px}" height="${px}" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${l}"/><stop offset=".55" stop-color="${d}"/><stop offset="1" stop-color="${l}"/></linearGradient></defs><circle cx="50" cy="50" r="47" fill="url(#${g})"/><circle cx="50" cy="50" r="40" fill="${bg}"/><circle cx="50" cy="50" r="40" fill="none" stroke="${l}" stroke-width="1.5" opacity=".6"/>${b[5]==='special'?`<circle cx="50" cy="50" r="34" fill="none" stroke="${l}" stroke-width="1" stroke-dasharray="2 4" opacity=".7"/>`:''}<text x="50" y="52" text-anchor="middle" dominant-baseline="central" font-family="Shippori Mincho B1,Hiragino Mincho ProN,Yu Mincho,serif" font-weight="800" font-size="46" fill="${l}">${b[2]}</text></svg>`}
 function bdBadge(id,px){const b=BD[id];if(!b)return null;const sp=document.createElement('span');sp.className='bdg';sp.title=b[3];sp.setAttribute('aria-label',b[3]);sp.innerHTML=bdSVG(id,px||16);return sp}
-function bdStats(){const s=PROF.st=PROF.st||{};for(const k of ['wins','games','net','streak','stMax','rmax','fast','yori','long','hunt','rev','watch','fr','daily','dcur'])s[k]=s[k]|0;s.cpu=Array.isArray(s.cpu)?s.cpu.map(x=>x|0).concat([0,0,0,0,0]).slice(0,5):[0,0,0,0,0];s.done=Array.isArray(s.done)?s.done.slice(-300):[];return s}
+function bdStats(){const s=PROF.st=PROF.st||{};for(const k of ['wins','games','net','streak','stMax','rmax','dmax','fast','yori','long','hunt','rev','watch','fr','daily','dcur'])s[k]=s[k]|0;s.cpu=Array.isArray(s.cpu)?s.cpu.map(x=>x|0).concat([0,0,0,0,0]).slice(0,5):[0,0,0,0,0];s.done=Array.isArray(s.done)?s.done.slice(-300):[];return s}
 function bdOwned(){return Array.isArray(PROF.bd)?PROF.bd.filter(id=>BD[id]):[]}
 function bdSel(){return BD[PROF.sel]&&bdOwned().includes(PROF.sel)?PROF.sel:''}
 // 1局の結果を数える（g は保存した対局の形：mode, me, win, log, noRate）
@@ -2692,7 +2755,7 @@ function bdCount(s,g){if(!g||g.mode==='study'||!g.log||!g.log.length)return;s.ga
   const n=g.log.length;if(n<=20)s.fast++;if(n>=80)s.long++;
   const f=g.log[me===1?0:1];if(f){const k=f[0]+'-'+f[1];if(me===1?(k==='30-25'||k==='35-28'):(k==='0-7'||k==='5-10'))s.yori++}
   let b=startBoard();for(const m of g.log)b=apply(b,m);let lone=0;for(let i=0;i<36;i++)if(b[i]===3-me&&!nbCount(b,i))lone++;if(lone>=3)s.hunt++}
-function bdCheck(quiet){const s=bdStats();s.rmax=Math.max(s.rmax,Math.round(PROF.rating));try{if(FR&&FR.friends)s.fr=Math.max(s.fr,FR.friends.length)}catch(e){}
+function bdCheck(quiet){const s=bdStats();s.rmax=Math.max(s.rmax,Math.round(PROF.rating));s.dmax=Math.max(s.dmax|0,myLv());try{if(FR&&FR.friends)s.fr=Math.max(s.fr,FR.friends.length)}catch(e){}
   const own=new Set(bdOwned()),neu=[];for(const b of BADGES)if(!own.has(b[1])&&b[6](s)){own.add(b[1]);neu.push(b[1])}
   PROF.bd=[...own];if(neu.length){saveProf();if(!quiet)bdToast(neu)}return neu}
 let BDQ=[],BDT=null;
@@ -2740,18 +2803,18 @@ let hiKey='';
 const _renderP=render;render=function(){_renderP();
   if(S.over){rateGame();try{bdGameEnd()}catch(e){console.error(e)}}
   // 自分の名前とレートを部屋に知らせる（席に着いている時だけ）
-  if(S.mode==='net'&&NET.code&&NET.live&&!NET.watch&&colorOf(NET.me)>0){const k=NET.code+'|'+NET.me+'|'+myName()+'|'+Math.round(PROF.rating)+'|'+isOff()+'|'+bdSel();if(k!==hiKey&&NET.claimed!==false){hiKey=k;post({t:'hi'})}}
+  if(S.mode==='net'&&NET.code&&NET.live&&!NET.watch&&colorOf(NET.me)>0){const k=NET.code+'|'+NET.me+'|'+myName()+'|'+Math.round(PROF.rating)+'|'+myLv()+'|'+isOff()+'|'+bdSel();if(k!==hiKey&&NET.claimed!==false){hiKey=k;post({t:'hi'})}}
   // 相手は盤の左上、自分は盤の右下（観戦中は手前側の黒を右下）
   const pt=$('plTop'),pbt=$('plBot');pt.innerHTML='';pbt.innerHTML='';
   if(S.mode==='net'&&NET.host){const hc=colorOf(NET.host),bId=hc===1?NET.host:NET.guest,wId=hc===1?NET.guest:NET.host;
-    const nm=id=>id?(id===NET.me&&!NET.watch?{name:myName(),rate:Math.round(PROF.rating),off:isOff(),bd:bdSel()}:(NM[id]||{name:'…',rate:null})):{name:'待機中',rate:null};const bn=nm(bId),wn=nm(wId);
+    const nm=id=>id?(id===NET.me&&!NET.watch?{name:myName(),rate:lvName(myLv()),off:isOff(),bd:bdSel()}:(NM[id]?Object.assign({},NM[id],{rate:lvTxt(oppLv(NM[id]))}):{name:'…',rate:null})):{name:'待機中',rate:null};const bn=nm(bId),wn=nm(wId);
     const meW=colorOf(NET.me)===2;
     const bs=plSpan(1,bn.name,bn.rate,bId&&bId===NET.me,bn.off,bn.bd),ws=plSpan(2,wn.name,wn.rate,wId&&wId===NET.me,wn.off,wn.bd);
     if(meW){pbt.append(ws);pt.append(bs)}else{pbt.append(bs);pt.append(ws)}pt.hidden=pbt.hidden=false}
-  else if(CPU_RATE[S.mode]){pbt.append(plSpan(hcOf(),myName(),Math.round(PROF.rating),true,isOff(),bdSel()));pt.append(plSpan(3-hcOf(),MODE_NAME(S.mode),CPU_RATE[S.mode],false));pt.hidden=pbt.hidden=false}
+  else if(CPU_RATE[S.mode]){pbt.append(plSpan(hcOf(),myName(),lvName(myLv()),true,isOff(),bdSel()));pt.append(plSpan(3-hcOf(),MODE_NAME(S.mode),lvName(lvOfRate(CPU_RATE[S.mode])),false));pt.hidden=pbt.hidden=false}
   else pt.hidden=pbt.hidden=true;
-  const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?'1手戻しを使ったのでレートは変わりません':'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
-  {const mn=$('meName');mn.textContent=myName();if(isOff())mn.prepend(offBadge(18));const sb=bdSel();if(sb)mn.append(bdBadge(sb,17))}$('meRate').textContent=Math.round(PROF.rating)};
+  const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?'1手戻しを使ったので段級は変わりません':'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
+  {const mn=$('meName');mn.textContent=myName();if(isOff())mn.prepend(offBadge(18));const sb=bdSel();if(sb)mn.append(bdBadge(sb,17))}$('meRate').textContent=lvName(myLv())+(myLv()>=10?' '+Math.floor(PROF.dan.pct)+'%':'')};
 /* ===== 棋風診断：その端末に残っている対局の手順から、将棋の棋風の分け方を参考に6つの物差しで測る ===== */
 // 人に近い指し手（やさしい・ふつうのCPUをいろいろな相手と組ませた110人×12局）の、1人あたり平均の平均と散らばり。
 // fwd・def・big・coh・bindは「選べた手の平均との差」。強いAI同士を基準にしていたころは、普通に指すと誰でも「攻め」になっていた
@@ -2828,10 +2891,10 @@ try{kfHome()}catch(e){}
 addEventListener('load',()=>{try{kfHome()}catch(e){}});
 for(const id of ['kfChip','kfChipProf']){const el=$(id);if(el)el.addEventListener('click',()=>{if(named())return;setTimeout(()=>{try{renderProf();bdRender()}catch(e){}const a=$('acct');if(a)a.scrollIntoView({behavior:'smooth',block:'start'})},60)})}
 function renderProf(){const nmd=named();$('nameIn').value=nmd?PROF.name:'';$('nameIn').disabled=!nmd;$('nameSave').disabled=!nmd;$('nameIn').placeholder=nmd?'名前を入れる':guestName();
-  $('nameNote').textContent=nmd?(isOff()?'役員アカウントです。名前の前にバッジが付き、広告は表示されません。':'ほかの人と同じ名前は付けられません。'):'未登録のあいだは「'+guestName()+'」です。アカウントに登録してログインすると、好きな名前を付けられます。';$('profRate').textContent=Math.round(PROF.rating);$('profRank').textContent=rankName(PROF.rating);
-  {const cur=rankOf(PROF.rating);$('rankRow').innerHTML=RANKS.map(([min,k,n])=>`<div title="${k?min+'〜':'〜999'}" style="${k===cur?'color:var(--gold);font-weight:700':''}"><div class="stone b${rankCls(k)}"><span>3</span></div>${n}</div>`).join('');
-   $('rankNext').textContent=cur<14?'次は '+(1000+cur*100)+' で「'+RANK_NAMES[cur+1]+'」':'最高の段です'}
-  $('profRec').textContent=PROF.games?PROF.games+'局　'+PROF.w+'勝 '+PROF.l+'敗'+(PROF.d?' '+PROF.d+'分':''):'まだレート対局がありません'}
+  $('nameNote').textContent=nmd?(isOff()?'役員アカウントです。名前の前にバッジが付き、広告は表示されません。':'ほかの人と同じ名前は付けられません。'):'未登録のあいだは「'+guestName()+'」です。アカウントに登録してログインすると、好きな名前を付けられます。';{const D=PROF.dan,cur=D.lv;$('profRate').textContent=lvName(cur);$('profRank').textContent=cur>=10?Math.floor(D.pct)+'%':'';
+   $('rankRow').innerHTML=Array.from({length:LV_MAX+1},(_,l)=>`<div style="${l===cur?'color:var(--gold);font-weight:700':''}"><div class="stone b${rankCls(l)}"><span>3</span></div>${lvName(l)}</div>`).join('');
+   $('rankNext').textContent=cur<10?'勝つたびに昇級します':cur<LV_MAX?'次の「'+lvName(cur+1)+'」まで あと'+Math.max(1,Math.ceil(100-D.pct))+'%'+(D.z>0?'（'+lvName(cur-1)+'に下がるまで あと'+(5-D.z)+'敗）':''):'最高の段です'}
+  $('profRec').textContent=PROF.games?PROF.games+'局　'+PROF.w+'勝 '+PROF.l+'敗'+(PROF.d?' '+PROF.d+'分':''):'まだ段級の対局がありません'}
 $('meBtn').addEventListener('click',()=>{renderProf();bdRender();$('nameMsg').textContent=''});
 async function claimName(nm){await fbInit();const u=FB.user;if(!u||!u.emailVerified)throw {code:'need-login'};
   const ref=FB.db.collection('names').doc(nameKey(nm)),snap=await ref.get();
@@ -2916,17 +2979,17 @@ function acctErr(e){acctMsg(ACCT_ERR[e&&e.code]||('うまくいきませんで�
 function acctRender(){const u=FB.user;$('acctOut').hidden=!!u;$('acctVerify').hidden=!(u&&!u.emailVerified);$('acctIn').hidden=!(u&&u.emailVerified);
   if(u){$('acctVEmail').textContent=u.email;$('acctUEmail').textContent=u.email}
   const me=$('meEdit');if(me)me.textContent=u&&u.emailVerified?'ログイン中 ›':'アカウント ›'}
-function profData(){const o={name:PROF.name||'',rating:Math.round(PROF.rating*10)/10,games:PROF.games|0,w:PROF.w|0,l:PROF.l|0,d:PROF.d|0,rated:(PROF.rated||[]).slice(-150),peak:!!PROF.peak,cs:PROF.cs||{},st:PROF.st||{},bd:PROF.bd||[],sel:PROF.sel||'',t:Date.now()};if(KF_SYNC.ok)o.kifu=kifuPack();try{if(FR.loaded){o.friends=FR.friends;o.fout=FR.fout;o.fin=FR.fin}}catch(e){}return o}
+function profData(){const o={name:PROF.name||'',rating:Math.round(PROF.rating*10)/10,games:PROF.games|0,w:PROF.w|0,l:PROF.l|0,d:PROF.d|0,rated:(PROF.rated||[]).slice(-150),peak:!!PROF.peak,cs:PROF.cs||{},st:PROF.st||{},bd:PROF.bd||[],sel:PROF.sel||'',dan:PROF.dan,t:Date.now()};if(KF_SYNC.ok)o.kifu=kifuPack();try{if(FR.loaded){o.friends=FR.friends;o.fout=FR.fout;o.fin=FR.fin}}catch(e){}return o}
 
 // アカウントのバッジと記録を、この端末のものと合わせる（大きい方・両方持っている方を残す）
-function bdMerge(d){if(!d)return;try{const P=csProg();if(d.cs&&typeof d.cs==='object')for(const k in d.cs){const a=P[k]||[],b=Array.isArray(d.cs[k])?d.cs[k]:[];P[k]=Array.from({length:Math.max(a.length,b.length)},(_,i)=>Math.max(a[i]|0,b[i]|0))}}catch(e){}const a=bdStats(),b=d.st||{};for(const k of ['wins','games','net','stMax','rmax','fast','yori','long','hunt','rev','watch','fr','daily'])a[k]=Math.max(a[k]|0,b[k]|0);
+function bdMerge(d){if(!d)return;try{const P=csProg();if(d.cs&&typeof d.cs==='object')for(const k in d.cs){const a=P[k]||[],b=Array.isArray(d.cs[k])?d.cs[k]:[];P[k]=Array.from({length:Math.max(a.length,b.length)},(_,i)=>Math.max(a[i]|0,b[i]|0))}}catch(e){}const a=bdStats(),b=d.st||{};for(const k of ['wins','games','net','stMax','rmax','dmax','fast','yori','long','hunt','rev','watch','fr','daily'])a[k]=Math.max(a[k]|0,b[k]|0);
   if(Array.isArray(b.cpu))for(let i=0;i<5;i++)a.cpu[i]=Math.max(a.cpu[i]|0,b.cpu[i]|0);if(Array.isArray(b.done))a.done=Array.from(new Set([...a.done,...b.done])).slice(-300);if(b.mon1)a.mon1=1;if(typeof b.dlast==='string'&&(!a.dlast||b.dlast>a.dlast)){a.dlast=b.dlast;a.dcur=b.dcur|0}
   PROF.bd=Array.from(new Set([...bdOwned(),...(Array.isArray(d.bd)?d.bd.filter(x=>BD[x]):[])]));if(!PROF.sel&&typeof d.sel==='string')PROF.sel=d.sel}
 async function acctPull(){if(!FB.user||!FB.user.emailVerified)return;FB.syncing=true;$('acctSync').textContent='データを読み込んでいます…';
   try{const ref=FB.db.collection('users').doc(FB.user.uid);const snap=await ref.get();
     if(snap.exists){const d=snap.data();try{frLoad(d)}catch(e){}try{kifuMerge(d.kifu)}catch(e){}
       // 対局数が多い方を正とする（この端末で登録前に遊んだ分を失わないため）
-      if((d.games|0)>=(PROF.games|0)){PROF.name=d.name||PROF.name;PROF.rating=Number(d.rating)||PROF.rating;PROF.games=d.games|0;PROF.w=d.w|0;PROF.l=d.l|0;PROF.d=d.d|0;PROF.peak=!!(d.peak||PROF.peak);PROF.rated=Array.from(new Set([...(PROF.rated||[]),...(d.rated||[])])).slice(-200);bdMerge(d);_saveProfLocal()}
+      if((d.games|0)>=(PROF.games|0)){PROF.name=d.name||PROF.name;PROF.rating=Number(d.rating)||PROF.rating;PROF.games=d.games|0;PROF.w=d.w|0;PROF.l=d.l|0;PROF.d=d.d|0;PROF.peak=!!(d.peak||PROF.peak);if(d.dan)PROF.dan=danP(d.dan);PROF.rated=Array.from(new Set([...(PROF.rated||[]),...(d.rated||[])])).slice(-200);bdMerge(d);_saveProfLocal()}
       else{bdMerge(d);await kifuProbe(ref);await ref.set(profData())}}
     else{try{FR.loaded=true}catch(e){}try{kifuMerge(null)}catch(e){}await kifuProbe(ref);await ref.set(profData())}
     try{frStart()}catch(e){}
@@ -2939,9 +3002,9 @@ function acctPush(){if(!FB.ready||!FB.user||!FB.user.emailVerified||FB.syncing)r
 /* 対局の記録（直近100局）もアカウントに保存して、別の端末でも見られるようにする。
    1局は「手を2文字ずつ」に縮める。書き込めるか最初に確かめ、だめなら名前やレートの保存には混ぜない */
 const KF_SYNC={ok:false,t:0},KC='0123456789abcdefghijklmnopqrstuvwxyz',KUID='bocch-games-uid';
-function kifuPack(){return loadGames().filter(g=>g&&g.log&&g.log.length&&g.mode!=='study').slice(0,GMAX).map(g=>{const o={i:g.id,t:g.t|0,m:g.mode,me:g.me|0,w:g.win|0,y:g.why||'',l:g.log.map(m=>KC[m[0]]+KC[m[1]]).join('')};if(g.rd!=null)o.rd=g.rd;if(g.opp)o.o=g.opp;if(g.ra!=null)o.ra=g.ra;return o})}
+function kifuPack(){return loadGames().filter(g=>g&&g.log&&g.log.length&&g.mode!=='study').slice(0,GMAX).map(g=>{const o={i:g.id,t:g.t|0,m:g.mode,me:g.me|0,w:g.win|0,y:g.why||'',l:g.log.map(m=>KC[m[0]]+KC[m[1]]).join('')};if(g.dn)o.dn=g.dn;if(g.opp)o.o=g.opp;if(g.ra!=null)o.ra=g.ra;return o})}
 function kifuUnpack(o){if(!o||typeof o.i!=='string'||typeof o.l!=='string')return null;const log=[];for(let k=0;k+1<o.l.length;k+=2){const f=KC.indexOf(o.l[k]),t=KC.indexOf(o.l[k+1]);if(f<0||t<0||f>35||t>35)return null;log.push([f,t])}
-  const g={id:o.i,t:+o.t||0,mode:o.m,me:o.me|0,win:o.w|0,why:o.y||'',log,an:null};if(o.rd!=null)g.rd=o.rd;if(o.o)g.opp=o.o;if(o.ra!=null)g.ra=o.ra;return g}
+  const g={id:o.i,t:+o.t||0,mode:o.m,me:o.me|0,win:o.w|0,why:o.y||'',log,an:null};if(typeof o.dn==='string')g.dn=o.dn.slice(0,6);if(o.o)g.opp=o.o;if(o.ra!=null)g.ra=o.ra;return g}
 function kifuMerge(remote){const uid=FB.user&&FB.user.uid;if(!uid)return;let tag='';try{tag=localStorage.getItem(KUID)||''}catch(e){}
   // この端末の記録が別のアカウントのものなら混ぜずに、アカウントの記録に置き換える
   let local=tag&&tag!==uid?[]:loadGames();const map=new Map(local.map(g=>[g.id,g]));
@@ -3363,8 +3426,8 @@ async function shareImage(o){// o:{b, last, title, sub, black, white, ply, flip}
   const blob=await new Promise(r=>c.toBlob(r,'image/png'));const file=new File([blob],'bocch.png',{type:'image/png'});
   try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'bocch',text:(o.title||'')+' #bocch'});return 'shared'}}catch(e){if(e&&e.name==='AbortError')return 'cancel'}
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='bocch.png';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000);return 'saved'}
-function playerLabel(color){try{if(S.mode==='net'&&NET.host){const hc=colorOf(NET.host),id=color===1?(hc===1?NET.host:NET.guest):(hc===1?NET.guest:NET.host);if(id===NET.me&&!NET.watch)return myName()+'　'+Math.round(PROF.rating);const n=NM[id];return n?n.name+'　'+n.rate:'名無し'}
-  if(CPU_RATE[S.mode])return color===hcOf()?myName()+'　'+Math.round(PROF.rating):MODE_NAME(S.mode)+'　'+CPU_RATE[S.mode];return color===1?'黒':'白'}catch(e){return ''}}
+function playerLabel(color){try{if(S.mode==='net'&&NET.host){const hc=colorOf(NET.host),id=color===1?(hc===1?NET.host:NET.guest):(hc===1?NET.guest:NET.host);if(id===NET.me&&!NET.watch)return myName()+'　'+lvName(myLv());const n=NM[id];return n?n.name+'　'+(lvTxt(oppLv(n))||''):'名無し'}
+  if(CPU_RATE[S.mode])return color===hcOf()?myName()+'　'+lvName(myLv()):MODE_NAME(S.mode)+'　'+lvName(lvOfRate(CPU_RATE[S.mode]));return color===1?'黒':'白'}catch(e){return ''}}
 $('xNow').addEventListener('click',()=>{if(!S.over)return;const L=window.BOCCH_LANG||'ja',w=S.over.win,me=fxMe(),n=(S.log||[]).length;
   const T=t=>{try{return window.bocchT?window.bocchT(t):t}catch(e){return t}},why=T(S.over.why||'');
   const R={ja:['勝ちました！','負けました…','黒の勝ち','白の勝ち','引き分け','bocchで%r（%w・%n手）'],en:['I won!','I lost…','Black wins','White wins','Draw','bocch: %r (%w, %n moves)'],
@@ -3381,7 +3444,8 @@ $('revImg').addEventListener('click',()=>{const g=REV.g;if(!g)return;const p=REV
 /* ランキング：開いた人のレートを中継サーバーに置く（名前を変えたら前の名前は 100 にして隠す） */
 function wkKey(d){d=d?new Date(d):new Date();const day=(d.getDay()+6)%7;d.setHours(0,0,0,0);d.setDate(d.getDate()-day);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function wkPrev(){const d=new Date();d.setDate(d.getDate()-7);return wkKey(d)}
-function rankPost(){try{const nm=myName(),r=Math.round(PROF.rating);if(!nm)return;if(PROF.rkName&&PROF.rkName!==nm)botSaveRate('p:'+PROF.rkName,100);if(PROF.rkName!==nm){PROF.rkName=nm;saveProf()}botSaveRate('p:'+nm,r)}catch(e){}}
+const rkEnc=(lv,pct)=>100+lvC(lv)*100+Math.min(99,Math.floor(pct)),rkDec=v=>({lv:lvC(Math.floor((v-100)/100)),pct:(v-100)%100});
+function rankPost(){try{const nm=myName();if(!nm)return;if(PROF.rkName&&PROF.rkName!==nm)botSaveRate('d:'+PROF.rkName,100);if(PROF.rkName!==nm){PROF.rkName=nm;saveProf()}botSaveRate('d:'+nm,rkEnc(PROF.dan.lv,PROF.dan.pct))}catch(e){}}
 const RK={k:'all',data:null};
 async function rankOpen(){$('rkNote').textContent='読み込んでいます…';$('rkList').innerHTML='';rankPost();const kv=await botRates();RK.data=kv||{};$('rkNote').textContent=kv?'':'読み込めませんでした。通信を確かめてください。';
   // 名前付きのボット：まだレートが決まっていなければ、ランダム対戦と同じ1400〜1500で決めて保存
@@ -3390,15 +3454,15 @@ async function rankOpen(){$('rkNote').textContent='読み込んでいます…';
   $('rkPrev').textContent=RK.prev?'先月（'+(+monPrev().slice(5))+'月）の1位：'+RK.prev:'';
   rankRender()}
 function rankRender(){const d=RK.data||{},me=myName(),box=$('rkList');box.innerHTML='';
-  let rows=Object.entries(d).filter(([k,v])=>k.startsWith('p:')&&v>100).map(([k,v])=>[k.slice(2),v]);for(const nm of BOT_NAMES)if(Number.isFinite(d[nm]))rows.push([nm,d[nm]]);rows.sort((a,b)=>b[1]-a[1]);
+  let rows=rankRows(d);
   $('rkEmpty').hidden=!!rows.length;const myI=rows.findIndex(r=>r[0]===me);
   const show=rows.slice(0,10).map((r,i)=>[r,i]);if(myI>=10){show.push(null);show.push([rows[myI],myI])}
-  show.forEach(x=>{if(!x){const li=document.createElement('li');li.className='gap';li.textContent='…';box.append(li);return}const [[nm,v],i]=x;const li=document.createElement('li');if(nm===me)li.className='me';li.innerHTML='<span class="n"></span><span class="nm"></span><span class="v"></span>';li.querySelector('.n').textContent=i+1;li.querySelector('.nm').textContent=nm;if(i===0){li.classList.add('top1');li.querySelector('.nm').insertAdjacentHTML('afterbegin','<svg class="crown" viewBox="0 0 24 24" aria-label="1位"><path d="M3 18 L5 8 L9.5 12 L12 5 L14.5 12 L19 8 L21 18 Z" fill="#e9c46a" stroke="#8a6a3a" stroke-width="1" stroke-linejoin="round"/><circle cx="5" cy="7.5" r="1.4" fill="#d23b2f"/><circle cx="12" cy="4.5" r="1.5" fill="#d23b2f"/><circle cx="19" cy="7.5" r="1.4" fill="#d23b2f"/><rect x="3" y="18" width="18" height="2.4" rx="1" fill="#c9a24e"/></svg>')}li.querySelector('.v').textContent=v;box.append(li)})}
+  show.forEach(x=>{if(!x){const li=document.createElement('li');li.className='gap';li.textContent='…';box.append(li);return}const [[nm,v],i]=x;const li=document.createElement('li');if(nm===me)li.className='me';li.innerHTML='<span class="n"></span><span class="nm"></span><span class="v"></span>';li.querySelector('.n').textContent=i+1;li.querySelector('.nm').textContent=nm;if(i===0){li.classList.add('top1');li.querySelector('.nm').insertAdjacentHTML('afterbegin','<svg class="crown" viewBox="0 0 24 24" aria-label="1位"><path d="M3 18 L5 8 L9.5 12 L12 5 L14.5 12 L19 8 L21 18 Z" fill="#e9c46a" stroke="#8a6a3a" stroke-width="1" stroke-linejoin="round"/><circle cx="5" cy="7.5" r="1.4" fill="#d23b2f"/><circle cx="12" cy="4.5" r="1.5" fill="#d23b2f"/><circle cx="19" cy="7.5" r="1.4" fill="#d23b2f"/><rect x="3" y="18" width="18" height="2.4" rx="1" fill="#c9a24e"/></svg>')}{const q=rkDec(v);li.querySelector('.v').textContent=lvName(q.lv)+(q.lv>=10?' '+q.pct+'%':'')}box.append(li)})}
 
 /* 月間一位：新しい月に最初に開いた人が、その時点の1位を「先月の1位」としてサーバーに記録する（m:YYYY-MM:名前）。自分が記録されていればバッジ */
 function monKey(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
 function monPrev(){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return monKey(d)}
-function rankRows(d){const rows=Object.entries(d).filter(([k,v])=>k.startsWith('p:')&&v>100).map(([k,v])=>[k.slice(2),v]);for(const nm of BOT_NAMES)if(Number.isFinite(d[nm]))rows.push([nm,d[nm]]);return rows.sort((a,b)=>b[1]-a[1])}
+function rankRows(d){const rows=Object.entries(d).filter(([k,v])=>k.startsWith('d:')&&v>100).map(([k,v])=>[k.slice(2),v]);for(const nm of BOT_NAMES)if(Number.isFinite(d[nm]))rows.push([nm,rkEnc(lvOfRate(d[nm]),50)]);return rows.sort((a,b)=>b[1]-a[1])}
 function monCheck(kv){if(!kv)return;const pm=monPrev(),pk='m:'+pm+':';if(pm<'2026-10'){RK.prev='';return} // 最初の記録は10月の1位からlet w=Object.entries(kv).filter(([k])=>k.startsWith(pk)).sort((a,b)=>b[1]-a[1])[0];
   if(!w){const top=rankRows(kv)[0];if(top){botSaveRate(pk+top[0],top[1]);kv[pk+top[0]]=top[1];w=[pk+top[0],top[1]]}}
   RK.prev=w?w[0].slice(pk.length):'';
