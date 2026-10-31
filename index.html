@@ -3453,7 +3453,7 @@ $('revImg').addEventListener('click',()=>{const g=REV.g;if(!g)return;const p=REV
 function wkKey(d){d=d?new Date(d):new Date();const day=(d.getDay()+6)%7;d.setHours(0,0,0,0);d.setDate(d.getDate()-day);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function wkPrev(){const d=new Date();d.setDate(d.getDate()-7);return wkKey(d)}
 const rkEnc=(lv,pct)=>100+lvC(lv)*100+Math.min(99,Math.floor(pct)),rkDec=v=>({lv:lvC(Math.floor((v-100)/100)),pct:(v-100)%100});
-function rankPost(){try{const nm=myName();if(!nm)return;if(PROF.rkName&&PROF.rkName!==nm)botSaveRate('d:'+PROF.rkName,100);if(PROF.rkName!==nm){PROF.rkName=nm;saveProf()}botSaveRate('d:'+nm,rkEnc(PROF.dan.lv,PROF.dan.pct))}catch(e){}}
+function rankPost(){try{const nm=myName();if(!nm)return;if(PROF.rkName&&PROF.rkName!==nm){botSaveRate('d:'+PROF.rkName,100);botSaveRate('p:'+PROF.rkName,100)}if(PROF.rkName!==nm){PROF.rkName=nm;saveProf()}botSaveRate('d:'+nm,rkEnc(PROF.dan.lv,PROF.dan.pct));botSaveRate('p:'+nm,Math.max(101,Math.round(PROF.rating)))}catch(e){}}
 const RK={k:'all',data:null};
 async function rankOpen(){$('rkNote').textContent='読み込んでいます…';$('rkList').innerHTML='';rankPost();const kv=await botRates();RK.data=kv||{};$('rkNote').textContent=kv?'':'読み込めませんでした。通信を確かめてください。';
   // 名前付きのボット：まだレートが決まっていなければ、ランダム対戦と同じ1400〜1500で決めて保存
@@ -3470,7 +3470,12 @@ function rankRender(){const d=RK.data||{},me=myName(),box=$('rkList');box.innerH
 /* 月間一位：新しい月に最初に開いた人が、その時点の1位を「先月の1位」としてサーバーに記録する（m:YYYY-MM:名前）。自分が記録されていればバッジ */
 function monKey(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
 function monPrev(){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return monKey(d)}
-function rankRows(d){const rows=Object.entries(d).filter(([k,v])=>k.startsWith('d:')&&v>100).map(([k,v])=>[k.slice(2),v]);return rows.sort((a,b)=>b[1]-a[1])}
+/* ランキングの並び：段級（達成率）の高い順。同じなら内部レートの高い順。
+   人は d:名前（段級）と p:名前（レート）、名前付きCPUは d:名前（段級）と 名前（レート）。30級でもレートがあれば載る */
+function rankRows(d){const M=new Map(),put=(nm,k,v)=>{const o=M.get(nm)||{dv:100,rt:0};o[k]=v;M.set(nm,o)};
+  for(const [k,v] of Object.entries(d)){if(!(v>100))continue;if(k.startsWith('d:'))put(k.slice(2),'dv',v);else if(k.startsWith('p:'))put(k.slice(2),'rt',v)}
+  for(const nm of BOT_NAMES)if(Number.isFinite(d[nm])){const o=M.get(nm)||{dv:100,rt:0};o.rt=d[nm];M.set(nm,o)}
+  return [...M].filter(([nm,o])=>o.dv>100||o.rt>100).map(([nm,o])=>[nm,o.dv,o.rt]).sort((a,b)=>b[1]-a[1]||b[2]-a[2])}
 function monCheck(kv){if(!kv)return;const pm=monPrev(),pk='m:'+pm+':';if(pm<'2026-10'){RK.prev='';return} // 最初の記録は10月の1位からlet w=Object.entries(kv).filter(([k])=>k.startsWith(pk)).sort((a,b)=>b[1]-a[1])[0];
   if(!w){const top=rankRows(kv)[0];if(top){botSaveRate(pk+top[0],top[1]);kv[pk+top[0]]=top[1];w=[pk+top[0],top[1]]}}
   RK.prev=w?w[0].slice(pk.length):'';
