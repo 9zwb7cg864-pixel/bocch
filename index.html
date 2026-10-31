@@ -700,6 +700,8 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .scr[data-scr=home] .rules-link{top:12px;right:12px;width:36px;height:36px;border:1px solid var(--gold-line);border-radius:50%;color:var(--gold);padding:7px}
 .scr[data-scr=home] .rules-link svg{width:20px;height:20px}
 .scr[data-scr=home] .ver{right:56px!important;top:20px}
+.hm .hm-card{display:block;width:100%;text-align:left;padding:14px 12px 13px 14px}.hm-mn,.hm-bar,.hm-mf{display:flex}.hm-bar{display:block}.hm-mi{display:block}
+.hm-cchv{width:16px!important;height:16px!important;margin-left:2px;align-self:center}.hm-card:active{transform:scale(.99)}
 html:not([lang=ja]) .hm-menu span{font-size:10.5px}
 html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is([lang=en],[lang=es],[lang=de]) .hm-sub .hm-fimg img{height:36px}
 </style>
@@ -717,21 +719,17 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
     </div>
     <button class="hm-chp" id="hmChamp" data-go="rank" type="button" hidden><svg class="cr" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18 L5 8 L9.5 12 L12 5 L14.5 12 L19 8 L21 18 Z" fill="#e9c46a" stroke="#8a6a3a" stroke-width="1" stroke-linejoin="round"/><rect x="3" y="18" width="18" height="2.4" rx="1" fill="#c9a24e"/></svg><small id="hmChampM"></small><b id="hmChampN" class="no-i18n"></b><span class="hm-cst"><span class="stone b" id="hmChampS"></span></span><em id="hmChampL"></em><svg class="chv" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
 
-    <div class="hm-card fold" id="meCard">
-      <div class="hm-me" id="meTop" role="button" tabindex="0" aria-expanded="false" aria-controls="meMore">
+    <button class="hm-card" id="meBtn" data-go="profile" type="button" aria-label="アカウント・段級・棋風">
+      <span class="hm-me" id="meTop">
         <span class="hm-rk"><span class="stone b" id="meStone"></span></span>
-        <div class="hm-mi">
-          <div class="hm-mn"><b id="meName"></b><em id="meRate"></em><span class="hm-sk" id="meStreak" aria-hidden="true"></span></div>
-          <div class="hm-bar"><u><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s></u><i id="meBar"></i></div>
-          <div class="hm-mf"><span><span>達成率</span> <b id="mePct"></b></span><span id="meNext"></span></div>
-        </div>
-        <svg class="hm-fdv" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-      </div>
-      <div class="hm-more" id="meMore">
-        <button class="kf-chip hm-row" id="kfChip" data-go="kifu" type="button" hidden></button>
-        <button class="hm-row hm-reg" id="meBtn" data-go="profile" type="button"><span id="meEdit">アカウント</span><span class="hm-regh" id="meRegH">登録すると、名前と段級が残ります</span><svg class="chv" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
-      </div>
-    </div>
+        <span class="hm-mi">
+          <span class="hm-mn"><b id="meName"></b><em id="meRate"></em><span class="hm-sk" id="meStreak" aria-hidden="true"></span></span>
+          <span class="hm-bar"><u><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s></u><i id="meBar"></i></span>
+          <span class="hm-mf"><span><span>達成率</span> <b id="mePct"></b></span><span id="meNext"></span></span>
+        </span>
+        <svg class="chv hm-cchv" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </span>
+    </button>
 
     <button class="hm-resume i-play" id="resumeBtn" hidden></button>
     <button class="hm-resume i-play" id="rematchBtn" hidden>マッチングに復帰（相手を探し直す）</button>
@@ -3922,10 +3920,7 @@ function hmCard(){const lv=myLv(),D=PROF.dan||{lv:0,pct:0},st=$('meStone');if(!s
   st.className='stone b'+rankCls(lv);
   const pct=lv<10?0:Math.max(0,Math.min(100,Math.floor(D.pct||0)));$('meBar').style.width=pct+'%';$('mePct').textContent=lv<10?'—':pct+'%';
   $('meNext').textContent=lv>=LV_MAX&&pct>=100?'最高位':lv<10?'1勝で昇級':(lv+1>=30?'昇段まで あと':'昇級まで あと')+(100-pct)+'%';
-  let k=0;try{k=Math.min(5,bdStats().streak|0)}catch(e){}$('meStreak').innerHTML='<i></i>'.repeat(k);$('meStreak').title=k?k+'連勝中':'';
-  $('meRegH').hidden=named()}
-{const mc=$('meCard'),top=$('meTop');const tg=()=>{const o=mc.classList.toggle('fold');top.setAttribute('aria-expanded',String(!o))};
-  top.addEventListener('click',tg);top.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();tg()}})}
+  let k=0;try{k=Math.min(5,bdStats().streak|0)}catch(e){}$('meStreak').innerHTML='<i></i>'.repeat(k);$('meStreak').title=k?k+'連勝中':'';}
 try{hmCard()}catch(e){}
 /* 先月の1位：盤の下に1行で出す。押すとランキング */
 function hmChamp(kv){const nm=RK.prev;if(!nm||!kv)return;const r=rankRows(kv).find(x=>x[0]===nm),lv=r&&r[1]>100?rkDec(r[1]).lv:0;
