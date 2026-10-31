@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=19"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=20"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -47,6 +47,20 @@
   --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
   color-scheme:dark;
 }
+:root{--i-l:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M15 5l-7 7 7 7' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");--i-r:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 5l7 7-7 7' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");--i-d:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");--i-u:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 15l6-6 6 6' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");--i-play:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 4.5v15l12-7.5z' fill='black'/%3E%3C/svg%3E");--i-pause:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 5h3.5v14H7zM13.5 5H17v14h-3.5z' fill='black'/%3E%3C/svg%3E");--i-prev:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17 4.5v15L5 12z' fill='black'/%3E%3C/svg%3E");--i-next:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 4.5v15l12-7.5z' fill='black'/%3E%3C/svg%3E");--i-ext:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14 4h6v6M20 4l-9 9M18 14v5H5V6h5' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");--i-check:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");--i-plus:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 5v14M5 12h14' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");--i-undo:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 14L4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");--i-reset:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M20 12a8 8 0 1 1-2.4-5.7M20 4v6h-6' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");--ic-d:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%23d8bd7e' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");--ic-u:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 15l6-6 6 6' fill='none' stroke='%23d8bd7e' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+/* 線のアイコン（文字の記号の代わり）。色は文字色に合わせる */
+.i-l::before,.i-play::before,.i-pause::before,.i-prev::before,.i-check::before,.i-plus::before,.i-undo::before,.i-reset::before,.i-next::before,
+.i-r::after,.i-ext::after,.i-next-a::after,.kf-go::before,.fr-chev::before{content:"";display:inline-block;width:1em;height:1em;vertical-align:-.15em;background:currentColor;-webkit-mask:var(--m) no-repeat center/contain;mask:var(--m) no-repeat center/contain;flex:none}
+.i-l::before{--m:var(--i-l);margin-right:.25em}.i-r::after{--m:var(--i-r);margin-left:.25em;width:.85em}
+.i-play::before{--m:var(--i-play);margin-right:.45em;width:.95em;height:.95em}.i-pause::before{--m:var(--i-pause);margin-right:.45em;width:.95em;height:.95em}
+.i-prev::before{--m:var(--i-prev);margin-right:.4em;width:.75em}.i-next::before{--m:var(--i-next);width:.75em}.i-next-a::after{--m:var(--i-next);margin-left:.4em;width:.75em}
+.i-check::before{--m:var(--i-check);margin-right:.35em}.i-plus::before{--m:var(--i-plus);margin-right:.3em}
+.i-undo::before{--m:var(--i-undo)}.i-reset::before{--m:var(--i-reset)}.i-ext::after{--m:var(--i-ext);margin-left:.3em;width:.9em}
+.i-only::before{margin:0!important;width:1.1em;height:1.1em}.i-only.i-prev::before,.i-only.i-next::before{width:.85em}
+.kf-go::before{--m:var(--i-r)}.fr-chev::before{--m:var(--i-d);width:.9em}.fr-chev.up::before{--m:var(--i-u)}
+.svs{width:1em;height:1em;vertical-align:-.13em;color:var(--gold)}.cs-msg .stars{margin-left:.5em;letter-spacing:.1em}.cs-msg .stars .svs{width:1.1em;height:1.1em}
+.ln-ex button>span:first-child::before{content:"";display:inline-block;width:.55em;height:.55em;border-radius:50%;margin-right:.4em;vertical-align:.08em;background:var(--qc,#888)}
+.ln-ex .q0{--qc:#f0d896}.ln-ex .l1{--qc:#8fbf9a}.ln-ex .l2{--qc:#a89e8a}.ln-ex .l3{--qc:#d9a08b}.ln-ex .l4{--qc:#d9614f}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 .wchat{border-color:rgba(201,169,110,.45)}.wchat .chat-head b{color:var(--gold)}.wchat .chat-log{min-height:1.6em}
@@ -325,8 +339,8 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .kifu{margin:10px auto 0;max-width:420px;font-size:12.5px;line-height:1.55;color:var(--sub);text-align:left;padding:6px 10px;border:1px solid var(--line);border-radius:2px;font-variant-numeric:tabular-nums}
 .kifu summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:10px;min-height:28px;align-items:center}
 .kifu summary::-webkit-details-marker{display:none}
-.kifu summary::after{content:"開く ▾";color:var(--gold);font-size:12px;flex:none}
-.kifu[open] summary::after{content:"たたむ ▴"}
+.kifu summary::after{content:"開く";padding-right:16px;background:var(--ic-d) no-repeat right center/11px;color:var(--gold);font-size:12px;flex:none}
+.kifu[open] summary::after{content:"たたむ";background-image:var(--ic-u)}
 .kifu #kifu{max-height:7.8em;overflow-y:auto;padding-top:6px;margin-top:4px;border-top:1px solid var(--line)}
 .chks{justify-content:center;gap:18px}
 .nolab .lab{display:none}
@@ -602,11 +616,11 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
     <h1>bocch</h1>
     <p class="tag">ひとりぼっちの石は、動けない。</p>
     <p class="online" id="onlineNow" hidden><i></i><span></span></p>
-    <button class="me-btn" id="meBtn" data-go="profile"><span id="meName"></span><span class="me-rate" id="meRate"></span><span class="me-edit" id="meEdit">アカウント ›</span></button>
+    <button class="me-btn" id="meBtn" data-go="profile"><span id="meName"></span><span class="me-rate" id="meRate"></span><span class="me-edit i-r" id="meEdit">アカウント</span></button>
     <button class="kf-chip" id="kfChip" data-go="kifu" type="button" hidden></button>
     <nav class="menu" aria-label="メニュー">
-      <button class="big resume" id="resumeBtn" hidden></button>
-      <button class="big resume" id="rematchBtn" hidden>▶ マッチングに復帰（相手を探し直す）</button>
+      <button class="big resume i-play" id="resumeBtn" hidden></button>
+      <button class="big resume i-play" id="rematchBtn" hidden>マッチングに復帰（相手を探し直す）</button>
       <button class="primary big" id="randomBtn">ランダム対戦</button>
       <button class="big" data-go="friend">友だちと対戦</button>
       <button class="big" data-go="solo">ひとりで遊ぶ</button>
@@ -619,7 +633,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
         <li>途中の石は飛び越えてよい。石は取られない</li>
         <li>向こう岸に自分の石が2つ着いたら勝ち</li>
       </ol>
-      <div class="row"><button id="hrOk">読んだ</button><button class="primary" id="hrLearn">4問で覚える ›</button></div>
+      <div class="row"><button id="hrOk">読んだ</button><button class="primary i-r" id="hrLearn">4問で覚える</button></div>
     </div>
     <nav class="sub-menu" aria-label="その他">
       <button data-go="watch" aria-label="観戦する"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>観戦</span></button>
@@ -649,7 +663,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 
 <!-- 友だちと対戦 -->
 <section class="scr" data-scr="friend" hidden>
-  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>友だちと対戦</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>友だちと対戦</h2><span class="sp"></span></div>
   <div id="net" class="stack">
     <div id="netIdle" class="stack">
       <div class="card stack">
@@ -670,7 +684,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 
 <!-- 招待（相手待ち） -->
 <section class="scr" data-scr="invite" hidden>
-  <div class="topbar"><button class="back" id="cancel">‹ やめる</button><h2>相手を待っています</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back i-l" id="cancel">やめる</button><h2>相手を待っています</h2><span class="sp"></span></div>
   <div id="netHost" class="stack center">
     <div class="mark" aria-hidden="true"><span class="dot b big"></span><span class="dot ghost big"></span></div>
     <p class="lead">この部屋のリンクを送ってください。<br>相手が開くと、すぐに対局が始まります。</p>
@@ -684,7 +698,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 
 <!-- ランダム対戦（相手探し） -->
 <section class="scr" data-scr="match" hidden>
-  <div class="topbar"><button class="back" id="matchCancel">‹ やめる</button><h2>ランダム対戦</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back i-l" id="matchCancel">やめる</button><h2>ランダム対戦</h2><span class="sp"></span></div>
   <div class="stack center seek">
     <div class="mark searching" aria-hidden="true"><span class="dot b big"></span><span class="dot w big"></span></div>
     <p class="status" id="matchTitle">相手を探しています</p>
@@ -696,7 +710,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 
 <!-- 対局履歴 -->
 <section class="scr" data-scr="history" hidden>
-  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>対局履歴</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>対局履歴</h2><span class="sp"></span></div>
   <p class="lead hist-note">終わった対局はこの端末に自動で残ります。選ぶと感想戦を開きます。</p>
   <div class="hist" id="histList"></div>
   <p class="hist-empty" id="histEmpty">まだ対局がありません。</p>
@@ -706,7 +720,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 
 <!-- 感想戦 -->
 <section class="scr" data-scr="rank" hidden>
-  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>ランキング</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>ランキング</h2><span class="sp"></span></div>
   <p class="note rk-note">bocchを開いた人の段級の、上位10人と自分の順位です。段級はオンライン対戦とCPU戦（1手戻しなし）で変わります。月が変わるときに1位だった人には「月間一位」のバッジが付きます。</p>
   <p class="rk-prev" id="rkPrev"></p>
   <p class="note rk-note" id="rkNote"></p>
@@ -714,28 +728,28 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
   <p class="hist-empty" id="rkEmpty" hidden>まだ載っている人がいません。</p>
 </section>
 <section class="scr" data-scr="course" hidden>
-  <div class="topbar"><button class="back" id="csBack">‹ 戻る</button><h2 id="csTitle">学ぶ</h2><span class="sp cs-tot" id="csTot"></span></div>
+  <div class="topbar"><button class="back i-l" id="csBack">戻る</button><h2 id="csTitle">学ぶ</h2><span class="sp cs-tot" id="csTot"></span></div>
   <div id="csMap">
-    <a class="cs-yt" href="https://www.youtube.com/@bocch.official" target="_blank" rel="noopener"><span class="pl">▶</span><span><b>YouTube「bocch定跡研究」</b><small>戦法や定跡を、動画でも解説しています ›</small></span></a>
-    <a class="cs-yt cs-x" href="https://x.com/kairo10000" target="_blank" rel="noopener"><span class="pl">𝕏</span><span><b>X（公式）</b><small>新しい動画や機能のお知らせ ›</small></span></a>
+    <a class="cs-yt" href="https://www.youtube.com/@bocch.official" target="_blank" rel="noopener"><span class="pl"><svg viewBox="0 0 28 20" width="28" height="20" aria-hidden="true"><rect width="28" height="20" rx="5" fill="#e05a4a"/><path d="M11 6v8l7-4z" fill="#fff"/></svg></span><span><b>YouTube「bocch定跡研究」</b><small>戦法や定跡を、動画でも解説しています</small></span></a>
+    <a class="cs-yt cs-x" href="https://x.com/kairo10000" target="_blank" rel="noopener"><span class="pl"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 4l16 16M20 4L4 20" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></span><span><b>X（公式）</b><small>新しい動画や機能のお知らせ</small></span></a>
     <div class="cs-prog"><i id="csBar"></i></div><p class="cs-progt" id="csProgT"></p>
     <div id="csList"></div>
-    <button class="cs-ref" id="csRef">資料 ›<small>勝ち方ガイド：試し盤・定跡を盤で見る・手筋の図・26,000局のデータ</small></button>
+    <button class="cs-ref" id="csRef">資料<small>勝ち方ガイド：試し盤・定跡を盤で見る・手筋の図・26,000局のデータ</small></button>
   </div>
   <div id="csLv" hidden>
     <div class="cs-dots" id="csDots"></div>
     <p class="cs-goal" id="csGoal"></p>
     <div class="boardwrap"><div class="board" id="cboard"><div class="grid" id="cgrid" aria-label="講座の盤"></div></div></div>
     <p class="cs-msg" id="csMsg"></p>
-    <div class="row cs-btns"><button id="csRetry">やり直し</button><button id="csHint">ヒント</button><button class="primary" id="csNext" hidden>次へ ›</button></div>
+    <div class="row cs-btns"><button id="csRetry">やり直し</button><button id="csHint">ヒント</button><button class="primary i-r" id="csNext" hidden>次へ</button></div>
   </div>
 </section>
 <section class="scr" data-scr="ref" hidden>
-  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>資料</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>資料</h2><span class="sp"></span></div>
   <iframe id="refFrame" title="資料（勝ち方ガイド）" class="ref-frame" loading="lazy"></iframe>
 </section>
 <section class="scr" data-scr="daily" hidden>
-  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>毎日の1問</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>毎日の1問</h2><span class="sp"></span></div>
   <p class="rev-head" id="dqHead"></p>
   <div class="boardwrap rev-board"><div class="board" id="dboard"><div class="lab lab-top" id="dlabTop" aria-hidden="true"></div><div class="lab lab-left" id="dlabLeft" aria-hidden="true"></div><div class="grid" id="dgrid" aria-label="毎日の1問の盤"></div></div></div>
   <p class="dq-msg" id="dqMsg"></p>
@@ -746,18 +760,18 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
   <p class="note dq-note">相手がどう受けても、2手で勝てる手が1つだけあります。その日の最初の挑戦だけが連続記録に入ります（2回目からは練習）。問題は毎日0時に変わります。</p>
 </section>
 <section class="scr" data-scr="review" hidden>
-  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>感想戦</h2><span class="rbtns"><button class="back rshare" id="revImg">画像 ↗</button><button class="back rshare" id="revShare">共有 ↗</button></span></div>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>感想戦</h2><span class="rbtns"><button class="back rshare" id="revImg"><span class="i-ext">画像</span></button><button class="back rshare" id="revShare"><span class="i-ext">共有</span></button></span></div>
   <p class="rev-head" id="revHead"></p>
   <p class="rev-share-msg" id="revShareMsg" hidden></p>
   <div class="boardwrap rev-board"><div class="board" id="rboard"><div class="lab lab-top" id="rlabTop" aria-hidden="true"></div><div class="lab lab-left" id="rlabLeft" aria-hidden="true"></div><div class="grid" id="rgrid" aria-label="感想戦の盤"></div></div></div>
   <div class="row rev-nav">
-    <button id="rPrev" aria-label="1手戻る">◀</button><span class="rev-ply" id="revPly"></span><button id="rNext" aria-label="1手進む">▶</button>
+    <button id="rPrev" class="i-only i-prev" aria-label="1手戻る"></button><span class="rev-ply" id="revPly"></span><button id="rNext" class="i-only i-next" aria-label="1手進む"></button>
   </div>
   <div class="rev-info">
     <p class="rev-move" id="revMove"></p>
     <div class="rev-note" id="revNote"></div>
   </div>
-  <div class="rev-graph" id="revGraphBox"><button class="graph-unlock" id="graphUnlock" hidden>▶ 広告を見て、形勢グラフを見る<small>最強での深い再解析もつきます</small></button><svg id="revGraph" viewBox="0 0 300 84" preserveAspectRatio="none" role="img" aria-label="形勢のグラフ"></svg><div class="rev-graph-lab"><span>上ほど黒有利・下ほど白有利</span><span id="revProg"></span></div></div>
+  <div class="rev-graph" id="revGraphBox"><button class="graph-unlock i-play" id="graphUnlock" hidden>広告を見て、形勢グラフを見る<small>最強での深い再解析もつきます</small></button><svg id="revGraph" viewBox="0 0 300 84" preserveAspectRatio="none" role="img" aria-label="形勢のグラフ"></svg><div class="rev-graph-lab"><span>上ほど黒有利・下ほど白有利</span><span id="revProg"></span></div></div>
   <div class="row chks"><label class="chk"><input type="checkbox" id="rShowBest" checked> 最善手を表示</label><label class="chk"><input type="checkbox" id="rOnlyBad"> 悪手だけ追う</label></div>
   <div class="deep-box" id="deepBox"><button id="deepBtn" class="deep-btn"></button><p class="deep-note" id="deepNote"></p></div>
   <div class="rev-list" id="revList"></div>
@@ -765,7 +779,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 
 <!-- 観戦 -->
 <section class="scr" data-scr="friends" hidden>
-  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>フレンド</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>フレンド</h2><span class="sp"></span></div>
   <div id="frNeed" class="card prof" hidden><p class="note">フレンド機能は、アカウントに登録してログインし、名前を付けると使えます。</p><button class="primary" data-go="profile">アカウントへ</button></div>
   <div id="frMain" hidden>
     <p class="lead hist-note">フレンドの対局（研究以外）を、対局中は観戦、終わった対局は12時間以内なら感想戦で見られます。</p>
@@ -776,7 +790,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
   </div>
 </section>
 <section class="scr" data-scr="watch" hidden>
-  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>観戦する</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>観戦する</h2><span class="sp"></span></div>
   <p class="lead hist-note">いま対局中の部屋です。選ぶと観戦できます（指すことはできません）。</p>
   <button class="big primary ai-watch" id="aiWatch">AIを観戦する（最強 対 最強）</button>
   <div class="hist" id="watchList"></div>
@@ -786,7 +800,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 
 <!-- プロフィール -->
 <section class="scr" data-scr="kifu" hidden>
-  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>あなたの棋風</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>あなたの棋風</h2><span class="sp"></span></div>
   <div class="card prof kf" id="kfCard">
     <div id="kfBody"></div>
   </div>
@@ -797,7 +811,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 </section>
 
 <section class="scr" data-scr="profile" hidden>
-  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>アカウント</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>アカウント</h2><span class="sp"></span></div>
   <div class="card prof">
     <label class="prof-l" for="nameIn">名前（12文字まで）</label>
     <div class="row prof-row"><input type="text" id="nameIn" maxlength="12" autocomplete="nickname" placeholder="名無し"><button id="nameSave" class="primary">保存</button></div>
@@ -836,7 +850,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 
 <!-- ひとりで遊ぶ -->
 <section class="scr" data-scr="solo" hidden>
-  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>ひとりで遊ぶ</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>ひとりで遊ぶ</h2><span class="sp"></span></div>
   <div class="side-pick">
     <div class="side-l">CPU戦の手番</div>
     <div class="seg side-seg" id="sideSeg" role="group" aria-label="CPU戦の手番">
@@ -856,7 +870,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 
 <!-- ルール -->
 <section class="scr" data-scr="rules" hidden>
-  <div class="topbar"><button class="back" data-back>‹ 戻る</button><h2>ルール</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>ルール</h2><span class="sp"></span></div>
   <div class="card rules">
     <ol>
       <li>自分の石を1つ選び、縦・横・斜めにまっすぐ動かす</li>
@@ -872,8 +886,8 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 
 <!-- 対局 -->
 <section class="scr" data-scr="game" hidden>
-  <div id="duoBar" hidden><button id="duoBack" aria-label="ホームへ">‹</button><button id="duoUndo" aria-label="1手戻す">↶</button><button id="duoReset" aria-label="最初から">↺</button></div>
-  <div class="topbar"><button class="back" id="gameBack">‹ ホーム</button><span class="conn" id="conn"><i></i><span id="connTxt"></span></span><button class="back" data-go="rules">ルール</button></div>
+  <div id="duoBar" hidden><button id="duoBack" class="i-only i-l" aria-label="ホームへ"></button><button id="duoUndo" class="i-only i-undo" aria-label="1手戻す"></button><button id="duoReset" class="i-only i-reset" aria-label="最初から"></button></div>
+  <div class="topbar"><button class="back i-l" id="gameBack">ホーム</button><span class="conn" id="conn"><i></i><span id="connTxt"></span></span><button class="back" data-go="rules">ルール</button></div>
   <div class="players top" id="plTop" hidden></div>
   <div class="boardwrap"><div class="board" id="board"><div class="lab lab-top" id="labTop" aria-hidden="true"></div><div class="lab lab-left" id="labLeft" aria-hidden="true"></div><div class="lab lab-bot" id="labBot" aria-hidden="true"></div><div class="lab lab-right" id="labRight" aria-hidden="true"></div><div class="grid" id="grid" role="grid" aria-label="盤"></div></div></div>
   <div class="players bot" id="plBot" hidden></div>
@@ -911,11 +925,11 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
       <label>白のAI<select id="stW"><option value="0">人が指す</option><option value="1">やさしい</option><option value="2">ふつう</option><option value="3">つよい</option><option value="4">最強</option></select></label>
       <label>速さ<select id="stSp"><option value="1500">ゆっくり</option><option value="600" selected>ふつう</option><option value="150">はやい</option></select></label>
     </div>
-    <div class="row st-btns"><button id="stRun" class="primary">▶ AIに指させる</button><button id="stOne">AIに1手だけ</button></div>
+    <div class="row st-btns"><button id="stRun" class="primary i-play">AIに指させる</button><button id="stOne">AIに1手だけ</button></div>
     <div class="row chks"><label class="chk"><input type="checkbox" id="stEv" checked> 評価値</label><label class="chk"><input type="checkbox" id="stBest" checked> 最善手を盤に表示</label></div>
   </div>
   <div class="row rev-nav" id="watchNav" hidden>
-    <button id="wPrev" aria-label="1手戻る">◀</button><span class="rev-ply" id="wPly"></span><button id="wNext" aria-label="1手進む">▶</button><button id="wLive" class="w-live">最新へ</button>
+    <button id="wPrev" class="i-only i-prev" aria-label="1手戻る"></button><span class="rev-ply" id="wPly"></span><button id="wNext" class="i-only i-next" aria-label="1手進む"></button><button id="wLive" class="w-live">最新へ</button>
   </div>
   <div class="row" id="localCtl">
     <button id="undo">1手戻す</button>
@@ -926,7 +940,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
     <button id="rematch" class="primary" hidden>もう一局</button>
     <button id="reseek" hidden>相手を探し直す</button>
     <button id="leave" hidden>対戦をやめる</button>
-    <button id="frOpp" hidden>＋フレンド申請</button>
+    <button id="frOpp" class="i-plus" hidden>フレンド申請</button>
   </div>
   <div class="endrow" id="reviewRow" hidden><button id="reviewNow" class="endb main"><span>感想戦で振り返る</span></button><button id="xNow" class="endb"><span>Xで共有</span></button></div>
   <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 駒音</label></div>
@@ -1817,13 +1831,13 @@ const STUDY={run:false,lv:{1:0,2:0},sp:600,evKey:'',ev:null,ew:null,ply:-1,at:0}
 // 研究のAI同士：手が進まなくなったら（画面を離れた・考えが返ってこない等）指し直させる
 setInterval(()=>{if(!S||!S.study||!STUDY.run||S.over)return;if(S.ply!==STUDY.ply){STUDY.ply=S.ply;STUDY.at=Date.now();return}
   if(STUDY.lv[S.turn]&&Date.now()-STUDY.at>Math.max(9000,STUDY.sp+6000)){STUDY.at=Date.now();KICK='';WKkey='';kick()}},1500);
-function studyStart(){if(S.mode==='net')leave();S=initState(0);S.study=true;STUDY.run=false;STUDY.ev=null;STUDY.evKey='';KICK='';WKkey='';$('stRun').textContent='▶ AIに指させる';render();show('game')}
+function studyStart(){if(S.mode==='net')leave();S=initState(0);S.study=true;STUDY.run=false;STUDY.ev=null;STUDY.evKey='';KICK='';WKkey='';stBtn('AIに指させる',0);render();show('game')}
 function studyKick(){if(!STUDY.run||S.over)return;const lv=STUDY.lv[S.turn];if(!lv)return;const k='s:'+S.ply+':'+key(S.b,S.turn);if(KICK===k)return;KICK=k;
   setTimeout(()=>{if(S.study&&STUDY.run&&!S.over&&KICK==='s:'+S.ply+':'+key(S.b,S.turn))cpuPlay(S.turn,STUDY.lv[S.turn])},STUDY.sp)}
-function studyStop(){STUDY.run=false;KICK='';$('stRun').textContent='▶ AIに指させる';render()}
+function studyStop(){STUDY.run=false;KICK='';stBtn('AIに指させる',0);render()}
 function evWorker(){if(STUDY.ew!==null)return STUDY.ew;try{const src=$('eng').textContent+'\nonmessage=e=>{const d=e.data;const r=BocchEngine.think(d.b,d.p,d.ms,{history:d.history});postMessage({key:d.key,p:d.p,r})}';
   STUDY.ew=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));STUDY.ew.onmessage=e=>{const d=e.data;if(d.key!==STUDY.evKey)return;STUDY.ev=d;try{TALK.ev=d}catch(_){}renderStudy()}}catch(e){STUDY.ew=false}return STUDY.ew}
-function renderStudy(){const on=!!S.study;if(on&&S.over&&STUDY.run){STUDY.run=false;$('stRun').textContent='▶ もう一局AIに指させる'}$('studyPanel').hidden=!on;$('localCtl').classList.toggle('st',on);if(!on)return;
+function renderStudy(){const on=!!S.study;if(on&&S.over&&STUDY.run){STUDY.run=false;stBtn('もう一局AIに指させる',0)}$('studyPanel').hidden=!on;$('localCtl').classList.toggle('st',on);if(!on)return;
   const showEv=$('stEv').checked;$('studyPanel').querySelector('.ev-bar').hidden=!showEv;$('evTxt').parentElement.hidden=!showEv;$('evPv').hidden=!showEv;
   const k=S.ply+':'+key(S.b,S.turn);
   if(S.over){$('evFill').style.width=(S.over.win===1?100:S.over.win===2?0:50)+'%';$('evTxt').textContent=S.over.win?NAME[S.over.win]+'の勝ち':'引き分け';$('evBest').textContent='';$('evPv').textContent='';return}
@@ -1845,7 +1859,7 @@ $('stSp').addEventListener('change',e=>{STUDY.sp=+e.target.value});
 $('stRun').addEventListener('click',()=>{if(STUDY.run){studyStop();return}
   if(!STUDY.lv[1]&&!STUDY.lv[2]){STUDY.lv[1]=STUDY.lv[2]=2;$('stB').value=$('stW').value='2'}
   if(S.over){S=initState(0);S.study=true;STUDY.evKey=''}
-  STUDY.run=true;KICK='';$('stRun').textContent='⏸ 止める';render()});
+  STUDY.run=true;KICK='';stBtn('止める',1);render()});
 $('stOne').addEventListener('click',()=>{if(S.over||STUDY.run)return;cpuPlay(S.turn,STUDY.lv[S.turn]||3)});
 $('stEv').addEventListener('change',()=>{STUDY.evKey='';render()});$('stBest').addEventListener('change',render);
 $('duoUndo').addEventListener('click',()=>$('undo').click());$('duoReset').addEventListener('click',()=>$('reset').click());
@@ -2335,7 +2349,7 @@ function renderHistory(){const g=loadGames(),box=$('histList');box.innerHTML='';
     const r=document.createElement('span');r.className='res '+rc;r.textContent=rt;
     const m=document.createElement('span');m.className='meta';const mb=document.createElement('b');mb.textContent=MODE_NAME(x.mode)+(x.mode==='net'&&x.opp?'　対 '+x.opp:'')+(x.dn?'　'+x.dn:'');m.append(mb,document.createElement('br'),document.createTextNode(fmtDate(x.t)+'　'+x.log.length+'手'+(side?'　'+side:'')));
     const bd=document.createElement('span');bd.className='bad';bd.textContent=bad;
-    if(x.deep){const done=(x.an||[]).filter(Boolean).length>=x.log.length,tg=document.createElement('span');tg.className='done-tag'+(done?'':' part');tg.textContent=done?'✓ 解析済み':'解析の途中';bd.prepend(tg)}
+    if(x.deep){const done=(x.an||[]).filter(Boolean).length>=x.log.length,tg=document.createElement('span');tg.className='done-tag'+(done?'':' part');tg.textContent=done?'解析済み':'解析の途中';if(done)tg.classList.add('i-check');bd.prepend(tg)}
     b.append(r,m,bd);b.addEventListener('click',()=>openReview(x.id));box.appendChild(b)})}
 $('histClear').addEventListener('click',()=>{const b=$('histClear');if(b.dataset.arm){storeGames([]);delete b.dataset.arm;b.textContent='履歴をすべて消す';renderHistory()}else{b.dataset.arm='1';b.textContent='もう一度押すと消えます';setTimeout(()=>{delete b.dataset.arm;b.textContent='履歴をすべて消す'},3000)}});
 
@@ -2463,7 +2477,7 @@ function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n
     let hn='';if(HN&&HN.over)hn=`<div class="pv-ai">ここで${side(HN.over)}の勝ちです</div>`;else if(HN&&HN.m){const bp=HN.s>EWIN-1000?1:HN.s<-EWIN+1000?0:sig(EK*HN.s),blk=Math.round((HN.turn===1?bp:1-bp)*100);
       hn=(HN.s>EWIN-1000?`<div class="mate">詰みがあります（${side(HN.turn)}の${EWIN-Math.round(HN.s)}手詰め）</div>`:HN.s<-EWIN+1000?`<div class="mate miss">${side(3-HN.turn)}に詰みがあります（あと${EWIN-Math.round(-HN.s)}手）</div>`:'')+`<div class="pv-ai">AIの最善手：<b>${side(HN.turn)} ${mvTxt(HN.m)}</b>　形勢 黒${blk}%・白${100-blk}%<br>読み筋：${HN.pv.map((m,q)=>side(q%2?3-HN.turn:HN.turn)+mvTxt(m)).join(' → ')}</div>`}else if(!HN||HN.none===undefined)hn='<div class="pv-ai">AIが考えています…</div>';
     note+=`<div class="pvbox"><div class="pv-h">検討中　${v.base}手目の局面から（石を動かして試せます）</div>${hn}
-      <div class="pvctl"><button data-act="pvprev">◀ 戻る</button><span class="pvk">${v.k} / ${v.line.length}</span><button data-act="pvnext">進む ▶</button>
+      <div class="pvctl"><button class="i-prev" data-act="pvprev">戻る</button><span class="pvk">${v.k} / ${v.line.length}</span><button class="i-next-a" data-act="pvnext">進む</button>
       <button data-act="pvclose" class="primary">本筋に戻る</button></div>
       <div class="pvmoves">${mv2}</div></div>`}
   else{
@@ -2515,8 +2529,8 @@ function exHint(){const v=REV.pv;if(!v)return null;v.hints=v.hints||{};const key
     v.hints[key]=r&&r.move?{m:r.move,pv:(r.pv&&r.pv.length?r.pv:[r.move]).slice(0,6),s:r.score,turn:st.turn}:{none:1};renderReview()},30)}
   return null}
 function revCell(k){if(CUR!=='review'||!REV.g)return;const st=REV.pv?pvState():REV.pos[REV.i];
-  if(REV.pv&&REV.pv.k>0&&revWon(st.b,3-st.turn)){REV.sel=-1;revWarn('決着がついた局面です。「◀ 戻る」で手を戻せます');return}
-  if(!REV.pv&&REV.i>=REV.g.log.length&&REV.g.win){REV.sel=-1;revWarn('終局後の局面です。◀で戻ってから石を動かしてください');return}
+  if(REV.pv&&REV.pv.k>0&&revWon(st.b,3-st.turn)){REV.sel=-1;revWarn('決着がついた局面です。「戻る」で手を戻せます');return}
+  if(!REV.pv&&REV.i>=REV.g.log.length&&REV.g.win){REV.sel=-1;revWarn('終局後の局面です。「戻る」で戻ってから石を動かしてください');return}
   if(REV.sel>=0){const m=movesFrom(st.b,REV.sel).find(x=>x[1]===k);if(m){
     if(!REV.pv)pvOpen(REV.i,[[0,0]]),REV.pv.line=[];const v=REV.pv;v.line=v.line.slice(0,v.k).concat([[m[0],m[1]]]);v.k++;REV.sel=-1;renderReview();return}}
   if(st.b[k]===st.turn&&movesFrom(st.b,k).length){REV.sel=REV.sel===k?-1:k}else{REV.sel=-1;if(st.b[k]===3-st.turn){revWarn('今は'+(st.turn===1?'黒':'白')+'の番です。'+(st.turn===1?'黒':'白')+'の石を動かしてください');return}if(st.b[k]===st.turn){revWarn('この石は動けません（まわりに石がない「ぼっち」か、行き先がありません）');return}}renderReview()}
@@ -2885,11 +2899,11 @@ function kfMini(sc){const c=17,R=15,P=(i,r)=>[c+Math.cos(-Math.PI/2+i*Math.PI/3)
   return `<svg viewBox="0 0 34 34" aria-hidden="true"><polygon points="${[0,1,2,3,4,5].map(i=>P(i,R).join(',')).join(' ')}" fill="none" stroke="rgba(216,189,126,.35)"/><polygon points="${sc.map((v,i)=>P(i,R*v/100).join(',')).join(' ')}" fill="rgba(216,189,126,.35)" stroke="#f0d896" stroke-width="1.2"/></svg>`}
 function kfHome(){let k;try{k=kfCalc()}catch(e){return}
   // 未登録の人には棋風を出さず、アカウント登録へ案内する
-  if(!named()){const h=`${kfMini([20,20,20,20,20,20])}<span><small>あなたの棋風</small><b>アカウント登録で棋風を表示</b></span><span class="kf-go">›</span>`;
+  if(!named()){const h=`${kfMini([20,20,20,20,20,20])}<span><small>あなたの棋風</small><b>アカウント登録で棋風を表示</b></span><span class="kf-go"></span>`;
     for(const id of ['kfChip','kfChipProf']){const el=$(id);if(!el)continue;el.innerHTML=h;el.classList.add('pending');el.dataset.go='profile';if(id==='kfChip')el.hidden=false}return}
   for(const id of ['kfChip','kfChipProf']){const el=$(id);if(el)el.dataset.go='kifu'}
-  const h=k.sc?`${kfMini(k.sc)}<span><small>あなたの棋風</small><b>${k.name}</b></span><span class="kf-go">›</span>`
-    :`${kfMini([20,20,20,20,20,20])}<span><small>あなたの棋風</small><b>あと${5-k.n}局で診断</b></span><span class="kf-go">›</span>`;
+  const h=k.sc?`${kfMini(k.sc)}<span><small>あなたの棋風</small><b>${k.name}</b></span><span class="kf-go"></span>`
+    :`${kfMini([20,20,20,20,20,20])}<span><small>あなたの棋風</small><b>あと${5-k.n}局で診断</b></span><span class="kf-go"></span>`;
   for(const id of ['kfChip','kfChipProf']){const el=$(id);if(!el)continue;el.innerHTML=h;el.classList.toggle('pending',!k.sc);if(id==='kfChip')el.hidden=!k.sc&&k.n<1}}
 function kfAxRender(){const k=kfCalc(),c=$('kfAxCard');if(!c)return;c.hidden=!k.sc||!named();if(!k.sc)return;
   $('kfAx').innerHTML=KF_LAB.map((l,i)=>`<div class="kf-ax"><span>${l}</span><b>${k.sc[i]}</b><p>${KF_AXD[i]}</p></div>`).join('')}
@@ -2961,7 +2975,7 @@ function setActive(a){try{a?localStorage.setItem(AKEY,JSON.stringify(a)):localSt
 function updResume(){const b=$('resumeBtn');let a=getActive();if(a&&a.opp==='最強AI'){setActive(null);a=null} // AI観戦の部屋は「戻る」の対象にしない
   const show=!!a&&!(S.mode==='net'&&NET.code===a.code);b.hidden=!show;
   {let m=0;try{m=+localStorage.getItem('bocch-matching')||0}catch(e){}$('rematchBtn').hidden=!(m&&Date.now()-m<3*60*1000&&!MATCH.on&&!show)}
-  if(show){const nm=a.opp?a.opp+'との':'';b.textContent='▶ '+nm+'対局に戻る（部屋 '+a.code.toUpperCase()+'）'}}
+  if(show){const nm=a.opp?a.opp+'との':'';b.textContent=nm+'対局に戻る（部屋 '+a.code.toUpperCase()+'）'}}
 const _renderA=render;render=function(){_renderA();
   if(S.mode==='net'&&NET.code&&!NET.watch&&!NET.ai&&NET.guest&&colorOf(NET.me)>0){
     if(S.over)setActive(null);
@@ -2988,7 +3002,7 @@ function acctMsg(t,err){const m=$('acctMsg');m.textContent=t||'';m.style.color=e
 function acctErr(e){acctMsg(ACCT_ERR[e&&e.code]||('うまくいきませんでした（'+(e&&e.code||e)+'）'),true)}
 function acctRender(){const u=FB.user;$('acctOut').hidden=!!u;$('acctVerify').hidden=!(u&&!u.emailVerified);$('acctIn').hidden=!(u&&u.emailVerified);
   if(u){$('acctVEmail').textContent=u.email;$('acctUEmail').textContent=u.email}
-  const me=$('meEdit');if(me)me.textContent=u&&u.emailVerified?'ログイン中 ›':'アカウント ›'}
+  const me=$('meEdit');if(me)me.textContent=u&&u.emailVerified?'ログイン中':'アカウント'}
 function profData(){const o={name:PROF.name||'',rating:Math.round(PROF.rating*10)/10,games:PROF.games|0,w:PROF.w|0,l:PROF.l|0,d:PROF.d|0,rated:(PROF.rated||[]).slice(-150),peak:!!PROF.peak,cs:PROF.cs||{},st:PROF.st||{},bd:PROF.bd||[],sel:PROF.sel||'',dan:PROF.dan,t:Date.now()};if(KF_SYNC.ok)o.kifu=kifuPack();try{if(FR.loaded){o.friends=FR.friends;o.fout=FR.fout;o.fin=FR.fin}}catch(e){}return o}
 
 // アカウントのバッジと記録を、この端末のものと合わせる（大きい方・両方持っている方を残す）
@@ -3036,7 +3050,7 @@ $('acctChecked').addEventListener('click',async()=>{try{await FB.user.reload();F
 const acctOut=async()=>{try{await FB.auth.signOut();acctMsg('ログアウトしました。この端末の名前とレートはそのまま残ります。')}catch(e){acctErr(e)}};
 $('acctLogout').addEventListener('click',acctOut);$('acctLogout2').addEventListener('click',acctOut);
 // ログイン状態を復元するため、ページを開いたら少し後に読み込む（以前ログインしたことがある端末だけ）
-try{if(localStorage.getItem('bocch-acct')==='1')fbInit().catch(()=>{});if(localStorage.getItem('bocch-named')==='1'){const me=$('meEdit');if(me)me.textContent='ログイン中 ›'}}catch(e){}
+try{if(localStorage.getItem('bocch-acct')==='1')fbInit().catch(()=>{});if(localStorage.getItem('bocch-named')==='1'){const me=$('meEdit');if(me)me.textContent='ログイン中'}}catch(e){}
 $('meBtn').addEventListener('click',()=>{fbInit().catch(()=>{})});
 {const mark=()=>{try{localStorage.setItem('bocch-acct','1')}catch(e){}};$('acctLogin').addEventListener('click',mark);$('acctSignup').addEventListener('click',mark)}
 render();
@@ -3121,13 +3135,13 @@ function frRender(){if(!$('frMain'))return;const me=myUid();$('frNeed').hidden=!
   for(const {f,gs,live,on} of info){if(q&&!f.name.toLowerCase().includes(q))continue;const op=FR.open.has(f.uid);
     const it=mk('div','fr-item fr-c'+(op?' open':'')),top=mk('div','fr-top');
     const nb=mk('button','fr-name');nb.setAttribute('aria-expanded',String(op));const nm=mk('b','',f.name);nb.append(mk('i','fr-dot'+(on?' on':''),''));nb.lastChild.title=on?'オンライン':'オフライン';
-    const st=mk('span','fr-st'+(live||on?' live':''),live?'対局中（'+live.k.length/2+'手）':on?'オンライン':FR.feeds[f.uid]&&gs.length?'12時間で'+gs.length+'局':'');nb.append(nm,st,mk('i','fr-chev',op?'▴':'▾'));
+    const st=mk('span','fr-st'+(live||on?' live':''),live?'対局中（'+live.k.length/2+'手）':on?'オンライン':FR.feeds[f.uid]&&gs.length?'12時間で'+gs.length+'局':'');nb.append(nm,st,mk('i','fr-chev'+(op?' up':''),''));
     nb.onclick=()=>{op?FR.open.delete(f.uid):FR.open.add(f.uid);frRender()};
     const pl=mk('button','fr-play','対戦');pl.onclick=()=>frChallenge(f);top.append(nb,pl);it.append(top);
     if(op){const box=mk('div','fr-games');
-      if(live){const b=mk('button','primary',live.room?'▶ 観戦する（オンライン対戦）':'▶ 対局を見る（自動で更新）');b.onclick=()=>live.room?frWatchRoom(live.room):frOpen(f,live,true);box.append(b)}
+      if(live){const b=mk('button','primary',live.room?'観戦する（オンライン対戦）':'対局を見る（自動で更新）');b.classList.add('i-play');b.onclick=()=>live.room?frWatchRoom(live.room):frOpen(f,live,true);box.append(b)}
       for(const g of gs.filter(g=>g.over).slice(0,5)){const lg=frLog(g.k);if(!lg)continue;const r=g.win===0?'引き分け':g.me?f.name+(g.win===g.me?'の勝ち':'の負け'):(g.win===1?'黒':'白')+'勝ち';
-        const b=mk('button','',fmtDate(g._t*1000)+'　'+MODE_NAME(g.mode)+'　'+r+'（'+lg.length+'手）'+(g.opp?'　相手 '+g.opp:'')+'　感想戦 ›');b.onclick=()=>frOpen(f,g,false);box.append(b)}
+        const b=mk('button','',fmtDate(g._t*1000)+'　'+MODE_NAME(g.mode)+'　'+r+'（'+lg.length+'手）'+(g.opp?'　相手 '+g.opp:'')+'　感想戦');b.className='i-r';b.onclick=()=>frOpen(f,g,false);box.append(b)}
       if(!box.children.length)box.append(mk('div','fr-st',FR.feeds[f.uid]?'直近12時間の対局はありません':'読み込み中…'));
       const x=mk('button','fr-rm','フレンドから外す');x.onclick=()=>frRemove(f.uid);box.append(x);it.append(box)}
     lb.append(it)}}
@@ -3556,7 +3570,7 @@ function learnPanel(){const P=$('learnPanel');if(!P)return;P.hidden=!(S&&S.learn
   if(id==='mech'){h='<h3>仕組み：数字と動ける距離</h3><p>動ける距離は「まわり8マスにいる石の数（色は問わない）」です。石を動かすと、隣の石の数字も変わります。ここがこのゲームのいちばん大事なところです。</p><div class="ctl">'+Object.keys(LN_P).map(k=>'<button data-p="'+k+'" aria-pressed="'+((LN.preset||'start')===k)+'">'+LN_PN[k]+'</button>').join('')+'</div><div class="cap">'+LN_PM[LN.preset||'start']+'</div><div class="ctl"><button id="lnEdit" aria-pressed="'+LN.edit+'">石を置く（黒→白→空き）</button></div><p class="ln-note">「石を置く」をオフにすると、ふつうに石を動かせます。下の評価値は、いま並んでいる形で次が黒の番として計算しています。</p>'}
   else if(id==='stop'){const f=LN_DF[LN.fig|0];h='<h3>相手のリーチの止め方</h3><p>黒の石（数字2）が、2マス上のゴールに届く形です。上・右上・左上の3方向に届くので、着地点は最大3か所あります。</p><div class="ctl">'+LN_DF.map((x,i)=>'<button data-f="'+i+'" aria-pressed="'+((LN.fig|0)===i)+'">'+x.t.replace(/（.*）/,'')+'</button>').join('')+'</div><div class="cap"><b>'+f.t+'</b><span class="tag '+(f.ok?'ok':'ng')+'">'+(f.ok?'効く':'効きにくい')+'</span><br>'+f.d+'</div><p class="ln-note">白の番で並べています。実際に白を動かして、黒の数字がどう変わるか試してください。</p>'}
   else if(id.startsWith('tac:')){const it=LN_TAC.flatMap(x=>x[1]).find(x=>'tac:'+x[0]===id),st=it[4],cap=LN.k?st[LN.k-1].c:it[5];
-    h='<h3>'+it[0]+'<span class="tag '+(it[1]==='ok'?'ok':'ng')+'">'+(it[1]==='ok'?'使う':'注意')+'</span></h3><p>'+it[2]+'</p><div class="cap">'+cap+'</div><div class="ctl">'+(st.length?'<button id="lnNext"'+(LN.k>=st.length?' disabled':'')+'>▶ 次へ（'+LN.k+' / '+st.length+'）</button>':'')+'<button id="lnAgain">はじめから</button></div><p class="ln-note">図の石の並びはこの形のための例です。並んだあとは自由に石を動かして、評価値で確かめられます。</p>'}
+    h='<h3>'+it[0]+'<span class="tag '+(it[1]==='ok'?'ok':'ng')+'">'+(it[1]==='ok'?'使う':'注意')+'</span></h3><p>'+it[2]+'</p><div class="cap">'+cap+'</div><div class="ctl">'+(st.length?'<button class="i-play" id="lnNext"'+(LN.k>=st.length?' disabled':'')+'>次へ（'+LN.k+' / '+st.length+'）</button>':'')+'<button id="lnAgain">はじめから</button></div><p class="ln-note">図の石の並びはこの形のための例です。並んだあとは自由に石を動かして、評価値で確かめられます。</p>'}
   else if(id==='jos')h=lnJos();
   else if(LN_TEXT[id])h='<h3>'+LN_TEXT[id][0]+'</h3>'+LN_TEXT[id][1];
   B.innerHTML=h;
@@ -3575,9 +3589,9 @@ function lnJos(){const P=LN.path||[],pct=s=>Math.round(100/(1+Math.exp(-0.013*s)
   else if(P.length===2){opts=t3(P[0],P[1]);q='黒の3手目（全'+opts.length+'通り）'}
   let h='<h3>3手目までの定跡</h3><p class="ln-note">最強に、3手目までの全部の手を読ませた評価です。手を押すと盤が進みます。右は、その手を指したあとの黒の勝率の目安。盤の上で自由に動かしても評価値が出ます。</p>';
   h+='<div class="cap">'+(P.length?P.map((m,k)=>(k+1)+'. '+(k%2?'白':'黒')+' '+(lnName(m,k%2?2:1)||'')+' '+mv(m)).join('　'):'開始局面（黒の番）')+'</div>';
-  h+='<div class="ctl">'+(P.length?'<button id="lnJBack">◀ 1手戻る</button>':'')+'</div>';
+  h+='<div class="ctl">'+(P.length?'<button class="i-prev" id="lnJBack">1手戻る</button>':'')+'</div>';
   if(P.length>=3)return h+'<p>ここまでが定跡です。4手目からは、最強もその場で読んで指します。盤の上でそのまま続きを試せます。</p>';
-  opts.sort((a,b)=>a.p===1?b.s-a.s:a.s-b.s);const best=opts.length?opts[0].s:0,LV=[['★ 最善',''],['◎ 好手','l1'],['○ ふつう','l2'],['△ 疑問手','l3'],['✕ 悪手','l4']],lv=d=>d<=0?0:d<=20?1:d<=60?2:d<=120?3:4;
+  opts.sort((a,b)=>a.p===1?b.s-a.s:a.s-b.s);const best=opts.length?opts[0].s:0,LV=[['最善','q0'],['好手','l1'],['ふつう','l2'],['疑問手','l3'],['悪手','l4']],lv=d=>d<=0?0:d<=20?1:d<=60?2:d<=120?3:4;
   h+='<p><b>'+q+'</b></p><div class="ln-ex">'+opts.map(o=>{const L=LV[lv(Math.abs(o.s-best))],bp=pct(o.s);return '<button class="'+(o.s===best?'best ':'')+L[1]+'" data-jm="'+o.m.join('-')+'"><span>'+L[0]+'</span><span>'+(lnName(o.m,o.p)||'その他')+'<small>'+mv(o.m)+'</small></span><span class="tr"><i style="width:'+bp+'%"></i></span><span class="pc">黒'+bp+'%</span></button>'}).join('')+'</div>';
   return h}
 document.querySelectorAll('#lnTabs button').forEach(b=>b.addEventListener('click',()=>{LN.tab=b.dataset.t;const first=LN_LIST[LN.tab].find(x=>!x[0].startsWith('#'));LN.id=first[0];if(LN.id==='jos')LN.path=[];learnLoad()}));
@@ -3603,10 +3617,12 @@ addEventListener('popstate',()=>{if(CUR==='course')csMap()});
 try{homeRulesInit()}catch(e){}
 
 /* ===== 講座（lichess・chess.com・囲碁の学習サイトを参考に）：短い課題を1問ずつ。目標は1つ、指した瞬間に判定、少ない手数で★3つ ===== */
-const CS_BASIC=[{"id":"move","t":"動き方","lv":[{"rows":["......","......","......","......","..B...","..B..."],"star":["3d"],"goal":"stars","txt":"石は「隣にいる石の数」だけ進む。3eの石を☆まで動かそう","hint":"3eの隣は3fの1つだけ。だから1マス進む","par":1},{"rows":["......","......","......","......",".BBB..","......"],"star":["3c"],"goal":"stars","txt":"3eは隣が2つ。2マス進める。☆まで動かそう","hint":"3eをまっすぐ上へ2マス","par":1},{"rows":["......","......","......","...B..","..BB..","......"],"star":["1c"],"goal":"stars","txt":"斜めにも進める。☆まで動かそう","hint":"隣が2つある3eを、左上へ2マス","par":1},{"rows":["......","......","......","......","..B...",".BB..."],"star":["3d"],"goal":"stars","txt":"途中の石は飛び越えてよい。☆まで動かそう","hint":"3fは隣が2つ（3eと2f）。3eを飛び越えて2マス上へ","par":1}]},{"id":"change","t":"数字が変わる","lv":[{"rows":["......","......","......","......",".BB...","......"],"star":["3c"],"goal":"stars","txt":"隣の石が動くと、数字も変わる。☆を取ろう（2手）","hint":"まず2eを動かして3eの隣を増やすと…","par":2},{"rows":["......","......","......","..BB..","..BB..","......"],"star":["3b"],"goal":"stars","txt":"4つ固まると全員3。1つ動かすと、残りの数字が変わる","hint":"3eは隣が3つ。上へ3マスで3b","par":1},{"rows":["......","......","......","......",".BBB..",".B...."],"star":["5c","2b"],"goal":"stars","txt":"☆を2つ取ろう","hint":"先に取った石が、次の石の数字を変える","par":3}]},{"id":"bocchi","t":"ぼっち","lv":[{"rows":["......","......","..W...","...B..","......","....B."],"target":"3c","goal":"zero","txt":"白3cの隣は黒4dだけ。白を「ぼっち（0）」にして動けなくしよう","hint":"4dが3cの隣から離れればいい","par":1},{"rows":["......","......","......","..B...","......","....BB"],"target":"3d","goal":"free","txt":"黒3dは隣がいなくて動けない（ぼっち）。動けるようにしよう","hint":"5fを斜めに1つ動かすと、3dの隣に着く","par":1},{"rows":["......",".W....","..B...","..B...","......","......"],"target":"2b","goal":"zero","txt":"白2bの隣は黒3cだけ。3cを動かして、2bをぼっちにしよう","hint":"3cは隣が2つで2マス進む。行き先が2bの隣だと、まだ0にならない","par":1}]},{"id":"win","t":"勝ち方","lv":[{"rows":["......",".BB...","......","......","......","......"],"goal":"arrive","txt":"向こう岸（いちばん上の段）に2つ着いたら勝ち。勝とう","hint":"どちらも隣が1つ。1つずつ上へ","par":2},{"rows":["..B...","......","...B..","...BB.","......","......"],"goal":"arrive","txt":"もう1つ着いている。2つ目を着けて勝とう","hint":"4cの隣は4dと5dの2つ。まっすぐ2マス上がると…","par":1},{"rows":["......","......",".B.B..","..B...","......","......"],"goal":"arrive","txt":"2つ着けて勝とう（何手かかる？）","hint":"1手目で、次の石の数字を整える","par":3}]}];
+const CS_BASIC=[{"id":"move","t":"動き方","lv":[{"rows":["......","......","......","......","..B...","..B..."],"star":["3d"],"goal":"stars","txt":"石は「隣にいる石の数」だけ進む。3eの石を星まで動かそう","hint":"3eの隣は3fの1つだけ。だから1マス進む","par":1},{"rows":["......","......","......","......",".BBB..","......"],"star":["3c"],"goal":"stars","txt":"3eは隣が2つ。2マス進める。星まで動かそう","hint":"3eをまっすぐ上へ2マス","par":1},{"rows":["......","......","......","...B..","..BB..","......"],"star":["1c"],"goal":"stars","txt":"斜めにも進める。星まで動かそう","hint":"隣が2つある3eを、左上へ2マス","par":1},{"rows":["......","......","......","......","..B...",".BB..."],"star":["3d"],"goal":"stars","txt":"途中の石は飛び越えてよい。星まで動かそう","hint":"3fは隣が2つ（3eと2f）。3eを飛び越えて2マス上へ","par":1}]},{"id":"change","t":"数字が変わる","lv":[{"rows":["......","......","......","......",".BB...","......"],"star":["3c"],"goal":"stars","txt":"隣の石が動くと、数字も変わる。星を取ろう（2手）","hint":"まず2eを動かして3eの隣を増やすと…","par":2},{"rows":["......","......","......","..BB..","..BB..","......"],"star":["3b"],"goal":"stars","txt":"4つ固まると全員3。1つ動かすと、残りの数字が変わる","hint":"3eは隣が3つ。上へ3マスで3b","par":1},{"rows":["......","......","......","......",".BBB..",".B...."],"star":["5c","2b"],"goal":"stars","txt":"星を2つ取ろう","hint":"先に取った石が、次の石の数字を変える","par":3}]},{"id":"bocchi","t":"ぼっち","lv":[{"rows":["......","......","..W...","...B..","......","....B."],"target":"3c","goal":"zero","txt":"白3cの隣は黒4dだけ。白を「ぼっち（0）」にして動けなくしよう","hint":"4dが3cの隣から離れればいい","par":1},{"rows":["......","......","......","..B...","......","....BB"],"target":"3d","goal":"free","txt":"黒3dは隣がいなくて動けない（ぼっち）。動けるようにしよう","hint":"5fを斜めに1つ動かすと、3dの隣に着く","par":1},{"rows":["......",".W....","..B...","..B...","......","......"],"target":"2b","goal":"zero","txt":"白2bの隣は黒3cだけ。3cを動かして、2bをぼっちにしよう","hint":"3cは隣が2つで2マス進む。行き先が2bの隣だと、まだ0にならない","par":1}]},{"id":"win","t":"勝ち方","lv":[{"rows":["......",".BB...","......","......","......","......"],"goal":"arrive","txt":"向こう岸（いちばん上の段）に2つ着いたら勝ち。勝とう","hint":"どちらも隣が1つ。1つずつ上へ","par":2},{"rows":["..B...","......","...B..","...BB.","......","......"],"goal":"arrive","txt":"もう1つ着いている。2つ目を着けて勝とう","hint":"4cの隣は4dと5dの2つ。まっすぐ2マス上がると…","par":1},{"rows":["......","......",".B.B..","..B...","......","......"],"goal":"arrive","txt":"2つ着けて勝とう（何手かかる？）","hint":"1手目で、次の石の数字を整える","par":3}]}];
 const CS_MORE=[{"id":"m_pick","t":"リーチを見つける","lv":[{"rows":["......",".BW..W","......",".....B",".B..B.","......"],"pick":["2b"],"goal":"pick","player":1,"txt":"次の1手で向こう岸（いちばん上の段）に届く黒を、全部タップしよう（1個）","hint":"ズレ＝ゴールまでの段数−数字。ズレ0の石で、着地点が空いていれば届く","par":1},{"rows":["......",".....B","B.WBWB","B.....","B.....","......"],"pick":["4c","6c"],"goal":"pick","player":1,"txt":"次の1手で向こう岸（いちばん上の段）に届く黒を、全部タップしよう（2個）","hint":"ズレ＝ゴールまでの段数−数字。ズレ0の石で、着地点が空いていれば届く","par":1},{"rows":["W.....","..BB.W",".....B",".B...B","....B.","......"],"pick":["3b","4b","6c"],"goal":"pick","player":1,"txt":"次の1手で向こう岸（いちばん上の段）に届く黒を、全部タップしよう（3個）","hint":"ズレ＝ゴールまでの段数−数字。ズレ0の石で、着地点が空いていれば届く","par":1}]},{"id":"m_push","t":"押し上げで止める","lv":[{"rows":["..WW..",".W....","..B...","B.B..B","......","......"],"ans":["4a-3b","4a-4b"],"goal":"stop","player":2,"txt":"白の番。リーチの黒の隣に着けて、数字を増やして止めよう（押し上げ）","hint":"リーチの黒の隣に白が来ると数字が1増え、ゴールを跳び越す","par":1},{"rows":["...WWW","......","BBB...","..B...","......","......"],"ans":["4a-3b","4a-4b"],"goal":"stop","player":2,"txt":"白の番。リーチの黒の隣に着けて、数字を増やして止めよう（押し上げ）","hint":"リーチの黒の隣に白が来ると数字が1増え、ゴールを跳び越す","par":1},{"rows":["......","....W.",".....B","....BW","....B.","......"],"ans":["5b-5c"],"goal":"stop","player":2,"txt":"白の番。リーチの黒の隣に着けて、数字を増やして止めよう（押し上げ）","hint":"リーチの黒の隣に白が来ると数字が1増え、ゴールを跳び越す","par":1}]},{"id":"m_pull","t":"引き抜きで止める","lv":[{"rows":["......","......","..BW..",".B...B",".....W","......"],"ans":["4c-5b","4c-5c","4c-5d"],"goal":"stop","player":2,"txt":"白の番。リーチの黒の数字には白も入っている。その白をどかして止めよう（引き抜き）","hint":"リーチの黒の隣にいる白を、隣ではないマスへ動かす","par":1},{"rows":[".W....","......","....B.","B..B..","...WB.","......"],"ans":["4e-2c","4e-2e","4e-6e"],"goal":"stop","player":2,"txt":"白の番。リーチの黒の数字には白も入っている。その白をどかして止めよう（引き抜き）","hint":"リーチの黒の隣にいる白を、隣ではないマスへ動かす","par":1},{"rows":["......",".W.W..","...B..","...B..","B.B...","......"],"ans":["4b-3a","4b-4a","4b-5a"],"goal":"stop","player":2,"txt":"白の番。リーチの黒の数字には白も入っている。その白をどかして止めよう（引き抜き）","hint":"リーチの黒の隣にいる白を、隣ではないマスへ動かす","par":1}]},{"id":"m_block","t":"ふさぐだけではダメ","lv":[{"rows":["......","..WW..","BB....","....WB","..B...","......"],"ans":["3b-5b","4b-3c"],"goal":"stop","player":2,"txt":"白の番。黒のリーチを止めよう","hint":"着地点をふさいでも、ほかの着地点から届く。黒の数字を変えよう","par":1},{"rows":["W.....",".W....",".B...W","B.....","...B.B","......"],"ans":["1a-1b","2b-4b","2b-4d"],"goal":"stop","player":2,"txt":"白の番。黒のリーチを止めよう","hint":"着地点をふさいでも、ほかの着地点から届く。黒の数字を変えよう","par":1}]},{"id":"m_yubaku","t":"誘爆を避ける","lv":[{"rows":["WB....","BW.W.B","...B..",".BB...","......","......"],"ans":["4b-3a","4b-4a"],"trap":["1a-4d","2b-5b","4b-5a"],"goal":"stop","player":2,"txt":"白の番。黒はもう1個着いている。リーチを止めよう（誘爆に注意）","hint":"着地点の隣に黒のズレ+1、出発点の隣に黒のズレ−1がいないか確かめる","par":1},{"rows":[".B..W.",".....B","..BBWB",".....W",".....B","......"],"ans":["5a-5b"],"trap":["5a-4b","5c-1c","6d-3d"],"goal":"stop","player":2,"txt":"白の番。黒はもう1個着いている。リーチを止めよう（誘爆に注意）","hint":"着地点の隣に黒のズレ+1、出発点の隣に黒のズレ−1がいないか確かめる","par":1},{"rows":["...B.W","...BW.","BBB...",".W....","......","......"],"ans":["5b-2b"],"trap":["2d-2a","2d-5a","2d-5d"],"goal":"stop","player":2,"txt":"白の番。黒はもう1個着いている。リーチを止めよう（誘爆に注意）","hint":"着地点の隣に黒のズレ+1、出発点の隣に黒のズレ−1がいないか確かめる","par":1}]},{"id":"a_switch","t":"スイッチと抜き","lv":[{"rows":["......","......","...W..",".BB..B","....B.","......"],"ans":["5e-4d","5e-4e"],"goal":"switch","player":1,"txt":"黒の番。動かした石とは別の黒を、リーチにしよう","hint":"ズレ+1の黒の隣に着ける（スイッチ）か、ズレ−1の黒の隣から離れる（抜き）","par":1},{"rows":["......",".B....","......",".B.BB.","...B..","......"],"ans":["5d-3b","4e-2c"],"goal":"switch","player":1,"txt":"黒の番。動かした石とは別の黒を、リーチにしよう","hint":"ズレ+1の黒の隣に着ける（スイッチ）か、ズレ−1の黒の隣から離れる（抜き）","par":1},{"rows":["......","...B..","B.....",".....B",".B..B.","......"],"ans":["6d-5c"],"goal":"switch","player":1,"txt":"黒の番。動かした石とは別の黒を、リーチにしよう","hint":"ズレ+1の黒の隣に着ける（スイッチ）か、ズレ−1の黒の隣から離れる（抜き）","par":1}]},{"id":"a_both","t":"止めながら作る","lv":[{"rows":["W.W...","......","BBW.WB","...B..","......","......"],"ans":["3c-3e","3c-5e"],"goal":"both","player":2,"txt":"白の番。黒のリーチを止めて、同時に白のリーチも作ろう","hint":"止める手のうち、着地点の隣にズレ+1の白がいるマスを探す","par":1},{"rows":[".....W","..W...","W.B..B","B..W..","......","......"],"ans":["1c-2c","1c-2d"],"goal":"both","player":2,"txt":"白の番。黒のリーチを止めて、同時に白のリーチも作ろう","hint":"止める手のうち、着地点の隣にズレ+1の白がいるマスを探す","par":1},{"rows":["......","...W..","..WB..","BWB...","B.....","......"],"ans":["2d-6d"],"goal":"both","player":2,"txt":"白の番。黒のリーチを止めて、同時に白のリーチも作ろう","hint":"止める手のうち、着地点の隣にズレ+1の白がいるマスを探す","par":1}]},{"id":"a_win2","t":"2手で勝つ","lv":[{"rows":["WW...B",".W....","...WW.","BB.W..",".B..B.","...B.."],"goal":"win2","player":1,"ans":["5e-3e"],"txt":"黒の番。相手がどう受けても、2手で勝てる手を指そう","hint":"1手目のあと、白の受けを全部考える。どの受けにも勝ちの手が残る1手がある","par":2},{"rows":["...B..","....BW",".W..B.","WW..B.","..W...",".WBB.."],"goal":"win2","player":1,"ans":["5b-2e"],"txt":"黒の番。相手がどう受けても、2手で勝てる手を指そう","hint":"1手目のあと、白の受けを全部考える。どの受けにも勝ちの手が残る1手がある","par":2},{"rows":[".W.B..","....WB","WB..W.","..B..B","....W.",".W..B."],"goal":"win2","player":1,"ans":["6d-4d"],"txt":"黒の番。相手がどう受けても、2手で勝てる手を指そう","hint":"1手目のあと、白の受けを全部考える。どの受けにも勝ちの手が残る1手がある","par":2},{"rows":["..B.W.",".B....","..W.B.","W..B.B",".WW.B.",".W...."],"goal":"win2","player":1,"ans":["3a-4a"],"txt":"黒の番。相手がどう受けても、2手で勝てる手を指そう","hint":"1手目のあと、白の受けを全部考える。どの受けにも勝ちの手が残る1手がある","par":2}]}];CS_BASIC.push(...CS_MORE);
 const CS_SECTIONS=[['初級',['move','change','bocchi','win']],['中級',['m_pick','m_push','m_pull','m_block','m_yubaku']],['上級',['a_switch','a_both','a_win2']]];
 const CS_SOON={soon1:'リーチを見つける',soon2:'押し上げで止める',soon3:'引き抜きで止める',soon4:'ふさぐだけではダメ',soon5:'誘爆を避ける',soon6:'スイッチと抜き',soon7:'止めながら作る',soon8:'2手で勝つ'};
+const STAR1='<svg class="svs" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17.4 5.9 20.9l1.5-6.8L2.2 9.5l6.9-.7z" fill="currentColor"/></svg>',STAR0=STAR1.replace('fill="currentColor"','fill="none" stroke="currentColor" stroke-width="1.6"');
+function stBtn(t,run){const b=$('stRun');b.textContent=t;b.classList.toggle('i-play',!run);b.classList.toggle('i-pause',!!run)}
 const CS_ICON={move:'動',change:'変',bocchi:'孤',win:'勝',m_pick:'見',m_push:'押',m_pull:'抜',m_block:'塞',m_yubaku:'爆',a_switch:'換',a_both:'両',a_win2:'詰'},CS_SUB={move:'数字＝動ける距離',change:'隣が動くと数字が変わる',bocchi:'隣がいない石は動けない',win:'向こう岸に2つ着けば勝ち',m_pick:'次の1手で届く石を探す',m_push:'隣に着けて数字を増やす',m_pull:'隣から離れて数字を減らす',m_block:'着地点をふさいでも止まらない',m_yubaku:'止めたつもりで相手を勝たせない',a_switch:'動かさない石をリーチにする',a_both:'1手で止めて、自分も作る',a_win2:'どう受けられても勝つ'};
 const CS={c:null,i:0,b:null,got:null,moves:0,sel:-1,done:false,wrong:0,busy:false,pl:1,picked:null,phase:''};
 const csIdx=s=>(+s[0]-1)+'abcdef'.indexOf(s[1])*6;
@@ -3617,9 +3633,9 @@ function csMap(){FP=-1;$('csMap').hidden=false;$('csLv').hidden=true;$('csTitle'
     for(const id of ids){const c=csCourse(id),b=document.createElement('button');b.className='cs-card';
       if(!c){b.classList.add('soon');b.disabled=true;b.innerHTML='<span class="ic">・</span><span><b></b><small>準備中</small></span>';b.querySelector('b').textContent=CS_SOON[id];box.append(b);continue}
       const st=(P[id]||[]),sum=st.reduce((a,x)=>a+(x|0),0),max=c.lv.length*3,cleared=st.filter(x=>x>0).length;got+=sum;all+=max;if(cleared===c.lv.length)b.classList.add('done');
-      b.innerHTML='<span class="ic">'+(CS_ICON[id]||'・')+'</span><span><b></b><small></small></span><span class="st">★ '+sum+' / '+max+'</span>';b.querySelector('b').textContent=c.t;b.querySelector('small').textContent=CS_SUB[id]||'';
+      b.innerHTML='<span class="ic">'+(CS_ICON[id]||'・')+'</span><span><b></b><small></small></span><span class="st">'+STAR1+' '+sum+' / '+max+'</span>';b.querySelector('b').textContent=c.t;b.querySelector('small').textContent=CS_SUB[id]||'';
       b.addEventListener('click',()=>{const n=Math.min(cleared,c.lv.length-1);csOpen(id,cleared>=c.lv.length?0:n)});box.append(b)}}
-  $('csBar').style.width=(all?got/all*100:0)+'%';$('csProgT').textContent='★ '+got+' / '+all;$('csTot').textContent=''}
+  $('csBar').style.width=(all?got/all*100:0)+'%';$('csProgT').innerHTML=STAR1+' '+got+' / '+all;$('csTot').textContent=''}
 function csOpen(id,i){CS.c=csCourse(id);CS.i=i|0;$('csMap').hidden=true;$('csLv').hidden=false;$('csTitle').textContent=CS.c.t;csLoad()}
 function csLoad(){const l=CS.c.lv[CS.i];CS.b=l.rows.join('').split('').map(ch=>ch==='B'?1:ch==='W'?2:0);CS.got=new Set();CS.moves=0;CS.sel=-1;CS.done=false;CS.wrong=0;CS.busy=false;CS.pl=l.player||1;CS.picked=new Set();CS.phase='p1';$('cboard').classList.toggle('flip',CS.pl===2);
   $('csGoal').textContent=l.txt;$('csMsg').textContent='';$('csMsg').className='cs-msg';$('csNext').hidden=true;$('csHint').hidden=false;$('cboard').classList.remove('clear');csDraw()}
@@ -3668,8 +3684,8 @@ function csMove(m){const l=CS.c.lv[CS.i],prev=CS.b.slice();CS.b=apply(CS.b,m);CS
   setTimeout(csDraw,0)}
 function csClear(){const l=CS.c.lv[CS.i];CS.done=true;const extra=CS.moves-l.par+CS.wrong;const st=extra<=0?3:extra<=2?2:1;
   const P=csProg(),arr=(P[CS.c.id]||[]).slice();arr[CS.i]=Math.max(arr[CS.i]|0,st);P[CS.c.id]=arr;saveProf();
-  csDraw();$('cboard').classList.add('clear');csMsg(['','クリア','いいね！','完ぺき！'][st]+'　'+'★'.repeat(st)+'☆'.repeat(3-st)+(st<3?'（最短'+l.par+'手）':''),'ok');
-  $('csHint').hidden=true;$('csNext').hidden=false;$('csNext').textContent=CS.i<CS.c.lv.length-1?'次へ ›':'講座の一覧へ ›';if(FP>=0)$('csNext').textContent=FP<FIRST_PATH.length-1?'次へ ›':'CPUと対局する ›'}
+  csDraw();$('cboard').classList.add('clear');csMsg(['','クリア','いいね！','完ぺき！'][st]+(st<3?'（最短'+l.par+'手）':''),'ok');$('csMsg').insertAdjacentHTML('beforeend','<span class="stars">'+STAR1.repeat(st)+STAR0.repeat(3-st)+'</span>');
+  $('csHint').hidden=true;$('csNext').hidden=false;$('csNext').textContent=CS.i<CS.c.lv.length-1?'次へ':'講座の一覧へ';if(FP>=0)$('csNext').textContent=FP<FIRST_PATH.length-1?'次へ':'CPUと対局する'}
 $('cgrid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(c)csCell(+c.id.slice(1))});
 $('csRetry').addEventListener('click',()=>{if(CS.c)csLoad()});
 $('csHint').addEventListener('click',()=>{if(CS.c){CS.wrong=Math.max(CS.wrong,1);csMsg('ヒント：'+CS.c.lv[CS.i].hint,'hint')}});
@@ -3731,8 +3747,8 @@ function deepRender(){const b=$('deepBtn'),n=$('deepNote');if(!b||!REV.g)return;
   $('revGraphBox').classList.toggle('locked',lock);$('graphUnlock').hidden=!lock;document.querySelector('[data-scr=review]').classList.toggle('ev-locked',lock);
   $('deepBox').hidden=lock;
   if(g.deep&&done<len){b.disabled=true;b.textContent='最強で深く解析しています… '+done+' / '+len;n.textContent='1手あたり約2.5秒かけて読み直しています。画面はこのまま見ていられます。';return}
-  if(g.deep){b.disabled=true;b.textContent='✓ 最強で深く解析済み';n.textContent='悪手・疑問手と最善手は、深く読んだ結果で表示しています。';return}
-  b.disabled=false;b.textContent='▶ 最強で深く再解析';
+  if(g.deep){b.disabled=true;b.textContent='最強で深く解析済み';b.className='deep-btn i-check';n.textContent='悪手・疑問手と最善手は、深く読んだ結果で表示しています。';return}
+  b.disabled=false;b.textContent='最強で深く再解析';b.className='deep-btn i-play';
   n.textContent='ふだんの解析より約3倍長く読み直して、悪手の判定と最善手をより正確にします（1局で1〜2分）。'}
 function showReward(btn,label){if(isOff()||!ADS.client||typeof adBreak!=='function'){deepStart();return}
   btn.disabled=true;const old=btn.innerHTML;btn.textContent='広告を読み込んでいます…';let shown=false,got=false;

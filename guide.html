@@ -250,16 +250,22 @@ ol.check b{display:block}
 ol.check span{font-size:13.5px;color:var(--sub)}
 .src{border-top:1px solid var(--line);padding-top:16px}
 </style>
-</head>
+<style>.gi{width:1em;height:1em;vertical-align:-.15em;margin-right:.2em}
+.qd{display:inline-block;width:.6em;height:.6em;border-radius:50%;margin:0 .25em 0 .1em;vertical-align:.05em;background:var(--qc)}
+.qd.q0,.best .mk::before{--qc:#f0d896}.qd.l1,.l1 .mk::before{--qc:#8fbf9a}.qd.l2,.l2 .mk::before{--qc:#a89e8a}.qd.l3,.l3 .mk::before{--qc:#d9a08b}.qd.l4,.l4 .mk::before{--qc:#d9614f}
+.mk::before{content:"";display:inline-block;width:.6em;height:.6em;border-radius:50%;margin-right:.35em;vertical-align:.05em;background:var(--qc,#a89e8a)}
+.gb-p::before,.gb-n::after{content:"";display:inline-block;width:.7em;height:.7em;background:currentColor;vertical-align:-.05em;-webkit-mask:var(--m) no-repeat center/contain;mask:var(--m) no-repeat center/contain}
+.gb-p::before{--m:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M17 4.5v15L5 12z'/%3E%3C/svg%3E");margin-right:.35em}
+.gb-n::after{--m:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 4.5v15l12-7.5z'/%3E%3C/svg%3E");margin-left:.35em}</style></head>
 <body>
 
 <main>
 <header>
-  <a href="./" style="display:inline-block;margin-bottom:14px;color:var(--gold);text-decoration:none;font-size:14px">‹ ゲームに戻る</a>
+  <a href="./" style="display:inline-block;margin-bottom:14px;color:var(--gold);text-decoration:none;font-size:14px"><svg class="gi" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>ゲームに戻る</a>
   <div class="eyebrow">ひとりぼっちの石は動けない</div>
   <h1>bocch 勝ち方ガイド</h1>
   <p class="lead">AI「最強」が重く見ているポイントと、AI同士の3万局から集計した「勝ちやすい形」を、盤の図でまとめました。石の数字は、その石が動ける距離です。</p>
-  <a class="ytbox" href="https://www.youtube.com/@bocch.official" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;margin:16px 0 0;padding:12px 14px;border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);border-radius:8px;color:inherit;text-decoration:none"><span style="color:var(--gold);font-size:20px">▶</span><span><b style="color:var(--gold)">YouTube「bocch定跡研究」</b><br><span style="font-size:14px">戦法や定跡を、動画でも解説しています ›</span></span></a>
+  <a class="ytbox" href="https://www.youtube.com/@bocch.official" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;margin:16px 0 0;padding:12px 14px;border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);border-radius:8px;color:inherit;text-decoration:none"><span style="display:flex"><svg viewBox="0 0 28 20" width="28" height="20" aria-hidden="true"><rect width="28" height="20" rx="5" fill="#e05a4a"/><path d="M11 6v8l7-4z" fill="#fff"/></svg></span><span><b style="color:var(--gold)">YouTube「bocch定跡研究」</b><br><span style="font-size:14px">戦法や定跡を、動画でも解説しています</span></span></a>
 </header>
 
 <nav class="tabs" id="tabs" role="tablist" aria-label="ガイドの章">
@@ -317,14 +323,14 @@ ol.check span{font-size:13.5px;color:var(--sub)}
     <li><b>本線は互角</b>：黒の寄り添い → 白の肩寄せ（黒と反対の端）→ 黒が反対の端も寄せる、で評価は0点。ここから本当の勝負です。</li>
   </ul>
   <h3 style="margin-top:22px">盤で見る（派生つき）</h3>
-  <p class="note" style="margin-top:4px">候補の手を押すと、盤がその手まで進みます。各手の右の数字は、その手を指したあとの黒の勝率の目安（最新AIの評価）です。左の印は最善との差で、★最善・◎好手・○ふつう・△疑問手・✕悪手。3手目は指せる手をすべて並べています。</p>
+  <p class="note" style="margin-top:4px">候補の手を押すと、盤がその手まで進みます。各手の右の数字は、その手を指したあとの黒の勝率の目安（最新AIの評価）です。左の印は最善との差で、<i class="qd q0"></i>最善・<i class="qd l1"></i>好手・<i class="qd l2"></i>ふつう・<i class="qd l3"></i>疑問手・<i class="qd l4"></i>悪手。3手目は指せる手をすべて並べています。</p>
   <div class="ex" id="ex">
     <div class="ex-top">
       <div class="board" id="exB" aria-label="定跡の盤"></div>
       <div class="ex-side">
         <div class="ex-path" id="exPath"></div>
         <div class="ex-ev" id="exEv"></div>
-        <div class="ex-nav"><button type="button" id="exBack">◀ 1手戻る</button><button type="button" id="exReset">最初から</button></div>
+        <div class="ex-nav"><button class="gb-p" type="button" id="exBack">1手戻る</button><button type="button" id="exReset">最初から</button></div>
       </div>
     </div>
     <div class="ex-q" id="exQ"></div>
@@ -546,14 +552,14 @@ const OP=[
  {t:'一本槍',d:'まっすぐ突っ込み、仲間から離れて止められやすい。',v:33,f:[5,1],to:[3,1]},
  {t:'はぐれ雲',d:'外へ抜けて、ひとりぼっちになりやすい。',v:33,f:[5,2],to:[3,0]}];
 const opens=document.getElementById('opens');
-opens.innerHTML=OP.map((x,i)=>rowHTML(i===0,x.t,'',x.d,x.v).replace('class="row','tabindex="0" role="button" aria-expanded="false" data-i="'+i+'" class="tap row wide').replace(/<\/div><\/div>$/,'<div class="more">▶ タップで派生（この後どの戦法になるか）を見る</div></div><div class="deriv" hidden></div></div>')).join('');
+opens.innerHTML=OP.map((x,i)=>rowHTML(i===0,x.t,'',x.d,x.v).replace('class="row','tabindex="0" role="button" aria-expanded="false" data-i="'+i+'" class="tap row wide').replace(/<\/div><\/div>$/,'<div class="more">タップで派生（この後どの戦法になるか）を見る</div></div><div class="deriv" hidden></div></div>')).join('');
 opens.addEventListener('click',e=>{const row=e.target.closest('.row.tap');if(!row||e.target.closest('.deriv'))return;const box=row.querySelector('.deriv'),open=box.hidden;
   if(open&&!box.innerHTML){const D=DERIV[OP[+row.dataset.i].t];const best=D.dist.filter(d=>d.p>=10).sort((a,b)=>b.win-a.win)[0];
     box.innerHTML='<div class="dh">この1手目から始めた'+D.n+'局で、8手目にどの戦法になったか（割合）と、その戦法になったときの勝率</div>'+
       D.dist.map(d=>'<div class="dv"><span class="nm">'+d.s+'</span><span class="track"><i style="width:'+d.p+'%"></i></span><span class="wr '+(d.win>=55?'g':d.win<=45?'b':'')+'">'+d.p+'％・勝率'+d.win+'％</span></div>').join('')+
       '<div class="rec">この1手目からは<b>'+best.s+'</b>に組むのがいちばん勝ちやすい（勝率'+best.win+'％）。</div>'+
       (REPLY[OP[+row.dataset.i].t]?'<div class="dh" style="margin-top:6px">黒がこの1手目のとき、白の2手目ごとの白の勝率（最新AIの26,000局から、各470〜600局）</div>'+REPLY[OP[+row.dataset.i].t].map(r=>'<div class="dv"><span class="nm">'+r.r+'</span><span class="track"><i style="width:'+Math.max(0,Math.min(100,(r.win-20)/60*100))+'%;background:var(--fg);opacity:.35"></i></span><span class="wr '+(r.win>=55?'g':r.win<=45?'b':'')+'">白の勝率'+r.win+'％</span></div>').join(''):'')}
-  box.hidden=!open;row.setAttribute('aria-expanded',String(open));row.querySelector('.more').textContent=open?'▼ 閉じる':'▶ タップで派生（この後どの戦法になるか）を見る'});
+  box.hidden=!open;row.setAttribute('aria-expanded',String(open));row.querySelector('.more').textContent=open?'閉じる':'タップで派生（この後どの戦法になるか）を見る'});
 opens.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('tap')){e.preventDefault();e.target.click()}});
 [...opens.querySelectorAll('.board')].forEach((el,i)=>{const o=OP[i];const g=[];for(let r=3;r<6;r++){let s='';for(let c=0;c<6;c++){let v=r===5?'B':'.';if(r===o.f[0]&&c===o.f[1])v='.';if(r===o.to[0]&&c===o.to[1])v='B';s+=v}g.push(s)}
   const m={};m[idx(6,o.f[0]-3,o.f[1])]='from';draw(el,g,m)});
@@ -586,11 +592,11 @@ const ST=[
 const strats=document.getElementById('strats');
 Object.assign(BUILD,BUILD_VAR);
 const ALL=[];ST.forEach(x=>{ALL.push(x);VAR.filter(v=>v.par===x.t).forEach(v=>ALL.push(Object.assign({sub:1},v)))});
-strats.innerHTML=ALL.map((x,i)=>'<div class="strat'+(i===0?' top':'')+(x.sub?' sub':'')+'" tabindex="0" role="button" aria-expanded="false" data-i="'+i+'"><div class="board"></div><div style="min-width:0">'+(x.sub?'<div class="subtag">└ '+x.p+'</div>':'')+'<h3>'+x.t+'<small>'+x.y+'</small></h3><p>'+x.d+'</p>'+(x.op?'<div class="op">よくある出だし　'+x.op.map(o=>'<code>'+o+'</code>').join('')+'</div>':'')+bar(x.v)+'<div class="more">▶ タップで組む順番を見る</div></div><div class="build" hidden></div></div>').join('');
+strats.innerHTML=ALL.map((x,i)=>'<div class="strat'+(i===0?' top':'')+(x.sub?' sub':'')+'" tabindex="0" role="button" aria-expanded="false" data-i="'+i+'"><div class="board"></div><div style="min-width:0">'+(x.sub?'<div class="subtag">└ '+x.p+'</div>':'')+'<h3>'+x.t+'<small>'+x.y+'</small></h3><p>'+x.d+'</p>'+(x.op?'<div class="op">よくある出だし　'+x.op.map(o=>'<code>'+o+'</code>').join('')+'</div>':'')+bar(x.v)+'<div class="more">タップで組む順番を見る</div></div><div class="build" hidden></div></div>').join('');
 const sqn=i=>(i%6+1)+'abcdef'[i/6|0];
 function boardRows(set){const r=[];for(let y=0;y<6;y++){let s='';for(let x=0;x<6;x++)s+=set.has(y*6+x)?'B':'.';r.push(s)}return r}
 function openBuild(card){const i=+card.dataset.i,box=card.querySelector('.build'),seq=BUILD[ALL[i].t];let k=0;
-  box.innerHTML='<div class="board"></div><div class="ctl2"><div class="nav"><button data-a="p">◀ 戻る</button><span class="k"></span><button data-a="n">進む ▶</button><button data-a="r">最初から</button></div><div class="say2"></div><div class="steps">'+seq.map((m,j)=>'<button data-j="'+(j+1)+'">'+(j+1)+'. '+sqn(m[0])+'→'+sqn(m[1])+'</button>').join('')+'</div><p class="note">相手が別の場所で指している間に、自分の石だけでこの形を組む最短の手順です（ルールどおりに動ける手だけ）。実戦では相手の石の位置で数字が変わることがあります。</p></div>';
+  box.innerHTML='<div class="board"></div><div class="ctl2"><div class="nav"><button class="gb-p" data-a="p">戻る</button><span class="k"></span><button class="gb-n" data-a="n">進む</button><button data-a="r">最初から</button></div><div class="say2"></div><div class="steps">'+seq.map((m,j)=>'<button data-j="'+(j+1)+'">'+(j+1)+'. '+sqn(m[0])+'→'+sqn(m[1])+'</button>').join('')+'</div><p class="note">相手が別の場所で指している間に、自分の石だけでこの形を組む最短の手順です（ルールどおりに動ける手だけ）。実戦では相手の石の位置で数字が変わることがあります。</p></div>';
   const render=()=>{const S=new Set([30,31,32,33,34,35]);let mk=null;for(let j=0;j<k;j++){const [f,t]=seq[j];S.delete(f);S.add(t);if(j===k-1)mk={from:f,to:t}}
     draw(box.querySelector('.board'),boardRows(S),mk?{[mk.from]:'from',[mk.to]:'to'}:null,{goalTop:true});
     box.querySelector('.k').textContent=k+' / '+seq.length+'手';box.querySelector('[data-a=p]').disabled=k===0;box.querySelector('[data-a=n]').disabled=k===seq.length;
@@ -599,7 +605,7 @@ function openBuild(card){const i=+card.dataset.i,box=card.querySelector('.build'
   box.addEventListener('click',e=>{e.stopPropagation();const b=e.target.closest('button');if(!b)return;if(b.dataset.a==='p')k=Math.max(0,k-1);else if(b.dataset.a==='n')k=Math.min(seq.length,k+1);else if(b.dataset.a==='r')k=0;else if(b.dataset.j)k=+b.dataset.j;render()});
   box.addEventListener('keydown',e=>e.stopPropagation());render()}
 strats.addEventListener('click',e=>{const card=e.target.closest('.strat');if(!card||e.target.closest('.build'))return;const box=card.querySelector('.build'),open=box.hidden;
-  if(open&&!box.innerHTML)openBuild(card);box.hidden=!open;card.setAttribute('aria-expanded',String(open));card.querySelector('.more').textContent=open?'▼ 閉じる':'▶ タップで組む順番を見る'});
+  if(open&&!box.innerHTML)openBuild(card);box.hidden=!open;card.setAttribute('aria-expanded',String(open));card.querySelector('.more').textContent=open?'閉じる':'タップで組む順番を見る'});
 strats.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('strat')){e.preventDefault();e.target.click()}});
 [...strats.querySelectorAll(':scope > .strat > .board')].forEach((el,i)=>draw(el,ALL[i].rows,null,{goalTop:true}));
 const MX=[[50,56,73,44,67],[44,50,61,38,59],[27,39,50,31,44],[56,62,69,50,74],[33,41,56,26,50]];
@@ -731,14 +737,14 @@ TAC.forEach(gr=>{const G=document.createElement('div');G.className='tac-group';G
     else{Q.textContent='ここまでが定跡です';L.innerHTML='<p class="ex-end">4手目からは定跡がありません。「最強」もここからはその場で読んで指します。ほかの流れを見るときは「1手戻る」で戻ってください。</p>';return}
     // 手番側から見てよい順に並べる
     opts.sort((a,b)=>a.p===1?b.s-a.s:a.s-b.s);const bestS=opts[0].s;
-    const LV=[['★ 最善',''],['◎ 好手','l1'],['○ ふつう','l2'],['△ 疑問手','l3'],['✕ 悪手','l4']],lvOf=d=>d<=0?0:d<=20?1:d<=60?2:d<=120?3:4;
+    const LV=[['最善',''],['好手','l1'],['ふつう','l2'],['疑問手','l3'],['悪手','l4']],lvOf=d=>d<=0?0:d<=20?1:d<=60?2:d<=120?3:4;
     opts.forEach(o=>{const btn=document.createElement('button');btn.type='button';const best=o.s===bestS;if(best)btn.classList.add('best');const lv=lvOf(Math.abs(o.s-bestS));if(LV[lv][1])btn.classList.add(LV[lv][1]);
       const nm=nameOf(o.m,o.p);const bp=pct(o.s);
       btn.innerHTML='<span class="mk">'+LV[lv][0]+'</span><span class="nm">'+(nm||'その他')+'<small>'+mv(o.m)+'</small></span><span class="tr"><i style="width:'+bp+'%"></i></span><span class="pc">黒'+bp+'％</span>';
       btn.addEventListener('mouseenter',()=>{hover=o.m;render2()});btn.addEventListener('mouseleave',()=>{hover=null;render2()});
       btn.addEventListener('focus',()=>{hover=o.m;render2()});btn.addEventListener('blur',()=>{hover=null;render2()});
       btn.addEventListener('click',()=>{hover=null;path.push(o.m);render()});L.appendChild(btn)});
-    const lg=document.createElement('p');lg.className='ex-legend';lg.textContent='★最善　◎好手（最善との差20点以内）　○ふつう（60点以内）　△疑問手（120点以内）　✕悪手（それ以上）。点は「最強」の評価で、100点の差がおよそ勝率28ポイント分です。';L.appendChild(lg)}
+    const lg=document.createElement('p');lg.className='ex-legend';lg.innerHTML='<i class="qd q0"></i>最善　<i class="qd l1"></i>好手（最善との差20点以内）　<i class="qd l2"></i>ふつう（60点以内）　<i class="qd l3"></i>疑問手（120点以内）　<i class="qd l4"></i>悪手（それ以上）。点は「最強」の評価で、100点の差がおよそ勝率28ポイント分です。';L.appendChild(lg)}
   // 候補にふれたときは盤だけ描き直す
   function render2(){const b=board(),mk={};const last=path[path.length-1];const show=hover||last;if(show){mk[show[0]]='from';mk[show[1]]=hover?'tgt':'to'}draw(el('exB'),rows(b),mk,{goalTop:true})}
   el('exBack').addEventListener('click',()=>{path.pop();hover=null;render()});
