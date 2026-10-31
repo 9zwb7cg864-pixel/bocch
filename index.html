@@ -607,12 +607,12 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .hm{position:relative;max-width:420px;margin:0 auto;padding:0 16px 30px;text-align:left}
 .hm button{font:inherit;letter-spacing:normal;color:var(--fg);min-height:0;border:0;border-radius:10px;text-align:left;background:none;padding:0}
 .hm button:hover{border-color:transparent}
-.hm .hm-head{display:block;max-width:none;margin:0;border:0;text-align:center;padding:14px 0 0}.hm-head h1{margin:0;line-height:0;font-size:0}
-.hm-logo{height:84px;width:auto;filter:drop-shadow(0 3px 10px rgba(0,0,0,.7))}
+.hm .hm-head{display:block;max-width:none;margin:0;border:0;text-align:center;padding:8px 0 0}.hm-head h1{margin:0;line-height:0;font-size:0}
+.hm-logo{height:78px;width:auto;filter:drop-shadow(0 3px 10px rgba(0,0,0,.7))}
 .hm .hm-tag{margin:6px 0 0;font-size:12px;font-family:var(--f-disp);font-weight:700;letter-spacing:.28em;color:var(--sub);font-size:12px;line-height:1.5}
-.hm-hero{position:relative;margin:0 -16px;padding:2px 16px 4px;overflow:hidden}
-.hm-hero:after{content:"";position:absolute;left:0;right:0;bottom:0;height:30%;background:linear-gradient(180deg,transparent,var(--bg) 82%);pointer-events:none}
-.hm-hb{position:relative;width:52%;margin:4px auto 0;aspect-ratio:1;transform:perspective(900px) rotateX(28deg);transform-origin:50% 70%;background:var(--wood-edge);box-shadow:0 30px 50px rgba(0,0,0,.65),inset 0 0 0 1px rgba(216,189,126,.3);border-radius:2px}
+.hm-hero{position:relative;margin:0 -16px;padding:0 16px 0;overflow:hidden}
+.hm-hero:after{content:"";position:absolute;left:0;right:0;bottom:0;height:12%;background:linear-gradient(180deg,transparent,var(--bg) 82%);pointer-events:none}
+.hm-hb{position:relative;width:48%;margin:-4px auto 0;aspect-ratio:1;transform:perspective(900px) rotateX(28deg);transform-origin:50% 70%;background:var(--wood-edge);box-shadow:0 30px 50px rgba(0,0,0,.65),inset 0 0 0 1px rgba(216,189,126,.3);border-radius:2px}
 .hm-hg{position:absolute;inset:5%;background:var(--wood);background-image:repeating-linear-gradient(90deg,rgba(0,0,0,.07) 0 1px,transparent 1px 6px);display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(6,1fr);border-top:1px solid var(--wood-line);border-left:1px solid var(--wood-line)}
 .hm-hg i{border-right:1px solid var(--wood-line);border-bottom:1px solid var(--wood-line)}
 .hm-hl{position:absolute;inset:5%}
@@ -623,7 +623,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .hm-hs.z b{filter:grayscale(1) brightness(.8)}
 .hm-hs.jump b{animation:hmJmp .7s cubic-bezier(.4,0,.3,1)}@keyframes hmJmp{50%{transform:scale(1.35)}}
 /* 先月の1位：盤の下の端に重ねる */
-.hm .hm-chp{position:relative;z-index:3;display:flex;align-items:center;gap:6px;width:max-content;max-width:100%;margin:-40px auto 0;padding:6px 10px 6px 8px;border-radius:999px;white-space:nowrap;
+.hm .hm-chp{position:relative;z-index:3;display:flex;align-items:center;gap:6px;width:max-content;max-width:100%;margin:-6px auto 0;padding:6px 10px 6px 8px;border-radius:999px;white-space:nowrap;
   background:linear-gradient(160deg,rgba(44,34,20,.96),rgba(23,18,12,.96));box-shadow:inset 0 0 0 1px rgba(233,196,106,.5),0 6px 16px rgba(0,0,0,.55)}
 .hm-chp .cr{width:18px;height:18px;flex:none;filter:drop-shadow(0 0 5px rgba(233,196,106,.5))}
 .hm-chp small{font-size:11px;color:var(--gold);letter-spacing:.06em}
@@ -633,7 +633,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .hm .chv{width:13px;height:13px;flex:none;fill:none;stroke:var(--sub);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 /* 漆の札 */
 .hm-card,.hm-sub,.hm-daily,.hm-menu{background:linear-gradient(160deg,#211a14,#15110d);border-radius:10px;box-shadow:inset 0 0 0 1px rgba(216,189,126,.22),0 10px 24px rgba(0,0,0,.4)}
-.hm-card{position:relative;margin-top:12px;padding:14px 14px 13px}
+.hm-card{position:relative;margin-top:8px;padding:14px 14px 13px}
 .hm-me{display:flex;gap:12px;align-items:center;cursor:pointer;outline-offset:4px}
 .hm-rk{display:flex;width:52px;height:52px;flex:none;align-items:center;justify-content:center}.hm-rk .stone{width:52px;height:52px;font-size:0;--bw:3px}
 .hm-mi{flex:1;min-width:0}
@@ -658,7 +658,7 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 /* 対局に戻る */
 .hm .hm-resume{display:block;width:100%;margin-top:12px;padding:12px;border:1px solid var(--gold);background:rgba(216,189,126,.1);color:var(--gold-hi);font-family:var(--f-disp);font-weight:800;text-align:center;animation:resumePulse 2.4s ease-in-out infinite}
 /* 対局する（ランダム対戦） */
-.hm .hm-play{position:relative;display:block;width:100%;margin-top:10px;padding:16px 18px;border-radius:12px;overflow:hidden;
+.hm .hm-play{position:relative;display:block;width:100%;margin-top:8px;padding:16px 18px;border-radius:12px;overflow:hidden;
   background:radial-gradient(ellipse 80% 120% at 85% -10%,rgba(255,220,150,.20),transparent 60%),linear-gradient(150deg,#5a1610,#2e0b08 55%,#1a0605);
   box-shadow:inset 0 0 0 1px rgba(240,216,150,.55),inset 0 0 0 4px rgba(46,11,8,.9),inset 0 0 0 5px rgba(216,189,126,.35),0 14px 30px rgba(0,0,0,.55)}
 .hm-leaf{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.9}
