@@ -2736,8 +2736,11 @@ const _renderP=render;render=function(){_renderP();
   const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?'1手戻しを使ったのでレートは変わりません':'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
   {const mn=$('meName');mn.textContent=myName();if(isOff())mn.prepend(offBadge(18));const sb=bdSel();if(sb)mn.append(bdBadge(sb,17))}$('meRate').textContent=Math.round(PROF.rating)};
 /* ===== 棋風診断：その端末に残っている対局の手順から、将棋の棋風の分け方を参考に6つの物差しで測る ===== */
-const KF_BASE={fwd:[.5413,.107],def:[.2406,.1305],big:[.208,.0927],coh:[1.2705,.262],bind:[.1771,.0881],first:[16.9,10.13],len:[43.69,14.9],open:[.5844,.2789]}; // AI同士480局面ぶんの平均と散らばり
-const KF_COME=.336; // 相手に先に着かれた対局からの逆転勝ち（AI同士）
+// 人に近い指し手（やさしい・ふつうのCPUの組み合わせ、46人×12局）の、1人あたり平均の平均と散らばり。
+// 以前は強いAI同士の対局を基準にしていたため、普通に指すと誰でも「攻め」になっていた
+const KF_BASE={fwd:[.7812,.0359],def:[.1372,.0388],big:[.1494,.0436],coh:[.9642,.1405],bind:[.1118,.0337],first:[17.71,2.786],len:[20.69,2.14],open:[.0924,.0907]};
+const KF_AXS=[1.454,1.43,.724,1,.998,1]; // 6つの目もりの散らばりをそろえる（どれか1つだけが大きく出ないように）
+const KF_COME=[.282,.263]; // 相手に先に着かれた対局からの逆転勝ち（平均と散らばり）
 const KF_AX=[ // [キー, 高いときの名前, 低いときの名前, 低い側も名前にするか]
  ['seme','攻め','受け',1],['kyu','急戦','持久戦',1],['atsu','厚み','さばき',1],['jo','定跡','力戦',1],['osa','押さえ込み','',0],['neb','粘り','',0]];
 const KF_LAB=['攻め','急戦','厚み','定跡','押さえ込み','粘り'];
@@ -2761,8 +2764,8 @@ function kfGame(log,me){let b=startBoard(),t=1;const opp=3-me,g=goalRow(me);
 function kfCalc(){const gs=loadGames().filter(g=>g&&g.mode!=='study'&&(g.me===1||g.me===2)&&g.log&&g.log.length>=6).slice(0,100);
   const rs=[];let bh=0,bw=0;const spc={};for(const g of gs){const r=kfGame(g.log,g.me);if(!r)continue;rs.push(r);if(r.behind){bh++;if(g.win===g.me)bw++}if(r.sp>=0)spc[r.sp]=(spc[r.sp]||0)+1}
   if(rs.length<5)return {n:rs.length};
-  const avg=k=>rs.reduce((a,r)=>a+r[k],0)/rs.length,z=k=>(avg(k)-KF_BASE[k][0])/(KF_BASE[k][1]*.6);
-  const Z=[(z('fwd')-z('def'))/1.4,(-z('first')-z('len'))/1.4,(z('coh')-z('big'))/1.4,z('open'),z('bind'),bh>=2?((bw/bh)-KF_COME)/.25:0];
+  const avg=k=>rs.reduce((a,r)=>a+r[k],0)/rs.length,z=k=>(avg(k)-KF_BASE[k][0])/KF_BASE[k][1];
+  const Z=[z('fwd')-z('def'),-z('first')-z('len'),z('coh')-z('big'),z('open'),z('bind'),bh>=2?((bw/bh)-KF_COME[0])/KF_COME[1]:0].map((v,i)=>v/KF_AXS[i]);
   const sc=Z.map(v=>Math.max(4,Math.min(96,Math.round(50+16*v))));
   const cand=[];Z.forEach((v,i)=>{const a=KF_AX[i];if(v>=0)cand.push([v,a[1]]);else if(a[3])cand.push([-v,a[2]])});cand.sort((x,y)=>y[0]-x[0]);
   const p=cand[0][1],q=cand[1]?cand[1][1]:'';let fav='';const top=Object.entries(spc).sort((a,b)=>b[1]-a[1])[0];if(top&&top[1]>=2)fav=SENPO[+top[0]][0]+'（'+top[1]+'局）';
