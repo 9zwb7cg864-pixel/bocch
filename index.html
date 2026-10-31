@@ -1968,6 +1968,8 @@ const BOTS_KV=RELAY+'bocch-v1-bots/kv';
 async function botRates(){try{const r=await fetch(BOTS_KV,{cache:'no-store'});if(!r.ok)return null;const j=await r.json();return j&&typeof j==='object'?j:null}catch(e){return null}}
 /* 名前付きCPUの段級：人と同じく30級から始まり、対局の結果で上下する */
 function botDan(kv,nm){const v=kv&&Number(kv['d:'+nm]),z=kv&&Number(kv['dz:'+nm]);if(!Number.isFinite(v)||v<100)return {lv:0,pct:0,z:0};const q=rkDec(v);return {lv:q.lv,pct:q.pct,z:Number.isFinite(z)?Math.max(0,Math.min(9,z-100)):0}}
+/* 名前のないCPUの段級：記録を持たないので、実際にいる人の段級から1人ぶんをランダムに借りる（いなければ30級） */
+function pickHumanLv(kv){const a=kv?Object.entries(kv).filter(([k,v])=>k.startsWith('d:')&&!BOT_NAMES.includes(k.slice(2))&&Number(v)>=100).map(([k,v])=>rkDec(Number(v)).lv):[];return a.length?a[Math.random()*a.length|0]:0}
 function botSaveRate(name,v){try{fetch(BOTS_KV,{method:'POST',body:JSON.stringify({k:name,v:Math.round(v)})}).catch(()=>{})}catch(e){}}
 function shadowPost(o){if(!SHADOW.bot)return Promise.resolve();o.from=SHADOW.bot.id;return fetch(RELAY+TOPIC(SHADOW.bot.room),{method:'POST',body:JSON.stringify(o)}).catch(()=>{})}
 function shadowCheck(){
@@ -1983,7 +1985,7 @@ function shadowCheck(){
   const b=SHADOW.bot;
   const prep=level===2?botRates().then(kv=>{if(SHADOW.bot!==b)return;const nm=BOT_NAMES[Math.random()*BOT_NAMES.length|0];b.name=nm;b.named=true;
     if(kv&&Number.isFinite(kv[nm]))b.rate=kv[nm];else{b.rate=1400+Math.floor(Math.random()*101);if(kv)botSaveRate(nm,b.rate)}
-    b.dan=botDan(kv,nm)}):Promise.resolve();
+    b.dan=botDan(kv,nm)}):botRates().then(kv=>{if(SHADOW.bot!==b)return;b.dan={lv:pickHumanLv(kv),pct:0,z:0}}).catch(()=>{});
   prep.then(()=>setTimeout(()=>{if(SHADOW.bot===b&&NET.code===code&&!NET.guest)shadowPost(Object.assign({t:'join',name:b.name,rate:b.rate,off:0},b.dan?{lv:b.dan.lv}:{})).then(()=>{setTimeout(()=>{if(NET.code===code)show('game',true)},600)})},800+Math.random()*1200));
 }
 function shadowStop(){clearTimeout(SHADOW.timer);SHADOW.timer=null;SHADOW.bot=null;SHADOW.key=''}
