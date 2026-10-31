@@ -3480,7 +3480,8 @@ function rankRows(d){const M=new Map(),put=(nm,k,v)=>{const o=M.get(nm)||{dv:100
   for(const [k,v] of Object.entries(d)){if(!(v>100))continue;if(k.startsWith('d:'))put(k.slice(2),'dv',v);else if(k.startsWith('p:'))put(k.slice(2),'rt',v)}
   for(const nm of BOT_NAMES)if(Number.isFinite(d[nm])){const o=M.get(nm)||{dv:100,rt:0};o.rt=d[nm];M.set(nm,o)}
   return [...M].filter(([nm,o])=>o.dv>100||o.rt>100).map(([nm,o])=>[nm,o.dv,o.rt]).sort((a,b)=>b[1]-a[1]||b[2]-a[2])}
-function monCheck(kv){if(!kv)return;const pm=monPrev(),pk='m:'+pm+':';if(pm<'2026-10'){RK.prev='';return} // 最初の記録は10月の1位からlet w=Object.entries(kv).filter(([k])=>k.startsWith(pk)).sort((a,b)=>b[1]-a[1])[0];
+function monCheck(kv){if(!kv)return;const pm=monPrev(),pk='m:'+pm+':';if(pm<'2026-10'){RK.prev='';return} /* 最初の記録は10月の1位から */
+  let w=Object.entries(kv).filter(([k])=>k.startsWith(pk)).sort((a,b)=>b[1]-a[1])[0];
   if(!w){const top=rankRows(kv)[0];if(top){botSaveRate(pk+top[0],top[1]);kv[pk+top[0]]=top[1];w=[pk+top[0],top[1]]}}
   RK.prev=w?w[0].slice(pk.length):'';
   const me=myName();if(Object.keys(kv).some(k=>/^m:\d{4}-\d{2}:/.test(k)&&k.slice(10)===me)){const s=bdStats();if(!s.mon1){s.mon1=1;saveProf();bdCheck()}}}
