@@ -147,7 +147,7 @@ canvas.mvcv{position:absolute;left:-10%;top:-10%;width:120%;height:120%;will-cha
 .mvend .mvrow{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;justify-content:center}
 .mvbtn{position:relative;min-height:46px;padding:0 22px;background:rgba(216,189,126,.06);color:var(--fg);border:1px solid rgba(216,189,126,.6);border-radius:0;font-family:var(--f-disp);font-size:15px;letter-spacing:.1em;cursor:pointer}
 .mvbtn.solid{background:var(--gold);color:#1c140b;border:0;font-weight:800}
-.rkup{z-index:61}.rkup .mvk{font-size:min(30vw,150px)}.rkup.isdan .mvk{font-size:min(38vw,190px)}html:not([lang="ja"]) .rkup .mvk{font-size:min(17vw,96px)!important;font-family:"Kaushan Script","Yuji Boku",serif}html[lang="ko"] .rkup .mvk{font-family:"Nanum Brush Script","Yuji Boku",serif}html[lang="zh-Hans"] .rkup .mvk{font-family:"Ma Shan Zheng","Yuji Boku",serif}html[lang="zh-Hant"] .rkup .mvk{font-family:"Yuji Boku",serif}
+.rkup{z-index:61}.rkup .mvk{font-size:min(30vw,150px)}html[lang="ja"] .rkup .mvk,html:not([lang]) .rkup .mvk{font-family:"Shippori Mincho B1",serif;font-weight:800}.rkup.isdan .mvk{font-size:min(38vw,190px)}html:not([lang="ja"]) .rkup .mvk{font-size:min(17vw,96px)!important;font-family:"Kaushan Script","Yuji Boku",serif}html[lang="ko"] .rkup .mvk{font-family:"Nanum Brush Script","Yuji Boku",serif}html[lang="zh-Hans"] .rkup .mvk{font-family:"Ma Shan Zheng","Yuji Boku",serif}html[lang="zh-Hant"] .rkup .mvk{font-family:"Yuji Boku",serif}
 .rkup .rkstone{width:92px;height:92px;font-size:38px;margin:4px 0 8px;--rs:1.3}.rkup .mvwho{color:var(--gold-hi)}
 @keyframes mvInk{0%{opacity:0;filter:blur(8px);transform:scale(1.08)}100%{opacity:1;filter:blur(0);transform:scale(1)}}
 .mvflake{position:absolute;pointer-events:none;background:linear-gradient(135deg,#fff3c4,#d8bd7e 55%,#a8833f);animation:mvFall 3.4s ease-in infinite}
@@ -2708,7 +2708,7 @@ function danStep(D,res,exp){const lv=D.lv;
   D.pct=Math.round(D.pct*10)/10}
 /* 昇級・昇段の演出：金の筆文字で新しい段級と、その縁の石 */
 function danFx(lv){
-  /* 筆文字のフォント：日本語・繁体字は Yuji Boku、ほかは勝敗の演出と同じ言語ごとの筆文字 */
+  /* 段級名のフォント：日本語は Shippori Mincho（太）、繁体字は Yuji Boku、ほかは勝敗の演出と同じ言語ごとの筆文字 */
   const LG=window.BOCCH_LANG||'ja',fam={en:'Kaushan Script',es:'Kaushan Script',de:'Kaushan Script',ko:'Nanum Brush Script','zh-Hans':'Ma Shan Zheng'}[LG];
   if(fam&&!document.getElementById('rkFont')){const l=document.createElement('link');l.id='rkFont';l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+fam.replace(/ /g,'+')+'&display=swap';document.head.appendChild(l)}
   let e=$('rkUp');if(!e){e=document.createElement('div');e.id='rkUp';e.setAttribute('role','dialog');e.setAttribute('aria-modal','true');document.body.appendChild(e);e.addEventListener('click',()=>{e.hidden=true})}
