@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=14"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=15"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -2772,7 +2772,7 @@ function kfRadar(sc){const cx=130,cy=120,R=88,ang=i=>-Math.PI/2+i*Math.PI/3,P=(i
   for(let i=0;i<6;i++){const[x,y]=P(i,R);o+=`<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="rgba(216,189,126,.15)"/>`;const[lx,ly]=P(i,R+18);o+=`<text x="${lx}" y="${ly+4}" text-anchor="middle" font-size="11" fill="#a89e8a">${KF_LAB[i]}</text>`}
   o+=`<polygon points="${sc.map((v,i)=>P(i,R*v/100).join(',')).join(' ')}" fill="rgba(216,189,126,.28)" stroke="#f0d896" stroke-width="2"/>`;
   return `<svg viewBox="0 0 260 240" role="img" aria-label="棋風のレーダー図">${o}</svg>`}
-function kfRender(){const el=$('kfBody');if(!el)return;const k=kfCalc();
+function kfRender(){const el=$('kfBody');if(!el)return;if(!named()){el.innerHTML=`<p class="kf-desc">棋風の診断は、アカウントに登録すると使えます。</p><button class="endb kf-share" type="button" id="kfReg">アカウント登録へ</button>`;$('kfReg').onclick=()=>{show('profile');setTimeout(()=>{try{renderProf();bdRender()}catch(e){}const a=$('acct');if(a)a.scrollIntoView({behavior:'smooth',block:'start'})},60)};return}const k=kfCalc();
   if(!k.sc){el.innerHTML=`<p class="kf-desc">あと${5-k.n}局指すと、あなたの棋風を診断します（この端末の対局から、直近100局まで）。</p>`;return}
   el.innerHTML=`<div class="kf-type">${k.name}</div><p class="kf-desc"><span>${KF_DESC[k.p]}</span>${k.q?'<span>'+KF_DESC[k.q].replace('タイプ。','面もあります。')+'</span>':''}</p>
    <div class="kf-wrap">${kfRadar(k.sc)}<div class="kf-list">${k.sc.map((v,i)=>`<div class="kf-row"><span>${KF_LAB[i]}</span><span class="kf-bar"><i style="width:${v}%"></i></span><b>${v}</b></div>`).join('')}</div></div>
@@ -2784,14 +2784,21 @@ const KF_AXD=['高いほど向こう岸へ進む手が多い。低いほど、�
 function kfMini(sc){const c=17,R=15,P=(i,r)=>[c+Math.cos(-Math.PI/2+i*Math.PI/3)*r,c+Math.sin(-Math.PI/2+i*Math.PI/3)*r];
   return `<svg viewBox="0 0 34 34" aria-hidden="true"><polygon points="${[0,1,2,3,4,5].map(i=>P(i,R).join(',')).join(' ')}" fill="none" stroke="rgba(216,189,126,.35)"/><polygon points="${sc.map((v,i)=>P(i,R*v/100).join(',')).join(' ')}" fill="rgba(216,189,126,.35)" stroke="#f0d896" stroke-width="1.2"/></svg>`}
 function kfHome(){let k;try{k=kfCalc()}catch(e){return}
+  // 未登録の人には棋風を出さず、アカウント登録へ案内する
+  if(!named()){const h=`${kfMini([20,20,20,20,20,20])}<span><small>あなたの棋風</small><b>アカウント登録で棋風を表示</b></span><span class="kf-go">›</span>`;
+    for(const id of ['kfChip','kfChipProf']){const el=$(id);if(!el)continue;el.innerHTML=h;el.classList.add('pending');el.dataset.go='profile';if(id==='kfChip')el.hidden=false}return}
+  for(const id of ['kfChip','kfChipProf']){const el=$(id);if(el)el.dataset.go='kifu'}
   const h=k.sc?`${kfMini(k.sc)}<span><small>あなたの棋風</small><b>${k.name}</b></span><span class="kf-go">›</span>`
     :`${kfMini([20,20,20,20,20,20])}<span><small>あなたの棋風</small><b>あと${5-k.n}局で診断</b></span><span class="kf-go">›</span>`;
   for(const id of ['kfChip','kfChipProf']){const el=$(id);if(!el)continue;el.innerHTML=h;el.classList.toggle('pending',!k.sc);if(id==='kfChip')el.hidden=!k.sc&&k.n<1}}
-function kfAxRender(){const k=kfCalc(),c=$('kfAxCard');if(!c)return;c.hidden=!k.sc;if(!k.sc)return;
+function kfAxRender(){const k=kfCalc(),c=$('kfAxCard');if(!c)return;c.hidden=!k.sc||!named();if(!k.sc)return;
   $('kfAx').innerHTML=KF_LAB.map((l,i)=>`<div class="kf-ax"><span>${l}</span><b>${k.sc[i]}</b><p>${KF_AXD[i]}</p></div>`).join('')}
 {const _pk=paint;paint=function(n){_pk(n);if(n==='kifu')try{kfRender();kfAxRender()}catch(e){console.error(e)}
   if(n==='home'||n==='profile')try{kfHome()}catch(e){console.error(e)}}}
 try{kfHome()}catch(e){}
+// 開いた直後はログインの部品がまだ用意されていないので、読み込みが終わってからもう一度判定する
+addEventListener('load',()=>{try{kfHome()}catch(e){}});
+for(const id of ['kfChip','kfChipProf']){const el=$(id);if(el)el.addEventListener('click',()=>{if(named())return;setTimeout(()=>{try{renderProf();bdRender()}catch(e){}const a=$('acct');if(a)a.scrollIntoView({behavior:'smooth',block:'start'})},60)})}
 function renderProf(){const nmd=named();$('nameIn').value=nmd?PROF.name:'';$('nameIn').disabled=!nmd;$('nameSave').disabled=!nmd;$('nameIn').placeholder=nmd?'名前を入れる':guestName();
   $('nameNote').textContent=nmd?(isOff()?'役員アカウントです。名前の前にバッジが付き、広告は表示されません。':'ほかの人と同じ名前は付けられません。'):'未登録のあいだは「'+guestName()+'」です。アカウントに登録してログインすると、好きな名前を付けられます。';$('profRate').textContent=Math.round(PROF.rating);$('profRank').textContent=rankName(PROF.rating);
   {const cur=rankOf(PROF.rating);$('rankRow').innerHTML=RANKS.map(([min,k,n])=>`<div title="${k?min+'〜':'〜999'}" style="${k===cur?'color:var(--gold);font-weight:700':''}"><div class="stone b${rankCls(k)}"><span>3</span></div>${n}</div>`).join('');
