@@ -76,7 +76,7 @@ const $=id=>document.getElementById(id);
 const fmt=n=>(n||0).toLocaleString('ja-JP');
 const hm=s=>{s=s||0;const h=Math.floor(s/3600),m=Math.round(s%3600/60);return h?h.toLocaleString('ja-JP')+'<small>時間</small>'+m+'<small>分</small>':m+'<small>分</small>'};
 const MODE={net:'オンライン（人）',shadow:'オンライン（影の相手）',local:'1台で2人',cpu1:'CPU やさしい',cpu2:'CPU ふつう',cpu3:'CPU つよい',cpu4:'CPU 最強'};
-let PW='';try{PW=sessionStorage.getItem('bocch-stats-pw')||''}catch(e){}
+let PW='';try{PW=localStorage.getItem('bocch-stats-pw')||sessionStorage.getItem('bocch-stats-pw')||''}catch(e){}
 
 async function load(){
   const r=await fetch(RELAY+'bocch-v1-stats/view',{headers:{'X-Pass':PW},cache:'no-store'});
@@ -111,12 +111,12 @@ async function load(){
   }catch(e){$('names').innerHTML='<tr><td colspan="3">読み込めませんでした</td></tr>'}
 }
 async function unlock(){$('err').textContent='確かめています…';$('go').disabled=true;
-  try{await load();try{sessionStorage.setItem('bocch-stats-pw',PW)}catch(e){}$('lock').hidden=true;$('main').hidden=false;$('err').textContent=''}
-  catch(e){$('err').textContent=e==='pw'?'パスワードが違います':'読み込めませんでした。少し待ってからもう一度';PW='';try{sessionStorage.removeItem('bocch-stats-pw')}catch(x){}}
+  try{await load();try{localStorage.setItem('bocch-stats-pw',PW)}catch(e){}$('lock').hidden=true;$('main').hidden=false;$('err').textContent=''}
+  catch(e){$('err').textContent=e==='pw'?'パスワードが違います':'読み込めませんでした。少し待ってからもう一度';PW='';try{localStorage.removeItem('bocch-stats-pw')}catch(x){}}
   $('go').disabled=false}
 $('lock').addEventListener('submit',e=>{e.preventDefault();PW=$('pw').value;unlock()});
 $('reload').addEventListener('click',()=>load().catch(()=>{}));
-$('out').addEventListener('click',()=>{PW='';try{sessionStorage.removeItem('bocch-stats-pw')}catch(e){}$('main').hidden=true;$('lock').hidden=false;$('pw').value=''});
+$('out').addEventListener('click',()=>{PW='';try{localStorage.removeItem('bocch-stats-pw')}catch(e){}$('main').hidden=true;$('lock').hidden=false;$('pw').value=''});
 if(PW)unlock();
 </script>
 </body>
