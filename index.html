@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=21"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=23"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -702,6 +702,99 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .scr[data-scr=home] .ver{right:56px!important;top:20px}
 .hm .hm-card{display:block;width:100%;text-align:left;padding:14px 12px 13px 14px}.hm-mn,.hm-bar,.hm-mf{display:flex}.hm-bar{display:block}.hm-mi{display:block}
 .hm-cchv{width:16px!important;height:16px!important;margin-left:2px;align-self:center}.hm-card:active{transform:scale(.99)}
+/* ===== 全画面をホームと同じ見た目に（2026-11）：漆の札・金のボタン・丸い戻る・金の筆文字の見出し ===== */
+body{background-image:radial-gradient(ellipse 120% 50% at 50% -10%,rgba(216,189,126,.10),transparent 60%),repeating-linear-gradient(115deg,rgba(237,228,208,.025) 0 1px,transparent 1px 9px),repeating-linear-gradient(25deg,rgba(237,228,208,.02) 0 1px,transparent 1px 13px);background-attachment:fixed}
+.scr:not([data-scr=home]):not([data-scr=game]){padding-left:16px;padding-right:16px}
+/* 見出しの帯 */
+.scr .topbar{position:relative;min-height:72px;margin:0 0 10px;padding:0 52px;border-bottom:0;justify-content:center}
+.scr .topbar::after{content:"";position:absolute;left:26%;right:26%;bottom:4px;height:1px;background:linear-gradient(90deg,transparent,rgba(216,189,126,.55),transparent)}
+.scr .topbar>.back.i-l{position:absolute;left:0;top:50%;transform:translateY(-50%);width:38px;height:38px;min-height:0;padding:0;border-radius:50%;border:1px solid var(--gold-line);color:var(--gold);font-size:0;letter-spacing:0;display:flex;align-items:center;justify-content:center;background:transparent}
+.scr .topbar>.back.i-l::before{font-size:18px;margin:0;width:18px;height:18px}
+.scr .topbar>.sp{position:absolute;right:0;width:auto}
+.scr .topbar .rbtns{position:absolute;right:0;top:50%;transform:translateY(-50%)}
+.scr .topbar h2{flex:none;font-family:var(--f-disp);font-weight:800;font-size:22px;letter-spacing:.1em;line-height:1.2;background:linear-gradient(180deg,#fff4cc,#e9c46a 55%,#b07f2c);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 rgba(0,0,0,.55))}
+.scr .topbar h2.ttl-img{line-height:0;font-size:0;background:none;filter:none}
+.scr .topbar h2 .tt{height:40px;width:auto;max-width:min(62vw,300px);object-fit:contain;filter:drop-shadow(0 2px 0 rgba(0,0,0,.6)) drop-shadow(0 0 14px rgba(240,216,150,.22))}
+.scr .topbar h2 .tt.sq{height:46px}
+.scr .topbar h2 .tt-alt{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* 札とボタン */
+.card,.scr .fr-item,.scr .home-rules{background:linear-gradient(160deg,#211a14,#15110d);border:0;border-radius:10px;box-shadow:inset 0 0 0 1px rgba(216,189,126,.22),0 10px 24px rgba(0,0,0,.4)}
+.card{padding:16px}
+button{border-radius:10px}
+.scr:not([data-scr=home]) button.big{min-height:56px;border:0;border-radius:10px;font-family:var(--f-disp);font-weight:800;font-size:16px;letter-spacing:.08em;color:var(--fg);background:linear-gradient(160deg,#2a2118,#18130e);box-shadow:inset 0 0 0 1px rgba(216,189,126,.3),0 6px 16px rgba(0,0,0,.35)}
+.scr:not([data-scr=home]) button.big:hover{background:linear-gradient(160deg,#30261b,#1c1610)}
+button.primary,.scr:not([data-scr=home]) button.big.primary{border:0;color:#2a1408;font-weight:800;background:linear-gradient(180deg,#f6e2a8,#d2ad5f 55%,#a87e35);box-shadow:0 6px 16px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.4)}
+button.primary:hover{background:linear-gradient(180deg,#fbe9b8,#d8b56a 55%,#b0873c)}
+.scr input[type=text],.scr input[type=email],.scr input[type=password],.scr .fr-row input,.scr .fr-find{border-radius:8px;border:1px solid rgba(216,189,126,.3);background:#0e0b08}
+.seg{border-radius:10px;border-color:rgba(216,189,126,.25);background:#15110d}
+.seg button[aria-pressed="true"]{background:linear-gradient(180deg,#f6e2a8,#c9a24e);color:#2a1408}
+/* 一覧（対局履歴・観戦） */
+.hist{gap:10px}
+.hist button{border:0;border-radius:10px;padding:13px 14px;background:linear-gradient(160deg,#211a14,#15110d);box-shadow:inset 0 0 0 1px rgba(216,189,126,.2)}
+.hist button:hover{background:linear-gradient(160deg,#281f17,#18130e)}
+.hist .res{font-size:20px;font-weight:800}
+.hist .res.win{background:linear-gradient(180deg,#fff4cc,#e9c46a 55%,#b07f2c);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hist-note,.lead{color:var(--sub)}
+/* ランキング */
+.rk-list{margin-top:10px}
+.rk-list li{padding:11px 12px;border-bottom:1px solid var(--gold-line)}
+.rk-list li.top1{margin-bottom:6px;border:0;border-radius:10px;background:linear-gradient(160deg,#2c2214,#17120c);box-shadow:inset 0 0 0 1px rgba(233,196,106,.55),0 10px 24px rgba(0,0,0,.45);padding:14px 12px}
+.rk-list li.top1 .nm{font-family:var(--f-disp);font-size:17px}
+.rk-list li.me{border-radius:8px;background:linear-gradient(90deg,rgba(216,189,126,.14),transparent)}
+.rk-list li .v{font-weight:800}
+.rk-prev{font-family:var(--f-disp);font-weight:700}
+/* 相手探し・相手待ち */
+.seek .mark,#netHost .mark{position:relative;width:150px;height:150px;margin:0 auto;align-items:center;justify-content:center;gap:16px}
+.seek .mark::before,.seek .mark::after,#netHost .mark::before,#netHost .mark::after{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid rgba(216,189,126,.35);animation:hmRing 2.4s ease-out infinite}
+.seek .mark::after,#netHost .mark::after{animation-delay:1.2s}
+@keyframes hmRing{0%{transform:scale(.45);opacity:1}100%{transform:scale(1.15);opacity:0}}
+.seek .mark .dot.big,#netHost .mark .dot.big{width:46px;height:46px}
+.seek .status{font-family:var(--f-disp);font-weight:800;color:var(--gold-hi)}
+.elapsed{font-family:var(--f-disp);font-weight:800;font-size:30px;color:var(--gold-hi);letter-spacing:.1em}
+.code{font-family:var(--f-disp);font-weight:800;color:var(--gold-hi);border:0}
+/* 小見出し */
+.fr-sec h3,.acct-h,.home-rules h3{font-family:var(--f-disp);font-weight:800;color:var(--gold);letter-spacing:.14em}
+/* 対局の選び方（対局する → ランダム・友だち・ひとり） */
+.pm{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.pm button{position:relative;display:block;width:100%;min-height:0;padding:18px 18px 16px;border:0;border-radius:12px;text-align:left;letter-spacing:normal;color:var(--fg);background:linear-gradient(160deg,#211a14,#15110d);box-shadow:inset 0 0 0 1px rgba(216,189,126,.3),0 10px 24px rgba(0,0,0,.45);overflow:hidden}
+.pm button.pm-r{background:radial-gradient(ellipse 80% 120% at 85% -10%,rgba(255,220,150,.20),transparent 60%),linear-gradient(150deg,#5a1610,#2e0b08 55%,#1a0605);box-shadow:inset 0 0 0 1px rgba(240,216,150,.55),inset 0 0 0 4px rgba(46,11,8,.9),inset 0 0 0 5px rgba(216,189,126,.35),0 14px 30px rgba(0,0,0,.55)}
+.pm button:active{transform:scale(.99)}
+.pm .hm-fimg img{height:40px}.pm .hm-fimg b{font-size:24px}
+.pm .pm-d{display:block;margin-top:6px;padding-right:50px;font-size:12.5px;color:var(--sub);line-height:1.55}.pm-r .pm-d{color:#e9d3a6}
+.pm .hm-go{right:16px;bottom:50%;transform:translateY(50%);width:40px;height:40px}
+.pm .online{justify-content:flex-start;margin:6px 0 0;color:#f1dfb6}
+html:is([lang=en],[lang=es],[lang=de]) .pm .hm-fimg img{height:46px}
+/* 終局の画面（2026-11）：Flowの金の筆文字。勝ちは光の筋と金箔、負けは墨、引き分けは黒と白が寄って止まる */
+.mvend{background:radial-gradient(ellipse 70% 50% at 50% 42%,rgba(16,13,10,.80),rgba(16,13,10,.96))!important}
+.mvend .mvk{line-height:0;animation:none;text-shadow:none;position:relative;z-index:1}
+.mvimg{display:block;width:auto;max-width:82vw;opacity:0}
+.mvimg.win{height:min(46vw,190px);filter:drop-shadow(0 0 24px rgba(240,216,150,.55)) drop-shadow(0 4px 0 rgba(0,0,0,.6));animation:mvWinIn 1s cubic-bezier(.2,.9,.25,1.2) .15s forwards}
+@keyframes mvWinIn{0%{opacity:0;transform:scale(1.9);filter:blur(10px)}60%{opacity:1;filter:blur(0) drop-shadow(0 0 40px rgba(255,236,180,.9))}100%{opacity:1;transform:scale(1)}}
+.mvimg.lose{height:min(40vw,170px);filter:grayscale(.55) brightness(.8) drop-shadow(0 4px 0 rgba(0,0,0,.7));animation:mvLoseIn 1.6s cubic-bezier(.3,.6,.3,1) .2s forwards}
+@keyframes mvLoseIn{0%{opacity:0;transform:translateY(-30px)}100%{opacity:1;transform:none}}
+.mvimg.draw{height:min(17vw,72px);opacity:1;filter:drop-shadow(0 0 16px rgba(240,216,150,.35)) drop-shadow(0 3px 0 rgba(0,0,0,.6));clip-path:inset(-20px 100% -20px -20px);animation:mvBrush 1.1s cubic-bezier(.5,0,.3,1) .9s forwards}
+@keyframes mvBrush{to{clip-path:inset(-20px -20px -20px -20px)}}
+.mvrays{position:absolute;left:50%;top:42%;width:560px;height:560px;margin:-280px 0 0 -280px;opacity:0;pointer-events:none;background:repeating-conic-gradient(from 0deg,rgba(240,216,150,.16) 0 6deg,transparent 6deg 22deg);-webkit-mask:radial-gradient(circle,#000 10%,transparent 62%);mask:radial-gradient(circle,#000 10%,transparent 62%);animation:mvRays 1.2s .3s forwards,mvSpin 30s linear infinite}
+@keyframes mvRays{to{opacity:1}}@keyframes mvSpin{to{transform:rotate(360deg)}}
+.mvpair{position:relative;width:180px;height:70px;margin-bottom:10px}
+.mvpair span{position:absolute;top:8px;left:50%;width:54px;height:54px;border-radius:50%;box-shadow:0 8px 16px rgba(0,0,0,.6);opacity:0}
+.mvpair .pb{margin-left:-56px;background:radial-gradient(circle at 34% 28%,#5a5c5e,#232526 38%,#0c0d0e 72%);animation:mvInL .9s cubic-bezier(.3,.7,.3,1) .1s forwards}
+.mvpair .pw{margin-left:2px;background:radial-gradient(circle at 34% 28%,#fff,#e4e5e6 38%,#c3c5c7 72%);animation:mvInR .9s cubic-bezier(.3,.7,.3,1) .1s forwards}
+@keyframes mvInL{0%{opacity:0;transform:translateX(-120px)}80%{opacity:1;transform:translateX(3px)}100%{opacity:1;transform:none}}
+@keyframes mvInR{0%{opacity:0;transform:translateX(120px)}80%{opacity:1;transform:translateX(-3px)}100%{opacity:1;transform:none}}
+.mvpair i{position:absolute;left:50%;top:35px;width:0;height:1px;background:linear-gradient(90deg,transparent,#f6e2a8,transparent);transform:translateX(-50%);animation:mvLine .8s ease-out .85s forwards}
+@keyframes mvLine{to{width:260px}}
+.mvend .mvwho,.mvend .mvwhy,.mvend .mvrow{position:relative;z-index:1}
+.mvbtn{border-radius:10px;border:0;background:linear-gradient(160deg,#2a2118,#18130e);box-shadow:inset 0 0 0 1px rgba(216,189,126,.4)}
+.mvbtn.solid{background:linear-gradient(180deg,#f6e2a8,#d2ad5f 55%,#a87e35);box-shadow:0 6px 16px rgba(0,0,0,.45)}
+.pf-hero{margin:0 0 12px}.pf-hero .hm-mn b{font-size:18px}.kf-chip-prof{border-radius:10px;border:0;background:linear-gradient(160deg,#211a14,#15110d);box-shadow:inset 0 0 0 1px rgba(216,189,126,.3)}
+.mvstreak{position:relative;z-index:1;margin-top:2px;font-family:var(--f-disp);font-weight:800;font-size:22px;letter-spacing:.2em;background:linear-gradient(180deg,#fff4cc,#e9c46a 55%,#b07f2c);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;animation:mvLoseIn .8s ease-out 1.1s forwards}
+.mvrate{position:relative;z-index:1;width:min(78vw,300px);margin-top:14px;opacity:0;animation:mvLoseIn .6s ease-out 1.2s forwards}
+.mvr-top{display:flex;align-items:baseline;gap:8px;font-size:12.5px;color:var(--sub)}.mvr-top b{font-family:var(--f-disp);font-weight:800;color:var(--gold-hi);font-size:18px}.mvr-top em{font-style:normal;font-weight:700;color:#e9c46a;margin-left:auto}.mvr-top em.dn{color:#a89e8a}
+.mvr-bar{position:relative;height:9px;margin-top:6px;background:linear-gradient(180deg,#0e0b08,#1d1712);box-shadow:inset 0 0 0 1px rgba(216,189,126,.3);overflow:hidden}
+.mvr-bar u{position:absolute;inset:0;display:flex;justify-content:space-evenly}.mvr-bar u s{width:1px;background:rgba(216,189,126,.2)}
+.mvr-bar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(180deg,#f6e2a8,#d8b56a 45%,#9c7433);transition:width 1.3s cubic-bezier(.3,.8,.3,1)}
+.mvr-left{margin-top:6px;text-align:right;font-size:12px;color:var(--sub)}
 html:not([lang=ja]) .hm-menu span{font-size:10.5px}
 html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is([lang=en],[lang=es],[lang=de]) .hm-sub .hm-fimg img{height:36px}
 </style>
@@ -733,17 +826,12 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
 
     <button class="hm-resume i-play" id="resumeBtn" hidden></button>
     <button class="hm-resume i-play" id="rematchBtn" hidden>マッチングに復帰（相手を探し直す）</button>
-    <button class="hm-play" id="randomBtn" type="button">
+    <button class="hm-play" id="playGo" data-go="play" type="button">
       <svg class="hm-leaf" id="hmLeaf" viewBox="0 0 400 170" preserveAspectRatio="none" aria-hidden="true"></svg>
-      <small>ランダム対戦</small>
       <span class="hm-fimg" data-fimg="play"><img alt="対局する" width="356" height="120"><b>対局する</b></span>
       <p class="online" id="onlineNow" hidden><i></i><span></span></p>
       <span class="hm-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg></span>
     </button>
-    <div class="hm-two">
-      <button class="hm-sub" data-go="friend" type="button"><span class="hm-fimg" data-fimg="friend"><img alt="友だちと対戦" width="230" height="72"><b>友だちと対戦</b></span><span class="hm-sd">部屋を作って招待</span></button>
-      <button class="hm-sub" data-go="solo" type="button"><span class="hm-fimg" data-fimg="solo"><img alt="ひとりで遊ぶ" width="240" height="72"><b>ひとりで遊ぶ</b></span><span class="hm-sd">CPU・最強AIまで</span></button>
-    </div>
 
     <div class="home-rules" id="homeRules" hidden>
       <h3>ルール</h3>
@@ -785,6 +873,16 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
     <p class="foot foot-links"><a href="privacy.html">プライバシーポリシー・お問い合わせ</a></p>
     <p class="foot lang-row"><select id="langSel" class="no-i18n" aria-label="Language / 言語"><option value="ja">日本語</option><option value="en">English</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="ko">한국어</option><option value="es">Español</option><option value="de">Deutsch</option></select></p>
     <div class="ad-slot" data-ad="home" hidden aria-label="広告"></div>
+  </div>
+</section>
+
+<!-- 対局する：ランダム・友だち・ひとりを選ぶ -->
+<section class="scr" data-scr="play" hidden>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>対局する</h2><span class="sp"></span></div>
+  <div class="pm">
+    <button class="pm-r" id="randomBtn" type="button"><span class="hm-fimg" data-fimg="match"><img alt="ランダム対戦" width="300" height="96"><b>ランダム対戦</b></span><span class="pm-d">同じ時間に探している人と自動で組み合わせます。段級が上がり下がりします。</span><span class="hm-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg></span></button>
+    <button data-go="friend" type="button"><span class="hm-fimg" data-fimg="friend"><img alt="友だちと対戦" width="230" height="72"><b>友だちと対戦</b></span><span class="pm-d">部屋を作って、リンクを送った相手と指します。</span><span class="hm-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg></span></button>
+    <button data-go="solo" type="button"><span class="hm-fimg" data-fimg="solo"><img alt="ひとりで遊ぶ" width="240" height="72"><b>ひとりで遊ぶ</b></span><span class="pm-d">CPUのやさしい〜最強AI、1台で2人、研究。</span><span class="hm-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg></span></button>
   </div>
 </section>
 
@@ -939,6 +1037,17 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
 
 <section class="scr" data-scr="profile" hidden>
   <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>アカウント</h2><span class="sp"></span></div>
+  <div class="hm-card pf-hero">
+    <span class="hm-me">
+      <span class="hm-rk"><span class="stone b" id="pfStone"></span></span>
+      <span class="hm-mi">
+        <span class="hm-mn"><b id="pfName"></b><em id="pfRate"></em><span class="hm-sk" id="pfStreak" aria-hidden="true"></span></span>
+        <span class="hm-bar"><u><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s><s></s></u><i id="pfBar"></i></span>
+        <span class="hm-mf"><span><span>達成率</span> <b id="pfPct"></b></span><span id="pfNext"></span></span>
+      </span>
+    </span>
+  </div>
+  <button class="kf-chip kf-chip-prof" data-go="kifu" id="kfChipProf" type="button"></button>
   <div class="card prof">
     <label class="prof-l" for="nameIn">名前（12文字まで）</label>
     <div class="row prof-row"><input type="text" id="nameIn" maxlength="12" autocomplete="nickname" placeholder="名無し"><button id="nameSave" class="primary">保存</button></div>
@@ -950,7 +1059,6 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
     <div class="bd-head"><label class="prof-l">バッジ</label><small id="bdCount"></small></div><p class="prof-note">持っているバッジを押すと、名前の横に出ます。もう一度押すと外れます。</p><div id="bdList"></div>
     <p class="note">段級はオンライン対戦とCPU戦（1手戻しを使わなかった対局）で上下します。名前と段級はオンライン対戦では相手と観戦者に表示されます。</p>
   </div>
-  <button class="kf-chip kf-chip-prof" data-go="kifu" id="kfChipProf" type="button"></button>
   <div class="card prof acct" id="acct">
     <h3 class="acct-h">メールでアカウント登録</h3>
     <p class="note" id="acctLead">登録すると、名前・レート・戦績がアカウントに保存され、別の端末でもログインすれば同じものを使えます。一度ログインすれば、ログアウトするまでこの端末ではログインしたままです。</p>
@@ -2411,25 +2519,27 @@ function fxEnd0(win,why,me,b,cell){if(!$('showJos').checked||CUR!=='game')return
   /* 勝ち負けの画面（試作どおり）：勝ちは金箔と筆の「勝」、負けは墨のしずくと薄墨の「負」 */
   let e=$('mvEnd');if(!e){e=document.createElement('div');e.id='mvEnd';e.className='mvend';e.setAttribute('role','dialog');e.setAttribute('aria-modal','true');document.body.appendChild(e);
     e.addEventListener('click',ev=>{const a=ev.target.closest('[data-a]');if(!a)return;e.hidden=true;if(a.dataset.a==='again'){const r=S.mode==='net'?$('rematch'):$('reset');if(r&&!r.hidden)r.click()}})}
-  const lose=me&&me!==win,mine=me&&me===win,cn=win===1?'黒':'白';let h='';
+  const lose=!!(me&&win&&me!==win),mine=me&&me===win,cn=win===1?'黒':'白';let h='';
   /* 大きな字は言語ごとの筆文字で */
-  const LG=window.BOCCH_LANG||'ja',BK={en:['WIN','LOSE','Kaushan Script'],es:['VICTORIA','DERROTA','Kaushan Script'],de:['SIEG','NIEDERLAGE','Kaushan Script'],ko:['승','패','Nanum Brush Script'],'zh-Hans':['胜','负','Ma Shan Zheng']}[LG];
-  let bigT=lose?'負':'勝',bigSt='';if(BK){bigT=BK[lose?1:0];const fam=BK[2];if(!document.getElementById('mvFont')){const l=document.createElement('link');l.id='mvFont';l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+fam.replace(/ /g,'+')+'&display=swap';document.head.appendChild(l)}
-    const n=[...bigT].length,k=n<=1?1:Math.min(1,1.55/(n*(/[A-Z]/.test(bigT)?.62:.95)));bigSt=' style="font-family:\''+fam+'\',\'Yuji Boku\',serif;font-size:calc(min(52vw,210px)*'+k.toFixed(3)+')"'}
-  if(!lose)for(let k=0;k<28;k++){const z=4+(k*7)%9;h+='<span class="mvflake" aria-hidden="true" style="left:'+((k*37+11)%100)+'%;top:'+((k*53+7)%80)+'%;width:'+z+'px;height:'+Math.round(z*.7)+'px;transform:rotate('+(k*37%180)+'deg);animation-delay:'+((k*13)%20)/10+'s"></span>'}
-  else for(let k=0;k<8;k++)h+='<span class="mvdrop" aria-hidden="true" style="left:'+(10+(k*23)%80)+'%;top:'+(15+(k*29)%60)+'%;height:'+(10+(k*5)%10)+'px;animation-delay:'+k*.6+'s"></span>';
+  const draw=!win,LG=window.BOCCH_LANG||'ja',RK3=draw?'draw':lose?'lose':'win';
+  /* 大きな字は Flow で作った金の筆文字（言語ごと） */
+  const bigT='<img class="mvimg '+RK3+'" src="ui/'+RK3+'-'+(fimgHas(RK3,LG)?LG:'ja')+'.webp" alt="'+(draw?'引き分け':lose?'負け':'勝ち')+'">',bigSt='';
+  if(!lose&&!draw)h+='<div class="mvrays" aria-hidden="true"></div>';
+  if(draw)h+='<div class="mvpair" aria-hidden="true"><span class="pb"></span><span class="pw"></span><i></i></div>';
+  if(!lose&&!draw)for(let k=0;k<28;k++){const z=4+(k*7)%9;h+='<span class="mvflake" aria-hidden="true" style="left:'+((k*37+11)%100)+'%;top:'+((k*53+7)%80)+'%;width:'+z+'px;height:'+Math.round(z*.7)+'px;transform:rotate('+(k*37%180)+'deg);animation-delay:'+((k*13)%20)/10+'s"></span>'}
+  else if(lose)for(let k=0;k<8;k++)h+='<span class="mvdrop" aria-hidden="true" style="left:'+(10+(k*23)%80)+'%;top:'+(15+(k*29)%60)+'%;height:'+(10+(k*5)%10)+'px;animation-delay:'+k*.6+'s"></span>';
   const canAgain=S.mode!=='net'||(!NET.watch&&colorOf(NET.me)>0);
-  h+='<div class="mvk"'+bigSt+'>'+bigT+'</div><div class="mvwho">'+(mine?'あなたの勝ち':cn+'の勝ち')+'</div><div class="mvwhy">'+esc0(why)+'　'+(S.ply||0)+'手</div><div class="mvrow">';
+  h+='<div class="mvk"'+bigSt+'>'+bigT+'</div><div class="mvwho">'+(draw?'':mine?'あなたの勝ち':lose?'あなたの負け':cn+'の勝ち')+'</div><div class="mvwhy">'+esc0(why)+'　'+(S.ply||0)+'手</div><div class="mvrow">';
   h+=lose?'<button class="mvbtn solid" type="button" data-a="look">盤面を振り返る</button>'+(canAgain?'<button class="mvbtn" type="button" data-a="again">もう一局</button>':'')
          :(canAgain?'<button class="mvbtn solid" type="button" data-a="again">もう一局</button>':'')+'<button class="mvbtn'+(canAgain?'':' solid')+'" type="button" data-a="look">盤面を見る</button>';
-  e.className='mvend'+(lose?' lose':'');e.innerHTML=h+'</div>';e.hidden=false;try{e.querySelector('.mvbtn').focus({preventScroll:true})}catch(x){}
+  e.className='mvend'+(lose?' lose':'')+(draw?' draw':'')+(!lose&&!draw?' win':'');e.innerHTML=h+'</div>';e.hidden=false;try{e.querySelector('.mvbtn').focus({preventScroll:true})}catch(x){}
   return false}
 function esc0(t){return String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function fxMe(){if(S.mode==='net')return NET.ai?0:(colorOf(NET.me)||0);if(S.mode===0||S.study)return 0;return hcOf()}
 function fxCheck(){if(!S||S.study)return;const live=typeof VIEW==='undefined'||VIEW.i==null;const gid=(S.mode==='net'?'n'+(NET.code||'')+'-'+(NET.game||''):S.gid||(S._fx||(S._fx=Math.random().toString(36).slice(2))))+':'+S.mode;
   const a=[0,arrivedCount(S.b,1),arrivedCount(S.b,2)],ply=S.ply||0;
   if(gid!==FX.gid||ply<FX.ply){FX.gid=gid;FX.ply=ply;FX.arr=a;FX.over=S.over?gid:'';return}
-  if(S.over&&S.over.win&&FX.over!==gid){FX.over=gid;FX.ply=ply;FX.arr=a;if(live)fxEnd(S.over.win,S.over.why||'',fxMe());return}
+  if(S.over&&FX.over!==gid){FX.over=gid;FX.ply=ply;FX.arr=a;if(live)fxEnd(S.over.win,S.over.why||'',fxMe());return}
   if(!S.over&&ply===FX.ply+1&&S.last&&live){const m=S.b[S.last[1]];if(m&&a[m]>FX.arr[m]){const me=fxMe();fxArrive(m,S.last[1],me?me===m:undefined)}}
   if(ply!==FX.ply){FX.ply=ply;FX.arr=a}}
 const _render2=render;
@@ -3911,15 +4021,26 @@ const KIFU=["1wk4ezs07up1dxl2gsqgfvjfcq27vpscq27vwytwxtmxvmwdh7dvxwixnsgnbgvhmiw
 /* 金箔の粒（対局するの札） */
 (function(){const lf=document.getElementById('hmLeaf');if(!lf)return;let h='';for(let k=0;k<70;k++){const x=(Math.sin(k*91.7)*.5+.5)*400,y=(Math.sin(k*37.3)*.5+.5)*170,s=1+((k*13)%5)*.7,o=.15+((k*7)%10)/30;h+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+s.toFixed(1)+'" height="'+(s*.7).toFixed(1)+'" fill="#f0d896" opacity="'+o.toFixed(2)+'" transform="rotate('+(k*29)+' '+x.toFixed(1)+' '+y.toFixed(1)+')"/>'}lf.innerHTML=h})();
 /* Flowで作った筆文字：言語ごとの画像。無い言語は同じ色の文字で出す */
-const FIMG_LANGS={play:['ja','en','zh-Hans','zh-Hant','ko','es','de'],friend:['ja','en','zh-Hans','zh-Hant','ko','es','de'],solo:['ja','en','zh-Hans','zh-Hant','ko','es','de']};
+const FIMG_L=['ja','en','zh-Hans','zh-Hant','ko','es','de'],FIMG_K=['play','friend','solo','match','invite','history','rank','course','ref','daily','review','friends','watch','kifu','profile','rules','win','lose','draw'];
+const fimgHas=(k,L)=>FIMG_K.includes(k)&&FIMG_L.includes(L);
 function fimgInit(){const L=window.BOCCH_LANG||'ja';document.querySelectorAll('[data-fimg]').forEach(el=>{const k=el.dataset.fimg,img=el.querySelector('img');
-  if((FIMG_LANGS[k]||[]).includes(L)){img.src='ui/'+k+'-'+L+'.webp';el.classList.remove('txt')}else{img.removeAttribute('src');el.classList.add('txt')}})}
+  if(fimgHas(k,L)){img.src='ui/'+k+'-'+L+'.webp';el.classList.remove('txt')}else{img.removeAttribute('src');el.classList.add('txt')}})}
 fimgInit();
+/* 各画面の見出し：日本語の見出しの文字から、Flowで作った金の筆文字の画像に置き換える（画像が無い言語は金の文字のまま） */
+const TTL_KEY={'対局する':'play','友だちと対戦':'friend','ひとりで遊ぶ':'solo','相手を待っています':'invite','ランダム対戦':'match','対局履歴':'history','ランキング':'rank','学ぶ':'course','資料':'ref','毎日の1問':'daily','感想戦':'review','フレンド':'friends','観戦する':'watch','あなたの棋風':'kifu','アカウント':'profile','ルール':'rules'};
+const TTL_SQ={course:1,ref:1,rules:1,review:1};
+function ttlApply(h){const L=window.BOCCH_LANG||'ja';if(h.querySelector('.tt'))return;const t=(h.textContent||'').trim();
+  let k=TTL_KEY[t];if(!k&&window.bocchT)for(const j in TTL_KEY)if(window.bocchT(j)===t){k=TTL_KEY[j];break}
+  if(!k||!fimgHas(k,L)){h.classList.remove('ttl-img');return}
+  h.classList.add('ttl-img');h.textContent='';const im=document.createElement('img');im.className='tt'+(TTL_SQ[k]?' sq':'');im.src='ui/'+k+'-'+L+'.webp';im.alt=t;const sp=document.createElement('span');sp.className='tt-alt';sp.textContent=t;h.append(im,sp)}
+document.querySelectorAll('.scr .topbar h2').forEach(h=>{ttlApply(h);if(h.id)new MutationObserver(()=>ttlApply(h)).observe(h,{childList:true,characterData:true,subtree:true})});
 /* 自分の札：段級の縁の石・名前・段級・連勝・達成率。押すと棋風とアカウントの行が開く */
 function hmCard(){const lv=myLv(),D=PROF.dan||{lv:0,pct:0},st=$('meStone');if(!st)return;
   st.className='stone b'+rankCls(lv);
   const pct=lv<10?0:Math.max(0,Math.min(100,Math.floor(D.pct||0)));$('meBar').style.width=pct+'%';$('mePct').textContent=lv<10?'—':pct+'%';
   $('meNext').textContent=lv>=LV_MAX&&pct>=100?'最高位':lv<10?'1勝で昇級':(lv+1>=30?'昇段まで あと':'昇級まで あと')+(100-pct)+'%';
+  for(const [p,q] of [['meStone','pfStone'],['meBar','pfBar'],['mePct','pfPct'],['meNext','pfNext'],['meRate','pfRate'],['meStreak','pfStreak']]){const A=$(p),B=$(q);if(!A||!B)continue;B.className=A.className;B.style.width=A.style.width;B.innerHTML=A.innerHTML}
+  {const n=$('pfName');if(n)n.textContent=myName()}
   let k=0;try{k=Math.min(5,bdStats().streak|0)}catch(e){}$('meStreak').innerHTML='<i></i>'.repeat(k);$('meStreak').title=k?k+'連勝中':'';}
 try{hmCard()}catch(e){}
 /* 先月の1位：盤の下に1行で出す。押すとランキング */
@@ -3932,6 +4053,67 @@ async function hmDaily(){try{const L=await dqLoad();if(!L.length)return;const n=
     $('hmDqN').textContent='第'+(n+1)+'問';$('hmDqP').textContent=(q[1]===1?'黒番':'白番')+'・2手で勝ち';$('hmDqC').textContent=dqCur()+'日'}catch(e){}}
 hmDaily();
 {const _ph=paint;paint=function(n){_ph(n);if(n==='home')try{hmCard();hmDaily()}catch(e){}}}
+</script>
+<script>
+/* ===== 対局中の新しい演出（2026-11）：縛り・ぼっち。終局画面に連勝と達成率 ===== */
+const FX2={cv:null,raf:0,prev:null,gid:'',ply:-1,pct:null,tm:[]};
+const FXI={koi:new Image(),shib:new Image()};FXI.koi.src='ui/fx-koi.webp';FXI.shib.src='ui/fx-shib.webp';
+function fx2Base(){const bd=$('board'),grid=$('grid');if(!bd||!grid||grid.children.length<36)return null;
+  if(!FX2.cv){const c=document.createElement('canvas');c.setAttribute('aria-hidden','true');c.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:7';bd.appendChild(c);FX2.cv=c}
+  const R=bd.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1),c=FX2.cv;c.width=Math.round(R.width*dpr);c.height=Math.round(R.height*dpr);const x=c.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);
+  const Q=[...grid.children].slice(0,36).map(e=>{const r=e.getBoundingClientRect();return{x:r.left-R.left+r.width/2,y:r.top-R.top+r.height/2,w:r.width}});
+  const ux={x:Q[1].x-Q[0].x,y:Q[1].y-Q[0].y},uy={x:Q[6].x-Q[0].x,y:Q[6].y-Q[0].y};
+  return{x,W:R.width,H:R.height,cs:Q[0].w,P:i=>Q[i],at:(r,c)=>({x:Q[0].x+c*ux.x+r*uy.x,y:Q[0].y+c*ux.y+r*uy.y})}}
+function fx2Stop(){cancelAnimationFrame(FX2.raf);FX2.tm.forEach(clearTimeout);FX2.tm=[];if(FX2.cv){const x=FX2.cv.getContext('2d');x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,FX2.cv.width,FX2.cv.height)}}
+function fx2Anim(per,draw){cancelAnimationFrame(FX2.raf);const g=fx2Base();if(!g)return;const t0=performance.now();
+  const f=now=>{const t=now-t0;g.x.clearRect(0,0,g.W,g.H);if(t>per||CUR!=='game')return;draw(g,t);FX2.raf=requestAnimationFrame(f)};FX2.raf=requestAnimationFrame(f)}
+const FX2TINT={};function fx2Tint(im){if(FX2TINT[im.src])return FX2TINT[im.src];if(!im.complete||!im.naturalWidth)return null;const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;const x=c.getContext('2d');x.drawImage(im,0,0);x.globalCompositeOperation='source-in';const g=x.createLinearGradient(0,0,0,c.height);g.addColorStop(0,'#fff4cc');g.addColorStop(.5,'#e9c46a');g.addColorStop(1,'#b07f2c');x.fillStyle=g;x.fillRect(0,0,c.width,c.height);return FX2TINT[im.src]=c}
+/* 金の筆文字の帯（戦法と同じ形）。日本語は Flow の筆文字、ほかの言語は同じ色の文字 */
+function fx2Band(g,np,im,word){const {x,W,H}=g;if(np<=0||np>=1)return;const a=Math.min(1,np/.1)*(1-fxW(np,.84,1)),y=H*.8,bh=W*.27,wp=fxE(np/.3);x.save();x.globalAlpha=a;x.fillStyle='rgba(14,15,18,.88)';x.fillRect(0,y-bh/2,W,bh);
+  const ja=(window.BOCCH_LANG||'ja')==='ja',tc=ja&&fx2Tint(im);x.beginPath();x.rect(0,y-bh/2,W*wp,bh);x.clip();x.shadowColor='rgba(0,0,0,.85)';x.shadowBlur=10;
+  if(tc){let nh=bh*.78,nw=nh*tc.width/tc.height;if(nw>W*.7){nw=W*.7;nh=nw*tc.height/tc.width}x.drawImage(tc,W/2-nw/2,y-nh/2,nw,nh)}
+  else{const t=(window.bocchT||(s=>s))(word),gr=x.createLinearGradient(0,y-30,0,y+30);gr.addColorStop(0,'#fff4cc');gr.addColorStop(.5,'#e9c46a');gr.addColorStop(1,'#b07f2c');x.fillStyle=gr;x.textAlign='center';x.textBaseline='middle';x.font='800 '+Math.round(bh*.5)+'px '+FX_FONT;x.fillText(t,W/2,y)}
+  x.restore()}
+function fx2Art(g,t,im,t0,fade){const {x,W,H}=g,ip=fxE(fxW(t,t0,t0+1050));if(ip<=0||!im.complete||!im.naturalWidth)return;const cx=W/2,cy=H*.4,sz=Math.min(W,H)*.72*(.84+.16*ip);
+  x.save();const dg=x.createRadialGradient(cx,cy,0,cx,cy,sz*.72);dg.addColorStop(0,'rgba(14,15,18,.66)');dg.addColorStop(.7,'rgba(14,15,18,.4)');dg.addColorStop(1,'rgba(14,15,18,0)');x.globalAlpha=ip*fade;x.fillStyle=dg;x.beginPath();x.arc(cx,cy,sz*.72,0,7);x.fill();
+  const hg=x.createRadialGradient(cx,cy,0,cx,cy,sz*.6);hg.addColorStop(0,'rgba(233,196,106,.3)');hg.addColorStop(1,'rgba(0,0,0,0)');x.globalAlpha=ip*fade*(.85+.15*Math.sin(t/180));x.fillStyle=hg;x.beginPath();x.arc(cx,cy,sz*.6,0,7);x.fill();
+  x.globalAlpha=ip*fade;x.drawImage(im,cx-sz/2,cy-sz/2+(1-ip)*H*.14,sz,sz);
+  for(let n=0;n<16;n++){const fp=fxW(t,t0+fxR(n)*900,t0+1250+fxR(n)*1400);if(fp<=0||fp>=1)continue;x.globalAlpha=fade*(1-fp)*.9;x.fillStyle=n%2?'#e9c46a':'#f6e2a8';x.fillRect(cx+(fxR(n+3)-.5)*sz*1.1-2,cy+sz*.5-fp*sz*1.1,4,4)}
+  x.restore()}
+/* 縛り：相手の石が「4」で行き先が1つも無くなった瞬間。8方向に4マス分の光が伸びて盤の端や石で止まり、冠の鯉と「縛り」の筆文字 */
+function fx2Bind(b,i){const n=nbCount(b,i),r=i/6|0,c=i%6,D8=[[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[-1,1],[1,-1],[1,1]];
+  const rays=D8.map(([dr,dc])=>{let k=0;for(let s=1;s<=n;s++){const rr=r+dr*s,cc=c+dc*s;if(rr<0||rr>5||cc<0||cc>5)break;k=s}return{dr,dc,k:k<n?k+.5:k}});
+  fx2Anim(5200,(g,t)=>{const {x,cs}=g,o=g.P(i);fx2Art(g,t,FXI.koi,1300,1-fxW(t,4500,5200));fx2Band(g,fxW(t,2000,5200),FXI.shib,'縛り');
+    rays.forEach((ry,j)=>{const st=j*40,p=fxE(fxW(t,st,st+520)),fade=1-fxW(t,1500,2300),e=g.at(r+ry.dr*ry.k*p,c+ry.dc*ry.k*p);
+      const gr=x.createLinearGradient(o.x,o.y,e.x,e.y);gr.addColorStop(0,'rgba(246,226,168,0)');gr.addColorStop(.25,'rgba(246,226,168,.55)');gr.addColorStop(1,'rgba(255,244,214,.95)');
+      x.save();x.globalAlpha=fade;x.strokeStyle=gr;x.lineWidth=2;x.shadowColor='rgba(240,216,150,.9)';x.shadowBlur=8;x.beginPath();x.moveTo(o.x,o.y);x.lineTo(e.x,e.y);x.stroke();
+      const hp=fxW(t,st+480,st+900);if(hp>0&&hp<1){x.globalAlpha=(1-hp)*fade;x.fillStyle='#fff4d6';x.beginPath();x.arc(e.x,e.y,2+6*hp,0,7);x.fill()}x.restore()});
+    const rp=fxW(t,1000,1600);if(rp>0){x.save();x.globalAlpha=1-fxW(t,1900,2400);x.strokeStyle='rgba(246,226,168,.9)';x.lineWidth=1.5;x.shadowColor='rgba(240,216,150,.9)';x.shadowBlur=10;x.beginPath();x.arc(o.x,o.y,cs*(0.9-0.45*fxE(rp)),0,7);x.stroke();x.restore()}})}
+/* ぼっち：最後の隣の石が離れて、ひとりぼっち（0）になった石。間の糸が伸びて、ぷつっと切れる */
+function fx2Lonely(a,t){fx2Anim(1500,(g,tm)=>{const {x,cs}=g,A=g.P(a),B=g.P(t),ang=Math.atan2(B.y-A.y,B.x-A.x),d=Math.hypot(B.x-A.x,B.y-A.y);
+    if(tm<500){const p=tm/500;x.save();x.globalAlpha=.9;x.strokeStyle='rgba(246,226,168,.9)';x.lineWidth=Math.max(.6,1.6-p);x.shadowColor='rgba(240,216,150,.8)';x.shadowBlur=6;x.beginPath();x.moveTo(A.x,A.y);x.lineTo(A.x+Math.cos(ang)*d,A.y+Math.sin(ang)*d);x.stroke();x.restore();return}
+    const p=Math.min(1,(tm-500)/900),L1=d*.45*(1-fxE(p));x.save();x.strokeStyle='rgba(246,226,168,.9)';x.lineWidth=1;x.globalAlpha=1-p;
+    x.beginPath();x.moveTo(A.x,A.y);x.lineTo(A.x+Math.cos(ang)*L1,A.y+Math.sin(ang)*L1+p*8);x.stroke();x.beginPath();x.moveTo(B.x,B.y);x.lineTo(B.x-Math.cos(ang)*L1,B.y-Math.sin(ang)*L1+p*8);x.stroke();
+    const mx=(A.x+B.x)/2,my=(A.y+B.y)/2;for(let k=0;k<6;k++){x.fillStyle='#fff4d6';x.fillRect(mx+Math.cos(k)*p*14,my+Math.sin(k*1.7)*p*14+p*p*10,2,2)}
+    const rp=fxW(tm,600,1400);if(rp>0&&rp<1){x.globalAlpha=(1-rp)*.7;x.strokeStyle='rgba(150,170,190,.8)';x.beginPath();x.arc(A.x,A.y,cs*(.35+.25*rp),0,7);x.stroke()}x.restore()})}
+/* 1手ごとに、直前の盤と比べて演出を決める */
+{const _fc=fxCheck;fxCheck=function(){_fc();try{if(!S||S.study||S.learn)return;const live=typeof VIEW==='undefined'||VIEW.i==null,gid=FX.gid,ply=S.ply||0;
+  if(!S.over)FX2.pct=PROF&&PROF.dan?{lv:PROF.dan.lv,pct:PROF.dan.pct}:null;
+  if(gid!==FX2.gid||ply!==FX2.ply+1||!FX2.prev||!S.last||!live||S.over||CUR!=='game'||!$('showJos').checked){FX2.gid=gid;FX2.ply=ply;FX2.prev=S.b.slice();return}
+  const b0=FX2.prev,b1=S.b,[f,t]=S.last,mv=b1[t];FX2.gid=gid;FX2.ply=ply;FX2.prev=b1.slice();if(!mv)return;
+  const frozen=(b,i)=>nbCount(b,i)>=4&&!movesFrom(b,i).length;
+  for(let i=0;i<36;i++)if(b1[i]===3-mv&&frozen(b1,i)&&!(b0[i]===3-mv&&frozen(b0,i))){FX2.tm.push(setTimeout(()=>fx2Bind(b1,i),650));return}
+  const fr=f/6|0,fc=f%6;for(let i=0;i<36;i++){if(!b1[i]||i===t)continue;const r=i/6|0,c=i%6;if(Math.abs(r-fr)<=1&&Math.abs(c-fc)<=1&&nbCount(b1,i)===0&&b0[i]&&nbCount(b0,i)>0){FX2.tm.push(setTimeout(()=>fx2Lonely(i,t),450));return}}
+}catch(e){}}}
+{const _ps=paint;paint=function(n){_ps(n);if(n!=='game')fx2Stop()}}
+/* 終局画面：連勝（自分が勝ったとき）と、段級の達成率のバー */
+{const _fe=fxEnd0;fxEnd0=function(win,why,me,b,cell){const r=_fe(win,why,me,b,cell);try{const e=$('mvEnd');if(!e||e.hidden)return r;const row=e.querySelector('.mvrow');if(!row)return r;
+  const mine=me&&me===win;let h='';
+  if(mine){let k=0;try{k=bdStats().streak|0}catch(x){}if(k>=2)h+='<div class="mvstreak">'+k+'連勝</div>'}
+  const rated=(S.mode==='net'&&!NET.watch)||(typeof CPU_RATE!=='undefined'&&CPU_RATE[S.mode]&&!S.noRate);
+  if(rated&&FX2.pct&&PROF.dan){const a0=FX2.pct,a1=PROF.dan,up=a1.lv>a0.lv,dn=a1.lv<a0.lv,from=Math.floor(a0.pct||0),to=up?100:dn?0:Math.floor(a1.pct||0),d=to-from;
+    if(a1.lv>=10||a0.lv>=10)h+='<div class="mvrate"><div class="mvr-top"><span>達成率</span><b class="mvr-n">'+from+'%</b>'+(d?'<em class="'+(d>0?'up':'dn')+'">'+(d>0?'+':'')+d+'%</em>':'')+'</div><div class="mvr-bar"><u>'+'<s></s>'.repeat(9)+'</u><i style="width:'+from+'%" data-to="'+to+'"></i></div><div class="mvr-left">'+(up?(lvName(a1.lv)+'に'+(a1.lv>=30?'昇段':'昇級')):(a1.lv+1>=30?'昇段まで あと':'昇級まで あと')+(100-to)+'%')+'</div></div>'}
+  if(h){row.insertAdjacentHTML('beforebegin',h);const bar=e.querySelector('.mvr-bar i');if(bar)setTimeout(()=>{const to=+bar.dataset.to;bar.style.width=to+'%';const n=e.querySelector('.mvr-n');if(n){let v=parseInt(n.textContent);const st=to>v?1:-1;const iv=setInterval(()=>{if(v===to){clearInterval(iv);return}v+=st;n.textContent=v+'%'},Math.max(15,1200/Math.max(1,Math.abs(to-v))))}},1400)}}catch(x){}return r}}
 </script>
 <script>
 /* いまオンラインの人数：開いている人が1分ごとに「いるよ」を送り、直近2分に送った人を数える（画面を見ていない間は送らない） */
