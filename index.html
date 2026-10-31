@@ -2736,11 +2736,11 @@ const _renderP=render;render=function(){_renderP();
   const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?'1手戻しを使ったのでレートは変わりません':'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
   {const mn=$('meName');mn.textContent=myName();if(isOff())mn.prepend(offBadge(18));const sb=bdSel();if(sb)mn.append(bdBadge(sb,17))}$('meRate').textContent=Math.round(PROF.rating)};
 /* ===== 棋風診断：その端末に残っている対局の手順から、将棋の棋風の分け方を参考に6つの物差しで測る ===== */
-// 人に近い指し手（やさしい・ふつうのCPUの組み合わせ、46人×12局）の、1人あたり平均の平均と散らばり。
-// 以前は強いAI同士の対局を基準にしていたため、普通に指すと誰でも「攻め」になっていた
-const KF_BASE={fwd:[.7812,.0359],def:[.1372,.0388],big:[.1494,.0436],coh:[.9642,.1405],bind:[.1118,.0337],first:[17.71,2.786],len:[20.69,2.14],open:[.0924,.0907]};
-const KF_AXS=[1.454,1.43,.724,1,.998,1]; // 6つの目もりの散らばりをそろえる（どれか1つだけが大きく出ないように）
-const KF_COME=[.282,.263]; // 相手に先に着かれた対局からの逆転勝ち（平均と散らばり）
+// 人に近い指し手（やさしい・ふつうのCPUをいろいろな相手と組ませた110人×12局）の、1人あたり平均の平均と散らばり。
+// fwd・def・big・coh・bindは「選べた手の平均との差」。強いAI同士を基準にしていたころは、普通に指すと誰でも「攻め」になっていた
+const KF_BASE={fwd:[.1866,.042],def:[.0472,.0252],big:[.0464,.0267],coh:[-.0285,.0537],bind:[.0201,.0247],first:[18.12,2.512],len:[20.87,2.42],open:[.1341,.1107]};
+const KF_AXS=[1.365,1.624,1.526,1,1,1]; // 6つの目もりの散らばりをそろえる（どれか1つだけが大きく出ないように）
+const KF_COME=[.247,.231]; // 相手に先に着かれた対局からの逆転勝ち（平均と散らばり）
 const KF_AX=[ // [キー, 高いときの名前, 低いときの名前, 低い側も名前にするか]
  ['seme','攻め','受け',1],['kyu','急戦','持久戦',1],['atsu','厚み','さばき',1],['jo','定跡','力戦',1],['osa','押さえ込み','',0],['neb','粘り','',0]];
 const KF_LAB=['攻め','急戦','厚み','定跡','押さえ込み','粘り'];
@@ -2748,20 +2748,27 @@ const KF_DESC={'攻め':'向こう岸へ向かう手が多く、自分から仕�
  '厚み':'石どうしを寄せて、まとまって進むタイプ。','さばき':'大きく跳ぶ手が多く、軽く動き回るタイプ。','定跡':'双璧や送り鳥など、名前のある序盤をよく使うタイプ。','力戦':'定跡を外れた自分の形で戦うタイプ。',
  '押さえ込み':'相手の石を数字4や動けない石にして縛るタイプ。','粘り':'先に着かれてからの逆転が多いタイプ。'};
 const KF_ID={'攻め':'seme','受け':'uke','急戦':'kyusen','持久戦':'jikyu','厚み':'atsumi','さばき':'sabaki','定跡':'joseki','力戦':'rikisen','押さえ込み':'osae','粘り':'nebari'};
+/* 1局ぶんの指し方のくせ。攻め・受け・さばき・押さえ込み・厚みは「その局面で選べた手の平均と比べて、選んだ手がどうだったか」で測る
+   （前に進む手の割合などをそのまま数えると、対局の長さや相手の強さで大きく動いてしまうため） */
 function kfGame(log,me){let b=startBoard(),t=1;const opp=3-me,g=goalRow(me);
   const reach=(b,p)=>{const gr=goalRow(p);let n=0;for(let i=0;i<36;i++)if(b[i]===p&&(i/6|0)!==gr&&movesFrom(b,i).some(m=>(m[1]/6|0)===gr))n++;return n};
   const bound=(b,p)=>{let n=0;for(let i=0;i<36;i++)if(b[i]===p&&(nbCount(b,i)===4||!movesFrom(b,i).length))n++;return n};
   const own=(b,i)=>{const r=i/6|0,c=i%6;let n=0;for(const[x,y]of DIRS)if(ok(r+x,c+y)&&b[(r+x)*6+c+y]===b[i])n++;return n};
-  let mv=0,fwd=0,def=0,big=0,coh=0,cohN=0,bind=0,first=0,oppFirst=0;
+  const cohOf=n=>{let s=0,c=0;for(let i=0;i<36;i++)if(n[i]===me){s+=own(n,i);c++}return c?s/c:0};
+  const feat=(b,m,r0,b0)=>{const f=m[0],to=m[1],n=apply(b,m);return [Math.abs((f/6|0)-g)>Math.abs((to/6|0)-g)?1:0,reach(n,opp)<r0?1:0,Math.max(Math.abs((f/6|0)-(to/6|0)),Math.abs(f%6-to%6))>=3?1:0,bound(n,opp)>b0?1:0,cohOf(n),n]};
+  let mv=0,fwd=0,def=0,big=0,coh=0,bind=0,first=0,oppFirst=0;
   for(let k=0;k<log.length;k++){const m=log[k];
-    if(t===me){const f=m[0],to=m[1];if(Math.abs((f/6|0)-g)>Math.abs((to/6|0)-g))fwd++;
-      const n=apply(b,m);if(reach(n,opp)<reach(b,opp))def++;if(bound(n,opp)>bound(b,opp))bind++;
-      if(Math.max(Math.abs((f/6|0)-(to/6|0)),Math.abs(f%6-to%6))>=3)big++;mv++;
-      for(let i=0;i<36;i++)if(n[i]===me){coh+=own(n,i);cohN++}b=n;if(!first&&arrivedCount(b,me)>0)first=k+1}
+    if(t===me){const ms=allMoves(b,me),r0=reach(b,opp),b0=bound(b,opp);
+      if(ms.length>1){const av=[0,0,0,0,0];for(const x of ms){const q=feat(b,x,r0,b0);for(let h=0;h<5;h++)av[h]+=q[h]}
+        const c=feat(b,m,r0,b0);fwd+=c[0]-av[0]/ms.length;def+=c[1]-av[1]/ms.length;big+=c[2]-av[2]/ms.length;bind+=c[3]-av[3]/ms.length;coh+=c[4]-av[4]/ms.length;mv++}
+      b=apply(b,m);if(!first&&arrivedCount(b,me)>0)first=k+1}
     else{b=apply(b,m);if(!first&&!oppFirst&&arrivedCount(b,opp)>0)oppFirst=k+1}t=3-t}
   if(!mv)return null;let sp=-1;try{sp=me===1?senpoOf(log[0],log[2],1):senpoOf(log[1],log[3],2)}catch(e){}
-  return {fwd:fwd/mv,def:def/mv,big:big/mv,coh:coh/Math.max(1,cohN),bind:bind/mv,first:first||log.length+10,len:log.length,open:sp>=0?1:0,sp,behind:!!oppFirst}}
-function kfCalc(){const gs=loadGames().filter(g=>g&&g.mode!=='study'&&(g.me===1||g.me===2)&&g.log&&g.log.length>=6).slice(0,100);
+  return {fwd:fwd/mv,def:def/mv,big:big/mv,coh:coh/mv,bind:bind/mv,first:first||log.length+10,len:log.length,open:sp>=0?1:0,sp,behind:!!oppFirst}}
+// 診断は重い（100局で数百ミリ秒）ので、対局の記録が変わらないあいだは前の結果を使い回す
+const KF_MEMO={key:'',v:null};
+function kfCalc(){let key='';try{key=localStorage.getItem(GKEY)||''}catch(e){}key=key.length+':'+key.slice(0,200);if(KF_MEMO.v&&KF_MEMO.key===key)return KF_MEMO.v;const v=kfCalc0();KF_MEMO.key=key;KF_MEMO.v=v;return v}
+function kfCalc0(){const gs=loadGames().filter(g=>g&&g.mode!=='study'&&(g.me===1||g.me===2)&&g.log&&g.log.length>=6).slice(0,100);
   const rs=[];let bh=0,bw=0;const spc={};for(const g of gs){const r=kfGame(g.log,g.me);if(!r)continue;rs.push(r);if(r.behind){bh++;if(g.win===g.me)bw++}if(r.sp>=0)spc[r.sp]=(spc[r.sp]||0)+1}
   if(rs.length<5)return {n:rs.length};
   const avg=k=>rs.reduce((a,r)=>a+r[k],0)/rs.length,z=k=>(avg(k)-KF_BASE[k][0])/KF_BASE[k][1];
