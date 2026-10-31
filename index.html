@@ -1966,6 +1966,8 @@ const SHADOW={bot:null,timer:null,key:'',rates:null};
 const BOT_NAMES=['サタン二世','ピコまる','パワーボマー','どら焼き三太郎','ノルマンディー上陸作戦','防人','屯田兵受かりました','Kebin67','beckman','tompson','ketty','婦真理','ネギトロ','がちぼっち','ぷらごみ募集','このげーむおもろい','あらびっくり','さいばいまん','これ毒かも！','私に嘘はつかないでえ','藤井壮太','大','The sun','tiny rion','Mac','死して尚','歌人チャンネル','明日は我が身','迷惑メール','ルーキー１２３４'];
 const BOTS_KV=RELAY+'bocch-v1-bots/kv';
 async function botRates(){try{const r=await fetch(BOTS_KV,{cache:'no-store'});if(!r.ok)return null;const j=await r.json();return j&&typeof j==='object'?j:null}catch(e){return null}}
+/* 名前付きCPUの段級：人と同じく30級から始まり、対局の結果で上下する */
+function botDan(kv,nm){const v=kv&&Number(kv['d:'+nm]),z=kv&&Number(kv['dz:'+nm]);if(!Number.isFinite(v)||v<100)return {lv:0,pct:0,z:0};const q=rkDec(v);return {lv:q.lv,pct:q.pct,z:Number.isFinite(z)?Math.max(0,Math.min(9,z-100)):0}}
 function botSaveRate(name,v){try{fetch(BOTS_KV,{method:'POST',body:JSON.stringify({k:name,v:Math.round(v)})}).catch(()=>{})}catch(e){}}
 function shadowPost(o){if(!SHADOW.bot)return Promise.resolve();o.from=SHADOW.bot.id;return fetch(RELAY+TOPIC(SHADOW.bot.room),{method:'POST',body:JSON.stringify(o)}).catch(()=>{})}
 function shadowCheck(){
@@ -1980,8 +1982,9 @@ function shadowCheck(){
   stopMatch();NET.auto=false;clearTimeout(NET.waitT);
   const b=SHADOW.bot;
   const prep=level===2?botRates().then(kv=>{if(SHADOW.bot!==b)return;const nm=BOT_NAMES[Math.random()*BOT_NAMES.length|0];b.name=nm;b.named=true;
-    if(kv&&Number.isFinite(kv[nm]))b.rate=kv[nm];else{b.rate=1400+Math.floor(Math.random()*101);if(kv)botSaveRate(nm,b.rate)}}):Promise.resolve();
-  prep.then(()=>setTimeout(()=>{if(SHADOW.bot===b&&NET.code===code&&!NET.guest)shadowPost({t:'join',name:b.name,rate:b.rate,off:0}).then(()=>{setTimeout(()=>{if(NET.code===code)show('game',true)},600)})},800+Math.random()*1200));
+    if(kv&&Number.isFinite(kv[nm]))b.rate=kv[nm];else{b.rate=1400+Math.floor(Math.random()*101);if(kv)botSaveRate(nm,b.rate)}
+    b.dan=botDan(kv,nm)}):Promise.resolve();
+  prep.then(()=>setTimeout(()=>{if(SHADOW.bot===b&&NET.code===code&&!NET.guest)shadowPost(Object.assign({t:'join',name:b.name,rate:b.rate,off:0},b.dan?{lv:b.dan.lv}:{})).then(()=>{setTimeout(()=>{if(NET.code===code)show('game',true)},600)})},800+Math.random()*1200));
 }
 function shadowStop(){clearTimeout(SHADOW.timer);SHADOW.timer=null;SHADOW.bot=null;SHADOW.key=''}
 // 考える時間：人間同士の実測（序盤1〜10秒・中盤10〜45秒で中央値18秒・長考30秒超が約15%・形が決まると即指し）に合わせる
@@ -2029,7 +2032,8 @@ function shadowTick(){
   if(S.over){
     const ek='e'+NET.game;if(b.named&&SHADOW.ekey!==ek&&S.log&&S.log.length>=2){SHADOW.ekey=ek;
       const res=S.over.win===0?.5:S.over.win===my?1:0,opp=Math.round(PROF.rating),df=Math.max(-400,Math.min(400,opp-b.rate)),exp=1/(1+Math.pow(10,df/400));
-      b.rate=Math.max(100,Math.min(4000,Math.round(b.rate+20*(res-exp))));botSaveRate(b.name,b.rate)}
+      b.rate=Math.max(100,Math.min(4000,Math.round(b.rate+20*(res-exp))));botSaveRate(b.name,b.rate);
+      const nm=b.name;botRates().then(kv=>{const D=botDan(kv,nm);danStep(D,res,exp);botSaveRate('d:'+nm,rkEnc(D.lv,D.pct));botSaveRate('dz:'+nm,100+D.z);if(SHADOW.bot===b)b.dan=D}).catch(()=>{})}
     const k='r'+NET.game;if(SHADOW.key===k)return;
     if(NET.want&&NET.want[NET.me]===NET.game+1&&!(NET.want[b.id]===NET.game+1)){SHADOW.key=k;SHADOW.timer=setTimeout(()=>{if(SHADOW.bot===b&&S.over&&NET.want&&NET.want[NET.me]===NET.game+1)shadowPost({t:'rematch',g:NET.game+1})},2000+Math.random()*4000)}
     return}
@@ -3466,7 +3470,7 @@ function rankRender(){const d=RK.data||{},me=myName(),box=$('rkList');box.innerH
 /* 月間一位：新しい月に最初に開いた人が、その時点の1位を「先月の1位」としてサーバーに記録する（m:YYYY-MM:名前）。自分が記録されていればバッジ */
 function monKey(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
 function monPrev(){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return monKey(d)}
-function rankRows(d){const rows=Object.entries(d).filter(([k,v])=>k.startsWith('d:')&&v>100).map(([k,v])=>[k.slice(2),v]);for(const nm of BOT_NAMES)if(Number.isFinite(d[nm]))rows.push([nm,rkEnc(lvOfRate(d[nm]),50)]);return rows.sort((a,b)=>b[1]-a[1])}
+function rankRows(d){const rows=Object.entries(d).filter(([k,v])=>k.startsWith('d:')&&v>100).map(([k,v])=>[k.slice(2),v]);return rows.sort((a,b)=>b[1]-a[1])}
 function monCheck(kv){if(!kv)return;const pm=monPrev(),pk='m:'+pm+':';if(pm<'2026-10'){RK.prev='';return} // 最初の記録は10月の1位からlet w=Object.entries(kv).filter(([k])=>k.startsWith(pk)).sort((a,b)=>b[1]-a[1])[0];
   if(!w){const top=rankRows(kv)[0];if(top){botSaveRate(pk+top[0],top[1]);kv[pk+top[0]]=top[1];w=[pk+top[0],top[1]]}}
   RK.prev=w?w[0].slice(pk.length):'';
