@@ -2654,7 +2654,7 @@ var PKEY='bocch-profile',CPU_RATE={1:900,2:1200,3:1500,4:2100};
 const cleanName=x=>String(x==null?'':x).replace(/[\u0000-\u001f\u007f<>]/g,'').trim().slice(0,12);
 function loadProf(){let p={};try{p=JSON.parse(localStorage.getItem(PKEY)||'{}')||{}}catch(e){}
   return {name:cleanName(p.name)||'',rating:Number.isFinite(p.rating)?p.rating:1500,games:p.games|0,w:p.w|0,l:p.l|0,d:p.d|0,rated:Array.isArray(p.rated)?p.rated.slice(-200):[],peak:!!p.peak,cs:p.cs&&typeof p.cs==='object'?p.cs:{},wk:p.wk&&typeof p.wk.k==='string'?p.wk:null,st:p.st||{},bd:Array.isArray(p.bd)?p.bd:[],sel:typeof p.sel==='string'?p.sel:'',bdInit:p.bdInit|0,dan:danP(p.dan)}}
-function danP(x){return {lv:lvC(x&&x.lv),pct:Math.max(0,Math.min(100,Number(x&&x.pct)||0)),z:Math.max(0,(x&&x.z)|0)}}
+function danP(x){const o={lv:lvC(x&&x.lv),pct:Math.max(0,Math.min(100,Number(x&&x.pct)||0)),z:Math.max(0,(x&&x.z)|0)};if(x&&x.s)o.s=x.s|0;return o}
 var PROF=loadProf();
 /* 役員（メールアドレスで決める）：名前の前に金の家紋バッジ、広告なし */
 const OFFICERS_H=['b6da2635da3d44b7d11cf2a95793762381ef20f0ab05861706b9a460c790b315','f92bd5cb543f24093dcdc7a576e227b2fbbfad6f78dd377dd5948145c8f8aac3','c456eecd7b8f88e455b24fa3ea6a79afc110e4fcdc4a13ea732a5816e0644567']; // 役員のメールアドレスのSHA-256（アドレスそのものはコードに置かない）
@@ -3005,6 +3005,8 @@ async function acctPull(){if(!FB.user||!FB.user.emailVerified)return;FB.syncing=
     try{frStart()}catch(e){}
     if(!KF_SYNC.ok){await kifuProbe(ref)}else kifuPush();
     if(PROF.name){try{const ok=await claimName(PROF.name);if(!ok){$('nameMsg').textContent='「'+PROF.name+'」はほかの人が使っていたので、名前を付け直してください。';PROF.name='';_saveProfLocal();ref.set(profData()).catch(()=>{})}}catch(e){}}
+    // オーナーのアカウントは一度だけ18級から始める（メールアドレスはハッシュでだけ照合する。s で済みを記録し、アカウントにも保存）
+    try{if(!(PROF.dan&&PROF.dan.s)&&await mailHash(FB.user.email)===OWNER_H){PROF.dan={lv:12,pct:0,z:0,s:1};_saveProfLocal();await ref.set(profData())}}catch(e){}
     $('acctSync').textContent='名前・レート・戦績をアカウントに保存しています';if(typeof renderProf==='function')renderProf();render();try{rankPost()}catch(e){}}
   catch(e){$('acctSync').textContent='読み込めませんでした（'+(e.code||e.message)+'）'}
   FB.syncing=false}
