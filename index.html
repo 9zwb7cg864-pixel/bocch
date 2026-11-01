@@ -812,9 +812,6 @@ html:is([lang=en],[lang=es],[lang=de]) .pm .hm-fimg img{height:46px}
 .mvmyo{position:relative;z-index:1;display:flex;align-items:baseline;gap:8px;margin-top:12px;padding:8px 16px;min-height:0;border:0;border-radius:999px;background:linear-gradient(160deg,rgba(44,34,20,.96),rgba(23,18,12,.96));box-shadow:inset 0 0 0 1px rgba(233,196,106,.55);color:var(--fg);letter-spacing:.06em;opacity:0;animation:mvLoseIn .6s ease-out forwards}
 .mvmyo b{font-family:"Yuji Boku",var(--f-disp);font-weight:400;font-size:22px;background:linear-gradient(180deg,#fff4cc,#e9c46a 55%,#b07f2c);-webkit-background-clip:text;background-clip:text;color:transparent}
 .mvmyo span{font-family:var(--f-disp);font-weight:800;color:var(--gold-hi)}.mvmyo small{font-size:11px;color:var(--sub)}
-.stone.bnd{overflow:visible}.stone.bnd::after{content:"";position:absolute;inset:-9%;border-radius:50%;background:url(ui/fx-bind.webp) center/contain no-repeat;filter:drop-shadow(0 0 4px rgba(240,216,150,.5));animation:bndIn .5s ease-out both;pointer-events:none}
-.stone.bnd span{color:#f6e2a8!important;text-shadow:0 0 4px #000,0 0 8px rgba(0,0,0,.8)}.stone.w.bnd span{color:#2a1d14!important;text-shadow:0 0 4px #fff,0 0 8px rgba(255,255,255,.9)}
-@keyframes bndIn{from{opacity:0;transform:scale(1.25) rotate(-20deg)}to{opacity:1;transform:none}}
 html:not([lang=ja]) .hm-menu span{font-size:10.5px}
 html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is([lang=en],[lang=es],[lang=de]) .hm-sub .hm-fimg img{height:36px}
 </style>
@@ -4286,11 +4283,6 @@ function myoPlay(n){if(!MYO.list.length)return;const i=MYO.list[n%MYO.list.lengt
   clearTimeout(MYO.t);MYO.t=setTimeout(()=>{if(MYO.list.length>n+1)myoPlay(n+1);else{$('board').classList.remove('past');render();const e=$('mvEnd');if(e)e.hidden=false}},4500+MYO_D)}
 </script>
 <script>
-/* 縛られている石（「4」で行き先が1つもない石）に、金の点線の輪。段級の縁の外側に出す */
-{const _rb=render;render=function(){_rb();try{if(CUR!=='game'||!S||!S.b)return;const past=$('board').classList.contains('past');
-  for(let k=0;k<36;k++){const st=$('c'+k)&&$('c'+k).querySelector('.stone');if(!st)continue;const on=!past&&S.b[k]&&nbCount(S.b,k)>=4&&!movesFrom(S.b,k).length;st.classList.toggle('bnd',!!on)}}catch(e){}}}
-</script>
-<script>
 /* いまオンラインの人数：開いている人が1分ごとに「いるよ」を送り、直近2分に送った人を数える（画面を見ていない間は送らない） */
 const ONLINE_BASE=0; // 実際の人数をそのまま出す（上乗せしない）
 const ONLINE_MIN=20; // この人数に届かないときは表示しない（オーナーには常に表示）
@@ -4401,7 +4393,9 @@ const CG_GD={r1:['団子','R'],r2:['抹茶碗','R'],r3:['手ぬぐい','R'],r4:[
  x15:['名刀の鍔','SSR','iori'],x16:['金のかんざし','SSR','kikuno'],x17:['金の錨','SSR','taiga'],x18:['白黒の仮面の欠片','SSR','mumyo'],x19:['黒鉄の前立て','SSR','kurogane'],x20:['神楽鈴','SSR','shirotae'],x21:['夜叉の面','SSR','yashamaru']};
 const CG_PT={R:1,SR:3,SSR:10},CG_LV=[0,60,200],CG_DAY=3,CG_EVERY=5;
 const CG_COL={R:['rgba(230,230,230,.35)','#1c1c1c','rgba(255,255,255,.10)','#d8d8d8'],SR:['rgba(90,169,255,.45)','#0a1a33','rgba(120,180,255,.12)','#5aa9ff'],SSR:['rgba(230,190,90,.45)','#2e2208','rgba(255,215,120,.13)','#e6be5a'],UR:['rgba(224,64,44,.55)','#3a0d08','rgba(255,120,80,.12)','#e0402c']};
-const cgOn=()=>{try{return localStorage.getItem('bocch-own')==='1'}catch(e){return false}}; // いまはオーナーのアカウントだけに出す
+const CG_NEW_T=Date.UTC(2026,10,1,10,25); // この時刻より後に登録したアカウントにも出す
+const cgOn=()=>{try{return localStorage.getItem('bocch-own')==='1'||localStorage.getItem('bocch-cgnew')!=='0'}catch(e){return true}}; // 出さないのは、この時刻より前からあるアカウント（オーナー以外）でログインしている人だけ
+{const _ar=acctRender;acctRender=function(){_ar();try{const u=FB.user;if(u&&u.emailVerified){const ct=Date.parse(u.metadata&&u.metadata.creationTime);localStorage.setItem('bocch-cgnew',ct>=CG_NEW_T?'1':'0')}else localStorage.removeItem('bocch-cgnew')}catch(e){}try{cgHome()}catch(e){}}}
 const cgOkId=id=>typeof id==='string'&&!!CG_NM[id];
 function cgToday(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function cgP(x){const o={own:{},sel:'kurogane',inv:{},day:'',ad:0,tk:0,gb:-1,first:1,t:0};if(x&&typeof x==='object'){
