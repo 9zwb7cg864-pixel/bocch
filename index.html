@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=23"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=24"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -795,6 +795,12 @@ html:is([lang=en],[lang=es],[lang=de]) .pm .hm-fimg img{height:46px}
 .mvr-bar u{position:absolute;inset:0;display:flex;justify-content:space-evenly}.mvr-bar u s{width:1px;background:rgba(216,189,126,.2)}
 .mvr-bar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(180deg,#f6e2a8,#d8b56a 45%,#9c7433);transition:width 1.3s cubic-bezier(.3,.8,.3,1)}
 .mvr-left{margin-top:6px;text-align:right;font-size:12px;color:var(--sub)}
+.mvmyo{position:relative;z-index:1;display:flex;align-items:baseline;gap:8px;margin-top:12px;padding:8px 16px;min-height:0;border:0;border-radius:999px;background:linear-gradient(160deg,rgba(44,34,20,.96),rgba(23,18,12,.96));box-shadow:inset 0 0 0 1px rgba(233,196,106,.55);color:var(--fg);letter-spacing:.06em;opacity:0;animation:mvLoseIn .6s ease-out forwards}
+.mvmyo b{font-family:"Yuji Boku",var(--f-disp);font-weight:400;font-size:22px;background:linear-gradient(180deg,#fff4cc,#e9c46a 55%,#b07f2c);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mvmyo span{font-family:var(--f-disp);font-weight:800;color:var(--gold-hi)}.mvmyo small{font-size:11px;color:var(--sub)}
+.stone.bnd{overflow:visible}.stone.bnd::after{content:"";position:absolute;inset:-9%;border-radius:50%;background:url(ui/fx-bind.webp) center/contain no-repeat;filter:drop-shadow(0 0 4px rgba(240,216,150,.5));animation:bndIn .5s ease-out both;pointer-events:none}
+.stone.bnd span{color:#f6e2a8!important;text-shadow:0 0 4px #000,0 0 8px rgba(0,0,0,.8)}.stone.w.bnd span{color:#2a1d14!important;text-shadow:0 0 4px #fff,0 0 8px rgba(255,255,255,.9)}
+@keyframes bndIn{from{opacity:0;transform:scale(1.25) rotate(-20deg)}to{opacity:1;transform:none}}
 html:not([lang=ja]) .hm-menu span{font-size:10.5px}
 html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is([lang=en],[lang=es],[lang=de]) .hm-sub .hm-fimg img{height:36px}
 </style>
@@ -4057,7 +4063,7 @@ hmDaily();
 <script>
 /* ===== 対局中の新しい演出（2026-11）：縛り・ぼっち。終局画面に連勝と達成率 ===== */
 const FX2={cv:null,raf:0,prev:null,gid:'',ply:-1,pct:null,tm:[]};
-const FXI={koi:new Image(),shib:new Image()};FXI.koi.src='ui/fx-koi.webp';FXI.shib.src='ui/fx-shib.webp';
+const FXI={koi:new Image(),shib:new Image()};FXI.koi.src='ui/fx-koi.webp';{const L=window.BOCCH_LANG||'ja';FXI.shib.src=L==='ja'?'ui/fx-shib.webp':['en','zh-Hans','ko','es','de'].includes(L)?'ui/fx-shib-'+L+'.webp':'';FXI.shibOK=!!FXI.shib.src}
 function fx2Base(){const bd=$('board'),grid=$('grid');if(!bd||!grid||grid.children.length<36)return null;
   if(!FX2.cv){const c=document.createElement('canvas');c.setAttribute('aria-hidden','true');c.style.cssText='position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:7';bd.appendChild(c);FX2.cv=c}
   const R=bd.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1),c=FX2.cv;c.width=Math.round(R.width*dpr);c.height=Math.round(R.height*dpr);const x=c.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);
@@ -4070,11 +4076,11 @@ function fx2Anim(per,draw){cancelAnimationFrame(FX2.raf);const g=fx2Base();if(!g
 const FX2TINT={};function fx2Tint(im){if(FX2TINT[im.src])return FX2TINT[im.src];if(!im.complete||!im.naturalWidth)return null;const c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;const x=c.getContext('2d');x.drawImage(im,0,0);x.globalCompositeOperation='source-in';const g=x.createLinearGradient(0,0,0,c.height);g.addColorStop(0,'#fff4cc');g.addColorStop(.5,'#e9c46a');g.addColorStop(1,'#b07f2c');x.fillStyle=g;x.fillRect(0,0,c.width,c.height);return FX2TINT[im.src]=c}
 /* 金の筆文字の帯（戦法と同じ形）。日本語は Flow の筆文字、ほかの言語は同じ色の文字 */
 function fx2Band(g,np,im,word){const {x,W,H}=g;if(np<=0||np>=1)return;const a=Math.min(1,np/.1)*(1-fxW(np,.84,1)),y=H*.8,bh=W*.27,wp=fxE(np/.3);x.save();x.globalAlpha=a;x.fillStyle='rgba(14,15,18,.88)';x.fillRect(0,y-bh/2,W,bh);
-  const ja=(window.BOCCH_LANG||'ja')==='ja',tc=ja&&fx2Tint(im);x.beginPath();x.rect(0,y-bh/2,W*wp,bh);x.clip();x.shadowColor='rgba(0,0,0,.85)';x.shadowBlur=10;
+  const tc=FXI.shibOK&&fx2Tint(im);x.beginPath();x.rect(0,y-bh/2,W*wp,bh);x.clip();x.shadowColor='rgba(0,0,0,.85)';x.shadowBlur=10;
   if(tc){let nh=bh*.78,nw=nh*tc.width/tc.height;if(nw>W*.7){nw=W*.7;nh=nw*tc.height/tc.width}x.drawImage(tc,W/2-nw/2,y-nh/2,nw,nh)}
   else{const t=(window.bocchT||(s=>s))(word),gr=x.createLinearGradient(0,y-30,0,y+30);gr.addColorStop(0,'#fff4cc');gr.addColorStop(.5,'#e9c46a');gr.addColorStop(1,'#b07f2c');x.fillStyle=gr;x.textAlign='center';x.textBaseline='middle';x.font='800 '+Math.round(bh*.5)+'px '+FX_FONT;x.fillText(t,W/2,y)}
   x.restore()}
-function fx2Art(g,t,im,t0,fade){const {x,W,H}=g,ip=fxE(fxW(t,t0,t0+1050));if(ip<=0||!im.complete||!im.naturalWidth)return;const cx=W/2,cy=H*.4,sz=Math.min(W,H)*.72*(.84+.16*ip);
+function fx2Art(g,t,im,t0,fade,dur){const {x,W,H}=g,ip=fxE(fxW(t,t0,t0+(dur||1050)));if(ip<=0||!im.complete||!im.naturalWidth)return;const cx=W/2,cy=H*.4,sz=Math.min(W,H)*.72*(.84+.16*ip);
   x.save();const dg=x.createRadialGradient(cx,cy,0,cx,cy,sz*.72);dg.addColorStop(0,'rgba(14,15,18,.66)');dg.addColorStop(.7,'rgba(14,15,18,.4)');dg.addColorStop(1,'rgba(14,15,18,0)');x.globalAlpha=ip*fade;x.fillStyle=dg;x.beginPath();x.arc(cx,cy,sz*.72,0,7);x.fill();
   const hg=x.createRadialGradient(cx,cy,0,cx,cy,sz*.6);hg.addColorStop(0,'rgba(233,196,106,.3)');hg.addColorStop(1,'rgba(0,0,0,0)');x.globalAlpha=ip*fade*(.85+.15*Math.sin(t/180));x.fillStyle=hg;x.beginPath();x.arc(cx,cy,sz*.6,0,7);x.fill();
   x.globalAlpha=ip*fade;x.drawImage(im,cx-sz/2,cy-sz/2+(1-ip)*H*.14,sz,sz);
@@ -4083,12 +4089,12 @@ function fx2Art(g,t,im,t0,fade){const {x,W,H}=g,ip=fxE(fxW(t,t0,t0+1050));if(ip<
 /* 縛り：相手の石が「4」で行き先が1つも無くなった瞬間。8方向に4マス分の光が伸びて盤の端や石で止まり、冠の鯉と「縛り」の筆文字 */
 function fx2Bind(b,i){const n=nbCount(b,i),r=i/6|0,c=i%6,D8=[[-1,0],[1,0],[0,-1],[0,1],[-1,-1],[-1,1],[1,-1],[1,1]];
   const rays=D8.map(([dr,dc])=>{let k=0;for(let s=1;s<=n;s++){const rr=r+dr*s,cc=c+dc*s;if(rr<0||rr>5||cc<0||cc>5)break;k=s}return{dr,dc,k:k<n?k+.5:k}});
-  fx2Anim(5200,(g,t)=>{const {x,cs}=g,o=g.P(i);fx2Art(g,t,FXI.koi,1300,1-fxW(t,4500,5200));fx2Band(g,fxW(t,2000,5200),FXI.shib,'縛り');
-    rays.forEach((ry,j)=>{const st=j*40,p=fxE(fxW(t,st,st+520)),fade=1-fxW(t,1500,2300),e=g.at(r+ry.dr*ry.k*p,c+ry.dc*ry.k*p);
+  fx2Anim(2700,(g,t)=>{const {x,cs}=g,o=g.P(i);fx2Art(g,t,FXI.koi,450,1-fxW(t,2200,2700),600);fx2Band(g,fxW(t,750,2700),FXI.shib,'縛り');
+    rays.forEach((ry,j)=>{const st=j*25,p=fxE(fxW(t,st,st+380)),fade=1-fxW(t,800,1250),e=g.at(r+ry.dr*ry.k*p,c+ry.dc*ry.k*p);
       const gr=x.createLinearGradient(o.x,o.y,e.x,e.y);gr.addColorStop(0,'rgba(246,226,168,0)');gr.addColorStop(.25,'rgba(246,226,168,.55)');gr.addColorStop(1,'rgba(255,244,214,.95)');
       x.save();x.globalAlpha=fade;x.strokeStyle=gr;x.lineWidth=2;x.shadowColor='rgba(240,216,150,.9)';x.shadowBlur=8;x.beginPath();x.moveTo(o.x,o.y);x.lineTo(e.x,e.y);x.stroke();
-      const hp=fxW(t,st+480,st+900);if(hp>0&&hp<1){x.globalAlpha=(1-hp)*fade;x.fillStyle='#fff4d6';x.beginPath();x.arc(e.x,e.y,2+6*hp,0,7);x.fill()}x.restore()});
-    const rp=fxW(t,1000,1600);if(rp>0){x.save();x.globalAlpha=1-fxW(t,1900,2400);x.strokeStyle='rgba(246,226,168,.9)';x.lineWidth=1.5;x.shadowColor='rgba(240,216,150,.9)';x.shadowBlur=10;x.beginPath();x.arc(o.x,o.y,cs*(0.9-0.45*fxE(rp)),0,7);x.stroke();x.restore()}})}
+      const hp=fxW(t,st+340,st+640);if(hp>0&&hp<1){x.globalAlpha=(1-hp)*fade;x.fillStyle='#fff4d6';x.beginPath();x.arc(e.x,e.y,2+6*hp,0,7);x.fill()}x.restore()});
+    const rp=fxW(t,500,900);if(rp>0){x.save();x.globalAlpha=1-fxW(t,1100,1500);x.strokeStyle='rgba(246,226,168,.9)';x.lineWidth=1.5;x.shadowColor='rgba(240,216,150,.9)';x.shadowBlur=10;x.beginPath();x.arc(o.x,o.y,cs*(0.9-0.45*fxE(rp)),0,7);x.stroke();x.restore()}})}
 /* ぼっち：最後の隣の石が離れて、ひとりぼっち（0）になった石。間の糸が伸びて、ぷつっと切れる */
 function fx2Lonely(a,t){fx2Anim(1500,(g,tm)=>{const {x,cs}=g,A=g.P(a),B=g.P(t),ang=Math.atan2(B.y-A.y,B.x-A.x),d=Math.hypot(B.x-A.x,B.y-A.y);
     if(tm<500){const p=tm/500;x.save();x.globalAlpha=.9;x.strokeStyle='rgba(246,226,168,.9)';x.lineWidth=Math.max(.6,1.6-p);x.shadowColor='rgba(240,216,150,.8)';x.shadowBlur=6;x.beginPath();x.moveTo(A.x,A.y);x.lineTo(A.x+Math.cos(ang)*d,A.y+Math.sin(ang)*d);x.stroke();x.restore();return}
@@ -4114,6 +4120,41 @@ function fx2Lonely(a,t){fx2Anim(1500,(g,tm)=>{const {x,cs}=g,A=g.P(a),B=g.P(t),a
   if(rated&&FX2.pct&&PROF.dan){const a0=FX2.pct,a1=PROF.dan,up=a1.lv>a0.lv,dn=a1.lv<a0.lv,from=Math.floor(a0.pct||0),to=up?100:dn?0:Math.floor(a1.pct||0),d=to-from;
     if(a1.lv>=10||a0.lv>=10)h+='<div class="mvrate"><div class="mvr-top"><span>達成率</span><b class="mvr-n">'+from+'%</b>'+(d?'<em class="'+(d>0?'up':'dn')+'">'+(d>0?'+':'')+d+'%</em>':'')+'</div><div class="mvr-bar"><u>'+'<s></s>'.repeat(9)+'</u><i style="width:'+from+'%" data-to="'+to+'"></i></div><div class="mvr-left">'+(up?(lvName(a1.lv)+'に'+(a1.lv>=30?'昇段':'昇級')):(a1.lv+1>=30?'昇段まで あと':'昇級まで あと')+(100-to)+'%')+'</div></div>'}
   if(h){row.insertAdjacentHTML('beforebegin',h);const bar=e.querySelector('.mvr-bar i');if(bar)setTimeout(()=>{const to=+bar.dataset.to;bar.style.width=to+'%';const n=e.querySelector('.mvr-n');if(n){let v=parseInt(n.textContent);const st=to>v?1:-1;const iv=setInterval(()=>{if(v===to){clearInterval(iv);return}v+=st;n.textContent=v+'%'},Math.max(15,1200/Math.max(1,Math.abs(to-v))))}},1400)}}catch(x){}return r}}
+</script>
+<script>
+/* ===== 妙手（2026-11）：自分の手を裏で最強AIに読ませる。長く読むと同じ手で、短く読むと別の手（＝見つけにくい一番の手）なら妙手。終局画面で「妙手 N回」 ===== */
+const MYO={gid:'',list:[],pend:0,w:null};const FXFAN=new Image();FXFAN.src='ui/fx-fan.webp';
+function myoWorker(){if(MYO.w!==null)return MYO.w;try{const src=$('eng').textContent+'\nonmessage=e=>{const d=e.data;const s=BocchEngine.think(d.b,d.p,700,{});const same=s&&s.move&&s.move[0]===d.m[0]&&s.move[1]===d.m[1];let q=null;if(same)q=BocchEngine.think(d.b,d.p,30,{});postMessage({gid:d.gid,i:d.i,m:d.m,same,quick:q&&q.move,score:s&&s.score})}';
+  MYO.w=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));MYO.w.onmessage=e=>{const d=e.data;if(d.gid!==MYO.gid)return;MYO.pend--;if(d.same&&d.quick&&(d.quick[0]!==d.m[0]||d.quick[1]!==d.m[1]))MYO.list.push(d.i);myoChip()};MYO.w.onerror=()=>{MYO.w=false}}catch(e){MYO.w=false}return MYO.w}
+function myoQueue(gid,b,p,m,i){if(gid!==MYO.gid){MYO.gid=gid;MYO.list=[];MYO.pend=0}if(i<4)return;const w=myoWorker();if(!w)return;MYO.pend++;w.postMessage({gid,b:b.slice(),p,m:m.slice(),i})}
+{const _fc2=fxCheck;fxCheck=function(){const prev=FX2.prev,pp=FX2.ply,pg=FX2.gid;_fc2();try{if(!S||S.study||S.learn||!S.last||!prev)return;const ply=S.ply||0,gid=FX.gid,me=fxMe();
+  if(gid!==pg||ply!==pp+1||!me)return;const mv=S.b[S.last[1]];if(mv!==me||S.over)return;myoQueue(gid,prev,me,S.last,ply-1)}catch(e){}}}
+/* 終局画面に「妙手 N回」。読み終わっていなければ、終わりしだい出す */
+function myoChip(){const e=$('mvEnd');if(!e||e.hidden||!S||!S.over)return;let c=e.querySelector('.mvmyo');const n=MYO.list.length;
+  if(!n){if(c)c.remove();return}if(!c){c=document.createElement('button');c.type='button';c.className='mvmyo';const row=e.querySelector('.mvrow');if(!row)return;row.parentNode.insertBefore(c,row);
+    c.addEventListener('click',ev=>{ev.stopPropagation();e.hidden=true;myoPlay(0)})}
+  c.innerHTML='<b>妙手</b><span>'+n+'回</span><small>押すとその場面</small>'}
+{const _fe2=fxEnd0;fxEnd0=function(win,why,me,b,cell){const r=_fe2(win,why,me,b,cell);setTimeout(myoChip,1600);let k=0;const iv=setInterval(()=>{myoChip();if(++k>40||MYO.pend<=0)clearInterval(iv)},500);return r}}
+/* その局面を盤に出して、金の扇子と「妙手」の筆文字 */
+function myoShow(i){const L=S.log||[];let b=startBoard();for(let k=0;k<=i&&k<L.length;k++)b=apply(b,L[k]);const last=L[i],rk=[0,colorRank(1),colorRank(2)];
+  for(let k=0;k<36;k++){const el=$('c'+k),c=b[k],r=k/6|0,d=c?nbCount(b,k):0;let cls='cell';if(r===0||r===5)cls+=' goal';if(last&&(last[0]===k||last[1]===k))cls+=' last';
+    setCell(el,cls,c?`<div class="stone ${c===1?'b':'w'}${d?'':' zero'}${rankCls(rk[c])}"><span>${d}</span></div>`:'')}
+  $('board').classList.add('past');$('hint').textContent=(i+1)+'手目の妙手'}
+function myoPlay(n){if(!MYO.list.length)return;const i=MYO.list[n%MYO.list.length];myoShow(i);
+  fx2Anim(4200,(g,tm)=>{const {x,W,H}=g,fade=1-fxW(tm,3500,4200),ip=fxE(fxW(tm,150,1100)),cx=W/2,cy=H*.46,R=Math.min(W,H)*.36*(.85+.15*ip);
+    if(ip>0){x.save();const dg=x.createRadialGradient(cx,cy-R*.3,0,cx,cy-R*.3,R*1.3);dg.addColorStop(0,'rgba(14,15,18,.7)');dg.addColorStop(.7,'rgba(14,15,18,.45)');dg.addColorStop(1,'rgba(14,15,18,0)');x.globalAlpha=ip*fade;x.fillStyle=dg;x.fillRect(0,0,W,H);x.restore();
+      if(FXFAN.complete&&FXFAN.naturalWidth){x.save();x.globalAlpha=ip*fade;const sz=R*2.3;x.drawImage(FXFAN,cx-sz/2,cy+(1-ip)*H*.12-sz*.62,sz,sz);x.restore()}
+      for(let k=0;k<18;k++){const fp=fxW(tm,200+fxR(k)*900,1400+fxR(k)*1500);if(fp<=0||fp>=1)continue;x.save();x.globalAlpha=fade*(1-fp)*.9;x.fillStyle=k%2?'#e9c46a':'#f6e2a8';x.fillRect(cx+(fxR(k+3)-.5)*R*2.2-2,cy-fp*R*1.6+R*.2,4,4);x.restore()}}
+    const np=fxW(tm,800,4200);if(np>0){const T=window.bocchT||(s=>s),a=Math.min(1,np/.1)*fade,y=H*.8,bh=W*.25,wp=fxE(np/.3);x.save();x.globalAlpha=a;x.fillStyle='rgba(14,15,18,.88)';x.fillRect(0,y-bh/2,W,bh);
+      x.textAlign='center';x.textBaseline='middle';x.fillStyle='#cdbf98';x.font='500 12px '+FX_FONT;x.fillText(T('最強AIと同じ一手')+'　'+T((i+1)+'手目'),W/2,y-bh*.34);
+      x.beginPath();x.rect(0,y-bh/2,W*wp,bh);x.clip();const gr=x.createLinearGradient(0,y-30,0,y+30);gr.addColorStop(0,'#fff4cc');gr.addColorStop(.5,'#e9c46a');gr.addColorStop(1,'#b07f2c');
+      x.fillStyle=gr;x.shadowColor='rgba(0,0,0,.85)';x.shadowBlur=10;const t=T('妙手');x.font=(t.length>3?'800 '+Math.round(bh*.36):Math.round(bh*.56))+'px '+(t==='妙手'?'"Yuji Boku",':'')+FX_FONT;x.fillText(t,W/2,y+8);x.restore()}});
+  clearTimeout(MYO.t);MYO.t=setTimeout(()=>{if(MYO.list.length>n+1)myoPlay(n+1);else{$('board').classList.remove('past');render();const e=$('mvEnd');if(e)e.hidden=false}},4500)}
+</script>
+<script>
+/* 縛られている石（「4」で行き先が1つもない石）に、金の点線の輪。段級の縁の外側に出す */
+{const _rb=render;render=function(){_rb();try{if(CUR!=='game'||!S||!S.b)return;const past=$('board').classList.contains('past');
+  for(let k=0;k<36;k++){const st=$('c'+k)&&$('c'+k).querySelector('.stone');if(!st)continue;const on=!past&&S.b[k]&&nbCount(S.b,k)>=4&&!movesFrom(S.b,k).length;st.classList.toggle('bnd',!!on)}}catch(e){}}}
 </script>
 <script>
 /* いまオンラインの人数：開いている人が1分ごとに「いるよ」を送り、直近2分に送った人を数える（画面を見ていない間は送らない） */
