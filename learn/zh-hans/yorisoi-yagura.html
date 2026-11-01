@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>依偎与橹：最初的2手，以及如何应对打入｜bocch</title>
+<meta name="description" content="用棋子数字的总和与AI的评价，说明bocch的第1手“依偎”为什么强。并用棋盘图介绍橹的组法，以及被打入时的正确应对。">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/zh-hans/yorisoi-yagura.html">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/yorisoi-yagura.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/yorisoi-yagura.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/yorisoi-yagura.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/yorisoi-yagura.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/yorisoi-yagura.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/yorisoi-yagura.html">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/yorisoi-yagura.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/yorisoi-yagura.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="依偎与橹：最初的2手，以及如何应对打入">
+<meta property="og:description" content="用棋子数字的总和与AI的评价，说明bocch的第1手“依偎”为什么强。并用棋盘图介绍橹的组法，以及被打入时的正确应对。">
+<meta property="og:url" content="https://bocchgame.com/learn/zh-hans/yorisoi-yagura.html">
+<meta property="og:image" content="https://bocchgame.com/og-zh-hans.jpg">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "依偎与橹：最初的2手，以及如何应对打入", "description": "用棋子数字的总和与AI的评价，说明bocch的第1手“依偎”为什么强。并用棋盘图介绍橹的组法，以及被打入时的正确应对。", "inLanguage": "zh-Hans", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about-zh-hans.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/zh-hans/yorisoi-yagura.html", "datePublished": "2026-11-01", "dateModified": "2026-11-01"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="../../zh-hans.html">bocch</a><nav><a href="../../learn/zh-hans/">文章</a><a href="../../guide-zh-hans.html">攻略</a><a class="play" href="../../zh-hans.html">开始对局</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">定式</div>
+<h1>依偎与橹：最初的2手，以及如何应对打入</h1>
+<p class="meta">kairo · 2026年11月1日</p>
+<p class="lead">第1手中下得最多的“依偎”，只是把边上的棋子斜着往前靠一格的朴素着法。但用AI去算，白方能正确应对的手几乎没有。本文来看看依偎强在哪里、由此能组成的“橹”，以及破橹的唯一方法。</p>
+<h2>让最弱的棋子发挥作用</h2>
+<p>初始布局中，角上的棋子（黑方是 1f 和 6f）旁边只有1颗，数字是1。只能走1格，是最弱的棋子。</p>
+<p>依偎，就是把这颗角上的棋子靠到同伴旁边的 2e。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>依偎（1f→2e）。2e 的数字为2，旁边的 3f 也从2升到3</figcaption></figure>
+<p>移动后的 2e 数字变成2，旁边的 3f 也从2升到了3。把黑方6颗棋子的数字全部加起来，初始布局是10，依偎之后是12。<strong>第1手的7种类型中，只有依偎能让总和增加</strong>。</p>
+<p>反过来，向前跳出的手又如何呢？候鸟（2f→4d）也好，正面突破（3f→3d）也好，总和都会降到6。因为跳出去的棋子接近孤子，留下的棋子旁边也变少了。可以说，依偎是一手不往前走、而是积蓄跳跃力量的棋。</p>
+<h2>白方几乎无法正确应对</h2>
+<p>面对依偎，白方有14种着法。用最强AI全部算一遍，能保持均势的只有在另一侧角上同样靠拢的 6a→5b（并肩）。同侧的并肩 1a→2b 黑方略优。其余12种，黑方都明显占优。</p>
+<p>从白方看，这是很想把棋子走向中央的局面。但越是进攻的手，越会撞上黑方厚实的形状。实战中依偎常常获胜，是因为对方在这里容易走错。</p>
+<h2>拿不准时，把另一边也靠过来</h2>
+<p>黑方第2手要针对白方的14种着法各记一个正解，实在辛苦。所以有一种办法，是干脆决定第2手把右边的角也靠过来，也就是 6f→5e。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>黑方把左右两边都靠过来的形状（双璧）</figcaption></figure>
+<p>按旧AI的评价，这手无论白方怎么走，损失都控制在20分左右；白方进攻时，黑方的大幅领先会原样保留下来。</p>
+<p class="note">补记：之后让新AI之间对弈数千局，发现在白方以并肩应对的局面中，这个形状黑方的胜率只有4成左右。它对并肩以外的手能赢9成，是很强的形状，但已经知道面对并肩时换别的手更容易赢。详见<a href="souheki.html">双璧一文</a>。</p>
+<h2>组橹</h2>
+<p>依偎之后，黑方可以组成 2e·3e·2f·3f 的方块。这就是橹。4颗棋子彼此相邻，所以每颗棋子的数字都保持在3〜4，能跳得很远。它也能成为同伴跳跃时的跳板。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">3</b></i><i class="c to mk"><b class="s b">4</b></i><i class="c"></i><i class="c fr"></i><i class="c"></i><i class="c g"></i><i class="c g mk"><b class="s b">3</b></i><i class="c g mk"><b class="s b">4</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i></div></div><figcaption>蓝框里的4颗就是橹。每颗棋子的数字都是3〜4</figcaption></figure>
+<p>橹最快3手就能组成。最快的6种组法中，有5种从依偎开始。而白方的棋子在 a 行，在黑方组完之前的2手里，够不到黑方阵地。<strong>白方阻止不了橹</strong>。</p>
+<h2>被打入时，不要放在旁边</h2>
+<p>不过，白方有一手令人头疼的着法：打入。下图中，白方从 3a 一口气跳进 3d，把棋子放在了要组橹的位置正前方。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g fr"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i></div></div><figcaption>白方打入（3a→3d）。3d 的白子旁边只有 2e，数字为1</figcaption></figure>
+<p>3d 的白子现在旁边只有 2e，所以数字是1。如果黑方这时想完成橹而走 5e→3e，会怎么样呢？</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">4</b></i><i class="c to"><b class="s b">4</b></i><i class="c"></i><i class="c fr"></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">4</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="38.1" y1="61.9" x2="12.6" y2="87.4" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>5e→3e 是失败的。3d 的数字升到2，白方可以跳进 1f</figcaption></figure>
+<p>3e 来到 3d 旁边，3d 的数字就增加到2。数字2的棋子能斜着跳2格，去处是 1f——依偎腾出来的黑方角落，对白方来说就是终点。白方抵达了1颗。AI的评价是负16。</p>
+<p>这个局面黑方有13种着法。其中放在 3d 旁边的6种，都会让 3d 的数字变成2，让白方跳进 1f。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">4</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c g to"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i></div></div><figcaption>正解是 4f→1f。先自己填上空出的角（评价正6）</figcaption></figure>
+<p>正解是 4f→1f。先自己把空出的角填上。4f 旁边有 3f·5f·5e 三颗，数字是3，横走3格就能进入 1f。完成橹放到之后也来得及。</p>
+<div class="pt"><b>被打入时的规则</b><ol><li>不要放在打入棋子的旁边（不提高对方的数字）</li><li>先填上依偎空出的角</li></ol></div>
+<h2>改变数字来阻止的手</h2>
+<p>白方用另一侧的并肩（6a→5b）应对之后，也有打入。就是在黑方两边都靠拢时，白方从 4a 跳进 4d 的手。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c g fr"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">3</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i></div></div><figcaption>白方的 4d 来到 5e 旁边，5e 的数字从2变成3</figcaption></figure>
+<p>4d 的白子来到 5e 旁边，5e 的数字从2变成了3。数字为3时，5e 就进不了 3e。白方是在通过改变黑方棋子的数字来阻止橹。对方的棋子靠近时，请先确认自己棋子的数字有没有变。</p>
+<h2>总结</h2>
+<ul><li>第1手走依偎。把最弱的角上棋子靠到同伴旁边。</li><li>依偎之后可以瞄准橹。白方阻止不了。</li><li>被打入时，不要放在打入棋子的旁边，先填上空出的角。</li><li>对方的棋子靠近时，看看自己棋子的数字有没有变。</li></ul>
+<p class="note">本文是把YouTube“bocch定跡研究”第21期的内容重新整理成的文章。评价来自“最强”AI的计算，并不是完全解出的值。</p>
+</article>
+<section class="rel"><h2>相关文章</h2><ul><li><a href="../../learn/zh-hans/souheki.html">双璧：胜率9成的战法与唯一的弱点</a></li><li><a href="../../learn/zh-hans/ai-joseki-senpo.html">新AI改写的第3手定式与10种战法</a></li></ul></section>
+</main>
+<footer><p><a href="../../learn/zh-hans/">文章列表</a><a href="../../learn/zh-hans/glossary.html">术语表</a><a href="../../guide-zh-hans.html">获胜攻略</a><a href="../../about-zh-hans.html">运营者信息</a><a href="../../privacy-zh-hans.html">隐私政策·联系我们</a></p><p class="langs"><a href="../../learn/yorisoi-yagura.html" lang="ja">日本語</a><a href="../../learn/en/yorisoi-yagura.html" lang="en">English</a><a href="../../learn/zh-hans/yorisoi-yagura.html" aria-current="page" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/yorisoi-yagura.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/yorisoi-yagura.html" lang="ko">한국어</a><a href="../../learn/es/yorisoi-yagura.html" lang="es">Español</a><a href="../../learn/de/yorisoi-yagura.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>

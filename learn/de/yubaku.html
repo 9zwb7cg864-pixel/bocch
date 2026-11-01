@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Eigentor: Wie du dem Gegner nicht selbst den Siegzug baust | bocch</title>
+<meta name="description" content="In 26.000 Partien KI gegen KI gibt es einen Zug, der 2.047-mal gespielt wurde – und die Seite, die ihn spielte, hat keine einzige Partie gewonnen. Mit Diagrammen und einer Übungsaufgabe zeigen wir, wie du das „Eigentor“ erkennst, bei dem du selbst die Zahl eines gegnerischen Steins veränderst.">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/de/yubaku.html">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/yubaku.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/yubaku.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/yubaku.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/yubaku.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/yubaku.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/yubaku.html">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/yubaku.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/yubaku.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="Eigentor: Wie du dem Gegner nicht selbst den Siegzug baust">
+<meta property="og:description" content="In 26.000 Partien KI gegen KI gibt es einen Zug, der 2.047-mal gespielt wurde – und die Seite, die ihn spielte, hat keine einzige Partie gewonnen. Mit Diagrammen und einer Übungsaufgabe zeigen wir, wie du das „Eigentor“ erkennst, bei dem du selbst die Zahl eines gegnerischen Steins veränderst.">
+<meta property="og:url" content="https://bocchgame.com/learn/de/yubaku.html">
+<meta property="og:image" content="https://bocchgame.com/og-de.jpg">
+<meta property="og:locale" content="de_DE">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Eigentor: Wie du dem Gegner nicht selbst den Siegzug baust", "description": "In 26.000 Partien KI gegen KI gibt es einen Zug, der 2.047-mal gespielt wurde – und die Seite, die ihn spielte, hat keine einzige Partie gewonnen. Mit Diagrammen und einer Übungsaufgabe zeigen wir, wie du das „Eigentor“ erkennst, bei dem du selbst die Zahl eines gegnerischen Steins veränderst.", "inLanguage": "de", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about-de.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/de/yubaku.html", "datePublished": "2026-11-01", "dateModified": "2026-11-01"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="../../de.html">bocch</a><nav><a href="../../learn/de/">Artikel</a><a href="../../guide-de.html">Leitfaden</a><a class="play" href="../../de.html">Spielen</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">Taktik</div>
+<h1>Eigentor: Wie du dem Gegner nicht selbst den Siegzug baust</h1>
+<p class="meta">kairo · 1. November 2026</p>
+<p class="lead">In 26.000 Partien KI gegen KI gibt es einen Zug, der 2.047-mal gespielt wurde. Die Gewinnrate der Seite, die ihn spielte: 0 %. Keine einzige gewonnene Partie. Ein Zug, mit dem du dem Gegner selbst den Siegzug baust – das „Eigentor“.</p>
+<h2>Eine Bombe auf dem Brett</h2>
+<p>Die Zahlen in bocch kannst du nicht selbst bestimmen. Sie ändern sich von allein, je nachdem, wie viele Steine nebenan stehen. Weil die Farbe keine Rolle spielt, <strong>ändern sich die Zahlen der gegnerischen Steine auch durch deine Züge</strong>.</p>
+<p>Hat der Gegner schon einen Stein im Ziel, ist jeder gegnerische Stein, der mit einer um 1 anderen Zahl ankommen würde, eine Bombe. Fehlt ihm eine Zahl, hat er Lücke +1, hat er eine zu viel, Lücke −1. Aus der Praxis gesprochen: Verdächtige zuerst die gegnerischen Steine mit 3 oder 4, die sich deiner Grundreihe nähern.</p>
+<p>Eine Bombe explodiert nicht von allein. Sie explodiert, wenn jemand einen Stein neben ihr bewegt. Und die Lunte zündet meistens dein eigener Zug.</p>
+<h2>Lande-Eigentor: Gefahr neben dem Landefeld</h2>
+<p>In der Stellung unten ist Weiß am Zug. Schwarz hat schon einen Stein auf 4a ins Ziel gebracht.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c g"></i><i class="c g mk"><b class="s b">1</b></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w z">0</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"><b class="s w">3</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">3</b></i><i class="c"><b class="s b">1</b></i><i class="c g"><b class="s b z">0</b></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i><i class="c g"></i></div></div><figcaption>Der schwarze Stein auf 5e hat die Zahl 3. Bis zum Ziel sind es 4 Reihen, ihm fehlt also eine (Lücke +1)</figcaption></figure>
+<p>Der schwarze Stein auf 5e hat die Zahl 3, bis zum Ziel sind es 4 Reihen. Ihm fehlt eine Zahl – eine Bombe mit Lücke +1. Weiß hat 18 mögliche Züge, und 2 davon zünden die Lunte.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c fr"></i><i class="c"><b class="s w">3</b></i><i class="c to"><b class="s w">4</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">4</b></i><i class="c"><b class="s b">2</b></i><i class="c g"><b class="s b z">0</b></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i><i class="c g"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="71.5" y1="71.5" x2="12.6" y2="12.6" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>Zieht Weiß 3d→5d, steigt die Zahl von 5e auf 4, und mit 5e→1a kommt der zweite schwarze Stein an</figcaption></figure>
+<p>Zieht Weiß 3d→5d, landet ein weißer Stein neben 5e, und die Zahl von 5e steigt auf 4. Mit 5e→1a kommt der zweite schwarze Stein an, und Schwarz gewinnt. Mit 3d→5f passiert dasselbe, denn auch 5f grenzt an 5e.</p>
+<div class="pt"><b>Lande-Eigentor</b>: Neben deinem Landefeld steht ein gegnerischer Stein mit Lücke +1</div>
+<h2>Abzugs-Eigentor: Gefahr neben dem Startfeld</h2>
+<p>Auch in der nächsten Stellung ist Weiß am Zug, und Schwarz hat schon einen Stein auf 6a ins Ziel gebracht.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w z">0</b></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g mk"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">4</b></i><i class="c"><b class="s w">3</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"><b class="s w">4</b></i><i class="c mk"><b class="s b">4</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i></div></div><figcaption>Der schwarze Stein auf 5d hat die Zahl 4. Bis zum Ziel sind es 3 Reihen, er hat also eine zu viel (Lücke −1)</figcaption></figure>
+<p>Der schwarze Stein auf 5d hat die Zahl 4, bis zum Ziel sind es 3 Reihen. Diesmal hat er eine Zahl zu viel: Lücke −1. Drei der vier Nachbarn von 5d sind weiße Steine – Weiß hält die schwarze Bombe also selbst in Schach. Weiß hat 10 mögliche Züge, und nur einer davon ist gefährlich.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w z">0</b></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">3</b></i><i class="c fr"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">3</b></i><i class="c"><b class="s w">4</b></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="71.5" y1="54.8" x2="29.2" y2="12.6" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>Zieht Weiß mit 5c→2c weg, sinkt die Zahl von 5d auf 3, und es folgt 5d→2a</figcaption></figure>
+<p>Zieht Weiß 5c→2c, wird 5c frei, und die Zahl von 5d sinkt auf 3. Mit 5d→2a gewinnt Schwarz. Weiß ist weit weggesprungen, doch genau im Moment des Wegziehens zündet die Lunte.</p>
+<div class="pt"><b>Abzugs-Eigentor</b>: Neben deinem Startfeld steht ein gegnerischer Stein mit Lücke −1</div>
+<h2>Der gefährlichste Moment ist der, in dem du stoppst</h2>
+<p>Das Tückische am Eigentor ist, dass es wie ein Stoppzug aussieht. Im Diagramm unten hat der schwarze Stein auf 3c die Zahl 2 und ist 2 Reihen vom Ziel entfernt – ein Reach. Weiß will ihn mit „Hochdrücken“ stoppen, also einen Stein danebenstellen und seine Zahl erhöhen.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s b z">0</b></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s w z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="75.0" y1="36.7" x2="75.0" y2="14.3" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>Mit 5a→4b hat Weiß 3c gestoppt. Doch jetzt hat 5c die Zahl 2, und es folgt 5c→5a</figcaption></figure>
+<p>3c ist gestoppt. Doch auf der anderen Seite des Landefelds 4b stand 5c mit der Zahl 1, 2 Reihen vom Ziel entfernt (Lücke +1). Weiß hat einen Reach gestoppt und dabei einen neuen erzeugt.</p>
+<p>Dasselbe kann auch beim „Wegziehen“ passieren, bei dem du einen Nachbarstein entfernst.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s b z">0</b></i><i class="c g"></i><i class="c g"></i><i class="c g to"><b class="s w z">0</b></i><i class="c g"></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c fr"></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"><b class="s b">2</b></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="75.0" y1="53.3" x2="75.0" y2="14.3" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>Mit 4d→4a hat Weiß 3c gestoppt, aber die Zahl von 5d sinkt auf 3, und es folgt 5d→5a</figcaption></figure>
+<p>Gerade wenn du dich ganz aufs Stoppen konzentrierst, übersiehst du die Steine nebenan. Der Moment, in dem du glaubst, den Gegner gestoppt zu haben, ist der gefährlichste.</p>
+<h2>Nur zwei Stellen prüfen</h2>
+<p>Hat der Gegner einen Stein im Ziel, prüf vor deinem Zug nur zwei Stellen. Das ganze Brett durchzurechnen ist nicht nötig.</p>
+<ol><li>Steht auf den <strong>8 Feldern um dein Landefeld</strong> ein gegnerischer Stein mit Lücke +1?</li><li>Steht auf den <strong>8 Feldern um dein Startfeld</strong> ein gegnerischer Stein mit Lücke −1?</li></ol>
+<h2>Übungsaufgabe</h2>
+<p>Weiß ist am Zug. Schwarz hat schon einen Stein auf 2a ins Ziel gebracht. Weiß hat 18 mögliche Züge, und 2 davon zünden die Lunte. Welche sind es?</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g mk"><b class="s b">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w z">0</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"><b class="s b z">0</b></i><i class="c"></i><i class="c"><b class="s b z">0</b></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i></div></div><figcaption>Weiß am Zug. Finde die zwei Züge, die ein Eigentor sind</figcaption></figure>
+<h3>Lösung</h3>
+<p>Die Bombe ist der schwarze Stein auf 6b. Er hat die Zahl 2 und ist 1 Reihe vom Ziel entfernt – eine Zahl zu viel, also Lücke −1. Gestützt wird 6b von den weißen Steinen auf 6a und 6c.</p>
+<p>Die Lösung lautet <strong>6c→5d</strong> und <strong>6c→6d</strong>. Bei beiden Zügen verlässt 6c das Nachbarfeld von 6b, 6b bekommt die Zahl 1, und mit 6b→5a kommt der zweite schwarze Stein an.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w z">0</b></i><i class="c"></i><i class="c fr"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s w">1</b></i><i class="c"><b class="s b">2</b></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"><b class="s b z">0</b></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="88.1" y1="21.5" x2="79.2" y2="12.6" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>Zieht 6c nach 6d, bekommt 6b die Zahl 1, und es folgt 6b→5a</figcaption></figure>
+<p>Zieht 6c dagegen nach 5b oder 5c, ist das sicher, denn dort bleibt er Nachbar von 6b. Auch 6a stützt 6b, aber wohin 6a auch zieht, er landet immer wieder neben 6b, also ändert sich die Zahl nicht. Selbst bei einem stützenden Stein entscheidet das Ziel des Zuges, ob die Bombe explodiert.</p>
+<h2>Zusammenfassung</h2>
+<ul><li>Hat der Gegner einen Stein im Ziel, such nach Bomben (gegnerische Steine mit Lücke +1 oder Lücke −1).</li><li>Lücke +1 neben dem Landefeld ist ein Lande-Eigentor, Lücke −1 neben dem Startfeld ein Abzugs-Eigentor.</li><li>Gerade bei Stoppzügen: auf die Nachbarn achten.</li></ul>
+<p class="note">Dieser Artikel ist eine schriftliche Fassung von Folge 22 des YouTube-Kanals „bocch定跡研究“. Die Stellungen stammen aus echten Partien KI gegen KI.</p>
+</article>
+<section class="rel"><h2>Verwandte Artikel</h2><ul><li><a href="../../learn/de/glossary.html">bocch-Glossar</a></li><li><a href="../../learn/de/dokumanju.html">Giftköder: gewinnen, indem man dem Gegner etwas schenkt</a></li></ul></section>
+</main>
+<footer><p><a href="../../learn/de/">Alle Artikel</a><a href="../../learn/de/glossary.html">Glossar</a><a href="../../guide-de.html">Strategie-Anleitung</a><a href="../../about-de.html">Über den Betreiber</a><a href="../../privacy-de.html">Datenschutz & Kontakt</a></p><p class="langs"><a href="../../learn/yubaku.html" lang="ja">日本語</a><a href="../../learn/en/yubaku.html" lang="en">English</a><a href="../../learn/zh-hans/yubaku.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/yubaku.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/yubaku.html" lang="ko">한국어</a><a href="../../learn/es/yubaku.html" lang="es">Español</a><a href="../../learn/de/yubaku.html" aria-current="page" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>

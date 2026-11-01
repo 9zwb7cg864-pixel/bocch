@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>bocch Rules and How to Play | bocch</title>
+<meta name="description" content="The rules of bocch, a board game on a 6×6 board where each stone jumps as far as the number of stones around it, explained with board diagrams. How move distance works, how to win, and what to watch for in your first few moves.">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/en/rules.html">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/rules.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/rules.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/rules.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/rules.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/rules.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/rules.html">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/rules.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/rules.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="bocch Rules and How to Play">
+<meta property="og:description" content="The rules of bocch, a board game on a 6×6 board where each stone jumps as far as the number of stones around it, explained with board diagrams. How move distance works, how to win, and what to watch for in your first few moves.">
+<meta property="og:url" content="https://bocchgame.com/learn/en/rules.html">
+<meta property="og:image" content="https://bocchgame.com/og-en.jpg">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "bocch Rules and How to Play", "description": "The rules of bocch, a board game on a 6×6 board where each stone jumps as far as the number of stones around it, explained with board diagrams. How move distance works, how to win, and what to watch for in your first few moves.", "inLanguage": "en", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about-en.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/en/rules.html", "datePublished": "2026-11-01", "dateModified": "2026-11-01"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="../../en.html">bocch</a><nav><a href="../../learn/en/">Articles</a><a href="../../guide-en.html">Guide</a><a class="play" href="../../en.html">Play</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">Basics</div>
+<h1>bocch Rules and How to Play</h1>
+<p class="meta">kairo · November 1, 2026</p>
+<p class="lead">bocch is a two-player board game played on a 6×6 board. Nothing is ever captured: the first player to get two of their stones to the opponent's edge wins. That is the whole goal, but the way a stone's move distance is decided is a little unusual.</p>
+<h2>Starting position</h2>
+<p>Each player starts with six stones lined up along their own edge row. Black moves first.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>The starting position. Black lines up on row f at the bottom, White on row a at the top</figcaption></figure>
+<p>How to read the diagrams: row a at the top is White's home and Black's goal; row f at the bottom is Black's home and White's goal. The number on each stone is how far it can move.</p>
+<h2>Move distance = the number of stones around you</h2>
+<p>On your turn, pick one of your stones and move it in a straight line: vertically, horizontally or diagonally. Unlike shogi or chess, <strong>how far a stone moves depends not on what kind of piece it is, but on its surroundings</strong>.</p>
+<p>The distance is exactly the number of stones on the 8 squares around that stone. Color doesn't matter. Even with 4 or more neighbors, the distance is capped at 4. You may jump over stones on the way, but the square you land on must be empty.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c dt"></i><i class="c"></i><i class="c dt"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c dt"></i><i class="c"></i><i class="c"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>Black has moved the stone on 1f to 2e. 2e's neighbors are 2f and 3f, so its number is 2. The green dots are where 2e can go next</figcaption></figure>
+<p>In the diagram above, the stone on 2e has the number 2, so it can go exactly two squares, to 2c, 4c or 4e. It can't move just one square, or three.</p>
+<p>When you move a stone, <strong>the numbers change not only for the stone you moved but for the stones around it too</strong>. With a stone now on 2e, its neighbor 3f went up from 2 to 3. Your opponent's numbers change the same way. This is the single most important thing in the game.</p>
+<h2>A lonely stone can't move</h2>
+<p>A stone with no stones around it has the number 0. With a distance of 0 it can't move. We call this a "loner" (bocchi in Japanese), which is where the game gets its name.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s w z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i><i class="c g"></i></div></div><figcaption>White's 5c has no neighbors, so it is 0 (a loner). It can't move until someone comes next to it</figcaption></figure>
+<p>If you keep flinging stones forward, both the stone that jumped and the stones left behind lose neighbors and become harder to move. Keeping your numbers up by staying close to your own stones is the foundation of strong play.</p>
+<h2>Winning, losing and draws</h2>
+<ul><li>If, when you finish your move, two of your stones are on the opponent's edge row (the far row), you win. For Black that is row a; for White, row f.</li><li>If you have no stone you can move on your turn, you lose.</li><li>If the same position occurs three times, the game is a draw.</li><li>In online games each player has 7 minutes on the clock. If you run out, you lose.</li></ul>
+<p>A stone that has arrived on the far row stays on the board, and it still counts toward the numbers of the stones around it.</p>
+<h2>Three things that will make you stronger right away</h2>
+<p>Once you know the rules, just keeping these three things in mind will win you more games.</p>
+<ol><li><strong>Bring your edge stones inward early.</strong> In the starting position, an edge stone has only one neighbor, so its number is 1. Sliding it one square diagonally forward, the "Snuggle", raises the numbers of both that stone and its neighbor.</li><li><strong>Watch your opponent's numbers.</strong> Putting your stone next to an opponent's stone raises its number. Before you move, check that you aren't giving it exactly the distance it needs to reach the far row.</li><li><strong>Don't stop one row short of the far row.</strong> A stone one row away can only arrive when its number is exactly 1. If more stones gather around it, it jumps past.</li></ol>
+<p>Terms are collected in the <a href="glossary.html">glossary</a>, and opening play is covered in <a href="yorisoi-yagura.html">The Snuggle and the Tower</a>. <a href="../../en.html">bocch</a> is free and needs no sign-up, so you can start a game against the CPU or a friend right away.</p>
+</article>
+<section class="rel"><h2>Related articles</h2><ul><li><a href="../../learn/en/glossary.html">bocch Glossary</a></li><li><a href="../../learn/en/yorisoi-yagura.html">The Snuggle and the Tower: The First Two Moves, and How to Answer an Invasion</a></li></ul></section>
+</main>
+<footer><p><a href="../../learn/en/">All articles</a><a href="../../learn/en/glossary.html">Glossary</a><a href="../../guide-en.html">Strategy guide</a><a href="../../about-en.html">About</a><a href="../../privacy-en.html">Privacy policy & contact</a></p><p class="langs"><a href="../../learn/rules.html" lang="ja">日本語</a><a href="../../learn/en/rules.html" aria-current="page" lang="en">English</a><a href="../../learn/zh-hans/rules.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/rules.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/rules.html" lang="ko">한국어</a><a href="../../learn/es/rules.html" lang="es">Español</a><a href="../../learn/de/rules.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>

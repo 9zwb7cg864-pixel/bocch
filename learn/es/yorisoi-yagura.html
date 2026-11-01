@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arrimo y torre: las dos primeras jugadas y cómo responder a una incursión | bocch</title>
+<meta name="description" content="Por qué es tan fuerte el «Arrimo», la primera jugada de bocch, explicado con la suma de los números de las piedras y la evaluación de la IA. También cómo montar la torre y cómo responder bien a una incursión, con diagramas.">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/es/yorisoi-yagura.html">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/yorisoi-yagura.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/yorisoi-yagura.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/yorisoi-yagura.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/yorisoi-yagura.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/yorisoi-yagura.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/yorisoi-yagura.html">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/yorisoi-yagura.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/yorisoi-yagura.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="Arrimo y torre: las dos primeras jugadas y cómo responder a una incursión">
+<meta property="og:description" content="Por qué es tan fuerte el «Arrimo», la primera jugada de bocch, explicado con la suma de los números de las piedras y la evaluación de la IA. También cómo montar la torre y cómo responder bien a una incursión, con diagramas.">
+<meta property="og:url" content="https://bocchgame.com/learn/es/yorisoi-yagura.html">
+<meta property="og:image" content="https://bocchgame.com/og-es.jpg">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Arrimo y torre: las dos primeras jugadas y cómo responder a una incursión", "description": "Por qué es tan fuerte el «Arrimo», la primera jugada de bocch, explicado con la suma de los números de las piedras y la evaluación de la IA. También cómo montar la torre y cómo responder bien a una incursión, con diagramas.", "inLanguage": "es", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about-es.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/es/yorisoi-yagura.html", "datePublished": "2026-11-01", "dateModified": "2026-11-01"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="../../es.html">bocch</a><nav><a href="../../learn/es/">Artículos</a><a href="../../guide-es.html">Guía</a><a class="play" href="../../es.html">Jugar</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">Teoría</div>
+<h1>Arrimo y torre: las dos primeras jugadas y cómo responder a una incursión</h1>
+<p class="meta">kairo · 1 de noviembre de 2026</p>
+<p class="lead">El «Arrimo», la primera jugada más habitual, solo acerca una piedra del extremo una casilla en diagonal. Parece una jugada modesta, pero si se analiza con la IA, Blanco casi no tiene respuestas correctas. En este artículo vemos por qué el Arrimo es fuerte, la «torre» que permite montar y la única forma de desmontarla.</p>
+<h2>Hacer trabajar a la piedra más débil</h2>
+<p>En la posición inicial, las piedras de las esquinas (1f y 6f, con Negro) solo tienen una vecina, así que su número es 1. Solo pueden moverse una casilla: son las piedras más débiles.</p>
+<p>El Arrimo lleva esta piedra de la esquina a 2e, junto a sus compañeras.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>Arrimo (1f→2e). 2e tiene el número 2, y su vecina 3f subió de 2 a 3</figcaption></figure>
+<p>La piedra movida a 2e pasa a tener el número 2, y su vecina 3f sube de 2 a 3. Si sumas los números de las 6 piedras negras, en la posición inicial dan 10, y tras el Arrimo, 12. <strong>De los 7 tipos de primera jugada, el Arrimo es el único que aumenta la suma</strong>.</p>
+<p>¿Y las jugadas que saltan hacia delante? Tanto el Ave migratoria (2f→4d) como el Ataque frontal (3f→3d) bajan la suma a 6. La piedra que salta queda casi aislada, y las que se quedan atrás pierden vecinas. Se puede decir que el Arrimo no avanza, sino que acumula fuerza para saltar.</p>
+<h2>Blanco casi nunca responde bien</h2>
+<p>Contra el Arrimo, Blanco tiene 14 jugadas. Al analizarlas todas con la IA Máximo, la única que mantiene la igualdad es 6a→5b, acercar de la misma forma la esquina del lado contrario (Hombro con hombro). El Hombro con hombro del mismo lado, 1a→2b, deja a Negro ligeramente mejor. Con las otras 12, Negro queda claramente mejor.</p>
+<p>Con Blanco, es una posición en la que apetece sacar una piedra al centro. Pero cuanto más agresiva es la jugada, más choca con la forma sólida de Negro. Si el Arrimo gana tanto en la práctica, es porque aquí es fácil que el rival se equivoque.</p>
+<h2>Si dudas, acerca también el otro extremo</h2>
+<p>Aprenderse una 2.ª jugada de Negro distinta para cada una de las 14 respuestas de Blanco es mucho trabajo. Una solución es decidir de antemano que la 2.ª jugada acerca también la esquina derecha: 6f→5e.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>Negro ha acercado los dos extremos (Muros gemelos)</figcaption></figure>
+<p>Según la evaluación de la IA antigua, contra cualquier jugada de Blanco esta jugada perdía como mucho unos 20 puntos, y si Blanco atacaba, Negro conservaba intacta su gran ventaja.</p>
+<p class="note">Nota añadida: después hicimos jugar miles de partidas entre las nuevas IA, y en las posiciones en que Blanco responde con Hombro con hombro, Negro gana con esta forma solo en torno al 40% de las veces. Contra todo lo demás es una forma fuerte que gana el 90%, pero contra Hombro con hombro otras jugadas ganan más. Lo explicamos en el <a href="souheki.html">artículo sobre Muros gemelos</a>.</p>
+<h2>Montar la torre</h2>
+<p>Después del Arrimo, Negro puede formar un bloque cuadrado con 2e, 3e, 2f y 3f: la torre. Como las cuatro piedras son vecinas entre sí, todas mantienen números de 3 a 4 y pueden saltar lejos. También sirven de apoyo cuando salta una compañera.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">3</b></i><i class="c to mk"><b class="s b">4</b></i><i class="c"></i><i class="c fr"></i><i class="c"></i><i class="c g"></i><i class="c g mk"><b class="s b">3</b></i><i class="c g mk"><b class="s b">4</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i></div></div><figcaption>Las cuatro piedras del marco azul forman la torre. Todas tienen números de 3 a 4</figcaption></figure>
+<p>La torre se monta en 3 jugadas como mínimo. De las 6 formas más cortas de montarla, 5 empiezan con el Arrimo. Y como las piedras blancas están en la fila a, en las 2 jugadas que tarda Negro en terminarla no pueden llegar a la casa de Negro. <strong>Blanco no puede impedir la torre</strong>.</p>
+<h2>Ante una incursión, no te pongas al lado</h2>
+<p>Pero Blanco tiene una jugada molesta: la incursión. En el diagrama, Blanco salta de golpe de 3a a 3d y coloca una piedra justo delante del lugar donde se monta la torre.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g fr"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i></div></div><figcaption>Incursión de Blanco (3a→3d). La blanca de 3d solo tiene a 2e de vecina: número 1</figcaption></figure>
+<p>Ahora la blanca de 3d solo tiene a 2e de vecina, así que su número es 1. ¿Qué pasa si Negro intenta completar la torre con 5e→3e?</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">4</b></i><i class="c to"><b class="s b">4</b></i><i class="c"></i><i class="c fr"></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">4</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="38.1" y1="61.9" x2="12.6" y2="87.4" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>5e→3e es un error. El número de 3d sube a 2 y Blanco puede saltar a 1f</figcaption></figure>
+<p>Al llegar 3e junto a 3d, el número de 3d sube a 2. Una piedra con número 2 puede saltar dos casillas en diagonal, y su destino es 1f: la esquina que Negro dejó libre con el Arrimo, que para Blanco es la meta. Blanco mete una piedra. La IA lo evaluó en −16.</p>
+<p>En esta posición Negro tiene 13 jugadas. Las 6 que ponen una piedra junto a 3d suben a 2 el número de 3d y le permiten saltar a 1f.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">4</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c g to"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i></div></div><figcaption>Lo correcto es 4f→1f: ocupar tú primero la esquina libre (evaluación +6)</figcaption></figure>
+<p>Lo correcto es 4f→1f: ocupar tú primero la esquina que quedó libre. 4f tiene tres vecinas (3f, 5f y 5e), así que su número es 3 y puede moverse tres casillas en horizontal hasta 1f. La torre se puede completar después y llega a tiempo.</p>
+<div class="pt"><b>Reglas ante una incursión</b><ol><li>No pongas piedras junto a la piedra que entró (no le subas el número)</li><li>Ocupa primero la esquina que dejó libre el Arrimo</li></ol></div>
+<h2>Jugadas que frenan cambiando números</h2>
+<p>También hay incursión cuando Blanco responde con Hombro con hombro del lado contrario (6a→5b). Cuando Negro ya ha acercado los dos extremos, Blanco salta de 4a a 4d.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c g fr"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">3</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i></div></div><figcaption>La blanca de 4d llega junto a 5e, y el número de 5e pasa de 2 a 3</figcaption></figure>
+<p>Al llegar la blanca de 4d junto a 5e, el número de 5e pasa de 2 a 3. Con número 3, 5e ya no puede entrar en 3e. Blanco intenta frenar la torre cambiando el número de una piedra negra. Cuando una piedra rival se acerque, comprueba primero si ha cambiado el número de tus piedras.</p>
+<h2>Resumen</h2>
+<ul><li>Primera jugada: Arrimo. Acerca la piedra más débil, la de la esquina, junto a sus compañeras.</li><li>Tras el Arrimo puedes ir a por la torre. Blanco no puede impedirla.</li><li>Ante una incursión, no te pongas junto a la piedra que entró y ocupa primero la esquina libre.</li><li>Cuando se acerque una piedra rival, mira si ha cambiado el número de tus piedras.</li></ul>
+<p class="note">Este artículo adapta como texto el contenido del episodio 21 del canal de YouTube «bocch定跡研究». Las evaluaciones son lecturas de la IA «Máximo», no valores resueltos hasta el final.</p>
+</article>
+<section class="rel"><h2>Artículos relacionados</h2><ul><li><a href="../../learn/es/souheki.html">Muros gemelos: la estrategia que gana 9 de cada 10 y su único punto débil</a></li><li><a href="../../learn/es/ai-joseki-senpo.html">La nueva IA cambia la teoría de la 3.ª jugada: las 10 estrategias</a></li></ul></section>
+</main>
+<footer><p><a href="../../learn/es/">Todos los artículos</a><a href="../../learn/es/glossary.html">Glosario</a><a href="../../guide-es.html">Guía de estrategia</a><a href="../../about-es.html">Sobre el sitio</a><a href="../../privacy-es.html">Política de privacidad y contacto</a></p><p class="langs"><a href="../../learn/yorisoi-yagura.html" lang="ja">日本語</a><a href="../../learn/en/yorisoi-yagura.html" lang="en">English</a><a href="../../learn/zh-hans/yorisoi-yagura.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/yorisoi-yagura.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/yorisoi-yagura.html" lang="ko">한국어</a><a href="../../learn/es/yorisoi-yagura.html" aria-current="page" lang="es">Español</a><a href="../../learn/de/yorisoi-yagura.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>

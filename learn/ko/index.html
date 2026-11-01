@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>bocch 글 목록 | bocch</title>
+<meta name="description" content="보드게임 “bocch”의 규칙, 정석, 전법, 수법을 판 그림과 AI끼리의 대국 데이터로 해설하는 글 목록입니다.">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/ko/">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="bocch 글 목록">
+<meta property="og:description" content="보드게임 “bocch”의 규칙, 정석, 전법, 수법을 판 그림과 AI끼리의 대국 데이터로 해설하는 글 목록입니다.">
+<meta property="og:url" content="https://bocchgame.com/learn/ko/">
+<meta property="og:image" content="https://bocchgame.com/og-ko.jpg">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "headline": "bocch 글 목록", "description": "보드게임 “bocch”의 규칙, 정석, 전법, 수법을 판 그림과 AI끼리의 대국 데이터로 해설하는 글 목록입니다.", "inLanguage": "ko", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about-ko.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/ko/"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="../../ko.html">bocch</a><nav><a href="../../learn/ko/">글</a><a href="../../guide-ko.html">가이드</a><a class="play" href="../../ko.html">대국하기</a></nav></header>
+<main>
+<article>
+
+<h1>bocch 글 목록</h1>
+
+<p class="lead">규칙의 기본부터 정석·전법·수법까지. 판 그림은 모두 실제 규칙대로 한 수씩 다시 두어 그렸습니다. 숫자는 AI끼리의 대국에서 센 것입니다.</p>
+<h2>기본</h2><ul class="cards"><li><a href="rules.html"><b>bocch 규칙과 노는 법</b><span>6×6 판에서 주변 돌의 수만큼 뛰는 보드게임 “bocch”의 규칙을 판 그림으로 설명합니다. 움직일 수 있는 거리가 정해지는 방식, 승패, 처음 몇 수에서 조심할 점까지.</span></a></li><li><a href="glossary.html"><b>bocch 용어집</b><span>bocch 해설과 영상에서 쓰는 말의 뜻을 정리했습니다. 숫자, 외톨이, 리치, 차이, 붙이기, 어깨 붙이기, 망루, 자폭, 밀어 올리기 등.</span></a></li></ul><h2>정석</h2><ul class="cards"><li><a href="yorisoi-yagura.html"><b>붙이기와 망루: 처음 두 수와 뛰어들기 받는 법</b><span>bocch의 첫 수 “붙이기”가 왜 강한지를 돌 숫자의 합계와 AI 평가로 설명합니다. 망루 짜는 법과, 뛰어들기를 당했을 때 올바르게 받는 법도 판 그림으로 소개합니다.</span></a></li></ul><h2>전법</h2><ul class="cards"><li><a href="souheki.html"><b>쌍벽: 9할을 이기는 전법과 단 하나의 약점</b><span>bocch의 전법 “쌍벽”은 AI끼리의 대국에서 대부분의 상대에게 9할 이상 이깁니다. 이길 수 없는 유일한 받기 “어깨 붙이기”와, 그때 두어야 할 수를 승률과 함께 소개합니다.</span></a></li><li><a href="ai-joseki-senpo.html"><b>새 AI가 바꾼 셋째 수 정석과 10가지 전법</b><span>bocch의 최강 CPU를 채점표 방식에서 신경망으로 새로 만들었습니다. 새 AI의 눈으로 다시 본 셋째 수 정석과, 초반 첫 수·둘째 수의 조합인 “전법” 10가지를 소개합니다.</span></a></li></ul><h2>수법</h2><ul class="cards"><li><a href="yubaku.html"><b>자폭: 내 수로 상대의 결정타를 만들지 않으려면</b><span>AI끼리의 2만 6천 판에서 2,047번 두어졌는데, 둔 쪽이 한 판도 이기지 못한 수가 있습니다. 상대 돌의 숫자를 스스로 바꿔 버리는 “자폭”을 찾아내는 법을 판 그림과 연습 문제로 해설합니다.</span></a></li><li><a href="dokumanju.html"><b>독 만두: 상대에게 내주고 이기는 수</b><span>bocch에는 돌을 잡는 규칙이 없습니다. 대신 내줄 수 있는 것은 “숫자”와 “선착”입니다. 일부러 상대 돌을 움직일 수 있게 만드는 “말 걸기”와, 돌을 뒤로 물리는 “시위 당기기”를 AI의 실전으로 소개합니다.</span></a></li></ul>
+</article>
+
+</main>
+<footer><p><a href="../../learn/ko/">글 목록</a><a href="../../learn/ko/glossary.html">용어집</a><a href="../../guide-ko.html">승리 가이드</a><a href="../../about-ko.html">운영자 정보</a><a href="../../privacy-ko.html">개인정보 처리방침 · 문의</a></p><p class="langs"><a href="../../learn/index.html" lang="ja">日本語</a><a href="../../learn/en/index.html" lang="en">English</a><a href="../../learn/zh-hans/index.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/index.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/index.html" aria-current="page" lang="ko">한국어</a><a href="../../learn/es/index.html" lang="es">Español</a><a href="../../learn/de/index.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>

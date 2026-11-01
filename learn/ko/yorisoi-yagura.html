@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>붙이기와 망루: 처음 두 수와 뛰어들기 받는 법 | bocch</title>
+<meta name="description" content="bocch의 첫 수 “붙이기”가 왜 강한지를 돌 숫자의 합계와 AI 평가로 설명합니다. 망루 짜는 법과, 뛰어들기를 당했을 때 올바르게 받는 법도 판 그림으로 소개합니다.">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/ko/yorisoi-yagura.html">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/yorisoi-yagura.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/yorisoi-yagura.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/yorisoi-yagura.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/yorisoi-yagura.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/yorisoi-yagura.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/yorisoi-yagura.html">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/yorisoi-yagura.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/yorisoi-yagura.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="붙이기와 망루: 처음 두 수와 뛰어들기 받는 법">
+<meta property="og:description" content="bocch의 첫 수 “붙이기”가 왜 강한지를 돌 숫자의 합계와 AI 평가로 설명합니다. 망루 짜는 법과, 뛰어들기를 당했을 때 올바르게 받는 법도 판 그림으로 소개합니다.">
+<meta property="og:url" content="https://bocchgame.com/learn/ko/yorisoi-yagura.html">
+<meta property="og:image" content="https://bocchgame.com/og-ko.jpg">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "붙이기와 망루: 처음 두 수와 뛰어들기 받는 법", "description": "bocch의 첫 수 “붙이기”가 왜 강한지를 돌 숫자의 합계와 AI 평가로 설명합니다. 망루 짜는 법과, 뛰어들기를 당했을 때 올바르게 받는 법도 판 그림으로 소개합니다.", "inLanguage": "ko", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about-ko.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/ko/yorisoi-yagura.html", "datePublished": "2026-11-01", "dateModified": "2026-11-01"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="../../ko.html">bocch</a><nav><a href="../../learn/ko/">글</a><a href="../../guide-ko.html">가이드</a><a class="play" href="../../ko.html">대국하기</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">정석</div>
+<h1>붙이기와 망루: 처음 두 수와 뛰어들기 받는 법</h1>
+<p class="meta">kairo · 2026년 11월 1일</p>
+<p class="lead">첫 수로 가장 많이 두는 “붙이기”는 끝 돌을 대각선 앞으로 한 칸 붙이기만 하는 수수한 수입니다. 그런데도 AI로 읽어 보면, 백이 올바르게 받을 수 있는 수는 거의 없습니다. 이 글에서는 붙이기가 강한 이유와, 거기서 짤 수 있는 “망루”, 그리고 망루를 무너뜨리는 단 하나의 방법을 살펴봅니다.</p>
+<h2>가장 약한 돌을 일하게 한다</h2>
+<p>처음 배치에서 귀의 돌(흑이라면 1f와 6f)은 이웃이 하나뿐이라 숫자가 1입니다. 한 칸밖에 움직일 수 없는, 가장 약한 돌입니다.</p>
+<p>붙이기는 이 귀의 돌을 동료 옆인 2e로 붙이는 수입니다.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>붙이기(1f→2e). 2e는 숫자 2, 옆의 3f도 2에서 3으로 올랐다</figcaption></figure>
+<p>움직인 2e는 숫자 2가 되고, 옆의 3f도 2에서 3으로 올랐습니다. 흑의 돌 6개의 숫자를 모두 더하면 처음 배치에서는 10, 붙이기 뒤에는 12입니다. <strong>첫 수 7가지 유형 중 합계가 늘어나는 것은 붙이기뿐</strong>입니다.</p>
+<p>반대로 앞으로 뛰쳐나가는 수는 어떨까요. 철새(2f→4d)도 정면 돌파(3f→3d)도 합계가 6까지 떨어집니다. 뛴 돌이 외톨이에 가까워지고, 남겨진 돌도 이웃이 줄기 때문입니다. 붙이기는 앞으로 나아가지 않고 뛰는 힘을 모으는 수라고 할 수 있습니다.</p>
+<h2>백은 거의 올바르게 받을 수 없다</h2>
+<p>붙이기에 대해 백의 수는 14가지입니다. 최강 AI로 전부 읽어 보니, 호각을 유지할 수 있는 것은 반대쪽 귀에서 똑같이 붙이는 6a→5b(어깨 붙이기)뿐이었습니다. 같은 쪽의 어깨 붙이기 1a→2b는 흑이 약간 좋습니다. 나머지 12가지는 흑이 확실히 좋아집니다.</p>
+<p>백 입장에서는 중앙에 돌을 내고 싶어지는 국면입니다. 하지만 공격적인 수일수록 흑의 두터운 모양에 부딪힙니다. 실전에서 붙이기가 자주 이기는 것은 상대가 여기서 실수하기 쉽기 때문입니다.</p>
+<h2>망설여지면 다른 쪽 끝도 붙인다</h2>
+<p>흑의 둘째 수에서, 백의 14가지 수마다 다른 정답을 외우기는 힘듭니다. 그래서 둘째 수는 오른쪽 귀도 붙인다고 정해 버리는 방법이 있습니다. 6f→5e입니다.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>흑이 좌우 끝을 모두 붙인 모양(쌍벽)</figcaption></figure>
+<p>예전 AI 평가로는 이 수는 백이 무엇을 두든 손해가 20점 정도에 그쳤고, 백이 공격해 온 경우에는 흑의 큰 리드가 그대로 남았습니다.</p>
+<p class="note">추가: 그 뒤 새 AI끼리 수천 판을 두게 했더니, 백이 어깨 붙이기로 받은 국면에서는 이 모양의 흑 승률이 4할 안팎에 머물렀습니다. 어깨 붙이기 이외에는 9할을 이기는 강한 모양이지만, 어깨 붙이기에는 다른 수가 더 이기기 쉽다는 것이 밝혀졌습니다. 자세한 내용은 <a href="souheki.html">쌍벽 글</a>에 정리했습니다.</p>
+<h2>망루를 짠다</h2>
+<p>붙이기 뒤에 흑은 2e·3e·2f·3f의 네모난 덩어리를 만들 수 있습니다. 이것이 망루입니다. 4개의 돌이 서로 이웃해 있어서 모든 돌의 숫자가 3~4로 유지되고, 멀리까지 뛸 수 있습니다. 동료가 뛸 때의 발판도 됩니다.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">3</b></i><i class="c to mk"><b class="s b">4</b></i><i class="c"></i><i class="c fr"></i><i class="c"></i><i class="c g"></i><i class="c g mk"><b class="s b">3</b></i><i class="c g mk"><b class="s b">4</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i></div></div><figcaption>파란 테두리의 4개가 망루. 모든 돌의 숫자가 3~4</figcaption></figure>
+<p>망루는 가장 빠르면 3수 만에 짤 수 있습니다. 가장 빠른 방법 6가지 중 5가지는 붙이기로 시작합니다. 그리고 백의 돌은 a줄에 있으므로, 흑이 다 짤 때까지의 2수 동안 흑의 진영까지 닿지 않습니다. <strong>백은 망루를 막을 수 없는</strong> 것입니다.</p>
+<h2>뛰어들기를 당하면 옆에 놓지 않는다</h2>
+<p>다만 백에게는 껄끄러운 수가 있습니다. 뛰어들기입니다. 아래 그림에서 백은 3a에서 3d로 단숨에 뛰어들어, 망루를 짤 자리 바로 앞에 돌을 놓았습니다.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g fr"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i></div></div><figcaption>백의 뛰어들기(3a→3d). 3d의 백은 이웃이 2e뿐이라 숫자 1</figcaption></figure>
+<p>3d의 백은 지금 이웃이 2e뿐이므로 숫자 1입니다. 여기서 흑이 망루를 완성하려고 5e→3e를 두면 어떻게 될까요?</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">4</b></i><i class="c to"><b class="s b">4</b></i><i class="c"></i><i class="c fr"></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">4</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="38.1" y1="61.9" x2="12.6" y2="87.4" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>5e→3e는 실패. 3d의 숫자가 2로 올라, 백은 1f로 뛰어들 수 있다</figcaption></figure>
+<p>3e가 3d 옆에 오면서 3d의 숫자가 2로 늘어납니다. 숫자 2인 돌은 대각선으로 두 칸 뛸 수 있으므로, 갈 곳은 1f. 붙이기로 비워 둔 흑의 귀이자, 백에게는 건너편입니다. 백이 하나 도착해 버립니다. AI 평가는 마이너스 16이었습니다.</p>
+<p>이 국면에서 흑의 수는 13가지입니다. 그중 3d 옆에 돌을 놓는 6가지는 모두 3d를 숫자 2로 만들어 1f로 뛰어드는 것을 허용해 버립니다.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">4</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c g to"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i></div></div><figcaption>정답은 4f→1f. 빈 귀를 먼저 스스로 메운다(평가 플러스 6)</figcaption></figure>
+<p>정답은 4f→1f입니다. 빈 귀를 먼저 내 돌로 메워 버립니다. 4f는 이웃이 3f·5f·5e 3개라서 숫자 3이고, 옆으로 세 칸 움직여 1f에 들어갈 수 있습니다. 망루 완성은 그 뒤에 해도 늦지 않습니다.</p>
+<div class="pt"><b>뛰어들기를 당했을 때의 규칙</b><ol><li>뛰어든 돌 옆에 놓지 않는다(상대의 숫자를 올리지 않는다)</li><li>붙이기로 빈 귀를 먼저 메운다</li></ol></div>
+<h2>숫자를 바꿔 막으러 오는 수</h2>
+<p>백이 반대쪽 어깨 붙이기(6a→5b)로 받은 뒤에도 뛰어들기는 있습니다. 흑이 양쪽 끝을 붙인 시점에, 백이 4a에서 4d로 뛰어드는 수입니다.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c g fr"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">3</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i></div></div><figcaption>백의 4d가 5e 옆에 와서, 5e의 숫자가 2에서 3으로</figcaption></figure>
+<p>4d의 백이 5e 옆에 오면서 5e의 숫자가 2에서 3으로 바뀌었습니다. 숫자 3으로는 5e에서 3e로 들어갈 수 없습니다. 백은 흑 돌의 숫자를 바꿔서 망루를 막으러 온 것입니다. 상대 돌이 가까이 오면, 먼저 내 돌의 숫자가 바뀌지 않았는지 확인하세요.</p>
+<h2>정리</h2>
+<ul><li>첫 수는 붙이기. 가장 약한 귀의 돌을 동료 옆으로 붙인다.</li><li>붙이기 뒤에는 망루를 노릴 수 있다. 백은 막을 수 없다.</li><li>뛰어들기를 당하면 뛰어든 돌 옆에 놓지 말고, 빈 귀를 먼저 메운다.</li><li>상대 돌이 다가오면 내 돌의 숫자가 바뀌지 않았는지 본다.</li></ul>
+<p class="note">이 글은 YouTube “bocch定跡研究” 제21회의 내용을 읽을거리로 다시 정리한 것입니다. 평가는 “최강” AI의 수읽기에 따른 것으로, 끝까지 풀어낸 값은 아닙니다.</p>
+</article>
+<section class="rel"><h2>관련 글</h2><ul><li><a href="../../learn/ko/souheki.html">쌍벽: 9할을 이기는 전법과 단 하나의 약점</a></li><li><a href="../../learn/ko/ai-joseki-senpo.html">새 AI가 바꾼 셋째 수 정석과 10가지 전법</a></li></ul></section>
+</main>
+<footer><p><a href="../../learn/ko/">글 목록</a><a href="../../learn/ko/glossary.html">용어집</a><a href="../../guide-ko.html">승리 가이드</a><a href="../../about-ko.html">운영자 정보</a><a href="../../privacy-ko.html">개인정보 처리방침 · 문의</a></p><p class="langs"><a href="../../learn/yorisoi-yagura.html" lang="ja">日本語</a><a href="../../learn/en/yorisoi-yagura.html" lang="en">English</a><a href="../../learn/zh-hans/yorisoi-yagura.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/yorisoi-yagura.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/yorisoi-yagura.html" aria-current="page" lang="ko">한국어</a><a href="../../learn/es/yorisoi-yagura.html" lang="es">Español</a><a href="../../learn/de/yorisoi-yagura.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>
