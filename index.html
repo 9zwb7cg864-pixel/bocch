@@ -4143,16 +4143,44 @@ function myoShow(i){const L=S.log||[];let b=startBoard();for(let k=0;k<=i&&k<L.l
   for(let k=0;k<36;k++){const el=$('c'+k),c=b[k],r=k/6|0,d=c?nbCount(b,k):0;let cls='cell';if(r===0||r===5)cls+=' goal';if(last&&(last[0]===k||last[1]===k))cls+=' last';
     setCell(el,cls,c?`<div class="stone ${c===1?'b':'w'}${d?'':' zero'}${rankCls(rk[c])}"><span>${d}</span></div>`:'')}
   $('board').classList.add('past');$('hint').textContent=(i+1)+'手目の妙手'}
-function myoPlay(n){if(!MYO.list.length)return;const i=MYO.list[n%MYO.list.length];myoShow(i);
-  fx2Anim(4200,(g,tm)=>{const {x,W,H}=g,fade=1-fxW(tm,3500,4200),ip=fxE(fxW(tm,150,1100)),cx=W/2,cy=H*.46,R=Math.min(W,H)*.36*(.85+.15*ip);
+/* 妙手：指す前の盤→金の糸が元のマスから行き先へ伸びる→石が糸をなぞって跳ぶ→扇子と「妙手」 */
+function myoFan(g,tm,i){const {x,W,H}=g,fade=1-fxW(tm,3500,4200),ip=fxE(fxW(tm,150,1100)),cx=W/2,cy=H*.46,R=Math.min(W,H)*.36*(.85+.15*ip);
     if(ip>0){x.save();const dg=x.createRadialGradient(cx,cy-R*.3,0,cx,cy-R*.3,R*1.3);dg.addColorStop(0,'rgba(14,15,18,.7)');dg.addColorStop(.7,'rgba(14,15,18,.45)');dg.addColorStop(1,'rgba(14,15,18,0)');x.globalAlpha=ip*fade;x.fillStyle=dg;x.fillRect(0,0,W,H);x.restore();
       if(FXFAN.complete&&FXFAN.naturalWidth){x.save();x.globalAlpha=ip*fade;const sz=R*2.3;x.drawImage(FXFAN,cx-sz/2,cy+(1-ip)*H*.12-sz*.62,sz,sz);x.restore()}
       for(let k=0;k<18;k++){const fp=fxW(tm,200+fxR(k)*900,1400+fxR(k)*1500);if(fp<=0||fp>=1)continue;x.save();x.globalAlpha=fade*(1-fp)*.9;x.fillStyle=k%2?'#e9c46a':'#f6e2a8';x.fillRect(cx+(fxR(k+3)-.5)*R*2.2-2,cy-fp*R*1.6+R*.2,4,4);x.restore()}}
     const np=fxW(tm,800,4200);if(np>0){const T=window.bocchT||(s=>s),a=Math.min(1,np/.1)*fade,y=H*.8,bh=W*.25,wp=fxE(np/.3);x.save();x.globalAlpha=a;x.fillStyle='rgba(14,15,18,.88)';x.fillRect(0,y-bh/2,W,bh);
       x.textAlign='center';x.textBaseline='middle';x.fillStyle='#cdbf98';x.font='500 12px '+FX_FONT;x.fillText(T('最強AIと同じ一手')+'　'+T((i+1)+'手目'),W/2,y-bh*.34);
       x.beginPath();x.rect(0,y-bh/2,W*wp,bh);x.clip();const gr=x.createLinearGradient(0,y-30,0,y+30);gr.addColorStop(0,'#fff4cc');gr.addColorStop(.5,'#e9c46a');gr.addColorStop(1,'#b07f2c');
-      x.fillStyle=gr;x.shadowColor='rgba(0,0,0,.85)';x.shadowBlur=10;const t=T('妙手');x.font=(t.length>3?'800 '+Math.round(bh*.36):Math.round(bh*.56))+'px '+(t==='妙手'?'"Yuji Boku",':'')+FX_FONT;x.fillText(t,W/2,y+8);x.restore()}});
-  clearTimeout(MYO.t);MYO.t=setTimeout(()=>{if(MYO.list.length>n+1)myoPlay(n+1);else{$('board').classList.remove('past');render();const e=$('mvEnd');if(e)e.hidden=false}},4500)}
+      x.fillStyle=gr;x.shadowColor='rgba(0,0,0,.85)';x.shadowBlur=10;const t=T('妙手');x.font=(t.length>3?'800 '+Math.round(bh*.36):Math.round(bh*.56))+'px '+(t==='妙手'?'"Yuji Boku",':'')+FX_FONT;x.fillText(t,W/2,y+8);x.restore()}}
+function myoBoard(b,mark){const rk=[0,colorRank(1),colorRank(2)];for(let k=0;k<36;k++){const el=$('c'+k),c=b[k],r=k/6|0,d=c?nbCount(b,k):0;let cls='cell';if(r===0||r===5)cls+=' goal';if(mark&&mark.includes(k))cls+=' last';
+  setCell(el,cls,c?`<div class="stone ${c===1?'b':'w'}${d?'':' zero'}${rankCls(rk[c])}"><span>${d}</span></div>`:'')}$('board').classList.add('past')}
+const MYO_D=2000;
+function myoPlay(n){if(!MYO.list.length)return;const i=MYO.list[n%MYO.list.length],L=S.log||[],m=L[i];if(!m){myoShow(i);return}
+  let b0=startBoard();for(let k=0;k<i&&k<L.length;k++)b0=apply(b0,L[k]);const [f,t]=m,side=b0[f],d0=nbCount(b0,f),rk=rankCls(colorRank(side));
+  myoBoard(b0,[f]);$('hint').textContent=(i+1)+'手目の妙手';
+  (MYO.tt||[]).forEach(clearTimeout);MYO.tt=[];if(MYO.fl){MYO.fl.remove();MYO.fl=null}
+  const bd=$("board");
+  // 石が跳ぶ：元のマスの石を消して、糸をなぞる石を重ねる
+  MYO.tt.push(setTimeout(()=>{const g=fx2Base();if(!g)return;const A=g.P(f),B=g.P(t),sz=g.cs*.8,dx=B.x-A.x,dy=B.y-A.y,Lh=Math.hypot(dx,dy)||1,Q={x:(A.x+B.x)/2-dy/Lh*Lh*.18,y:(A.y+B.y)/2+dx/Lh*Lh*.18};
+    const c=$('c'+f);if(c)setCell(c,c.className,'');const fl=document.createElement('div');fl.className='mvfly';fl.style.cssText='width:'+sz+'px;height:'+sz+'px;z-index:6';
+    fl.innerHTML=`<div class="stone ${side===1?'b':'w'}${d0?'':' zero'}${rk}"><span>${d0}</span></div>`;bd.appendChild(fl);MYO.fl=fl;const fr=[];
+    for(let s=0;s<=16;s++){const u=s/16,e=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2,x=(1-e)*(1-e)*A.x+2*(1-e)*e*Q.x+e*e*B.x,y=(1-e)*(1-e)*A.y+2*(1-e)*e*Q.y+e*e*B.y;
+      fr.push({transform:'translate('+(x-sz/2)+'px,'+(y-sz/2)+'px) scale('+(1+.22*Math.sin(Math.PI*u)).toFixed(3)+')',offset:u})}
+    fl.style.transform=fr[0].transform;fl.animate(fr,{duration:700,fill:'forwards'}).onfinish=()=>{fl.remove();if(MYO.fl===fl)MYO.fl=null;myoShow(i);const s2=$('c'+t)&&$('c'+t).querySelector('.stone');if(s2)s2.animate([{scale:'1.18'},{scale:'1'}],{duration:260,easing:'ease-out'})}},1100));
+  fx2Anim(4200+MYO_D,(g,tm)=>{const {x}=g,A=g.P(f),B=g.P(t),dx=B.x-A.x,dy=B.y-A.y,Lh=Math.hypot(dx,dy)||1,Q={x:(A.x+B.x)/2-dy/Lh*Lh*.18,y:(A.y+B.y)/2+dx/Lh*Lh*.18},cs=g.cs;
+    // 元のマスの光（指す前）
+    const rp=fxW(tm,0,1100);if(rp>0&&rp<1){x.save();x.strokeStyle='rgba(240,216,150,.95)';x.lineWidth=2.4;x.shadowColor='rgba(240,216,150,.9)';x.shadowBlur=10;x.globalAlpha=Math.sin(Math.PI*rp);x.beginPath();x.arc(A.x,A.y,cs*(.44+.08*Math.sin(rp*Math.PI*3)),0,7);x.stroke();x.restore()}
+    // 金の糸：元から行き先へ伸び、石が着いたら薄れて消える
+    const gp=fxE(fxW(tm,300,1100)),fade=1-fxW(tm,1900,2600);if(gp>0&&fade>0){x.save();x.globalAlpha=fade;x.strokeStyle='rgba(246,226,168,.95)';x.lineWidth=Math.max(2,cs*.07);x.lineCap='round';x.shadowColor='rgba(240,216,150,.9)';x.shadowBlur=12;x.beginPath();
+      const n=30;for(let k=0;k<=n;k++){const e=gp*k/n,px=(1-e)*(1-e)*A.x+2*(1-e)*e*Q.x+e*e*B.x,py=(1-e)*(1-e)*A.y+2*(1-e)*e*Q.y+e*e*B.y;if(k)x.lineTo(px,py);else x.moveTo(px,py)}x.stroke();
+      // 向きがわかる矢じり（糸が伸びきってから）
+      if(gp>=1){const ex=B.x-Q.x,ey=B.y-Q.y,el=Math.hypot(ex,ey)||1,ux=ex/el,uy=ey/el,tip={x:B.x-ux*cs*.46,y:B.y-uy*cs*.46},ah=cs*.2;x.setLineDash([]);x.beginPath();x.moveTo(tip.x-ux*ah-uy*ah*.6,tip.y-uy*ah+ux*ah*.6);x.lineTo(tip.x,tip.y);x.lineTo(tip.x-ux*ah+uy*ah*.6,tip.y-uy*ah-ux*ah*.6);x.stroke()}
+      // 元のマス（石が出たあとも点線の丸で残す）
+      const op=fxW(tm,1100,1300);if(op>0){x.save();x.globalAlpha=fade*op*.9;x.lineWidth=2;x.setLineDash([4,5]);x.beginPath();x.arc(A.x,A.y,cs*.36,0,7);x.stroke();x.restore()}
+      // 行き先の印
+      const tp=fxW(tm,700,1100);if(tp>0){x.globalAlpha=fade*tp;x.lineWidth=2;x.setLineDash([5,5]);x.beginPath();x.arc(B.x,B.y,cs*.42,0,7);x.stroke()}x.restore()}
+    if(tm>MYO_D)myoFan(g,tm-MYO_D,i)});
+  clearTimeout(MYO.t);MYO.t=setTimeout(()=>{if(MYO.list.length>n+1)myoPlay(n+1);else{$('board').classList.remove('past');render();const e=$('mvEnd');if(e)e.hidden=false}},4500+MYO_D)}
 </script>
 <script>
 /* 縛られている石（「4」で行き先が1つもない石）に、金の点線の輪。段級の縁の外側に出す */
