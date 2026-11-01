@@ -3704,7 +3704,7 @@ $('xNow').addEventListener('click',()=>{if(!S.over)return;const L=window.BOCCH_L
     ko:['이겼다!','졌다…','흑의 승리','백의 승리','무승부','bocch: %r (%w, %n수)'],es:['¡Gané!','Perdí…','Ganan las negras','Ganan las blancas','Empate','bocch: %r (%w, %n jugadas)'],
     de:['Gewonnen!','Verloren…','Schwarz gewinnt','Weiß gewinnt','Remis','bocch: %r (%w, %n Züge)']}[L]||null;const Q=R||['勝ちました！','負けました…','黒の勝ち','白の勝ち','引き分け','bocchで%r（%w・%n手）'];
   const r=!w?Q[4]:me?(me===w?Q[0]:Q[1]):(w===1?Q[2]:Q[3]);
-  const t=Q[5].replace('%r',r).replace('%w',why).replace('%n',n)+'\n#bocch\nhttps://bocchgame.com';
+  const t=Q[5].replace('%r',r).replace('%w',why).replace('%n',n)+'\n#bocch\nhttps://bocchgame.com/play/';
   openX('https://x.com/intent/post?text='+encodeURIComponent(t))});
 $('revImg').addEventListener('click',()=>{const g=REV.g;if(!g)return;const p=REV.pv?pvState():REV.pos[REV.i],n=g.log.length,i=REV.i,[rt]=resultOf(g);
   const last=REV.pv?(REV.pv.k>0?REV.pv.line[REV.pv.k-1]:null):(i>0?g.log[i-1]:null);
