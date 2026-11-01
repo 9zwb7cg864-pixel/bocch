@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=25"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=26"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -1184,7 +1184,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
     <button id="frOpp" class="i-plus" hidden>フレンド申請</button>
   </div>
   <div class="endrow" id="reviewRow" hidden><button id="reviewNow" class="endb main"><span>感想戦で振り返る</span></button><button id="xNow" class="endb"><span>Xで共有</span></button></div>
-  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label></div>
+  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label><label class="chk"><input type="checkbox" id="bgmOn" checked> BGM</label></div>
   <div class="ad-slot ad-over" data-ad="over" hidden aria-label="広告"></div>
 </section>
 
@@ -4250,6 +4250,25 @@ const SEX={gid:'',ply:-1,prev:null};
   for(const th of [30,10])if(r<=th&&r>th-3&&seOnce('t'+(NET.code||'')+':'+NET.game+':'+th))seP('time')}catch(e){}}}
 // 大事なボタン（対局を始める・もう一局・ホームの「対局する」）
 document.addEventListener('click',e=>{try{const b=e.target.closest&&e.target.closest('#playGo,#randomBtn,#rematchBtn,#rematch,.pm [data-go="friend"],.pm [data-go="solo"],.mvbtn[data-a="again"]');if(b&&!b.disabled)seP('btn')}catch(x){}},true);
+</script>
+<script>
+/* ===== BGM（2026-11）：対局中は合戦の曲、それ以外（ホーム・メニュー・マッチング待ち・感想戦・学ぶ）は琴の曲。設定の「BGM」で切り替え（最初はオン）
+   曲：Pixabay の音楽（クレジット不要）。iPhoneは音の要素の音量を変えられないので、音の部品（KOMA.ctx）に通して音量を決める */
+const BGM={on:true,el:{},g:{},cur:'',vol:.014,ok:false};
+try{BGM.on=localStorage.getItem('bocch-bgm')!=='0'}catch(e){}
+function bgmWant(){try{if(!BGM.on||document.hidden)return '';if(CUR==='game'&&S&&!S.over&&!S.study&&!S.learn&&(typeof VIEW==='undefined'||VIEW.i==null))return 'battle';return 'koto'}catch(e){return ''}}
+function bgmNode(k){if(BGM.el[k])return BGM.el[k];const a=new Audio('sounds/bgm/'+k+'.mp3');a.loop=true;a.preload='auto';a.crossOrigin='anonymous';BGM.el[k]=a;
+  try{const s=KOMA.ctx.createMediaElementSource(a),g=KOMA.ctx.createGain();g.gain.value=0;s.connect(g);g.connect(KOMA.ctx.destination);BGM.g[k]=g}catch(e){a.volume=.25}return a}
+function bgmFade(k,to,sec){const g=BGM.g[k];if(!g)return;const t=KOMA.ctx.currentTime;try{g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.linearRampToValueAtTime(to,t+sec)}catch(e){g.gain.value=to}}
+function bgmTick(){if(!BGM.ok||!KOMA.ctx)return;const w=bgmWant();if(w===BGM.cur)return;const old=BGM.cur;BGM.cur=w;
+  if(old){bgmFade(old,0,1.2);const a=BGM.el[old];setTimeout(()=>{if(BGM.cur!==old&&a)a.pause()},1300)}
+  if(w){const a=bgmNode(w);if(KOMA.ctx.state!=='running')KOMA.ctx.resume().catch(()=>{});a.play().then(()=>bgmFade(w,BGM.vol,1.2)).catch(()=>{BGM.cur=''})}}
+// 曲が流れている間は、音の部品を眠らせない
+{const _ks2=komaSleep;komaSleep=function(){if(BGM.cur){clearTimeout(KOMA.st);return}_ks2()}}
+// 最初に画面に触れたら流し始める（ブラウザの決まりで、触れる前は鳴らせない）
+['pointerdown','touchend','keydown'].forEach(ev=>addEventListener(ev,function f(){if(BGM.ok)return;komaLoad();if(!KOMA.ctx)return;KOMA.ctx.resume().then(()=>{BGM.ok=true;bgmTick()}).catch(()=>{})},{capture:true,passive:true}));
+setInterval(bgmTick,700);document.addEventListener('visibilitychange',bgmTick);
+$('bgmOn').checked=BGM.on;$('bgmOn').addEventListener('change',e=>{BGM.on=e.target.checked;try{localStorage.setItem('bocch-bgm',BGM.on?'1':'0')}catch(_){}bgmTick();if(!BGM.on&&!BGM.cur)komaSleep()});
 </script>
 </body>
 </html>
