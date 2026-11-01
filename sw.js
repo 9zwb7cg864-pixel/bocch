@@ -4,6 +4,7 @@ const CORE=['./','./index.html','./guide.html','./manifest.webmanifest','./icon-
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)).catch(()=>{}));self.skipWaiting()});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET')return;const u=new URL(r.url);if(u.origin!==location.origin)return; // 対戦の通信などは触らない
+  if(/\.mp4$/.test(u.pathname))return; // ガチャの動画は途中から読む（部分取得）ので、保存も横取りもしない
   // ページや翻訳ファイルは、スマホに一時保存された古い版を使わず、毎回サイトに確認する（変わっていなければ通信は小さい）
   const fresh=r.mode==='navigate'||/\.(html|js|json|webmanifest)$/.test(u.pathname)||u.pathname.endsWith('/');
   e.respondWith(fetch(fresh?new Request(r,{cache:'no-cache'}):r).then(res=>{if(res&&res.ok&&!u.search){const cp=res.clone();caches.open(CACHE).then(c=>c.put(r,cp)).catch(()=>{})}return res})
