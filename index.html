@@ -4208,8 +4208,7 @@ function fx2Lonely(a,t){fx2Anim(1500,(g,tm)=>{const {x,cs}=g,A=g.P(a),B=g.P(t),a
   if(gid!==FX2.gid||ply!==FX2.ply+1||!FX2.prev||!S.last||!live||S.over||CUR!=='game'||!$('showJos').checked){FX2.gid=gid;FX2.ply=ply;FX2.prev=S.b.slice();return}
   const b0=FX2.prev,b1=S.b,[f,t]=S.last,mv=b1[t];FX2.gid=gid;FX2.ply=ply;FX2.prev=b1.slice();if(!mv)return;
   const frozen=(b,i)=>nbCount(b,i)>=4&&!movesFrom(b,i).length;
-  for(let i=0;i<36;i++)if(b1[i]===3-mv&&b0[i]===3-mv&&nbCount(b0,i)<4&&nbCount(b1,i)>=4&&!movesFrom(b1,i).length){FX2.tm.push(setTimeout(()=>fx2Bind(b1,i),650));return}
-  // ぼっち（紐が切れる演出）は出さない（効果音は別の処理で鳴らす）
+  // 縛り（光と筆文字）とぼっち（紐が切れる）の演出は出さない
 }catch(e){}}}
 {const _ps=paint;paint=function(n){_ps(n);if(n!=='game')fx2Stop()}}
 /* 縛り＝相手の手で自分の石の数字が4未満から4に上がり、そのせいで動けなくなったときだけ（もともと4で、行き先をふさがれただけのときは出さない）
@@ -4331,15 +4330,7 @@ function seOnce(key){if(SE.done[key])return false;SE.done[key]=1;return true}
   if(me&&win===me)setTimeout(()=>{try{if(S&&S.danUp)return;if((bdStats().streak|0)>=2)seP('up')}catch(e){}},2300)}catch(e){}return _fe(win,why,me)}}
 // 昇級・昇段
 {const _df=danFx;danFx=function(lv){try{seP('up')}catch(e){}return _df(lv)}}
-// 縛り（相手の石が4で動けなくなった）とぼっち（隣がいなくなった）：演出のオン・オフに関係なく、1手ごとに直前の盤と比べる
-const SEX={gid:'',ply:-1,prev:null};
-{const _fc=fxCheck;fxCheck=function(){_fc();try{if(!S||S.study||S.learn)return;const live=typeof VIEW==='undefined'||VIEW.i==null,gid=FX.gid,ply=S.ply||0;
-  if(gid!==SEX.gid||ply!==SEX.ply+1||!SEX.prev||!S.last||!live||S.over||CUR!=='game'){SEX.gid=gid;SEX.ply=ply;SEX.prev=S.b.slice();return}
-  const b0=SEX.prev,b1=S.b,[f,t]=S.last,mv=b1[t];SEX.gid=gid;SEX.ply=ply;SEX.prev=b1.slice();if(!mv)return;
-  const frozen=(b,i)=>nbCount(b,i)>=4&&!movesFrom(b,i).length;
-  for(let i=0;i<36;i++)if(b1[i]===3-mv&&b0[i]===3-mv&&nbCount(b0,i)<4&&nbCount(b1,i)>=4&&!movesFrom(b1,i).length){seP('shib',650);SE.bindEnd=performance.now()+650+2700;return}
-  const fr=f/6|0,fc=f%6;for(let i=0;i<36;i++){if(!b1[i]||i===t)continue;const r=i/6|0,c=i%6;if(Math.abs(r-fr)<=1&&Math.abs(c-fc)<=1&&nbCount(b1,i)===0&&b0[i]&&nbCount(b0,i)>0){{const w=(SE.bindEnd||0)-performance.now();seP('boc',Math.max(450,w+50))}return}}
-}catch(e){}}}
+// 縛りとぼっちの効果音は鳴らさない
 // マッチング成立（「相手が見つかりました」が出たとき）
 {const el=$('matchTitle');if(el){let last=0;new MutationObserver(()=>{const t=el.textContent.trim(),ok=t==='相手が見つかりました'||(window.bocchT&&t===window.bocchT('相手が見つかりました'));if(ok&&Date.now()-last>4000){last=Date.now();seP('mat')}}).observe(el,{childList:true,characterData:true,subtree:true})}}
 // 残り時間：自分の手番で、持ち時間が30秒と10秒を切ったときに1回ずつ
