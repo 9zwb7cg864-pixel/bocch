@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>双璧：胜率9成的战法与唯一的弱点｜bocch</title>
+<meta name="description" content="bocch的战法“双璧”，在AI之间的对局中对大多数对手的胜率都超过9成。本文附上胜率，介绍它唯一赢不了的应对“并肩”，以及这时应该走的手。">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/zh-hans/souheki.html">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/souheki.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/souheki.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/souheki.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/souheki.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/souheki.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/souheki.html">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/souheki.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/souheki.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="双璧：胜率9成的战法与唯一的弱点">
+<meta property="og:description" content="bocch的战法“双璧”，在AI之间的对局中对大多数对手的胜率都超过9成。本文附上胜率，介绍它唯一赢不了的应对“并肩”，以及这时应该走的手。">
+<meta property="og:url" content="https://bocchgame.com/learn/zh-hans/souheki.html">
+<meta property="og:image" content="https://bocchgame.com/og-zh-hans.jpg">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "双璧：胜率9成的战法与唯一的弱点", "description": "bocch的战法“双璧”，在AI之间的对局中对大多数对手的胜率都超过9成。本文附上胜率，介绍它唯一赢不了的应对“并肩”，以及这时应该走的手。", "inLanguage": "zh-Hans", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about-zh-hans.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/zh-hans/souheki.html", "datePublished": "2026-11-01", "dateModified": "2026-11-01"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="../../zh-hans.html">bocch</a><nav><a href="../../learn/zh-hans/">文章</a><a href="../../guide-zh-hans.html">攻略</a><a class="play" href="../../zh-hans.html">开始对局</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">战法</div>
+<h1>双璧：胜率9成的战法与唯一的弱点</h1>
+<p class="meta">kairo · 2026年11月1日</p>
+<p class="lead">第1手依偎，第2手把另一侧的边子也靠过来。把左右两边的棋子都收进内侧，这就是“双璧”。让新AI之间对弈约3,700局，双璧对大多数对手的胜率都超过9成。不过，有一种应对它赢不了。</p>
+<h2>双璧的形状</h2>
+<p>黑方第1手是依偎（1f→2e），把左边的棋子斜着往前靠一格。白方走一手之后，黑方第2手把右边的棋子也同样靠过来（6f→5e）。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>双璧。黑方的6颗棋子全部与同伴相连</figcaption></figure>
+<p>边上的棋子如果放着不动，旁边只有1颗，几乎发挥不了作用。把两边都尽早收进内侧，6颗棋子就全部和同伴连在了一起。</p>
+<h2>为什么强</h2>
+<p>面对依偎，白方第1手有14种。其中对12种，黑方走双璧的胜率平均为91%。最低的对手（3a→3c）也有84%，最高的对手（3a→5c）达到96%。</p>
+<p>即使让最强AI深入计算，这12种中有11种，黑方第2手的最佳手都是双璧。它是bocch开局中最朴素、也最强的形状之一。</p>
+<h2>弱点是“并肩”</h2>
+<p>赢不了的，是白方第1手走并肩的时候。并肩是白方把边上的棋子斜着往前靠一格的手，与黑方的依偎形状相同。</p>
+<div class="pair"><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>对同侧并肩走双璧：黑方43%</figcaption></figure><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>对另一侧并肩走双璧：黑方37%</figcaption></figure></div>
+<p>对方在与黑方同侧（1a→2b）并肩时走双璧，黑方胜率为43%。若是另一侧（6a→5b），会降到37%。</p>
+<p>白方的应对很简单：黑方走双璧，白方也把剩下的边子靠过来，形成相同的形状。让最强AI算到15手之后，这个局面几乎是均势。但实际让AI之间对弈，结果是白方更容易赢。也就是说，即使算到底是均势，一直下下去对黑方来说更难。</p>
+<p class="note">在视频“bocch定跡研究”第24期中，曾介绍被并肩应对的双璧胜率为15%。分条件重新测量后是37〜43%。确实很苦，但15%说得太过了。</p>
+<h2>被并肩时，放弃双璧</h2>
+<h3>对同侧并肩，把中间的棋子直冲3格</h3>
+<p>对方在与黑方同侧并肩时，不走双璧，而是把中间的 3f 一口气直冲3格（3f→3c）。多亏了依偎，3f 旁边有3颗棋子，所以能笔直前进3格。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">3</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g fr"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>对同侧并肩走 3f→3c（黑方63%）</figcaption></figure>
+<p>这手的胜率是63%，比双璧的43%高出20个百分点。盾枪（2f→2d）是48%。</p>
+<h3>对另一侧并肩，走送行鸟或盾枪</h3>
+<p>对方在另一侧并肩时，把依偎旁边的棋子走出去。斜着飞出的送行鸟（2f→4d）是59%，笔直走出的盾枪（2f→2d）也是59%。两者都大幅高于双璧的37%。</p>
+<div class="pair"><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>送行鸟（黑方59%）</figcaption></figure><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>盾枪（黑方59%）</figcaption></figure></div>
+<div class="tw"><table><thead><tr><th>白方第1手</th><th>黑方第2手</th><th>黑方胜率</th></tr></thead><tbody><tr><td>并肩以外（12种）</td><td>双璧 6f→5e</td><td>91%</td></tr><tr><td>同侧并肩 1a→2b</td><td>直冲3格 3f→3c</td><td>63%</td></tr><tr><td>另一侧并肩 6a→5b</td><td>送行鸟 2f→4d·盾枪 2f→2d</td><td>59%</td></tr></tbody></table></div>
+<h2>从白方看</h2>
+<p>从白方看，情况正好相反。黑方以依偎开局时，白方第1手只有并肩一个选择。走并肩以外的手，会被黑方走出双璧，白方的胜率平均只有1成左右。</p>
+<p>只要先走了并肩，即使黑方走出双璧，白方也把边子靠过来应对，反而更容易赢。</p>
+<h2>总结</h2>
+<ul><li>依偎之后，对方不是并肩就走双璧。能赢9成。</li><li>对方走并肩就放弃双璧。同侧走 3f→3c，另一侧走送行鸟或盾枪。</li><li>白方面对依偎一定要走并肩。对方走双璧时，自己也把边子靠过来应对。</li></ul>
+<p class="note">数据来源：最强CPU之间的对局。在指定的着法之后，接下来的2手从前3名候补中随机选择，之后每手用120毫秒下完。胜率把和棋算作半胜计算。双璧对并肩以外12种的对局共1,190局，并肩的局面每种着法200〜500局。</p>
+</article>
+<section class="rel"><h2>相关文章</h2><ul><li><a href="../../learn/zh-hans/yorisoi-yagura.html">依偎与橹：最初的2手，以及如何应对打入</a></li><li><a href="../../learn/zh-hans/ai-joseki-senpo.html">新AI改写的第3手定式与10种战法</a></li></ul></section>
+</main>
+<footer><p><a href="../../learn/zh-hans/">文章列表</a><a href="../../learn/zh-hans/glossary.html">术语表</a><a href="../../guide-zh-hans.html">获胜攻略</a><a href="../../about-zh-hans.html">运营者信息</a><a href="../../privacy-zh-hans.html">隐私政策·联系我们</a></p><p class="langs"><a href="../../learn/souheki.html" lang="ja">日本語</a><a href="../../learn/en/souheki.html" lang="en">English</a><a href="../../learn/zh-hans/souheki.html" aria-current="page" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/souheki.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/souheki.html" lang="ko">한국어</a><a href="../../learn/es/souheki.html" lang="es">Español</a><a href="../../learn/de/souheki.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>

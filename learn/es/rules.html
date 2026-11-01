@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reglas de bocch y cómo se juega | bocch</title>
+<meta name="description" content="Las reglas de bocch, el juego de mesa de tablero 6×6 en el que cada piedra salta tantas casillas como piedras tiene alrededor, explicadas con diagramas: cómo se decide la distancia, cómo se gana y se pierde, y qué cuidar en las primeras jugadas.">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/es/rules.html">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/rules.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/rules.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/rules.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/rules.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/rules.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/rules.html">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/rules.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/rules.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="Reglas de bocch y cómo se juega">
+<meta property="og:description" content="Las reglas de bocch, el juego de mesa de tablero 6×6 en el que cada piedra salta tantas casillas como piedras tiene alrededor, explicadas con diagramas: cómo se decide la distancia, cómo se gana y se pierde, y qué cuidar en las primeras jugadas.">
+<meta property="og:url" content="https://bocchgame.com/learn/es/rules.html">
+<meta property="og:image" content="https://bocchgame.com/og-es.jpg">
+<meta property="og:locale" content="es_ES">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Reglas de bocch y cómo se juega", "description": "Las reglas de bocch, el juego de mesa de tablero 6×6 en el que cada piedra salta tantas casillas como piedras tiene alrededor, explicadas con diagramas: cómo se decide la distancia, cómo se gana y se pierde, y qué cuidar en las primeras jugadas.", "inLanguage": "es", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about-es.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/es/rules.html", "datePublished": "2026-11-01", "dateModified": "2026-11-01"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="../../es.html">bocch</a><nav><a href="../../learn/es/">Artículos</a><a href="../../guide-es.html">Guía</a><a class="play" href="../../es.html">Jugar</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">Fundamentos</div>
+<h1>Reglas de bocch y cómo se juega</h1>
+<p class="meta">kairo · 1 de noviembre de 2026</p>
+<p class="lead">bocch (se pronuncia «bochi») es un juego de mesa para dos personas que se juega en un tablero de 6×6. No se capturan piedras: gana quien lleve dos de sus piedras al borde del rival. No hay más reglas que esa, pero la forma de decidir «cuánto puede moverse» una piedra es algo especial.</p>
+<h2>Posición inicial</h2>
+<p>Cada jugador coloca sus 6 piedras en la fila del borde de su lado. Negro juega primero.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>Posición inicial. Negro se coloca abajo, en la fila f, y Blanco arriba, en la fila a</figcaption></figure>
+<p>Cómo leer los diagramas: la fila de arriba (a) es la casa de Blanco y la meta de Negro; la fila de abajo (f) es la casa de Negro y la meta de Blanco. El número de cada piedra es la distancia que puede moverse.</p>
+<h2>La distancia es «el número de piedras alrededor»</h2>
+<p>En tu turno eliges una de tus piedras y la mueves en línea recta, en vertical, horizontal o diagonal. A diferencia del shogi o el ajedrez, <strong>la distancia no depende del tipo de pieza, sino de lo que la rodea</strong>.</p>
+<p>La distancia es exactamente el número de piedras que hay en las 8 casillas de alrededor, sean negras o blancas. Aunque haya 4 vecinas o más, la distancia máxima es 4. Se puede saltar por encima de las piedras del camino, pero la casilla de llegada tiene que estar vacía.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c dt"></i><i class="c"></i><i class="c dt"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c dt"></i><i class="c"></i><i class="c"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>Negro ha movido la piedra de 1f a 2e. Las vecinas de 2e son 2f y 3f, así que su número es 2. Los puntos verdes son las casillas a las que 2e puede ir después</figcaption></figure>
+<p>En el diagrama, la piedra de 2e tiene el número 2. Por eso puede ir a 2c, 4c o 4e, que están a dos casillas. No puede avanzar solo una casilla, ni tres.</p>
+<p>Al mover una piedra, <strong>no solo cambia el número de la piedra movida, sino también el de las que la rodean</strong>. Al llegar una piedra a 2e, su vecina 3f subió de 2 a 3. Los números de las piedras del rival cambian de la misma forma. Esto es lo más importante del juego.</p>
+<h2>Una piedra sola no se mueve</h2>
+<p>Una piedra sin ninguna piedra alrededor tiene el número 0, y con distancia 0 no puede moverse. A una piedra en este estado la llamamos «aislada» (<i>bocchi</i> en japonés); de ahí viene el nombre del juego.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s w z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i><i class="c g"></i></div></div><figcaption>La blanca de 5c no tiene vecinas: su número es 0 (aislada). No podrá moverse hasta que alguien se le acerque</figcaption></figure>
+<p>Si lanzas piedras hacia delante una tras otra, tanto la que salta como las que se quedan atrás pierden vecinas y se mueven peor. Mantener los números altos cerca de tus compañeras es la base para jugar bien.</p>
+<h2>Victoria, derrota y tablas</h2>
+<ul><li>Si al terminar tu jugada tienes dos piedras en la fila del borde rival (la meta), ganas. Para Negro es la fila a; para Blanco, la fila f.</li><li>Si en tu turno no puedes mover ninguna piedra, pierdes.</li><li>Si la misma posición aparece tres veces, la partida acaba en tablas.</li><li>En las partidas en línea, cada jugador tiene 7 minutos; si se te acaban, pierdes.</li></ul>
+<p>Las piedras que llegan a la meta se quedan en el tablero, y también cuentan para los números de las piedras de alrededor.</p>
+<h2>Lo primero que te hará más fuerte</h2>
+<p>Una vez sepas las reglas, basta con tener en cuenta estas tres cosas para ganar más partidas.</p>
+<ol><li><strong>Mete pronto hacia dentro las piedras de los extremos.</strong> En la posición inicial, las piedras de los extremos solo tienen una vecina y su número es 1. Con el «Arrimo», que las acerca una casilla en diagonal hacia delante, sube el número de esa piedra y también el de su vecina.</li><li><strong>Vigila los números de las piedras rivales.</strong> Si pones una piedra junto a una del rival, su número sube. Antes de jugar, comprueba que no le estás dando justo la distancia que necesita para llegar a la meta.</li><li><strong>No te pares en la fila anterior a la meta.</strong> Una piedra en esa fila solo llega si su número es exactamente 1. Si se le juntan más vecinas, se pasa de largo.</li></ol>
+<p>Los términos están en el <a href="glossary.html">glosario</a>, y cómo jugar la apertura, en el artículo <a href="yorisoi-yagura.html">Arrimo y torre</a>. <a href="../../es.html">bocch</a> es gratis y sin registro: puedes jugar al momento contra la CPU o con amigos.</p>
+</article>
+<section class="rel"><h2>Artículos relacionados</h2><ul><li><a href="../../learn/es/glossary.html">Glosario de bocch</a></li><li><a href="../../learn/es/yorisoi-yagura.html">Arrimo y torre: las dos primeras jugadas y cómo responder a una incursión</a></li></ul></section>
+</main>
+<footer><p><a href="../../learn/es/">Todos los artículos</a><a href="../../learn/es/glossary.html">Glosario</a><a href="../../guide-es.html">Guía de estrategia</a><a href="../../about-es.html">Sobre el sitio</a><a href="../../privacy-es.html">Política de privacidad y contacto</a></p><p class="langs"><a href="../../learn/rules.html" lang="ja">日本語</a><a href="../../learn/en/rules.html" lang="en">English</a><a href="../../learn/zh-hans/rules.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/rules.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/rules.html" lang="ko">한국어</a><a href="../../learn/es/rules.html" aria-current="page" lang="es">Español</a><a href="../../learn/de/rules.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>

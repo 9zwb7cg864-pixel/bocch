@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>쌍벽: 9할을 이기는 전법과 단 하나의 약점 | bocch</title>
+<meta name="description" content="bocch의 전법 “쌍벽”은 AI끼리의 대국에서 대부분의 상대에게 9할 이상 이깁니다. 이길 수 없는 유일한 받기 “어깨 붙이기”와, 그때 두어야 할 수를 승률과 함께 소개합니다.">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/ko/souheki.html">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/souheki.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/souheki.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/souheki.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/souheki.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/souheki.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/souheki.html">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/souheki.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/souheki.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="쌍벽: 9할을 이기는 전법과 단 하나의 약점">
+<meta property="og:description" content="bocch의 전법 “쌍벽”은 AI끼리의 대국에서 대부분의 상대에게 9할 이상 이깁니다. 이길 수 없는 유일한 받기 “어깨 붙이기”와, 그때 두어야 할 수를 승률과 함께 소개합니다.">
+<meta property="og:url" content="https://bocchgame.com/learn/ko/souheki.html">
+<meta property="og:image" content="https://bocchgame.com/og-ko.jpg">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "쌍벽: 9할을 이기는 전법과 단 하나의 약점", "description": "bocch의 전법 “쌍벽”은 AI끼리의 대국에서 대부분의 상대에게 9할 이상 이깁니다. 이길 수 없는 유일한 받기 “어깨 붙이기”와, 그때 두어야 할 수를 승률과 함께 소개합니다.", "inLanguage": "ko", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about-ko.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/ko/souheki.html", "datePublished": "2026-11-01", "dateModified": "2026-11-01"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="../../ko.html">bocch</a><nav><a href="../../learn/ko/">글</a><a href="../../guide-ko.html">가이드</a><a class="play" href="../../ko.html">대국하기</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">전법</div>
+<h1>쌍벽: 9할을 이기는 전법과 단 하나의 약점</h1>
+<p class="meta">kairo · 2026년 11월 1일</p>
+<p class="lead">첫 수로 붙이고, 둘째 수로 다른 쪽 끝도 붙인다. 좌우 끝을 모두 안쪽으로 들이는 것이 “쌍벽”입니다. 새 AI끼리 약 3,700판을 두게 했더니, 쌍벽은 대부분의 상대에게 9할 이상 이겼습니다. 다만 이길 수 없는 받기가 딱 하나 있습니다.</p>
+<h2>쌍벽의 모양</h2>
+<p>흑의 첫 수는 붙이기(1f→2e). 왼쪽 끝 돌을 대각선 앞으로 한 칸 붙입니다. 백이 무언가를 둔 뒤, 흑의 둘째 수로 오른쪽 끝 돌도 똑같이 붙입니다(6f→5e).</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>쌍벽. 흑의 돌 6개가 모두 동료와 이어져 있다</figcaption></figure>
+<p>끝 돌은 그대로 두면 이웃이 하나뿐이라 거의 일하지 못합니다. 양쪽을 일찍 안쪽으로 들이면 6개의 돌이 모두 동료와 이어집니다.</p>
+<h2>왜 강한가</h2>
+<p>붙이기에 대해 백의 첫 수는 14가지입니다. 그중 12가지에 대해 흑이 쌍벽을 두었을 때의 승률은 평균 91퍼센트. 가장 낮은 상대(3a→3c)에도 84퍼센트, 가장 높은 상대(3a→5c)에는 96퍼센트였습니다.</p>
+<p>최강 AI에게 깊이 읽게 해도, 이 12가지 중 11가지에서 흑의 둘째 수 최선은 쌍벽이었습니다. bocch 초반에서 가장 솔직하고 가장 강한 모양 중 하나입니다.</p>
+<h2>약점은 “어깨 붙이기”</h2>
+<p>이길 수 없는 것은 백의 첫 수가 어깨 붙이기일 때입니다. 어깨 붙이기는 백이 끝 돌을 대각선 앞으로 한 칸 붙이는 수로, 흑의 붙이기와 같은 모양입니다.</p>
+<div class="pair"><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>같은 쪽 어깨 붙이기에 쌍벽: 흑 43%</figcaption></figure><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>반대쪽 어깨 붙이기에 쌍벽: 흑 37%</figcaption></figure></div>
+<p>흑과 같은 쪽(1a→2b)에 어깨 붙이기를 당하고 쌍벽을 두면 흑의 승률은 43퍼센트. 반대쪽(6a→5b)이면 37퍼센트까지 떨어집니다.</p>
+<p>백의 대답은 단순해서, 흑이 쌍벽이면 백도 남은 끝을 붙여 같은 모양을 만듭니다. 최강 AI에게 15수 앞까지 읽게 하면 이 국면은 거의 호각입니다. 그런데도 실제로 AI끼리 두게 하면 백이 더 이기기 쉬운 결과가 나왔습니다. 끝까지 읽으면 호각이라도, 계속 두어 나가기는 흑 쪽이 더 어려운 국면이라는 뜻입니다.</p>
+<p class="note">영상 “bocch定跡研究” 제24회에서는 어깨 붙이기로 받은 쌍벽을 15퍼센트라고 소개했습니다. 조건을 나눠 다시 재어 보니 37~43퍼센트였습니다. 괴로운 것은 분명하지만, 15퍼센트는 지나친 표현이었습니다.</p>
+<h2>어깨 붙이기를 당하면 쌍벽을 그만둔다</h2>
+<h3>같은 쪽 어깨 붙이기에는 가운데를 세 칸 찌른다</h3>
+<p>흑과 같은 쪽에 어깨 붙이기를 당하면, 쌍벽 대신 가운데의 3f를 단숨에 세 칸 찌릅니다(3f→3c). 붙이기 덕분에 3f 주변에는 돌이 3개 있으므로 똑바로 세 칸 나아갈 수 있습니다.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">3</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g fr"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>같은 쪽 어깨 붙이기에는 3f→3c(흑 63%)</figcaption></figure>
+<p>이 수의 승률은 63퍼센트. 쌍벽의 43퍼센트보다 20포인트 높았습니다. 방패창(2f→2d)은 48퍼센트였습니다.</p>
+<h3>반대쪽 어깨 붙이기에는 배웅새나 방패창</h3>
+<p>반대쪽에 어깨 붙이기를 당하면, 붙이기 옆의 돌을 앞으로 냅니다. 대각선으로 날리는 배웅새(2f→4d)가 59퍼센트, 똑바로 내는 방패창(2f→2d)도 59퍼센트. 둘 다 쌍벽의 37퍼센트를 크게 웃돕니다.</p>
+<div class="pair"><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>배웅새(흑 59%)</figcaption></figure><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>방패창(흑 59%)</figcaption></figure></div>
+<div class="tw"><table><thead><tr><th>백의 첫 수</th><th>흑의 둘째 수</th><th>흑의 승률</th></tr></thead><tbody><tr><td>어깨 붙이기 이외(12가지)</td><td>쌍벽 6f→5e</td><td>91%</td></tr><tr><td>같은 쪽 어깨 붙이기 1a→2b</td><td>세 칸 찌르기 3f→3c</td><td>63%</td></tr><tr><td>반대쪽 어깨 붙이기 6a→5b</td><td>배웅새 2f→4d·방패창 2f→2d</td><td>59%</td></tr></tbody></table></div>
+<h2>백의 입장에서 보면</h2>
+<p>백 입장에서 보면 이야기는 반대입니다. 흑이 붙이기로 오면 백의 첫 수는 어깨 붙이기뿐입니다. 어깨 붙이기 이외의 수를 두면 흑에게 쌍벽을 당해, 백의 승률은 평균 1할 정도밖에 되지 않습니다.</p>
+<p>어깨 붙이기를 해 두면, 흑이 쌍벽을 두어 와도 이쪽도 끝을 붙여 받으면 오히려 백이 더 이기기 쉬워집니다.</p>
+<h2>정리</h2>
+<ul><li>붙이기 뒤, 상대가 어깨 붙이기 이외라면 쌍벽. 9할을 이길 수 있다.</li><li>상대가 어깨 붙이기라면 쌍벽은 그만둔다. 같은 쪽이면 3f→3c, 반대쪽이면 배웅새나 방패창.</li><li>백은 붙이기에는 반드시 어깨 붙이기. 쌍벽이 오면 이쪽도 끝을 붙여 받는다.</li></ul>
+<p class="note">숫자의 출처: 최강 CPU끼리의 대국. 정해진 수순 뒤 2수는 상위 3수 중에서 무작위로 고르고, 그 뒤는 한 수에 120밀리초로 두게 했습니다. 승률은 무승부를 절반으로 계산했습니다. 어깨 붙이기 이외의 12가지에 대한 쌍벽은 총 1,190판, 어깨 붙이기 국면은 수마다 200~500판입니다.</p>
+</article>
+<section class="rel"><h2>관련 글</h2><ul><li><a href="../../learn/ko/yorisoi-yagura.html">붙이기와 망루: 처음 두 수와 뛰어들기 받는 법</a></li><li><a href="../../learn/ko/ai-joseki-senpo.html">새 AI가 바꾼 셋째 수 정석과 10가지 전법</a></li></ul></section>
+</main>
+<footer><p><a href="../../learn/ko/">글 목록</a><a href="../../learn/ko/glossary.html">용어집</a><a href="../../guide-ko.html">승리 가이드</a><a href="../../about-ko.html">운영자 정보</a><a href="../../privacy-ko.html">개인정보 처리방침 · 문의</a></p><p class="langs"><a href="../../learn/souheki.html" lang="ja">日本語</a><a href="../../learn/en/souheki.html" lang="en">English</a><a href="../../learn/zh-hans/souheki.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/souheki.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/souheki.html" aria-current="page" lang="ko">한국어</a><a href="../../learn/es/souheki.html" lang="es">Español</a><a href="../../learn/de/souheki.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>

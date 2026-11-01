@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>새 AI가 바꾼 셋째 수 정석과 10가지 전법 | bocch</title>
+<meta name="description" content="bocch의 최강 CPU를 채점표 방식에서 신경망으로 새로 만들었습니다. 새 AI의 눈으로 다시 본 셋째 수 정석과, 초반 첫 수·둘째 수의 조합인 “전법” 10가지를 소개합니다.">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/ko/ai-joseki-senpo.html">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/ai-joseki-senpo.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/ai-joseki-senpo.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/ai-joseki-senpo.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/ai-joseki-senpo.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/ai-joseki-senpo.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/ai-joseki-senpo.html">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/ai-joseki-senpo.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/ai-joseki-senpo.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="새 AI가 바꾼 셋째 수 정석과 10가지 전법">
+<meta property="og:description" content="bocch의 최강 CPU를 채점표 방식에서 신경망으로 새로 만들었습니다. 새 AI의 눈으로 다시 본 셋째 수 정석과, 초반 첫 수·둘째 수의 조합인 “전법” 10가지를 소개합니다.">
+<meta property="og:url" content="https://bocchgame.com/learn/ko/ai-joseki-senpo.html">
+<meta property="og:image" content="https://bocchgame.com/og-ko.jpg">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "새 AI가 바꾼 셋째 수 정석과 10가지 전법", "description": "bocch의 최강 CPU를 채점표 방식에서 신경망으로 새로 만들었습니다. 새 AI의 눈으로 다시 본 셋째 수 정석과, 초반 첫 수·둘째 수의 조합인 “전법” 10가지를 소개합니다.", "inLanguage": "ko", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about-ko.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/ko/ai-joseki-senpo.html", "datePublished": "2026-11-01", "dateModified": "2026-11-01"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="../../ko.html">bocch</a><nav><a href="../../learn/ko/">글</a><a href="../../guide-ko.html">가이드</a><a class="play" href="../../ko.html">대국하기</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">전법</div>
+<h1>새 AI가 바꾼 셋째 수 정석과 10가지 전법</h1>
+<p class="meta">kairo · 2026년 11월 1일</p>
+<p class="lead">bocch의 “최강” CPU를 새로 만들었습니다. 기존 최강과 400판을 두게 했더니 293승 83패 24무. 승률은 76퍼센트입니다. 이 글에서는 새 AI를 만든 방법과, 그 눈으로 다시 봤을 때 정석과 전법이 어떻게 바뀌었는지를 정리합니다.</p>
+<h2>채점표에서, 판 전체를 보는 AI로</h2>
+<p>지금까지의 AI는 국면을 보고 “어느 쪽이 유리한가”를 채점표로 정했습니다. 건너편에 도착한 돌은 1개에 249점, 외톨이 돌은 감점, 둘 수 있는 수가 많으면 가점, 한 수만 더 두면 도착할 수 있는 돌이 있으면 가점, 하는 식입니다. 항목의 비중은 2만 6천 판의 데이터로 맞췄지만, 항목 자체는 사람이 생각한 것입니다. 사람이 알아차리지 못한 모양의 좋고 나쁨은 채점표에 쓸 수 없습니다.</p>
+<p>새 AI는 채점표를 쓰지 않고, 판 전체를 보고 그 국면이 얼마나 이기기 쉬운지를 직접 내놓습니다. 신경망입니다. 무엇을 봐야 하는지는 가르쳐 주지 않았고, 자기 자신과 수십만 판의 연습 대국을 두며 이기는 모양을 스스로 익혔습니다.</p>
+<p>연습 대국을 두고, 진 국면을 복습하고, 이전의 자신과 실력을 겨룬다. 이기면 새로운 자신으로 교체한다. 이것을 9바퀴 반복했고, 교체에 성공한 것은 4번뿐이었습니다. 강해질수록 이전의 자신을 이기기는 어려워집니다.</p>
+<p>도중에 AI의 머리를 크게 키우는 실험도 했습니다. 형세를 보는 눈은 조금 정확해졌지만, 계산이 2배 이상 무거워져 읽을 수 있는 수가 한 수 얕아졌고, 원래 AI에게 진 판이 더 많았습니다. 반대로 계산만 빠르게 한 버전은 원래 AI에게 57퍼센트 이겼습니다. <strong>bocch에서는 똑똑하게 보는 것보다 깊이 읽는 것이 더 중요하다</strong>는 뜻입니다. 지금의 최강은 한 수에 3초, 15수 앞까지 읽습니다.</p>
+<h2>셋째 수 정석은 어떻게 바뀌었나</h2>
+<p>새 AI의 눈으로 셋째 수까지의 정석을 다시 조사했습니다. 첫 수와 둘째 수는 거의 그대로여서, 흑은 붙이기, 백은 어깨 붙이기가 여전히 본선입니다. 바뀐 것은 셋째 수로, 크게 두 가지를 알게 되었습니다.</p>
+<h3>1. 귀 지키기끼리라면 정석대로 붙이기</h3>
+<p>흑이 귀 지키기(6f→6e), 백도 귀 지키기(1a→1b)로 응한 국면입니다. 정석의 셋째 수는 반대쪽 붙이기 1f→2e. 새 AI는 귀 지키기한 돌을 한 칸 더 붙이는 6e→5e를 골랐습니다.</p>
+<div class="pair"><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i></div></div><figcaption>정석의 1f→2e(흑 80%)</figcaption></figure><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c fr"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i></div></div><figcaption>AI의 6e→5e(흑 49%)</figcaption></figure></div>
+<p>각각 100판씩 두게 하니, 정석의 붙이기가 80퍼센트, AI의 수는 49퍼센트였습니다. 여기는 정석이 옳았던 국면입니다. 초반에는 수를 넓히기보다 먼저 덩어리를 만드는 편이 이기기 쉽습니다.</p>
+<h3>2. 상대가 가운데로 나오면 앞으로 찌른다</h3>
+<p>다음은 흑의 귀 지키기에 백이 5a→3c 철새로 가운데로 뛰어든 국면입니다. 여기서도 정석은 붙이기였습니다. 새 AI는 5f→5d 외창으로 돌을 두 칸 앞으로 찔렀습니다.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i><i class="c g fr"></i><i class="c g"></i></div></div><figcaption>백의 철새에 흑은 외창(5f→5d)</figcaption></figure>
+<p>결과는 정석의 57퍼센트에 비해 외창은 88퍼센트. 상대가 가운데로 나오면 수비를 굳히기보다 앞으로 나가 승부를 내러 간다. 이것이 새 AI의 답이었습니다. 이 결과를 반영해 최강 CPU의 정석표와 게임 “배우기” 탭의 셋째 수 표를 고쳐 썼습니다.</p>
+<h2>첫 수와 둘째 수의 조합 = 전법</h2>
+<p>bocch에서는 지금까지 붙이기나 외창처럼 한 수마다 이름을 붙여 왔습니다. 그런데 새 AI로 다시 조사해 보니, 첫 수가 같아도 둘째 수에 따라 승률이 완전히 달라진다는 것을 알게 되었습니다.</p>
+<p>그래서 자기 첫 수와 둘째 수의 조합을 “전법”이라 부르고, 자주 두는 10가지에 이름을 붙였습니다. 흑이든 백이든 같은 모양이면 같은 이름입니다. 이름이 있으면 방금 둔 초반이 무엇이었는지 한마디로 말할 수 있어서, 외우기도 남과 이야기하기도 편해집니다. 쇼기(일본 장기)의 야구라나 시켄비샤와 마찬가지입니다.</p>
+<p>아래 그림은 흑이 두 수를 둔 장면입니다(백의 수는 생략했습니다). 각 전법에서 200판씩 새 AI끼리 두게 했습니다.</p>
+<h3>정통파: 상대가 올바르게 받아도 강하다</h3>
+<div class="pair"><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>방패창</figcaption></figure><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>배웅새</figcaption></figure></div>
+<ul><li><strong>방패창</strong>: 붙이기로 방패를 만들고, 그 옆 돌을 외창으로 똑바로 낸다. 상대가 최선으로 응해도 승률 47퍼센트로, 10가지 중 가장 높습니다. 예전 정석에서도 본선이었습니다.</li><li><strong>배웅새</strong>: 붙이기 옆의 돌을 철새로 대각선으로 날린다. 상대가 대충 두면 86퍼센트, 최선으로 응해도 42퍼센트입니다.</li></ul>
+<h3>기습형: 모르는 상대에게는 크게 이긴다</h3>
+<div class="pair"><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>쌍벽</figcaption></figure><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>선봉</figcaption></figure></div>
+<div class="pair"><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>한구석</figcaption></figure><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">1</b></i><i class="c g fr"></i><i class="c g"><b class="s b z">0</b></i></div></div><figcaption>쌍날</figcaption></figure></div>
+<ul><li><strong>쌍벽</strong>: 좌우 끝을 모두 붙인다. 상대가 대충 두면 87퍼센트로, 10가지 중 가장 많이 이깁니다. 다만 어깨 붙이기로 받으면 괴로워집니다(<a href="souheki.html">쌍벽 글</a>).</li><li><strong>선봉</strong>: 가운데로 나간 뒤 끝을 붙인다.</li><li><strong>한구석</strong>: 귀 지키기 뒤에 반대쪽 끝을 붙인다.</li><li><strong>쌍날</strong>: 붙이기와 반대쪽 철새를 조합한다.</li></ul>
+<h3>이색 전법: 수손 정석</h3>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c fr"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>수손 정석. 완성되는 모양은 붙이기와 같다</figcaption></figure>
+<p>귀 지키기로 한 칸 나간 뒤 한 칸 더 붙이는 전법입니다. 완성되는 모양은 붙이기를 한 수로 둔 것과 완전히 같으므로, 한 수를 통째로 손해 보고 있습니다. 그런데도 상대가 어깨 붙이기로 받은 국면에서는 35퍼센트를 이겨서, 생각만큼 나쁘지 않았습니다.</p>
+<h3>두면 안 되는 전법</h3>
+<div class="pair"><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g fr"></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>미아</figcaption></figure><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b z">0</b></i><i class="c"></i><i class="c to"><b class="s b z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"><b class="s b z">0</b></i><i class="c g"></i><i class="c g"><b class="s b z">0</b></i><i class="c g fr"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>격룡창</figcaption></figure></div>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b z">0</b></i><i class="c"></i><i class="c to"><b class="s b z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"><b class="s b z">0</b></i><i class="c g"></i><i class="c g"><b class="s b z">0</b></i><i class="c g fr"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>방랑 구름</figcaption></figure>
+<ul><li><strong>미아</strong>: 떠도는 구름으로 뛰쳐나간 뒤 붙인다. 상대가 대충 두어도 승률이 4할을 밑돕니다.</li><li><strong>격룡창</strong>: 외창과 정면 돌파로 두 줄을 밀어 넣는다.</li><li><strong>방랑 구름</strong>: 철새와 떠도는 구름으로 돌이 뿔뿔이 흩어진다.</li></ul>
+<p>격룡창과 방랑 구름 모두 상대가 대충 두어도 승률 6퍼센트 이하로, 거의 이길 수 없습니다. 끝 돌을 내버려 둔 채 가운데로 날리면 새 AI에게 반드시 응징당합니다.</p>
+<h2>정리</h2>
+<ul><li>초반에는 가까이를 굳히는 것이 기본.</li><li>다만 상대가 가운데로 나오면 앞으로 찌른다.</li><li>전법이라면 방패창과 배웅새가 정통파. 쌍벽은 강하지만, 어깨 붙이기로 받으면 다른 수로 바꾼다.</li></ul>
+<p>게임에서 내 둘째 수로 전법을 두면 그 이름이 판 위에 떠오릅니다. <a href="../../ko.html">새로운 최강 CPU</a>와 꼭 대결해 보세요.</p>
+<p class="note">이 글은 YouTube “bocch定跡研究” 제24회의 내용을 읽을거리로 다시 정리한 것입니다. 쌍벽이 어깨 붙이기로 받아졌을 때의 승률은 그 뒤 다시 잰 결과(제25회)의 숫자로 바꿨습니다.</p>
+</article>
+<section class="rel"><h2>관련 글</h2><ul><li><a href="../../learn/ko/yorisoi-yagura.html">붙이기와 망루: 처음 두 수와 뛰어들기 받는 법</a></li><li><a href="../../learn/ko/souheki.html">쌍벽: 9할을 이기는 전법과 단 하나의 약점</a></li></ul></section>
+</main>
+<footer><p><a href="../../learn/ko/">글 목록</a><a href="../../learn/ko/glossary.html">용어집</a><a href="../../guide-ko.html">승리 가이드</a><a href="../../about-ko.html">운영자 정보</a><a href="../../privacy-ko.html">개인정보 처리방침 · 문의</a></p><p class="langs"><a href="../../learn/ai-joseki-senpo.html" lang="ja">日本語</a><a href="../../learn/en/ai-joseki-senpo.html" lang="en">English</a><a href="../../learn/zh-hans/ai-joseki-senpo.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/ai-joseki-senpo.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/ai-joseki-senpo.html" aria-current="page" lang="ko">한국어</a><a href="../../learn/es/ai-joseki-senpo.html" lang="es">Español</a><a href="../../learn/de/ai-joseki-senpo.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>

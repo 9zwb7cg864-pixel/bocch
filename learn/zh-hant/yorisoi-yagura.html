@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>依偎與櫓：最初的2手，以及怎麼應付打入｜bocch</title>
+<meta name="description" content="用棋子數字的總和與AI的評價，說明 bocch 的第1手「依偎」為什麼強。也用棋盤圖介紹櫓的組法，以及被打入時正確的應法。">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/zh-hant/yorisoi-yagura.html">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/yorisoi-yagura.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/yorisoi-yagura.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/yorisoi-yagura.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/yorisoi-yagura.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/yorisoi-yagura.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/yorisoi-yagura.html">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/yorisoi-yagura.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/yorisoi-yagura.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="依偎與櫓：最初的2手，以及怎麼應付打入">
+<meta property="og:description" content="用棋子數字的總和與AI的評價，說明 bocch 的第1手「依偎」為什麼強。也用棋盤圖介紹櫓的組法，以及被打入時正確的應法。">
+<meta property="og:url" content="https://bocchgame.com/learn/zh-hant/yorisoi-yagura.html">
+<meta property="og:image" content="https://bocchgame.com/og-zh-hant.jpg">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "依偎與櫓：最初的2手，以及怎麼應付打入", "description": "用棋子數字的總和與AI的評價，說明 bocch 的第1手「依偎」為什麼強。也用棋盤圖介紹櫓的組法，以及被打入時正確的應法。", "inLanguage": "zh-Hant", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about-zh-hant.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/zh-hant/yorisoi-yagura.html", "datePublished": "2026-11-01", "dateModified": "2026-11-01"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="../../zh-hant.html">bocch</a><nav><a href="../../learn/zh-hant/">文章</a><a href="../../guide-zh-hant.html">攻略</a><a class="play" href="../../zh-hant.html">開始對局</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">定式</div>
+<h1>依偎與櫓：最初的2手，以及怎麼應付打入</h1>
+<p class="meta">kairo · 2026年11月1日</p>
+<p class="lead">第1手最多人走的「依偎」，只是把邊上的棋子往斜前方靠一格的樸實一手。但用AI來算，白方能正確應對的手幾乎沒有。這篇文章要看依偎強的理由、由此能組成的「櫓」，以及破解櫓的唯一方法。</p>
+<h2>讓最弱的棋子發揮作用</h2>
+<p>初始佈局中，角落的棋子（黑方是 1f 和 6f）旁邊只有1顆，所以數字是1。只能走1格，是最弱的棋子。</p>
+<p>依偎就是把這顆角落的棋子，靠到同伴旁邊的 2e 的手。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>依偎（1f→2e）。2e 數字為2，旁邊的 3f 也從2升到3</figcaption></figure>
+<p>移動後的 2e 數字變成2，旁邊的 3f 也從2升到3。把黑方6顆棋子的數字全部加起來，初始佈局是10，依偎之後是12。<strong>第1手的7種類型中，只有依偎能讓總和增加</strong>。</p>
+<p>反過來，往前衝出去的手又如何呢？候鳥（2f→4d）和正面突破（3f→3d）都會讓總和降到6。因為跳出去的棋子接近孤子，留下的棋子旁邊也變少了。可以說依偎是不往前進、先累積跳躍力量的一手。</p>
+<h2>白方幾乎無法正確應對</h2>
+<p>面對依偎，白方有14種走法。用「最強」AI全部算過，能維持均勢的只有在另一側角落同樣靠攏的 6a→5b（並肩）。同一側的並肩 1a→2b 是黑方略好。其餘12種，黑方都明顯佔優。</p>
+<p>從白方來看，這是很想把棋子往中央推的局面。但越是進攻的手，越會撞上黑方厚實的形狀。實戰中依偎勝率高，是因為對手在這裡很容易走錯。</p>
+<h2>拿不定主意，就把另一側的邊也靠攏</h2>
+<p>黑方第2手要針對白方14種走法各記一個正解，實在很辛苦。所以有個辦法，是乾脆決定第2手也把右邊角落靠攏，也就是 6f→5e。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>黑方把左右兩邊都靠攏的形狀（雙璧）</figcaption></figure>
+<p>在舊AI的評價中，這手不管面對白方哪種走法，損失都控制在20分左右；白方進攻時，黑方的大幅領先也會原樣保留。</p>
+<p class="note">補充：後來讓新AI互相對弈數千局，結果在白方以並肩應對的局面中，這個形狀的黑方勝率只有4成左右。對並肩以外的手能贏9成，是很強的形狀，但已經知道面對並肩時，別的手更容易贏。詳細內容整理在<a href="souheki.html">雙璧的文章</a>。</p>
+<h2>組櫓</h2>
+<p>依偎之後，黑方可以做出 2e、3e、2f、3f 的方形棋塊。這就是櫓。4顆棋子彼此相鄰，所以每顆棋子的數字都保持在3〜4，能跳得很遠。同伴跳躍時也能當作踏板。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">3</b></i><i class="c to mk"><b class="s b">4</b></i><i class="c"></i><i class="c fr"></i><i class="c"></i><i class="c g"></i><i class="c g mk"><b class="s b">3</b></i><i class="c g mk"><b class="s b">4</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i></div></div><figcaption>藍框的4顆就是櫓。每顆棋子的數字都是3〜4</figcaption></figure>
+<p>櫓最快3手就能組成。最快組法的6種中，有5種是從依偎開始。而且白方的棋子在 a 行，在黑方組好之前的2手內，到不了黑方的陣地。<strong>白方擋不住櫓</strong>。</p>
+<h2>被打入時，不要放在它旁邊</h2>
+<p>不過，白方有一手很討厭的棋，那就是打入。下圖中，白方從 3a 一口氣跳進 3d，把棋子放在要組櫓的位置正前方。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g fr"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i></div></div><figcaption>白方的打入（3a→3d）。3d 的白棋旁邊只有 2e，所以數字是1</figcaption></figure>
+<p>3d 的白棋目前旁邊只有 2e，所以數字是1。這時黑方如果想完成櫓而走 5e→3e，會怎麼樣呢？</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">4</b></i><i class="c to"><b class="s b">4</b></i><i class="c"></i><i class="c fr"></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">4</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="38.1" y1="61.9" x2="12.6" y2="87.4" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>5e→3e 是失敗。3d 的數字升到2，白方能跳進 1f</figcaption></figure>
+<p>3e 來到 3d 旁邊，3d 的數字就增加到2。數字2的棋子能斜著跳2格，目的地是 1f，也就是黑方因依偎而空出來的角落、對白方來說的對岸。白方抵達1顆。AI的評價是−16。</p>
+<p>這個局面黑方有13種走法。其中把棋子放在 3d 旁邊的6種，全都會讓 3d 變成數字2，讓白方跳進 1f。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">4</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c g to"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i></div></div><figcaption>正解是 4f→1f。先自己把空出的角落補上（評價＋6）</figcaption></figure>
+<p>正解是 4f→1f，先自己把空出的角落補上。4f 旁邊有 3f、5f、5e 共3顆，數字是3，往橫向走3格就能進入 1f。櫓之後再完成也來得及。</p>
+<div class="pt"><b>被打入時的原則</b><ol><li>不要放在打入的棋子旁邊（不要提高對方的數字）</li><li>先把依偎空出來的角落補上</li></ol></div>
+<h2>改變數字來阻擋的手</h2>
+<p>白方用另一側的並肩（6a→5b）應對之後，也有打入。就是在黑方把兩邊都靠攏時，白方從 4a 跳進 4d 的手。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c g fr"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">3</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i></div></div><figcaption>白方的 4d 來到 5e 旁邊，5e 的數字從2變成3</figcaption></figure>
+<p>4d 的白棋來到 5e 旁邊，5e 的數字就從2變成3。數字3的話，5e 進不了 3e。白方是靠改變黑方棋子的數字來阻止櫓。對方的棋子靠近時，請先確認自己棋子的數字有沒有改變。</p>
+<h2>總結</h2>
+<ul><li>第1手走依偎。把最弱的角落棋子靠到同伴旁邊。</li><li>依偎之後可以瞄準櫓。白方擋不住。</li><li>被打入時，不要放在打入的棋子旁邊，先補上空出的角落。</li><li>對方的棋子靠近時，看自己棋子的數字有沒有改變。</li></ul>
+<p class="note">這篇文章是把 YouTube「bocch定跡研究」第21集的內容改寫成文章。評價來自「最強」AI的計算，並不是徹底解開的值。</p>
+</article>
+<section class="rel"><h2>相關文章</h2><ul><li><a href="../../learn/zh-hant/souheki.html">雙璧：勝率9成的戰法，與唯一的弱點</a></li><li><a href="../../learn/zh-hant/ai-joseki-senpo.html">新AI改變的第3手定式，與10種戰法</a></li></ul></section>
+</main>
+<footer><p><a href="../../learn/zh-hant/">文章列表</a><a href="../../learn/zh-hant/glossary.html">用語集</a><a href="../../guide-zh-hant.html">獲勝攻略</a><a href="../../about-zh-hant.html">營運者資訊</a><a href="../../privacy-zh-hant.html">隱私政策、聯絡我們</a></p><p class="langs"><a href="../../learn/yorisoi-yagura.html" lang="ja">日本語</a><a href="../../learn/en/yorisoi-yagura.html" lang="en">English</a><a href="../../learn/zh-hans/yorisoi-yagura.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/yorisoi-yagura.html" aria-current="page" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/yorisoi-yagura.html" lang="ko">한국어</a><a href="../../learn/es/yorisoi-yagura.html" lang="es">Español</a><a href="../../learn/de/yorisoi-yagura.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>

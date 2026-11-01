@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Poisoned Bun: Winning by Giving Something Away | bocch</title>
+<meta name="description" content="bocch has no captures. What you can give away instead is &quot;numbers&quot; and &quot;first arrival&quot;. Using real AI games, this article shows the &quot;wake-up&quot;, where you deliberately let an opponent stone move, and the &quot;draw-back&quot;, where you pull a stone back.">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/en/dokumanju.html">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/dokumanju.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/dokumanju.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/dokumanju.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/dokumanju.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/dokumanju.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/dokumanju.html">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/dokumanju.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/dokumanju.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="The Poisoned Bun: Winning by Giving Something Away">
+<meta property="og:description" content="bocch has no captures. What you can give away instead is &quot;numbers&quot; and &quot;first arrival&quot;. Using real AI games, this article shows the &quot;wake-up&quot;, where you deliberately let an opponent stone move, and the &quot;draw-back&quot;, where you pull a stone back.">
+<meta property="og:url" content="https://bocchgame.com/learn/en/dokumanju.html">
+<meta property="og:image" content="https://bocchgame.com/og-en.jpg">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "The Poisoned Bun: Winning by Giving Something Away", "description": "bocch has no captures. What you can give away instead is \"numbers\" and \"first arrival\". Using real AI games, this article shows the \"wake-up\", where you deliberately let an opponent stone move, and the \"draw-back\", where you pull a stone back.", "inLanguage": "en", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about-en.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/en/dokumanju.html", "datePublished": "2026-11-01", "dateModified": "2026-11-01"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="../../en.html">bocch</a><nav><a href="../../learn/en/">Articles</a><a href="../../guide-en.html">Guide</a><a class="play" href="../../en.html">Play</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">Tactics</div>
+<h1>The Poisoned Bun: Winning by Giving Something Away</h1>
+<p class="meta">kairo · November 1, 2026</p>
+<p class="lead">In 26,000 AI-vs-AI games, there is a move where Black deliberately helps an enemy stone on move 5, letting a white stone that couldn't move start moving again. Black's win rate after playing it was 98%. Give your opponent something, and take something bigger. This is bocch's "Poisoned Bun".</p>
+<h2>What you can give away in bocch</h2>
+<p>Chess has the gambit, where you sacrifice a piece to gain an advantage. But bocch has no captures at all. What you can give away in bocch isn't stones, but <strong>numbers and first arrival</strong>.</p>
+<p>We counted every move in the AI's 26,000 games where a player gave something away on purpose.</p>
+<ul><li>The "wake-up", landing next to an enemy loner and letting it move, gave the giving side a 57–67% win rate. It was actually a move that tends to win.</li><li>Conceding the first goal, letting the opponent make the first arrival, was a loss in the opening at 44%. But in the middlegame it was 65%, and in the endgame 98%.</li></ul>
+<p>Giving something away isn't a bad move in itself. What matters is what you get in exchange.</p>
+<h2>The wake-up: wake the enemy, strengthen your own</h2>
+<p>This position arises after Black 6f→5e, White 5a→5c, Black 1f→2e, White 1a→2b.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g fr"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c"></i><i class="c to"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s w z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i></div></div><figcaption>White's 5c has no neighbors, so its number is 0. It can't move</figcaption></figure>
+<p>Look at White's 5c. It has no neighbors, so its number is 0. It is all alone and can't move. Here Black plays 2f→4d and wakes up White's 5c.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">3</b></i><i class="c"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i></div></div><figcaption>2f→4d. White's 5c goes from 0 to 1, and Black's 5e from 2 to 3</figcaption></figure>
+<p>With a neighbor now beside it, White's 5c goes from 0 to 1. The white stone that couldn't move can move now. Black has woken up the enemy.</p>
+<p>What Black got in return was 5e's number. With 4d now next to it, 5e went from 2 to 3, and its jumping distance grew by one square. The AI's evaluation was +83 for 2f→2d, which gives nothing away, versus +133 for 2f→4d. In the 40 games that reached this position, Black won 98%.</p>
+<p>Here is how the actual game continued. White 2a→2c, Black 3f→5d added another neighbor to 5e, making it 4. White moved its newly awakened 5c back to 5a, and Black played 5e→1a, a huge four-square jump for the first stone across.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g to"><b class="s b">1</b></i><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">3</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b z">0</b></i><i class="c"></i><i class="c"></i><i class="c fr"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i></div></div><figcaption>5e→1a. The number boosted by the wake-up became exactly the distance to the goal</figcaption></figure>
+<div class="pt">Waking up an enemy stone pays off if your own numbers grow</div>
+<h2>The draw-back: pull back to build power behind</h2>
+<p>Here is another line: Black 6f→5e, White 5a→3c, Black 1f→2e, White 1a→2b, Black 2f→4d, White 2a→2c, Black 4f→4c, White 3a→5c. Black to move.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s w z">0</b></i><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"><b class="s w">4</b></i><i class="c"><b class="s b">3</b></i><i class="c to"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">4</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i></div></div><figcaption>Black to move. What to do with the advanced 4c?</figcaption></figure>
+<p>Black chose to pull 4c back three squares to 4f, like drawing back a bowstring.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"><b class="s w">3</b></i><i class="c fr"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g mk"><b class="s b">2</b></i><i class="c g to"><b class="s b">3</b></i><i class="c g mk"><b class="s b">2</b></i><i class="c g"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="45.2" y1="45.2" x2="87.4" y2="87.4" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>4c→4f. 3f and 5f go from 1 to 2. But it opens a path from White's 3c to 6f</figcaption></figure>
+<p>The pulled-back 4f is next to 3f and 5f. Both of their numbers go from 1 to 2, and stones that were sleeping at the back can now jump. In exchange, a path opens from White's 3c to 6f. White can make the first arrival. This is the Poisoned Bun.</p>
+<p>In the actual game, White 5c→5b, Black 5f→5d, and then White ate the bun: 3c→6f, the first goal.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c fr"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">4</b></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i><i class="c g to"><b class="s w">1</b></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="75.0" y1="70.0" x2="75.0" y2="14.3" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>White's first arrival raises Black's 5e from 3 to 4. 5e→5a catches up at once</figcaption></figure>
+<p>But the white stone that arrived on 6f is next to Black's 5e. 5e's number goes from 3 to 4. That was the poison. Black jumps four squares with 5e→5a and immediately catches up.</p>
+<p>White's best is not to eat the bun. Even so, Black's advantage holds. In the same position, Black won 17% when it played 5f→4f without pulling back, and 76% when it pulled back.</p>
+<div class="pt">You can concede the first arrival if you can stop the second</div>
+<h2>Summary</h2>
+<ul><li>What you give away isn't stones, but numbers and first arrival.</li><li>Waking up an enemy stone pays off if your own numbers grow.</li><li>The draw-back builds power in the stones behind.</li><li>You can concede the first arrival if you can stop the second.</li></ul>
+<p class="note">This article is a written version of episode 23 of the YouTube series "bocch定跡研究". The positions are taken from actual AI-vs-AI games.</p>
+</article>
+<section class="rel"><h2>Related articles</h2><ul><li><a href="../../learn/en/glossary.html">bocch Glossary</a></li><li><a href="../../learn/en/yubaku.html">Backfire: How Not to Set Up Your Opponent's Winning Move</a></li></ul></section>
+</main>
+<footer><p><a href="../../learn/en/">All articles</a><a href="../../learn/en/glossary.html">Glossary</a><a href="../../guide-en.html">Strategy guide</a><a href="../../about-en.html">About</a><a href="../../privacy-en.html">Privacy policy & contact</a></p><p class="langs"><a href="../../learn/dokumanju.html" lang="ja">日本語</a><a href="../../learn/en/dokumanju.html" aria-current="page" lang="en">English</a><a href="../../learn/zh-hans/dokumanju.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/dokumanju.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/dokumanju.html" lang="ko">한국어</a><a href="../../learn/es/dokumanju.html" lang="es">Español</a><a href="../../learn/de/dokumanju.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>

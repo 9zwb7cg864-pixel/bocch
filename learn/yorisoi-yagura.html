@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>寄り添いと櫓：最初の2手と、打ち込みの受け方｜bocch</title>
+<meta name="description" content="bocchの初手「寄り添い」がなぜ強いのかを、石の数字の合計とAIの評価で説明します。櫓の組み方と、打ち込まれたときの正しい受け方も盤の図で紹介します。">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/yorisoi-yagura.html">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/yorisoi-yagura.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/yorisoi-yagura.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/yorisoi-yagura.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/yorisoi-yagura.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/yorisoi-yagura.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/yorisoi-yagura.html">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/yorisoi-yagura.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/yorisoi-yagura.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="寄り添いと櫓：最初の2手と、打ち込みの受け方">
+<meta property="og:description" content="bocchの初手「寄り添い」がなぜ強いのかを、石の数字の合計とAIの評価で説明します。櫓の組み方と、打ち込まれたときの正しい受け方も盤の図で紹介します。">
+<meta property="og:url" content="https://bocchgame.com/learn/yorisoi-yagura.html">
+<meta property="og:image" content="https://bocchgame.com/og.jpg">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "寄り添いと櫓：最初の2手と、打ち込みの受け方", "description": "bocchの初手「寄り添い」がなぜ強いのかを、石の数字の合計とAIの評価で説明します。櫓の組み方と、打ち込まれたときの正しい受け方も盤の図で紹介します。", "inLanguage": "ja", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/yorisoi-yagura.html", "datePublished": "2026-11-01", "dateModified": "2026-11-01"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="../">bocch</a><nav><a href="../learn/">記事</a><a href="../guide.html">ガイド</a><a class="play" href="../">対局する</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">定跡</div>
+<h1>寄り添いと櫓：最初の2手と、打ち込みの受け方</h1>
+<p class="meta">kairo・2026年11月1日</p>
+<p class="lead">初手でいちばん指されている「寄り添い」は、端の石を斜め前に1つ寄せるだけの地味な手です。それでもAIで読むと、白が正しく返せる手はほとんどありません。この記事では、寄り添いが強い理由と、そこから組める「櫓」、そして櫓のただ1つの崩し方を見ていきます。</p>
+<h2>一番弱い石を働かせる</h2>
+<p>最初の配置で、隅の石（黒なら 1f と 6f）は隣が1つだけなので、数字は1です。1マスしか動けない、一番弱い石です。</p>
+<p>寄り添いは、この隅の石を仲間の隣の 2e へ寄せる手です。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>寄り添い（1f→2e）。2e は数字2、隣の 3f も2から3に上がった</figcaption></figure>
+<p>動かした 2e は数字2になり、隣の 3f も2から3に上がりました。黒の6つの石の数字を全部足すと、最初の配置では10、寄り添いのあとは12です。<strong>初手の7つの型のうち、合計が増えるのは寄り添いだけ</strong>です。</p>
+<p>反対に、前へ飛び出す手はどうでしょう。渡り鳥（2f→4d）も正面突破（3f→3d）も、合計は6まで下がります。飛んだ石がぼっちに近くなり、残された石も隣が減るからです。寄り添いは、前に進まずに、跳ぶ力をためる手だと言えます。</p>
+<h2>白はほとんど正しく返せない</h2>
+<p>寄り添いに対して、白の手は14通りあります。最強AIで全部読むと、互角を保てるのは反対側の隅で同じように寄せる 6a→5b（肩寄せ）だけでした。同じ側の肩寄せ 1a→2b はわずかに黒よし。残りの12通りは、黒がはっきり良くなります。</p>
+<p>白から見ると、中央に石を出したくなる局面です。けれど、攻めた手ほど黒の厚い形にぶつかります。実戦で寄り添いがよく勝つのは、相手がここで間違えやすいからです。</p>
+<h2>迷ったら、もう一方の端も寄せる</h2>
+<p>黒の2手目で、白の14通りそれぞれに別の正解を覚えるのは大変です。そこで、2手目は右の隅も寄せる、と決めてしまう方法があります。6f→5e です。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>黒が左右の端を両方寄せた形（双璧）</figcaption></figure>
+<p>古いAIの評価では、この手は白のどの手に対しても損が20点ほどに収まり、白が攻めてきた場合は黒の大きなリードがそのまま残りました。</p>
+<p class="note">追記：その後、新しいAI同士で数千局指させたところ、白が肩寄せで返した局面では、この形の黒の勝率は4割前後にとどまりました。肩寄せ以外には9割勝つ強い形ですが、肩寄せには別の手のほうが勝ちやすいことがわかっています。くわしくは<a href="souheki.html">双璧の記事</a>にまとめました。</p>
+<h2>櫓を組む</h2>
+<p>寄り添いのあと、黒は 2e・3e・2f・3f の四角い塊を作れます。これが櫓です。4つの石が互いに隣同士なので、どの石も数字が3〜4に保たれ、遠くまで跳べます。仲間が跳ぶときの足場にもなります。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">3</b></i><i class="c to mk"><b class="s b">4</b></i><i class="c"></i><i class="c fr"></i><i class="c"></i><i class="c g"></i><i class="c g mk"><b class="s b">3</b></i><i class="c g mk"><b class="s b">4</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i></div></div><figcaption>青い枠の4つが櫓。どの石も数字が3〜4</figcaption></figure>
+<p>櫓は最短3手で組めます。最短の組み方6通りのうち5通りは寄り添いから始まります。そして白の石は a の段にいるので、黒が組み終わるまでの2手のあいだに、黒の陣地まで届きません。<strong>白は櫓を止められない</strong>のです。</p>
+<h2>打ち込まれたら、隣に置かない</h2>
+<p>ただし、白には嫌な手があります。打ち込みです。下の図では、白が 3a から 3d へ一気に跳び込んで、櫓を組む場所の真ん前に石を置きました。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g fr"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i></div></div><figcaption>白の打ち込み（3a→3d）。3d の白は隣が 2e だけなので数字1</figcaption></figure>
+<p>3d の白は、今は隣が 2e だけなので数字1です。ここで黒が櫓を完成させようと 5e→3e と指すと、どうなるでしょうか。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">4</b></i><i class="c to"><b class="s b">4</b></i><i class="c"></i><i class="c fr"></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">4</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="38.1" y1="61.9" x2="12.6" y2="87.4" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>5e→3e は失敗。3d の数字が2に上がり、白は 1f へ跳び込める</figcaption></figure>
+<p>3e が 3d の隣に来たことで、3d の数字が2に増えます。数字2の石は斜めに2マス跳べるので、行き先は 1f。寄り添いで空けた黒の隅、白にとっての向こう岸です。白が1つ着いてしまいます。AIの評価はマイナス16でした。</p>
+<p>この局面で黒の手は13通りあります。そのうち、3d の隣に石を置く6通りは、どれも 3d を数字2にして 1f への跳び込みを許してしまいます。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">4</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c g to"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i></div></div><figcaption>正解は 4f→1f。空いた隅を先に自分で埋める（評価プラス6）</figcaption></figure>
+<p>正解は 4f→1f です。空いた隅を先に自分で埋めてしまいます。4f は隣が 3f・5f・5e の3つなので数字3、横に3マス動いて 1f に入れます。櫓の完成は、そのあとでも間に合います。</p>
+<div class="pt"><b>打ち込まれたときのルール</b><ol><li>打ち込んだ石の隣に置かない（相手の数字を上げない）</li><li>寄り添いで空いた隅を、先に埋める</li></ol></div>
+<h2>数字を変えて止めてくる手</h2>
+<p>白が反対側の肩寄せ（6a→5b）で返したあとにも、打ち込みはあります。黒が両方の端を寄せたところで、白が 4a から 4d へ跳び込む手です。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c g fr"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">3</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i></div></div><figcaption>白の 4d が 5e の隣に来て、5e の数字が2から3に</figcaption></figure>
+<p>4d の白が 5e の隣に来たことで、5e の数字が2から3に変わりました。数字3では、5e から 3e へは入れません。白は、黒の石の数字を変えることで櫓を止めに来ているのです。相手の石が近くに来たら、まず自分の石の数字が変わっていないかを確かめてください。</p>
+<h2>まとめ</h2>
+<ul><li>初手は寄り添い。一番弱い隅の石を、仲間の隣へ寄せる。</li><li>寄り添いのあとは櫓を目指せる。白は止められない。</li><li>打ち込まれたら、打ち込んだ石の隣に置かず、空いた隅を先に埋める。</li><li>相手の石が近づいたら、自分の石の数字が変わっていないかを見る。</li></ul>
+<p class="note">この記事は、YouTube「bocch定跡研究」第21回の内容を読みものにまとめ直したものです。評価は「最強」AIの読みによるもので、最後まで解き切った値ではありません。</p>
+</article>
+<section class="rel"><h2>関連する記事</h2><ul><li><a href="../learn/souheki.html">双璧：9割勝つ戦法と、ただ1つの弱点</a></li><li><a href="../learn/ai-joseki-senpo.html">新しいAIが変えた3手目の定跡と、10の戦法</a></li></ul></section>
+</main>
+<footer><p><a href="../learn/">記事一覧</a><a href="../learn/glossary.html">用語集</a><a href="../guide.html">勝ち方ガイド</a><a href="../about.html">運営者情報</a><a href="../privacy.html">プライバシーポリシー・お問い合わせ</a></p><p class="langs"><a href="../learn/yorisoi-yagura.html" aria-current="page" lang="ja">日本語</a><a href="../learn/en/yorisoi-yagura.html" lang="en">English</a><a href="../learn/zh-hans/yorisoi-yagura.html" lang="zh-Hans">简体中文</a><a href="../learn/zh-hant/yorisoi-yagura.html" lang="zh-Hant">繁體中文</a><a href="../learn/ko/yorisoi-yagura.html" lang="ko">한국어</a><a href="../learn/es/yorisoi-yagura.html" lang="es">Español</a><a href="../learn/de/yorisoi-yagura.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>

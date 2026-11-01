@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Doppelmauer: eine Strategie, die 9 von 10 Partien gewinnt – und ihre einzige Schwäche | bocch</title>
+<meta name="description" content="Die bocch-Strategie „Doppelmauer“ gewinnt in Partien KI gegen KI gegen fast jeden Gegner über 90 % der Partien. Wir zeigen die einzige Antwort, gegen die sie nicht gewinnt – „Schulter an Schulter“ – und welche Züge du dann spielen solltest, mit Gewinnraten.">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/de/souheki.html">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/souheki.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/souheki.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/souheki.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/souheki.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/souheki.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/souheki.html">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/souheki.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/souheki.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="Doppelmauer: eine Strategie, die 9 von 10 Partien gewinnt – und ihre einzige Schwäche">
+<meta property="og:description" content="Die bocch-Strategie „Doppelmauer“ gewinnt in Partien KI gegen KI gegen fast jeden Gegner über 90 % der Partien. Wir zeigen die einzige Antwort, gegen die sie nicht gewinnt – „Schulter an Schulter“ – und welche Züge du dann spielen solltest, mit Gewinnraten.">
+<meta property="og:url" content="https://bocchgame.com/learn/de/souheki.html">
+<meta property="og:image" content="https://bocchgame.com/og-de.jpg">
+<meta property="og:locale" content="de_DE">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Doppelmauer: eine Strategie, die 9 von 10 Partien gewinnt – und ihre einzige Schwäche", "description": "Die bocch-Strategie „Doppelmauer“ gewinnt in Partien KI gegen KI gegen fast jeden Gegner über 90 % der Partien. Wir zeigen die einzige Antwort, gegen die sie nicht gewinnt – „Schulter an Schulter“ – und welche Züge du dann spielen solltest, mit Gewinnraten.", "inLanguage": "de", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about-de.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/de/souheki.html", "datePublished": "2026-11-01", "dateModified": "2026-11-01"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="../../de.html">bocch</a><nav><a href="../../learn/de/">Artikel</a><a href="../../guide-de.html">Leitfaden</a><a class="play" href="../../de.html">Spielen</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">Strategie</div>
+<h1>Doppelmauer: eine Strategie, die 9 von 10 Partien gewinnt – und ihre einzige Schwäche</h1>
+<p class="meta">kairo · 1. November 2026</p>
+<p class="lead">Im ersten Zug anschmiegen, im zweiten Zug auch den anderen Rand hereinholen – beide Randsteine kommen nach innen. Das ist die „Doppelmauer“. Wir ließen die neue KI rund 3.700 Partien gegen sich selbst spielen, und die Doppelmauer gewann gegen fast jeden Gegner über 90 %. Es gibt jedoch genau eine Antwort, gegen die sie nicht gewinnt.</p>
+<h2>Die Form der Doppelmauer</h2>
+<p>Der erste Zug von Schwarz ist das Anschmiegen (1f→2e): Der linke Randstein rückt ein Feld diagonal nach vorn. Nachdem Weiß gezogen hat, holt Schwarz im zweiten Zug auch den rechten Randstein auf dieselbe Weise herein (6f→5e).</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>Die Doppelmauer. Alle sechs schwarzen Steine haben Kontakt zu einem eigenen Stein</figcaption></figure>
+<p>Bleiben die Randsteine stehen, haben sie nur einen Nachbarn und leisten kaum etwas. Holt man beide früh nach innen, haben alle sechs Steine Kontakt zu eigenen Steinen.</p>
+<h2>Warum sie so stark ist</h2>
+<p>Auf das Anschmiegen hat Weiß 14 mögliche erste Züge. Gegen 12 davon gewinnt Schwarz mit der Doppelmauer im Schnitt 91 %. Selbst gegen den stärksten dieser Züge (3a→3c) sind es 84 %, gegen den schwächsten (3a→5c) 96 %.</p>
+<p>Auch wenn man die stärkste KI tief rechnen lässt, ist die Doppelmauer bei 11 dieser 12 Züge der beste zweite Zug von Schwarz. Sie ist eine der natürlichsten und zugleich stärksten Formen der bocch-Eröffnung.</p>
+<h2>Die Schwäche: „Schulter an Schulter“</h2>
+<p>Nicht gewinnen kann sie, wenn Weiß im ersten Zug Schulter an Schulter spielt. Dabei zieht Weiß einen Randstein ein Feld diagonal nach vorn – dieselbe Form wie das Anschmiegen von Schwarz.</p>
+<div class="pair"><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>Doppelmauer gegen Schulter an Schulter auf derselben Seite: Schwarz 43 %</figcaption></figure><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>Doppelmauer gegen Schulter an Schulter auf der anderen Seite: Schwarz 37 %</figcaption></figure></div>
+<p>Spielt Weiß Schulter an Schulter auf derselben Seite wie Schwarz (1a→2b) und Schwarz antwortet mit der Doppelmauer, gewinnt Schwarz 43 %. Auf der anderen Seite (6a→5b) sinkt der Wert auf 37 %.</p>
+<p>Die Antwort von Weiß ist einfach: Spielt Schwarz die Doppelmauer, holt Weiß auch seinen verbliebenen Randstein herein und stellt dieselbe Form her. Lässt man die stärkste KI 15 Züge tief rechnen, ist diese Stellung nahezu ausgeglichen. Spielt man sie aber tatsächlich KI gegen KI aus, gewinnt Weiß häufiger. Auch wenn die Stellung bei vollständiger Berechnung ausgeglichen ist, fällt es Schwarz schwerer, sie gut weiterzuspielen.</p>
+<p class="note">In Folge 24 des Videokanals „bocch定跡研究“ haben wir für die Doppelmauer gegen Schulter an Schulter 15 % angegeben. Nach einer neuen Messung mit getrennten Bedingungen waren es 37 bis 43 %. Schwierig ist die Stellung zweifellos, aber 15 % war übertrieben.</p>
+<h2>Gegen Schulter an Schulter: keine Doppelmauer</h2>
+<h3>Schulter an Schulter auf derselben Seite: den Mittelstein drei Felder vorstoßen</h3>
+<p>Spielt Weiß Schulter an Schulter auf derselben Seite wie Schwarz, stößt Schwarz statt der Doppelmauer den Mittelstein 3f mit einem Zug drei Felder vor (3f→3c). Dank des Anschmiegens hat 3f drei Nachbarn und kann deshalb drei Felder gerade nach vorn ziehen.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">3</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g fr"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>Gegen Schulter an Schulter auf derselben Seite: 3f→3c (Schwarz 63 %)</figcaption></figure>
+<p>Dieser Zug gewinnt 63 % – 20 Prozentpunkte mehr als die 43 % der Doppelmauer. Schild und Speer (2f→2d) kam auf 48 %.</p>
+<h3>Schulter an Schulter auf der anderen Seite: Geleitvogel oder Schild und Speer</h3>
+<p>Spielt Weiß Schulter an Schulter auf der anderen Seite, rückt Schwarz den Stein neben dem angeschmiegten Stein vor. Der Geleitvogel, der diagonal springt (2f→4d), gewinnt 59 %, und Schild und Speer, das gerade vorstößt (2f→2d), ebenfalls 59 %. Beide liegen weit über den 37 % der Doppelmauer.</p>
+<div class="pair"><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>Geleitvogel (Schwarz 59 %)</figcaption></figure><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>Schild und Speer (Schwarz 59 %)</figcaption></figure></div>
+<div class="tw"><table><thead><tr><th>1. Zug von Weiß</th><th>2. Zug von Schwarz</th><th>Gewinnrate Schwarz</th></tr></thead><tbody><tr><td>Alles außer Schulter an Schulter (12 Züge)</td><td>Doppelmauer 6f→5e</td><td>91 %</td></tr><tr><td>Schulter an Schulter auf derselben Seite 1a→2b</td><td>Dreifeldervorstoß 3f→3c</td><td>63 %</td></tr><tr><td>Schulter an Schulter auf der anderen Seite 6a→5b</td><td>Geleitvogel 2f→4d / Schild und Speer 2f→2d</td><td>59 %</td></tr></tbody></table></div>
+<h2>Aus Sicht von Weiß</h2>
+<p>Aus Sicht von Weiß ist es genau umgekehrt: Kommt Schwarz mit dem Anschmiegen, gibt es als ersten Zug nur Schulter an Schulter. Nach jedem anderen Zug spielt Schwarz die Doppelmauer, und Weiß gewinnt im Schnitt nur etwa 10 % der Partien.</p>
+<p>Hat Weiß Schulter an Schulter gespielt und Schwarz kommt trotzdem mit der Doppelmauer, holt Weiß ebenfalls seinen Randstein herein – und gewinnt danach sogar häufiger.</p>
+<h2>Zusammenfassung</h2>
+<ul><li>Nach dem Anschmiegen: Spielt der Gegner nicht Schulter an Schulter, folgt die Doppelmauer. Sie gewinnt 9 von 10 Partien.</li><li>Spielt der Gegner Schulter an Schulter, verzichte auf die Doppelmauer. Auf derselben Seite 3f→3c, auf der anderen Seite Geleitvogel oder Schild und Speer.</li><li>Als Weiß antwortest du auf das Anschmiegen immer mit Schulter an Schulter. Kommt dann die Doppelmauer, holst du ebenfalls deinen Randstein herein.</li></ul>
+<p class="note">Herkunft der Zahlen: Partien der stärksten CPU gegen sich selbst. Nach der festgelegten Zugfolge wurden die nächsten 2 Züge zufällig aus den 3 besten Zügen gewählt, danach hatte die KI 120 Millisekunden pro Zug. Remis zählen bei der Gewinnrate als halber Sieg. Für die Doppelmauer gegen die 12 Züge außer Schulter an Schulter wurden insgesamt 1.190 Partien gespielt, für die Stellungen nach Schulter an Schulter 200 bis 500 Partien pro Zug.</p>
+</article>
+<section class="rel"><h2>Verwandte Artikel</h2><ul><li><a href="../../learn/de/yorisoi-yagura.html">Anschmiegen und Turm: die ersten zwei Züge und wie man einen Einbruch abwehrt</a></li><li><a href="../../learn/de/ai-joseki-senpo.html">Wie die neue KI die Theorie des 3. Zugs verändert hat – und 10 Strategien</a></li></ul></section>
+</main>
+<footer><p><a href="../../learn/de/">Alle Artikel</a><a href="../../learn/de/glossary.html">Glossar</a><a href="../../guide-de.html">Strategie-Anleitung</a><a href="../../about-de.html">Über den Betreiber</a><a href="../../privacy-de.html">Datenschutz & Kontakt</a></p><p class="langs"><a href="../../learn/souheki.html" lang="ja">日本語</a><a href="../../learn/en/souheki.html" lang="en">English</a><a href="../../learn/zh-hans/souheki.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/souheki.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/souheki.html" lang="ko">한국어</a><a href="../../learn/es/souheki.html" lang="es">Español</a><a href="../../learn/de/souheki.html" aria-current="page" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>
