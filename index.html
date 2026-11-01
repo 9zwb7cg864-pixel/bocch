@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=28"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=29"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -818,6 +818,70 @@ html:is([lang=en],[lang=es],[lang=de]) .pm .hm-fimg img{height:46px}
 html:not([lang=ja]) .hm-menu span{font-size:10.5px}
 html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is([lang=en],[lang=es],[lang=de]) .hm-sub .hm-fimg img{height:36px}
 </style>
+<style>
+/* ===== キャラとガチャ（2026-11） ===== */
+.hm>.cg-bg{position:absolute;right:-18px;top:30px;width:330px;height:720px;z-index:0;padding:0;border-radius:0;cursor:pointer;-webkit-mask-image:linear-gradient(#000 66%,transparent 96%);mask-image:linear-gradient(#000 66%,transparent 96%)}
+.cg-bg img{position:absolute;right:0;top:0;height:100%;width:auto;max-width:none;filter:drop-shadow(0 18px 30px rgba(0,0,0,.6))}
+.cg-bg img[src=""],.cg-bg img:not([src]){display:none}
+.hm>*:not(.cg-bg){position:relative;z-index:1}
+.hm.cg-on .hm-head{text-align:left;pointer-events:none}.hm.cg-on .hm-head *{pointer-events:auto}
+.hm.cg-on .hm-logo{height:64px}
+.hm.cg-on .hm .hm-tag,.hm.cg-on .hm-tag{text-align:left;font-size:10.5px;letter-spacing:.14em;text-shadow:0 1px 6px #000}
+.hm.cg-on .hm-hero{overflow:visible;height:262px;pointer-events:none}
+.hm.cg-on .hm-hero:after{display:none}
+.hm.cg-on .hm-hb{width:44%;margin:6px 0 0 4px;pointer-events:none}
+.hm.cg-on .hm-card,.hm.cg-on .hm-daily,.hm.cg-on .hm-menu{background:linear-gradient(160deg,rgba(33,26,20,.94),rgba(21,17,13,.94))}
+.hm .cg-pull{position:absolute;left:18px;bottom:6px;z-index:3;display:block;padding:9px 18px 8px;border-radius:999px;pointer-events:auto;text-align:center;
+  background:linear-gradient(#3a2a12,#1c140a);box-shadow:inset 0 0 0 1px #c9a24e,0 6px 16px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,230,160,.25)}
+.cg-pull b,.cg-pull2 b{display:block;font-family:var(--f-disp);font-weight:800;font-size:15px;letter-spacing:.12em;color:var(--gold-hi);line-height:1.2}
+.cg-pull small,.cg-pull2 small{display:block;font-size:10.5px;color:var(--sub);margin-top:2px;line-height:1.3}
+.cg-pull.dim,.cg-pull2.dim{opacity:.6}
+.cg-cnt{color:var(--sub);font-size:13px;text-align:right}
+.cg-stage{position:relative;height:min(62vh,460px);margin:6px 0 0;border-radius:14px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--gold-soft);background:radial-gradient(90% 70% at 50% 88%,rgba(217,120,43,.28),transparent 70%),#0d0b07}
+.cg-stage>img{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);height:calc(100% - 12px);width:auto;max-width:none;transition:opacity .25s}
+.cg-lv{position:absolute;left:10px;top:10px;display:flex;gap:4px;z-index:2}
+.cg-lv button{min-height:0;font-size:11px;padding:3px 9px;border-radius:999px;border:1px solid var(--gold-soft);color:var(--sub);background:rgba(0,0,0,.55)}
+.cg-lv button.on{color:#1a1206;background:var(--gold);border-color:var(--gold);font-weight:700}
+.cg-lv button:disabled{opacity:.35}
+.cg-nm{position:absolute;right:12px;top:8px;text-align:right;z-index:2}
+.cg-nm img{height:40px;display:block;margin-left:auto;filter:drop-shadow(0 2px 6px #000)}
+.cg-nm b{display:block;font-family:var(--f-disp);font-weight:800;font-size:28px;letter-spacing:.08em;text-shadow:0 2px 8px #000;line-height:1.2}
+.cg-prog{margin-top:10px;padding:11px 13px;border-radius:12px;background:var(--panel);box-shadow:inset 0 0 0 1px var(--gold-line)}
+.cg-pr{display:flex;justify-content:space-between;font-size:13px;color:var(--sub)}.cg-pr b{color:var(--gold-hi);font-family:var(--f-disp)}
+.cg-bar{height:8px;border-radius:9px;background:#2a2318;margin-top:8px;overflow:hidden}.cg-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#9a6f22,#f0cf7f);transition:width .6s}
+.cg-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.cg-btns button{min-height:44px;white-space:nowrap;font-size:14px;padding:0 8px}
+.cg-inv{margin-top:10px}.cg-goods{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:6px}
+.cg-gd{position:relative;min-height:0;aspect-ratio:1;padding:4px;border-radius:10px;background:#120f0b;border:2px solid var(--gold-soft)}
+.cg-gd img{width:100%;height:100%;object-fit:contain}.cg-gd i{position:absolute;right:3px;bottom:2px;font-style:normal;font-size:11px;font-weight:700;color:var(--fg);text-shadow:0 1px 3px #000}
+.cg-gd.R{border-color:#cfcfcf}.cg-gd.SR{border-color:#5aa9ff}.cg-gd.SSR{border-color:#e6be5a}.cg-gd:disabled{opacity:.35}
+.cg-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:12px}
+.cg-cell{position:relative;min-height:0;padding:0;aspect-ratio:3/4;border-radius:8px;border:1px solid var(--gold-line);background:#0d0b07;overflow:hidden}
+.cg-cell img{width:100%;height:100%;object-fit:cover;object-position:top}.cg-cell.no img{filter:brightness(0) opacity(.4)}
+.cg-cell.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}.cg-cell.home:after{content:"";position:absolute;right:3px;top:3px;width:7px;height:7px;border-radius:50%;background:var(--gold-hi)}
+.cg-pull2{display:block;width:100%;margin-top:12px;padding:12px;border-radius:12px;text-align:center;background:linear-gradient(#3a2a12,#1c140a);box-shadow:inset 0 0 0 1px #c9a24e}
+.cg-rates{margin-top:10px;font-size:12px}
+.cg-ov{position:fixed;inset:0;z-index:200;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cg-ov video{width:100%;height:100%;object-fit:cover;object-position:center}
+.cg-skip{position:absolute;right:14px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:3;min-height:0;padding:7px 14px;border-radius:999px;font-size:13px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.3);color:#eee}
+.cg-res{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;animation:cgIn .5s ease-out;background:radial-gradient(70% 55% at 50% 58%,var(--cg-c,rgba(224,64,44,.5)),transparent 70%),radial-gradient(120% 80% at 50% 100%,var(--cg-d,#3a0d08),#0a0705 70%)}
+@keyframes cgIn{from{opacity:0;filter:brightness(3)}to{opacity:1;filter:none}}
+.cg-rays{position:absolute;left:50%;top:56%;width:1000px;height:1000px;transform:translate(-50%,-50%);background:repeating-conic-gradient(var(--cg-r,rgba(255,120,80,.12)) 0 6deg,transparent 6deg 18deg);-webkit-mask-image:radial-gradient(closest-side,#000,transparent);mask-image:radial-gradient(closest-side,#000,transparent);animation:cgSpin 40s linear infinite}
+@keyframes cgSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.cg-rhead{position:relative;z-index:2;margin-top:calc(34px + env(safe-area-inset-top,0px));text-align:center}
+.cg-rhead img{height:86px;display:block;margin:0 auto;filter:drop-shadow(0 4px 10px rgba(0,0,0,.8))}
+.cg-rhead b{display:block;font-family:var(--f-disp);font-weight:800;font-size:32px;letter-spacing:.14em;margin-top:2px;text-shadow:0 2px 10px #000}
+.cg-new{display:inline-block;margin-top:4px;font-size:12px;font-weight:700;letter-spacing:.2em;padding:2px 12px;border-radius:999px;background:#e0402c;color:#fff}
+.cg-rch{position:relative;z-index:1;flex:1;min-height:0;width:auto;max-width:96%;object-fit:contain;margin-top:-6px;filter:drop-shadow(0 0 30px rgba(255,90,60,.4));animation:cgUp .7s cubic-bezier(.2,.8,.3,1)}
+@keyframes cgUp{from{transform:translateY(30px) scale(1.06);opacity:0}}
+.cg-rg{position:relative;z-index:1;margin:auto 0;width:min(64vw,250px);aspect-ratio:1;border-radius:24px;border:3px solid var(--cg-b,#5aa9ff);background:radial-gradient(rgba(255,255,255,.08),rgba(0,0,0,.6));box-shadow:0 0 40px var(--cg-c);display:grid;place-items:center;animation:cgUp .6s cubic-bezier(.2,.8,.3,1)}
+.cg-rg img{width:84%}
+.cg-rpt{position:relative;z-index:2;margin:0 16px 8px;padding:10px 14px;border-radius:12px;background:rgba(20,16,10,.85);box-shadow:inset 0 0 0 1px var(--gold-soft);font-size:14px;text-align:center}
+.cg-rbtns{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:8px;width:calc(100% - 32px);max-width:420px}
+.cg-rbtns button{min-height:46px;font-size:14px;white-space:nowrap;padding:0 8px}.cg-rbtns button:disabled{opacity:.5}
+.cg-rclose{position:relative;z-index:2;min-height:0;margin:8px 0 calc(14px + env(safe-area-inset-bottom,0px));background:none;border:0;color:var(--sub);font-size:13px}
+.players .cg-bust{width:54px;height:54px;flex:none;margin:-16px 4px -10px 0;object-fit:contain;-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent);filter:drop-shadow(0 3px 5px rgba(0,0,0,.6))}
+.players>span{display:inline-flex;align-items:center}
+</style>
 </head>
 <body>
 <div id="bdToast" aria-live="polite"></div>
@@ -826,9 +890,11 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
   <div class="ver" id="ver" aria-label="バージョン">v1.24</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
+    <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
     <header class="hm-head"><h1><img class="hm-logo" src="ui/logo.webp" alt="bocch" width="295" height="180"></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p></header>
     <div class="hm-hero" aria-hidden="true">
       <div class="hm-hb"><div class="hm-hg" id="hmG"></div><div class="hm-hl" id="hmL"></div></div>
+      <button class="cg-pull" id="cgPull" type="button"><b>ガチャを引く</b><small id="cgLeft"></small></button>
     </div>
     <button class="hm-chp" id="hmChamp" data-go="rank" type="button" hidden><svg class="cr" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18 L5 8 L9.5 12 L12 5 L14.5 12 L19 8 L21 18 Z" fill="#e9c46a" stroke="#8a6a3a" stroke-width="1" stroke-linejoin="round"/><rect x="3" y="18" width="18" height="2.4" rx="1" fill="#c9a24e"/></svg><small id="hmChampM"></small><b id="hmChampN" class="no-i18n"></b><span class="hm-cst"><span class="stone b" id="hmChampS"></span></span><em id="hmChampL"></em><svg class="chv" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
 
@@ -972,6 +1038,16 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
   <div class="rk-pod" id="rkPod" hidden></div>
   <ol class="rk-list" id="rkList"></ol>
   <p class="hist-empty" id="rkEmpty" hidden>まだ載っている人がいません。</p>
+</section>
+<section class="scr" data-scr="chara" hidden>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>キャラ</h2><span class="sp cg-cnt" id="cgCnt"></span></div>
+  <div class="cg-stage" id="cgStage"><img id="cgImg" alt=""><div class="cg-lv" id="cgLv"></div><div class="cg-nm"><img id="cgRar" alt="UR"><b id="cgName"></b></div></div>
+  <div class="cg-prog" id="cgProg"><div class="cg-pr"><span id="cgNext"></span><span><b id="cgPt"></b></span></div><div class="cg-bar"><i id="cgBar"></i></div></div>
+  <div class="cg-btns"><button class="primary" id="cgSel" type="button">ホームに出す</button><button id="cgGive" type="button">グッズを渡す</button></div>
+  <div class="cg-inv" id="cgInv" hidden><p class="note" id="cgInvNote"></p><div class="cg-goods" id="cgGoods"></div></div>
+  <div class="cg-grid" id="cgGrid"></div>
+  <button class="cg-pull2" id="cgPull2" type="button"><b>ガチャを引く</b><small id="cgLeft2"></small></button>
+  <p class="note cg-rates">出る確率：UR（キャラ）1%・SSR 10%・SR 25%・R 64%。初めての1回は必ずキャラ。ガチャは1日3回と、5局ごとに1回引けます。グッズはR 1点・SR 3点・SSR 10点で、60点で豪華1、200点で豪華2になります。</p>
 </section>
 <section class="scr" data-scr="course" hidden>
   <div class="topbar"><button class="back i-l" id="csBack">戻る</button><h2 id="csTitle">学ぶ</h2><span class="sp cs-tot" id="csTot"></span></div>
@@ -2950,7 +3026,7 @@ const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t
 const _reduce=reduce;reduce=function(m){
   if(m&&m.t==='create'&&m.ai===1){NET.ai=true;if(!NET.watch&&!colorOf(NET.me)){NET.watch=true;NET.claimed=true;clearTimeout(NET.timer);try{history.replaceState(null,'','?watch='+NET.code)}catch(e){}}}
   if(m&&m.t==='next'&&typeof m.room==='string'&&/^[a-z0-9]{6}$/.test(m.room)&&NET.ai){aiFollow(m.room);return}
-  if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500,lv:(m.lv!=null&&Number.isFinite(+m.lv))?lvC(m.lv):null,off:m.off===1,bd:typeof m.bd==='string'&&BD[m.bd]?m.bd:'',uid:typeof m.uid==='string'&&/^[A-Za-z0-9]{10,40}$/.test(m.uid)?m.uid:null}}
+  if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500,lv:(m.lv!=null&&Number.isFinite(+m.lv))?lvC(m.lv):null,off:m.off===1,bd:typeof m.bd==='string'&&BD[m.bd]?m.bd:'',uid:typeof m.uid==='string'&&/^[A-Za-z0-9]{10,40}$/.test(m.uid)?m.uid:null,ch:typeof m.ch==='string'?m.ch.slice(0,20):''}}
   return _reduce(m)};
 function oppIdOf(){return NET.me===NET.host?NET.guest:NET.host}
 function rateGame(){
@@ -3087,15 +3163,15 @@ let hiKey='';
 const _renderP=render;render=function(){_renderP();
   if(S.over){rateGame();try{bdGameEnd()}catch(e){console.error(e)}}
   // 自分の名前とレートを部屋に知らせる（席に着いている時だけ）
-  if(S.mode==='net'&&NET.code&&NET.live&&!NET.watch&&colorOf(NET.me)>0){const k=NET.code+'|'+NET.me+'|'+myName()+'|'+Math.round(PROF.rating)+'|'+myLv()+'|'+isOff()+'|'+bdSel();if(k!==hiKey&&NET.claimed!==false){hiKey=k;post({t:'hi'})}}
+  if(S.mode==='net'&&NET.code&&NET.live&&!NET.watch&&colorOf(NET.me)>0){const k=NET.code+'|'+NET.me+'|'+myName()+'|'+Math.round(PROF.rating)+'|'+myLv()+'|'+isOff()+'|'+bdSel()+'|'+(typeof cgMine==='function'?cgMine():'');if(k!==hiKey&&NET.claimed!==false){hiKey=k;post({t:'hi'})}}
   // 相手は盤の左上、自分は盤の右下（観戦中は手前側の黒を右下）
   const pt=$('plTop'),pbt=$('plBot');pt.innerHTML='';pbt.innerHTML='';
   if(S.mode==='net'&&NET.host){const hc=colorOf(NET.host),bId=hc===1?NET.host:NET.guest,wId=hc===1?NET.guest:NET.host;
-    const nm=id=>id?(id===NET.me&&!NET.watch?{name:myName(),rate:lvName(myLv()),off:isOff(),bd:bdSel()}:(NM[id]?Object.assign({},NM[id],{rate:lvTxt(oppLv(NM[id]))}):{name:'…',rate:null})):{name:'待機中',rate:null};const bn=nm(bId),wn=nm(wId);
+    const nm=id=>id?(id===NET.me&&!NET.watch?{name:myName(),rate:lvName(myLv()),off:isOff(),bd:bdSel(),ch:typeof cgMine==='function'?cgMine():''}:(NM[id]?Object.assign({},NM[id],{rate:lvTxt(oppLv(NM[id]))}):{name:'…',rate:null})):{name:'待機中',rate:null};const bn=nm(bId),wn=nm(wId);
     const meW=colorOf(NET.me)===2;
-    const bs=plSpan(1,bn.name,bn.rate,bId&&bId===NET.me,bn.off,bn.bd),ws=plSpan(2,wn.name,wn.rate,wId&&wId===NET.me,wn.off,wn.bd);
+    const bs=plSpan(1,bn.name,bn.rate,bId&&bId===NET.me,bn.off,bn.bd,bn.ch),ws=plSpan(2,wn.name,wn.rate,wId&&wId===NET.me,wn.off,wn.bd,wn.ch);
     if(meW){pbt.append(ws);pt.append(bs)}else{pbt.append(bs);pt.append(ws)}pt.hidden=pbt.hidden=false}
-  else if(CPU_RATE[S.mode]){pbt.append(plSpan(hcOf(),myName(),lvName(myLv()),true,isOff(),bdSel()));pt.append(plSpan(3-hcOf(),MODE_NAME(S.mode),lvName(lvOfRate(CPU_RATE[S.mode])),false));pt.hidden=pbt.hidden=false}
+  else if(CPU_RATE[S.mode]){pbt.append(plSpan(hcOf(),myName(),lvName(myLv()),true,isOff(),bdSel(),typeof cgMine==='function'?cgMine():''));pt.append(plSpan(3-hcOf(),MODE_NAME(S.mode),lvName(lvOfRate(CPU_RATE[S.mode])),false));pt.hidden=pbt.hidden=false}
   else pt.hidden=pbt.hidden=true;
   const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?'1手戻しを使ったので段級は変わりません':'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
   {const mn=$('meName');mn.textContent=myName();if(isOff())mn.prepend(offBadge(18));const sb=bdSel();if(sb)mn.append(bdBadge(sb,17))}$('meRate').textContent=lvName(myLv());try{hmCard()}catch(e){}};
@@ -4301,6 +4377,132 @@ function bgmTick(){if(!BGM.ok||!KOMA.ctx)return;const w=bgmWant();if(w===BGM.cur
 ['pointerdown','touchend','keydown'].forEach(ev=>addEventListener(ev,function f(){if(BGM.ok)return;komaLoad();if(!KOMA.ctx)return;KOMA.ctx.resume().then(()=>{BGM.ok=true;bgmTick()}).catch(()=>{})},{capture:true,passive:true}));
 setInterval(bgmTick,700);document.addEventListener('visibilitychange',bgmTick);
 $('bgmOn').checked=BGM.on;$('bgmOn').addEventListener('change',e=>{BGM.on=e.target.checked;try{localStorage.setItem('bocch-bgm',BGM.on?'1':'0')}catch(_){}bgmTick();if(!BGM.on&&!BGM.cur)komaSleep()});
+</script>
+<div class="cg-ov" id="cgOv" hidden>
+  <video id="cgVid" playsinline preload="auto"></video>
+  <button class="cg-skip" id="cgSkip" type="button" hidden>スキップ</button>
+  <div class="cg-res" id="cgRes" hidden>
+    <div class="cg-rays" id="cgRays"></div>
+    <div class="cg-rhead"><img id="cgRRar" alt=""><b id="cgRName"></b><span class="cg-new" id="cgRNew" hidden>NEW</span></div>
+    <img class="cg-rch" id="cgRCh" alt="" hidden>
+    <div class="cg-rg" id="cgRG" hidden><img id="cgRGImg" alt=""></div>
+    <p class="cg-rpt" id="cgRPt" hidden></p>
+    <div class="cg-rbtns"><button id="cgRAgain" type="button"></button><button class="primary" id="cgRMain" type="button"></button></div>
+    <button class="cg-rclose" id="cgRClose" type="button">閉じる</button>
+  </div>
+</div>
+<script>
+/* ===== キャラとガチャ（2026-11）
+   ・キャラ21体（黒鉄は最初から持っている）。ガチャはUR（キャラ）1%・SSR 10%・SR 25%・R 64%。初回は必ずキャラ
+   ・SSRのグッズは持っているキャラの分だけ出る。グッズはR 1点・SR 3点・SSR 10点。60点で豪華1、200点で豪華2
+   ・1日3回（リワード広告。広告の準備ができるまでは広告なし）＋5局ごとに1回
+   ・記録は PROF.cg に入れて、アカウントにも保存する */
+const CG_CH=[['kurogane','黒鉄'],['shirotae','白妙'],['yashamaru','夜叉丸'],['kasumi','霞'],['gendo','玄道'],['chihaya','千早'],['sogen','宗玄'],['oborozuki','朧月'],['shido','獅童'],['koyuki','小雪'],['hozuki','鬼灯'],['tessai','鉄斎'],['momiji','紅葉'],['sorai','蒼雷'],['ayano','綾乃'],['jubei','十兵衛'],['amane','天音'],['iori','伊織'],['kikuno','菊乃'],['taiga','大河'],['mumyo','無明']];
+const CG_NM=Object.fromEntries(CG_CH);
+const CG_GD={r1:['団子','R'],r2:['抹茶碗','R'],r3:['手ぬぐい','R'],r4:['扇子','R'],r5:['墨と筆','R'],
+ s1:['金の盃','SR'],s2:['香木','SR'],s3:['蒔絵の櫛','SR'],s4:['古い棋譜','SR'],s5:['碁石の根付','SR'],
+ x01:['三日月の手裏剣','SSR','kasumi'],x02:['鉄の数珠','SSR','gendo'],x03:['金の軍旗','SSR','chihaya'],x04:['舵輪の懐中時計','SSR','sogen'],x05:['小さな天球儀','SSR','oborozuki'],x06:['獅子頭の鈴','SSR','shido'],x07:['白狼の牙の首飾り','SSR','koyuki'],
+ x08:['狐火の提灯','SSR','hozuki'],x09:['金の歯車','SSR','tessai'],x10:['金の舞扇','SSR','momiji'],x11:['雷の紋章','SSR','sorai'],x12:['白テンの手袋','SSR','ayano'],x13:['古い軍旗の切れ端','SSR','jubei'],x14:['黒い羽の団扇','SSR','amane'],
+ x15:['名刀の鍔','SSR','iori'],x16:['金のかんざし','SSR','kikuno'],x17:['金の錨','SSR','taiga'],x18:['白黒の仮面の欠片','SSR','mumyo'],x19:['黒鉄の前立て','SSR','kurogane'],x20:['神楽鈴','SSR','shirotae'],x21:['夜叉の面','SSR','yashamaru']};
+const CG_PT={R:1,SR:3,SSR:10},CG_LV=[0,60,200],CG_DAY=3,CG_EVERY=5;
+const CG_COL={R:['rgba(230,230,230,.35)','#1c1c1c','rgba(255,255,255,.10)','#d8d8d8'],SR:['rgba(90,169,255,.45)','#0a1a33','rgba(120,180,255,.12)','#5aa9ff'],SSR:['rgba(230,190,90,.45)','#2e2208','rgba(255,215,120,.13)','#e6be5a'],UR:['rgba(224,64,44,.55)','#3a0d08','rgba(255,120,80,.12)','#e0402c']};
+const cgOkId=id=>typeof id==='string'&&!!CG_NM[id];
+function cgToday(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function cgP(x){const o={own:{},sel:'kurogane',inv:{},day:'',ad:0,tk:0,gb:-1,first:1,t:0};if(x&&typeof x==='object'){
+  if(x.own&&typeof x.own==='object')for(const k in x.own)if(cgOkId(k)){const v=x.own[k]||{};o.own[k]={lv:Math.max(1,Math.min(3,v.lv|0||1)),pt:Math.max(0,Math.min(CG_LV[2],v.pt|0))}}
+  if(cgOkId(x.sel))o.sel=x.sel;if(x.inv&&typeof x.inv==='object')for(const k in x.inv)if(CG_GD[k]&&(x.inv[k]|0)>0)o.inv[k]=Math.min(999,x.inv[k]|0);
+  if(typeof x.day==='string')o.day=x.day.slice(0,10);o.ad=Math.max(0,Math.min(CG_DAY,x.ad|0));o.tk=Math.max(0,Math.min(99,x.tk|0));o.gb=Number.isFinite(x.gb)?x.gb|0:-1;o.first=x.first===0?0:1;o.t=+x.t||0}
+  if(!o.own.kurogane)o.own.kurogane={lv:1,pt:0};if(!o.own[o.sel])o.sel='kurogane';return o}
+try{PROF.cg=cgP(JSON.parse(localStorage.getItem(PKEY)||'{}').cg)}catch(e){PROF.cg=cgP(null)}
+const CG=()=>PROF.cg||(PROF.cg=cgP(null));
+function cgSave(){CG().t=Date.now();saveProf()}
+// アカウントへの保存：新しい方を残す
+{const _pd=profData;profData=function(){const o=_pd();o.cg=CG();return o}}
+{const _ap=acctPull;acctPull=async function(){let d=null;try{if(FB.user&&FB.user.emailVerified){const snap=await FB.db.collection('users').doc(FB.user.uid).get();if(snap.exists)d=snap.data()}}catch(e){}
+  if(d&&d.cg&&(+d.cg.t||0)>(CG().t||0)){PROF.cg=cgP(d.cg);try{localStorage.setItem(PKEY,JSON.stringify(PROF))}catch(e){}}
+  await _ap();try{cgRender()}catch(e){}}}
+// 引ける回数：今日の残り（広告）＋5局ごとの券
+function cgTick(){const c=CG(),g=bdStats().games|0;let ch=false;if(c.gb<0){c.gb=g;ch=true}
+  while(g-c.gb>=CG_EVERY){c.gb+=CG_EVERY;c.tk=Math.min(99,c.tk+1);ch=true}
+  if(c.day!==cgToday()){c.day=cgToday();c.ad=0;ch=true}if(ch)cgSave()}
+const cgLeftAd=()=>{const c=CG();return c.day===cgToday()?Math.max(0,CG_DAY-c.ad):CG_DAY};
+const cgLeft=()=>cgLeftAd()+CG().tk;
+const cgImg=(id,lv)=>'ch/'+id+'_'+(lv||1)+'.webp';
+function cgLvOf(pt){return pt>=CG_LV[2]?3:pt>=CG_LV[1]?2:1}
+// 抽選
+function cgDraw(){const c=CG(),not=CG_CH.map(x=>x[0]).filter(id=>!c.own[id]);
+  if(c.first&&not.length){c.first=0;return {k:'UR',id:not[Math.random()*not.length|0]}}
+  c.first=0;const r=Math.random()*100;
+  if(r<1&&not.length)return {k:'UR',id:not[Math.random()*not.length|0]};
+  if(r<11){const ss=Object.keys(CG_GD).filter(g=>CG_GD[g][1]==='SSR'&&c.own[CG_GD[g][2]]);return {k:'SSR',g:ss[Math.random()*ss.length|0]}}
+  const pool=r<36?['s1','s2','s3','s4','s5']:['r1','r2','r3','r4','r5'];return {k:r<36?'SR':'R',g:pool[Math.random()*pool.length|0]}}
+function cgApply(res){const c=CG();if(res.k==='UR'){c.own[res.id]={lv:1,pt:0}}else{c.inv[res.g]=(c.inv[res.g]|0)+1}cgSave();}
+// グッズを渡す
+function cgCanGive(g,id){const d=CG_GD[g];if(!d||!CG().own[id])return false;if(d[1]==='SSR'&&d[2]!==id)return false;return CG().own[id].pt<CG_LV[2]}
+function cgGive(g,id){const c=CG();if(!(c.inv[g]>0)||!cgCanGive(g,id))return null;const o=c.own[id],before=o.pt,blv=o.lv;
+  o.pt=Math.min(CG_LV[2],o.pt+CG_PT[CG_GD[g][1]]);o.lv=Math.max(o.lv,cgLvOf(o.pt));c.inv[g]--;if(!c.inv[g])delete c.inv[g];cgSave();return {before,after:o.pt,up:o.lv>blv,lv:o.lv}}
+/* ホーム */
+function cgHome(){const c=CG(),o=c.own[c.sel]||{lv:1},im=$('cgBgImg');const src=cgImg(c.sel,o.lv);if(im.getAttribute('src')!==src)im.setAttribute('src',src);
+  document.querySelector('.hm').classList.add('cg-on');
+  const n=cgLeft();for(const [b,l] of [['cgPull','cgLeft'],['cgPull2','cgLeft2']]){$(l).textContent=n>0?'あと'+n+'回':'明日また引けます';$(b).classList.toggle('dim',n<=0)}}
+$('cgBg').addEventListener('click',()=>{CGV.id=CG().sel;CGV.lv=0;show('chara');cgRender()});
+/* キャラ画面 */
+const CGV={id:'',lv:0,inv:false};
+function cgRender(){try{cgTick();cgHome()}catch(e){}if(CUR!=='chara')return;const c=CG();if(!c.own[CGV.id])CGV.id=c.sel;const id=CGV.id,o=c.own[id];
+  const n=Object.keys(c.own).length;$('cgCnt').textContent=n+' / '+CG_CH.length+'体';
+  const lv=CGV.lv&&CGV.lv<=o.lv?CGV.lv:o.lv;$('cgImg').src=cgImg(id,lv);$('cgName').textContent=CG_NM[id];$('cgRar').src='ui/rar_UR.webp';
+  const L=$('cgLv');L.innerHTML='';['基本','豪華1','豪華2'].forEach((t,i)=>{const b=document.createElement('button');b.type='button';b.textContent=t;b.className=lv===i+1?'on':'';b.disabled=i+1>o.lv;b.onclick=()=>{CGV.lv=i+1;cgRender()};L.append(b)});
+  const nxt=o.lv>=3?null:CG_LV[o.lv];$('cgNext').textContent=nxt?(o.lv===1?'豪華1まで':'豪華2まで'):'豪華2になりました';$('cgPt').textContent=nxt?o.pt+' / '+nxt+'点':CG_LV[2]+'点';
+  $('cgBar').style.width=(nxt?Math.min(100,o.pt/nxt*100):100)+'%';
+  const sb=$('cgSel');sb.disabled=c.sel===id;sb.textContent=c.sel===id?'ホームに表示中':'ホームに出す';
+  $('cgInv').hidden=!CGV.inv;$('cgGive').textContent=CGV.inv?'閉じる':'グッズを渡す';
+  if(CGV.inv){const box=$('cgGoods');box.innerHTML='';const ks=Object.keys(c.inv).filter(k=>c.inv[k]>0).sort((a,b)=>'rsx'.indexOf(a[0])-'rsx'.indexOf(b[0])||a.localeCompare(b));
+    $('cgInvNote').textContent=ks.length?(o.pt>=CG_LV[2]?'このキャラは豪華2になっているので、もう渡せません。':'押すと1つ渡します。SSRはそのキャラ専用です。'):'グッズを持っていません。ガチャで手に入ります。';
+    for(const k of ks){const d=CG_GD[k],b=document.createElement('button');b.type='button';b.className='cg-gd '+d[1];b.innerHTML='<img alt=""><i></i>';b.querySelector('img').src='g/'+k+'.webp';b.querySelector('img').alt=d[0];b.querySelector('i').textContent='×'+c.inv[k];b.title=d[0]+'（'+d[1]+'・'+CG_PT[d[1]]+'点）';
+      b.disabled=!cgCanGive(k,id);b.onclick=()=>{const r=cgGive(k,id);if(r){if(r.up)CGV.lv=r.lv;cgRender()}};box.append(b)}}
+  const G=$('cgGrid');G.innerHTML='';for(const [cid,nm] of CG_CH){const b=document.createElement('button');b.type='button';b.className='cg-cell'+(c.own[cid]?'':' no')+(cid===id?' on':'')+(cid===c.sel?' home':'');b.setAttribute('aria-label',c.own[cid]?nm:'？');b.innerHTML='<img alt="">';b.querySelector('img').src='ch/t_'+cid+'.webp';
+    if(c.own[cid])b.onclick=()=>{CGV.id=cid;CGV.lv=0;cgRender()};G.append(b)}}
+$('cgSel').addEventListener('click',()=>{CG().sel=CGV.id;cgSave();cgRender();render()});
+$('cgGive').addEventListener('click',()=>{CGV.inv=!CGV.inv;cgRender()});
+{const _r=render;render=function(){_r();try{cgRender()}catch(e){console.error(e)}}}
+addEventListener('popstate',()=>setTimeout(()=>{try{cgRender()}catch(e){}},0));
+/* ガチャ */
+const CGR={busy:false,res:null,skipT:0};
+function cgStart(){if(CGR.busy)return;cgTick();if(cgLeft()<=0){cgHome();return}
+  const c=CG();const go=()=>{CGR.busy=true;if(c.tk>0)c.tk--;else{if(c.day!==cgToday()){c.day=cgToday();c.ad=0}c.ad++}const res=cgDraw();cgApply(res);CGR.res=res;cgPlay(res)};
+  if(c.tk>0||isOff()||!ADS.client||typeof adBreak!=='function'){go();return}
+  let done=false;const fin=()=>{if(!done){done=true;go()}};setTimeout(fin,8000);
+  adBreak({type:'reward',name:'gacha',beforeReward:f=>f(),adViewed:fin,adDismissed:()=>{done=true},adBreakDone:()=>{if(!done)fin()}})}
+function cgPlay(res){const ov=$('cgOv'),v=$('cgVid');ov.hidden=false;$('cgRes').hidden=true;$('cgSkip').hidden=true;
+  v.src='v/summon_'+res.k+'.mp4';v.currentTime=0;try{v.muted=!(window.BGM_ON!==false)}catch(e){}v.muted=false;
+  const p=v.play();if(p&&p.catch)p.catch(()=>{v.muted=true;v.play().catch(()=>cgShow())});
+  clearTimeout(CGR.skipT);CGR.skipT=setTimeout(()=>{if(!ov.hidden&&$('cgRes').hidden)$('cgSkip').hidden=false},3000)}
+$('cgVid').addEventListener('ended',()=>cgShow());
+$('cgSkip').addEventListener('click',()=>{try{$('cgVid').pause()}catch(e){}cgShow()});
+function cgShow(){const r=CGR.res;if(!r)return;$('cgSkip').hidden=true;const R=$('cgRes');R.hidden=false;const col=CG_COL[r.k];
+  R.style.setProperty('--cg-c',col[0]);R.style.setProperty('--cg-d',col[1]);R.style.setProperty('--cg-r',col[2]);R.style.setProperty('--cg-b',col[3]);
+  $('cgRRar').src='ui/rar_'+r.k+'.webp';$('cgRRar').alt=r.k;const c=CG();
+  if(r.k==='UR'){$('cgRName').textContent=CG_NM[r.id];$('cgRNew').hidden=false;$('cgRCh').hidden=false;$('cgRCh').src=cgImg(r.id,1);$('cgRG').hidden=true;$('cgRPt').hidden=true;
+    $('cgRMain').textContent='ホームに出す';$('cgRMain').disabled=false;$('cgRMain').onclick=()=>{c.sel=r.id;cgSave();cgClose()}}
+  else{const d=CG_GD[r.g];$('cgRName').textContent=d[0];$('cgRNew').hidden=true;$('cgRCh').hidden=true;$('cgRG').hidden=false;$('cgRGImg').src='g/'+r.g+'.webp';
+    const to=d[1]==='SSR'?d[2]:c.sel,o=c.own[to],ok=cgCanGive(r.g,to);$('cgRPt').hidden=false;
+    $('cgRPt').textContent=ok?CG_NM[to]+'　'+o.pt+' → '+Math.min(CG_LV[2],o.pt+CG_PT[d[1]])+'点（+'+CG_PT[d[1]]+'）':'グッズは持ち物に入れました。キャラの画面で渡せます。';
+    $('cgRMain').textContent=ok?CG_NM[to]+'に渡す':'持ち物に入れる';$('cgRMain').disabled=false;
+    $('cgRMain').onclick=()=>{if(ok){const g=cgGive(r.g,to);if(g&&g.up){CGV.id=to;CGV.lv=g.lv}}cgClose()}}
+  const n=cgLeft();$('cgRAgain').textContent=n>0?'もう一回（残り'+n+'）':'今日はここまで';$('cgRAgain').disabled=n<=0;
+  $('cgRAgain').onclick=()=>{CGR.busy=false;cgStart()}}
+function cgClose(){$('cgOv').hidden=true;try{$('cgVid').pause()}catch(e){}CGR.busy=false;CGR.res=null;render()}
+$('cgRClose').addEventListener('click',cgClose);
+$('cgPull').addEventListener('click',e=>{e.stopPropagation();cgStart()});$('cgPull2').addEventListener('click',cgStart);
+/* 対局：名前の横に胸像。部屋に「キャラ.段階」を添えて送る */
+const cgMine=()=>{const c=CG(),o=c.own[c.sel];return c.sel+'.'+(o?o.lv:1)};
+function cgParse(x){if(typeof x!=='string')return null;const m=/^([a-z]+)\.([123])$/.exec(x);return m&&cgOkId(m[1])?{id:m[1],lv:+m[2]}:null}
+function cgBust(ch){const p=cgParse(ch);if(!p)return null;const im=document.createElement('img');im.className='cg-bust';im.alt=CG_NM[p.id];im.src='ch/b_'+p.id+'.webp';return im}
+{const _p=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi'))o.ch=cgMine();return _p(o)}}
+{const _sp=shadowPost;shadowPost=function(o){if(o&&o.t==='join'&&!o.ch&&o.name){let h=0;for(const ch of String(o.name))h=(h*31+ch.charCodeAt(0))>>>0;o.ch=CG_CH[h%CG_CH.length][0]+'.'+(1+(h>>>5)%3)}return _sp(o)}}
+const CG_OPP={};
+{const _pl=plSpan;plSpan=function(color,name,rate,you,off,bd,ch){const sp=_pl(color,name,rate,you,off,bd);const im=cgBust(ch);if(im)sp.prepend(im);return sp}}
+try{cgTick()}catch(e){}render();
 </script>
 </body>
 </html>
