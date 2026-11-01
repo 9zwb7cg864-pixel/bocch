@@ -712,6 +712,8 @@ body{background-image:radial-gradient(ellipse 120% 50% at 50% -10%,rgba(216,189,
 .scr .topbar>.back.i-l::before{font-size:18px;margin:0;width:18px;height:18px}
 .scr .topbar>.sp{position:absolute;right:0;width:auto}
 .scr .topbar .rbtns{position:absolute;right:0;top:50%;transform:translateY(-50%)}
+/* 右にボタンがある見出し（感想戦の「画像」「共有」）は、筆文字と重ならないようボタンを見出しの下の段に置く */
+.scr .topbar:has(.rbtns){flex-direction:column;padding-bottom:2px}.scr .topbar:has(.rbtns)>.back.i-l{top:23px}.scr .topbar .rbtns{position:static;transform:none;align-self:flex-end;margin-top:2px}
 .scr .topbar h2{flex:none;font-family:var(--f-disp);font-weight:800;font-size:22px;letter-spacing:.1em;line-height:1.2;background:linear-gradient(180deg,#fff4cc,#e9c46a 55%,#b07f2c);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 0 rgba(0,0,0,.55))}
 .scr .topbar h2.ttl-img{line-height:0;font-size:0;background:none;filter:none}
 .scr .topbar h2 .tt{height:40px;width:auto;max-width:min(62vw,300px);object-fit:contain;filter:drop-shadow(0 2px 0 rgba(0,0,0,.6)) drop-shadow(0 0 14px rgba(240,216,150,.22))}
