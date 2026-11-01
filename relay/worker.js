@@ -172,6 +172,10 @@ export class Topic extends DurableObject {
     for (const f of ["nv", "fs", "fg", "r1", "r7"]) {
       if (b[f] && !(await st.get(f + ":" + d))) { put[f + ":" + d] = 1; T[f] = (T[f] || 0) + 1; D[f] = (D[f] || 0) + 1; }
     }
+    // 登録の流れ：ev メール確認が済んだ・nm 初めて名前を付けた（アカウントごとに1回だけ）
+    if (/^[a-f0-9]{16,32}$/.test(u)) for (const f of ["ev", "nm"]) {
+      if (b[f] && !(await st.get(f + ":" + u))) { put[f + ":" + u] = 1; T[f] = (T[f] || 0) + 1; D[f] = (D[f] || 0) + 1; }
+    }
     put.tot = T; put["day:" + day] = D;
     await st.put(put);
     return new Response("ok\n", { headers: h });
