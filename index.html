@@ -3066,6 +3066,8 @@ setTimeout(()=>statSend(statVisit()),4000); // 開いた端末を数える（表
 function statFirst(k,f){try{if(localStorage.getItem(k))return;localStorage.setItem(k,'1');statSend({[f]:1})}catch(e){}}
 async function statAccount(uid){try{if(STAT.acc||!uid||!crypto.subtle)return;STAT.acc=true;const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('bocch:'+uid));
   STAT.u=[...new Uint8Array(h)].slice(0,12).map(x=>x.toString(16).padStart(2,'0')).join('');statSend({})}catch(e){}}
+/* 登録の流れ：ev＝メール確認が済んだ（今日以降に作られたアカウントだけ）・nm＝初めて名前を付けた。どちらも1アカウント1回（中継サーバーで数える） */
+async function statAcctOnce(f){try{for(let k=0;k<20&&!STAT.u;k++)await new Promise(r=>setTimeout(r,300));if(STAT.u)statSend({[f]:1})}catch(e){}}
 // 終局1回につき1つ。オンラインは同じ対局を2人とも送るので、黒の人（影の相手との対局は本人）だけが数える
 function statGameEnd(){statFirst('bocch-fg','fg');try{const net=S.mode==='net';const count=!net||colorOf(NET.me)===1||!!SHADOW.bot;
   const m=net?(SHADOW.bot?'shadow':'net'):S.mode===0?'local':'cpu'+S.mode;statFlush(count,m)}catch(e){}}
@@ -3190,7 +3192,7 @@ $('nameSave').addEventListener('click',async()=>{const msg=$('nameMsg');if(!name
     if(old&&nameKey(old)!==nameKey(nm))FB.db.collection('names').doc(nameKey(old)).delete().catch(()=>{});
     // ランキング：前の名前の行を必ず外して、新しい名前で載せ直す（別の端末で載せていた分も消えるように、前の名前そのものを外す）
     try{if(old&&old!==nm)botSaveRate('p:'+old,100);if(PROF.rkName&&PROF.rkName!==nm&&PROF.rkName!==old)botSaveRate('p:'+PROF.rkName,100)}catch(e){}
-    PROF.name=nm;saveProf();renderProf();try{rankPost()}catch(e){}msg.textContent='保存しました：'+nm;render()}
+    if(!old||/^名無し/.test(old))statAcctOnce('nm');PROF.name=nm;saveProf();renderProf();try{rankPost()}catch(e){}msg.textContent='保存しました：'+nm;render()}
   catch(e){msg.textContent='名前を確かめられませんでした（'+(e&&e.code||e)+'）。時間をおいてもう一度試してください。'}
   finally{$('nameSave').disabled=!named()}});
 $('nameIn').addEventListener('keydown',e=>{if(e.key==='Enter')$('nameSave').click()});
@@ -3253,7 +3255,7 @@ async function fbInit(){if(FB.ready||FB.loading)return FB.loading;FB.loading=(as
   const V='10.12.2';await loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-app-compat.js');
   await Promise.all([loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-auth-compat.js'),loadScript('https://www.gstatic.com/firebasejs/'+V+'/firebase-firestore-compat.js')]);
   firebase.initializeApp(FB_CONFIG);FB.auth=firebase.auth();FB.auth.languageCode='ja';FB.db=firebase.firestore();FB.ready=true;
-  FB.auth.onAuthStateChanged(u=>{FB.user=u;if(u&&u.emailVerified)statAccount(u.uid);try{if(u&&u.emailVerified){localStorage.setItem('bocch-named','1');mailHash(u.email).then(h=>{OFF_H.v=h;try{localStorage.setItem('bocch-off',OFFICERS_H.includes(h)?'1':'0');localStorage.setItem('bocch-own',h===OWNER_H?'1':'0')}catch(e){}try{render()}catch(e){}try{if(h===OWNER_H&&window.bocchOnline)window.bocchOnline()}catch(e){}})}else{OFF_H.v=null;localStorage.removeItem('bocch-named');localStorage.removeItem('bocch-off');localStorage.removeItem('bocch-own')}}catch(e){}
+  FB.auth.onAuthStateChanged(u=>{FB.user=u;if(u&&u.emailVerified){statAccount(u.uid);try{const ct=Date.parse(u.metadata&&u.metadata.creationTime);if(ct>=Date.UTC(2026,10,1,6))statAcctOnce('ev')}catch(e){}}try{if(u&&u.emailVerified){localStorage.setItem('bocch-named','1');mailHash(u.email).then(h=>{OFF_H.v=h;try{localStorage.setItem('bocch-off',OFFICERS_H.includes(h)?'1':'0');localStorage.setItem('bocch-own',h===OWNER_H?'1':'0')}catch(e){}try{render()}catch(e){}try{if(h===OWNER_H&&window.bocchOnline)window.bocchOnline()}catch(e){}})}else{OFF_H.v=null;localStorage.removeItem('bocch-named');localStorage.removeItem('bocch-off');localStorage.removeItem('bocch-own')}}catch(e){}
     acctRender();if(u&&u.emailVerified)acctPull();else{try{FR.friends=[];FR.fout=[];FR.fin=[];FR.loaded=false;FR.feeds={};clearInterval(FR.inT);try{FR.sub&&FR.sub.close();FR.sub=null}catch(e){}frBadge()}catch(e){}}if(typeof renderProf==='function'&&CUR==='profile')renderProf();render()})})();return FB.loading}
 const ACCT_ERR={'auth/email-already-in-use':'このメールアドレスはもう登録されています。「ログイン」を押してください。','auth/invalid-email':'メールアドレスの形が正しくありません。','auth/weak-password':'パスワードは6文字以上にしてください。','auth/invalid-credential':'メールアドレスかパスワードが違います。','auth/wrong-password':'メールアドレスかパスワードが違います。','auth/user-not-found':'このメールアドレスは登録されていません。','auth/missing-password':'パスワードを入れてください。','auth/too-many-requests':'試した回数が多すぎます。少し時間をおいてください。','auth/network-request-failed':'通信できませんでした。ネットにつながっているか確かめてください。'};
 function acctMsg(t,err){const m=$('acctMsg');m.textContent=t||'';m.style.color=err?'#e08c7c':''}
