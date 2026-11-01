@@ -1880,7 +1880,9 @@ let SIDE='b';try{const v=localStorage.getItem('bocch-side');if(v==='b'||v==='w'|
 function pickSide(){return SIDE==='w'?2:SIDE==='r'?(Math.random()<.5?1:2):1}
 const hcOf=()=>S&&S.hc?S.hc:1; // 人間の色（CPU戦）
 let KICK='',KICK_AT=0;function kick(){if(S&&S.study){studyKick();return}if(!S||!S.mode||S.mode==='net'||S.over||S.turn===hcOf())return;const k=S.mode+':'+S.ply+':'+key(S.b,S.turn);if(KICK===k)return;KICK=k;KICK_AT=Date.now();
-  setTimeout(()=>{if(S.mode&&S.mode!=='net'&&!S.over&&S.turn!==hcOf()&&KICK===S.mode+':'+S.ply+':'+key(S.b,S.turn))cpuPlay()},380)}
+  // 戦法などの演出が出ている間は、CPUが考え始めるのを待つ（考えている間は画面が止まり、演出が白の手のあとにずれるため）
+  {const k0=KICK,t0=Date.now();const go=()=>{if(KICK!==k0)return;if(typeof JOS!=='undefined'&&JOS.busy&&Date.now()-t0<6000){setTimeout(go,150);return}
+    if(S.mode&&S.mode!=='net'&&!S.over&&S.turn!==hcOf()&&KICK===S.mode+':'+S.ply+':'+key(S.b,S.turn))cpuPlay()};setTimeout(go,380)}}
 function nbCount(b,i){const r=i/N|0,c=i%N;let n=0;for(const[x,y]of DIRS)if(ok(r+x,c+y)&&b[(r+x)*N+c+y])n++;return Math.min(4,n)}
 function movesFrom(b,i){const d=nbCount(b,i),r=i/N|0,c=i%N,out=[];if(!d)return out;
   for(const[x,y]of DIRS){const rr=r+x*d,cc=c+y*d;if(ok(rr,cc)&&!b[rr*N+cc])out.push([i,rr*N+cc])}return out}
@@ -4339,7 +4341,8 @@ function seOnce(key){if(SE.done[key])return false;SE.done[key]=1;return true}
 // 戦法が決まった
 {const _sp=senPlay;senPlay=function(i,side,m1,m2,b){try{seP('sen')}catch(e){}return _sp(i,side,m1,m2,b)}}
 // 終局：自分の勝ち・負け・引き分け（観戦や2人で1台のときは引き分けと同じ音）。2連勝以上は少しあとに連勝の音
-{const _fe=fxEnd;fxEnd=function(win,why,me){try{const k=!win?'draw':me?(me===win?'win':'lose'):'draw';seP(k,250);
+{const _fe=fxEnd;fxEnd=function(win,why,me){try{const k=!win?'draw':me?(me===win?'win':'lose'):'draw';if(k!=='lose')seP(k,250); // 負けの音（ちーん）は鳴らさない
+
   if(me&&win===me)setTimeout(()=>{try{if(S&&S.danUp)return;if((bdStats().streak|0)>=2)seP('up')}catch(e){}},2300)}catch(e){}return _fe(win,why,me)}}
 // 昇級・昇段
 {const _df=danFx;danFx=function(lv){try{seP('up')}catch(e){}return _df(lv)}}
