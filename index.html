@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=24"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=25"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -1184,7 +1184,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
     <button id="frOpp" class="i-plus" hidden>フレンド申請</button>
   </div>
   <div class="endrow" id="reviewRow" hidden><button id="reviewNow" class="endb main"><span>感想戦で振り返る</span></button><button id="xNow" class="endb"><span>Xで共有</span></button></div>
-  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 駒音</label></div>
+  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label></div>
   <div class="ad-slot ad-over" data-ad="over" hidden aria-label="広告"></div>
 </section>
 
@@ -4181,6 +4181,47 @@ if(/[?&]fps\b/.test(location.search))(function(){const e=document.createElement(
   let last=performance.now(),fr=[],worst=60,drops=0,wt=0;function f(t){const d=t-last;last=t;fr.push(t);while(fr.length&&t-fr[0]>1000)fr.shift();if(d>20&&d<1000){drops+=Math.round(d/16.7)-1}
     const fps=fr.length;if(t-wt>3000){worst=fps;wt=t}else worst=Math.min(worst,fps);e.textContent=fps+' fps\n3秒最低 '+worst+'\n落ちたコマ '+drops;e.style.color=fps>=57?'#9f9':fps>=45?'#fd6':'#f88';requestAnimationFrame(f)}
   requestAnimationFrame(f)})();
+</script>
+<script>
+/* ===== 効果音（2026-11）：和楽器と駒音。駒音と同じスイッチ（設定の「音」）でオン・オフ =====
+   音源：Freesound の CC0 と CC BY（作者はクレジット欄）を切り出して響きを付けたもの */
+const SE={buf:{},ld:{},until:0,done:{},
+  vol:{shib:.026,boc:.066,muk:.032,sen:.017,win:.0147,lose:.051,draw:.019,up:.015,mat:.0237,time:.014,btn:.011}};
+function seLoad(k){if(SE.buf[k]||SE.ld[k]||!KOMA.ctx)return SE.ld[k];SE.ld[k]=fetch('sounds/se/'+k+'.mp3').then(r=>r.arrayBuffer()).then(a=>new Promise((ok,ng)=>KOMA.ctx.decodeAudioData(a,ok,ng))).then(b=>{SE.buf[k]=b;return b}).catch(()=>{SE.ld[k]=null});return SE.ld[k]}
+// 長い音の途中で止めないよう、鳴っている間は音の部品を眠らせない
+{const _ks=komaSleep;komaSleep=function(){const w=SE.until-performance.now();if(w>0){clearTimeout(KOMA.st);KOMA.st=setTimeout(()=>komaSleep(),w+200);return}_ks()}}
+function seP(k,delay){if(!KOMA.on||document.hidden)return;const go=()=>{if(!KOMA.on||document.hidden)return;komaLoad();if(!KOMA.ctx)return;
+  Promise.resolve(SE.buf[k]||seLoad(k)).then(b=>{if(!b)return;const run=()=>{const s=KOMA.ctx.createBufferSource(),g=KOMA.ctx.createGain();s.buffer=b;g.gain.value=SE.vol[k]||.02;s.connect(g);g.connect(KOMA.ctx.destination);s.start();
+    SE.until=Math.max(SE.until,performance.now()+b.duration*1000);komaSleep()};if(KOMA.ctx.state==='running')run();else KOMA.ctx.resume().then(run).catch(()=>{})}).catch(()=>{})};
+  if(delay)setTimeout(go,delay);else go()}
+// 最初に画面に触れたら、全部の音を読み込んでおく
+addEventListener('pointerdown',function f(){removeEventListener('pointerdown',f,true);setTimeout(()=>{try{komaLoad();Object.keys(SE.vol).forEach(seLoad)}catch(e){}},300)},true);
+function seOnce(key){if(SE.done[key])return false;SE.done[key]=1;return true}
+// 向こう岸に着いた（勝ちになる2つ目は終局の音）
+{const _fa=fxArrive;fxArrive=function(side,cell,mine){try{if(!S.over)seP('muk',40)}catch(e){}return _fa(side,cell,mine)}}
+// 戦法が決まった
+{const _sp=senPlay;senPlay=function(i,side,m1,m2,b){try{seP('sen')}catch(e){}return _sp(i,side,m1,m2,b)}}
+// 終局：自分の勝ち・負け・引き分け（観戦や2人で1台のときは引き分けと同じ音）。2連勝以上は少しあとに連勝の音
+{const _fe=fxEnd;fxEnd=function(win,why,me){try{const k=!win?'draw':me?(me===win?'win':'lose'):'draw';seP(k,250);
+  if(me&&win===me)setTimeout(()=>{try{if(S&&S.danUp)return;if((bdStats().streak|0)>=2)seP('up')}catch(e){}},2300)}catch(e){}return _fe(win,why,me)}}
+// 昇級・昇段
+{const _df=danFx;danFx=function(lv){try{seP('up')}catch(e){}return _df(lv)}}
+// 縛り（相手の石が4で動けなくなった）とぼっち（隣がいなくなった）：演出のオン・オフに関係なく、1手ごとに直前の盤と比べる
+const SEX={gid:'',ply:-1,prev:null};
+{const _fc=fxCheck;fxCheck=function(){_fc();try{if(!S||S.study||S.learn)return;const live=typeof VIEW==='undefined'||VIEW.i==null,gid=FX.gid,ply=S.ply||0;
+  if(gid!==SEX.gid||ply!==SEX.ply+1||!SEX.prev||!S.last||!live||S.over||CUR!=='game'){SEX.gid=gid;SEX.ply=ply;SEX.prev=S.b.slice();return}
+  const b0=SEX.prev,b1=S.b,[f,t]=S.last,mv=b1[t];SEX.gid=gid;SEX.ply=ply;SEX.prev=b1.slice();if(!mv)return;
+  const frozen=(b,i)=>nbCount(b,i)>=4&&!movesFrom(b,i).length;
+  for(let i=0;i<36;i++)if(b1[i]===3-mv&&frozen(b1,i)&&!(b0[i]===3-mv&&frozen(b0,i))){seP('shib',650);return}
+  const fr=f/6|0,fc=f%6;for(let i=0;i<36;i++){if(!b1[i]||i===t)continue;const r=i/6|0,c=i%6;if(Math.abs(r-fr)<=1&&Math.abs(c-fc)<=1&&nbCount(b1,i)===0&&b0[i]&&nbCount(b0,i)>0){seP('boc',450);return}}
+}catch(e){}}}
+// マッチング成立（「相手が見つかりました」が出たとき）
+{const el=$('matchTitle');if(el){let last=0;new MutationObserver(()=>{const t=el.textContent.trim(),ok=t==='相手が見つかりました'||(window.bocchT&&t===window.bocchT('相手が見つかりました'));if(ok&&Date.now()-last>4000){last=Date.now();seP('mat')}}).observe(el,{childList:true,characterData:true,subtree:true})}}
+// 残り時間：自分の手番で、持ち時間が30秒と10秒を切ったときに1回ずつ
+{const _uc=updClock;updClock=function(){_uc();try{if(S.mode!=='net'||S.over||!NET.clk||NET.clk.g!==NET.game)return;const c=colorOf(NET.me);if(!c||S.turn!==c)return;const r=remain(c);
+  for(const th of [30,10])if(r<=th&&r>th-3&&seOnce('t'+(NET.code||'')+':'+NET.game+':'+th))seP('time')}catch(e){}}}
+// 大事なボタン（対局を始める・もう一局・ホームの「対局する」）
+document.addEventListener('click',e=>{try{const b=e.target.closest&&e.target.closest('#playGo,#randomBtn,#rematchBtn,#rematch,.pm [data-go="friend"],.pm [data-go="solo"],.mvbtn[data-a="again"]');if(b&&!b.disabled)seP('btn')}catch(x){}},true);
 </script>
 </body>
 </html>
