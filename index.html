@@ -823,6 +823,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
 .hm.cg-on .hm-hero{overflow:visible;padding-bottom:44px;min-height:232px}
 .hm.cg-on .hm-hero:after{display:none}
 .hm.cg-on .hm-hb{width:46%;margin:14px 0 0 3%}
+.hm.cg-on .hm-chp{margin-top:12px}
 .hm .cg-pull{position:absolute;right:calc(2% + 22% - 66px);bottom:0;z-index:3;width:132px;display:block;padding:8px 10px 7px;border-radius:999px;text-align:center;
   background:linear-gradient(#3a2a12,#1c140a);box-shadow:inset 0 0 0 1px #c9a24e,0 6px 16px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,230,160,.25)}
 .cg-pull b,.cg-pull2 b{display:block;font-family:var(--f-disp);font-weight:800;font-size:15px;letter-spacing:.12em;color:var(--gold-hi);line-height:1.2}
@@ -854,6 +855,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
 .cg-rates{margin-top:10px;font-size:12px}
 .cg-ov{position:fixed;inset:0;z-index:200;background:#000;display:flex;align-items:center;justify-content:center;overflow:hidden}
 .cg-ov video{width:100%;height:100%;object-fit:cover;object-position:center}
+@media (min-aspect-ratio:3/4){.cg-ov video{width:auto;height:100%;max-width:100%;aspect-ratio:9/16;object-fit:contain}}
 .cg-skip{position:absolute;right:14px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:3;min-height:0;padding:7px 14px;border-radius:999px;font-size:13px;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.3);color:#eee}
 .cg-res{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;animation:cgIn .5s ease-out;background:radial-gradient(70% 55% at 50% 58%,var(--cg-c,rgba(224,64,44,.5)),transparent 70%),radial-gradient(120% 80% at 50% 100%,var(--cg-d,#3a0d08),#0a0705 70%)}
 @keyframes cgIn{from{opacity:0;filter:brightness(3)}to{opacity:1;filter:none}}
@@ -1267,7 +1269,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
     <button id="frOpp" class="i-plus" hidden>フレンド申請</button>
   </div>
   <div class="endrow" id="reviewRow" hidden><button id="reviewNow" class="endb main"><span>感想戦で振り返る</span></button><button id="xNow" class="endb"><span>Xで共有</span></button></div>
-  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label><label class="chk"><input type="checkbox" id="bgmOn" checked> BGM</label></div>
+  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label><label class="chk"><input type="checkbox" id="bgmOn"> BGM</label></div>
   <div class="ad-slot ad-over" data-ad="over" hidden aria-label="広告"></div>
 </section>
 
@@ -4349,8 +4351,8 @@ document.addEventListener('click',e=>{try{const b=e.target.closest&&e.target.clo
 <script>
 /* ===== BGM（2026-11）：対局中は合戦の曲、それ以外（ホーム・メニュー・マッチング待ち・感想戦・学ぶ）は琴の曲。設定の「BGM」で切り替え（最初はオン）
    曲：Pixabay の音楽（クレジット不要）。iPhoneは音の要素の音量を変えられないので、音の部品（KOMA.ctx）に通して音量を決める */
-const BGM={on:true,el:{},g:{},cur:'',vol:.014,ok:false};
-try{BGM.on=localStorage.getItem('bocch-bgm')!=='0'}catch(e){}
+const BGM={on:false,el:{},g:{},cur:'',vol:.014,ok:false};
+try{BGM.on=localStorage.getItem('bocch-bgm')==='1'}catch(e){BGM.on=false}
 function bgmWant(){try{if(!BGM.on||document.hidden)return '';if(CUR==='game'&&S&&!S.over&&!S.study&&!S.learn&&(typeof VIEW==='undefined'||VIEW.i==null))return 'battle';return 'koto'}catch(e){return ''}}
 function bgmNode(k){if(BGM.el[k])return BGM.el[k];const a=new Audio('sounds/bgm/'+k+'.mp3');a.loop=true;a.preload='auto';a.crossOrigin='anonymous';BGM.el[k]=a;
   try{const s=KOMA.ctx.createMediaElementSource(a),g=KOMA.ctx.createGain();g.gain.value=0;s.connect(g);g.connect(KOMA.ctx.destination);BGM.g[k]=g}catch(e){a.volume=.25}return a}
@@ -4394,7 +4396,8 @@ const CG_GD={r1:['団子','R'],r2:['抹茶碗','R'],r3:['手ぬぐい','R'],r4:[
 const CG_PT={R:1,SR:3,SSR:10},CG_LV=[0,60,200],CG_DAY=3,CG_EVERY=5;
 const CG_COL={R:['rgba(230,230,230,.35)','#1c1c1c','rgba(255,255,255,.10)','#d8d8d8'],SR:['rgba(90,169,255,.45)','#0a1a33','rgba(120,180,255,.12)','#5aa9ff'],SSR:['rgba(230,190,90,.45)','#2e2208','rgba(255,215,120,.13)','#e6be5a'],UR:['rgba(224,64,44,.55)','#3a0d08','rgba(255,120,80,.12)','#e0402c']};
 const CG_NEW_T=Date.UTC(2026,10,1,10,25); // この時刻より後に登録したアカウントにも出す
-const cgOn=()=>{try{return localStorage.getItem('bocch-own')==='1'||localStorage.getItem('bocch-cgnew')!=='0'}catch(e){return true}}; // 出さないのは、この時刻より前からあるアカウント（オーナー以外）でログインしている人だけ
+const CG_PAUSE=true; // キャラは一旦なし（falseに戻せば元どおり）
+const cgOn=()=>{if(CG_PAUSE)return false;try{return localStorage.getItem('bocch-own')==='1'||localStorage.getItem('bocch-cgnew')!=='0'}catch(e){return true}}; // 出さないのは、この時刻より前からあるアカウント（オーナー以外）でログインしている人だけ
 {const _ar=acctRender;acctRender=function(){_ar();try{const u=FB.user;if(u&&u.emailVerified){const ct=Date.parse(u.metadata&&u.metadata.creationTime);localStorage.setItem('bocch-cgnew',ct>=CG_NEW_T?'1':'0')}else localStorage.removeItem('bocch-cgnew')}catch(e){}try{cgHome()}catch(e){}}}
 const cgOkId=id=>typeof id==='string'&&!!CG_NM[id];
 function cgToday(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
