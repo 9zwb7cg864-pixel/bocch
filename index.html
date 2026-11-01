@@ -3158,7 +3158,7 @@ let hiKey='';
 const _renderP=render;render=function(){_renderP();
   if(S.over){rateGame();try{bdGameEnd()}catch(e){console.error(e)}}
   // 自分の名前とレートを部屋に知らせる（席に着いている時だけ）
-  if(S.mode==='net'&&NET.code&&NET.live&&!NET.watch&&colorOf(NET.me)>0){const k=NET.code+'|'+NET.me+'|'+myName()+'|'+Math.round(PROF.rating)+'|'+myLv()+'|'+isOff()+'|'+bdSel()+'|'+(typeof cgMine==='function'?cgMine():'');if(k!==hiKey&&NET.claimed!==false){hiKey=k;post({t:'hi'})}}
+  if(S.mode==='net'&&NET.code&&NET.live&&!NET.watch&&colorOf(NET.me)>0){const k=NET.code+'|'+NET.me+'|'+myName()+'|'+Math.round(PROF.rating)+'|'+myLv()+'|'+isOff()+'|'+bdSel();if(k!==hiKey&&NET.claimed!==false){hiKey=k;post({t:'hi'})}}
   // 相手は盤の左上、自分は盤の右下（観戦中は手前側の黒を右下）
   const pt=$('plTop'),pbt=$('plBot');pt.innerHTML='';pbt.innerHTML='';
   if(S.mode==='net'&&NET.host){const hc=colorOf(NET.host),bId=hc===1?NET.host:NET.guest,wId=hc===1?NET.guest:NET.host;
@@ -4401,6 +4401,7 @@ const CG_GD={r1:['団子','R'],r2:['抹茶碗','R'],r3:['手ぬぐい','R'],r4:[
  x15:['名刀の鍔','SSR','iori'],x16:['金のかんざし','SSR','kikuno'],x17:['金の錨','SSR','taiga'],x18:['白黒の仮面の欠片','SSR','mumyo'],x19:['黒鉄の前立て','SSR','kurogane'],x20:['神楽鈴','SSR','shirotae'],x21:['夜叉の面','SSR','yashamaru']};
 const CG_PT={R:1,SR:3,SSR:10},CG_LV=[0,60,200],CG_DAY=3,CG_EVERY=5;
 const CG_COL={R:['rgba(230,230,230,.35)','#1c1c1c','rgba(255,255,255,.10)','#d8d8d8'],SR:['rgba(90,169,255,.45)','#0a1a33','rgba(120,180,255,.12)','#5aa9ff'],SSR:['rgba(230,190,90,.45)','#2e2208','rgba(255,215,120,.13)','#e6be5a'],UR:['rgba(224,64,44,.55)','#3a0d08','rgba(255,120,80,.12)','#e0402c']};
+const cgOn=()=>{try{return localStorage.getItem('bocch-own')==='1'}catch(e){return false}}; // いまはオーナーのアカウントだけに出す
 const cgOkId=id=>typeof id==='string'&&!!CG_NM[id];
 function cgToday(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function cgP(x){const o={own:{},sel:'kurogane',inv:{},day:'',ad:0,tk:0,gb:-1,first:1,t:0};if(x&&typeof x==='object'){
@@ -4437,7 +4438,7 @@ function cgCanGive(g,id){const d=CG_GD[g];if(!d||!CG().own[id])return false;if(d
 function cgGive(g,id){const c=CG();if(!(c.inv[g]>0)||!cgCanGive(g,id))return null;const o=c.own[id],before=o.pt,blv=o.lv;
   o.pt=Math.min(CG_LV[2],o.pt+CG_PT[CG_GD[g][1]]);o.lv=Math.max(o.lv,cgLvOf(o.pt));c.inv[g]--;if(!c.inv[g])delete c.inv[g];cgSave();return {before,after:o.pt,up:o.lv>blv,lv:o.lv}}
 /* ホーム */
-function cgHome(){const c=CG(),o=c.own[c.sel]||{lv:1},im=$('cgBgImg');{const bg=$('cgBg'),hero=document.querySelector('.hm-hero');if(hero&&bg.parentElement!==hero)hero.append(bg)}const src=cgImg(c.sel,o.lv);if(im.getAttribute('src')!==src)im.setAttribute('src',src);
+function cgHome(){const on=cgOn();$('cgBg').hidden=!on;$('cgPull').hidden=!on;document.querySelector('.hm').classList.toggle('cg-on',on);if(!on){if(CUR==='chara')show('home',true);return}const c=CG(),o=c.own[c.sel]||{lv:1},im=$('cgBgImg');{const bg=$('cgBg'),hero=document.querySelector('.hm-hero');if(hero&&bg.parentElement!==hero)hero.append(bg)}const src=cgImg(c.sel,o.lv);if(im.getAttribute('src')!==src)im.setAttribute('src',src);
   document.querySelector('.hm').classList.add('cg-on');
   const n=cgLeft();for(const [b,l] of [['cgPull','cgLeft'],['cgPull2','cgLeft2']]){$(l).textContent=n>0?'あと'+n+'回':'明日また引けます';$(b).classList.toggle('dim',n<=0)}}
 $('cgBg').addEventListener('click',()=>{CGV.id=CG().sel;CGV.lv=0;show('chara');cgRender()});
@@ -4493,10 +4494,9 @@ $('cgPull').addEventListener('click',e=>{e.stopPropagation();cgStart()});$('cgPu
 const cgMine=()=>{const c=CG(),o=c.own[c.sel];return c.sel+'.'+(o?o.lv:1)};
 function cgParse(x){if(typeof x!=='string')return null;const m=/^([a-z]+)\.([123])$/.exec(x);return m&&cgOkId(m[1])?{id:m[1],lv:+m[2]}:null}
 function cgBust(ch){const p=cgParse(ch);if(!p)return null;const im=document.createElement('img');im.className='cg-bust';im.alt=CG_NM[p.id];im.src='ch/b_'+p.id+'.webp';return im}
-{const _p=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi'))o.ch=cgMine();return _p(o)}}
-{const _sp=shadowPost;shadowPost=function(o){if(o&&o.t==='join'&&!o.ch&&o.name){let h=0;for(const ch of String(o.name))h=(h*31+ch.charCodeAt(0))>>>0;o.ch=CG_CH[h%CG_CH.length][0]+'.'+(1+(h>>>5)%3)}return _sp(o)}}
+
 const CG_OPP={};
-{const _pl=plSpan;plSpan=function(color,name,rate,you,off,bd,ch){const sp=_pl(color,name,rate,you,off,bd);const im=cgBust(ch);if(im)sp.prepend(im);return sp}}
+{const _pl=plSpan;plSpan=function(color,name,rate,you,off,bd,ch){const sp=_pl(color,name,rate,you,off,bd);const im=you&&cgOn()?cgBust(ch):null;if(im)sp.prepend(im);return sp}}
 try{cgTick()}catch(e){}render();
 </script>
 </body>
