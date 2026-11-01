@@ -4207,7 +4207,7 @@ function fx2Lonely(a,t){fx2Anim(1500,(g,tm)=>{const {x,cs}=g,A=g.P(a),B=g.P(t),a
   const b0=FX2.prev,b1=S.b,[f,t]=S.last,mv=b1[t];FX2.gid=gid;FX2.ply=ply;FX2.prev=b1.slice();if(!mv)return;
   const frozen=(b,i)=>nbCount(b,i)>=4&&!movesFrom(b,i).length;
   for(let i=0;i<36;i++)if(b1[i]===3-mv&&b0[i]===3-mv&&nbCount(b0,i)<4&&nbCount(b1,i)>=4&&!movesFrom(b1,i).length){FX2.tm.push(setTimeout(()=>fx2Bind(b1,i),650));return}
-  const fr=f/6|0,fc=f%6;for(let i=0;i<36;i++){if(!b1[i]||i===t)continue;const r=i/6|0,c=i%6;if(Math.abs(r-fr)<=1&&Math.abs(c-fc)<=1&&nbCount(b1,i)===0&&b0[i]&&nbCount(b0,i)>0){FX2.tm.push(setTimeout(()=>fx2Lonely(i,t),450));return}}
+  // ぼっち（紐が切れる演出）は出さない（効果音は別の処理で鳴らす）
 }catch(e){}}}
 {const _ps=paint;paint=function(n){_ps(n);if(n!=='game')fx2Stop()}}
 /* 縛り＝相手の手で自分の石の数字が4未満から4に上がり、そのせいで動けなくなったときだけ（もともと4で、行き先をふさがれただけのときは出さない）
