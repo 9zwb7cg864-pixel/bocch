@@ -3134,6 +3134,19 @@ function statVisit(){const o={o:1};try{const jd=x=>new Date(x+9*3600e3).toISOStr
     if(diff>=1&&diff<=7&&!localStorage.getItem('bocch-r7')){localStorage.setItem('bocch-r7','1');o.r7=1}}}catch(e){}return o}
 setTimeout(()=>statSend(statVisit()),4000); // 開いた端末を数える（表示が落ち着いてから）
 function statFirst(k,f){try{if(localStorage.getItem(k))return;localStorage.setItem(k,'1');statSend({[f]:1})}catch(e){}}
+/* 入口の計測（2026-11）：初めて来た端末の初日だけ、各段階を1回ずつ送る。
+   n0 開いた（すぐ帰った人も含む）・l1〜l4 表示までの時間・ho ルールの「読んだ」・hl「4問で覚える」・pg「Play」・q1〜q4 1局も始めずに離れるまでの時間 */
+{const jd=()=>new Date(Date.now()+9*3600e3).toISOString().slice(0,10);let on=false;
+ try{const e=localStorage.getItem('bocch-ent');if(e===null&&!localStorage.getItem('bocch-fd')){localStorage.setItem('bocch-ent',jd());on=true}else on=e===jd()}catch(e){}
+ if(on){const once=(k,o,b)=>{try{if(localStorage.getItem('bocch-e-'+k))return;localStorage.setItem('bocch-e-'+k,'1');statSend(o,b)}catch(e){}};
+  once('n0',{n0:1});
+  const lt=()=>{const ms=performance.now();once('lt',{[ms<2000?'l1':ms<5000?'l2':ms<10000?'l3':'l4']:1})};
+  if(document.readyState==='complete')lt();else addEventListener('load',lt,{once:true});
+  const tap=(id,f)=>{const el=$(id);if(el)el.addEventListener('click',()=>once(f,{[f]:1}))};
+  tap('hrOk','ho');tap('hrLearn','hl');tap('playGo','pg');
+  const quit=()=>{try{if(localStorage.getItem('bocch-fs')||localStorage.getItem('bocch-ent')!==jd())return}catch(e){return}
+   const t=performance.now()/1000;once('q',{[t<10?'q1':t<30?'q2':t<120?'q3':'q4']:1},true)};
+  addEventListener('pagehide',quit);document.addEventListener('visibilitychange',()=>{if(document.hidden)quit()})}}
 async function statAccount(uid){try{if(STAT.acc||!uid||!crypto.subtle)return;STAT.acc=true;const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('bocch:'+uid));
   STAT.u=[...new Uint8Array(h)].slice(0,12).map(x=>x.toString(16).padStart(2,'0')).join('');statSend({})}catch(e){}}
 /* 登録の流れ：ev＝メール確認が済んだ（今日以降に作られたアカウントだけ）・nm＝初めて名前を付けた。どちらも1アカウント1回（中継サーバーで数える） */
