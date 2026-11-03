@@ -35,7 +35,14 @@ th:first-child,td:first-child{text-align:left}
 .top{display:flex;align-items:center;gap:10px}.top .r{margin-left:auto;display:flex;gap:8px}
 .top button{background:transparent;border:1px solid var(--line);color:var(--sub);border-radius:4px;padding:6px 10px;font-size:12.5px}
 .modes{display:flex;flex-wrap:wrap;gap:6px}.modes span{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:3px 10px;font-size:12.5px}.modes b{color:#f3d995;margin-left:4px}
-.sub{display:block;font-size:12px;opacity:.65}</style>
+.sub{display:block;font-size:12px;opacity:.65}.chartBox{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 12px 8px;position:relative}
+.cTop{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:6px}
+.leg{display:flex;flex-wrap:wrap;gap:12px;font-size:12.5px;color:var(--sub)}.leg i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
+.rng{display:flex;gap:4px}.rng button{background:transparent;border:1px solid var(--line);color:var(--sub);border-radius:4px;padding:3px 9px;font-size:12px}.rng button.on{border-color:var(--gold);color:var(--fg)}
+#uChart{width:100%;height:240px;display:block;touch-action:pan-y}
+.tip{position:absolute;pointer-events:none;background:#0b0f0d;border:1px solid var(--line);border-radius:4px;padding:6px 8px;font-size:12px;color:var(--fg);white-space:nowrap;display:none}
+.tip b{color:var(--fg)}.tip .r{display:flex;justify-content:space-between;gap:14px;color:var(--sub)}.tip .r span:last-child{color:var(--fg)}
+</style>
 </head>
 <body>
 <div class="app">
@@ -58,6 +65,13 @@ th:first-child,td:first-child{text-align:left}
       <div class="k"><div class="l">DAU（直近7日の平均）</div><div class="v" id="kDau"></div><div class="s" id="kDauS"></div></div>
       <div class="k"><div class="l">1人あたり（直近7日）</div><div class="v" id="kPer"></div><div class="s" id="kPerS"></div></div>
     </div>
+    <h2>ユーザー数の推移</h2>
+    <div class="chartBox">
+      <div class="cTop"><div class="leg" id="uLeg"></div><div class="rng" id="uRng"><button data-n="14">14日</button><button data-n="30" class="on">30日</button><button data-n="0">全期間</button></div></div>
+      <svg id="uChart" role="img" aria-label="1日ごとのユーザー数の推移"></svg>
+      <div class="tip" id="uTip"></div>
+    </div>
+    <p class="note">「遊んだ人」は1局以上指したかプレイ時間がある端末（DAU）、「開いた人」はサイトを開いた端末、「初めて来た人」はその日に初めて開いて4秒以上いた端末です（10月29日から）。数値の表は下の「日ごと」にあります。</p>
     <h2>初めての人の流れ（直近7日）</h2>
     <div class="wrapT"><table><thead><tr><th>段階</th><th>人数</th><th>前の段階から</th><th>開いた人から</th></tr></thead><tbody id="funnel"><tr><td colspan="4">読み込み中…</td></tr></tbody></table></div>
     <p class="note">数え始め：2026年10月29日。初めて開いた日から数えるので、記録を始める前に来たことがある端末は入りません。</p>
@@ -109,6 +123,7 @@ async function load(){
    const cnt=pre=>{const o={};for(const k of keys.slice(0,7))for(const [f,v] of Object.entries(days[k]))if(f.startsWith(pre))o[f.slice(pre.length)]=(o[f.slice(pre.length)]||0)+v;return Object.entries(o).sort((a,b)=>b[1]-a[1])};
    const tbl=(id,pre,M)=>{const r=cnt(pre),tt=r.reduce((a,[,v])=>a+v,0);$(id).innerHTML=r.length?r.map(([k,v])=>'<tr><td>'+(M[k]||k)+'</td><td>'+fmt(v)+'</td><td>'+Math.round(100*v/tt)+'%</td></tr>').join(''):'<tr><td colspan="3">まだ記録がありません</td></tr>'};
    tbl('xSrc','s_',SRC);tbl('xCc','c_',CC);tbl('xDv','d_',{m:'スマホ・タブレット',d:'パソコン'});tbl('xLg','g_',LG)}
+  window.__days=days;drawU();
   const ms=Object.entries(j.modes||{}).sort((a,b)=>b[1]-a[1]);$('modes').innerHTML=ms.length?ms.map(([k,v])=>'<span>'+(MODE[k]||k)+'<b>'+fmt(v)+'</b></span>').join(''):'<span>まだありません</span>';
   {const F=[['nv','初めて開いた'],['fs','1局目を始めた'],['fg','1局目を最後まで指した'],['r1','次の日にまた来た'],['r7','7日以内にまた来た']];const sum={};for(const k of keys.slice(0,7))for(const [f] of F)sum[f]=(sum[f]||0)+(days[k][f]||0);
    const pc=(a,b)=>b?Math.round(100*a/b)+'%':'—';$('funnel').innerHTML=F.map(([f,lab],i)=>'<tr><td>'+lab+'</td><td>'+fmt(sum[f])+'</td><td>'+(i===0?'—':pc(sum[f],sum[F[i===4?0:i-1][0]]))+'</td><td>'+(i===0?'—':pc(sum[f],sum.nv))+'</td></tr>').join('')}
@@ -129,8 +144,34 @@ async function load(){
   $('kAcc').innerHTML=fmt(Math.max(t.accounts||0,named||0))+'<small>件</small>';
   $('kAccS').textContent='ログイン確認 '+fmt(t.accounts)+'件'+(named!=null?'・名前付き '+fmt(named)+'件':'')+'・新規 '+fmt(t.signups)+'件'+(t.ev!=null?'・メール確認 '+fmt(t.ev)+'件':'')+(t.nm!=null?'・初めて名前 '+fmt(t.nm)+'件':'');
 }
+
+// ユーザー数の推移（折れ線3本・同じ単位なので軸は1つ）
+const USER_S=[['players','遊んだ人','#3987e5','遊んだ'],['visitors','開いた人','#d95926','開いた'],['nv','初めて来た人','#199e70','初めて']];let URNG=30;
+$('uLeg').innerHTML=USER_S.map(([,l,c])=>'<span><i style="background:'+c+'"></i>'+l+'</span>').join('');
+$('uRng').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;URNG=+b.dataset.n;[...$('uRng').children].forEach(x=>x.classList.toggle('on',x===b));drawU()});
+function drawU(){const days=window.__days||{};const svg=$('uChart'),tip=$('uTip');let ks=Object.keys(days).sort();if(URNG)ks=ks.slice(-URNG);
+ const W=svg.clientWidth||600,H=240,L=34,R=66,T=10,B=24;svg.setAttribute('viewBox','0 0 '+W+' '+H);
+ if(!ks.length){svg.innerHTML='<text x="'+W/2+'" y="'+H/2+'" fill="#9a9484" font-size="13" text-anchor="middle">まだ記録がありません</text>';return}
+ const mx=Math.max(1,...ks.flatMap(k=>USER_S.map(([f])=>days[k][f]||0)));const step=mx<=5?1:mx<=10?2:mx<=25?5:mx<=50?10:mx<=100?20:mx<=250?50:100;const top=Math.ceil(mx/step)*step;
+ const x=i=>L+(ks.length===1?(W-L-R)/2:i*(W-L-R)/(ks.length-1)),y=v=>T+(H-T-B)*(1-v/top);
+ let g='';for(let v=0;v<=top;v+=step)g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="rgba(236,230,216,.08)"/><text x="'+(L-6)+'" y="'+(y(v)+4)+'" fill="#6f6a5e" font-size="11" text-anchor="end">'+v+'</text>';
+ const every=Math.max(1,Math.ceil(ks.length/6));ks.forEach((k,i)=>{if(i%every===0||i===ks.length-1)g+='<text x="'+x(i)+'" y="'+(H-6)+'" fill="#6f6a5e" font-size="11" text-anchor="middle">'+(+k.slice(5,7))+'/'+(+k.slice(8))+'</text>'});
+ const lab=[];USER_S.forEach(([f,l,c,sl])=>{const pts=ks.map((k,i)=>[x(i),y(days[k][f]||0)]);if(f==='nv'){const i0=ks.findIndex(k=>days[k].nv!=null);if(i0<0)return;pts.splice(0,i0)}
+  g+='<polyline fill="none" stroke="'+c+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="'+pts.map(p=>p.join(',')).join(' ')+'"/>';
+  const p=pts[pts.length-1];g+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="4" fill="'+c+'" stroke="#131a17" stroke-width="2"/>';lab.push([p[1],sl,days[ks[ks.length-1]][f]||0])});
+ lab.sort((a,b)=>a[0]-b[0]);for(let i=1;i<lab.length;i++)if(lab[i][0]-lab[i-1][0]<14)lab[i][0]=lab[i-1][0]+14;
+ lab.forEach(([yy,l,v])=>g+='<text x="'+(W-R+8)+'" y="'+(yy+4)+'" fill="#9a9484" font-size="11">'+l+' '+v+'</text>');
+ g+='<line id="uX" x1="0" x2="0" y1="'+T+'" y2="'+(H-B)+'" stroke="rgba(236,230,216,.35)" stroke-dasharray="3 3" visibility="hidden"/><rect x="'+L+'" y="0" width="'+(W-L-R)+'" height="'+H+'" fill="transparent" id="uHit"/>';
+ svg.innerHTML=g;const hit=svg.querySelector('#uHit'),cx=svg.querySelector('#uX');
+ const show=ev=>{const r=svg.getBoundingClientRect();const px=(ev.touches?ev.touches[0].clientX:ev.clientX)-r.left;const sx=px*W/r.width;let i=ks.length===1?0:Math.round((sx-L)/((W-L-R)/(ks.length-1)));i=Math.max(0,Math.min(ks.length-1,i));
+  cx.setAttribute('x1',x(i));cx.setAttribute('x2',x(i));cx.setAttribute('visibility','visible');const d=days[ks[i]];
+  tip.innerHTML='<b>'+(+ks[i].slice(5,7))+'月'+(+ks[i].slice(8))+'日</b>'+USER_S.map(([f,l,c])=>'<div class="r"><span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+c+';margin-right:5px"></i>'+l+'</span><span>'+(d[f]!=null?fmt(d[f]):'—')+'</span></div>').join('');
+  tip.style.display='block';const tx=x(i)*r.width/W+12;tip.style.left=Math.min(tx,r.width-tip.offsetWidth-4)+'px';tip.style.top='40px'};
+ const hide=()=>{tip.style.display='none';cx.setAttribute('visibility','hidden')};
+ hit.addEventListener('mousemove',show);hit.addEventListener('touchstart',show,{passive:true});hit.addEventListener('touchmove',show,{passive:true});hit.addEventListener('mouseleave',hide);hit.addEventListener('touchend',()=>setTimeout(hide,1500))}
+addEventListener('resize',()=>{if(window.__days)drawU()});
 async function unlock(){$('err').textContent='確かめています…';$('go').disabled=true;
-  try{await load();try{localStorage.setItem('bocch-stats-pw',PW)}catch(e){}$('lock').hidden=true;$('main').hidden=false;$('err').textContent=''}
+  try{await load();try{localStorage.setItem('bocch-stats-pw',PW)}catch(e){}$('lock').hidden=true;$('main').hidden=false;if(window.__days)drawU();$('err').textContent=''}
   catch(e){$('err').textContent=e==='pw'?'パスワードが違います':'読み込めませんでした。少し待ってからもう一度';PW='';try{localStorage.removeItem('bocch-stats-pw')}catch(x){}}
   $('go').disabled=false}
 $('lock').addEventListener('submit',e=>{e.preventDefault();PW=$('pw').value;unlock()});
