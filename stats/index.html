@@ -35,7 +35,7 @@ th:first-child,td:first-child{text-align:left}
 .top{display:flex;align-items:center;gap:10px}.top .r{margin-left:auto;display:flex;gap:8px}
 .top button{background:transparent;border:1px solid var(--line);color:var(--sub);border-radius:4px;padding:6px 10px;font-size:12.5px}
 .modes{display:flex;flex-wrap:wrap;gap:6px}.modes span{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:3px 10px;font-size:12.5px}.modes b{color:#f3d995;margin-left:4px}
-</style>
+.sub{display:block;font-size:12px;opacity:.65}</style>
 </head>
 <body>
 <div class="app">
@@ -55,11 +55,18 @@ th:first-child,td:first-child{text-align:left}
       <div class="k"><div class="l">総対局数</div><div class="v" id="kG"></div><div class="s" id="kGS"></div></div>
       <div class="k"><div class="l">登録アカウント数</div><div class="v" id="kAcc"></div><div class="s" id="kAccS"></div></div>
       <div class="k"><div class="l">サイトを開いた人</div><div class="v" id="kV"></div><div class="s" id="kVS"></div></div>
-      <div class="k"><div class="l">ランキングに載った人</div><div class="v" id="kRk"></div><div class="s">記録を始める前の分も含む</div></div>
+      <div class="k"><div class="l">DAU（直近7日の平均）</div><div class="v" id="kDau"></div><div class="s" id="kDauS"></div></div>
+      <div class="k"><div class="l">1人あたり（直近7日）</div><div class="v" id="kPer"></div><div class="s" id="kPerS"></div></div>
     </div>
     <h2>初めての人の流れ（直近7日）</h2>
     <div class="wrapT"><table><thead><tr><th>段階</th><th>人数</th><th>前の段階から</th><th>開いた人から</th></tr></thead><tbody id="funnel"><tr><td colspan="4">読み込み中…</td></tr></tbody></table></div>
     <p class="note">数え始め：2026年10月29日。初めて開いた日から数えるので、記録を始める前に来たことがある端末は入りません。</p>
+    <h2>初めて来た人の内訳（直近7日）</h2>
+    <div class="wrapT"><table><thead><tr><th>来た場所</th><th>人数</th><th>割合</th></tr></thead><tbody id="xSrc"><tr><td colspan="3">読み込み中…</td></tr></tbody></table></div>
+    <div class="wrapT"><table><thead><tr><th>国</th><th>人数</th><th>割合</th></tr></thead><tbody id="xCc"></tbody></table></div>
+    <div class="wrapT"><table><thead><tr><th>端末</th><th>人数</th><th>割合</th></tr></thead><tbody id="xDv"></tbody></table></div>
+    <div class="wrapT"><table><thead><tr><th>ブラウザの言語</th><th>人数</th><th>割合</th></tr></thead><tbody id="xLg"></tbody></table></div>
+    <p class="note">数え始め：2026年11月3日。初めて来た端末の初日だけを数えます（1台1回）。「直接」はリンク元がわからない来方（ブックマーク・URLの入力・YouTubeやXのアプリから開いたときなど）も含みます。リンクに ?ref=yt などを付けると、来た場所がはっきりわかります。</p>
     <h2>入口の詳しい流れ（直近7日）</h2>
     <div class="wrapT"><table><thead><tr><th>段階</th><th>人数</th><th>開いた人から</th></tr></thead><tbody id="entry"><tr><td colspan="3">読み込み中…</td></tr></tbody></table></div>
     <div class="wrapT"><table><thead><tr><th>アプリ内ブラウザ</th><th>人数</th><th>開いた人から</th></tr></thead><tbody id="entryIB"></tbody></table></div>
@@ -68,10 +75,8 @@ th:first-child,td:first-child{text-align:left}
     <p class="note">数え始め：2026年11月2日（11月1日は途中から記録が始まったので入れていません）。初めて来た端末の初日だけを数えます（1台1回）。「離れる」はタブを閉じた・別のアプリに切り替えたときで、あとで戻ってきた人も入ります。2026年11月3日から、初めて来た端末はホームを飛ばして「CPU やさしい」との1局目が自動で始まります（説明つき）。そのため、それ以降は「Play」を押す人が減ります。</p>
     <h2>モード別の対局数</h2>
     <div class="modes" id="modes"></div>
-    <h2>登録アカウント（名前を付けた人）</h2>
-    <div class="wrapT"><table><thead><tr><th>名前</th><th>名前を付けた日</th><th>レート</th></tr></thead><tbody id="names"><tr><td colspan="3">読み込み中…</td></tr></tbody></table></div>
     <h2>日ごと（日本時間）</h2>
-    <div class="wrapT"><table><thead><tr><th>日付</th><th>プレイ時間</th><th>遊んだ人</th><th>対局</th><th>開いた人</th><th>新規登録</th><th>メール確認</th><th>名前</th></tr></thead><tbody id="days"></tbody></table></div>
+    <div class="wrapT"><table><thead><tr><th>日付</th><th>プレイ時間</th><th>遊んだ人</th><th>対局</th><th>開いた人</th><th>初めて来た人</th><th>新規登録</th></tr></thead><tbody id="days"></tbody></table></div>
     <p class="note" id="note"></p>
   </main>
 </div>
@@ -93,6 +98,17 @@ async function load(){
   $('kG').innerHTML=fmt(t.games)+'<small>局</small>';$('kGS').textContent='今日 '+fmt(today.games)+'局';
   $('kV').innerHTML=fmt(t.visitors)+'<small>人</small>';$('kVS').textContent='今日 '+fmt(today.visitors)+'人';
   $('kAcc').innerHTML='…';$('kAccS').textContent='';
+  {const w=(o,n)=>keys.slice(o,o+n).map(k=>days[k]);const cur=w(0,7),prv=w(7,7);const av=a=>a.length?a.reduce((x,d)=>x+(d.players||0),0)/a.length:0;
+   const c=av(cur),p=av(prv);$('kDau').innerHTML=(Math.round(c*10)/10)+'<small>人</small>';
+   $('kDauS').textContent=prv.length?'その前の7日 '+(Math.round(p*10)/10)+'人（'+(p?((c>=p?'+':'')+Math.round(100*(c-p)/p)+'%'):'—')+'）':'比べる前の週のデータがまだありません';
+   const pl=cur.reduce((x,d)=>x+(d.players||0),0),gm=cur.reduce((x,d)=>x+(d.games||0),0),sc=cur.reduce((x,d)=>x+(d.sec||0),0);
+   $('kPer').innerHTML=(pl?Math.round(gm/pl*10)/10:0)+'<small>局</small>';$('kPerS').textContent='プレイ時間 '+(pl?Math.round(sc/pl/60):0)+'分（遊んだ人1人あたり・1日ごとに数えて平均）'}
+  {const SRC={yt:'YouTube',x:'X（Twitter）',nt:'note',gs:'Google検索',sr:'ほかの検索（Yahoo・Bingなど）',rd:'Reddit',hn:'Hacker News',sn:'ほかのSNS（Discord・Instagramなど）',dr:'直接（リンク元なし）',o:'その他のサイト'};
+   const CC={JP:'日本',US:'アメリカ',KR:'韓国',TW:'台湾',DE:'ドイツ',CN:'中国',HK:'香港',GB:'イギリス',CA:'カナダ',AU:'オーストラリア',AT:'オーストリア',CH:'スイス',FR:'フランス',XX:'不明'};
+   const LG={ja:'日本語',en:'英語',ko:'韓国語',zh:'中国語',de:'ドイツ語',es:'スペイン語',fr:'フランス語',xx:'不明'};
+   const cnt=pre=>{const o={};for(const k of keys.slice(0,7))for(const [f,v] of Object.entries(days[k]))if(f.startsWith(pre))o[f.slice(pre.length)]=(o[f.slice(pre.length)]||0)+v;return Object.entries(o).sort((a,b)=>b[1]-a[1])};
+   const tbl=(id,pre,M)=>{const r=cnt(pre),tt=r.reduce((a,[,v])=>a+v,0);$(id).innerHTML=r.length?r.map(([k,v])=>'<tr><td>'+(M[k]||k)+'</td><td>'+fmt(v)+'</td><td>'+Math.round(100*v/tt)+'%</td></tr>').join(''):'<tr><td colspan="3">まだ記録がありません</td></tr>'};
+   tbl('xSrc','s_',SRC);tbl('xCc','c_',CC);tbl('xDv','d_',{m:'スマホ・タブレット',d:'パソコン'});tbl('xLg','g_',LG)}
   const ms=Object.entries(j.modes||{}).sort((a,b)=>b[1]-a[1]);$('modes').innerHTML=ms.length?ms.map(([k,v])=>'<span>'+(MODE[k]||k)+'<b>'+fmt(v)+'</b></span>').join(''):'<span>まだありません</span>';
   {const F=[['nv','初めて開いた'],['fs','1局目を始めた'],['fg','1局目を最後まで指した'],['r1','次の日にまた来た'],['r7','7日以内にまた来た']];const sum={};for(const k of keys.slice(0,7))for(const [f] of F)sum[f]=(sum[f]||0)+(days[k][f]||0);
    const pc=(a,b)=>b?Math.round(100*a/b)+'%':'—';$('funnel').innerHTML=F.map(([f,lab],i)=>'<tr><td>'+lab+'</td><td>'+fmt(sum[f])+'</td><td>'+(i===0?'—':pc(sum[f],sum[F[i===4?0:i-1][0]]))+'</td><td>'+(i===0?'—':pc(sum[f],sum.nv))+'</td></tr>').join('')}
@@ -104,24 +120,14 @@ async function load(){
    grp('entryL',[['2秒未満','l1'],['2〜5秒','l2'],['5〜10秒','l3'],['10秒以上','l4']]);
    grp('entryQ',[['10秒未満','q1'],['10〜30秒','q2'],['30秒〜2分','q3'],['2分以上','q4']])}
   const mx=Math.max(1,...keys.map(k=>days[k].sec||0));
-  $('days').innerHTML=keys.slice(0,45).map(k=>{const d=days[k];return '<tr><td>'+k.slice(5).replace('-','/')+'</td><td>'+Math.round((d.sec||0)/60)+'分<span class="bar" style="width:'+Math.round(60*(d.sec||0)/mx)+'px"></span></td><td>'+fmt(d.players)+'</td><td>'+fmt(d.games)+'</td><td>'+fmt(d.visitors)+'</td><td>'+fmt(d.signups)+'</td><td>'+fmt(d.ev)+'</td><td>'+fmt(d.nm)+'</td></tr>'}).join('')||'<tr><td colspan="8">まだ記録がありません</td></tr>';
+  $('days').innerHTML=keys.slice(0,45).map(k=>{const d=days[k];return '<tr><td>'+k.slice(5).replace('-','/')+'</td><td>'+Math.round((d.sec||0)/60)+'分<span class="bar" style="width:'+Math.round(60*(d.sec||0)/mx)+'px"></span></td><td>'+fmt(d.players)+'</td><td>'+fmt(d.games)+'</td><td>'+fmt(d.visitors)+'</td><td>'+fmt(d.nv)+(d.n0!=null?'<span class="sub">（全'+fmt(d.n0)+'）</span>':'')+'</td><td>'+fmt(d.signups)+((d.ev||d.nm)?'<span class="sub">（確認'+fmt(d.ev||0)+'・名前'+fmt(d.nm||0)+'）</span>':'')+'</td></tr>'}).join('')||'<tr><td colspan="7">まだ記録がありません</td></tr>';
   const first=keys[keys.length-1];
-  $('note').innerHTML='集計の開始：'+(first||'—')+'。それより前のプレイ時間・対局数・人数は記録されていません。<br>人数は端末（ブラウザ）ごとに数えるので、同じ人がスマホとパソコンで遊ぶと2人になります。オンライン対戦は1局を1回だけ数えます。<br>「メール確認」は2026年11月1日以降に作られたアカウントが確認メールのリンクを押してログインした数、「名前」は初めて名前を付けた数です（どちらも1アカウント1回）。<br>最終更新：'+new Date(j.now).toLocaleString('ja-JP');
+  $('note').innerHTML='集計の開始：'+(first||'—')+'。それより前のプレイ時間・対局数・人数は記録されていません。<br>人数は端末（ブラウザ）ごとに数えるので、同じ人がスマホとパソコンで遊ぶと2人になります。オンライン対戦は1局を1回だけ数えます。<br>「初めて来た人」はその日に初めて開いて4秒以上いた端末の数です（2026年10月29日から）。かっこ内の「全」はすぐ帰った人も含めた数です（2026年11月1日から）。<br>「新規登録」はアカウントを作った数で、かっこ内はそのうちメール確認を済ませた数・初めて名前を付けた数です。<br>「メール確認」は2026年11月1日以降に作られたアカウントが確認メールのリンクを押してログインした数、「名前」は初めて名前を付けた数です（どちらも1アカウント1回）。<br>最終更新：'+new Date(j.now).toLocaleString('ja-JP');
   // 登録アカウント：ログインを確認できた数（集計開始以後）と、名前を付けたアカウント（過去分も含む）
   let named=null;try{const fr=await fetch(FS,{method:'POST',body:JSON.stringify({structuredAggregationQuery:{structuredQuery:{from:[{collectionId:'names'}]},aggregations:[{alias:'n',count:{}}]}})});
     if(fr.ok){const a=await fr.json();named=+(a[0]&&a[0].result&&a[0].result.aggregateFields.n.integerValue)}}catch(e){}
   $('kAcc').innerHTML=fmt(Math.max(t.accounts||0,named||0))+'<small>件</small>';
   $('kAccS').textContent='ログイン確認 '+fmt(t.accounts)+'件'+(named!=null?'・名前付き '+fmt(named)+'件':'')+'・新規 '+fmt(t.signups)+'件'+(t.ev!=null?'・メール確認 '+fmt(t.ev)+'件':'')+(t.nm!=null?'・初めて名前 '+fmt(t.nm)+'件':'');
-  // ランキングに載った人（記録前の分も含む）
-  let kv={};try{kv=await (await fetch(RELAY+'bocch-v1-bots/kv',{cache:'no-store'})).json();$('kRk').innerHTML=fmt(Object.entries(kv).filter(([n,v])=>n.startsWith('p:')&&v!==100).length)+'<small>人</small>'}catch(e){$('kRk').textContent='—'}
-  // 名前を付けた登録アカウントの一覧（Firebase の names。名前を付けていないアカウントは載らない）
-  try{const rows=[];let tok='';do{const j=await (await fetch(FSB+'/names?pageSize=300&key='+FKEY+(tok?'&pageToken='+tok:''))).json();
-      for(const d of j.documents||[]){const f=d.fields||{};rows.push({n:(f.name&&f.name.stringValue)||'',t:+((f.t&&(f.t.integerValue||f.t.doubleValue))||0)})}tok=j.nextPageToken||''}while(tok);
-    rows.sort((a,b)=>b.t-a.t);const tb=$('names');tb.innerHTML='';
-    if(!rows.length)tb.innerHTML='<tr><td colspan="3">まだいません</td></tr>';
-    for(const r of rows){const tr=document.createElement('tr');const rt=kv['p:'+r.n];
-      [r.n,r.t?new Date(r.t).toLocaleDateString('ja-JP'):'—',rt&&rt!==100?String(rt):'—'].forEach(v=>{const td=document.createElement('td');td.textContent=v;tr.append(td)});tb.append(tr)}
-  }catch(e){$('names').innerHTML='<tr><td colspan="3">読み込めませんでした</td></tr>'}
 }
 async function unlock(){$('err').textContent='確かめています…';$('go').disabled=true;
   try{await load();try{localStorage.setItem('bocch-stats-pw',PW)}catch(e){}$('lock').hidden=true;$('main').hidden=false;$('err').textContent=''}

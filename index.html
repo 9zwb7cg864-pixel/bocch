@@ -3158,6 +3158,12 @@ function statFirst(k,f){try{if(localStorage.getItem(k))return;localStorage.setIt
  try{const e=localStorage.getItem('bocch-ent');if(e===null&&!localStorage.getItem('bocch-fd')){localStorage.setItem('bocch-ent',jd());on=true}else on=e===jd()}catch(e){}
  if(on){const once=(k,o,b)=>{try{if(localStorage.getItem('bocch-e-'+k))return;localStorage.setItem('bocch-e-'+k,'1');statSend(o,b)}catch(e){}};
   once('n0',{n0:1});
+  // 内訳：来た場所（リンク元・?ref=）・言語・端末（スマホかパソコンか）。国はサーバー側で付ける
+  {const q=new URLSearchParams(location.search),rf=(q.get('ref')||q.get('utm_source')||'').toLowerCase();let h='';try{h=new URL(document.referrer).hostname.toLowerCase()}catch(e){}
+   const src=rf?(/yt|youtube/.test(rf)?'yt':/^x$|twitter/.test(rf)?'x':/note/.test(rf)?'nt':'o'):(!h||/bocchgame\.com$/.test(h))?'dr':/(youtube\.com|youtu\.be)$/.test(h)?'yt':/(^|\.)(t\.co|x\.com|twitter\.com)$/.test(h)?'x':/note\.com$/.test(h)?'nt':/(^|\.)google\./.test(h)?'gs':/(bing|yahoo|duckduckgo|naver)\./.test(h)?'sr':/reddit\.com$/.test(h)?'rd':/ycombinator\.com$/.test(h)?'hn':/(discord|instagram|tiktok|facebook|threads)\./.test(h)?'sn':'o';
+   const lg=(((navigator.language||'').slice(0,2).toLowerCase()).match(/^[a-z]{2}$/)||['xx'])[0];
+   const dv=(/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Mac/.test(navigator.platform)))?'m':'d';
+   once('x',{src,lg,dv})}
   const lt=()=>{const ms=performance.now();once('lt',{[ms<2000?'l1':ms<5000?'l2':ms<10000?'l3':'l4']:1})};
   if(document.readyState==='complete')lt();else addEventListener('load',lt,{once:true});
   const tap=(id,f)=>{const el=$(id);if(el)el.addEventListener('click',()=>once(f,{[f]:1}))};
