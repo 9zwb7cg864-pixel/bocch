@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=29"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=30"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -125,6 +125,13 @@ canvas.mvcv{position:absolute;left:-10%;top:-10%;width:120%;height:120%;will-cha
 .mvfly{position:absolute;left:0;top:0;z-index:5;will-change:transform;pointer-events:none;display:flex;align-items:center;justify-content:center}
 .mvfly .stone{width:100%;height:100%}.mvfly.drag .stone{box-shadow:0 14px 18px rgba(0,0,0,.45),0 0 0 2px rgba(240,216,150,.9)}
 .cell.mine{touch-action:none}
+.cell.coachCan .stone{animation:coachPulse 1.3s ease-in-out infinite}
+@keyframes coachPulse{0%,100%{box-shadow:0 0 0 0 rgba(240,216,150,.0),0 2px 4px rgba(0,0,0,.4)}50%{box-shadow:0 0 0 5px rgba(240,216,150,.75),0 0 18px 6px rgba(240,216,150,.45)}}
+@media (prefers-reduced-motion:reduce){.cell.coachCan .stone{animation:none;box-shadow:0 0 0 4px rgba(240,216,150,.75)}}
+.coach{position:relative;margin:8px auto 10px;max-width:440px;padding:10px 38px 10px 14px;border:1px solid var(--gold-soft);border-radius:8px;background:rgba(216,189,126,.08);text-align:left}
+.coach b{display:block;color:var(--gold);font-size:15px;line-height:1.5;letter-spacing:.03em}
+.coach span{display:block;margin-top:3px;color:var(--sub);font-size:13px;line-height:1.6}
+.coach button{position:absolute;top:4px;right:4px;min-height:32px;min-width:32px;padding:0;border:0;background:transparent;color:var(--sub);font-size:18px;line-height:1}
 @media (prefers-reduced-motion:reduce){.reachG .stone::after,.reachR .stone::after,.mvb{animation:none}}
 .endrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.endrow[hidden]{display:none}
 .endb{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 12px;border:1px solid rgba(216,189,126,.55);border-radius:0;background:rgba(216,189,126,.05);color:var(--fg);font-family:var(--f-disp);font-size:15px;letter-spacing:.1em}
@@ -1214,6 +1221,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
 <section class="scr" data-scr="game" hidden>
   <div id="duoBar" hidden><button id="duoBack" class="i-only i-l" aria-label="ホームへ"></button><button id="duoUndo" class="i-only i-undo" aria-label="1手戻す"></button><button id="duoReset" class="i-only i-reset" aria-label="最初から"></button></div>
   <div class="topbar"><button class="back i-l" id="gameBack">ホーム</button><span class="conn" id="conn"><i></i><span id="connTxt"></span></span><button class="back" data-go="rules">ルール</button></div>
+  <div class="coach" id="coach" hidden aria-live="polite"><b id="coachT"></b><span id="coachS"></span><button type="button" id="coachX" aria-label="説明を閉じる">×</button></div>
   <div class="players top" id="plTop" hidden></div>
   <div class="boardwrap"><div class="board" id="board"><div class="lab lab-top" id="labTop" aria-hidden="true"></div><div class="lab lab-left" id="labLeft" aria-hidden="true"></div><div class="lab lab-bot" id="labBot" aria-hidden="true"></div><div class="lab lab-right" id="labRight" aria-hidden="true"></div><div class="grid" id="grid" role="grid" aria-label="盤"></div></div></div>
   <div class="players bot" id="plBot" hidden></div>
@@ -4502,6 +4510,40 @@ function cgBust(ch){const p=cgParse(ch);if(!p)return null;const im=document.crea
 const CG_OPP={};
 {const _pl=plSpan;plSpan=function(color,name,rate,you,off,bd,ch){const sp=_pl(color,name,rate,you,off,bd);const im=you&&cgOn()?cgBust(ch):null;if(im)sp.prepend(im);return sp}}
 try{cgTick()}catch(e){}render();
+</script>
+<script>
+/* はじめての1局（2026-11）：初めて開いた端末は、ホームを飛ばして「CPU やさしい」との対局をすぐ始め、説明を出しながら指してもらう。
+   対象：この端末で一度も対局・4問・ルールの「読んだ」をしていない／部屋・観戦・棋譜・今日の1問などのリンクで来ていない／検索エンジンなどの巡回ではない */
+const COACH={on:false,mv:0,off:false};
+function coachEligible(){try{
+  if(navigator.webdriver||/bot|crawl|spider|slurp|google|mediapartners|lighthouse|headless/i.test(navigator.userAgent))return false;
+  if(location.hash&&location.hash.length>1)return false;
+  for(const k of new URLSearchParams(location.search).keys())if(!/^(lang|utm_[a-z]+|fbclid|gclid|ref|s|t|nostat)$/.test(k))return false;
+  for(const k of ['bocch-fs','bocch-first-done','bocch-rules-seen','bocch-fd','bocch-coach'])if(localStorage.getItem(k))return false;
+  return true}catch(e){return false}}
+function coachStart(){try{localStorage.setItem('bocch-coach','1')}catch(e){}
+  COACH.on=true;COACH.mv=0;show('game');S=initState(1);S.hc=1;S.coach=true;KICK='';render()}
+function coachSet(t,sub){const c=$('coach');if(!c)return;if(!t){c.hidden=true;return}c.hidden=false;$('coachT').textContent=t;$('coachS').textContent=sub||'';$('coachS').hidden=!sub}
+function coachUpdate(){
+  const live=COACH.on&&!COACH.off&&S&&S.coach&&CUR==='game';
+  document.querySelectorAll('.cell.coachCan').forEach(e=>e.classList.remove('coachCan'));
+  if(!live){coachSet('');return}
+  if(S.over){coachSet('おつかれさまでした！','「もう一局」で続けて指せます。ホームでは、CPUの強さを変えたり、人と対戦したりできます');return}
+  const mine=S.turn===hcOf();
+  if(!mine){coachSet('相手（白）の番です','白が動くと、あなたの石の数字も変わります');return}
+  if(S.sel<0){for(let i=0;i<N*N;i++)if(S.b[i]===S.turn&&movesFrom(S.b,i).length){const e=$('c'+i);if(e)e.classList.add('coachCan')}}
+  if(COACH.mv===0){
+    if(S.sel<0)coachSet('あなたは黒（下の石）です。光っている石をタップしてください','石の数字は、まわり8マスにいる石の数。その数だけ進みます');
+    else coachSet('点のマスに動かせます','縦・横・斜めにまっすぐ、数字とぴったり同じ距離です。途中の石は飛び越えられます');return}
+  let zero=false;for(let i=0;i<N*N;i++)if(S.b[i]&&!nbCount(S.b,i))zero=true;
+  if(COACH.mv===1){coachSet(zero?'数字が0の石は「ぼっち」。動けません':'石が動くと、まわりの数字が変わります',zero?'まわりに誰もいない石は動けません。隣に石を寄せると、また動けるようになります':'まわりに誰もいなくなった石は0になり、動けなくなります');return}
+  if(COACH.mv===2){coachSet('いちばん上の段に、黒の石を2つ着けたら勝ちです','白は、いちばん下の段に2つ着けたら勝ち。相手の邪魔もしながら進みましょう');return}
+  if(COACH.mv===3){coachSet('あとは自由に指してみてください','困ったら、上の「ルール」でいつでも見直せます');return}
+  coachSet('')}
+{const _rC=render;render=function(){_rC();try{coachUpdate()}catch(e){}}}
+{const _dmC=doMove;doMove=function(m){if(COACH.on&&S&&S.coach&&!S.over&&S.turn===hcOf())COACH.mv++;return _dmC(m)}}
+$('coachX').addEventListener('click',()=>{COACH.off=true;coachUpdate()});
+if(coachEligible()){const go=()=>{try{if(CUR==='home'&&coachEligible())coachStart()}catch(e){}};if(document.readyState==='complete')setTimeout(go,0);else addEventListener('load',go,{once:true})}
 </script>
 </body>
 </html>

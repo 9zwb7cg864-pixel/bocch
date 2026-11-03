@@ -64,7 +64,7 @@ th:first-child,td:first-child{text-align:left}
     <div class="wrapT"><table><thead><tr><th>段階</th><th>人数</th><th>開いた人から</th></tr></thead><tbody id="entry"><tr><td colspan="3">読み込み中…</td></tr></tbody></table></div>
     <div class="wrapT"><table><thead><tr><th>表示までの時間</th><th>人数</th><th>割合</th></tr></thead><tbody id="entryL"></tbody></table></div>
     <div class="wrapT"><table><thead><tr><th>1局も始めずに離れるまで</th><th>人数</th><th>割合</th></tr></thead><tbody id="entryQ"></tbody></table></div>
-    <p class="note">数え始め：2026年11月1日。初めて来た端末の初日だけを数えます（1台1回）。「離れる」はタブを閉じた・別のアプリに切り替えたときで、あとで戻ってきた人も入ります。</p>
+    <p class="note">数え始め：2026年11月2日（11月1日は途中から記録が始まったので入れていません）。初めて来た端末の初日だけを数えます（1台1回）。「離れる」はタブを閉じた・別のアプリに切り替えたときで、あとで戻ってきた人も入ります。2026年11月3日から、初めて来た端末はホームを飛ばして「CPU やさしい」との1局目が自動で始まります（説明つき）。そのため、それ以降は「Play」を押す人が減ります。</p>
     <h2>モード別の対局数</h2>
     <div class="modes" id="modes"></div>
     <h2>登録アカウント（名前を付けた人）</h2>
@@ -95,7 +95,7 @@ async function load(){
   const ms=Object.entries(j.modes||{}).sort((a,b)=>b[1]-a[1]);$('modes').innerHTML=ms.length?ms.map(([k,v])=>'<span>'+(MODE[k]||k)+'<b>'+fmt(v)+'</b></span>').join(''):'<span>まだありません</span>';
   {const F=[['nv','初めて開いた'],['fs','1局目を始めた'],['fg','1局目を最後まで指した'],['r1','次の日にまた来た'],['r7','7日以内にまた来た']];const sum={};for(const k of keys.slice(0,7))for(const [f] of F)sum[f]=(sum[f]||0)+(days[k][f]||0);
    const pc=(a,b)=>b?Math.round(100*a/b)+'%':'—';$('funnel').innerHTML=F.map(([f,lab],i)=>'<tr><td>'+lab+'</td><td>'+fmt(sum[f])+'</td><td>'+(i===0?'—':pc(sum[f],sum[F[i===4?0:i-1][0]]))+'</td><td>'+(i===0?'—':pc(sum[f],sum.nv))+'</td></tr>').join('')}
-  {const ks=keys.slice(0,7).filter(k=>days[k].n0),sm=f=>ks.reduce((a,k)=>a+(days[k][f]||0),0),pc=(a,b)=>b?Math.round(100*a/b)+'%':'—',n0=sm('n0');
+  {const ks=keys.slice(0,7).filter(k=>k>='2026-11-02'&&days[k].n0),sm=f=>ks.reduce((a,k)=>a+(days[k][f]||0),0),pc=(a,b)=>b?Math.round(100*a/b)+'%':'—',n0=sm('n0');
    const row=(lab,v,b)=>'<tr><td>'+lab+'</td><td>'+fmt(v)+'</td><td>'+pc(v,b)+'</td></tr>';
    $('entry').innerHTML=!ks.length?'<tr><td colspan="3">まだ記録がありません</td></tr>':[['開いた（すぐ帰った人も含む）','n0'],['4秒以上いた','nv'],['ルールの「読んだ」を押した','ho'],['「4問で覚える」を押した','hl'],['「Play」を押した','pg'],['1局目を始めた','fs']].map(([l,f])=>row(l,sm(f),n0)).join('');
    const grp=(id,F)=>{const tt=F.reduce((a,[,f])=>a+sm(f),0);$(id).innerHTML=F.map(([l,f])=>row(l,sm(f),tt)).join('')};
