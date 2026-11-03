@@ -810,6 +810,9 @@ html:is([lang=en],[lang=es],[lang=de]) .pm .hm-fimg img{height:46px}
 .mvpair i{position:absolute;left:50%;top:35px;width:0;height:1px;background:linear-gradient(90deg,transparent,#f6e2a8,transparent);transform:translateX(-50%);animation:mvLine .8s ease-out .85s forwards}
 @keyframes mvLine{to{width:260px}}
 .mvend .mvwho,.mvend .mvwhy,.mvend .mvrow{position:relative;z-index:1}
+/* 昇級・昇段：文字の段級名は行の高さを戻す（終局画面の画像用 line-height:0 で、石や「昇級しました」と重なっていた）。後ろの勝ち負け画面が透けないよう背景を濃く */
+.mvend.rkup{background:rgba(16,13,10,.97)!important}
+.mvend.rkup .mvk{line-height:1.1;margin:2px 0 6px;text-shadow:0 0 40px rgba(240,216,150,.45),0 6px 0 rgba(0,0,0,.35)}
 .mvbtn{border-radius:10px;border:0;background:linear-gradient(160deg,#2a2118,#18130e);box-shadow:inset 0 0 0 1px rgba(216,189,126,.4)}
 .mvbtn.solid{background:linear-gradient(180deg,#f6e2a8,#d2ad5f 55%,#a87e35);box-shadow:0 6px 16px rgba(0,0,0,.45)}
 .pf-hero{margin:0 0 12px}.pf-hero .hm-mn b{font-size:18px}.kf-chip-prof{border-radius:10px;border:0;background:linear-gradient(160deg,#211a14,#15110d);box-shadow:inset 0 0 0 1px rgba(216,189,126,.3)}
