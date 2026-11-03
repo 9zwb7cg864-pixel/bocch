@@ -429,14 +429,15 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .deep-note{font-size:12px;color:var(--sub);margin:6px 0 0;line-height:1.6}
 .lang-row{margin-top:10px}.lang-row select{font:inherit;font-size:12px;color:var(--sub);background:transparent;border:1px solid var(--line);border-radius:2px;padding:4px 8px;min-height:32px;letter-spacing:.04em}
 .foot-links{margin-top:6px;display:flex;flex-wrap:wrap;justify-content:center;gap:4px 16px}.foot-links a{color:inherit;text-decoration:underline;text-underline-offset:3px}
-.hm-seek{display:flex;align-items:center;gap:10px;width:100%;margin:2px 0 12px;padding:10px 12px;border-radius:12px;border:1px solid rgba(201,169,110,.55);background:rgba(201,169,110,.09);color:var(--fg);font:inherit;text-align:left;cursor:pointer}
+.hm-seek{position:fixed;z-index:60;top:max(10px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:min(520px,calc(100% - 24px));display:flex;align-items:center;gap:10px;margin:0;padding:10px 12px;border-radius:12px;border:1px solid rgba(201,169,110,.6);background:#1a1710;box-shadow:0 8px 24px rgba(0,0,0,.45);color:var(--fg);font:inherit;text-align:left;cursor:pointer;animation:skIn .35s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes skIn{from{transform:translate(-50%,-140%);opacity:0}to{transform:translateX(-50%);opacity:1}}
 .hm-seek .hm-sd{flex:none;width:8px;height:8px;border-radius:50%;background:#6fc39a;box-shadow:0 0 0 3px rgba(111,195,154,.18);animation:skP 1.6s ease-in-out infinite}
 @keyframes skP{50%{box-shadow:0 0 0 6px rgba(111,195,154,.05)}}
 .hm-seek .stone{flex:none;width:26px;height:26px;position:relative}
 .hm-seek .hm-st{flex:1;min-width:0;display:flex;flex-direction:column;font-size:12.5px;color:var(--sub);line-height:1.35}
 .hm-seek .hm-sn{display:flex;gap:6px;align-items:baseline;min-width:0}.hm-seek .hm-sn b{color:var(--fg);font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hm-seek .hm-sg{flex:none;padding:6px 11px;border-radius:8px;background:var(--gold,#c9a96e);color:#17120a;font-weight:700;font-size:13px}
-@media (prefers-reduced-motion:reduce){.hm-seek .hm-sd{animation:none}}
+@media (prefers-reduced-motion:reduce){.hm-seek,.hm-seek .hm-sd{animation:none}}
 .online{display:flex;align-items:center;justify-content:center;gap:7px;margin:-4px 0 12px;font-size:13px;color:var(--sub);letter-spacing:.06em}
 .online i{width:8px;height:8px;border-radius:50%;background:#6fc39a;box-shadow:0 0 0 3px rgba(111,195,154,.18)}
 .online b{color:var(--fg);font-weight:700;font-variant-numeric:tabular-nums}
@@ -2248,7 +2249,7 @@ cellsBuild();S=initState(2);render();
 <script>
 /* 画面の切り替え（ブラウザの戻るにも対応） */
 let CUR='home';
-function paint(n){try{if(MATCH.on&&n!=='match'&&!(n==='game'&&S.mode==='net'))cancelMatch()}catch(e){}document.querySelectorAll('.scr').forEach(e=>{e.hidden=e.dataset.scr!==n});CUR=n;window.scrollTo(0,0);if(n==='home'&&window.bocchSeekPoll)setTimeout(window.bocchSeekPoll,300)}
+function paint(n){try{if(MATCH.on&&n!=='match'&&!(n==='game'&&S.mode==='net'))cancelMatch()}catch(e){}document.querySelectorAll('.scr').forEach(e=>{e.hidden=e.dataset.scr!==n});CUR=n;window.scrollTo(0,0);if(n==='home'&&window.bocchSeekPoll)setTimeout(window.bocchSeekPoll,300);else{const k=document.getElementById('seekNow');if(k)k.hidden=true}}
 function show(n,replace){paint(n);try{(replace?history.replaceState:history.pushState).call(history,{scr:n},'')}catch(e){}}
 addEventListener('popstate',e=>{const n=(e.state&&e.state.scr)||'home';if(CUR==='match'&&n!=='match'&&n!=='game'&&typeof cancelMatch==='function'&&MATCH.on)cancelMatch();if((CUR==='game'||CUR==='invite')&&S.mode==='net'&&n!=='game'&&n!=='invite')leave();paint(n);render()});
 document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
@@ -4351,7 +4352,7 @@ const ONLINE_MIN=20; // この人数に届かないときは表示しない（�
 </script>
 <script>
 /* ランダム対戦であふれて待っている人を、ホームに「〇〇が対戦相手を探しています」と出す。押すとその人と対局が始まる（startMatch が待っている人を取る） */
-(function(){const el=$('seekNow');if(!el)return;
+(function(){const el=$('seekNow');if(!el)return;document.body.appendChild(el);
   async function poll(){if(document.hidden||CUR!=='home'||MATCH.on){el.hidden=true;return}
     try{const t=await(await fetch(LOBBY+'/json?poll=1&since=70s',{cache:'no-store'})).text();const now=Date.now()/1000,sk=new Map(),dead=new Set();
       t.split('\n').forEach(l=>{if(!l)return;let d,m;try{d=JSON.parse(l);m=JSON.parse(d.message)}catch(e){return}if(!m||typeof m.room!=='string')return;
