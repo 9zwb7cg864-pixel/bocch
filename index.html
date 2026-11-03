@@ -1159,7 +1159,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
     <p class="prof-msg" id="nameMsg"></p><p class="prof-note" id="nameNote"></p>
     <div class="prof-rate"><span>段級</span><b id="profRate"></b><span id="profRank" style="margin-left:10px;color:var(--gold)"></span></div>
     <div class="rank-row" id="rankRow" aria-label="段位ごとの石の縁"></div>
-    <p class="rank-note"><span id="rankNext" style="color:var(--gold)"></span><br>30級から始まり、勝つと達成率が上がって、100%で昇級・昇段します。強い相手に勝つほど大きく上がり、上の段級ほど上がりにくくなります。0%になってからさらに5連敗すると、1つ下がります。段級が上がると石の縁が変わります。オンライン対戦では、相手の石も相手の段級の縁で見えます。</p>
+    <p class="rank-note"><span id="rankNext" style="color:var(--gold)"></span><br>30級から始まり、勝つと達成率が上がって、100%で昇級・昇段します。実力より低い段級の間は、勝つたびに1つ上がります。そのあとは、強い相手に勝つほど大きく上がります。0%になってからさらに5連敗すると、1つ下がります。段級が上がると石の縁が変わります。オンライン対戦では、相手の石も相手の段級の縁で見えます。</p>
     <p class="prof-rec" id="profRec"></p>
     <div class="bd-head"><label class="prof-l">バッジ</label><small id="bdCount"></small></div><p class="prof-note">持っているバッジを押すと、名前の横に出ます。もう一度押すと外れます。</p><div id="bdList"></div>
     <p class="note">段級はオンライン対戦とCPU戦（1手戻しを使わなかった対局）で上下します。名前と段級はオンライン対戦では相手と観戦者に表示されます。</p>
@@ -2393,7 +2393,7 @@ function shadowTick(){
     const ek='e'+NET.game;if(b.named&&SHADOW.ekey!==ek&&S.log&&S.log.length>=2){SHADOW.ekey=ek;
       const res=S.over.win===0?.5:S.over.win===my?1:0,opp=Math.round(PROF.rating),df=Math.max(-400,Math.min(400,opp-b.rate)),exp=1/(1+Math.pow(10,df/400));
       b.rate=Math.max(100,Math.min(4000,Math.round(b.rate+20*(res-exp))));botSaveRate(b.name,b.rate);
-      const nm=b.name;botRates().then(kv=>{const D=botDan(kv,nm);danStep(D,res,exp);botSaveRate('d:'+nm,rkEnc(D.lv,D.pct));botSaveRate('dz:'+nm,100+D.z);if(SHADOW.bot===b)b.dan=D}).catch(()=>{})}
+      const nm=b.name;botRates().then(kv=>{const D=botDan(kv,nm);danStep(D,res,PROF&&PROF.dan?(danR(PROF.dan.lv,PROF.dan.pct)-danR(D.lv,D.pct))/40:0,b.rate);botSaveRate('d:'+nm,rkEnc(D.lv,D.pct));botSaveRate('dz:'+nm,100+D.z);if(SHADOW.bot===b)b.dan=D}).catch(()=>{})}
     const k='r'+NET.game;if(SHADOW.key===k)return;
     if(NET.want&&NET.want[NET.me]===NET.game+1&&!(NET.want[b.id]===NET.game+1)){SHADOW.key=k;SHADOW.timer=setTimeout(()=>{if(SHADOW.bot===b&&S.over&&NET.want&&NET.want[NET.me]===NET.game+1)shadowPost({t:'rematch',g:NET.game+1})},2000+Math.random()*4000)}
     return}
@@ -3052,7 +3052,7 @@ function rateGame(){
   const res=S.over.win===0?.5:S.over.win===my?1:0,K=PROF.games<30?40:PROF.peak?10:20;
   const df=Math.max(-400,Math.min(400,opp-PROF.rating)),exp=1/(1+Math.pow(10,df/400)),before=Math.round(PROF.rating);
   PROF.rating=Math.max(100,PROF.rating+K*(res-exp));PROF.games++;if(res===1)PROF.w++;else if(res===0)PROF.l++;else PROF.d++;
-  const D=PROF.dan,b0={lv:D.lv,pct:D.pct};danStep(D,res,exp);
+  const D=PROF.dan,b0={lv:D.lv,pct:D.pct};{const o=S.mode==='net'?NM[oppIdOf()]:null,oR=o&&o.lv!=null?danR(o.lv,50):opp;danStep(D,res,(oR-danR(D.lv,D.pct))/40,PROF.rating)}
   PROF.rated.push(id);PROF.rated=PROF.rated.slice(-200);saveProf();
   const fp=x=>Math.floor(x);S.danUp=null;
   if(D.lv>b0.lv){S.rateMsg=lvName(D.lv)+(D.lv>=30?'に昇段！':'に昇級！');S.danUp=D.lv;setTimeout(()=>{try{danFx(D.lv)}catch(e){}},1700)}
@@ -3061,13 +3061,18 @@ function rateGame(){
   else{const dd=fp(D.pct)-fp(b0.pct);S.rateMsg=lvName(D.lv)+' '+fp(b0.pct)+'% → '+lvName(D.lv)+' '+fp(D.pct)+'%（'+(dd>=0?'+':'')+dd+'%）'}
   try{rankPost();bdCheck()}catch(e){}
   const g=loadGames(),ix=g.findIndex(x=>x.id===id);if(ix>=0){g[ix].dn=lvName(D.lv);g[ix].opp=oppName;delete g[ix].rd;storeGames(g)}}
-/* 段級の上下（将棋ウォーズに近い形）：30〜21級は勝つたびに昇級。それ以外は達成率0〜100%で、100%で昇級・昇段（20%から再開）。
-   同じ強さの相手に1勝で +25%（20〜11級）/+15%（10〜1級）/+10%（初段〜三段）/+6%（四段〜六段）/+4%（七段・八段）。強い相手ほど大きく、弱い相手に負けるほど大きく下がる。
-   0%になってからさらに5連敗で1つ下がる（50%から）。30〜21級は下がらない */
-function danStep(D,res,exp){const lv=D.lv;
-  if(lv<10){if(res===1){D.lv=lv+1;D.pct=D.lv>=10?20:0;D.z=0}return}
-  const base=lv<20?25:lv<30?15:lv<33?10:lv<36?6:4,was0=D.pct<=0;
-  const dl=res===1?base*2*(1-exp):res===0?-base*2*exp:base*2*(.5-exp);
+/* 段級の上下（将棋ウォーズと同じ上がり方）
+   ・実力（隠しレート）が段級より上の間は、勝つたびに1つ上がる（相手が自分より2つ以上下のときは除く。弱いCPUに勝つだけで上がりすぎないように）。30〜21級はいつでも1勝で1つ上がる。
+   ・それ以降は達成率。同じくらいの相手に勝つと+3.5%（負けると-3.5%）。勝ちと負けの幅の合計はいつも7%。
+     相手が1つ上なら勝ち+5%・負け-2%、2つ上なら+6%・-1%。1つ下なら+2%・-5%、2つ下なら+1%・-6%。
+   ・達成率20%未満では増減が4分の1。100%で上がり、20%から再開。0%からさらに5連敗で1つ下がる（50%から）。30〜21級は下がらない。
+   ・強さの比べ方：段級をレートに見立てる（30級=600、1つごとに+40。初段=1800、九段=2120）。CPUは やさしい900・ふつう1200・つよい1500・最強2100 */
+function danR(lv,pct){return 600+40*(lv+Math.max(0,Math.min(100,pct||0))/100)}
+function danWin(d){d=Math.max(-2,Math.min(2,d));return d>1?4+d:d<-1?3+d:3.5+1.5*d}
+function danStep(D,res,d,hid){const lv=D.lv;
+  if(res===1&&(lv<10||(hid!=null&&hid>=danR(lv+1,0)&&d>-2))){if(lv<LV_MAX){D.lv=lv+1;D.pct=D.lv>=10?20:0;D.z=0}return}
+  if(lv<10)return;
+  const w=danWin(d),was0=D.pct<=0;let dl=res===1?w:res===0?-(7-w):w-3.5;if(D.pct<20)dl/=4;
   if(res===1)D.z=0;D.pct+=dl;
   if(D.pct>=100){if(lv<LV_MAX){D.lv=lv+1;D.pct=20;D.z=0}else D.pct=100}
   else if(D.pct<=0){D.pct=0;if(res===0&&was0){D.z++;if(D.z>=5){D.lv=lv-1;D.pct=50;D.z=0}}}
