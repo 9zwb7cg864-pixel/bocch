@@ -1906,10 +1906,13 @@ function initState(mode){const b=startBoard();return {b,turn:1,mode,hc:(typeof m
 let SIDE='b';try{const v=localStorage.getItem('bocch-side');if(v==='b'||v==='w'||v==='r')SIDE=v}catch(e){}
 function pickSide(){return SIDE==='w'?2:SIDE==='r'?(Math.random()<.5?1:2):1}
 const hcOf=()=>S&&S.hc?S.hc:1; // 人間の色（CPU戦）
+/* 重い計算（CPUの思考）は、石が着地して数字が画面に描かれてから始める。思考中は画面が止まるので、先に始めると数字の更新が遅れて見える */
+function afterPaint(fn){const go=()=>{if(!document.hidden&&(MV.run||(MV.drag&&MV.drag.on))){setTimeout(go,40);return}
+  if(document.hidden)setTimeout(fn,0);else requestAnimationFrame(()=>setTimeout(fn,0))};go()}
 let KICK='',KICK_AT=0;function kick(){if(S&&S.study){studyKick();return}if(!S||!S.mode||S.mode==='net'||S.over||S.turn===hcOf())return;const k=S.mode+':'+S.ply+':'+key(S.b,S.turn);if(KICK===k)return;KICK=k;KICK_AT=Date.now();
   // 戦法などの演出が出ている間は、CPUが考え始めるのを待つ（考えている間は画面が止まり、演出が白の手のあとにずれるため）
   {const k0=KICK,t0=Date.now();const go=()=>{if(KICK!==k0)return;if(typeof JOS!=='undefined'&&JOS.busy&&Date.now()-t0<6000){setTimeout(go,150);return}
-    if(S.mode&&S.mode!=='net'&&!S.over&&S.turn!==hcOf()&&KICK===S.mode+':'+S.ply+':'+key(S.b,S.turn))cpuPlay()};setTimeout(go,380)}}
+    if(S.mode&&S.mode!=='net'&&!S.over&&S.turn!==hcOf()&&KICK===S.mode+':'+S.ply+':'+key(S.b,S.turn))afterPaint(()=>{if(S.mode&&S.mode!=='net'&&!S.over&&S.turn!==hcOf()&&KICK===S.mode+':'+S.ply+':'+key(S.b,S.turn))cpuPlay()})};setTimeout(go,380)}}
 function nbCount(b,i){const r=i/N|0,c=i%N;let n=0;for(const[x,y]of DIRS)if(ok(r+x,c+y)&&b[(r+x)*N+c+y])n++;return Math.min(4,n)}
 function movesFrom(b,i){const d=nbCount(b,i),r=i/N|0,c=i%N,out=[];if(!d)return out;
   for(const[x,y]of DIRS){const rr=r+x*d,cc=c+y*d;if(ok(rr,cc)&&!b[rr*N+cc])out.push([i,rr*N+cc])}return out}
@@ -1943,6 +1946,9 @@ function cpuMove(b,p,level){
     if(Math.random()<0.3)return ms[Math.random()*ms.length|0];
     deadline=Infinity;const sc=ms.map(m=>[-negamax(apply(b,m),3-p,0,-Infinity,Infinity)+Math.random()*160,m]);sc.sort((a,c)=>c[0]-a[0]);return sc[0][1]}
   for(const m of ms)if(arrived(apply(b,m),p))return m;
+  /* つよい：最強と同じ評価（ニューラルネット）で1手先だけ読む。7割はその手、3割は「ふつう」の手を指す。
+     ふつうに約8割勝つ強さ（以前の「深く読む」やり方は評価が読みの深さに合っておらず、ふつうに負けていた） */
+  if(level===3){if(typeof BocchEngine!=='undefined'&&Math.random()>=0.3){try{const r=BocchEngine.think(b.slice(),p,300,{history:[],shuffle:(S.ply||0)<4,book:false,maxDepth:1});if(r&&r.move)return r.move}catch(e){}}level=2}
   const limit=level===2?250:1200,maxD=level===2?3:9;
   deadline=performance.now()+limit;let bestMove=ms[0];
   for(let d=1;d<=maxD;d++){aborted=false;let best=-Infinity,bm=null,alpha=-Infinity;
@@ -2411,8 +2417,10 @@ function shadowTick(){
   if(S.turn!==my)return;
   const k=NET.game+':'+S.ply;if(SHADOW.key===k)return;SHADOW.key=k;
   const g=NET.game,ply=S.ply;
-  const r=shadowPick(S.b,my,b.level,S.log);if(!r)return;
-  SHADOW.timer=setTimeout(()=>{if(SHADOW.bot!==b||S.over||NET.game!==g||S.ply!==ply||S.turn!==my)return;shadowPost({t:'move',g,ply,m:r.m})},shadowWait(r.info));
+  // 考えるのは、相手の石が着地して数字が画面に出たあと（その場で考えると、数字の表示が考え終わるまで止まる）
+  afterPaint(()=>{if(SHADOW.bot!==b||S.over||NET.game!==g||S.ply!==ply||S.turn!==my)return;const t0=performance.now();
+    const r=shadowPick(S.b,my,b.level,S.log);if(!r)return;
+    SHADOW.timer=setTimeout(()=>{if(SHADOW.bot!==b||S.over||NET.game!==g||S.ply!==ply||S.turn!==my)return;shadowPost({t:'move',g,ply,m:r.m})},Math.max(0,shadowWait(r.info)-(performance.now()-t0)))});
 }
 const _renderS=render;render=function(){_renderS();try{shadowTick()}catch(e){}};
 const _closeNetS=closeNet;closeNet=function(){shadowStop();return _closeNetS()};
@@ -3194,10 +3202,15 @@ async function statAcctOnce(f){try{for(let k=0;k<20&&!STAT.u;k++)await new Promi
 // 終局1回につき1つ。オンラインは同じ対局を2人とも送るので、黒の人（影の相手との対局は本人）だけが数える
 function statGameEnd(){statFirst('bocch-fg','fg');try{const net=S.mode==='net';const count=!net||colorOf(NET.me)===1||!!SHADOW.bot;
   const m=net?(SHADOW.bot?'shadow':'net'):S.mode===0?'local':'cpu'+S.mode;statFlush(count,m)}catch(e){}}
+/* 連勝：オンライン対戦（ランダム対戦で入ってくる名無しの石・名前付きのCPUも含む）だけ数える。CPUモードと最強AIとの対局は数えず、負けても途切れない */
+function stCounts(){return S.mode==='net'&&!NET.watch&&!NET.ai}
+// 終局の演出は記録より先に出ることがあるので、まだ数えていない今の勝ちを足した連勝数を返す
+function stNow(){try{const s=bdStats(),id=currentGameId(),me=S.mode==='net'?colorOf(NET.me):0;let k=s.streak|0;
+  if(id&&!s.done.includes(id)&&S.over&&stCounts()&&me&&S.over.win===me)k++;return k}catch(e){return 0}}
 function bdGameEnd(){if(!S||!S.over||S.study||!S.log||!S.log.length)return;const id=currentGameId();if(!id)return;const s=bdStats();if(s.done.includes(id))return;
   const me=S.mode==='net'?(NET.watch?0:colorOf(NET.me)):S.mode===0?0:hcOf();if(S.mode==='net'&&!me)return;
   bdCount(s,{mode:S.mode,me,win:S.over.win,log:S.log,noRate:S.noRate});
-  if(S.mode==='net'&&me){if(S.over.win===me){s.streak++;s.stMax=Math.max(s.stMax,s.streak)}else if(S.over.win)s.streak=0}
+  if(stCounts()&&me){if(S.over.win===me){s.streak++;s.stMax=Math.max(s.stMax,s.streak)}else if(S.over.win)s.streak=0}
   s.done.push(id);s.done=s.done.slice(-300);saveProf();bdCheck();statGameEnd()}
 function bdRender(){const box=$('bdList');if(!box)return;bdCheck(true);const own=new Set(bdOwned()),sel=bdSel();$('bdCount').textContent=own.size+' / '+BADGES.length;box.innerHTML='';let cat='',grid=null;
   for(const b of BADGES){if(b[0]!==cat){cat=b[0];const h=document.createElement('div');h.className='bd-cat';h.textContent=cat;box.append(h);grid=document.createElement('div');grid.className='bd-grid';box.append(grid)}
@@ -4272,7 +4285,7 @@ function fx2Lonely(a,t){fx2Anim(1500,(g,tm)=>{const {x,cs}=g,A=g.P(a),B=g.P(t),a
 /* 終局画面：連勝（自分が勝ったとき）と、段級の達成率のバー */
 {const _fe=fxEnd0;fxEnd0=function(win,why,me,b,cell){const r=_fe(win,why,me,b,cell);try{const e=$('mvEnd');if(!e||e.hidden)return r;const row=e.querySelector('.mvrow');if(!row)return r;
   const mine=me&&me===win;let h='';
-  if(mine){let k=0;try{k=bdStats().streak|0}catch(x){}if(k>=2)h+='<div class="mvstreak">'+k+'連勝</div>'}
+  if(mine&&stCounts()){const k=stNow();if(k>=2)h+='<div class="mvstreak">'+k+'連勝</div>'}
   const rated=(S.mode==='net'&&!NET.watch)||(typeof CPU_RATE!=='undefined'&&CPU_RATE[S.mode]&&!S.noRate);
   if(rated&&FX2.pct&&PROF.dan){const a0=FX2.pct,a1=PROF.dan,up=a1.lv>a0.lv,dn=a1.lv<a0.lv,from=Math.floor(a0.pct||0),to=up?100:dn?0:Math.floor(a1.pct||0),d=to-from;
     if(a1.lv>=10||a0.lv>=10)h+='<div class="mvrate"><div class="mvr-top"><span>達成率</span><b class="mvr-n">'+from+'%</b>'+(d?'<em class="'+(d>0?'up':'dn')+'">'+(d>0?'+':'')+d+'%</em>':'')+'</div><div class="mvr-bar"><u>'+'<s></s>'.repeat(9)+'</u><i style="width:'+from+'%" data-to="'+to+'"></i></div><div class="mvr-left">'+(up?(lvName(a1.lv)+'に'+(a1.lv>=30?'昇段':'昇級')):(a1.lv+1>=30?'昇段まで あと':'昇級まで あと')+(100-to)+'%')+'</div></div>'}
@@ -4397,7 +4410,7 @@ function seOnce(key){if(SE.done[key])return false;SE.done[key]=1;return true}
 // 終局：自分の勝ち・負け・引き分け（観戦や2人で1台のときは引き分けと同じ音）。2連勝以上は少しあとに連勝の音
 {const _fe=fxEnd;fxEnd=function(win,why,me){try{const k=!win?'draw':me?(me===win?'win':'lose'):'draw';if(k!=='lose')seP(k,250); // 負けの音（ちーん）は鳴らさない
 
-  if(me&&win===me)setTimeout(()=>{try{if(S&&S.danUp)return;if((bdStats().streak|0)>=2)seP('up')}catch(e){}},2300)}catch(e){}return _fe(win,why,me)}}
+  if(me&&win===me)setTimeout(()=>{try{if(S&&S.danUp)return;if(stCounts()&&stNow()>=2)seP('up')}catch(e){}},2300)}catch(e){}return _fe(win,why,me)}}
 // 昇級・昇段
 {const _df=danFx;danFx=function(lv){try{seP('up')}catch(e){}return _df(lv)}}
 // 縛りとぼっちの効果音は鳴らさない
