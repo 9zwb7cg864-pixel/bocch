@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=30"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=31"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -125,6 +125,10 @@ canvas.mvcv{position:absolute;left:-10%;top:-10%;width:120%;height:120%;will-cha
 .mvfly{position:absolute;left:0;top:0;z-index:5;will-change:transform;pointer-events:none;display:flex;align-items:center;justify-content:center}
 .mvfly .stone{width:100%;height:100%}.mvfly.drag .stone{box-shadow:0 14px 18px rgba(0,0,0,.45),0 0 0 2px rgba(240,216,150,.9)}
 .cell.mine{touch-action:none}
+.ibx{margin:10px auto;max-width:440px;padding:10px 12px;border:1px solid var(--gold-soft);border-radius:8px;background:rgba(216,189,126,.08);display:flex;align-items:center;gap:10px;text-align:left}
+.ibx p{margin:0;flex:1;font-size:13px;line-height:1.55;color:var(--sub)}
+.ibx a{flex:none;display:inline-flex;align-items:center;min-height:40px;padding:6px 14px;border-radius:6px;background:var(--gold);color:#14110e;font-weight:700;font-size:14px;text-decoration:none}
+.ibx button{flex:none;min-height:32px;min-width:32px;padding:0;border:0;background:transparent;color:var(--sub);font-size:18px}
 .cell.coachCan .stone{animation:coachPulse 1.3s ease-in-out infinite}
 @keyframes coachPulse{0%,100%{box-shadow:0 0 0 0 rgba(240,216,150,.0),0 2px 4px rgba(0,0,0,.4)}50%{box-shadow:0 0 0 5px rgba(240,216,150,.75),0 0 18px 6px rgba(240,216,150,.45)}}
 @media (prefers-reduced-motion:reduce){.cell.coachCan .stone{animation:none;box-shadow:0 0 0 4px rgba(240,216,150,.75)}}
@@ -1226,6 +1230,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
   <div class="boardwrap"><div class="board" id="board"><div class="lab lab-top" id="labTop" aria-hidden="true"></div><div class="lab lab-left" id="labLeft" aria-hidden="true"></div><div class="lab lab-bot" id="labBot" aria-hidden="true"></div><div class="lab lab-right" id="labRight" aria-hidden="true"></div><div class="grid" id="grid" role="grid" aria-label="盤"></div></div></div>
   <div class="players bot" id="plBot" hidden></div>
   <div class="gameinfo">
+    <div class="ibx" id="ibx" hidden><p id="ibxT">ブラウザで開くと、次からも段級や記録が続きます</p><a id="ibxGo" href="#">ブラウザで開く</a><button type="button" id="ibxX" aria-label="閉じる">×</button></div>
     <div class="status" id="status"></div>
     <p class="hint" id="hint"></p>
     <p class="rate-msg" id="rateMsg" hidden></p>
@@ -4543,6 +4548,19 @@ function coachUpdate(){
 {const _rC=render;render=function(){_rC();try{coachUpdate()}catch(e){}}}
 {const _dmC=doMove;doMove=function(m){if(COACH.on&&S&&S.coach&&!S.over&&S.turn===hcOf())COACH.mv++;return _dmC(m)}}
 $('coachX').addEventListener('click',()=>{COACH.off=true;coachUpdate()});
+/* アプリ内ブラウザ（X・Instagram・LINE・Facebook）で開かれたとき、対局が終わったら「ブラウザで開く」を出す（2026-11）。
+   iPhone は Safari（x-safari-https://）、Android はいつものブラウザ（intent://）。アプリ内ブラウザは保存場所が別で、毎回別の端末あつかいになりやすいため。
+   計測：ib アプリ内ブラウザで初めて来た端末・ix ボタンを押した・ia ボタンから来た（どれも1台1回） */
+const IB=(()=>{const u=navigator.userAgent||'';const app=/Twitter|TwitterAndroid|FBAN|FBAV|Instagram|\bLine\//i.test(u);
+  return {app,ios:/iPhone|iPad|iPod/.test(u),android:/Android/.test(u)}})();
+function ibUrl(){const path='bocchgame.com/?from=ib'+(window.BOCCH_LANG&&window.BOCCH_LANG!=='ja'?'&lang='+encodeURIComponent(window.BOCCH_LANG):'');
+  if(IB.ios)return 'x-safari-https://'+path;if(IB.android)return 'intent://'+path+'#Intent;scheme=https;end';return ''}
+function ibOff(){try{return sessionStorage.getItem('bocch-ibx')==='1'}catch(e){return false}}
+function ibUpdate(){const e=$('ibx');if(!e)return;e.hidden=!(IB.app&&ibUrl()&&!ibOff()&&S&&S.over&&!S.study&&!S.learn&&CUR==='game')}
+{const _rI=render;render=function(){_rI();try{ibUpdate()}catch(e){}}}
+$('ibxGo').addEventListener('click',ev=>{ev.preventDefault();try{statFirst('bocch-ix','ix')}catch(e){}const u=ibUrl();if(u)setTimeout(()=>{location.href=u},150)});
+$('ibxX').addEventListener('click',()=>{try{sessionStorage.setItem('bocch-ibx','1')}catch(e){}ibUpdate()});
+try{if(IB.app)statFirst('bocch-ib','ib');if(/[?&]from=ib\b/.test(location.search))statFirst('bocch-ia','ia')}catch(e){}
 if(coachEligible()){const go=()=>{try{if(CUR==='home'&&coachEligible())coachStart()}catch(e){}};if(document.readyState==='complete')setTimeout(go,0);else addEventListener('load',go,{once:true})}
 </script>
 </body>

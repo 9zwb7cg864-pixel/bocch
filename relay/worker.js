@@ -169,8 +169,9 @@ export class Topic extends DurableObject {
     if (sec || g) await once("p:" + d, "players");
     if (/^[a-f0-9]{16,32}$/.test(u)) await once("a:" + u, "accounts");
     // 初めての人の流れ：nv 初めて開いた・fs 1局目を始めた・fg 1局目を終えた・r1 次の日に来た・r7 7日以内にまた来た（端末ごとに1回だけ）
+    // アプリ内ブラウザ：ib アプリ内ブラウザで初めて来た・ix「ブラウザで開く」を押した・ia そのボタンから来た
     // 入口の計測：n0 開いた（すぐ帰った人も含む）・l1〜l4 表示までの時間・ho ルールを読んだ・hl 4問で覚える・pg Playを押した・q1〜q4 1局も始めずに離れるまでの時間
-    for (const f of ["nv", "fs", "fg", "r1", "r7", "n0", "l1", "l2", "l3", "l4", "ho", "hl", "pg", "q1", "q2", "q3", "q4"]) {
+    for (const f of ["nv", "fs", "fg", "r1", "r7", "n0", "l1", "l2", "l3", "l4", "ho", "hl", "pg", "q1", "q2", "q3", "q4", "ib", "ix", "ia"]) {
       if (b[f] && !(await st.get(f + ":" + d))) { put[f + ":" + d] = 1; T[f] = (T[f] || 0) + 1; D[f] = (D[f] || 0) + 1; }
     }
     // 登録の流れ：ev メール確認が済んだ・nm 初めて名前を付けた（アカウントごとに1回だけ）

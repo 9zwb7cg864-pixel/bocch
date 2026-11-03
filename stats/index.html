@@ -62,6 +62,7 @@ th:first-child,td:first-child{text-align:left}
     <p class="note">数え始め：2026年10月29日。初めて開いた日から数えるので、記録を始める前に来たことがある端末は入りません。</p>
     <h2>入口の詳しい流れ（直近7日）</h2>
     <div class="wrapT"><table><thead><tr><th>段階</th><th>人数</th><th>開いた人から</th></tr></thead><tbody id="entry"><tr><td colspan="3">読み込み中…</td></tr></tbody></table></div>
+    <div class="wrapT"><table><thead><tr><th>アプリ内ブラウザ</th><th>人数</th><th>開いた人から</th></tr></thead><tbody id="entryIB"></tbody></table></div>
     <div class="wrapT"><table><thead><tr><th>表示までの時間</th><th>人数</th><th>割合</th></tr></thead><tbody id="entryL"></tbody></table></div>
     <div class="wrapT"><table><thead><tr><th>1局も始めずに離れるまで</th><th>人数</th><th>割合</th></tr></thead><tbody id="entryQ"></tbody></table></div>
     <p class="note">数え始め：2026年11月2日（11月1日は途中から記録が始まったので入れていません）。初めて来た端末の初日だけを数えます（1台1回）。「離れる」はタブを閉じた・別のアプリに切り替えたときで、あとで戻ってきた人も入ります。2026年11月3日から、初めて来た端末はホームを飛ばして「CPU やさしい」との1局目が自動で始まります（説明つき）。そのため、それ以降は「Play」を押す人が減ります。</p>
@@ -99,6 +100,7 @@ async function load(){
    const row=(lab,v,b)=>'<tr><td>'+lab+'</td><td>'+fmt(v)+'</td><td>'+pc(v,b)+'</td></tr>';
    $('entry').innerHTML=!ks.length?'<tr><td colspan="3">まだ記録がありません</td></tr>':[['開いた（すぐ帰った人も含む）','n0'],['4秒以上いた','nv'],['ルールの「読んだ」を押した','ho'],['「4問で覚える」を押した','hl'],['「Play」を押した','pg'],['1局目を始めた','fs']].map(([l,f])=>row(l,sm(f),n0)).join('');
    const grp=(id,F)=>{const tt=F.reduce((a,[,f])=>a+sm(f),0);$(id).innerHTML=F.map(([l,f])=>row(l,sm(f),tt)).join('')};
+   $('entryIB').innerHTML=[['アプリ内ブラウザ（Xなど）で来た','ib'],['「ブラウザで開く」を押した','ix'],['そのボタンからブラウザで来た','ia']].map(([l,f])=>row(l,sm(f),n0)).join('');
    grp('entryL',[['2秒未満','l1'],['2〜5秒','l2'],['5〜10秒','l3'],['10秒以上','l4']]);
    grp('entryQ',[['10秒未満','q1'],['10〜30秒','q2'],['30秒〜2分','q3'],['2分以上','q4']])}
   const mx=Math.max(1,...keys.map(k=>days[k].sec||0));
