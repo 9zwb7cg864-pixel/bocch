@@ -7,41 +7,83 @@
 <title>bocch 利用状況</title>
 <link rel="icon" href="/icon-192.png">
 <style>
-:root{--bg:#0e1311;--panel:#131a17;--fg:#ece6d8;--sub:#9a9484;--mute:#6f6a5e;--gold:#c9a96e;--gold-soft:rgba(201,169,110,.28);--line:rgba(236,230,216,.14);--soft:#18201c;--bad:#e0846c;color-scheme:dark}
+:root{--bg:#0d1210;--panel:#141b18;--panel2:#18211d;--fg:#ece6d8;--sub:#a29c8c;--mute:#736e62;--gold:#c9a96e;--goldhi:#f0d698;--line:rgba(236,230,216,.11);--line2:rgba(236,230,216,.2);
+ --s1:#3987e5;--s2:#d95926;--s3:#199e70;--up:#3fb27f;--down:#e0846c;color-scheme:dark}
 *{box-sizing:border-box}[hidden]{display:none!important}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;font-size:15px;line-height:1.6;padding:max(16px,env(safe-area-inset-top)) 16px 40px}
-.app{max-width:720px;margin:0 auto}
-h1{font-size:20px;margin:4px 0 16px;letter-spacing:.06em}h1 b{color:var(--gold)}
-.lock{max-width:340px;margin:12vh auto 0;text-align:center}
-.lock input{width:100%;font:inherit;font-size:16px;color:var(--fg);background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:12px;margin:14px 0 10px}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;font-size:15px;line-height:1.6;padding:max(16px,env(safe-area-inset-top)) 16px 48px}
+.app{max-width:780px;margin:0 auto}
 button{font:inherit;cursor:pointer}
-.btn{width:100%;min-height:46px;border:0;border-radius:4px;background:var(--gold);color:#17120a;font-weight:700}
-.err{color:var(--bad);font-size:13px;min-height:20px}
-.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-@media(min-width:640px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.k{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 14px}
-.k .l{font-size:12px;color:var(--sub)}
-.k .v{font-size:28px;font-weight:700;line-height:1.25;font-variant-numeric:tabular-nums;color:#f3d995;margin-top:2px}
-.k .v small{font-size:14px;color:var(--fg);font-weight:500;margin-left:2px}
-.k .s{font-size:11.5px;color:var(--mute);margin-top:2px}
-h2{font-size:14px;color:var(--gold);letter-spacing:.08em;margin:24px 0 8px;font-weight:700}
-table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
-th,td{padding:6px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
-th{color:var(--sub);font-weight:500;font-size:12px}
-th:first-child,td:first-child{text-align:left}
-.bar{display:inline-block;height:8px;background:var(--gold);border-radius:2px;vertical-align:middle;margin-left:6px;opacity:.75}
-.wrapT{overflow-x:auto}
-.note{font-size:12px;color:var(--mute);margin-top:18px;line-height:1.7}
-.top{display:flex;align-items:center;gap:10px}.top .r{margin-left:auto;display:flex;gap:8px}
-.top button{background:transparent;border:1px solid var(--line);color:var(--sub);border-radius:4px;padding:6px 10px;font-size:12.5px}
-.modes{display:flex;flex-wrap:wrap;gap:6px}.modes span{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:3px 10px;font-size:12.5px}.modes b{color:#f3d995;margin-left:4px}
-.sub{display:block;font-size:12px;opacity:.65}.chartBox{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 12px 8px;position:relative}
+/* ロック画面 */
+.lock{max-width:340px;margin:12vh auto 0;text-align:center}
+.lock h1{font-size:20px;letter-spacing:.06em;margin:0 0 6px}.lock h1 b{color:var(--gold)}
+.lock input{width:100%;font:inherit;font-size:16px;color:var(--fg);background:var(--panel2);border:1px solid var(--line2);border-radius:6px;padding:12px;margin:14px 0 10px}
+.btn{width:100%;min-height:46px;border:0;border-radius:6px;background:var(--gold);color:#17120a;font-weight:700}
+.err{color:var(--down);font-size:13px;min-height:20px}
+/* 見出し */
+.head{display:flex;align-items:flex-start;gap:10px;margin-bottom:18px}
+.head h1{font-size:19px;letter-spacing:.05em;margin:0;line-height:1.3}.head h1 b{color:var(--gold)}
+.head .upd{font-size:11.5px;color:var(--mute);margin-top:2px}
+.head .r{margin-left:auto;display:flex;gap:6px}
+.ghost{background:transparent;border:1px solid var(--line2);color:var(--sub);border-radius:6px;padding:6px 11px;font-size:12.5px}
+.ghost:hover{color:var(--fg)}
+/* 節 */
+section{margin-top:26px}
+.sh{display:flex;align-items:baseline;gap:10px;margin:0 0 10px}
+.sh h2{font-size:13px;color:var(--gold);letter-spacing:.1em;margin:0;font-weight:700}
+.sh .hint{font-size:11.5px;color:var(--mute)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+/* 数字のタイル */
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(min-width:680px){.tiles.four{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.t{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+.t .l{font-size:12px;color:var(--sub)}
+.t .v{font-size:30px;font-weight:700;line-height:1.2;font-variant-numeric:tabular-nums;color:var(--goldhi);margin-top:4px;letter-spacing:.01em}
+.t .v small{font-size:13px;color:var(--fg);font-weight:500;margin-left:3px}
+.t .s{font-size:11.5px;color:var(--mute);margin-top:4px;line-height:1.5}
+.t.sm .v{font-size:22px}
+.dl{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:700;border-radius:20px;padding:1px 8px;margin-top:6px;background:rgba(236,230,216,.06);color:var(--sub)}
+.dl.up{color:var(--up);background:rgba(63,178,127,.12)}.dl.down{color:var(--down);background:rgba(224,132,108,.12)}
+/* 推移グラフ */
 .cTop{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:6px}
 .leg{display:flex;flex-wrap:wrap;gap:12px;font-size:12.5px;color:var(--sub)}.leg i{display:inline-block;width:14px;height:3px;border-radius:2px;margin-right:6px;vertical-align:middle}
-.rng{display:flex;gap:4px}.rng button{background:transparent;border:1px solid var(--line);color:var(--sub);border-radius:4px;padding:3px 9px;font-size:12px}.rng button.on{border-color:var(--gold);color:var(--fg)}
+.seg{display:flex;gap:2px;background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:2px}
+.seg button{background:transparent;border:0;color:var(--sub);border-radius:5px;padding:3px 10px;font-size:12px}.seg button.on{background:rgba(201,169,110,.18);color:var(--fg)}
+.chartBox{position:relative}
 #uChart{width:100%;height:240px;display:block;touch-action:pan-y}
-.tip{position:absolute;pointer-events:none;background:#0b0f0d;border:1px solid var(--line);border-radius:4px;padding:6px 8px;font-size:12px;color:var(--fg);white-space:nowrap;display:none}
-.tip b{color:var(--fg)}.tip .r{display:flex;justify-content:space-between;gap:14px;color:var(--sub)}.tip .r span:last-child{color:var(--fg)}
+.tip{position:absolute;pointer-events:none;background:#0a0e0c;border:1px solid var(--line2);border-radius:6px;padding:7px 9px;font-size:12px;color:var(--fg);white-space:nowrap;display:none;z-index:2}
+.tip .r{display:flex;justify-content:space-between;gap:16px;color:var(--sub)}.tip .r span:last-child{color:var(--fg);font-variant-numeric:tabular-nums}
+/* 棒の一覧 */
+.bars{display:flex;flex-direction:column;gap:9px}
+.br{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;font-size:13px}
+.br .n{color:var(--fg);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.br .c{color:var(--fg);font-variant-numeric:tabular-nums;text-align:right}.br .c em{font-style:normal;color:var(--mute);margin-left:6px;font-size:12px}
+.br .tr{grid-column:1/-1;height:6px;background:rgba(236,230,216,.06);border-radius:3px;overflow:hidden}
+.br .tr i{display:block;height:100%;background:var(--gold);border-radius:3px;opacity:.85}
+.empty{font-size:12.5px;color:var(--mute)}
+.grid3{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:680px){.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.grid3 h3,.card h3{font-size:12px;color:var(--sub);font-weight:500;margin:0 0 10px}
+/* 流れ（ファネル） */
+.fn{display:flex;flex-direction:column;gap:10px}
+.fr .top{display:flex;justify-content:space-between;font-size:13px}.fr .top b{font-weight:500}
+.fr .top span{font-variant-numeric:tabular-nums}.fr .top span em{font-style:normal;color:var(--mute);font-size:12px;margin-left:8px}
+.fr .tr{height:10px;background:rgba(236,230,216,.06);border-radius:5px;overflow:hidden;margin-top:4px}
+.fr .tr i{display:block;height:100%;background:var(--s1);border-radius:5px}
+/* たたむ */
+details{background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-top:10px}
+summary{cursor:pointer;list-style:none;padding:12px 16px;font-size:13.5px;color:var(--fg);display:flex;align-items:center;gap:8px}
+summary::-webkit-details-marker{display:none}
+summary::before{content:'▸';color:var(--gold);transition:transform .15s}details[open] summary::before{transform:rotate(90deg)}
+summary .hint{margin-left:auto;font-size:11.5px;color:var(--mute)}
+.dbody{padding:0 16px 14px}
+table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th{color:var(--sub);font-weight:500;font-size:12px}
+th:first-child,td:first-child{text-align:left}
+td .sub{display:block;font-size:11px;color:var(--mute)}
+.wrapT{overflow-x:auto;margin-bottom:12px}
+.note{font-size:12px;color:var(--mute);line-height:1.75}
+.note p{margin:0 0 8px}
 </style>
 </head>
 <body>
@@ -55,43 +97,79 @@ th:first-child,td:first-child{text-align:left}
   </form>
 
   <main id="main" hidden>
-    <div class="top"><h1><b>bocch</b> 利用状況</h1><div class="r"><button id="reload">↻ 更新</button><button id="out">閉じる</button></div></div>
-    <div class="kpis">
-      <div class="k"><div class="l">総プレイ時間</div><div class="v" id="kSec"></div><div class="s" id="kSecS"></div></div>
-      <div class="k"><div class="l">遊んだ人の数</div><div class="v" id="kPl"></div><div class="s" id="kPlS"></div></div>
-      <div class="k"><div class="l">総対局数</div><div class="v" id="kG"></div><div class="s" id="kGS"></div></div>
-      <div class="k"><div class="l">登録アカウント数</div><div class="v" id="kAcc"></div><div class="s" id="kAccS"></div></div>
-      <div class="k"><div class="l">サイトを開いた人</div><div class="v" id="kV"></div><div class="s" id="kVS"></div></div>
-      <div class="k"><div class="l">DAU（直近7日の平均）</div><div class="v" id="kDau"></div><div class="s" id="kDauS"></div></div>
-      <div class="k"><div class="l">1人あたり（直近7日）</div><div class="v" id="kPer"></div><div class="s" id="kPerS"></div></div>
+    <div class="head">
+      <div><h1><b>bocch</b> 利用状況</h1><div class="upd" id="upd"></div></div>
+      <div class="r"><button class="ghost" id="reload">↻ 更新</button><button class="ghost" id="out">閉じる</button></div>
     </div>
-    <h2>ユーザー数の推移</h2>
-    <div class="chartBox">
-      <div class="cTop"><div class="leg" id="uLeg"></div><div class="rng" id="uRng"><button data-n="14">14日</button><button data-n="30" class="on">30日</button><button data-n="0">全期間</button></div></div>
-      <svg id="uChart" role="img" aria-label="1日ごとのユーザー数の推移"></svg>
-      <div class="tip" id="uTip"></div>
-    </div>
-    <p class="note">「遊んだ人」は1局以上指したかプレイ時間がある端末（DAU）、「開いた人」はサイトを開いた端末、「初めて来た人」はその日に初めて開いて4秒以上いた端末です（10月29日から）。数値の表は下の「日ごと」にあります。</p>
-    <h2>初めての人の流れ（直近7日）</h2>
-    <div class="wrapT"><table><thead><tr><th>段階</th><th>人数</th><th>前の段階から</th><th>開いた人から</th></tr></thead><tbody id="funnel"><tr><td colspan="4">読み込み中…</td></tr></tbody></table></div>
-    <p class="note">数え始め：2026年10月29日。初めて開いた日から数えるので、記録を始める前に来たことがある端末は入りません。</p>
-    <h2>初めて来た人の内訳（直近7日）</h2>
-    <div class="wrapT"><table><thead><tr><th>来た場所</th><th>人数</th><th>割合</th></tr></thead><tbody id="xSrc"><tr><td colspan="3">読み込み中…</td></tr></tbody></table></div>
-    <div class="wrapT"><table><thead><tr><th>国</th><th>人数</th><th>割合</th></tr></thead><tbody id="xCc"></tbody></table></div>
-    <div class="wrapT"><table><thead><tr><th>端末</th><th>人数</th><th>割合</th></tr></thead><tbody id="xDv"></tbody></table></div>
-    <div class="wrapT"><table><thead><tr><th>ブラウザの言語</th><th>人数</th><th>割合</th></tr></thead><tbody id="xLg"></tbody></table></div>
-    <p class="note">数え始め：2026年11月3日。初めて来た端末の初日だけを数えます（1台1回）。「直接」はリンク元がわからない来方（ブックマーク・URLの入力・YouTubeやXのアプリから開いたときなど）も含みます。リンクに ?ref=yt などを付けると、来た場所がはっきりわかります。</p>
-    <h2>入口の詳しい流れ（直近7日）</h2>
-    <div class="wrapT"><table><thead><tr><th>段階</th><th>人数</th><th>開いた人から</th></tr></thead><tbody id="entry"><tr><td colspan="3">読み込み中…</td></tr></tbody></table></div>
-    <div class="wrapT"><table><thead><tr><th>アプリ内ブラウザ</th><th>人数</th><th>開いた人から</th></tr></thead><tbody id="entryIB"></tbody></table></div>
-    <div class="wrapT"><table><thead><tr><th>表示までの時間</th><th>人数</th><th>割合</th></tr></thead><tbody id="entryL"></tbody></table></div>
-    <div class="wrapT"><table><thead><tr><th>1局も始めずに離れるまで</th><th>人数</th><th>割合</th></tr></thead><tbody id="entryQ"></tbody></table></div>
-    <p class="note">数え始め：2026年11月2日（11月1日は途中から記録が始まったので入れていません）。初めて来た端末の初日だけを数えます（1台1回）。「離れる」はタブを閉じた・別のアプリに切り替えたときで、あとで戻ってきた人も入ります。2026年11月3日から、初めて来た端末はホームを飛ばして「CPU やさしい」との1局目が自動で始まります（説明つき）。そのため、それ以降は「Play」を押す人が減ります。</p>
-    <h2>モード別の対局数</h2>
-    <div class="modes" id="modes"></div>
-    <h2>日ごと（日本時間）</h2>
-    <div class="wrapT"><table><thead><tr><th>日付</th><th>プレイ時間</th><th>遊んだ人</th><th>対局</th><th>開いた人</th><th>初めて来た人</th><th>新規登録</th></tr></thead><tbody id="days"></tbody></table></div>
-    <p class="note" id="note"></p>
+
+    <!-- 1. いまの状況 -->
+    <section style="margin-top:0">
+      <div class="sh"><h2>いまの状況</h2><span class="hint">人数は端末ごと</span></div>
+      <div class="tiles four">
+        <div class="t"><div class="l">DAU（直近7日の平均）</div><div class="v" id="kDau">—</div><div id="kDauD"></div></div>
+        <div class="t"><div class="l">今日遊んだ人</div><div class="v" id="kToday">—</div><div id="kTodayD"></div></div>
+        <div class="t"><div class="l">新しく来た人（直近7日）</div><div class="v" id="kNew">—</div><div class="s" id="kNewS"></div></div>
+        <div class="t"><div class="l">翌日また来た率（7日）</div><div class="v" id="kRet">—</div><div class="s" id="kRetS"></div></div>
+      </div>
+    </section>
+
+    <!-- 2. 推移 -->
+    <section>
+      <div class="sh"><h2>ユーザー数の推移</h2></div>
+      <div class="card">
+        <div class="cTop"><div class="leg" id="uLeg"></div><div class="seg" id="uRng"><button data-n="14">14日</button><button data-n="30" class="on">30日</button><button data-n="0">全期間</button></div></div>
+        <div class="chartBox"><svg id="uChart" role="img" aria-label="1日ごとのユーザー数の推移"></svg><div class="tip" id="uTip"></div></div>
+      </div>
+    </section>
+
+    <!-- 3. 新しく来た人 -->
+    <section>
+      <div class="sh"><h2>新しく来た人</h2><span class="hint">直近7日・1台1回</span></div>
+      <div class="card"><h3>初めて来てから、どこまで進んだか</h3><div class="fn" id="funnel"><div class="empty">読み込み中…</div></div></div>
+      <div class="grid3" style="margin-top:10px">
+        <div class="card"><h3>来た場所</h3><div class="bars" id="xSrc"></div></div>
+        <div class="card"><h3>国</h3><div class="bars" id="xCc"></div></div>
+        <div class="card"><h3>端末</h3><div class="bars" id="xDv"></div><h3 style="margin-top:16px">ブラウザの言語</h3><div class="bars" id="xLg"></div></div>
+      </div>
+    </section>
+
+    <!-- 4. 遊び方 -->
+    <section>
+      <div class="sh"><h2>遊び方</h2></div>
+      <div class="tiles four">
+        <div class="t sm"><div class="l">1人あたりの対局（7日）</div><div class="v" id="kPerG">—</div></div>
+        <div class="t sm"><div class="l">1人あたりの時間（7日）</div><div class="v" id="kPerT">—</div></div>
+        <div class="t sm"><div class="l">総プレイ時間</div><div class="v" id="kSec">—</div><div class="s" id="kSecS"></div></div>
+        <div class="t sm"><div class="l">総対局数</div><div class="v" id="kG">—</div><div class="s" id="kGS"></div></div>
+      </div>
+      <div class="card" style="margin-top:10px"><h3>モード別の対局数（全期間）</h3><div class="bars" id="modes"></div></div>
+    </section>
+
+    <!-- 5. アカウント -->
+    <section>
+      <div class="sh"><h2>アカウントと累計</h2></div>
+      <div class="tiles four">
+        <div class="t sm"><div class="l">登録アカウント</div><div class="v" id="kAcc">—</div><div class="s" id="kAccS"></div></div>
+        <div class="t sm"><div class="l">新規登録（直近7日）</div><div class="v" id="kSu">—</div><div class="s" id="kSuS"></div></div>
+        <div class="t sm"><div class="l">遊んだ人（累計）</div><div class="v" id="kPl">—</div></div>
+        <div class="t sm"><div class="l">サイトを開いた人（累計）</div><div class="v" id="kV">—</div></div>
+      </div>
+    </section>
+
+    <!-- 6. 細かいデータ -->
+    <section>
+      <div class="sh"><h2>細かいデータ</h2></div>
+      <details><summary>入口の細かい流れ<span class="hint">直近7日</span></summary><div class="dbody">
+        <div class="wrapT"><table><thead><tr><th>段階</th><th>人数</th><th>開いた人から</th></tr></thead><tbody id="entry"></tbody></table></div>
+        <div class="wrapT"><table><thead><tr><th>アプリ内ブラウザ</th><th>人数</th><th>開いた人から</th></tr></thead><tbody id="entryIB"></tbody></table></div>
+        <div class="wrapT"><table><thead><tr><th>表示までの時間</th><th>人数</th><th>割合</th></tr></thead><tbody id="entryL"></tbody></table></div>
+        <div class="wrapT"><table><thead><tr><th>1局も始めずに離れるまで</th><th>人数</th><th>割合</th></tr></thead><tbody id="entryQ"></tbody></table></div>
+      </div></details>
+      <details><summary>日ごとの表<span class="hint">日本時間・最大45日</span></summary><div class="dbody">
+        <div class="wrapT"><table><thead><tr><th>日付</th><th>遊んだ人</th><th>開いた人</th><th>初めて来た人</th><th>対局</th><th>プレイ時間</th><th>新規登録</th></tr></thead><tbody id="days"></tbody></table></div>
+      </div></details>
+      <details><summary>数え方の説明</summary><div class="dbody note" id="note"></div></details>
+    </section>
   </main>
 </div>
 <script>
@@ -99,50 +177,85 @@ const RELAY='https://bocch.9zwb7cg864.workers.dev/';
 const FKEY='AIzaSyDKnPBLV0t4wid2mwtrT-mVc39jLnoQgXY',FSB='https://firestore.googleapis.com/v1/projects/bocch-7072d/databases/(default)/documents',FS=FSB+':runAggregationQuery?key='+FKEY;
 const $=id=>document.getElementById(id);
 const fmt=n=>(n||0).toLocaleString('ja-JP');
+const r1=n=>Math.round(n*10)/10;
 const hm=s=>{s=s||0;const h=Math.floor(s/3600),m=Math.round(s%3600/60);return h?h.toLocaleString('ja-JP')+'<small>時間</small>'+m+'<small>分</small>':m+'<small>分</small>'};
+const pc=(a,b)=>b?Math.round(100*a/b)+'%':'—';
 const MODE={net:'オンライン（人）',shadow:'オンライン（影の相手）',local:'1台で2人',cpu1:'CPU やさしい',cpu2:'CPU ふつう',cpu3:'CPU つよい',cpu4:'CPU 最強'};
+const SRC={yt:'YouTube',x:'X（Twitter）',nt:'note',gs:'Google検索',sr:'ほかの検索',rd:'Reddit',hn:'Hacker News',sn:'ほかのSNS',dr:'直接（リンク元なし）',o:'その他のサイト'};
+const CC={JP:'日本',US:'アメリカ',KR:'韓国',TW:'台湾',DE:'ドイツ',CN:'中国',HK:'香港',GB:'イギリス',CA:'カナダ',AU:'オーストラリア',AT:'オーストリア',CH:'スイス',FR:'フランス',XX:'不明'};
+const LG={ja:'日本語',en:'英語',ko:'韓国語',zh:'中国語',de:'ドイツ語',es:'スペイン語',fr:'フランス語',xx:'不明'};
 let PW='';try{PW=localStorage.getItem('bocch-stats-pw')||sessionStorage.getItem('bocch-stats-pw')||''}catch(e){}
+
+// 増減の札（矢印と文字で示す。色だけに頼らない）
+function delta(cur,prev,label){if(prev==null)return '<div class="s">'+label+'のデータがまだありません</div>';
+  if(!prev)return '<span class="dl">'+label+' 0 → '+r1(cur)+'</span>';const d=Math.round(100*(cur-prev)/prev);
+  const cls=d>0?'up':d<0?'down':'';return '<span class="dl '+cls+'">'+(d>0?'▲ +':d<0?'▼ ':'± ')+d+'%</span><div class="s">'+label+' '+r1(prev)+'人</div>'}
+// 棒の一覧
+function bars(id,rows,opt={}){const el=$(id);if(!rows.length){el.innerHTML='<div class="empty">'+(opt.empty||'まだ記録がありません')+'</div>';return}
+  const tt=rows.reduce((a,[,v])=>a+v,0),mx=Math.max(...rows.map(([,v])=>v));
+  el.innerHTML=rows.map(([n,v])=>'<div class="br"><span class="n">'+n+'</span><span class="c">'+fmt(v)+(opt.pct===false?'':'<em>'+pc(v,tt)+'</em>')+'</span><span class="tr"><i style="width:'+Math.max(2,Math.round(100*v/mx))+'%"></i></span></div>').join('')}
 
 async function load(){
   const r=await fetch(RELAY+'bocch-v1-stats/view',{headers:{'X-Pass':PW},cache:'no-store'});
   if(r.status===401)throw 'pw';if(!r.ok)throw 'net';const j=await r.json();
-  const t=j.tot||{},days=j.days||{},keys=Object.keys(days).sort().reverse(),today=keys[0]&&days[keys[0]]||{};
-  $('kSec').innerHTML=hm(t.sec);$('kSecS').textContent='今日 '+Math.round((today.sec||0)/60)+'分・1人あたり '+(t.players?Math.round(t.sec/t.players/60):0)+'分';
-  $('kPl').innerHTML=fmt(t.players)+'<small>人</small>';$('kPlS').textContent='今日 '+fmt(today.players)+'人（端末ごとに数える）';
-  $('kG').innerHTML=fmt(t.games)+'<small>局</small>';$('kGS').textContent='今日 '+fmt(today.games)+'局';
-  $('kV').innerHTML=fmt(t.visitors)+'<small>人</small>';$('kVS').textContent='今日 '+fmt(today.visitors)+'人';
-  $('kAcc').innerHTML='…';$('kAccS').textContent='';
-  {const w=(o,n)=>keys.slice(o,o+n).map(k=>days[k]);const cur=w(0,7),prv=w(7,7);const av=a=>a.length?a.reduce((x,d)=>x+(d.players||0),0)/a.length:0;
-   const c=av(cur),p=av(prv);$('kDau').innerHTML=(Math.round(c*10)/10)+'<small>人</small>';
-   $('kDauS').textContent=prv.length?'その前の7日 '+(Math.round(p*10)/10)+'人（'+(p?((c>=p?'+':'')+Math.round(100*(c-p)/p)+'%'):'—')+'）':'比べる前の週のデータがまだありません';
-   const pl=cur.reduce((x,d)=>x+(d.players||0),0),gm=cur.reduce((x,d)=>x+(d.games||0),0),sc=cur.reduce((x,d)=>x+(d.sec||0),0);
-   $('kPer').innerHTML=(pl?Math.round(gm/pl*10)/10:0)+'<small>局</small>';$('kPerS').textContent='プレイ時間 '+(pl?Math.round(sc/pl/60):0)+'分（遊んだ人1人あたり・1日ごとに数えて平均）'}
-  {const SRC={yt:'YouTube',x:'X（Twitter）',nt:'note',gs:'Google検索',sr:'ほかの検索（Yahoo・Bingなど）',rd:'Reddit',hn:'Hacker News',sn:'ほかのSNS（Discord・Instagramなど）',dr:'直接（リンク元なし）',o:'その他のサイト'};
-   const CC={JP:'日本',US:'アメリカ',KR:'韓国',TW:'台湾',DE:'ドイツ',CN:'中国',HK:'香港',GB:'イギリス',CA:'カナダ',AU:'オーストラリア',AT:'オーストリア',CH:'スイス',FR:'フランス',XX:'不明'};
-   const LG={ja:'日本語',en:'英語',ko:'韓国語',zh:'中国語',de:'ドイツ語',es:'スペイン語',fr:'フランス語',xx:'不明'};
-   const cnt=pre=>{const o={};for(const k of keys.slice(0,7))for(const [f,v] of Object.entries(days[k]))if(f.startsWith(pre))o[f.slice(pre.length)]=(o[f.slice(pre.length)]||0)+v;return Object.entries(o).sort((a,b)=>b[1]-a[1])};
-   const tbl=(id,pre,M)=>{const r=cnt(pre),tt=r.reduce((a,[,v])=>a+v,0);$(id).innerHTML=r.length?r.map(([k,v])=>'<tr><td>'+(M[k]||k)+'</td><td>'+fmt(v)+'</td><td>'+Math.round(100*v/tt)+'%</td></tr>').join(''):'<tr><td colspan="3">まだ記録がありません</td></tr>'};
-   tbl('xSrc','s_',SRC);tbl('xCc','c_',CC);tbl('xDv','d_',{m:'スマホ・タブレット',d:'パソコン'});tbl('xLg','g_',LG)}
+  const t=j.tot||{},days=j.days||{},keys=Object.keys(days).sort().reverse(),D=k=>days[k]||{};
+  const w=(o,n)=>keys.slice(o,o+n).map(D),cur=w(0,7),prv=w(7,7),sum=(a,f)=>a.reduce((x,d)=>x+(d[f]||0),0);
+  $('upd').textContent='最終更新 '+new Date(j.now).toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+
+  // 1. いまの状況
+  const dau=cur.length?sum(cur,'players')/cur.length:0,dauP=prv.length?sum(prv,'players')/prv.length:null;
+  $('kDau').innerHTML=r1(dau)+'<small>人</small>';$('kDauD').innerHTML=delta(dau,dauP,'その前の7日');
+  const td=D(keys[0]),yd=keys[1]?D(keys[1]):null;
+  $('kToday').innerHTML=fmt(td.players)+'<small>人</small>';$('kTodayD').innerHTML=delta(td.players||0,yd?yd.players||0:null,'昨日');
+  const nv7=sum(cur,'nv'),fs7=sum(cur,'fs');
+  $('kNew').innerHTML=fmt(nv7)+'<small>人</small>';$('kNewS').textContent='そのうち1局目を始めた '+pc(fs7,nv7);
+  // 次の日にまた来た：今日はまだ戻れないので、昨日以前に来た人だけで割る
+  const old=keys.slice(1,8).map(D),r1s=sum(old,'r1'),nvo=sum(old,'nv');
+  $('kRet').innerHTML=nvo?Math.round(100*r1s/nvo)+'<small>%</small>':'—';$('kRetS').textContent=nvo?fmt(nvo)+'人のうち '+fmt(r1s)+'人（今日来た人は除く）':'まだ記録がありません';
+
+  // 2. 推移
   window.__days=days;drawU();
-  const ms=Object.entries(j.modes||{}).sort((a,b)=>b[1]-a[1]);$('modes').innerHTML=ms.length?ms.map(([k,v])=>'<span>'+(MODE[k]||k)+'<b>'+fmt(v)+'</b></span>').join(''):'<span>まだありません</span>';
-  {const F=[['nv','初めて開いた'],['fs','1局目を始めた'],['fg','1局目を最後まで指した'],['r1','次の日にまた来た'],['r7','7日以内にまた来た']];const sum={};for(const k of keys.slice(0,7))for(const [f] of F)sum[f]=(sum[f]||0)+(days[k][f]||0);
-   const pc=(a,b)=>b?Math.round(100*a/b)+'%':'—';$('funnel').innerHTML=F.map(([f,lab],i)=>'<tr><td>'+lab+'</td><td>'+fmt(sum[f])+'</td><td>'+(i===0?'—':pc(sum[f],sum[F[i===4?0:i-1][0]]))+'</td><td>'+(i===0?'—':pc(sum[f],sum.nv))+'</td></tr>').join('')}
-  {const ks=keys.slice(0,7).filter(k=>k>='2026-11-02'&&days[k].n0),sm=f=>ks.reduce((a,k)=>a+(days[k][f]||0),0),pc=(a,b)=>b?Math.round(100*a/b)+'%':'—',n0=sm('n0');
-   const row=(lab,v,b)=>'<tr><td>'+lab+'</td><td>'+fmt(v)+'</td><td>'+pc(v,b)+'</td></tr>';
-   $('entry').innerHTML=!ks.length?'<tr><td colspan="3">まだ記録がありません</td></tr>':[['開いた（すぐ帰った人も含む）','n0'],['4秒以上いた','nv'],['ルールの「読んだ」を押した','ho'],['「4問で覚える」を押した','hl'],['「Play」を押した','pg'],['1局目を始めた','fs']].map(([l,f])=>row(l,sm(f),n0)).join('');
-   const grp=(id,F)=>{const tt=F.reduce((a,[,f])=>a+sm(f),0);$(id).innerHTML=F.map(([l,f])=>row(l,sm(f),tt)).join('')};
-   $('entryIB').innerHTML=[['アプリ内ブラウザ（Xなど）で来た','ib'],['「ブラウザで開く」を押した','ix'],['そのボタンからブラウザで来た','ia']].map(([l,f])=>row(l,sm(f),n0)).join('');
-   grp('entryL',[['2秒未満','l1'],['2〜5秒','l2'],['5〜10秒','l3'],['10秒以上','l4']]);
-   grp('entryQ',[['10秒未満','q1'],['10〜30秒','q2'],['30秒〜2分','q3'],['2分以上','q4']])}
-  const mx=Math.max(1,...keys.map(k=>days[k].sec||0));
-  $('days').innerHTML=keys.slice(0,45).map(k=>{const d=days[k];return '<tr><td>'+k.slice(5).replace('-','/')+'</td><td>'+Math.round((d.sec||0)/60)+'分<span class="bar" style="width:'+Math.round(60*(d.sec||0)/mx)+'px"></span></td><td>'+fmt(d.players)+'</td><td>'+fmt(d.games)+'</td><td>'+fmt(d.visitors)+'</td><td>'+fmt(d.nv)+(d.n0!=null?'<span class="sub">（全'+fmt(d.n0)+'）</span>':'')+'</td><td>'+fmt(d.signups)+((d.ev||d.nm)?'<span class="sub">（確認'+fmt(d.ev||0)+'・名前'+fmt(d.nm||0)+'）</span>':'')+'</td></tr>'}).join('')||'<tr><td colspan="7">まだ記録がありません</td></tr>';
-  const first=keys[keys.length-1];
-  $('note').innerHTML='集計の開始：'+(first||'—')+'。それより前のプレイ時間・対局数・人数は記録されていません。<br>人数は端末（ブラウザ）ごとに数えるので、同じ人がスマホとパソコンで遊ぶと2人になります。オンライン対戦は1局を1回だけ数えます。<br>「初めて来た人」はその日に初めて開いて4秒以上いた端末の数です（2026年10月29日から）。かっこ内の「全」はすぐ帰った人も含めた数です（2026年11月1日から）。<br>「新規登録」はアカウントを作った数で、かっこ内はそのうちメール確認を済ませた数・初めて名前を付けた数です。<br>「メール確認」は2026年11月1日以降に作られたアカウントが確認メールのリンクを押してログインした数、「名前」は初めて名前を付けた数です（どちらも1アカウント1回）。<br>最終更新：'+new Date(j.now).toLocaleString('ja-JP');
-  // 登録アカウント：ログインを確認できた数（集計開始以後）と、名前を付けたアカウント（過去分も含む）
+
+  // 3. 新しく来た人
+  {const F=[['nv','初めて開いた（4秒以上いた）'],['fs','1局目を始めた'],['fg','1局目を最後まで指した'],['r1','次の日にまた来た'],['r7','7日以内にまた来た']];const s={};for(const [f] of F)s[f]=sum(cur,f);
+   $('funnel').innerHTML=s.nv?F.map(([f,l])=>'<div class="fr"><div class="top"><b>'+l+'</b><span>'+fmt(s[f])+'人<em>'+pc(s[f],s.nv)+'</em></span></div><div class="tr"><i style="width:'+Math.max(1,Math.round(100*s[f]/s.nv))+'%"></i></div></div>').join(''):'<div class="empty">まだ記録がありません</div>'}
+  {const cnt=pre=>{const o={};for(const k of keys.slice(0,7))for(const [f,v] of Object.entries(D(k)))if(f.startsWith(pre))o[f.slice(pre.length)]=(o[f.slice(pre.length)]||0)+v;return Object.entries(o).sort((a,b)=>b[1]-a[1])};
+   const em='11月3日から数えています';
+   bars('xSrc',cnt('s_').map(([k,v])=>[SRC[k]||k,v]),{empty:em});bars('xCc',cnt('c_').map(([k,v])=>[CC[k]||k,v]),{empty:em});
+   bars('xDv',cnt('d_').map(([k,v])=>[k==='m'?'スマホ・タブレット':'パソコン',v]),{empty:em});bars('xLg',cnt('g_').map(([k,v])=>[LG[k]||k,v]),{empty:em})}
+
+  // 4. 遊び方
+  {const pl=sum(cur,'players'),gm=sum(cur,'games'),sc=sum(cur,'sec');
+   $('kPerG').innerHTML=(pl?r1(gm/pl):0)+'<small>局</small>';$('kPerT').innerHTML=(pl?Math.round(sc/pl/60):0)+'<small>分</small>';
+   $('kSec').innerHTML=hm(t.sec);$('kSecS').textContent='今日 '+Math.round((td.sec||0)/60)+'分';
+   $('kG').innerHTML=fmt(t.games)+'<small>局</small>';$('kGS').textContent='今日 '+fmt(td.games)+'局';
+   bars('modes',Object.entries(j.modes||{}).sort((a,b)=>b[1]-a[1]).map(([k,v])=>[MODE[k]||k,v]))}
+
+  // 5. アカウントと累計
+  $('kPl').innerHTML=fmt(t.players)+'<small>人</small>';$('kV').innerHTML=fmt(t.visitors)+'<small>人</small>';
+  $('kSu').innerHTML=fmt(sum(cur,'signups'))+'<small>件</small>';$('kSuS').textContent='メール確認 '+fmt(sum(cur,'ev'))+'・名前 '+fmt(sum(cur,'nm'));
+  $('kAcc').innerHTML='…';
+
+  // 6. 細かいデータ
+  {const ks=keys.slice(0,7).filter(k=>k>='2026-11-02'&&D(k).n0),sm=f=>ks.reduce((a,k)=>a+(D(k)[f]||0),0),n0=sm('n0');
+   const row=(l,v,b)=>'<tr><td>'+l+'</td><td>'+fmt(v)+'</td><td>'+pc(v,b)+'</td></tr>',none='<tr><td colspan="3">まだ記録がありません</td></tr>';
+   $('entry').innerHTML=!ks.length?none:[['開いた（すぐ帰った人も含む）','n0'],['4秒以上いた','nv'],['ルールの「読んだ」を押した','ho'],['「4問で覚える」を押した','hl'],['「Play」を押した','pg'],['1局目を始めた','fs']].map(([l,f])=>row(l,sm(f),n0)).join('');
+   $('entryIB').innerHTML=!ks.length?none:[['アプリ内ブラウザ（Xなど）で来た','ib'],['「ブラウザで開く」を押した','ix'],['そのボタンからブラウザで来た','ia']].map(([l,f])=>row(l,sm(f),n0)).join('');
+   const grp=(id,F)=>{const tt=F.reduce((a,[,f])=>a+sm(f),0);$(id).innerHTML=!ks.length?none:F.map(([l,f])=>row(l,sm(f),tt)).join('')};
+   grp('entryL',[['2秒未満','l1'],['2〜5秒','l2'],['5〜10秒','l3'],['10秒以上','l4']]);grp('entryQ',[['10秒未満','q1'],['10〜30秒','q2'],['30秒〜2分','q3'],['2分以上','q4']])}
+  $('days').innerHTML=keys.slice(0,45).map(k=>{const d=D(k);return '<tr><td>'+(+k.slice(5,7))+'/'+(+k.slice(8))+'</td><td>'+fmt(d.players)+'</td><td>'+fmt(d.visitors)+'</td><td>'+(d.nv!=null?fmt(d.nv):'—')+(d.n0!=null?'<span class="sub">全'+fmt(d.n0)+'</span>':'')+'</td><td>'+fmt(d.games)+'</td><td>'+Math.round((d.sec||0)/60)+'分</td><td>'+fmt(d.signups)+((d.ev||d.nm)?'<span class="sub">確認'+fmt(d.ev||0)+'・名前'+fmt(d.nm||0)+'</span>':'')+'</td></tr>'}).join('')||'<tr><td colspan="7">まだ記録がありません</td></tr>';
+  $('note').innerHTML=['<p>集計の開始：'+(keys[keys.length-1]||'—')+'。それより前のプレイ時間・対局数・人数は記録されていません。</p>',
+   '<p>人数は端末（ブラウザ）ごとに数えます。同じ人がスマホとパソコンで遊ぶと2人になります。オンライン対戦は1局を1回だけ数えます。</p>',
+   '<p><b>遊んだ人（DAU）</b>：その日に1局以上指したか、プレイ時間がある端末。<b>開いた人</b>：サイトを開いた端末。<b>初めて来た人</b>：その日に初めて開いて4秒以上いた端末（10月29日から）。表の「全」はすぐ帰った人も含めた数（11月1日から）。</p>',
+   '<p><b>次の日にまた来た</b>：直近7日（今日を除く）に初めて来た人のうち、翌日にも開いた割合。</p>',
+   '<p><b>来た場所・国・端末・言語</b>：初めて来た端末の初日だけ（11月3日から）。「直接」はリンク元がわからない来方（ブックマーク・URLの入力・YouTubeやXのアプリから開いたときなど）も含みます。リンクに ?ref=yt などを付けると、来た場所がはっきりわかります。国は接続している場所から判定します。</p>',
+   '<p><b>入口の細かい流れ</b>：11月2日から（11月1日は途中から記録が始まったので入れていません）。「離れる」はタブを閉じた・別のアプリに切り替えたときで、あとで戻ってきた人も入ります。11月3日から、初めて来た端末はホームを飛ばして「CPU やさしい」との1局目が自動で始まるので、それ以降は「Play」を押す人が減ります。</p>',
+   '<p><b>新規登録</b>：アカウントを作った数。「確認」は確認メールのリンクを押してログインした数、「名前」は初めて名前を付けた数（どちらも1アカウント1回、11月1日以降に作られたアカウント）。</p>'].join('');
+  // 登録アカウント：ログインを確認できた数と、名前を付けたアカウント（過去分も含む）の多いほう
   let named=null;try{const fr=await fetch(FS,{method:'POST',body:JSON.stringify({structuredAggregationQuery:{structuredQuery:{from:[{collectionId:'names'}]},aggregations:[{alias:'n',count:{}}]}})});
     if(fr.ok){const a=await fr.json();named=+(a[0]&&a[0].result&&a[0].result.aggregateFields.n.integerValue)}}catch(e){}
   $('kAcc').innerHTML=fmt(Math.max(t.accounts||0,named||0))+'<small>件</small>';
-  $('kAccS').textContent='ログイン確認 '+fmt(t.accounts)+'件'+(named!=null?'・名前付き '+fmt(named)+'件':'')+'・新規 '+fmt(t.signups)+'件'+(t.ev!=null?'・メール確認 '+fmt(t.ev)+'件':'')+(t.nm!=null?'・初めて名前 '+fmt(t.nm)+'件':'');
+  $('kAccS').textContent='ログイン確認 '+fmt(t.accounts)+(named!=null?'・名前付き '+fmt(named):'');
 }
 
 // ユーザー数の推移（折れ線3本・同じ単位なので軸は1つ）
@@ -150,26 +263,27 @@ const USER_S=[['players','遊んだ人','#3987e5','遊んだ'],['visitors','開�
 $('uLeg').innerHTML=USER_S.map(([,l,c])=>'<span><i style="background:'+c+'"></i>'+l+'</span>').join('');
 $('uRng').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;URNG=+b.dataset.n;[...$('uRng').children].forEach(x=>x.classList.toggle('on',x===b));drawU()});
 function drawU(){const days=window.__days||{};const svg=$('uChart'),tip=$('uTip');let ks=Object.keys(days).sort();if(URNG)ks=ks.slice(-URNG);
- const W=svg.clientWidth||600,H=240,L=34,R=66,T=10,B=24;svg.setAttribute('viewBox','0 0 '+W+' '+H);
- if(!ks.length){svg.innerHTML='<text x="'+W/2+'" y="'+H/2+'" fill="#9a9484" font-size="13" text-anchor="middle">まだ記録がありません</text>';return}
+ const W=svg.clientWidth||600,H=240,L=30,R=66,T=10,B=24;svg.setAttribute('viewBox','0 0 '+W+' '+H);
+ if(!ks.length){svg.innerHTML='<text x="'+W/2+'" y="'+H/2+'" fill="#a29c8c" font-size="13" text-anchor="middle">まだ記録がありません</text>';return}
  const mx=Math.max(1,...ks.flatMap(k=>USER_S.map(([f])=>days[k][f]||0)));const step=mx<=5?1:mx<=10?2:mx<=25?5:mx<=50?10:mx<=100?20:mx<=250?50:100;const top=Math.ceil(mx/step)*step;
  const x=i=>L+(ks.length===1?(W-L-R)/2:i*(W-L-R)/(ks.length-1)),y=v=>T+(H-T-B)*(1-v/top);
- let g='';for(let v=0;v<=top;v+=step)g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="rgba(236,230,216,.08)"/><text x="'+(L-6)+'" y="'+(y(v)+4)+'" fill="#6f6a5e" font-size="11" text-anchor="end">'+v+'</text>';
- const every=Math.max(1,Math.ceil(ks.length/6));ks.forEach((k,i)=>{if(i%every===0||i===ks.length-1)g+='<text x="'+x(i)+'" y="'+(H-6)+'" fill="#6f6a5e" font-size="11" text-anchor="middle">'+(+k.slice(5,7))+'/'+(+k.slice(8))+'</text>'});
+ let g='';for(let v=0;v<=top;v+=step)g+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y(v)+'" y2="'+y(v)+'" stroke="rgba(236,230,216,.07)"/><text x="'+(L-6)+'" y="'+(y(v)+4)+'" fill="#736e62" font-size="11" text-anchor="end">'+v+'</text>';
+ const every=Math.max(1,Math.ceil(ks.length/6));ks.forEach((k,i)=>{if(i%every===0||i===ks.length-1)g+='<text x="'+x(i)+'" y="'+(H-6)+'" fill="#736e62" font-size="11" text-anchor="middle">'+(+k.slice(5,7))+'/'+(+k.slice(8))+'</text>'});
  const lab=[];USER_S.forEach(([f,l,c,sl])=>{const pts=ks.map((k,i)=>[x(i),y(days[k][f]||0)]);if(f==='nv'){const i0=ks.findIndex(k=>days[k].nv!=null);if(i0<0)return;pts.splice(0,i0)}
   g+='<polyline fill="none" stroke="'+c+'" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="'+pts.map(p=>p.join(',')).join(' ')+'"/>';
-  const p=pts[pts.length-1];g+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="4" fill="'+c+'" stroke="#131a17" stroke-width="2"/>';lab.push([p[1],sl,days[ks[ks.length-1]][f]||0])});
+  const p=pts[pts.length-1];g+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="4" fill="'+c+'" stroke="#141b18" stroke-width="2"/>';lab.push([p[1],sl,days[ks[ks.length-1]][f]||0])});
  lab.sort((a,b)=>a[0]-b[0]);for(let i=1;i<lab.length;i++)if(lab[i][0]-lab[i-1][0]<14)lab[i][0]=lab[i-1][0]+14;
- lab.forEach(([yy,l,v])=>g+='<text x="'+(W-R+8)+'" y="'+(yy+4)+'" fill="#9a9484" font-size="11">'+l+' '+v+'</text>');
+ lab.forEach(([yy,l,v])=>g+='<text x="'+(W-R+8)+'" y="'+(yy+4)+'" fill="#a29c8c" font-size="11">'+l+' '+v+'</text>');
  g+='<line id="uX" x1="0" x2="0" y1="'+T+'" y2="'+(H-B)+'" stroke="rgba(236,230,216,.35)" stroke-dasharray="3 3" visibility="hidden"/><rect x="'+L+'" y="0" width="'+(W-L-R)+'" height="'+H+'" fill="transparent" id="uHit"/>';
  svg.innerHTML=g;const hit=svg.querySelector('#uHit'),cx=svg.querySelector('#uX');
  const show=ev=>{const r=svg.getBoundingClientRect();const px=(ev.touches?ev.touches[0].clientX:ev.clientX)-r.left;const sx=px*W/r.width;let i=ks.length===1?0:Math.round((sx-L)/((W-L-R)/(ks.length-1)));i=Math.max(0,Math.min(ks.length-1,i));
   cx.setAttribute('x1',x(i));cx.setAttribute('x2',x(i));cx.setAttribute('visibility','visible');const d=days[ks[i]];
   tip.innerHTML='<b>'+(+ks[i].slice(5,7))+'月'+(+ks[i].slice(8))+'日</b>'+USER_S.map(([f,l,c])=>'<div class="r"><span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+c+';margin-right:5px"></i>'+l+'</span><span>'+(d[f]!=null?fmt(d[f]):'—')+'</span></div>').join('');
-  tip.style.display='block';const tx=x(i)*r.width/W+12;tip.style.left=Math.min(tx,r.width-tip.offsetWidth-4)+'px';tip.style.top='40px'};
+  tip.style.display='block';const tx=x(i)*r.width/W+12;tip.style.left=Math.max(0,Math.min(tx,r.width-tip.offsetWidth-4))+'px';tip.style.top='8px'};
  const hide=()=>{tip.style.display='none';cx.setAttribute('visibility','hidden')};
  hit.addEventListener('mousemove',show);hit.addEventListener('touchstart',show,{passive:true});hit.addEventListener('touchmove',show,{passive:true});hit.addEventListener('mouseleave',hide);hit.addEventListener('touchend',()=>setTimeout(hide,1500))}
 addEventListener('resize',()=>{if(window.__days)drawU()});
+
 async function unlock(){$('err').textContent='確かめています…';$('go').disabled=true;
   try{await load();try{localStorage.setItem('bocch-stats-pw',PW)}catch(e){}$('lock').hidden=true;$('main').hidden=false;if(window.__days)drawU();$('err').textContent=''}
   catch(e){$('err').textContent=e==='pw'?'パスワードが違います':'読み込めませんでした。少し待ってからもう一度';PW='';try{localStorage.removeItem('bocch-stats-pw')}catch(x){}}
