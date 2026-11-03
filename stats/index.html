@@ -183,6 +183,8 @@ const pc=(a,b)=>b?Math.round(100*a/b)+'%':'—';
 const MODE={net:'オンライン（人）',shadow:'オンライン（影の相手）',local:'1台で2人',cpu1:'CPU やさしい',cpu2:'CPU ふつう',cpu3:'CPU つよい',cpu4:'CPU 最強'};
 const SRC={yt:'YouTube',x:'X（Twitter）',nt:'note',gs:'Google検索',sr:'ほかの検索',rd:'Reddit',hn:'Hacker News',sn:'ほかのSNS',dr:'直接（リンク元なし）',o:'その他のサイト'};
 const CC={JP:'日本',US:'アメリカ',KR:'韓国',TW:'台湾',DE:'ドイツ',CN:'中国',HK:'香港',GB:'イギリス',CA:'カナダ',AU:'オーストラリア',AT:'オーストリア',CH:'スイス',FR:'フランス',XX:'不明'};
+// 一覧にない国も日本語名で出す（ブラウザの国名辞書を使う。だめなら国コードのまま）
+const ccName=k=>{if(CC[k])return CC[k];try{return new Intl.DisplayNames(['ja'],{type:'region'}).of(k)||k}catch(e){return k}};
 const LG={ja:'日本語',en:'英語',ko:'韓国語',zh:'中国語',de:'ドイツ語',es:'スペイン語',fr:'フランス語',xx:'不明'};
 let PW='';try{PW=localStorage.getItem('bocch-stats-pw')||sessionStorage.getItem('bocch-stats-pw')||''}catch(e){}
 
@@ -221,7 +223,7 @@ async function load(){
    $('funnel').innerHTML=s.nv?F.map(([f,l])=>'<div class="fr"><div class="top"><b>'+l+'</b><span>'+fmt(s[f])+'人<em>'+pc(s[f],s.nv)+'</em></span></div><div class="tr"><i style="width:'+Math.max(1,Math.round(100*s[f]/s.nv))+'%"></i></div></div>').join(''):'<div class="empty">まだ記録がありません</div>'}
   {const cnt=pre=>{const o={};for(const k of keys.slice(0,7))for(const [f,v] of Object.entries(D(k)))if(f.startsWith(pre))o[f.slice(pre.length)]=(o[f.slice(pre.length)]||0)+v;return Object.entries(o).sort((a,b)=>b[1]-a[1])};
    const em='11月3日から数えています';
-   bars('xSrc',cnt('s_').map(([k,v])=>[SRC[k]||k,v]),{empty:em});bars('xCc',cnt('c_').map(([k,v])=>[CC[k]||k,v]),{empty:em});
+   bars('xSrc',cnt('s_').map(([k,v])=>[SRC[k]||k,v]),{empty:em});bars('xCc',cnt('c_').map(([k,v])=>[ccName(k),v]),{empty:em});
    bars('xDv',cnt('d_').map(([k,v])=>[k==='m'?'スマホ・タブレット':'パソコン',v]),{empty:em});bars('xLg',cnt('g_').map(([k,v])=>[LG[k]||k,v]),{empty:em})}
 
   // 4. 遊び方
