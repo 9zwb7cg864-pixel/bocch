@@ -39,6 +39,8 @@ export default {
     if (parts[0] === "bocch-v1-tally" && parts[1] === "note") {
       url.pathname = "/bocch-v1-stats/hit"; req = new Request(url.toString(), req); parts = ["bocch-v1-stats", "hit"];
     }
+    // 集計には国（Cloudflare が判定）を付けて渡す
+    if (parts[0] === "bocch-v1-stats" && parts[1] === "hit") { const hd = new Headers(req.headers); hd.set("X-CC", String((req.cf && req.cf.country) || "")); req = new Request(req, { headers: hd }); }
     const topic = parts[0] || "";
     if (!/^[A-Za-z0-9_-]{1,64}$/.test(topic)) {
       return new Response("bocch relay ok\n", { headers: { ...cors(req), "Content-Type": "text/plain; charset=utf-8" } });
@@ -173,6 +175,15 @@ export class Topic extends DurableObject {
     // 入口の計測：n0 開いた（すぐ帰った人も含む）・l1〜l4 表示までの時間・ho ルールを読んだ・hl 4問で覚える・pg Playを押した・q1〜q4 1局も始めずに離れるまでの時間
     for (const f of ["nv", "fs", "fg", "r1", "r7", "n0", "l1", "l2", "l3", "l4", "ho", "hl", "pg", "q1", "q2", "q3", "q4", "ib", "ix", "ia"]) {
       if (b[f] && !(await st.get(f + ":" + d))) { put[f + ":" + d] = 1; T[f] = (T[f] || 0) + 1; D[f] = (D[f] || 0) + 1; }
+    }
+    // 初めて来た人の内訳（端末ごとに1回）：s_ 来た場所・c_ 国・g_ 言語・d_ 端末（m スマホ・d パソコン）
+    {
+      const src = String(b.src || "").replace(/[^a-z]/g, "").slice(0, 3), lg = String(b.lg || "").replace(/[^a-z]/g, "").slice(0, 2), dv = b.dv === "m" || b.dv === "d" ? b.dv : "";
+      if ((src || lg || dv) && !(await st.get("x:" + d))) {
+        put["x:" + d] = 1;
+        const cc = String(req.headers.get("X-CC") || "").toUpperCase().replace(/[^A-Z]/g, "").slice(0, 2) || "XX";
+        for (const k of [src && "s_" + src, lg && "g_" + lg, dv && "d_" + dv, "c_" + cc]) if (k) { T[k] = (T[k] || 0) + 1; D[k] = (D[k] || 0) + 1; }
+      }
     }
     // 登録の流れ：ev メール確認が済んだ・nm 初めて名前を付けた（アカウントごとに1回だけ）
     if (/^[a-f0-9]{16,32}$/.test(u)) for (const f of ["ev", "nm"]) {
