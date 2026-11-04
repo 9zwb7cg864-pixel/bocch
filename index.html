@@ -904,7 +904,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.26</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.27</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -3471,7 +3471,7 @@ function frBadge(){const b=$('frBadge');b.textContent=String(FR.fin.length);b.hi
 function frPostList(){const me=myUid();if(!me)return;frRelay(frTopic('fd',me),{t:'flist',uids:FR.friends.map(f=>f.uid),name:myName()});try{localStorage.setItem('bocch-fr-lp',String(Date.now()))}catch(e){}}
 function frAdd(uid,name){if(!isFriend(uid))FR.friends.push({uid,name:cleanName(name)||'名無し',t:Date.now()});FR.fout=FR.fout.filter(f=>f.uid!==uid);FR.fin=FR.fin.filter(f=>f.uid!==uid)}
 async function frRequest(uid,name){const me=myUid();if(!me){frMsg('フレンド機能は、アカウントにログインすると使えます',true);return false}
-  if(uid===me){frMsg('自分には申請できません',true);return false}if(isFriend(uid)){frMsg(name+' さんはもうフレンドです');return false}
+  if(uid===me){frMsg('自分には申請できません',true);return false}if(isFriend(uid)){const f=FR.friends.find(x=>x.uid===uid),was=f&&f.name;if(f&&cleanName(name)&&f.name!==cleanName(name)){f.name=cleanName(name);frSave();frRender()}frMsg(name+' さんはもうフレンドです'+(was&&was!==cleanName(name)?'（一覧では前の名前「'+was+'」で表示されていました）':''));return false}
   if(FR.fin.some(f=>f.uid===uid)){frAccept(uid);return true}
   const ok=await frRelay(frTopic('in',uid),{t:'freq',uid:me,name:myName()});
   if(!ok){frMsg('送れませんでした。時間をおいて試してください',true);return false}
@@ -3493,7 +3493,12 @@ async function frPollInbox(){const me=myUid();if(!me||!FR.loaded)return;const ms
     else if(m.t==='finv'||m.t==='fdec'){m._pre=1;frInvMsg(m)}}
   if(ch){frSeenSave();frSave();frBadge();frRender();frPostList()}}
 // フレンドと申請先の公開欄を読む（申請先の「フレンド一覧」に自分が入っていたら、承認されたとみなす）
-async function frPollFeeds(){const me=myUid();if(!me)return;const targets=[...FR.friends,...FR.fout];let ch=false;FR.on=FR.on||{};
+// フレンドの今の名前を名前の台帳から取り直す（名前を変えた人が前の名前のまま残らないように）
+let frNamesAt=0;async function frRefreshNames(){if(Date.now()-frNamesAt<10*60*1000||!FR.friends.length)return;frNamesAt=Date.now();
+  try{await fbInit();let ch=false;await Promise.all(FR.friends.map(async f=>{try{const q=await FB.db.collection('names').where('uid','==',f.uid).limit(5).get();
+    let best=null;q.forEach(d=>{const x=d.data();if(x&&cleanName(x.name)&&(!best||(x.t||0)>(best.t||0)))best=x});
+    if(best){const nm=cleanName(best.name);if(nm!==f.name){f.name=nm;ch=true}}}catch(e){}}));if(ch){frSave();frRender()}}catch(e){}}
+async function frPollFeeds(){const me=myUid();if(!me)return;frRefreshNames();const targets=[...FR.friends,...FR.fout];let ch=false;FR.on=FR.on||{};
   await Promise.all(targets.map(async f=>{
     if(isFriend(f.uid))frRead(frTopic('on',f.uid),'3m').then(os=>{if(!os)return;const l=os.filter(o=>o.t==='on'||o.t==='off').pop();FR.on[f.uid]=l?(l.t==='on'?l._t:0):0;frRender()});
     const ms=await frRead(frTopic('fd',f.uid),'12h');if(!ms)return;FR.feeds[f.uid]=ms;
