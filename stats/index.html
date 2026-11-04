@@ -41,6 +41,9 @@ section{margin-top:26px}
 .t .v small{font-size:13px;color:var(--fg);font-weight:500;margin-left:3px}
 .t .s{font-size:11.5px;color:var(--mute);margin-top:4px;line-height:1.5}
 .t.sm .v{font-size:22px}
+.t.tap{cursor:pointer}.t.tap:hover{border-color:var(--goldhi)}.t .hint{font-size:10.5px;color:var(--mute);margin-left:4px}
+.accList{margin-top:10px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;max-height:420px;overflow-y:auto}
+.accList ol{margin:0;padding-left:2.4em;font-size:13.5px;line-height:1.9}.accList li span{color:var(--mute);font-size:11.5px;margin-left:8px}.accList .s{font-size:12px;color:var(--mute)}
 .dl{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:700;border-radius:20px;padding:1px 8px;margin-top:6px;background:rgba(236,230,216,.06);color:var(--sub)}
 .dl.up{color:var(--up);background:rgba(63,178,127,.12)}.dl.down{color:var(--down);background:rgba(224,132,108,.12)}
 /* 推移グラフ */
@@ -149,11 +152,12 @@ td .sub{display:block;font-size:11px;color:var(--mute)}
     <section>
       <div class="sh"><h2>アカウントと累計</h2></div>
       <div class="tiles four">
-        <div class="t sm"><div class="l">登録アカウント</div><div class="v" id="kAcc">—</div><div class="s" id="kAccS"></div></div>
+        <div class="t sm tap" id="accTile" role="button" tabindex="0" aria-expanded="false"><div class="l">登録アカウント <span class="hint">▼ 押すと一覧</span></div><div class="v" id="kAcc">—</div><div class="s" id="kAccS"></div></div>
         <div class="t sm"><div class="l">新規登録（直近7日）</div><div class="v" id="kSu">—</div><div class="s" id="kSuS"></div></div>
         <div class="t sm"><div class="l">遊んだ人（累計）</div><div class="v" id="kPl">—</div></div>
         <div class="t sm"><div class="l">サイトを開いた人（累計）</div><div class="v" id="kV">—</div></div>
       </div>
+      <div id="accList" class="accList" hidden></div>
     </section>
 
     <!-- 6. 細かいデータ -->
@@ -294,6 +298,19 @@ $('lock').addEventListener('submit',e=>{e.preventDefault();PW=$('pw').value;unlo
 $('reload').addEventListener('click',()=>load().catch(()=>{}));
 $('out').addEventListener('click',()=>{PW='';try{localStorage.removeItem('bocch-stats-pw')}catch(e){}$('main').hidden=true;$('lock').hidden=false;$('pw').value=''});
 if(PW)unlock();
+
+// 登録アカウントの欄を押すと、名前の一覧（新しい順）を開く
+(()=>{const tile=$('accTile'),box=$('accList');let loaded=false;
+ const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const dt=ms=>{const d=new Date(+ms);return isNaN(d)?'':(d.getMonth()+1)+'/'+d.getDate()+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
+ async function load(){box.innerHTML='<div class="s">読み込み中…</div>';
+  try{const r=await fetch(FSB+':runQuery?key='+FKEY,{method:'POST',body:JSON.stringify({structuredQuery:{from:[{collectionId:'names'}],orderBy:[{field:{fieldPath:'t'},direction:'DESCENDING'}],limit:1000}})});
+   if(!r.ok)throw new Error(r.status);const a=await r.json();
+   const rows=a.filter(x=>x.document).map(x=>{const f=x.document.fields||{};return {n:(f.name&&f.name.stringValue)||'',t:f.t&&(f.t.integerValue||f.t.doubleValue)}}).filter(x=>x.n);
+   box.innerHTML='<div class="s">名前を付けたアカウント '+rows.length+'件（新しい順）</div><ol>'+rows.map(x=>'<li>'+esc(x.n)+'<span>'+dt(x.t)+'</span></li>').join('')+'</ol>';loaded=true}
+  catch(e){box.innerHTML='<div class="s">一覧を読み込めませんでした（'+esc(e.message||e)+'）</div>'}}
+ function toggle(){const open=box.hidden;box.hidden=!open;tile.setAttribute('aria-expanded',open);tile.querySelector('.hint').textContent=open?'▲ 閉じる':'▼ 押すと一覧';if(open&&!loaded)load()}
+ tile.addEventListener('click',toggle);tile.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}})})();
 </script>
 </body>
 </html>
