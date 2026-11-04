@@ -837,6 +837,13 @@ html:is([lang=en],[lang=es],[lang=de]) .pm .hm-fimg img{height:46px}
 .mvmyo span{font-family:var(--f-disp);font-weight:800;color:var(--gold-hi)}.mvmyo small{font-size:11px;color:var(--sub)}
 html:not([lang=ja]) .hm-menu span{font-size:10.5px}
 html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is([lang=en],[lang=es],[lang=de]) .hm-sub .hm-fimg img{height:36px}
+
+/* 仮：四角の駒（設定の「四角の駒」で切り替え） */
+html.sqst .stone,html.sqst .stone::before,html.sqst .stone::after,html.sqst .mvghost,html.sqst .cell.lastFrom::before,html.sqst .cell.bestf::after,html.sqst .cell.bestt::after{border-radius:16%!important}
+html.sqst .stone.b:not(.rk){box-shadow:inset 0 0 0 2px rgba(201,169,110,.85),0 4px 6px rgba(0,0,0,.38)}
+html.sqst .stone.w:not(.rk){box-shadow:inset 0 0 0 2px rgba(120,110,95,.75),0 4px 6px rgba(0,0,0,.38)}
+html.sqst .stone.b.zero:not(.rk){box-shadow:inset 0 0 0 2px rgba(201,169,110,.4),0 4px 6px rgba(0,0,0,.38)}
+html.sqst .stone.w.zero:not(.rk){box-shadow:inset 0 0 0 2px rgba(120,110,95,.4),0 4px 6px rgba(0,0,0,.38)}
 </style>
 <style>
 /* ===== キャラとガチャ（2026-11） ===== */
@@ -904,7 +911,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.28</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.29</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -1296,7 +1303,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
     <button id="frOpp" class="i-plus" hidden>フレンド申請</button>
   </div>
   <div class="endrow" id="reviewRow" hidden><button id="reviewNow" class="endb main"><span>感想戦で振り返る</span></button><button id="xNow" class="endb"><span>Xで共有</span></button></div>
-  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label><label class="chk"><input type="checkbox" id="bgmOn"> BGM</label></div>
+  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label><label class="chk"><input type="checkbox" id="bgmOn"> BGM</label><label class="chk"><input type="checkbox" id="sqStone"> 四角の駒</label></div>
   <div class="ad-slot ad-over" data-ad="over" hidden aria-label="広告"></div>
 </section>
 
@@ -2460,6 +2467,11 @@ render();
 (function(){try{if(localStorage.getItem('bocch-kifu-open')==='1')$('kifuBox').open=true;if(localStorage.getItem('bocch-lab')==='0')$('showLab').checked=false}catch(e){}})();
 $('kifuBox').addEventListener('toggle',()=>{try{localStorage.setItem('bocch-kifu-open',$('kifuBox').open?'1':'0')}catch(e){}});
 $('showLab').addEventListener('change',()=>{try{localStorage.setItem('bocch-lab',$('showLab').checked?'1':'0')}catch(e){}render()});
+// 仮：四角の駒の切り替え（この端末だけに保存）
+(function(){const c=$('sqStone');if(!c)return;const ap=on=>document.documentElement.classList.toggle('sqst',on);
+  try{c.checked=localStorage.getItem('bocch-sq')==='1'}catch(e){}ap(c.checked);
+  c.addEventListener('change',()=>{ap(c.checked);try{localStorage.setItem('bocch-sq',c.checked?'1':'0')}catch(e){}})})();
+
 render();
 $('randomBtn').addEventListener('click',startMatch);
 $('reseek').addEventListener('click',()=>startMatch());
