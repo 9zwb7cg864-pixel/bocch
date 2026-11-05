@@ -118,6 +118,7 @@ header p{margin:0;color:var(--sub);font-family:var(--f-disp);font-size:14px;lett
 .mvb.up{color:var(--gold-hi)}.mvb.dn{color:#f2b3a4}.flip .mvb{transform:rotate(180deg);top:auto;right:auto;bottom:2px;left:1px;animation-name:mvUpF}
 @keyframes mvUp{0%{transform:translateY(4px);opacity:0}15%{opacity:1}75%{opacity:1}100%{transform:translateY(-5px);opacity:0}}
 @keyframes mvUpF{0%{transform:rotate(180deg) translateY(4px);opacity:0}15%{opacity:1}75%{opacity:1}100%{transform:rotate(180deg) translateY(-5px);opacity:0}}
+.mvrip{position:absolute;left:50%;top:50%;width:84%;height:84%;margin:-42% 0 0 -42%;border-radius:50%;border:2px solid rgba(240,216,150,.55);pointer-events:none;animation:mvrip .48s ease-out forwards;z-index:0}@keyframes mvrip{from{transform:scale(.7);opacity:.9}to{transform:scale(1.35);opacity:0}}@media (prefers-reduced-motion:reduce){.mvrip{display:none}}
 .mvghost{position:absolute;width:80%;height:80%;border-radius:50%;opacity:.2;pointer-events:none}
 .mvghost.b{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%)}.mvghost.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%)}
 svg.mvfx{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;z-index:4}
@@ -838,12 +839,6 @@ html:is([lang=en],[lang=es],[lang=de]) .pm .hm-fimg img{height:46px}
 html:not([lang=ja]) .hm-menu span{font-size:10.5px}
 html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is([lang=en],[lang=es],[lang=de]) .hm-sub .hm-fimg img{height:36px}
 
-/* 仮：四角の駒（設定の「四角の駒」で切り替え） */
-html.sqst .stone,html.sqst .stone::before,html.sqst .stone::after,html.sqst .mvghost,html.sqst .cell.lastFrom::before,html.sqst .cell.bestf::after,html.sqst .cell.bestt::after{border-radius:16%!important}
-html.sqst .stone.b:not(.rk){box-shadow:inset 0 0 0 2px rgba(201,169,110,.85),0 4px 6px rgba(0,0,0,.38)}
-html.sqst .stone.w:not(.rk){box-shadow:inset 0 0 0 2px rgba(120,110,95,.75),0 4px 6px rgba(0,0,0,.38)}
-html.sqst .stone.b.zero:not(.rk){box-shadow:inset 0 0 0 2px rgba(201,169,110,.4),0 4px 6px rgba(0,0,0,.38)}
-html.sqst .stone.w.zero:not(.rk){box-shadow:inset 0 0 0 2px rgba(120,110,95,.4),0 4px 6px rgba(0,0,0,.38)}
 </style>
 <style>
 /* ===== キャラとガチャ（2026-11） ===== */
@@ -911,7 +906,7 @@ html.sqst .stone.w.zero:not(.rk){box-shadow:inset 0 0 0 2px rgba(120,110,95,.4),
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.29</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.30</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -1303,7 +1298,7 @@ html.sqst .stone.w.zero:not(.rk){box-shadow:inset 0 0 0 2px rgba(120,110,95,.4),
     <button id="frOpp" class="i-plus" hidden>フレンド申請</button>
   </div>
   <div class="endrow" id="reviewRow" hidden><button id="reviewNow" class="endb main"><span>感想戦で振り返る</span></button><button id="xNow" class="endb"><span>Xで共有</span></button></div>
-  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label><label class="chk"><input type="checkbox" id="bgmOn"> BGM</label><label class="chk"><input type="checkbox" id="sqStone"> 四角の駒</label></div>
+  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label><label class="chk"><input type="checkbox" id="bgmOn"> BGM</label></div>
   <div class="ad-slot ad-over" data-ad="over" hidden aria-label="広告"></div>
 </section>
 
@@ -1822,8 +1817,16 @@ function mvPre(){const P=MV.prev,cur={S,ply:S.ply||0,b:S.b.slice(),last:S.last};
   if(MV.skip===cur.ply){MV.skip=-1;MV.pop=t;return}
   if(!mvLive()||MV_RM.matches||document.hidden)return;
   MV.hide=t;let rk='';try{rk=rankCls(colorRank(P.b[f]))}catch(e){}MV.run={f,t,p:P.b[f],d0:nbCount(P.b,f),rk}}
-function mvPost(){mvCand();if(MV.pop>=0){const s=$('c'+MV.pop).querySelector('.stone');MV.pop=-1;if(s&&!MV_RM.matches)s.animate([{scale:'1.1'},{scale:'1'}],{duration:160,easing:'ease-out'})}
+function mvPost(){mvCand();if(MV.pop>=0){const t=MV.pop,cl=$('c'+t),s=cl&&cl.querySelector('.stone');MV.pop=-1;if(s&&!MV_RM.matches)mvLand(t,cl,s)}
   if(MV.run&&!MV.run.go){MV.run.go=true;mvFly(MV.run)}}
+/* 着地の手応え：沈んで戻る・盤に波紋・周りの石の数字が近い順に変わる・短い振動 */
+function mvLand(t,cl,s){
+  s.animate([{scale:'1.1'},{scale:'.92',offset:.42},{scale:'1.03',offset:.72},{scale:'1'}],{duration:280,easing:'ease-out'});
+  try{const r=document.createElement('span');r.className='mvrip';cl.appendChild(r);r.addEventListener('animationend',()=>r.remove());setTimeout(()=>r.remove(),900)}catch(e){}
+  try{if(KOMA.on&&navigator.vibrate)navigator.vibrate(9)}catch(e){}
+  const tr=t/N|0,tc=t%N,ks=Object.keys(MV.badge||{}).map(Number).sort((a,b)=>Math.max(Math.abs((a/N|0)-tr),Math.abs(a%N-tc))-Math.max(Math.abs((b/N|0)-tr),Math.abs(b%N-tc)));
+  ks.forEach((i,k)=>{const c=$('c'+i),st=c&&c.querySelector('.stone');if(!st)return;const up=MV.badge[i]>0;
+    st.animate([{scale:'1',filter:'brightness(1)'},{scale:up?'1.12':'.94',filter:up?'brightness(1.35)':'brightness(.8)',offset:.4},{scale:'1',filter:'brightness(1)'}],{duration:300,delay:90+70*k,easing:'ease-out'})})}
 function mvStop(){if(MV.run){const r=MV.run;MV.run=null;try{r.fl&&r.fl.remove()}catch(e){}try{mvL('move').replaceChildren();if(MVK.move){MVK.move=null;mvKick()}}catch(e){}if(MV.hide>=0){const h=MV.hide;MV.hide=-1;const c=$('c'+h);if(c)c._h=null}}}
 /* 金糸：石のふちから出て、行き先の手前で止まる。どの向きも同じ割合で曲がる */
 const mvC=i=>[(i%N)*100+50,(i/N|0)*100+50];
@@ -1876,10 +1879,11 @@ function mvFly(R){const ln={c:mvCurve(R.f,R.t)};MVK.move={c:ln.c,t0:performance.
   const fl=document.createElement('div');fl.className='mvfly';fl.style.width=size+'px';fl.style.height=size+'px';
   const src=$('c'+R.f);fl.innerHTML=`<div class="stone ${R.p===1?'b':'w'}${R.d0?'':' zero'}${R.rk||''}"><span>${R.d0}</span></div>`;
   const pt=v=>[v[0]/600*W-size/2,v[1]/600*H-size/2];const [A,B,Q]=ln.c.full,fr=[];
-  for(let s=0;s<=14;s++){const u=s/14,e=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2,q=pt(mvBz(A,Q,B,e));fr.push({transform:'translate('+q[0]+'px,'+q[1]+'px) scale('+(1+.12*Math.sin(Math.PI*u)).toFixed(3)+')',offset:u})}
+  const dist=Math.max(Math.abs((R.f%N)-(R.t%N)),Math.abs((R.f/N|0)-(R.t/N|0))),lift=.06+.035*dist;R.dur=220+45*dist;
+  for(let s=0;s<=14;s++){const u=s/14,e=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2,q=pt(mvBz(A,Q,B,e));fr.push({transform:'translate('+q[0]+'px,'+q[1]+'px) scale('+(1+lift*Math.sin(Math.PI*u)).toFixed(3)+')',offset:u})}
   fl.style.transform=fr[0].transform;gridEl.appendChild(fl);R.fl=fl;
   setTimeout(()=>{if(MV.run!==R)return;if(MVK.move)MVK.move.t1=performance.now();mvKick();
-    fl.animate(fr,{duration:300,fill:'forwards'}).onfinish=()=>{if(MV.run!==R)return;mvStop();MV.pop=R.t;render()}},120)}
+    fl.animate(fr,{duration:R.dur||300,fill:'forwards'}).onfinish=()=>{if(MV.run!==R)return;const snd=R.snd;mvStop();MV.pop=R.t;render();if(snd){try{komaPlay()}catch(e){}}}},120)}
 /* ドラッグ：石が指に付いてきて、行き先の近くで吸い付く。行き先でなければ元に戻る */
 function mvPt(ev){const r=gridEl.getBoundingClientRect();let x=(ev.clientX-r.left)/r.width*gridEl.clientWidth,y=(ev.clientY-r.top)/r.height*gridEl.clientHeight;
   if($('board').classList.contains('flip')){x=gridEl.clientWidth-x;y=gridEl.clientHeight-y}return [x,y]}
@@ -2467,10 +2471,7 @@ render();
 (function(){try{if(localStorage.getItem('bocch-kifu-open')==='1')$('kifuBox').open=true;if(localStorage.getItem('bocch-lab')==='0')$('showLab').checked=false}catch(e){}})();
 $('kifuBox').addEventListener('toggle',()=>{try{localStorage.setItem('bocch-kifu-open',$('kifuBox').open?'1':'0')}catch(e){}});
 $('showLab').addEventListener('change',()=>{try{localStorage.setItem('bocch-lab',$('showLab').checked?'1':'0')}catch(e){}render()});
-// 仮：四角の駒の切り替え（この端末だけに保存）
-(function(){const c=$('sqStone');if(!c)return;const ap=on=>document.documentElement.classList.toggle('sqst',on);
-  try{c.checked=localStorage.getItem('bocch-sq')==='1'}catch(e){}ap(c.checked);
-  c.addEventListener('change',()=>{ap(c.checked);try{localStorage.setItem('bocch-sq',c.checked?'1':'0')}catch(e){}})})();
+
 
 render();
 $('randomBtn').addEventListener('click',startMatch);
@@ -4138,7 +4139,7 @@ const KW={};
 function boardSig(id){const g=$(id);if(!g)return '';let s='';for(const c of g.children){if(!c.classList||!c.classList.contains('cell'))continue;const st=c.firstElementChild;s+=st?(st.classList.contains('b')?'b':'w'):'.'}return s}
 function komaWatch(id,ctx,visible){if(!visible){if(KW[id])KW[id].ctx=null;return}const sig=boardSig(id),now=performance.now(),o=KW[id];
   if(!o||o.ctx!==ctx){KW[id]={ctx,sig,at:now};return}
-  if(o.sig!==sig){o.sig=sig;if(!(id==='grid'&&S.mode==='net')||now-o.at>1200)komaPlay()}}
+  if(o.sig!==sig){o.sig=sig;if(!(id==='grid'&&S.mode==='net')||now-o.at>1200){if(id==='grid'&&MV.run){MV.run.snd=true;return}komaPlay()}}}
 {const _rk=render;render=function(){_rk();try{komaWatch('grid',[S.mode,NET.code||'',NET.game||0,S.study?1:0].join('|'),CUR==='game')}catch(e){}}}
 {const _rr=renderReview;renderReview=function(){_rr();try{komaWatch('rgrid',REV.g?REV.g.id||REV.g.t:'',CUR==='review')}catch(e){}}}
 render();
