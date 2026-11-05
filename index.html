@@ -447,6 +447,8 @@ button.back{border:0;padding:8px 4px;min-height:44px;color:var(--gold);letter-sp
 .rev-graph svg{display:block;width:100%;height:84px;background:var(--soft);border:1px solid var(--line);border-radius:2px;cursor:pointer;touch-action:none}
 .rev-graph-lab{display:flex;justify-content:space-between;font-size:11px;color:var(--mute);margin-top:3px}
 .rev-nav{justify-content:center;gap:8px;margin-top:10px}
+.rev-cpu{justify-content:center;margin-top:8px}
+.rev-cpu button{font-size:13px;padding:7px 14px}
 .w-live{min-width:auto!important;padding:10px 14px!important;font-size:13.5px!important;letter-spacing:.06em!important}
 .board.past{filter:saturate(.75) brightness(.92)}
 .boardwrap{position:relative}
@@ -916,7 +918,7 @@ html.sqst .stone.w.zero:not(.rk){box-shadow:inset 0 0 0 2px rgba(120,110,95,.4),
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.30</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.31</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -1120,6 +1122,7 @@ html.sqst .stone.w.zero:not(.rk){box-shadow:inset 0 0 0 2px rgba(120,110,95,.4),
   <div class="row rev-nav">
     <button id="rPrev" class="i-only i-prev" aria-label="1手戻る"></button><span class="rev-ply" id="revPly"></span><button id="rNext" class="i-only i-next" aria-label="1手進む"></button>
   </div>
+  <div class="row rev-cpu"><button id="revPlayCpu" class="i-play">この局面からCPUと対局</button></div>
   <div class="rev-info">
     <p class="rev-move" id="revMove"></p>
     <div class="rev-note" id="revNote"></div>
@@ -2212,7 +2215,7 @@ function leave(){closeNet();netMsg('');try{history.replaceState(null,'',location
 function createRoom(){openRoom(newCode())}
 function joinRoom(code){openRoom(code)}
 /* 操作 */
-document.querySelectorAll('#modeSeg button').forEach(x=>x.addEventListener('click',()=>{if(S.mode==='net')leave();S=initState(+x.dataset.mode);KICK='';render()}));
+document.querySelectorAll('#modeSeg button').forEach(x=>x.addEventListener('click',()=>{if(S.mode==='net')leave();const fp=S.fromPos&&+x.dataset.mode?S.fromPos:null;S=fp?posState(+x.dataset.mode,fp.b,fp.turn):initState(+x.dataset.mode);KICK='';render()}));
 /* 研究：AI同士の対局と、評価値を見ながらの検討 */
 const STUDY={run:false,lv:{1:0,2:0},sp:600,evKey:'',ev:null,ew:null,ply:-1,at:0};
 // 研究のAI同士：手が進まなくなったら（画面を離れた・考えが返ってこない等）指し直させる
@@ -2250,7 +2253,7 @@ $('stRun').addEventListener('click',()=>{if(STUDY.run){studyStop();return}
 $('stOne').addEventListener('click',()=>{if(S.over||STUDY.run)return;cpuPlay(S.turn,STUDY.lv[S.turn]||3)});
 $('stEv').addEventListener('change',()=>{STUDY.evKey='';render()});$('stBest').addEventListener('change',render);
 $('duoUndo').addEventListener('click',()=>$('undo').click());$('duoReset').addEventListener('click',()=>$('reset').click());
-$('reset').addEventListener('click',()=>{const st=!!S.study;S=initState(S.mode);if(st){S.study=true;STUDY.evKey='';if(STUDY.run)studyStop()}KICK='';render()});
+$('reset').addEventListener('click',()=>{const st=!!S.study;if(S.fromPos){S=posState(S.mode,S.fromPos.b,S.fromPos.turn);KICK='';render();return}S=initState(S.mode);if(st){S.study=true;STUDY.evKey='';if(STUDY.run)studyStop()}KICK='';render()});
 function renderSide(){document.querySelectorAll('#sideSeg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.side===SIDE)))}
 document.querySelectorAll('#sideSeg button').forEach(b=>b.addEventListener('click',()=>{SIDE=b.dataset.side;try{localStorage.setItem('bocch-side',SIDE)}catch(e){}renderSide()}));renderSide();
 $('undo').addEventListener('click',()=>{
@@ -2723,7 +2726,7 @@ function currentGameId(){
   if(!S.gid)S.gid='g'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
   return S.gid}
 function saveFinished(){
-  if(!S.over||!S.log||!S.log.length)return;
+  if(!S.over||!S.log||!S.log.length||S.fromPos)return;
   const id=currentGameId();if(!id)return;
   const me=S.mode==='net'?colorOf(NET.me):S.mode===0?0:hcOf();
   const g=loadGames(),ix=g.findIndex(x=>x.id===id),old=ix>=0?g[ix]:null;
@@ -2733,7 +2736,7 @@ function saveFinished(){
 const _renderR=render;
 render=function(){_renderR();
   if(S.over)saveFinished();
-  const rr=$('reviewRow');if(rr)rr.hidden=!(S.over&&S.log&&S.log.length)};
+  const rr=$('reviewRow');if(rr)rr.hidden=!(S.over&&S.log&&S.log.length)||!!S.fromPos};
 
 /* 履歴の一覧 */
 function fmtDate(t){const d=new Date(t),p=n=>String(n).padStart(2,'0');return (d.getMonth()+1)+'/'+d.getDate()+' '+p(d.getHours())+':'+p(d.getMinutes())}
@@ -2930,6 +2933,12 @@ function revCell(k){if(CUR!=='review'||!REV.g)return;const st=REV.pv?pvState():R
   if(REV.sel>=0){const m=movesFrom(st.b,REV.sel).find(x=>x[1]===k);if(m){
     if(!REV.pv)pvOpen(REV.i,[[0,0]]),REV.pv.line=[];const v=REV.pv;v.line=v.line.slice(0,v.k).concat([[m[0],m[1]]]);v.k++;REV.sel=-1;renderReview();return}}
   if(st.b[k]===st.turn&&movesFrom(st.b,k).length){REV.sel=REV.sel===k?-1:k}else{REV.sel=-1;if(st.b[k]===3-st.turn){revWarn('今は'+(st.turn===1?'黒':'白')+'の番です。'+(st.turn===1?'黒':'白')+'の石を動かしてください');return}if(st.b[k]===st.turn){revWarn('この石は動けません（まわりに石がない「ぼっち」か、行き先がありません）');return}}renderReview()}
+/* 感想戦：今の局面（検討中ならその局面）から、CPUと対局する。手番の側を自分が持つ。段級・戦績・履歴には残さない */
+function posState(mode,b,turn){const s=initState(mode);s.b=b.slice();s.turn=turn;s.hc=turn;s.reps={[key(b,turn)]:1};s.fromPos={b:b.slice(),turn};s.noRate=true;return s}
+$('revPlayCpu').addEventListener('click',()=>{const g=REV.g;if(!g)return;const st=REV.pv?pvState():REV.pos[REV.i];
+  if(revWon(st.b,1)||revWon(st.b,2)||!allMoves(st.b,st.turn).length){revWarn('決着がついた局面からは対局できません');return}
+  const lv=(typeof g.mode==='number'&&g.mode>=1&&g.mode<=4)?g.mode:2;
+  S=posState(lv,st.b,st.turn);KICK='';show('game');render()});
 function revWarn(t){REV.msg=t;clearTimeout(REV.msgT);REV.msgT=setTimeout(()=>{REV.msg='';renderReview()},2600);renderReview()}
 $('rgrid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(!c)return;revCell(+c.id.slice(1))});
 $('reviewNow').addEventListener('click',()=>{saveFinished();const id=currentGameId();if(id)openReview(id)});
@@ -3238,7 +3247,7 @@ function stCounts(){return S.mode==='net'&&!NET.watch&&!NET.ai}
 // 終局の演出は記録より先に出ることがあるので、まだ数えていない今の勝ちを足した連勝数を返す
 function stNow(){try{const s=bdStats(),id=currentGameId(),me=S.mode==='net'?colorOf(NET.me):0;let k=s.streak|0;
   if(id&&!s.done.includes(id)&&S.over&&stCounts()&&me&&S.over.win===me)k++;return k}catch(e){return 0}}
-function bdGameEnd(){if(!S||!S.over||S.study||!S.log||!S.log.length)return;const id=currentGameId();if(!id)return;const s=bdStats();if(s.done.includes(id))return;
+function bdGameEnd(){if(!S||!S.over||S.study||S.fromPos||!S.log||!S.log.length)return;const id=currentGameId();if(!id)return;const s=bdStats();if(s.done.includes(id))return;
   const me=S.mode==='net'?(NET.watch?0:colorOf(NET.me)):S.mode===0?0:hcOf();if(S.mode==='net'&&!me)return;
   bdCount(s,{mode:S.mode,me,win:S.over.win,log:S.log,noRate:S.noRate});
   if(stCounts()&&me){if(S.over.win===me){s.streak++;s.stMax=Math.max(s.stMax,s.streak)}else if(S.over.win)s.streak=0}
@@ -3264,7 +3273,7 @@ const _renderP=render;render=function(){_renderP();
     if(meW){pbt.append(ws);pt.append(bs)}else{pbt.append(bs);pt.append(ws)}pt.hidden=pbt.hidden=false}
   else if(CPU_RATE[S.mode]){pbt.append(plSpan(hcOf(),myName(),lvName(myLv()),true,isOff(),bdSel(),typeof cgMine==='function'?cgMine():''));pt.append(plSpan(3-hcOf(),MODE_NAME(S.mode),lvName(lvOfRate(CPU_RATE[S.mode])),false));pt.hidden=pbt.hidden=false}
   else pt.hidden=pbt.hidden=true;
-  const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?'1手戻しを使ったので段級は変わりません':'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
+  const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?(S.fromPos?'途中の局面から始めた対局なので段級は変わりません':'1手戻しを使ったので段級は変わりません'):'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
   {const mn=$('meName');mn.textContent=myName();if(isOff())mn.prepend(offBadge(18));const sb=bdSel();if(sb)mn.append(bdBadge(sb,17))}$('meRate').textContent=lvName(myLv());try{hmCard()}catch(e){}};
 /* ===== 棋風診断：その端末に残っている対局の手順から、将棋の棋風の分け方を参考に6つの物差しで測る ===== */
 // 人に近い指し手（やさしい・ふつうのCPUをいろいろな相手と組ませた110人×12局）の、1人あたり平均の平均と散らばり。
