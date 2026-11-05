@@ -844,6 +844,11 @@ html.sqst .stone.b:not(.rk){box-shadow:inset 0 0 0 2px rgba(201,169,110,.85),0 4
 html.sqst .stone.w:not(.rk){box-shadow:inset 0 0 0 2px rgba(120,110,95,.75),0 4px 6px rgba(0,0,0,.38)}
 html.sqst .stone.b.zero:not(.rk){box-shadow:inset 0 0 0 2px rgba(201,169,110,.4),0 4px 6px rgba(0,0,0,.38)}
 html.sqst .stone.w.zero:not(.rk){box-shadow:inset 0 0 0 2px rgba(120,110,95,.4),0 4px 6px rgba(0,0,0,.38)}
+/* 仮：四角の駒の回転（数字が変わった石だけ、その場で縦に90度回る） */
+.sqspin{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);perspective:320px;pointer-events:none;z-index:2}
+.sqc{position:absolute;inset:0;transform-style:preserve-3d}
+.sqf{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.sqf .stone{width:100%;height:100%}
 </style>
 <style>
 /* ===== キャラとガチャ（2026-11） ===== */
@@ -911,7 +916,7 @@ html.sqst .stone.w.zero:not(.rk){box-shadow:inset 0 0 0 2px rgba(120,110,95,.4),
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.29</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.30</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -1822,8 +1827,21 @@ function mvPre(){const P=MV.prev,cur={S,ply:S.ply||0,b:S.b.slice(),last:S.last};
   if(MV.skip===cur.ply){MV.skip=-1;MV.pop=t;return}
   if(!mvLive()||MV_RM.matches||document.hidden)return;
   MV.hide=t;let rk='';try{rk=rankCls(colorRank(P.b[f]))}catch(e){}MV.run={f,t,p:P.b[f],d0:nbCount(P.b,f),rk}}
-function mvPost(){mvCand();if(MV.pop>=0){const s=$('c'+MV.pop).querySelector('.stone');MV.pop=-1;if(s&&!MV_RM.matches)s.animate([{scale:'1.1'},{scale:'1'}],{duration:160,easing:'ease-out'})}
+function mvPost(){mvCand();if(MV.pop>=0){const s=$('c'+MV.pop).querySelector('.stone');MV.pop=-1;if(s&&!MV_RM.matches)s.animate([{scale:'1.1'},{scale:'1'}],{duration:160,easing:'ease-out'});sqSpin(MV.badge)}
   if(MV.run&&!MV.run.go){MV.run.go=true;mvFly(MV.run)}}
+/* 仮：四角の駒のとき、数字が変わった石をその場で縦に90度回す（見ている人から見て、+1は奥へ、−1は手前へ） */
+function sqSpin(bd){if(!bd||!document.documentElement.classList.contains('sqst')||MV_RM.matches||document.hidden)return;
+  const flip=$('board').classList.contains('flip');
+  for(const k in bd){const c=$('c'+k),s=c&&c.querySelector('.stone'),dv=bd[k];if(!s||!dv)continue;const w=s.offsetWidth,h=s.offsetHeight/2;if(!h)continue;
+    const n=+s.textContent,o=Math.max(0,n-dv),up=(dv>0)!==flip;
+    const old=s.cloneNode(true),nw=s.cloneNode(true);old.querySelector('span').textContent=o;old.classList.toggle('zero',!o);
+    const box=document.createElement('div');box.className='sqspin';box.style.width=w+'px';box.style.height=(h*2)+'px';box.setAttribute('aria-hidden','true');
+    const cube=document.createElement('div');cube.className='sqc';
+    const f1=document.createElement('div');f1.className='sqf';f1.style.transform='translateZ('+h+'px)';f1.appendChild(old);
+    const f2=document.createElement('div');f2.className='sqf';f2.style.transform=(up?'rotateX(-90deg)':'rotateX(90deg)')+' translateZ('+h+'px)';f2.appendChild(nw);
+    cube.append(f1,f2);box.appendChild(cube);c.appendChild(box);s.style.visibility='hidden';
+    const a=cube.animate([{transform:'translateZ(-'+h+'px) rotateX(0deg)'},{transform:'translateZ(-'+h+'px) rotateX('+(up?90:-90)+'deg)'}],{duration:280,easing:'cubic-bezier(.3,.7,.3,1)',fill:'forwards'});
+    const end=()=>{box.remove();s.style.visibility=''};a.onfinish=end;a.oncancel=end}}
 function mvStop(){if(MV.run){const r=MV.run;MV.run=null;try{r.fl&&r.fl.remove()}catch(e){}try{mvL('move').replaceChildren();if(MVK.move){MVK.move=null;mvKick()}}catch(e){}if(MV.hide>=0){const h=MV.hide;MV.hide=-1;const c=$('c'+h);if(c)c._h=null}}}
 /* 金糸：石のふちから出て、行き先の手前で止まる。どの向きも同じ割合で曲がる */
 const mvC=i=>[(i%N)*100+50,(i/N|0)*100+50];
@@ -2038,7 +2056,8 @@ function render(){
   const b=S.b,targets=S.sel>=0?movesFrom(b,S.sel).map(m=>m[1]):[];
   const nbs=new Set();if(S.sel>=0){const r=S.sel/N|0,c=S.sel%N;for(const[x,y]of DIRS)if(ok(r+x,c+y)&&b[(r+x)*N+c+y])nbs.add((r+x)*N+c+y)}
   const canAct=human(),rk=[0,colorRank(1),colorRank(2)];mvPre();const RCH=mvReach(b);
-  for(let i=0;i<N*N;i++){const el=$('c'+i),v=b[i],r=i/N|0,d=v?nbCount(b,i):0;
+  const SQ0=document.documentElement.classList.contains('sqst')&&MV.hide>=0&&!MV_RM.matches;
+  for(let i=0;i<N*N;i++){const el=$('c'+i),v=b[i],r=i/N|0,d=v?nbCount(b,i)-(SQ0&&MV.badge[i]?MV.badge[i]:0):0;
     let cls='cell';if(r===0||r===N-1)cls+=' goal';if(S.last&&(S.last[0]===i||S.last[1]===i))cls+=' last '+(S.last[1]===i?'lastTo':'lastFrom');
     if(RCH.s[i])cls+=' reach'+RCH.s[i];if(RCH.t[i])cls+=' goal'+RCH.t[i];
     if(canAct&&v===S.turn)cls+=' mine';if(i===S.sel)cls+=' sel';if(nbs.has(i))cls+=' nb';
