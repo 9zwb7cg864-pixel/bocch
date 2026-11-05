@@ -906,7 +906,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.30</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.31</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -1797,7 +1797,9 @@ const oppLv=o=>o?(o.lv!=null?lvC(o.lv):(o.rate!=null?lvOfRate(o.rate):-1)):-1;
 const lvTxt=l=>l==null||l<0?null:lvName(l);
 const gridEl=$('grid');
 /* ===== 盤の上の動き：候補の金糸・跳ぶ動き・ドラッグ・+1/−1・届く石の光 ===== */
-const MV={hide:-1,pop:-1,badge:{},prev:null,run:null,skip:-1,cand:'',hov:-1,drag:null,noClick:false};
+const MV={hide:-1,pop:-1,badge:{},prev:null,run:null,skip:-1,cand:'',hov:-1,drag:null,noClick:false,until:0};
+/* 駒の動き（飛ぶ・着地・周りの数字）が終わるまで、CPUの手を盤に入れるのを待つ */
+function mvAfter(fn){const w=(MV.until||0)-performance.now();if(w>0||MV.run)setTimeout(()=>mvAfter(fn),Math.max(40,Math.min(w,900)));else fn()}
 const MV_NS='http://www.w3.org/2000/svg',MV_RM=matchMedia('(prefers-reduced-motion: reduce)');
 let MV_SVG=null,MV_UID=0;
 function mvLive(){try{return CUR==='game'&&(typeof VIEW==='undefined'||VIEW.i==null)}catch(e){return false}}
@@ -1825,6 +1827,7 @@ function mvLand(t,cl,s){
   try{const r=document.createElement('span');r.className='mvrip';cl.appendChild(r);r.addEventListener('animationend',()=>r.remove());setTimeout(()=>r.remove(),900)}catch(e){}
   try{if(KOMA.on&&navigator.vibrate)navigator.vibrate(9)}catch(e){}
   const tr=t/N|0,tc=t%N,ks=Object.keys(MV.badge||{}).map(Number).sort((a,b)=>Math.max(Math.abs((a/N|0)-tr),Math.abs(a%N-tc))-Math.max(Math.abs((b/N|0)-tr),Math.abs(b%N-tc)));
+  MV.until=performance.now()+Math.max(280,90+70*Math.max(0,ks.length-1)+300);
   ks.forEach((i,k)=>{const c=$('c'+i),st=c&&c.querySelector('.stone');if(!st)return;const up=MV.badge[i]>0;
     st.animate([{scale:'1',filter:'brightness(1)'},{scale:up?'1.12':'.94',filter:up?'brightness(1.35)':'brightness(.8)',offset:.4},{scale:'1',filter:'brightness(1)'}],{duration:300,delay:90+70*k,easing:'ease-out'})})}
 function mvStop(){if(MV.run){const r=MV.run;MV.run=null;try{r.fl&&r.fl.remove()}catch(e){}try{mvL('move').replaceChildren();if(MVK.move){MVK.move=null;mvKick()}}catch(e){}if(MV.hide>=0){const h=MV.hide;MV.hide=-1;const c=$('c'+h);if(c)c._h=null}}}
@@ -1881,7 +1884,7 @@ function mvFly(R){const ln={c:mvCurve(R.f,R.t)};MVK.move={c:ln.c,t0:performance.
   const pt=v=>[v[0]/600*W-size/2,v[1]/600*H-size/2];const [A,B,Q]=ln.c.full,fr=[];
   const dist=Math.max(Math.abs((R.f%N)-(R.t%N)),Math.abs((R.f/N|0)-(R.t/N|0))),lift=.06+.035*dist;R.dur=220+45*dist;
   for(let s=0;s<=14;s++){const u=s/14,e=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2,q=pt(mvBz(A,Q,B,e));fr.push({transform:'translate('+q[0]+'px,'+q[1]+'px) scale('+(1+lift*Math.sin(Math.PI*u)).toFixed(3)+')',offset:u})}
-  fl.style.transform=fr[0].transform;gridEl.appendChild(fl);R.fl=fl;
+  fl.style.transform=fr[0].transform;gridEl.appendChild(fl);R.fl=fl;MV.until=performance.now()+120+R.dur+120;
   setTimeout(()=>{if(MV.run!==R)return;if(MVK.move)MVK.move.t1=performance.now();mvKick();
     fl.animate(fr,{duration:R.dur||300,fill:'forwards'}).onfinish=()=>{if(MV.run!==R)return;const snd=R.snd;mvStop();MV.pop=R.t;render();if(snd){try{komaPlay()}catch(e){}}}},120)}
 /* ドラッグ：石が指に付いてきて、行き先の近くで吸い付く。行き先でなければ元に戻る */
@@ -2011,16 +2014,16 @@ let WK=null,WKkey='';
 function getWorker(){if(WK!==null)return WK;
   try{const src=$('eng').textContent+'\nonmessage=e=>{const d=e.data;const r=BocchEngine.think(d.b,d.p,d.ms,{history:d.history,shuffle:d.shuffle,book:d.book});postMessage({key:d.key,r})}';
     WK=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));
-    WK.onmessage=e=>{const d=e.data;if(d.key===WKkey&&d.key===S.ply+':'+key(S.b,S.turn)&&!S.over&&d.r)doMove(d.r.move)};
+    WK.onmessage=e=>{const d=e.data;const go=()=>{if(d.key===WKkey&&d.key===S.ply+':'+key(S.b,S.turn)&&!S.over&&d.r)doMove(d.r.move)};mvAfter(go)};
     WK.onerror=()=>{WK=false}}catch(e){WK=false}return WK}
 function cpuPlay(p,lv){p=p||3-hcOf();lv=lv||S.mode;
   if(lv===4){const k=S.ply+':'+key(S.b,S.turn);WKkey=k;
     const job={key:k,b:S.b.slice(),p,ms:S.study?Math.min(3000,Math.max(800,STUDY.sp*2)):3000,history:S.hist.map(h=>({b:h.b,turn:h.turn})),shuffle:S.ply<4,book:true};
     const w=getWorker();
     if(w)w.postMessage(job);
-    else setTimeout(()=>{if(WKkey!==k)return;const r=BocchEngine.think(job.b,job.p,1500,job);if(r&&k===S.ply+':'+key(S.b,S.turn)&&!S.over)doMove(r.move)},30);
+    else setTimeout(()=>{if(WKkey!==k)return;const r=BocchEngine.think(job.b,job.p,1500,job);mvAfter(()=>{if(r&&WKkey===k&&k===S.ply+':'+key(S.b,S.turn)&&!S.over)doMove(r.move)})},30);
     return}
-  const cm=cpuMove(S.b,p,lv);if(cm)doMove(cm)}
+  const k0=S.ply+':'+key(S.b,S.turn),cm=cpuMove(S.b,p,lv);if(cm)mvAfter(()=>{if(k0===S.ply+':'+key(S.b,S.turn)&&!S.over)doMove(cm)})}
 
 /* 描画 */
 function cellsBuild(){gridEl.innerHTML='';for(let i=0;i<N*N;i++){const d=document.createElement('button');d.className='cell';d.id='c'+i;d.addEventListener('click',()=>onCell(i));gridEl.appendChild(d)}}
