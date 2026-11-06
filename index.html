@@ -567,6 +567,9 @@ html,body,button,a,input,label,.board,.grid,.cell{touch-action:manipulation}
 .rk-list li .crown{width:20px;height:20px;vertical-align:-4px;margin-right:6px}.rk-list li.top1 .nm{color:#f2d78f;font-weight:700}
 .rk-list li.gap{justify-content:center;color:var(--sub);padding:2px;border-bottom:0}
 .rk-list li.me{background:rgba(201,169,110,.10)}
+.rk-me{position:fixed;left:50%;transform:translateX(-50%);z-index:30;margin:0;width:calc(100% - 24px);max-width:460px;background:#1c1610;border:1px solid rgba(216,189,126,.55);border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.5)}
+.rk-me.top{top:calc(8px + env(safe-area-inset-top))}.rk-me.bot{bottom:calc(8px + env(safe-area-inset-bottom))}
+.rk-me li{border-bottom:0}.rk-me li.me{background:rgba(201,169,110,.16)}
 .rk-pod{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:8px;align-items:end;max-width:460px;width:100%;margin:10px auto 4px}
 .rk-pod .pod{min-width:0;text-align:center;padding:12px 6px 10px;border-radius:10px;background:linear-gradient(160deg,#211a14,#15110d);box-shadow:inset 0 0 0 1px rgba(216,189,126,.22)}
 .rk-pod .pod.p1{grid-column:2;padding-top:12px;background:linear-gradient(160deg,#2c2214,#17120c);box-shadow:inset 0 0 0 1px rgba(233,196,106,.55),0 10px 24px rgba(0,0,0,.45)}
@@ -908,7 +911,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.32</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.33</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -1055,11 +1058,12 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
 <!-- 感想戦 -->
 <section class="scr" data-scr="rank" hidden>
   <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>ランキング</h2><span class="sp"></span></div>
-  <p class="note rk-note">bocchを開いた人の段級の、上位10人と自分の順位です。段級はオンライン対戦とCPU戦（1手戻しなし）で変わります。月が変わるときに1位だった人には「月間一位」のバッジが付きます。</p>
+  <p class="note rk-note">bocchを開いた人全員の段級の順位です。段級はオンライン対戦とCPU戦（1手戻しなし）で変わります。月が変わるときに1位だった人には「月間一位」のバッジが付きます。</p>
   <p class="rk-prev" id="rkPrev"></p>
   <p class="note rk-note" id="rkNote"></p>
   <div class="rk-pod" id="rkPod" hidden></div>
   <ol class="rk-list" id="rkList"></ol>
+  <ol class="rk-list rk-me" id="rkMe" hidden></ol>
   <p class="hist-empty" id="rkEmpty" hidden>まだ載っている人がいません。</p>
 </section>
 <section class="scr" data-scr="chara" hidden>
@@ -3918,10 +3922,18 @@ function rankRender(){const d=RK.data||{},me=myName(),box=$('rkList'),pod=$('rkP
     el.innerHTML=(i===0?CROWN:'<i class="pn"></i>')+stone(q)+'<b class="nm"></b><em class="v"></em>';
     if(i)el.querySelector('.pn').textContent=i+1;el.querySelector('.nm').textContent=r[0];el.querySelector('.v').textContent=lvTx(q);pod.append(el)});
   pod.hidden=!rows.length;
-  // 4位から10位と、自分（11位以下なら …のあとに）
-  const show=rows.slice(3,10).map((r,i)=>[r,i+3]);if(myI>=10){show.push(null);show.push([rows[myI],myI])}
-  show.forEach(x=>{if(!x){const li=document.createElement('li');li.className='gap';li.textContent='…';box.append(li);return}const [[nm,v],i]=x,q=lvOf(v);const li=document.createElement('li');if(nm===me)li.className='me';
-    li.innerHTML='<span class="n"></span>'+stone(q)+'<span class="nm"></span><span class="v"></span>';li.querySelector('.n').textContent=i+1;li.querySelector('.nm').textContent=nm;li.querySelector('.v').textContent=lvTx(q);box.append(li)})}
+  // 4位から最後まで全員
+  const row=(nm,v,i)=>{const q=lvOf(v),li=document.createElement('li');if(nm===me)li.className='me';
+    li.innerHTML='<span class="n"></span>'+stone(q)+'<span class="nm"></span><span class="v"></span>';li.querySelector('.n').textContent=i+1;li.querySelector('.nm').textContent=nm;li.querySelector('.v').textContent=lvTx(q);return li};
+  rows.slice(3).forEach(([nm,v],k)=>box.append(row(nm,v,k+3)));
+  // 自分の行が画面から外れたら、自分の順位と名前を端に出す（自分より下を見ているときは上、上を見ているときは下）
+  const bar=$('rkMe');bar.hidden=true;bar.innerHTML='';RK.mine=null;
+  if(myI<0)return;const mine=myI<3?pod.querySelector('.pod.me'):box.querySelector('li.me');if(!mine)return;
+  bar.append(row(rows[myI][0],rows[myI][1],myI));RK.mine=mine;rkMeUpd()}
+function rkMeUpd(){const bar=$('rkMe'),m=RK.mine;if(!m||CUR!=='rank'){if(bar)bar.hidden=true;return}
+  const r=m.getBoundingClientRect(),up=r.bottom<=0,dn=r.top>=innerHeight;
+  if(!up&&!dn){bar.hidden=true;return}bar.classList.toggle('top',up);bar.classList.toggle('bot',dn);bar.hidden=false}
+addEventListener('scroll',rkMeUpd,{passive:true});addEventListener('resize',rkMeUpd)
 
 /* 月間一位：新しい月に最初に開いた人が、その時点の1位を「先月の1位」としてサーバーに記録する（m:YYYY-MM:名前）。自分が記録されていればバッジ */
 function monKey(d){d=d||new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')}
