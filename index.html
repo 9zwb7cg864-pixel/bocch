@@ -844,6 +844,18 @@ html:is([lang=en],[lang=es],[lang=de]) .pm .hm-fimg img{height:46px}
 html:not([lang=ja]) .hm-menu span{font-size:10.5px}
 html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is([lang=en],[lang=es],[lang=de]) .hm-sub .hm-fimg img{height:36px}
 
+
+/* シック（白・細身セリフ）：ロゴ・見出し・対局ボタンの文字。筆文字の画像は使わない */
+:root{--f-chic:"Cormorant Garamond","Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;--chic:#f3efe7}
+.hm-logo-t{display:inline-block;font-family:var(--f-chic);font-weight:600;font-size:64px;letter-spacing:.08em;line-height:78px;color:var(--chic);filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))}
+.hm .hm-tag{color:#d9d4ca}
+.hm-fimg b{font-family:var(--f-chic)!important;font-weight:700!important;letter-spacing:.14em;background:none!important;-webkit-text-fill-color:var(--chic);color:var(--chic)!important;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))!important}
+.hm-play .hm-fimg b{font-size:38px}.pm .hm-fimg b{font-size:26px}
+.hm .hm-play,.pm button.pm-r{background:transparent;box-shadow:inset 0 0 0 1px rgba(243,239,231,.55)}
+.hm-play .hm-leaf,.pm-r .hm-leaf{display:none}
+.hm-play small,.pm-r .pm-d{color:#cfc9be}.hm-play .online,.pm .online{color:#e7e1d6}
+.hm-play .hm-go,.pm .hm-go{background:none;box-shadow:none}.hm-play .hm-go svg,.pm .hm-go svg{fill:var(--chic);width:26px;height:26px}
+.scr .topbar h2{font-family:var(--f-chic);font-weight:700;letter-spacing:.16em;background:none;-webkit-text-fill-color:var(--chic);color:var(--chic);filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
 </style>
 <style>
 /* ===== キャラとガチャ（2026-11） ===== */
@@ -911,11 +923,11 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.33</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.34</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
-    <header class="hm-head"><h1><img class="hm-logo" src="ui/logo.webp" alt="bocch" width="295" height="180"></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p></header>
+    <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p></header>
     <div class="hm-hero" aria-hidden="true">
       <div class="hm-hb"><div class="hm-hg" id="hmG"></div><div class="hm-hl" id="hmL"></div></div>
       <button class="cg-pull" id="cgPull" type="button"><b>ガチャを引く</b><small id="cgLeft"></small></button>
@@ -4238,14 +4250,14 @@ const KIFU=["1wk4ezs07up1dxl2gsqgfvjfcq27vpscq27vwytwxtmxvmwdh7dvxwixnsgnbgvhmiw
 const FIMG_L=['ja','en','zh-Hans','zh-Hant','ko','es','de'],FIMG_K=['play','friend','solo','match','invite','history','rank','course','ref','daily','review','friends','watch','kifu','profile','rules','win','lose','draw'];
 const fimgHas=(k,L)=>FIMG_K.includes(k)&&FIMG_L.includes(L);
 function fimgInit(){const L=window.BOCCH_LANG||'ja';document.querySelectorAll('[data-fimg]').forEach(el=>{const k=el.dataset.fimg,img=el.querySelector('img');
-  if(fimgHas(k,L)){img.src='ui/'+k+'-'+L+'.webp';el.classList.remove('txt')}else{img.removeAttribute('src');el.classList.add('txt')}})}
+  if(false&&fimgHas(k,L)){img.src='ui/'+k+'-'+L+'.webp';el.classList.remove('txt')}else{img.removeAttribute('src');el.classList.add('txt')}})}
 fimgInit();
 /* 各画面の見出し：日本語の見出しの文字から、Flowで作った金の筆文字の画像に置き換える（画像が無い言語は金の文字のまま） */
 const TTL_KEY={'対局する':'play','友だちと対戦':'friend','ひとりで遊ぶ':'solo','相手を待っています':'invite','ランダム対戦':'match','対局履歴':'history','ランキング':'rank','学ぶ':'course','資料':'ref','毎日の1問':'daily','感想戦':'review','フレンド':'friends','観戦する':'watch','あなたの棋風':'kifu','アカウント':'profile','ルール':'rules'};
 const TTL_SQ={course:1,ref:1,rules:1,review:1};
 function ttlApply(h){const L=window.BOCCH_LANG||'ja';if(h.querySelector('.tt'))return;const t=(h.textContent||'').trim();
   let k=TTL_KEY[t];if(!k&&window.bocchT)for(const j in TTL_KEY)if(window.bocchT(j)===t){k=TTL_KEY[j];break}
-  if(!k||!fimgHas(k,L)){h.classList.remove('ttl-img');return}
+  if(true||!k||!fimgHas(k,L)){h.classList.remove('ttl-img');return} /* 見出しは筆文字の画像をやめ、白の明朝で出す */
   h.classList.add('ttl-img');h.textContent='';const im=document.createElement('img');im.className='tt'+(TTL_SQ[k]?' sq':'');im.src='ui/'+k+'-'+L+'.webp';im.alt=t;const sp=document.createElement('span');sp.className='tt-alt';sp.textContent=t;h.append(im,sp)}
 document.querySelectorAll('.scr .topbar h2').forEach(h=>{ttlApply(h);if(h.id)new MutationObserver(()=>ttlApply(h)).observe(h,{childList:true,characterData:true,subtree:true})});
 /* 自分の札：段級の縁の石・名前・段級・連勝・達成率。押すと棋風とアカウントの行が開く */
