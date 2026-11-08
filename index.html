@@ -1630,7 +1630,7 @@ button.primary:active,.primary:active,.hm-play:active,.hc-btn:active,.rev-mv:act
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.46</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.47</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -2751,7 +2751,7 @@ function negamax(b,p,depth,alpha,beta){
 const CPUS=[[5,'Mia','入門','#f9a8c9'],[1,'Kevin','やさしい','#f59e7b'],[6,'Lily','やさしい','#fbbf5a'],[2,'Max','ふつう','#6fd39a'],[7,'Nora','ふつう','#5cc8d6'],[3,'Leo','つよい','#7c8cf5'],[8,'Emma','つよい','#a78bfa'],[9,'Oscar','とてもつよい','#c084fc'],[10,'Ivy','とてもつよい','#f472b6'],[4,'Victor','最強','#e5c07b']].map((a,i)=>({m:a[0],n:a[1],t:a[2],c:a[3],lv:i+1}));
 const CPU_BY={};CPUS.forEach(c=>CPU_BY[c.m]=c);
 /* 顔：絵ができるまでは色の丸に頭文字。絵ができたら img/cpu/名前.webp を使う */
-const CPU_IMG={};
+const CPU_IMG={};CPUS.forEach(c=>{CPU_IMG[c.n]='img/cpu/'+c.n.toLowerCase()+'.webp?v=1'});
 function cpuAv(c,cls){const e=document.createElement('span');e.className='cav'+(cls?' '+cls:'');e.style.setProperty('--c',c.c);
   if(CPU_IMG[c.n]){const im=document.createElement('img');im.src=CPU_IMG[c.n];im.alt='';e.append(im)}else e.textContent=c.n[0];return e}
 const cpuRate=m=>CPU_RATE[m]||0;
