@@ -2069,7 +2069,7 @@ function mvCand(){let key='';const can=S.sel>=0&&mvLive()&&human();if(can)key=S.
   MVK.cand=tg.map((t,k)=>{const on=MV.hov===t,o=old[t];return {t,c:mvCurve(S.sel,t),op:MV.hov>=0?(on?1:.22):.55,t0:first&&!MV_RM.matches?now:(o?o.t0:null),dl:first?Math.min(.5,k*.08)*320:(o?o.dl:0)}});mvKick();
   if(MV.hov>=0&&tg.includes(MV.hov)){mvBrackets(L,MV.hov);const c=$('c'+MV.hov);if(c){c.classList.add('mvhov');const gh=document.createElement('span');gh.className='mvghost '+(S.turn===1?'b':'w');c.prepend(gh)}}}
 /* 指したときの動き：線が伸びる→石が線をなぞって跳ぶ→線は後ろから消える */
-function mvFly(R){const ln={c:mvCurve(R.f,R.t)};MVK.move={c:ln.c,t0:performance.now(),t1:null};mvKick();const W=MVSZ.w||gridEl.clientWidth,H=MVSZ.h||gridEl.clientHeight,size=W/N*.8;
+function mvFly(R){const ln={c:mvCurve(R.f,R.t)};/* 石が飛ぶときの線は出さない（2026-11） */const W=MVSZ.w||gridEl.clientWidth,H=MVSZ.h||gridEl.clientHeight,size=W/N*.8;
   const fl=document.createElement('div');fl.className='mvfly';fl.style.width=size+'px';fl.style.height=size+'px';
   const src=$('c'+R.f);fl.innerHTML=`<div class="stone ${R.p===1?'b':'w'}${R.d0?'':' zero'}${R.rk||''}"><span>${R.d0}</span></div>`;
   const pt=v=>[v[0]/600*W-size/2,v[1]/600*H-size/2];const [A,B,Q]=ln.c.full,fr=[];
