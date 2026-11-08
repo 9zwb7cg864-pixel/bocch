@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=37"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=38"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -1472,7 +1472,7 @@ body.tabs-on .scr:is([data-scr=daily],[data-scr=history],[data-scr=profile],[dat
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.40</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.41</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -3797,7 +3797,23 @@ const BADGES=[
 const BD=Object.fromEntries(BADGES.map(b=>[b[1],b]));
 let BDN=0;
 function bdSVG(id,px){const b=BD[id];if(!b)return '';const [d,l,bg]=BD_T[b[5]],g='bdg'+(++BDN);
-  return `<svg width="${px}" height="${px}" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${l}"/><stop offset=".55" stop-color="${d}"/><stop offset="1" stop-color="${l}"/></linearGradient></defs><circle cx="50" cy="50" r="47" fill="url(#${g})"/><circle cx="50" cy="50" r="40" fill="${bg}"/><circle cx="50" cy="50" r="40" fill="none" stroke="${l}" stroke-width="1.5" opacity=".6"/>${b[5]==='special'?`<circle cx="50" cy="50" r="34" fill="none" stroke="${l}" stroke-width="1" stroke-dasharray="2 4" opacity=".7"/>`:''}<text x="50" y="52" text-anchor="middle" dominant-baseline="central" font-family="Noto Sans JP,Hiragino Sans,sans-serif" font-weight="800" font-size="44" fill="${l}">${b[2]}</text></svg>`}
+  return `<svg width="${px}" height="${px}" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${l}"/><stop offset=".55" stop-color="${d}"/><stop offset="1" stop-color="${l}"/></linearGradient></defs><circle cx="50" cy="50" r="47" fill="url(#${g})"/><circle cx="50" cy="50" r="40" fill="${bg}"/><circle cx="50" cy="50" r="40" fill="none" stroke="${l}" stroke-width="1.5" opacity=".6"/>${b[5]==='special'?`<circle cx="50" cy="50" r="34" fill="none" stroke="${l}" stroke-width="1" stroke-dasharray="2 4" opacity=".7"/>`:''}<text x="50" y="52" text-anchor="middle" dominant-baseline="central" font-family="Noto Sans JP,Hiragino Sans,sans-serif" font-weight="800" font-size="${bdGlyph(b)[1]}" fill="${l}">${bdGlyph(b)[0]}</text>${bdGlyph(b)[2]?bdGlyph(b)[2].replace(/C/g,l):''}</svg>`}
+/* バッジの中の字：日本語・中国語は漢字、ほかの言語は数字か小さな絵 */
+const BD_ZH={'観':['观','觀'],'網':['网','網'],'達':['达','達'],'極':['极','極'],'連':['连','連'],'昇':['升','昇'],'観戦':['观','觀']};
+const BD_I={crown:'<path d="M28 64 L32 38 L42 50 L50 32 L58 50 L68 38 L72 64 Z" fill="none" stroke="C" stroke-width="5" stroke-linejoin="round"/>',
+ bolt:'<path d="M54 26 L36 54 H50 L46 74 L64 46 H50 Z" fill="none" stroke="C" stroke-width="5" stroke-linejoin="round"/>',
+ eye:'<path d="M26 50 Q50 28 74 50 Q50 72 26 50 Z" fill="none" stroke="C" stroke-width="5"/><circle cx="50" cy="50" r="7" fill="C"/>',
+ glass:'<circle cx="46" cy="46" r="14" fill="none" stroke="C" stroke-width="5"/><path d="M56 56 L70 70" stroke="C" stroke-width="6" stroke-linecap="round"/>',
+ people:'<circle cx="40" cy="42" r="8" fill="none" stroke="C" stroke-width="5"/><circle cx="62" cy="44" r="6" fill="none" stroke="C" stroke-width="4"/><path d="M26 70 Q40 52 54 70 M54 66 Q62 54 74 66" fill="none" stroke="C" stroke-width="5" stroke-linecap="round"/>',
+ pair:'<circle cx="40" cy="50" r="11" fill="C"/><circle cx="62" cy="50" r="11" fill="none" stroke="C" stroke-width="5"/>',
+ hour:'<path d="M36 28 H64 M36 72 H64 M38 28 Q38 48 50 50 Q62 48 62 28 M38 72 Q38 52 50 50 Q62 52 62 72" fill="none" stroke="C" stroke-width="5" stroke-linecap="round"/>',
+ target:'<circle cx="50" cy="50" r="20" fill="none" stroke="C" stroke-width="5"/><circle cx="50" cy="50" r="7" fill="C"/>',
+ globe:'<circle cx="50" cy="50" r="20" fill="none" stroke="C" stroke-width="5"/><path d="M30 50 H70 M50 30 Q38 50 50 70 Q62 50 50 30" fill="none" stroke="C" stroke-width="4"/>'};
+const BD_LAT={first:['1'],w10:['10'],w100:['100'],g1000:['1K'],c1:['Lv1'],c2:['Lv2'],c3:['Lv3'],c4:['Lv4'],n1:[0,'globe'],r16:['1D'],r18:['4D'],r20:['9D'],st5:['×5'],mon1:[0,'crown'],d7:['7d'],d30:['30d'],d100:['100d'],fast:[0,'bolt'],yori:[0,'pair'],long:[0,'hour'],hunt:[0,'target'],rev:[0,'glass'],watch:[0,'eye'],fr5:[0,'people']};
+function bdGlyph(b){const L=window.BOCCH_LANG||'ja';
+  if(L==='ja')return [b[2],44,''];
+  if(L==='zh-Hans'||L==='zh-Hant'){const z=BD_ZH[b[2]];return [z?z[L==='zh-Hans'?0:1]:b[2],44,'']}
+  const m=BD_LAT[b[1]]||[b[2]];if(!m[0])return ['',10,BD_I[m[1]]||''];const t=m[0];return [t,t.length>=4?26:t.length===3?30:t.length===2?38:44,'']}
 function bdBadge(id,px){const b=BD[id];if(!b)return null;const sp=document.createElement('span');sp.className='bdg';sp.title=b[3];sp.setAttribute('aria-label',b[3]);sp.innerHTML=bdSVG(id,px||16);return sp}
 function bdStats(){const s=PROF.st=PROF.st||{};for(const k of ['wins','games','net','streak','stMax','rmax','dmax','fast','yori','long','hunt','rev','watch','fr','daily','dcur'])s[k]=s[k]|0;s.cpu=Array.isArray(s.cpu)?s.cpu.map(x=>x|0).concat([0,0,0,0,0]).slice(0,5):[0,0,0,0,0];s.done=Array.isArray(s.done)?s.done.slice(-300):[];return s}
 function bdOwned(){return Array.isArray(PROF.bd)?PROF.bd.filter(id=>BD[id]):[]}
