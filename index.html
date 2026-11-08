@@ -1049,6 +1049,12 @@ body,button,input,select,textarea{font-family:var(--f-body)!important;letter-spa
 .scr h2,.scr h3,.topbar h2,.panel h2,.status,.about h2,.hm-fimg b,.pm .hm-fimg b,.home-rules h3,.side-l,.chk,.tag,header p,.hm .hm-tag{letter-spacing:.02em!important;font-family:var(--f-disp)!important}
 .topbar h2{font-weight:800!important}
 .stone,.rs-n,.hm-logo-t,h1{font-family:"Outfit","Noto Sans JP",sans-serif!important}
+/* 盤の上の石には段級の縁を付けない（縁なしの碁石）。名前の横・ランキングの石は縁を残す */
+.grid .stone.rk,.hm-hg .stone.rk{border:0!important;box-shadow:0 3px 4px rgba(0,0,0,.35),0 1px 1px rgba(0,0,0,.3)!important;animation:none!important}
+.grid .stone.b.rk,.hm-hg .stone.b.rk{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%)!important;color:#f4f4f4!important}
+.grid .stone.w.rk,.hm-hg .stone.w.rk{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%)!important;color:#2a2c33!important}
+.grid .stone.dan::before,.hm-hg .stone.dan::before,.grid .cell:not(.reachG):not(.reachR) .stone.dan::after,.hm-hg .stone.dan::after{display:none!important}
+.sel .grid .stone.rk,.grid .sel .stone.rk{box-shadow:0 0 0 3px var(--b-acc),0 3px 4px rgba(0,0,0,.35)!important}
 </style>
 </head>
 <body>
