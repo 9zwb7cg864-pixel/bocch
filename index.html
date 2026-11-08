@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=31"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=32"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -138,7 +138,7 @@ canvas.mvcv{position:absolute;left:-10%;top:-10%;width:120%;height:120%;will-cha
 .coach span{display:block;margin-top:3px;color:var(--sub);font-size:13px;line-height:1.6}
 .coach button{position:absolute;top:4px;right:4px;min-height:32px;min-width:32px;padding:0;border:0;background:transparent;color:var(--sub);font-size:18px;line-height:1}
 @media (prefers-reduced-motion:reduce){.reachG .stone::after,.reachR .stone::after,.mvb{animation:none}}
-.endrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.endrow[hidden]{display:none}
+.endrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.endrow[hidden]{display:none}#mvNow{grid-column:1/-1}#mvNow[hidden]{display:none}
 .endb{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 12px;border:1px solid rgba(216,189,126,.55);border-radius:0;background:rgba(216,189,126,.05);color:var(--fg);font-family:var(--f-disp);font-size:15px;letter-spacing:.1em}
 .endb:hover{background:rgba(216,189,126,.12);border-color:var(--gold)}
 .endb.main{background:var(--gold);border-color:var(--gold);color:#1c140b;font-weight:800}.endb.main:hover{background:var(--gold-hi)}
@@ -923,7 +923,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.34</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.35</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -1121,7 +1121,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
   <p class="note dq-note">相手がどう受けても、2手で勝てる手が1つだけあります。その日の最初の挑戦だけが連続記録に入ります（2回目からは練習）。問題は毎日0時に変わります。</p>
 </section>
 <section class="scr" data-scr="review" hidden>
-  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>感想戦</h2><span class="rbtns"><button class="back rshare" id="revImg"><span class="i-ext">画像</span></button><button class="back rshare" id="revShare"><span class="i-ext">共有</span></button></span></div>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>感想戦</h2><span class="rbtns"><button class="back rshare" id="revMv" hidden>動画</button><button class="back rshare" id="revImg"><span class="i-ext">画像</span></button><button class="back rshare" id="revShare"><span class="i-ext">共有</span></button></span></div>
   <p class="rev-head" id="revHead"></p>
   <p class="rev-share-msg" id="revShareMsg" hidden></p>
   <div class="boardwrap rev-board"><div class="board" id="rboard"><div class="lab lab-top" id="rlabTop" aria-hidden="true"></div><div class="lab lab-left" id="rlabLeft" aria-hidden="true"></div><div class="grid" id="rgrid" aria-label="感想戦の盤"></div></div></div>
@@ -1316,7 +1316,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
     <button id="leave" hidden>対戦をやめる</button>
     <button id="frOpp" class="i-plus" hidden>フレンド申請</button>
   </div>
-  <div class="endrow" id="reviewRow" hidden><button id="reviewNow" class="endb main"><span>感想戦で振り返る</span></button><button id="xNow" class="endb"><span>Xで共有</span></button></div>
+  <div class="endrow" id="reviewRow" hidden><button id="reviewNow" class="endb main"><span>感想戦で振り返る</span></button><button id="xNow" class="endb"><span>Xで共有</span></button><button id="mvNow" class="endb" hidden><span>動画を作る</span></button></div>
   <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label><label class="chk"><input type="checkbox" id="bgmOn"> BGM</label></div>
   <div class="ad-slot ad-over" data-ad="over" hidden aria-label="広告"></div>
 </section>
@@ -2737,7 +2737,7 @@ function saveFinished(){
 const _renderR=render;
 render=function(){_renderR();
   if(S.over)saveFinished();
-  const rr=$('reviewRow');if(rr)rr.hidden=!(S.over&&S.log&&S.log.length)||!!S.fromPos};
+  const rr=$('reviewRow');if(rr)rr.hidden=!(S.over&&S.log&&S.log.length)||!!S.fromPos;const mn=$('mvNow');if(mn)mn.hidden=!rr||rr.hidden||!mvOK(S.log)};
 
 /* 履歴の一覧 */
 function fmtDate(t){const d=new Date(t),p=n=>String(n).padStart(2,'0');return (d.getMonth()+1)+'/'+d.getDate()+' '+p(d.getHours())+':'+p(d.getMinutes())}
@@ -2834,7 +2834,7 @@ function finishAnalysis(){const g=loadGames(),ix=g.findIndex(x=>x.id===REV.g.id)
 function openReview(id){const g=loadGames().find(x=>x.id===id);if(!g)return;try{bdStats().rev++;saveProf();bdCheck()}catch(e){}
   REV.g=g;REV.pos=buildPos(g);REV.an=(g.an&&g.an.length)?g.an.map(x=>x&&x.pv!==undefined?x:null):[];REV.job++;
   // 最初の悪手へ飛ぶのは解析後。最初は終局図から
-  REV.i=0;show('review');renderReview();if(REV.an.filter(Boolean).length<g.log.length)nextAnalysis()}
+  REV.i=0;show('review');$('revMv').hidden=!mvOK(g.log);renderReview();if(REV.an.filter(Boolean).length<g.log.length)nextAnalysis()}
 function setRev(i){REV.pv=null;REV.sel=-1;clearInterval(REV.pvT);REV.i=Math.max(0,Math.min(REV.pos.length-1,i));renderReview()}
 /* 読み筋の再生：base局面からAIの予想手順を1手ずつ盤に並べる */
 function pvState(){const v=REV.pv,p=REV.pos[v.base];let b=p.b.slice(),turn=p.turn;
@@ -2942,6 +2942,11 @@ $('revPlayCpu').addEventListener('click',()=>{const g=REV.g;if(!g)return;const s
   S=posState(lv,st.b,st.turn);KICK='';show('game');render()});
 function revWarn(t){REV.msg=t;clearTimeout(REV.msgT);REV.msgT=setTimeout(()=>{REV.msg='';renderReview()},2600);renderReview()}
 $('rgrid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(!c)return;revCell(+c.id.slice(1))});
+/* 動画を作る：勝った側がゴールに2つ着いて終わった対局だけ。本体（mv/maker.js）は押したときに読み込む */
+function mvOK(log){try{if(!log||log.length<4)return false;const b=Array(36).fill(0);for(let c=0;c<6;c++){b[c]=2;b[30+c]=1}let p=1;for(const [f,t] of log){if(b[f]!==p||b[t])return false;b[t]=p;b[f]=0;p=3-p}const w=3-p,r=w===1?0:5;let k=0;for(let c=0;c<6;c++)if(b[r*6+c]===w)k++;return k>=2}catch(e){return false}}
+function mvOpen(log){const go=()=>window.BocchVideo.open({log});if(window.BocchVideo)return go();const sc=document.createElement('script');sc.src='mv/maker.js?v=1';sc.onload=go;sc.onerror=()=>alert((window.bocchT||(x=>x))('読み込めませんでした'));document.head.appendChild(sc)}
+$('mvNow').addEventListener('click',()=>{if(S.over&&S.log)mvOpen(S.log.map(m=>[m[0],m[1]]))});
+$('revMv').addEventListener('click',()=>{if(REV.g)mvOpen(REV.g.log.map(m=>[m[0],m[1]]))});
 $('reviewNow').addEventListener('click',()=>{saveFinished();const id=currentGameId();if(id)openReview(id)});
 document.querySelector('[data-go="history"]').addEventListener('click',renderHistory);
 addEventListener('popstate',()=>{if(CUR==='history')renderHistory();if(CUR!=='review')REV.job++});
@@ -4481,7 +4486,7 @@ document.addEventListener('click',e=>{try{const b=e.target.closest&&e.target.clo
    曲：Pixabay の音楽（クレジット不要）。iPhoneは音の要素の音量を変えられないので、音の部品（KOMA.ctx）に通して音量を決める */
 const BGM={on:false,el:{},g:{},cur:'',vol:.014,ok:false};
 try{BGM.on=localStorage.getItem('bocch-bgm')==='1'}catch(e){BGM.on=false}
-function bgmWant(){try{if(!BGM.on||document.hidden)return '';if(CUR==='game'&&S&&!S.over&&!S.study&&!S.learn&&(typeof VIEW==='undefined'||VIEW.i==null))return 'battle';return 'koto'}catch(e){return ''}}
+function bgmWant(){try{if(!BGM.on||document.hidden||window.BOCCH_MV)return '';if(CUR==='game'&&S&&!S.over&&!S.study&&!S.learn&&(typeof VIEW==='undefined'||VIEW.i==null))return 'battle';return 'koto'}catch(e){return ''}}
 function bgmNode(k){if(BGM.el[k])return BGM.el[k];const a=new Audio('sounds/bgm/'+k+'.mp3');a.loop=true;a.preload='auto';a.crossOrigin='anonymous';BGM.el[k]=a;
   try{const s=KOMA.ctx.createMediaElementSource(a),g=KOMA.ctx.createGain();g.gain.value=0;s.connect(g);g.connect(KOMA.ctx.destination);BGM.g[k]=g}catch(e){a.volume=.25}return a}
 function bgmFade(k,to,sec){const g=BGM.g[k];if(!g)return;const t=KOMA.ctx.currentTime;try{g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.linearRampToValueAtTime(to,t+sec)}catch(e){g.gain.value=to}}
