@@ -4,7 +4,7 @@ if(window.BocchVideo)return;
 const BASE=(document.currentScript&&document.currentScript.src||'').replace(/[^\/]*$/,'')||'mv/';
 const T=s=>{try{return window.bocchT?window.bocchT(s):s}catch(e){return s}};
 function makeRenderer(CV,CFG){const RR={};
-const GAME=CFG.moves;const N=GAME.length;const WINNER=GAME[N-1][0];
+const GAME=CFG.moves;const N=GAME.length;const WINNER=CFG.winner||GAME[N-1][0];
 const W=1080,H=1920,cv=CV,g=cv.getContext('2d');
 const B=60/(CFG.bpm||110);
 const LAND=CFG.land; // absolute landing seconds per move (synced to sung words)
@@ -138,7 +138,7 @@ RR.renderAt=function(t){
  // badges
  if(mv>=0&&landed&&BADGE[mv+1]){const to=GAME[mv][2];const [txt,col]=BADGE[mv+1];badge(cx(to)+CS*0.38,cy(to)-CS*0.38,txt,col,(t-landT)/0.35)}
  // win: goal row glow
- if(mv===N-1&&landed){const u=t-landT;const row=WINNER===1?0:5,WC=WINNER===1?ORANGE:BLUE;for(let c=0;c<6;c++){const i=row*6+c;g.save();g.globalAlpha=Math.min(0.35,u*0.5)*(bd[i]===WINNER?2:1);g.fillStyle=WC;g.shadowColor=WC;g.shadowBlur=40;g.fillRect(sx(i),sy(i),CS,CS);g.restore()}
+ if(mv===N-1&&landed&&!CFG.draw){const u=t-landT;const row=WINNER===1?0:5,WC=WINNER===1?ORANGE:BLUE;for(let c=0;c<6;c++){const i=row*6+c;g.save();g.globalAlpha=Math.min(0.35,u*0.5)*(bd[i]===WINNER?2:1);g.fillStyle=WC;g.shadowColor=WC;g.shadowBlur=40;g.fillRect(sx(i),sy(i),CS,CS);g.restore()}
   for(let c=0;c<6;c++){const i=row*6+c;if(bd[i]===WINNER)stone(cx(i),cy(i),WINNER,nb(bd,i),1,[GOLD,0.9])}}
  g.restore(); // camera
  // ----- screen flashes -----
@@ -181,8 +181,8 @@ function parseKifu(txt){
       [f,t]=m;if(b[f]!==p)throw new Error(`${out.length+1}手目が盤面と合いません`)}
     b[t]=b[f];b[f]=0;out.push([p,f,t]);p=3-p}
   return out}
-function analyze(moves){
-  const n=moves.length;const W=moves[n-1][0],O=3-W;const boards=[];let b=Array(36).fill(0);for(let c=0;c<6;c++){b[c]=2;b[30+c]=1}boards.push(b.slice());
+function analyze(moves,W0){
+  const n=moves.length;const W=(W0===1||W0===2)?W0:moves[n-1][0],O=3-W;const boards=[];let b=Array(36).fill(0);for(let c=0;c<6;c++){b[c]=2;b[30+c]=1}boards.push(b.slice());
   for(const [p,f,t] of moves){b[t]=b[f];b[f]=0;boards.push(b.slice())}
   const goal=p=>p===1?0:5,arr=(bd,p)=>[0,1,2,3,4,5].filter(c=>bd[goal(p)*6+c]===p).length;
   const ev={};let prevO=0,prevW=0,firstArr=0;const iso=(bd,p)=>{let k=0;for(let i=0;i<36;i++)if(bd[i]===p&&(i/6|0)!==goal(p)&&NB(bd,i)===0)k++;return k};let pz=0;
@@ -191,7 +191,7 @@ function analyze(moves){
     if(p===W&&rO>prevO)e.push('bait');if(p===W&&rW>=2)e.push('multi');if(p===O&&rW>prevW)e.push('induce');
     const z=iso(bd,O);if(z>pz)e.push('bocchi');pz=z;
     if(e.length)ev[k]=e;prevO=rO;prevW=R.filter(r=>r[2]===W).length}
-  const fin=n-2;const finReach=new Set(REACH(boards[fin]).filter(r=>r[2]===W).map(r=>r[1])).size;
+  const fin=n>=4?n-2:n;const finReach=new Set(REACH(boards[fin]).filter(r=>r[2]===W).map(r=>r[1])).size;
   return {n,W,boards,ev,fin,finReach,firstArr}}
 const THEMES={
  A:{light:'#ece6fb',dark:'#8b7bd8',frame:'#2a2340',line:'#00000022',label:'#b9b0e0',bg:'dark',bg1:'#1a1430',bg2:'#040308',outline:'#3b3355',particles:false},
@@ -199,17 +199,20 @@ const THEMES={
  C:{light:'#f1e8d2',dark:'#3f9f95',frame:'#10302e',line:'#00000022',label:'#9fd6cf',bg:'grad',bg1:'#0d1b33',bg2:'#020409',outline:'#2c4d4a',particles:true,flip:['#ffffff','#2f6bff']},
  D:{light:'#fbe4ef',dark:'#e48db3',frame:'#3a1730',line:'#00000022',label:'#f3b6d0',bg:'aura',bg1:'#1b0c26',bg2:'#030106',outline:'#5a2d48',particles:false},
  E:{light:'#20202a',dark:'#1b1b23',frame:'#121218',line:'#2e2e3a',label:'#6b6b7a',bg:'dark',particles:true}};
-function plan(moves,track,themeKey,camMode){camMode=camMode||'mid';
-  const A=analyze(moves);const {n,fin,W,boards,ev}=A;if(n<4)throw new Error('手数が少なすぎます');
+function plan(moves,track,themeKey,camMode,end){camMode=camMode||'mid';end=end||{};
+  const A=analyze(moves,end.win===0?(end.me===1||end.me===2?end.me:1):end.win);const {n,fin,W,boards,ev}=A;if(n<1)throw new Error('手数が少なすぎます');
   const B=60/track.bpm,PH=track.phase;const GB=B>=0.5?B:2*B;const beat=t=>PH+Math.round((t-PH)/GB)*GB;
-  const L=Array(n+1).fill(null);L[n]=track.winT;L[fin]=track.finT;L[n-1]=beat((track.finT+track.winT)/2);
+  const L=Array(n+1).fill(null);
+  if(n<4){ /* 1〜3手の短い対局：最後の手を決め手の拍に置き、前の手は2拍ずつさかのぼる */
+    for(let k=n;k>=1;k--)L[k]=Math.max(0.6+(k-1)*0.6,track.winT-(n-k)*Math.max(2*GB,1.2))}
+  else{L[n]=track.winT;L[fin]=track.finT;L[n-1]=beat((track.finT+track.winT)/2);
   if(!(L[n-1]>L[fin]+0.8&&L[n-1]<L[n]-0.8))L[n-1]=(L[fin]+L[n])/2;
   const key=k=>ev[k]&&ev[k].some(x=>x!=='multi'||true);
   const t0=0.6,t1=track.finT,m=fin;let cand;
   for(const wk of [2.4,1.8,1.3,1.0]){const wt=[];for(let q=0;q<m;q++)wt.push(q>0&&key(q)?wk:1);const cs=[0];for(const w of wt)cs.push(cs[cs.length-1]+w);
     cand=cs.map(c=>t0+(t1-t0)*c/cs[m]);const gaps=cand.slice(1).map((x,i)=>x-cand[i]);if(Math.min(...gaps)>=0.55||wk===1.0)break}
   for(let j=1;j<m;j++){const tb=beat(cand[j]);L[j]=(tb-(L[j-1]??t0)>=0.5&&tb<t1-0.5)?tb:cand[j]}
-  {const seg=[t0];for(let j=1;j<m;j++)seg.push(L[j]);seg.push(t1);if(Math.min(...seg.slice(1).map((x,i)=>x-seg[i]))<0.45)for(let j=1;j<m;j++)L[j]=cand[j]}
+  {const seg=[t0];for(let j=1;j<m;j++)seg.push(L[j]);seg.push(t1);if(Math.min(...seg.slice(1).map((x,i)=>x-seg[i]))<0.45)for(let j=1;j<m;j++)L[j]=cand[j]}}
   const LAND=L.slice(1);
   // camera: punch-ins like bocch_mv_white_v1 (opponent's first arrival, first bait/bocchi)
   const cam=[];const used=[];const startOf=k=>LAND[k-1]-Math.min(0.32,(LAND[k-1]-(k>1?LAND[k-2]:0))*0.45);
@@ -225,12 +228,19 @@ function plan(moves,track,themeKey,camMode){camMode=camMode||'mid';
       if(key||nextGap>=1.3){const R=REACH(boards[m]);const sq=[...new Set(R.flatMap(r=>[r[0],r[1]]))];cam.push({t:+(LAND[i]+0.12).toFixed(3),sq:sq.length?sq:[t],z:key?2.3:1.6,d:0.4})}}
     for(const pl of [1,2]){for(let m=1;m<n-1;m++){if(arrived(boards[m],pl)){cam.push({t:+(LAND[m-1]+0.15).toFixed(3),sq:[moves[m-1][2]],z:2.5,d:0.3});break}}}
     for(let i=1;i<n;i++)if(LAND[i]-LAND[i-1]>4.5)cam.push({t:+(LAND[i-1]+1.6).toFixed(3),sq:null,d:Math.min(3,LAND[i]-LAND[i-1]-2.2)});
-    if(fin>=1)cam.push({t:+(LAND[fin-1]-1.6).toFixed(3),sq:[moves[fin-1][1]],z:2.6,d:0.6});
+    if(n>=4&&fin>=1)cam.push({t:+(LAND[fin-1]-1.6).toFixed(3),sq:[moves[fin-1][1]],z:2.6,d:0.6});
     const W=A.W,arr=[0,1,2,3,4,5].map(c=>goal(W)*6+c).filter(x=>boards[n][x]===W);
     cam.push({t:+(track.winT-0.1).toFixed(3),sq:arr,z:2.2,d:0.6},{t:+(track.winT+1.1).toFixed(3),sq:null,d:1.2})}
-  const badge={};badge[fin]=['!!','CYAN'];for(const k in ev)if(+k<fin&&ev[k].includes('bait'))badge[k]=['!?','PURPLE'];
+  const badge={};if(n>=4&&moves[fin-1][0]===W)badge[fin]=['!!','CYAN'];for(const k in ev)if(+k<fin&&ev[k].includes('bait'))badge[k]=['!?','PURPLE'];
   const th=themeKey==='rand'?'ABCD'[Math.floor(Math.random()*4)]:themeKey;
-  const cfg={bpm:track.bpm,phase:PH,pulseAmp:0,drift:0,moves,land:LAND,total:track.end,tel:[],badge,shake:camMode==='calm'?[]:[fin,n],boom:[],blunder:0,iso:0,seqT:{[fin]:track.seq},pulse:[[track.finT,track.winT]],cam,words:track.words,hot:['home','three','four','two','lanes','lane','move','over','done','mistake','first','block'],theme:THEMES[th],flipT:track.finT};
+  /* 決着の形：ゴール到着以外（投了・時間切れ・動けない・引き分け）は最後に一言出す */
+  const why=String(end.why||''),drawn=end.win===0;let tag='';
+  if(drawn)tag='DRAW';else if(/投了/.test(why))tag='RESIGNS';else if(/時間切れ/.test(why))tag='TIME OUT';else if(/動けなく/.test(why))tag='NO MOVES';
+  else{const gl=W===1?0:5;let k=0;for(let c=0;c<6;c++)if(boards[n][gl*6+c]===W)k++;if(k<2)tag='WIN'}
+  const cutin=tag?[{t:+(L[n]+0.9).toFixed(3),d:1.4,text:tag,c1:drawn?'#5b6b8c':W===1?'#ff7a1a':'#2f8bff',c2:drawn?'#232d43':'#121826'}]:[];
+  /* 短い対局は曲の途中から始める（最初の手の3秒前、最低でも決め所の6秒前から） */
+  const start=n<4?Math.max(0,Math.min(L[1]-3,track.winT-6)):0;
+  const cfg={start,winner:W,draw:end.win===0,cutin,bpm:track.bpm,phase:PH,pulseAmp:0,drift:0,moves,land:LAND,total:track.end,tel:[],badge,shake:camMode==='calm'?[]:[fin,n],boom:[],blunder:0,iso:0,seqT:n>=4?{[fin]:track.seq}:{},pulse:[[track.finT,track.winT]],cam,words:track.words,hot:['home','three','four','two','lanes','lane','move','over','done','mistake','first','block'],theme:THEMES[th],flipT:track.finT};
   return {cfg,A,theme:th}}
 
 const THN={A:'ラベンダー',B:'サーモン',C:'ティール',D:'ピンク',E:'ダーク'};
@@ -253,16 +263,16 @@ function load(){if(ready)return ready;
 #bmv .msg{width:100%;max-width:420px;font-size:13px;color:#9aa6c0;min-height:18px;line-height:1.6;text-align:center}`;
   document.head.appendChild(css);
   const ff=[new FontFace('Bebas','url('+BASE+'bebas.ttf)'),new FontFace('Outfit','url('+BASE+'outfit.ttf)',{weight:'700'})];
-  ready=Promise.all([fetch(BASE+'tracks.json?v=2').then(r=>r.json()).then(j=>{TRACKS=j}),...ff.map(f=>f.load().then(x=>document.fonts.add(x)).catch(()=>{}))]);
+  ready=Promise.all([fetch(BASE+'tracks.json?v=1').then(r=>r.json()).then(j=>{TRACKS=j}),...ff.map(f=>f.load().then(x=>document.fonts.add(x)).catch(()=>{}))]);
   return ready}
 let UI=null,ST=null;
 function el(h){const d=document.createElement('div');d.innerHTML=h;return d.firstElementChild}
 function bgm(off){window.BOCCH_MV=off?1:0;try{window.bgmTick&&window.bgmTick()}catch(e){}}
 function close(){if(!UI)return;if(ST&&ST.src){try{ST.src.stop()}catch(e){}}if(ST)ST.stop=1;if(ST&&ST.rec&&ST.rec.state!=='inactive')try{ST.rec.stop()}catch(e){}
   UI.remove();UI=null;bgm(false)}
-function okLog(log){try{const mv=parseKifu(JSON.stringify(log));const A=analyze(mv);const b=A.boards[A.n];const g=A.W===1?0:5;let k=0;for(let c=0;c<6;c++)if(b[g*6+c]===A.W)k++;return k>=2&&A.n>=4?mv:null}catch(e){return null}}
+function okLog(log){try{return log&&log.length?parseKifu(JSON.stringify(log)):null}catch(e){return null}}
 async function open(o){
-  const mv=okLog(o&&o.log||[]);if(!mv){alert(T('この対局は動画にできません（ゴールに2つ着いて決着した対局だけ作れます）'));return}
+  const mv=okLog(o&&o.log||[]);if(!mv){alert(T('この対局は動画にできません'));return}const END={win:o.win,why:o.why,me:o.me};
   close();bgm(true);
   UI=el(`<div id="bmv" role="dialog" aria-modal="true"><div class="top"><h3>${T('動画を作る')}</h3><button class="x" id="bmvX">${T('閉じる')} ✕</button></div>
 <canvas id="bmvCv" width="1080" height="1920"></canvas>
@@ -276,17 +286,17 @@ async function open(o){
   try{await load()}catch(e){msg(T('読み込めませんでした'));return}
   if(!UI)return;
   /* 曲は手数で自動に選ぶ：決め手までを1手およそ1.2秒で見せられる曲（短い対局は短い曲、長い対局は長い曲） */
-  const want=0.6+(mv.length-2)*1.2,df=TRACKS.map((t,i)=>[Math.abs(t.finT-want),i]).sort((a,b)=>a[0]-b[0]),near=df.filter(d=>d[0]<=Math.max(7,df[0][0]+3));
+  const want=mv.length<4?0:0.6+(mv.length-2)*1.2,df=TRACKS.map((t,i)=>[Math.abs(t.finT-want),i]).sort((a,b)=>a[0]-b[0]),near=df.filter(d=>d[0]<=Math.max(7,df[0][0]+3));
   const TI=near[Math.floor(Math.random()*near.length)][1],thPick='ABCD'[Math.floor(Math.random()*4)];
   for(const k of 'ABCDE'){const op=document.createElement('option');op.value=k;op.textContent=T(THN[k]);q('bmvTh').appendChild(op)}q('bmvTh').value=thPick;{let c='mid';try{c=localStorage.getItem('bocch-mvcam')||'mid'}catch(e){}q('bmvCam').value=c}
   let P=null,RR=null,blob=null,busy=false,ac=null;const AB={};
-  const build=()=>{blob=null;q('bmvOut').hidden=true;P=plan(mv,TRACKS[TI],q('bmvTh').value,q('bmvCam').value);RR=makeRenderer(CV,P.cfg);RR.renderAt(0.01)};
-  const safe=()=>{try{build();msg(T('勝った側の視点で、曲に合わせた縦型動画を作ります'))}catch(e){msg(T('動画を作れませんでした'))}};
+  const build=()=>{blob=null;q('bmvOut').hidden=true;P=plan(mv,TRACKS[TI],q('bmvTh').value,q('bmvCam').value,END);RR=makeRenderer(CV,P.cfg);RR.renderAt((P.cfg.start||0)+0.01)};
+  const safe=()=>{try{build();msg(T(END.win===0?'曲に合わせた縦型動画を作ります':'勝った側の視点で、曲に合わせた縦型動画を作ります'))}catch(e){msg(T('動画を作れませんでした'))}};
   q('bmvTh').onchange=()=>{if(!busy)safe()};q('bmvCam').onchange=()=>{try{localStorage.setItem('bocch-mvcam',q('bmvCam').value)}catch(e){}if(!busy)safe()};
   safe();q('bmvPrev').disabled=q('bmvMake').disabled=false;
   async function audio(i){ac=ac||new AudioContext();if(!AB[i])AB[i]=await fetch(BASE+TRACKS[i].file).then(r=>r.arrayBuffer()).then(b=>ac.decodeAudioData(b));return AB[i]}
   const LB={bmvPrev:'▶ '+T('プレビュー'),bmvMake:T('動画を作る')};let curBtn=null;
-  function stopRun(){if(!ST||ST.stop)return;ST.stop=1;try{ST.src&&ST.src.stop()}catch(e){}if(ST.rec&&ST.rec.state!=='inactive')try{ST.rec.stop()}catch(e){}q('bmvProg').style.width='0%';RR.renderAt(0.01);msg(T('止めました'))}
+  function stopRun(){if(!ST||ST.stop)return;ST.stop=1;try{ST.src&&ST.src.stop()}catch(e){}if(ST.rec&&ST.rec.state!=='inactive')try{ST.rec.stop()}catch(e){}q('bmvProg').style.width='0%';RR.renderAt((P.cfg.start||0)+0.01);msg(T('止めました'))}
   async function run(record){if(busy){if(curBtn===(record?'bmvMake':'bmvPrev'))stopRun();return}busy=true;const me=UI;curBtn=record?'bmvMake':'bmvPrev';q('bmvPrev').disabled=q('bmvMake').disabled=q('bmvTh').disabled=q('bmvCam').disabled=true;
     {const b=q(curBtn);b.disabled=false;b.textContent='■ '+T(record?'やめる':'止める')}
     ST={};try{safe();msg(T('読み込み中…'));const buf=await audio(TI);if(UI!==me)return;await ac.resume();
@@ -295,8 +305,8 @@ async function open(o){
         const types=['video/mp4;codecs=avc1.42E01F,mp4a.40.2','video/mp4','video/webm;codecs=vp9,opus','video/webm'];mime=types.find(t=>window.MediaRecorder&&MediaRecorder.isTypeSupported(t))||'';
         const ms=new MediaStream([...CV.captureStream(30).getVideoTracks(),...dest.stream.getAudioTracks()]);ST.rec=new MediaRecorder(ms,mime?{mimeType:mime,videoBitsPerSecond:6e6}:{});ST.rec.ondataavailable=e=>e.data.size&&chunks.push(e.data);ST.rec.start(500);
         msg(T('録画中…終わるまでこの画面を開いたままにしてください'))}else msg('');
-      src.connect(ac.destination);const t0=ac.currentTime+0.15;src.start(t0);const TT=RR.TOTAL;
-      await new Promise(res=>{const loop=()=>{if(ST.stop){res();return}const t=ac.currentTime-t0;RR.renderAt(Math.max(0,Math.min(t,TT)));q('bmvProg').style.width=Math.min(100,Math.max(0,t/TT*100))+'%';if(t>=TT){res();return}requestAnimationFrame(loop)};loop()});
+      src.connect(ac.destination);const S0=P.cfg.start||0,t0=ac.currentTime+0.15;src.start(t0,S0);const TT=RR.TOTAL;
+      await new Promise(res=>{const loop=()=>{if(ST.stop){res();return}const t=ac.currentTime-t0+S0;RR.renderAt(Math.max(S0,Math.min(t,TT)));q('bmvProg').style.width=Math.min(100,Math.max(0,(t-S0)/(TT-S0)*100))+'%';if(t>=TT){res();return}requestAnimationFrame(loop)};loop()});
       if(ST.stop)return;try{src.stop()}catch(e){}RR.renderAt(Math.min(TT,TRACKS[TI].winT+1));
       if(ST.rec){await new Promise(r=>{ST.rec.onstop=r;ST.rec.stop()});blob=new Blob(chunks,{type:(mime||'video/webm').split(';')[0]});q('bmvOut').hidden=false;msg(T('できました。保存か共有を押してください。'))}
       else msg('');
