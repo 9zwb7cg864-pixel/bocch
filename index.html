@@ -1630,7 +1630,7 @@ button.primary:active,.primary:active,.hm-play:active,.hc-btn:active,.rev-mv:act
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.48</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.49</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -2770,7 +2770,8 @@ function cpuMove(b,p,level){
   const ms=allMoves(b,p);if(!ms.length)return null;
   /* 入門：ほとんどでたらめに指す。勝てる手も3割しか気づかない */
   if(level===5){if(Math.random()<0.3)for(const m of ms)if(arrived(apply(b,m),p))return m;if(Math.random()<0.75)return ms[Math.random()*ms.length|0];level=1}
-  if(level===6)level=Math.random()<0.65?1:2; /* やさしいとふつうの間 */
+  if(level===6)level=Math.random()<0.8?2:1; /* やさしいとふつうの間（1手ごとに混ぜると弱い手に引っ張られるので、ふつうを8割） */
+  if(level===7)level=Math.random()<0.7?3:2; /* ふつうとつよいの間（深く読むと逆に弱くなるので、混ぜて作る） */
   /* AIの直感だけ（つよいの手抜きなし） */
   if(level===8){for(const m of ms)if(arrived(apply(b,m),p))return m;if(typeof BocchEngine!=='undefined'){try{const r=BocchEngine.think(b.slice(),p,300,{history:[],shuffle:(S.ply||0)<4,book:false,maxDepth:1});if(r&&r.move)return r.move}catch(e){}}level=2}
   if(level===1){ // やさしい：先を読まず、見た目の形だけで選ぶ。勝てる手や受けもときどき見逃す
@@ -2781,7 +2782,7 @@ function cpuMove(b,p,level){
   /* つよい：最強と同じ評価（ニューラルネット）で1手先だけ読む。7割はその手、3割は「ふつう」の手を指す。
      ふつうに約8割勝つ強さ（以前の「深く読む」やり方は評価が読みの深さに合っておらず、ふつうに負けていた） */
   if(level===3){if(typeof BocchEngine!=='undefined'&&Math.random()>=0.3){try{const r=BocchEngine.think(b.slice(),p,300,{history:[],shuffle:(S.ply||0)<4,book:false,maxDepth:1});if(r&&r.move)return r.move}catch(e){}}level=2}
-  const limit=level===2?250:level===7?500:1200,maxD=level===2?3:level===7?4:9;
+  const limit=level===2?250:1200,maxD=level===2?3:9;
   deadline=performance.now()+limit;let bestMove=ms[0];
   for(let d=1;d<=maxD;d++){aborted=false;let best=-Infinity,bm=null,alpha=-Infinity;
     for(const m of[bestMove,...ms.filter(x=>x!==bestMove)]){const v=-negamax(apply(b,m),3-p,d-1,-Infinity,-alpha)+Math.random()*(S.hist.length<6?15:0.5);
@@ -2835,8 +2836,10 @@ function getWorker(){if(WK!==null)return WK;
     WK.onmessage=e=>{const d=e.data;const go=()=>{if(d.key===WKkey&&d.key===S.ply+':'+key(S.b,S.turn)&&!S.over&&d.r)doMove(d.r.move)};mvAfter(go)};
     WK.onerror=()=>{WK=false}}catch(e){WK=false}return WK}
 function cpuPlay(p,lv){p=p||3-hcOf();lv=lv||S.mode;
+  /* Oscar・Ivy：最強AIとAIの直感を混ぜる（最強AIは考える時間を変えても強さがほとんど変わらないため） */
+  if((lv===9||lv===10)&&Math.random()>=(lv===9?0.5:0.8))lv=8;
   if(lv===4||lv===9||lv===10){const k=S.ply+':'+key(S.b,S.turn);WKkey=k;
-    const job={key:k,b:S.b.slice(),p,ms:S.study?Math.min(3000,Math.max(800,STUDY.sp*2)):({9:500,10:1500}[lv]||3000),history:S.hist.map(h=>({b:h.b,turn:h.turn})),shuffle:S.ply<4,book:true};
+    const job={key:k,b:S.b.slice(),p,ms:S.study?Math.min(3000,Math.max(800,STUDY.sp*2)):({9:500,10:1000}[lv]||3000),history:S.hist.map(h=>({b:h.b,turn:h.turn})),shuffle:S.ply<4,book:true};
     const w=getWorker();
     if(w)w.postMessage(job);
     else setTimeout(()=>{if(WKkey!==k)return;const r=BocchEngine.think(job.b,job.p,1500,job);mvAfter(()=>{if(r&&WKkey===k&&k===S.ply+':'+key(S.b,S.turn)&&!S.over)doMove(r.move)})},30);
@@ -3909,7 +3912,7 @@ setInterval(()=>{if(!AIW.on){if(S&&S.mode==='net'&&NET.watch&&NET.ai&&NET.code&&
 addEventListener('popstate',()=>{if(CUR==='watch'){if(!LV.on)startWatchList()}else stopWatchList()});
 
 /* 名前とレート（この端末に保存。オンラインでは部屋の記録に名前とレートを添えて送る） */
-var PKEY='bocch-profile',CPU_RATE={5:600,1:900,6:1050,2:1200,7:1350,3:1500,8:1650,9:1800,10:1950,4:2100};
+var PKEY='bocch-profile',CPU_RATE={5:600,1:810,6:1110,2:1240,7:1400,3:1500,8:1630,9:1890,10:2150,4:2450}; /* CPUどうしの対局（2026-11）で測った強さ。Leo（つよい）＝1500基準 */
 const cleanName=x=>String(x==null?'':x).replace(/[\u0000-\u001f\u007f<>]/g,'').trim().slice(0,12);
 function loadProf(){let p={};try{p=JSON.parse(localStorage.getItem(PKEY)||'{}')||{}}catch(e){}
   return {name:cleanName(p.name)||'',rating:Number.isFinite(p.rating)?p.rating:1500,games:p.games|0,w:p.w|0,l:p.l|0,d:p.d|0,rated:Array.isArray(p.rated)?p.rated.slice(-200):[],peak:!!p.peak,cs:p.cs&&typeof p.cs==='object'?p.cs:{},wk:p.wk&&typeof p.wk.k==='string'?p.wk:null,st:p.st||{},bd:Array.isArray(p.bd)?p.bd:[],sel:typeof p.sel==='string'?p.sel:'',bdInit:p.bdInit|0,dan:danP(p.dan)}}
