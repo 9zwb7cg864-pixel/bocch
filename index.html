@@ -1082,6 +1082,12 @@ body,button,input,select,textarea{font-family:var(--f-body)!important;letter-spa
 .home-rules{border:0!important;box-shadow:none!important;padding:16px!important}
 .home-rules h3{color:var(--fg)!important;font-size:15px}
 .hm-daily,.hm-menu,.hm-chp,.home-rules,.hm-box{border:0!important}
+/* 和風の名残を消す：明朝・筆文字・金のフォントを使っていた所もNoto Sans JPに */
+.dq-streak b,.rk-list li .n,.rk-list li .v,.rk-pod .pn,.rk-pod .nm,.rk-pod .v,.home-rules h3,.ln-body h3,.cs-card .ic,.mvmyo b,.mvend .mvk,.rkup .mvk{font-family:"Noto Sans JP",sans-serif!important;font-weight:800!important;-webkit-text-fill-color:currentColor}
+.dq-streak b,.rk-list li .v,.rk-pod .v,.ln-body h3{color:var(--fg)!important}
+.rkcard .mvhd{padding-top:26px}.rkcard .rkstone{width:72px;height:72px;margin:0 auto 12px;font-size:0}
+.rkcard .mvhd h3{font-size:34px;color:var(--b-acc2)}
+.mvflake,.mvrays,.mvdrop{display:none!important}
 </style>
 </head>
 <body>
@@ -1489,7 +1495,7 @@ body,button,input,select,textarea{font-family:var(--f-body)!important;letter-spa
     <button type="button" class="gset i-set" aria-expanded="false">設定</button>
   </div>
   <div class="endrow" id="reviewRow" hidden><button id="reviewNow" class="endb main"><span>感想戦で振り返る</span></button><button id="xNow" class="endb"><span>Xで共有</span></button><button id="mvNow" class="endb" hidden><span>動画を作る</span></button></div>
-  <div class="row chks" id="gChks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label><label class="chk"><input type="checkbox" id="bgmOn"> BGM</label></div>
+  <div class="row chks" id="gChks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label><label class="chk" hidden><input type="checkbox" id="bgmOn"> BGM</label></div>
   <div class="ad-slot ad-over" data-ad="over" hidden aria-label="広告"></div>
 </section>
 
@@ -2845,7 +2851,7 @@ function fxRipple(g,i,p,col,col1,big){big=big||1;const {x,P,k,W}=g,Q=P[i],maxR=W
   x.restore()}
 function fxArrive(side,cell,mine){fxQueue(()=>fxArrive0(side,cell,mine))}
 function fxArrive0(side,cell,mine){if(!$('showJos').checked||CUR!=='game')return false;FX_FACE=side;const g=fxBase();if(!g)return false;
-  const col=side===1?'#f6e2a8':'#ffffff',col1=side===1?'#e9c46a':'#dfe6ee',t0=performance.now(),PER=2200;
+  const col=side===1?'#cfe3fb':'#ffffff',col1=side===1?'#a9cdf7':'#dfe6ee',t0=performance.now(),PER=2200;
   function f(now){const t=now-t0;if(CUR!=='game'){josStop();return}if(t>PER){fxDone();return}const {x,W,H,dpr}=g;x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
     fxRipple(g,cell,t/PER,col,col1);
     JOS.raf=requestAnimationFrame(f)}JOS.raf=requestAnimationFrame(f);return true}
@@ -3342,11 +3348,10 @@ function danStep(D,res,d,hid){const lv=D.lv;
 function danFx(lv){
   /* 段級名のフォント：日本語は Shippori Mincho（太）、繁体字は Yuji Boku、ほかは勝敗の演出と同じ言語ごとの筆文字 */
   const LG=window.BOCCH_LANG||'ja',fam={en:'Kaushan Script',es:'Kaushan Script',de:'Kaushan Script',ko:'Nanum Brush Script','zh-Hans':'Ma Shan Zheng'}[LG];
-  if(fam&&!document.getElementById('rkFont')){const l=document.createElement('link');l.id='rkFont';l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+fam.replace(/ /g,'+')+'&display=swap';document.head.appendChild(l)}
+  if(false&&fam&&!document.getElementById('rkFont')){const l=document.createElement('link');l.id='rkFont';l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family='+fam.replace(/ /g,'+')+'&display=swap';document.head.appendChild(l)}
   let e=$('rkUp');if(!e){e=document.createElement('div');e.id='rkUp';e.setAttribute('role','dialog');e.setAttribute('aria-modal','true');document.body.appendChild(e);e.addEventListener('click',()=>{e.hidden=true})}
-  const dan=lv>=30;let h='';for(let k=0;k<(dan?40:22);k++){const z=4+(k*7)%9;h+='<span class="mvflake" aria-hidden="true" style="left:'+((k*37+11)%100)+'%;top:'+((k*53+7)%80)+'%;width:'+z+'px;height:'+Math.round(z*.7)+'px;transform:rotate('+(k*37%180)+'deg);animation-delay:'+((k*13)%20)/10+'s"></span>'}
-  h+='<div class="stone b rkstone'+rankCls(lv)+'"><span>4</span></div><div class="mvk">'+lvName(lv)+'</div><div class="mvwho">'+(dan?'昇段しました':'昇級しました')+'</div><div class="mvwhy">'+(dan?'おめでとうございます':'この調子で')+'</div><div class="mvrow"><button class="mvbtn solid" type="button">閉じる</button></div>';
-  e.className='mvend rkup'+(dan?' isdan':'');e.innerHTML=h;e.hidden=false;clearTimeout(e._t);e._t=setTimeout(()=>{e.hidden=true},dan?7000:4500)}
+  const dan=lv>=30;let h='<div class="mvcard rkcard"><div class="mvhd"><div class="stone b rkstone'+rankCls(lv)+'"><span>4</span></div><h3>'+lvName(lv)+'</h3><p>'+(dan?'昇段しました':'昇級しました')+'</p></div><div class="mvacts"><button class="mvbtn main" type="button">閉じる</button></div></div>';
+  e.className='mvend bcard rkup'+(dan?' isdan':'');e.innerHTML=h;e.hidden=false;clearTimeout(e._t);e._t=setTimeout(()=>{e.hidden=true},dan?7000:4500)}
 $('undo').addEventListener('click',()=>{if(S.mode&&S.mode!=='net')S.noRate=true});
 
 /* バッジ：条件を満たすともらえ、1つ選ぶと名前の横に出る（オンラインの相手にも見える） */
@@ -4651,12 +4656,12 @@ const SE={buf:{},ld:{},until:0,done:{},
 function seLoad(k){if(SE.buf[k]||SE.ld[k]||!KOMA.ctx)return SE.ld[k];SE.ld[k]=fetch('sounds/se/'+k+'.mp3').then(r=>r.arrayBuffer()).then(a=>new Promise((ok,ng)=>KOMA.ctx.decodeAudioData(a,ok,ng))).then(b=>{SE.buf[k]=b;return b}).catch(()=>{SE.ld[k]=null});return SE.ld[k]}
 // 長い音の途中で止めないよう、鳴っている間は音の部品を眠らせない
 {const _ks=komaSleep;komaSleep=function(){const w=SE.until-performance.now();if(w>0){clearTimeout(KOMA.st);KOMA.st=setTimeout(()=>komaSleep(),w+200);return}_ks()}}
-function seP(k,delay){if(!KOMA.on||document.hidden)return;const go=()=>{if(!KOMA.on||document.hidden)return;komaLoad();if(!KOMA.ctx)return;
+function seP(k,delay){return;/* 和楽器の効果音は鳴らさない（2026-11 和風をやめた） */if(!KOMA.on||document.hidden)return;const go=()=>{if(!KOMA.on||document.hidden)return;komaLoad();if(!KOMA.ctx)return;
   Promise.resolve(SE.buf[k]||seLoad(k)).then(b=>{if(!b)return;const run=()=>{const s=KOMA.ctx.createBufferSource(),g=KOMA.ctx.createGain();s.buffer=b;g.gain.value=SE.vol[k]||.02;s.connect(g);g.connect(KOMA.ctx.destination);s.start();
     SE.until=Math.max(SE.until,performance.now()+b.duration*1000);komaSleep()};if(KOMA.ctx.state==='running')run();else KOMA.ctx.resume().then(run).catch(()=>{})}).catch(()=>{})};
   if(delay)setTimeout(go,delay);else go()}
 // 最初に画面に触れたら、全部の音を読み込んでおく
-addEventListener('pointerdown',function f(){removeEventListener('pointerdown',f,true);setTimeout(()=>{try{komaLoad();Object.keys(SE.vol).forEach(seLoad)}catch(e){}},300)},true);
+/* 効果音は使わないので先読みもしない */
 function seOnce(key){if(SE.done[key])return false;SE.done[key]=1;return true}
 // 向こう岸に着いた（勝ちになる2つ目は終局の音）
 {const _fa=fxArrive;fxArrive=function(side,cell,mine){try{if(!S.over)seP('muk',40)}catch(e){}return _fa(side,cell,mine)}}
@@ -4681,7 +4686,7 @@ document.addEventListener('click',e=>{try{const b=e.target.closest&&e.target.clo
 /* ===== BGM（2026-11）：対局中は合戦の曲、それ以外（ホーム・メニュー・マッチング待ち・感想戦・学ぶ）は琴の曲。設定の「BGM」で切り替え（最初はオン）
    曲：Pixabay の音楽（クレジット不要）。iPhoneは音の要素の音量を変えられないので、音の部品（KOMA.ctx）に通して音量を決める */
 const BGM={on:false,el:{},g:{},cur:'',vol:.014,ok:false};
-try{BGM.on=localStorage.getItem('bocch-bgm')==='1'}catch(e){BGM.on=false}
+BGM.on=false;/* 琴・合戦のBGMは流さない（2026-11 和風をやめた） */
 function bgmWant(){try{if(!BGM.on||document.hidden||window.BOCCH_MV)return '';if(CUR==='game'&&S&&!S.over&&!S.study&&!S.learn&&(typeof VIEW==='undefined'||VIEW.i==null))return 'battle';return 'koto'}catch(e){return ''}}
 function bgmNode(k){if(BGM.el[k])return BGM.el[k];const a=new Audio('sounds/bgm/'+k+'.mp3');a.loop=true;a.preload='auto';a.crossOrigin='anonymous';BGM.el[k]=a;
   try{const s=KOMA.ctx.createMediaElementSource(a),g=KOMA.ctx.createGain();g.gain.value=0;s.connect(g);g.connect(KOMA.ctx.destination);BGM.g[k]=g}catch(e){a.volume=.25}return a}
