@@ -224,20 +224,20 @@ const THN={A:'ラベンダー',B:'サーモン',C:'ティール',D:'ピンク',E
 let TRACKS=null,ready=null;
 function load(){if(ready)return ready;
   const css=document.createElement('style');css.textContent=`
-#bmv{position:fixed;inset:0;z-index:9999;background:#08080c;color:#eee;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px;padding:max(12px,env(safe-area-inset-top)) 16px max(14px,env(safe-area-inset-bottom));box-sizing:border-box;overflow-y:auto;font-family:system-ui,"Hiragino Sans","Noto Sans JP",sans-serif}
+#bmv{position:fixed;inset:0;z-index:9999;background:#121826;color:#eef2fa;font-family:"Noto Sans JP",sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:10px;padding:max(12px,env(safe-area-inset-top)) 16px max(14px,env(safe-area-inset-bottom));box-sizing:border-box;overflow-y:auto;font-family:system-ui,"Hiragino Sans","Noto Sans JP",sans-serif}
 #bmv .top{width:100%;max-width:420px;display:flex;align-items:center;justify-content:space-between}
-#bmv h3{margin:0;font-size:16px;font-weight:700}
-#bmv .x{background:none;border:none;color:#bbb;font-size:15px;padding:8px;cursor:pointer}
-#bmv canvas{height:min(56vh,640px);width:auto;max-width:100%;aspect-ratio:9/16;border-radius:12px;background:#000;display:block;flex:none}
+#bmv h3{margin:0;font-size:17px;font-weight:800}
+#bmv .x{background:none;border:none;color:#9aa6c0;min-height:0;font-size:15px;padding:8px;cursor:pointer}
+#bmv canvas{height:min(56vh,640px);width:auto;max-width:100%;aspect-ratio:9/16;border-radius:18px;background:#000;display:block;flex:none}
 #bmv .opt{width:100%;max-width:420px;display:grid;grid-template-columns:1fr;gap:8px}
-#bmv label{font-size:11px;color:#9a9aa8;display:block;margin-bottom:3px}
-#bmv select{width:100%;background:#15151c;color:#eee;border:1px solid #2b2b36;border-radius:8px;padding:8px;font-size:14px}
+#bmv label{font-size:12px;color:#9aa6c0;font-weight:700;display:block;margin-bottom:3px}
+#bmv select{width:100%;background:#1a2234;color:#eef2fa;border:1px solid rgba(200,215,240,.18);border-radius:12px;padding:10px;font-size:14px}
 #bmv .row{width:100%;max-width:420px;display:flex;gap:8px}
-#bmv .row button{flex:1;background:#22222c;color:#eee;border:1px solid #3a3a48;border-radius:10px;padding:12px;font-size:15px;cursor:pointer}
-#bmv .row button.main{background:#38f0ff;color:#001318;border:none;font-weight:700}
+#bmv .row button{flex:1;background:#232d43;color:#eef2fa;border:0;border-radius:999px;padding:12px;min-height:50px;font-size:15px;font-weight:800;cursor:pointer}
+#bmv .row button.main{background:linear-gradient(180deg,#cfe3fb,#a9cdf7);color:#0f1a30;border:none;font-weight:900}
 #bmv button:disabled{opacity:.45;cursor:default}
-#bmv .bar{width:100%;max-width:420px;height:5px;background:#22222c;border-radius:99px;overflow:hidden;flex:none}#bmv .bar i{display:block;height:100%;width:0;background:#38f0ff}
-#bmv .msg{width:100%;max-width:420px;font-size:13px;color:#aaa;min-height:18px;line-height:1.6;text-align:center}`;
+#bmv .bar{width:100%;max-width:420px;height:6px;background:#232d43;border-radius:99px;overflow:hidden;flex:none}#bmv .bar i{display:block;height:100%;width:0;background:#a9cdf7;border-radius:99px}
+#bmv .msg{width:100%;max-width:420px;font-size:13px;color:#9aa6c0;min-height:18px;line-height:1.6;text-align:center}`;
   document.head.appendChild(css);
   const ff=[new FontFace('Bebas','url('+BASE+'bebas.ttf)'),new FontFace('Outfit','url('+BASE+'outfit.ttf)',{weight:'700'})];
   ready=Promise.all([fetch(BASE+'tracks.json?v=2').then(r=>r.json()).then(j=>{TRACKS=j}),...ff.map(f=>f.load().then(x=>document.fonts.add(x)).catch(()=>{}))]);
