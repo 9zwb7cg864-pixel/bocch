@@ -229,7 +229,7 @@ function load(){if(ready)return ready;
 #bmv h3{margin:0;font-size:16px;font-weight:700}
 #bmv .x{background:none;border:none;color:#bbb;font-size:15px;padding:8px;cursor:pointer}
 #bmv canvas{height:min(56vh,640px);width:auto;max-width:100%;aspect-ratio:9/16;border-radius:12px;background:#000;display:block;flex:none}
-#bmv .opt{width:100%;max-width:420px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#bmv .opt{width:100%;max-width:420px;display:grid;grid-template-columns:1fr;gap:8px}
 #bmv label{font-size:11px;color:#9a9aa8;display:block;margin-bottom:3px}
 #bmv select{width:100%;background:#15151c;color:#eee;border:1px solid #2b2b36;border-radius:8px;padding:8px;font-size:14px}
 #bmv .row{width:100%;max-width:420px;display:flex;gap:8px}
@@ -240,7 +240,7 @@ function load(){if(ready)return ready;
 #bmv .msg{width:100%;max-width:420px;font-size:13px;color:#aaa;min-height:18px;line-height:1.6;text-align:center}`;
   document.head.appendChild(css);
   const ff=[new FontFace('Bebas','url('+BASE+'bebas.ttf)'),new FontFace('Outfit','url('+BASE+'outfit.ttf)',{weight:'700'})];
-  ready=Promise.all([fetch(BASE+'tracks.json?v=1').then(r=>r.json()).then(j=>{TRACKS=j}),...ff.map(f=>f.load().then(x=>document.fonts.add(x)).catch(()=>{}))]);
+  ready=Promise.all([fetch(BASE+'tracks.json?v=2').then(r=>r.json()).then(j=>{TRACKS=j}),...ff.map(f=>f.load().then(x=>document.fonts.add(x)).catch(()=>{}))]);
   return ready}
 let UI=null,ST=null;
 function el(h){const d=document.createElement('div');d.innerHTML=h;return d.firstElementChild}
@@ -253,7 +253,7 @@ async function open(o){
   close();bgm(true);
   UI=el(`<div id="bmv" role="dialog" aria-modal="true"><div class="top"><h3>${T('動画を作る')}</h3><button class="x" id="bmvX">${T('閉じる')} ✕</button></div>
 <canvas id="bmvCv" width="1080" height="1920"></canvas>
-<div class="opt"><div><label for="bmvTr">${T('曲')}</label><select id="bmvTr"></select></div><div><label for="bmvTh">${T('見た目')}</label><select id="bmvTh"></select></div></div>
+<div class="opt"><div><label for="bmvTh">${T('見た目')}</label><select id="bmvTh"></select></div></div>
 <div class="row"><button id="bmvPrev">▶ ${T('プレビュー')}</button><button id="bmvMake" class="main">${T('動画を作る')}</button></div>
 <div class="bar"><i id="bmvProg"></i></div><div class="msg" id="bmvMsg">${T('読み込み中…')}</div>
 <div class="row" id="bmvOut" hidden><button id="bmvSave" class="main">${T('保存')}</button><button id="bmvShare">${T('共有')}</button></div></div>`);
@@ -262,17 +262,18 @@ async function open(o){
   q('bmvPrev').disabled=q('bmvMake').disabled=true;
   try{await load()}catch(e){msg(T('読み込めませんでした'));return}
   if(!UI)return;
-  const pick=Math.floor(Math.random()*TRACKS.length),thPick='ABCD'[Math.floor(Math.random()*4)];
-  TRACKS.forEach((t,i)=>{const op=document.createElement('option');op.value=i;op.textContent=t.name;q('bmvTr').appendChild(op)});q('bmvTr').value=pick;
+  /* 曲は手数で自動に選ぶ：決め手までを1手およそ1.2秒で見せられる曲（短い対局は短い曲、長い対局は長い曲） */
+  const want=0.6+(mv.length-2)*1.2,df=TRACKS.map((t,i)=>[Math.abs(t.finT-want),i]).sort((a,b)=>a[0]-b[0]),near=df.filter(d=>d[0]<=Math.max(7,df[0][0]+3));
+  const TI=near[Math.floor(Math.random()*near.length)][1],thPick='ABCD'[Math.floor(Math.random()*4)];
   for(const k of 'ABCDE'){const op=document.createElement('option');op.value=k;op.textContent=T(THN[k]);q('bmvTh').appendChild(op)}q('bmvTh').value=thPick;
   let P=null,RR=null,blob=null,busy=false,ac=null;const AB={};
-  const build=()=>{blob=null;q('bmvOut').hidden=true;P=plan(mv,TRACKS[+q('bmvTr').value],q('bmvTh').value);RR=makeRenderer(CV,P.cfg);RR.renderAt(0.01)};
+  const build=()=>{blob=null;q('bmvOut').hidden=true;P=plan(mv,TRACKS[TI],q('bmvTh').value);RR=makeRenderer(CV,P.cfg);RR.renderAt(0.01)};
   const safe=()=>{try{build();msg(T('勝った側の視点で、曲に合わせた縦型動画を作ります'))}catch(e){msg(T('動画を作れませんでした'))}};
-  q('bmvTr').onchange=q('bmvTh').onchange=()=>{if(!busy)safe()};
+  q('bmvTh').onchange=()=>{if(!busy)safe()};
   safe();q('bmvPrev').disabled=q('bmvMake').disabled=false;
   async function audio(i){ac=ac||new AudioContext();if(!AB[i])AB[i]=await fetch(BASE+TRACKS[i].file).then(r=>r.arrayBuffer()).then(b=>ac.decodeAudioData(b));return AB[i]}
-  async function run(record){if(busy)return;busy=true;const me=UI;q('bmvPrev').disabled=q('bmvMake').disabled=q('bmvTr').disabled=q('bmvTh').disabled=true;
-    ST={};try{safe();msg(T('読み込み中…'));const buf=await audio(+q('bmvTr').value);if(UI!==me)return;await ac.resume();
+  async function run(record){if(busy)return;busy=true;const me=UI;q('bmvPrev').disabled=q('bmvMake').disabled=q('bmvTh').disabled=true;
+    ST={};try{safe();msg(T('読み込み中…'));const buf=await audio(TI);if(UI!==me)return;await ac.resume();
       const src=ac.createBufferSource();src.buffer=buf;ST.src=src;let chunks=[],mime='';
       if(record){const dest=ac.createMediaStreamDestination();src.connect(dest);
         const types=['video/mp4;codecs=avc1.42E01F,mp4a.40.2','video/mp4','video/webm;codecs=vp9,opus','video/webm'];mime=types.find(t=>window.MediaRecorder&&MediaRecorder.isTypeSupported(t))||'';
@@ -280,11 +281,11 @@ async function open(o){
         msg(T('録画中…終わるまでこの画面を開いたままにしてください'))}else msg('');
       src.connect(ac.destination);const t0=ac.currentTime+0.15;src.start(t0);const TT=RR.TOTAL;
       await new Promise(res=>{const loop=()=>{if(ST.stop){res();return}const t=ac.currentTime-t0;RR.renderAt(Math.max(0,Math.min(t,TT)));q('bmvProg').style.width=Math.min(100,Math.max(0,t/TT*100))+'%';if(t>=TT){res();return}requestAnimationFrame(loop)};loop()});
-      if(ST.stop)return;try{src.stop()}catch(e){}RR.renderAt(Math.min(TT,TRACKS[+q('bmvTr').value].winT+1));
+      if(ST.stop)return;try{src.stop()}catch(e){}RR.renderAt(Math.min(TT,TRACKS[TI].winT+1));
       if(ST.rec){await new Promise(r=>{ST.rec.onstop=r;ST.rec.stop()});blob=new Blob(chunks,{type:(mime||'video/webm').split(';')[0]});q('bmvOut').hidden=false;msg(T('できました。保存か共有を押してください。'))}
       else msg('');
     }catch(e){msg(T('動画を作れませんでした'))}
-    finally{busy=false;if(UI===me)q('bmvPrev').disabled=q('bmvMake').disabled=q('bmvTr').disabled=q('bmvTh').disabled=false}}
+    finally{busy=false;if(UI===me)q('bmvPrev').disabled=q('bmvMake').disabled=q('bmvTh').disabled=false}}
   q('bmvPrev').onclick=()=>run(false);q('bmvMake').onclick=()=>run(true);
   const fname=()=>'bocch_'+new Date().toISOString().slice(0,19).replace(/\D/g,'')+'.'+(blob.type.includes('mp4')?'mp4':'webm');
   q('bmvSave').onclick=()=>{if(!blob)return;const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname();document.body.appendChild(a);a.click();a.remove();msg(T('保存しました'))};

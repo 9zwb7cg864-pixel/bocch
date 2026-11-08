@@ -138,7 +138,7 @@ canvas.mvcv{position:absolute;left:-10%;top:-10%;width:120%;height:120%;will-cha
 .coach span{display:block;margin-top:3px;color:var(--sub);font-size:13px;line-height:1.6}
 .coach button{position:absolute;top:4px;right:4px;min-height:32px;min-width:32px;padding:0;border:0;background:transparent;color:var(--sub);font-size:18px;line-height:1}
 @media (prefers-reduced-motion:reduce){.reachG .stone::after,.reachR .stone::after,.mvb{animation:none}}
-.endrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.endrow[hidden]{display:none}#mvNow{grid-column:1/-1}#mvNow[hidden]{display:none}
+.endrow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.endrow[hidden]{display:none}#mvNow{grid-column:1/-1}.rbtns [hidden]{display:none!important}#revMv{white-space:nowrap}#mvNow[hidden]{display:none}
 .endb{position:relative;display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 12px;border:1px solid rgba(216,189,126,.55);border-radius:0;background:rgba(216,189,126,.05);color:var(--fg);font-family:var(--f-disp);font-size:15px;letter-spacing:.1em}
 .endb:hover{background:rgba(216,189,126,.12);border-color:var(--gold)}
 .endb.main{background:var(--gold);border-color:var(--gold);color:#1c140b;font-weight:800}.endb.main:hover{background:var(--gold-hi)}
@@ -923,7 +923,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.35</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.36</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -1121,7 +1121,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
   <p class="note dq-note">相手がどう受けても、2手で勝てる手が1つだけあります。その日の最初の挑戦だけが連続記録に入ります（2回目からは練習）。問題は毎日0時に変わります。</p>
 </section>
 <section class="scr" data-scr="review" hidden>
-  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>感想戦</h2><span class="rbtns"><button class="back rshare" id="revMv" hidden>動画</button><button class="back rshare" id="revImg"><span class="i-ext">画像</span></button><button class="back rshare" id="revShare"><span class="i-ext">共有</span></button></span></div>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>感想戦</h2><span class="rbtns"><button class="back rshare" id="revMv" hidden>動画を作る</button><button class="back rshare" id="revImg" hidden><span class="i-ext">画像</span></button><button class="back rshare" id="revShare" hidden><span class="i-ext">共有</span></button></span></div>
   <p class="rev-head" id="revHead"></p>
   <p class="rev-share-msg" id="revShareMsg" hidden></p>
   <div class="boardwrap rev-board"><div class="board" id="rboard"><div class="lab lab-top" id="rlabTop" aria-hidden="true"></div><div class="lab lab-left" id="rlabLeft" aria-hidden="true"></div><div class="grid" id="rgrid" aria-label="感想戦の盤"></div></div></div>
@@ -2944,7 +2944,7 @@ function revWarn(t){REV.msg=t;clearTimeout(REV.msgT);REV.msgT=setTimeout(()=>{RE
 $('rgrid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(!c)return;revCell(+c.id.slice(1))});
 /* 動画を作る：勝った側がゴールに2つ着いて終わった対局だけ。本体（mv/maker.js）は押したときに読み込む */
 function mvOK(log){try{if(!log||log.length<4)return false;const b=Array(36).fill(0);for(let c=0;c<6;c++){b[c]=2;b[30+c]=1}let p=1;for(const [f,t] of log){if(b[f]!==p||b[t])return false;b[t]=p;b[f]=0;p=3-p}const w=3-p,r=w===1?0:5;let k=0;for(let c=0;c<6;c++)if(b[r*6+c]===w)k++;return k>=2}catch(e){return false}}
-function mvOpen(log){const go=()=>window.BocchVideo.open({log});if(window.BocchVideo)return go();const sc=document.createElement('script');sc.src='mv/maker.js?v=1';sc.onload=go;sc.onerror=()=>alert((window.bocchT||(x=>x))('読み込めませんでした'));document.head.appendChild(sc)}
+function mvOpen(log){const go=()=>window.BocchVideo.open({log});if(window.BocchVideo)return go();const sc=document.createElement('script');sc.src='mv/maker.js?v=2';sc.onload=go;sc.onerror=()=>alert((window.bocchT||(x=>x))('読み込めませんでした'));document.head.appendChild(sc)}
 $('mvNow').addEventListener('click',()=>{if(S.over&&S.log)mvOpen(S.log.map(m=>[m[0],m[1]]))});
 $('revMv').addEventListener('click',()=>{if(REV.g)mvOpen(REV.g.log.map(m=>[m[0],m[1]]))});
 $('reviewNow').addEventListener('click',()=>{saveFinished();const id=currentGameId();if(id)openReview(id)});
