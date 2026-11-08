@@ -32,7 +32,7 @@
 <meta name="apple-mobile-web-app-title" content="bocch">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&family=Shippori+Mincho+B1:wght@500;700;800&family=Yuji+Boku&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Outfit:wght@600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&family=Shippori+Mincho+B1:wght@500;700;800&family=Yuji+Boku&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&family=Outfit:wght@600;700;800&display=swap">
 <link rel="prefetch" href="guide.html">
 <style>
 /* 墨と金箔：和紙の墨色に金の細線、焦げ茶の木目の盤、那智黒と蛤の石 */
@@ -924,7 +924,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
  --line:rgba(200,215,240,.12);--soft:#1c2436;--wood:#8f9bb6;--wood-line:transparent;--wood-edge:transparent;
  --ai:#a9cdf7;--dot:rgba(169,205,247,.9);--win:#9fd8b0;--lose:#ff9a8b;
  --b-p1:#1c2436;--b-p2:#252f45;--b-acc:#a9cdf7;--b-acc2:#cfe3fb;--b-ink:#0f1a30;--sqL:#c9d2e3;--sqD:#8f9bb6;
- --f-latin:"Outfit","Zen Kaku Gothic New",sans-serif;--f-disp:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;--f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif}
+ --f-latin:"Outfit","Noto Sans JP",sans-serif;--f-disp:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif;--f-body:"Noto Sans JP","Hiragino Sans","Yu Gothic",sans-serif}
 html,body{background:var(--bg)!important}body{background-image:none!important;font-weight:500}
 h1{font-family:"Outfit",sans-serif;font-style:normal;font-weight:800;letter-spacing:-.01em}
 .topbar h2,.panel h2,.status,.about h2{letter-spacing:.04em;font-weight:800}
@@ -952,7 +952,7 @@ input[type=checkbox]{accent-color:var(--b-acc)}
 .stone.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%),repeating-linear-gradient(-28deg,transparent 0 5px,rgba(150,140,120,.06) 5px 6px);color:#2a2c33}
 .stone.zero{opacity:.6}.stone.zero::before{background:transparent}
 /* ホームまわり */
-:root{--f-chic:"Outfit","Zen Kaku Gothic New",sans-serif;--chic:#eef2fa}
+:root{--f-chic:"Outfit","Noto Sans JP",sans-serif;--chic:#eef2fa}
 .hm-logo-t{font-family:"Outfit",sans-serif!important;font-weight:800!important;letter-spacing:-.01em!important;font-size:56px!important;filter:none!important}
 .hm .hm-tag{color:var(--sub);letter-spacing:.06em}
 .hm-fimg b,.pm .hm-fimg b{font-family:var(--f-disp)!important;font-weight:900!important;letter-spacing:.04em!important;filter:none!important}
@@ -1043,6 +1043,12 @@ input[type=checkbox]{accent-color:var(--b-acc)}
 .rs-go{margin-left:auto;color:var(--b-acc);font-size:13px;font-weight:800}.rs-go::after{content:" ›"}
 .rev-nav button,#watchNav button{border:0!important;border-radius:16px!important;background:var(--b-p2)!important;color:var(--fg)}
 .rev-cpu button,.rshare{border-radius:999px!important}
+/* 文字：Noto Sans JP、字間は詰める */
+body,button,input,select,textarea{font-family:var(--f-body)!important;letter-spacing:.01em}
+#thB~*{}
+.scr h2,.scr h3,.topbar h2,.panel h2,.status,.about h2,.hm-fimg b,.pm .hm-fimg b,.home-rules h3,.side-l,.chk,.tag,header p,.hm .hm-tag{letter-spacing:.02em!important;font-family:var(--f-disp)!important}
+.topbar h2{font-weight:800!important}
+.stone,.rs-n,.hm-logo-t,h1{font-family:"Outfit","Noto Sans JP",sans-serif!important}
 </style>
 </head>
 <body>
