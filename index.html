@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=35"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=36"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -1354,6 +1354,118 @@ details>summary{cursor:pointer;color:var(--sub)}
 .hm-menu{grid-template-columns:repeat(4,minmax(0,1fr))}
 .hm-menu button[hidden]{display:none}
 
+/* =====================================================================
+   新しい組み立て（2026-11）
+   ===================================================================== */
+/* 下のタブ */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:none;grid-template-columns:repeat(5,minmax(0,1fr));max-width:520px;margin:0 auto;padding:6px 6px calc(8px + env(safe-area-inset-bottom));background:rgba(11,16,32,.96);backdrop-filter:blur(10px);border-top:1px solid rgba(200,215,240,.08)}
+body.tabs-on .tabbar{display:grid}
+body.tabs-on .scr{padding-bottom:110px}
+.tabbar button{display:flex;flex-direction:column;align-items:center;gap:3px;min-height:52px;padding:6px 0;background:transparent;border-radius:12px;color:var(--mute);font-size:10.5px;font-weight:700}
+.tabbar button:hover{background:transparent;color:var(--sub)}
+.tabbar button[aria-current=page]{color:var(--acc2)}
+.tabbar svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media (min-width:900px){.tabbar{border-radius:20px 20px 0 0}}
+/* タブの一番上の画面では「戻る」を出さない */
+body.tabs-on .scr:is([data-scr=daily],[data-scr=history],[data-scr=profile],[data-scr=setup]) .topbar .back{visibility:hidden}
+.tab-top{justify-content:flex-start}.tab-top h2{text-align:left;font-size:22px;font-weight:900;padding-left:4px}
+
+/* ホーム（新） */
+.hm-head{display:flex;align-items:center;justify-content:space-between;padding:6px 0 2px;text-align:left}
+.hm-head h1{margin:0}
+.hm-logo-t{font-size:30px}
+.hm-pill{display:flex;align-items:center;gap:8px;min-height:0;padding:5px 12px 5px 5px;border-radius:999px;background:var(--p1);font-size:14px;font-weight:900;color:var(--acc2)}
+.hm-pill .stone{width:24px;height:24px;font-size:0}
+.scr[data-scr=home] .ver{position:static;order:3;margin-left:8px}
+.scr[data-scr=home] .rules-link{display:none}
+.hm-card{display:none!important}
+.hm-qh,.hm-sh{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;font-weight:800;color:var(--sub);padding:0 2px}
+.hm-qh{margin-bottom:-4px}
+.hm-sh{margin:6px 0 -4px!important}.hm-sh[hidden]{display:none}
+.hm-sh button{min-height:0;padding:2px 4px;background:transparent;color:var(--acc);font-size:12.5px}
+.hm-modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.hm-modes button{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:0;padding:12px 4px 10px;border-radius:16px;background:rgba(255,255,255,.06);color:var(--sub);font-size:12.5px;font-weight:800}
+.hm-modes button svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hm-modes button[aria-pressed=true]{background:var(--acc2);color:var(--ink)}
+.hm .hm-play .hm-go{display:none}
+.hm .hm-play .hm-fimg b{font-size:21px}
+.hm .hm-play{min-height:58px}
+.hm-rec{background:var(--p1);border-radius:var(--r-card);padding:4px 14px}.hm-rec[hidden]{display:none}
+.rec-it{display:flex;align-items:center;gap:10px;width:100%;min-height:0;padding:11px 0;border-radius:0;background:transparent;border-top:1px solid var(--line);text-align:left;font-weight:500}
+.rec-it:first-child{border-top:0}.rec-it:hover{background:transparent}.rec-it:hover b{color:var(--acc2)}
+.rec-it .res{flex:none;min-width:46px;padding:3px 0;border-radius:999px;text-align:center;font-size:11px;font-weight:800;background:var(--p2);color:var(--sub)}
+.rec-it .res.win{background:rgba(143,214,168,.16);color:var(--good)}.rec-it .res.lose{background:rgba(255,143,128,.14);color:var(--bad)}
+.rec-it b{font-size:14px;font-weight:800;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rec-it small{color:var(--sub);font-size:12px;flex:none}.rec-it em{margin-left:auto;font-style:normal;color:var(--mute);font-size:11px;flex:none}
+.hm-rkslot:empty{display:none}
+.hm-menu{grid-template-columns:repeat(3,minmax(0,1fr))}
+.hm-menu [data-go=history]{display:none}
+
+/* 対局の設定 */
+.st-mode{margin-bottom:14px}
+.st-pane[hidden]{display:none}
+.st-h{font-size:12.5px;font-weight:800;color:var(--sub);margin:14px 2px 8px}
+.st-lv{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.st-lv button{display:flex;align-items:center;gap:12px;min-height:0;padding:14px 12px;border-radius:18px;background:var(--p1);text-align:left}
+.st-lv button[aria-pressed=true]{box-shadow:inset 0 0 0 2px var(--acc);background:var(--p2)}
+.st-lv .cpu-st{width:40px;height:40px;margin:0;flex:none}
+.st-lv b{display:block;font-size:15px;font-weight:900}.st-lv small{display:block;font-size:12px;color:var(--sub);font-weight:700}
+.st-more{display:flex;flex-direction:column;background:var(--p1);border-radius:var(--r-card);padding:4px 14px}
+.st-more button{display:flex;align-items:baseline;gap:10px;min-height:0;padding:13px 0;background:transparent;border-radius:0;border-top:1px solid var(--line);text-align:left}
+.st-more button:first-child{border-top:0}.st-more button:hover{background:transparent;color:var(--acc2)}
+.st-more button::after{content:"›";margin-left:auto;color:var(--mute)}
+.st-more small{color:var(--sub);font-size:12px;font-weight:500}
+.st-desc .lead{margin:0}.st-online{margin-top:8px;font-size:13px;color:var(--good);font-weight:700}.st-online:empty{display:none}
+.st-join input{flex:1;min-width:0}
+.st-go{margin-top:18px}
+
+/* 対局中：棋譜の帯・盤まわり */
+.mv-strip{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin:0 -16px 6px;padding:8px 16px;background:var(--bar);font-family:var(--fn);font-size:13px;white-space:nowrap;color:var(--sub)}
+.mv-strip::-webkit-scrollbar{display:none}
+.mv-strip .ms{padding:2px 7px;border-radius:7px;flex:none}.mv-strip .ms b{color:var(--mute);font-weight:600;margin-right:3px}
+.mv-strip .ms.cur{background:var(--p3);color:var(--fg)}
+.mv-strip .ms-empty{color:var(--mute)}
+.scr[data-scr=game].duo .mv-strip{display:none}
+.scr[data-scr=game] .topbar{position:relative;min-height:48px;margin-bottom:0}
+.scr[data-scr=game]:not(.duo) .boardwrap{width:min(100%,calc(100dvh - 300px))}
+.players{padding:8px 10px;margin:0 auto!important;background:var(--bar);border-radius:16px 16px 0 0}
+.players.bot{border-radius:0 0 16px 16px}
+.scr[data-scr=game]:not(.duo) .players{width:min(100%,calc(100dvh - 300px))}
+.kifu{display:none!important}
+.gameinfo{margin-top:12px}
+.status{font-size:17px}
+.hint{font-size:13px}
+
+/* 感想戦：形勢バー */
+.rev-board{display:flex;gap:6px;align-items:stretch}
+.rev-board .board{flex:1}
+.rev-ev{width:12px;flex:none;border-radius:6px;overflow:hidden;position:relative;background:#f4f3ee;margin:5% 0}
+.rev-ev i{position:absolute;left:0;right:0;bottom:0;height:50%;background:#1b1c1f;transition:height .35s ease}
+.rev-ev.meW{background:#1b1c1f}.rev-ev.meW i{background:#f4f3ee}
+.rev-ev.na i{opacity:.35}
+.rev-nav{gap:8px}
+.rev-nav button{min-width:60px}
+.rv-end{font-family:var(--fn);font-weight:800;font-size:13px}
+.rs-list{grid-template-columns:repeat(auto-fit,minmax(0,1fr));grid-auto-flow:column;gap:8px;padding:10px;background:#151c2c}
+.rs-it{flex-direction:column;align-items:center;gap:4px;padding:12px 6px;background:var(--p1);border-radius:14px;text-align:center}
+.rs-it .rs-n{width:auto;height:auto;background:transparent;font-size:24px}
+.rs-it .rs-t small{display:none}.rs-it .rs-t b{font-size:12px;color:var(--sub)}
+.rs-it .rs-go{display:none}
+
+/* アカウント：成績 */
+.pf-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.pf-stats div{background:var(--p1);border-radius:16px;padding:12px 6px;text-align:center}
+.pf-stats b{display:block;font-family:var(--fn);font-size:22px;font-weight:800}
+.pf-stats small{font-size:11px;color:var(--sub);font-weight:700}
+.pf-more{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:12px}
+.pf-more button{min-height:44px;font-size:13px;border-radius:14px;background:var(--p1)}
+
+.hm .hm-head{display:flex;align-items:center;justify-content:space-between;text-align:left;padding:4px 0 0}
+.hm-head h1{line-height:1;font-size:inherit}
+.scr[data-scr=home] .ver{position:absolute;top:6px;right:18px;left:auto;font-size:10px;color:var(--mute)}
+.scr[data-scr=home]{position:relative;padding-top:14px}
+.rev-nav{flex-wrap:nowrap}.rev-nav button{min-width:0;flex:1;max-width:72px;padding:10px 0}.rev-ply{flex:none}
+
 </style>
 </head>
 <body>
@@ -1364,7 +1476,7 @@ details>summary{cursor:pointer;color:var(--sub)}
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
-    <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p></header>
+    <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
     <div class="hm-hero" aria-hidden="true">
       <div class="hm-hb"><div class="hm-hg" id="hmG"></div><div class="hm-hl" id="hmL"></div></div>
       <button class="cg-pull" id="cgPull" type="button"><b>ガチャを引く</b><small id="cgLeft"></small></button>
@@ -1372,6 +1484,8 @@ details>summary{cursor:pointer;color:var(--sub)}
     <button class="hm-chp" id="hmChamp" data-go="rank" type="button" hidden><svg class="cr" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18 L5 8 L9.5 12 L12 5 L14.5 12 L19 8 L21 18 Z" fill="#e9c46a" stroke="#8a6a3a" stroke-width="1" stroke-linejoin="round"/><rect x="3" y="18" width="18" height="2.4" rx="1" fill="#c9a24e"/></svg><small id="hmChampM"></small><b id="hmChampN" class="no-i18n"></b><span class="hm-cst"><span class="stone b" id="hmChampS"></span></span><em id="hmChampL"></em><svg class="chv" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
 
     <div class="hm-box">
+      <div class="hm-qh">すぐ対局</div>
+      <div class="hm-modes" id="hmModes"><button type="button" data-qm="rand" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><span>ランダム</span></button><button type="button" data-qm="cpu" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="7" width="14" height="11" rx="3"/><path d="M12 3v4M9 12h.01M15 12h.01"/></svg><span>CPU</span></button><button type="button" data-qm="fr" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M17 8v6M14 11h6"/></svg><span>友だち</span></button></div>
     <button class="hm-card" id="meBtn" data-go="profile" type="button" aria-label="アカウント・段級・棋風">
       <span class="hm-me" id="meTop">
         <span class="hm-rk"><span class="stone b" id="meStone"></span></span>
@@ -1386,7 +1500,7 @@ details>summary{cursor:pointer;color:var(--sub)}
 
     <button class="hm-resume i-play" id="resumeBtn" hidden></button>
     <button class="hm-resume i-play" id="rematchBtn" hidden>マッチングに復帰（相手を探し直す）</button>
-    <button class="hm-play" id="playGo" data-go="play" type="button">
+    <button class="hm-play" id="playGo" type="button">
       <svg class="hm-leaf" id="hmLeaf" viewBox="0 0 400 170" preserveAspectRatio="none" aria-hidden="true"></svg>
       <span class="hm-fimg" data-fimg="play"><img alt="対局する" width="356" height="120"><b>対局する</b></span>
       <p class="online" id="onlineNow" hidden><i></i><span></span></p>
@@ -1407,12 +1521,17 @@ details>summary{cursor:pointer;color:var(--sub)}
       <div class="row"><button id="hrOk">読んだ</button><button class="primary i-r" id="hrLearn">4問で覚える</button></div>
     </div>
 
+    <div class="hm-sh"><span>今日の1問</span></div>
     <button class="hm-daily" data-go="daily" id="dailyBtn" type="button">
       <span class="hm-mini"><span class="g" id="hmMini"></span></span>
       <span class="hm-dq"><small>今日の1問</small><b><span id="hmDqN"></span>　<span id="hmDqP"></span></b><span class="hm-dqs"><span>連続</span> <em id="hmDqC"></em></span></span>
       <span class="fr-badge" id="dailyDot" hidden></span>
     </button>
 
+    <div class="hm-sh" id="hmRecH" hidden><span>最近の対局</span><button type="button" id="hmRecAll">すべて</button></div>
+    <div class="hm-rec" id="hmRec" hidden></div>
+    <div class="hm-sh" id="hmRkH"><span>ランキング</span></div>
+    <div class="hm-rkslot" id="hmRkSlot"></div>
     <nav class="hm-menu" aria-label="その他">
       <button data-go="watch" type="button" aria-label="観戦する"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span>観戦</span></button>
       <button data-go="friends" id="friendsBtn" type="button" aria-label="フレンド"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2c3 .2 5.5 2.3 5.5 5.3"/></svg><span>フレンド</span><span class="fr-badge" id="frBadge" hidden></span></button>
@@ -1493,7 +1612,6 @@ details>summary{cursor:pointer;color:var(--sub)}
     <p class="lead" id="matchMsg">同じタイミングで探している人と、自動で組み合わせます。</p>
     <p class="elapsed" id="matchTime">0:00</p>
   </div>
-  <div class="ad-slot" data-ad="match" hidden aria-label="広告"></div>
 </section>
 
 <!-- 対局履歴 -->
@@ -1503,7 +1621,6 @@ details>summary{cursor:pointer;color:var(--sub)}
   <div class="hist" id="histList"></div>
   <p class="hist-empty" id="histEmpty">まだ対局がありません。</p>
   <div class="row hist-ctl"><button id="histClear" class="danger">履歴をすべて消す</button></div>
-  <div class="ad-slot" data-ad="hist" hidden aria-label="広告"></div>
 </section>
 
 <!-- 感想戦 -->
@@ -1564,9 +1681,9 @@ details>summary{cursor:pointer;color:var(--sub)}
   <p class="rev-head" id="revHead"></p>
   <p class="rev-share-msg" id="revShareMsg" hidden></p>
   <div class="rev-sum" id="revSum" hidden></div>
-  <div class="boardwrap rev-board"><div class="board" id="rboard"><div class="lab lab-top" id="rlabTop" aria-hidden="true"></div><div class="lab lab-left" id="rlabLeft" aria-hidden="true"></div><div class="grid" id="rgrid" aria-label="感想戦の盤"></div></div></div>
+  <div class="boardwrap rev-board"><div class="rev-ev" id="revEv" aria-hidden="true"><i></i></div><div class="board" id="rboard"><div class="lab lab-top" id="rlabTop" aria-hidden="true"></div><div class="lab lab-left" id="rlabLeft" aria-hidden="true"></div><div class="grid" id="rgrid" aria-label="感想戦の盤"></div></div></div>
   <div class="row rev-nav">
-    <button id="rPrev" class="i-only i-prev" aria-label="1手戻る"></button><span class="rev-ply" id="revPly"></span><button id="rNext" class="i-only i-next" aria-label="1手進む"></button>
+    <button id="rFirst" type="button" class="rv-end" aria-label="最初へ">|◀</button><button id="rPrev" class="i-only i-prev" aria-label="1手戻る"></button><span class="rev-ply" id="revPly"></span><button id="rNext" class="i-only i-next" aria-label="1手進む"></button><button id="rLast" type="button" class="rv-end" aria-label="最後へ">▶|</button>
   </div>
   <div class="row rev-cpu"><button id="revPlayCpu" class="i-play">この局面からCPUと対局</button></div>
   <div class="rev-info">
@@ -1577,6 +1694,7 @@ details>summary{cursor:pointer;color:var(--sub)}
   <div class="row chks"><label class="chk"><input type="checkbox" id="rShowBest" checked> 最善手を表示</label><label class="chk"><input type="checkbox" id="rOnlyBad"> 悪手だけ追う</label></div>
   <div class="deep-box" id="deepBox"><button id="deepBtn" class="deep-btn"></button><p class="deep-note" id="deepNote"></p></div>
   <div class="rev-list" id="revList"></div>
+  <div class="ad-slot" data-ad="rev" hidden aria-label="広告"></div>
 </section>
 
 <!-- 観戦 -->
@@ -1624,7 +1742,9 @@ details>summary{cursor:pointer;color:var(--sub)}
       </span>
     </span>
   </div>
+  <div class="pf-stats" id="pfStats"></div>
   <button class="kf-chip kf-chip-prof" data-go="kifu" id="kfChipProf" type="button"></button>
+  <div class="pf-more"><button type="button" data-go="rank">ランキング</button><button type="button" data-go="friends">フレンド</button><button type="button" data-go="watch">観戦</button></div>
   <div class="card prof">
     <label class="prof-l" for="nameIn">名前（12文字まで）</label>
     <div class="row prof-row"><input type="text" id="nameIn" maxlength="12" autocomplete="nickname" placeholder="名無し"><button id="nameSave" class="primary">保存</button></div>
@@ -1660,6 +1780,27 @@ details>summary{cursor:pointer;color:var(--sub)}
   </div>
 </section>
 
+<!-- 対局の設定：種類・強さ・手番を1画面で -->
+<section class="scr" data-scr="setup" hidden>
+  <div class="topbar tab-top"><h2>対局</h2></div>
+  <div class="seg st-mode" id="stMode" role="tablist"><button type="button" data-m="rand">ランダム</button><button type="button" data-m="cpu" aria-pressed="true">CPU</button><button type="button" data-m="fr">友だち</button></div>
+  <div class="st-pane" data-p="rand" hidden><div class="card st-desc"><p class="lead">同じ時間に探している人と自動で組み合わせます。勝ち負けで段級が上がり下がりします。持ち時間は1人7分です。</p><p class="st-online" id="stOnline"></p></div></div>
+  <div class="st-pane" data-p="cpu">
+    <h4 class="st-h">強さ</h4>
+    <div class="st-lv" id="stLv"><button type="button" data-lv="1"><i class="cpu-st l1"></i><span><b>やさしい</b><small class="cpu-lv" data-lv="1"></small></span></button><button type="button" data-lv="2"><i class="cpu-st l2"></i><span><b>ふつう</b><small class="cpu-lv" data-lv="2"></small></span></button><button type="button" data-lv="3"><i class="cpu-st l3"></i><span><b>つよい</b><small class="cpu-lv" data-lv="3"></small></span></button><button type="button" data-lv="4"><i class="cpu-st l4"></i><span><b>最強</b><small class="cpu-lv" data-lv="4"></small></span></button></div>
+    <h4 class="st-h">手番</h4>
+    <div class="seg" id="stSide"><button type="button" data-side="b">黒（先手）</button><button type="button" data-side="r">おまかせ</button><button type="button" data-side="w">白（後手）</button></div>
+    <h4 class="st-h">そのほか</h4>
+    <div class="st-more"><button type="button" id="stDuo"><span>1台で2人</span><small>1つの端末で交代に指す</small></button><button type="button" id="stStudy"><span>研究</span><small>AI同士・評価値つき</small></button></div>
+  </div>
+  <div class="st-pane" data-p="fr" hidden>
+    <div class="card st-desc"><p class="lead">部屋を作って、リンクを相手に送ります。相手が開くとすぐに始まります。</p></div>
+    <h4 class="st-h">部屋コードをもらった人</h4>
+    <div class="row nowrap st-join"><input type="text" id="stCode" maxlength="6" placeholder="部屋コード" autocomplete="off" aria-label="部屋コード"><button type="button" id="stJoin">参加する</button></div>
+  </div>
+  <button class="primary big st-go" id="stGo" type="button">対局する</button>
+</section>
+
 <!-- ひとりで遊ぶ -->
 <section class="scr" data-scr="solo" hidden>
   <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>ひとりで遊ぶ</h2><span class="sp"></span></div>
@@ -1679,7 +1820,6 @@ details>summary{cursor:pointer;color:var(--sub)}
     <button class="big" data-mode="0">1台で2人</button>
     <button class="big" id="studyBtn">研究（AI同士・評価値つき）</button>
   </div>
-  <div class="ad-slot" data-ad="solo" hidden aria-label="広告"></div>
 </section>
 
 <!-- ルール -->
@@ -1702,6 +1842,7 @@ details>summary{cursor:pointer;color:var(--sub)}
 <section class="scr" data-scr="game" hidden>
   <div id="duoBar" hidden><button id="duoBack" class="i-only i-l" aria-label="ホームへ"></button><button id="duoUndo" class="i-only i-undo" aria-label="1手戻す"></button><button id="duoReset" class="i-only i-reset" aria-label="最初から"></button></div>
   <div class="topbar"><button class="back i-l" id="gameBack">ホーム</button><span class="conn" id="conn"><i></i><span id="connTxt"></span></span><button class="back" data-go="rules">ルール</button></div>
+  <div class="mv-strip" id="mvStrip" aria-label="棋譜"></div>
   <div class="coach" id="coach" hidden aria-live="polite"><b id="coachT"></b><span id="coachS"></span><button type="button" id="coachX" aria-label="説明を閉じる">×</button></div>
   <div class="players top" id="plTop" hidden></div>
   <div class="boardwrap"><div class="board" id="board"><div class="lab lab-top" id="labTop" aria-hidden="true"></div><div class="lab lab-left" id="labLeft" aria-hidden="true"></div><div class="lab lab-bot" id="labBot" aria-hidden="true"></div><div class="lab lab-right" id="labRight" aria-hidden="true"></div><div class="grid" id="grid" role="grid" aria-label="盤"></div></div></div>
@@ -1762,9 +1903,15 @@ details>summary{cursor:pointer;color:var(--sub)}
   </div>
   <div class="endrow" id="reviewRow" hidden><button id="reviewNow" class="endb main"><span>感想戦で振り返る</span></button><button id="xNow" class="endb"><span>Xで共有</span></button><button id="mvNow" class="endb" hidden><span>動画を作る</span></button></div>
   <div class="row chks" id="gChks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label><label class="chk" hidden><input type="checkbox" id="bgmOn"> BGM</label></div>
-  <div class="ad-slot ad-over" data-ad="over" hidden aria-label="広告"></div>
 </section>
 
+<nav class="tabbar" id="tabbar" aria-label="メイン">
+  <button type="button" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>ホーム</span></button>
+  <button type="button" data-tab="setup"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z"/></svg><span>対局</span></button>
+  <button type="button" data-tab="daily"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4a2 2 0 1 1 4 0h4v4a2 2 0 1 1 0 4v3H4z"/></svg><span>パズル</span></button>
+  <button type="button" data-tab="history"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>履歴</span></button>
+  <button type="button" data-tab="profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg><span>アカウント</span></button>
+</nav>
 <script id="eng">
 /* bocch 最強エンジン (eng_nn7 高速化: diff=true, int=true, evalTT=true) */
 var BocchEngine=(function(){
@@ -5154,6 +5301,81 @@ try{document.querySelectorAll('.cpu-lv').forEach(e=>{e.textContent=lvName(lvOfRa
 {const _rT=render;render=function(){_rT();try{for(const id of ['plTop','plBot']){const el=$(id);if(!el||el.hidden)continue;const d=el.querySelector('.dot');const c=d?(d.classList.contains('b')?1:2):0;
   let t=el.querySelector('.pl-turn');if(!t){t=document.createElement('span');t.className='pl-turn';el.appendChild(t)}
   const on=!S.over&&c&&S.turn===c;el.classList.toggle('on',!!on);const me=id==='plBot';t.textContent=S.over?'':on?(me?'あなたの番':'考え中'):'';t.hidden=!t.textContent}}catch(e){}}}
+</script>
+<script>
+/* ===== 新しい組み立て（2026-11）：下のタブ・ホーム・対局の設定・棋譜の帯・形勢バー・成績 =====
+   裏側の処理（対局の開始・通信・解析）は今までの関数とボタンをそのまま呼ぶ */
+(function(){
+const T=s=>{try{return window.bocchT&&window.BOCCH_LANG!=='ja'?window.bocchT(s):s}catch(e){return s}};
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:v}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const sqN=i=>(i%6+1)+'abcdef'[i/6|0];
+/* ---------- 下のタブ ---------- */
+const TABROOT={home:'home',setup:'setup',daily:'daily',history:'history',profile:'profile',rank:'profile',friends:'profile',watch:'profile',kifu:'profile'};
+const tabbar=$('tabbar');
+function tabSync(n){const t=TABROOT[n];document.body.classList.toggle('tabs-on',!!t);tabbar.querySelectorAll('button').forEach(b=>b.setAttribute('aria-current',b.dataset.tab===t?'page':'false'))}
+tabbar.addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;const k=b.dataset.tab;
+  if(k==='home')show('home');else if(k==='setup')stOpen();else if(k==='daily')$('dailyBtn').click();
+  else if(k==='history'){const h=document.querySelector('.hm-menu [data-go="history"]');if(h)h.click();else show('history')}
+  else if(k==='profile')$('meBtn').click()});
+{const _p=paint;paint=function(n){_p(n);try{tabSync(n);if(n==='home')hmSync();if(n==='profile')pfSync();if(n==='setup')stSync()}catch(e){console.error(e)}}}
+/* ---------- ホーム ---------- */
+let QM=LS.get('bocch-qm','rand');
+function hmSync(){try{$('hmPillS').className=$('meStone').className;$('hmPillR').textContent=$('meRate').textContent}catch(e){}
+  $('hmModes').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.qm===QM?'true':'false'));
+  // 最近の対局（3つ）
+  let gs=[];try{gs=loadGames().slice(0,3)}catch(e){}
+  const box=$('hmRec');box.innerHTML='';$('hmRecH').hidden=box.hidden=!gs.length;
+  for(const x of gs){const b=document.createElement('button');b.type='button';b.className='rec-it';const [rt,rc]=resultOf(x);
+    const r=document.createElement('span');r.className='res '+rc;r.textContent=rt;const m=document.createElement('b');m.textContent=MODE_NAME(x.mode)+(x.mode==='net'&&x.opp?'　'+x.opp:'');
+    const n=document.createElement('small');n.textContent=x.log.length+'手';const d=document.createElement('em');d.textContent=fmtDate(x.t);
+    b.append(r,m,n,d);b.addEventListener('click',()=>openReview(x.id));box.append(b)}
+  const ch=$('hmChamp');$('hmRkH').hidden=!ch||ch.hidden}
+$('hmModes').addEventListener('click',e=>{const b=e.target.closest('[data-qm]');if(!b)return;QM=b.dataset.qm;LS.set('bocch-qm',QM);hmSync()});
+$('playGo').addEventListener('click',()=>{if(QM==='rand')$('randomBtn').click();else stOpen(QM)});
+$('hmPill').addEventListener('click',()=>$('meBtn').click());
+$('hmRecAll').addEventListener('click',()=>{const h=document.querySelector('.hm-menu [data-go="history"]');if(h)h.click()});
+{const ch=$('hmChamp'),slot=$('hmRkSlot');if(ch&&slot){slot.append(ch);new MutationObserver(()=>{$('hmRkH').hidden=ch.hidden}).observe(ch,{attributes:true,attributeFilter:['hidden']})}}
+{const on=$('onlineNow');if(on)new MutationObserver(()=>{const t=$('stOnline');if(t)t.textContent=on.hidden?'':on.textContent}).observe(on,{attributes:true,childList:true,subtree:true,characterData:true})}
+/* ---------- 対局の設定 ---------- */
+let STM=LS.get('bocch-stm','cpu'),STL=+LS.get('bocch-stl','2')||2;
+function stOpen(m){if(m)STM=m;show('setup')}
+function stSync(){LS.set('bocch-stm',STM);LS.set('bocch-stl',String(STL));
+  $('stMode').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.m===STM?'true':'false'));
+  document.querySelectorAll('.st-pane').forEach(p=>p.hidden=p.dataset.p!==STM);
+  $('stLv').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.lv===STL?'true':'false'));
+  const cur=document.querySelector('#sideSeg [aria-pressed="true"]'),sd=cur?cur.dataset.side:'b';
+  $('stSide').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.side===sd?'true':'false'));
+  $('stGo').textContent=T(STM==='fr'?'部屋を作る':'対局する');
+  const on=$('onlineNow');$('stOnline').textContent=on&&!on.hidden?on.textContent:''}
+$('stMode').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;STM=b.dataset.m;stSync()});
+$('stLv').addEventListener('click',e=>{const b=e.target.closest('[data-lv]');if(!b)return;STL=+b.dataset.lv;stSync()});
+$('stSide').addEventListener('click',e=>{const b=e.target.closest('[data-side]');if(!b)return;const o=document.querySelector('#sideSeg [data-side="'+b.dataset.side+'"]');if(o)o.click();stSync()});
+$('stGo').addEventListener('click',()=>{if(STM==='rand')$('randomBtn').click();else if(STM==='fr')$('create').click();else{const b=document.querySelector('#modeSeg [data-mode="'+STL+'"]');if(b)b.click()}});
+$('stDuo').addEventListener('click',()=>{const b=document.querySelector('#modeSeg [data-mode="0"]');if(b)b.click()});
+$('stStudy').addEventListener('click',()=>$('studyBtn').click());
+$('stJoin').addEventListener('click',()=>{const v=$('stCode').value.trim();if(!v)return;const c=$('codeIn');c.value=v;c.dispatchEvent(new Event('input',{bubbles:true}));$('join').click()});
+$('stCode').addEventListener('keydown',e=>{if(e.key==='Enter')$('stJoin').click()});
+/* ---------- 対局中：棋譜の帯 ---------- */
+let stripKey='';
+function stripSync(){const el=$('mvStrip');if(!el||CUR!=='game')return;const log=(S&&S.log)||[],ply=S.ply==null?log.length:S.ply;const key=log.length+':'+ply+':'+(log[log.length-1]||'');if(key===stripKey)return;stripKey=key;
+  if(!log.length){el.innerHTML='<span class="ms-empty">'+T('開始局面')+'</span>';return}
+  let h='';for(let k=0;k<log.length;k++){const m=log[k];h+='<span class="ms'+(k===ply-1?' cur':'')+(k%2?' w':' b')+'"><b>'+(k+1)+'.</b>'+sqN(m[0])+'→'+sqN(m[1])+'</span>'}
+  el.innerHTML=h;const c=el.querySelector('.cur')||el.lastElementChild;if(c)el.scrollLeft=c.offsetLeft-el.clientWidth+c.offsetWidth+24}
+/* ---------- 感想戦：形勢バー・最初と最後 ---------- */
+function evSync(){const bar=$('revEv');if(!bar||!REV.g)return;let v=null;try{v=blackPct(REV.i)}catch(e){}const meW=REV.g.me===2;
+  bar.classList.toggle('meW',meW);const i=bar.firstElementChild;if(v==null){bar.classList.add('na');return}bar.classList.remove('na');
+  const bottom=meW?1-v:v;i.style.height=(bottom*100).toFixed(1)+'%'}
+$('rFirst').addEventListener('click',()=>setRev(0));$('rLast').addEventListener('click',()=>setRev(REV.pos.length-1));
+addEventListener('keydown',e=>{if(CUR!=='review'||e.target.closest('input,textarea,select'))return;if(e.key==='ArrowLeft'){$('rPrev').click();e.preventDefault()}else if(e.key==='ArrowRight'){$('rNext').click();e.preventDefault()}});
+{const _rr=renderReview;renderReview=function(){_rr.apply(this,arguments);try{evSync()}catch(e){}}}
+/* ---------- アカウント：成績 ---------- */
+function pfSync(){const el=$('pfStats');if(!el)return;let s={};try{s=bdStats()}catch(e){}const g=s.games|0,w=s.wins|0;
+  el.innerHTML='<div><b>'+g+'</b><small>'+T('対局')+'</small></div><div><b>'+(g?Math.round(w/g*100)+'%':'—')+'</b><small>'+T('勝率')+'</small></div><div><b>'+(s.streak|0)+'</b><small>'+T('連勝中')+'</small></div>'}
+/* ---------- render のたびに ---------- */
+{const _r=render;render=function(){_r.apply(this,arguments);try{stripSync();if(CUR==='home')hmSync()}catch(e){}}}
+try{tabSync(CUR);if(CUR==='home')hmSync()}catch(e){}
+})();
+
 </script>
 </body>
 </html>
