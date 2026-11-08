@@ -1088,6 +1088,7 @@ body,button,input,select,textarea{font-family:var(--f-body)!important;letter-spa
 .rkcard .mvhd{padding-top:26px}.rkcard .rkstone{width:72px;height:72px;margin:0 auto 12px;font-size:0}
 .rkcard .mvhd h3{font-size:34px;color:var(--b-acc2)}
 .mvflake,.mvrays,.mvdrop{display:none!important}
+.hm-sk i{background:var(--b-acc)!important;box-shadow:0 0 6px rgba(169,205,247,.55)!important}
 </style>
 </head>
 <body>
@@ -3296,8 +3297,8 @@ const guestName=()=>'名無しの石'+GID;
 const myName=()=>named()&&PROF.name?PROF.name:guestName();
 const nameKey=n=>String(n).normalize('NFKC').toLowerCase().replace(/\s+/g,'');
 let OBN=0;function offBadge(px){const sp=document.createElement('span');const gid='obg'+(++OBN);sp.className='off-badge';sp.title='役員';sp.setAttribute('aria-label','役員');px=px||18;
-  /* 役員バッジ：赤漆の盾に金の縁と「役」 */
-  sp.innerHTML='<svg width="'+px+'" height="'+px+'" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3c4"/><stop offset=".28" stop-color="#e9c46a"/><stop offset=".55" stop-color="#9a7230"/><stop offset=".8" stop-color="#f6e2a8"/><stop offset="1" stop-color="#b8892f"/></linearGradient><radialGradient id="'+gid+'r" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#b8322a"/><stop offset=".6" stop-color="#6e1410"/><stop offset="1" stop-color="#2a0705"/></radialGradient></defs><path d="M12.0 12.0 Q50 4.0 88.0 12.0 L88.0 48 Q86.0 78.0 50 95.0 Q14.0 78.0 12.0 48 Z" fill="url(#'+gid+')"/><path d="M18.8 13.1 Q50 4.7 81.2 13.1 L81.2 48 Q79.5 79.4 50 94.5 Q20.5 79.4 18.8 48 Z" fill="url(#'+gid+'r)" transform="translate(0 2)"/><path d="M22.6 13.7 Q50 5.1 77.4 13.7 L77.4 48 Q75.9 80.2 50 94.2 Q24.1 80.2 22.6 48 Z" fill="none" stroke="url(#'+gid+')" stroke-width="1.6" transform="translate(0 3)"/><text x="50" y="49" text-anchor="middle" dominant-baseline="central" font-family="Shippori Mincho B1,Hiragino Mincho ProN,Yu Mincho,serif" font-weight="800" font-size="34" fill="url(#'+gid+')">役</text><path d="M24 20 L42 14" stroke="#fff" stroke-opacity=".3" stroke-width="2.5" stroke-linecap="round"/></svg>';return sp}
+  /* 役員バッジ：紺の盾に淡い青の縁と「役」（見た目B） */
+  sp.innerHTML='<svg width="'+px+'" height="'+px+'" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="'+gid+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#eef5ff"/><stop offset=".28" stop-color="#cfe3fb"/><stop offset=".55" stop-color="#5f86b8"/><stop offset=".8" stop-color="#a9cdf7"/><stop offset="1" stop-color="#6f93c4"/></linearGradient><radialGradient id="'+gid+'r" cx=".4" cy=".3" r=".9"><stop offset="0" stop-color="#33456b"/><stop offset=".6" stop-color="#1c2436"/><stop offset="1" stop-color="#0f1626"/></radialGradient></defs><path d="M12.0 12.0 Q50 4.0 88.0 12.0 L88.0 48 Q86.0 78.0 50 95.0 Q14.0 78.0 12.0 48 Z" fill="url(#'+gid+')"/><path d="M18.8 13.1 Q50 4.7 81.2 13.1 L81.2 48 Q79.5 79.4 50 94.5 Q20.5 79.4 18.8 48 Z" fill="url(#'+gid+'r)" transform="translate(0 2)"/><path d="M22.6 13.7 Q50 5.1 77.4 13.7 L77.4 48 Q75.9 80.2 50 94.2 Q24.1 80.2 22.6 48 Z" fill="none" stroke="url(#'+gid+')" stroke-width="1.6" transform="translate(0 3)"/><text x="50" y="49" text-anchor="middle" dominant-baseline="central" font-family="Noto Sans JP,Hiragino Sans,sans-serif" font-weight="800" font-size="34" fill="url(#'+gid+')">役</text><path d="M24 20 L42 14" stroke="#fff" stroke-opacity=".3" stroke-width="2.5" stroke-linecap="round"/></svg>';return sp}
 function saveProf(){try{localStorage.setItem(PKEY,JSON.stringify(PROF))}catch(e){}}
 
 var NM={};
@@ -3355,7 +3356,7 @@ function danFx(lv){
 $('undo').addEventListener('click',()=>{if(S.mode&&S.mode!=='net')S.noRate=true});
 
 /* バッジ：条件を満たすともらえ、1つ選ぶと名前の横に出る（オンラインの相手にも見える） */
-const BD_T={bronze:['#7a4a2a','#d08b5b','#3a2416'],silver:['#6d7378','#e1e5e8','#2a2e31'],gold:['#8a6a3a','#f2d78f','#2b2312'],special:['#7a1f1a','#ffcf7a','#2a0d0b']};
+const BD_T={bronze:['#3e4a63','#8f9bb6','#1c2436'],silver:['#4f6a96','#c9d2e3','#1c2436'],gold:['#5f86b8','#cfe3fb','#18233a'],special:['#6b5bb8','#d6ccff','#1c1838']};/* 見た目B：寒色の段階 */
 const BADGES=[
  ['対局','first','初','初勝利','どのモードでも1勝','bronze',s=>s.wins>=1],
  ['対局','w10','十','十勝','合計10勝','bronze',s=>s.wins>=10],
@@ -3384,7 +3385,7 @@ const BADGES=[
 const BD=Object.fromEntries(BADGES.map(b=>[b[1],b]));
 let BDN=0;
 function bdSVG(id,px){const b=BD[id];if(!b)return '';const [d,l,bg]=BD_T[b[5]],g='bdg'+(++BDN);
-  return `<svg width="${px}" height="${px}" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${l}"/><stop offset=".55" stop-color="${d}"/><stop offset="1" stop-color="${l}"/></linearGradient></defs><circle cx="50" cy="50" r="47" fill="url(#${g})"/><circle cx="50" cy="50" r="40" fill="${bg}"/><circle cx="50" cy="50" r="40" fill="none" stroke="${l}" stroke-width="1.5" opacity=".6"/>${b[5]==='special'?`<circle cx="50" cy="50" r="34" fill="none" stroke="${l}" stroke-width="1" stroke-dasharray="2 4" opacity=".7"/>`:''}<text x="50" y="52" text-anchor="middle" dominant-baseline="central" font-family="Shippori Mincho B1,Hiragino Mincho ProN,Yu Mincho,serif" font-weight="800" font-size="46" fill="${l}">${b[2]}</text></svg>`}
+  return `<svg width="${px}" height="${px}" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="${g}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${l}"/><stop offset=".55" stop-color="${d}"/><stop offset="1" stop-color="${l}"/></linearGradient></defs><circle cx="50" cy="50" r="47" fill="url(#${g})"/><circle cx="50" cy="50" r="40" fill="${bg}"/><circle cx="50" cy="50" r="40" fill="none" stroke="${l}" stroke-width="1.5" opacity=".6"/>${b[5]==='special'?`<circle cx="50" cy="50" r="34" fill="none" stroke="${l}" stroke-width="1" stroke-dasharray="2 4" opacity=".7"/>`:''}<text x="50" y="52" text-anchor="middle" dominant-baseline="central" font-family="Noto Sans JP,Hiragino Sans,sans-serif" font-weight="800" font-size="44" fill="${l}">${b[2]}</text></svg>`}
 function bdBadge(id,px){const b=BD[id];if(!b)return null;const sp=document.createElement('span');sp.className='bdg';sp.title=b[3];sp.setAttribute('aria-label',b[3]);sp.innerHTML=bdSVG(id,px||16);return sp}
 function bdStats(){const s=PROF.st=PROF.st||{};for(const k of ['wins','games','net','streak','stMax','rmax','dmax','fast','yori','long','hunt','rev','watch','fr','daily','dcur'])s[k]=s[k]|0;s.cpu=Array.isArray(s.cpu)?s.cpu.map(x=>x|0).concat([0,0,0,0,0]).slice(0,5):[0,0,0,0,0];s.done=Array.isArray(s.done)?s.done.slice(-300):[];return s}
 function bdOwned(){return Array.isArray(PROF.bd)?PROF.bd.filter(id=>BD[id]):[]}
