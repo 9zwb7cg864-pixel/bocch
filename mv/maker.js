@@ -199,7 +199,7 @@ const THEMES={
  C:{light:'#f1e8d2',dark:'#3f9f95',frame:'#10302e',line:'#00000022',label:'#9fd6cf',bg:'grad',bg1:'#0d1b33',bg2:'#020409',outline:'#2c4d4a',particles:true,flip:['#ffffff','#2f6bff']},
  D:{light:'#fbe4ef',dark:'#e48db3',frame:'#3a1730',line:'#00000022',label:'#f3b6d0',bg:'aura',bg1:'#1b0c26',bg2:'#030106',outline:'#5a2d48',particles:false},
  E:{light:'#20202a',dark:'#1b1b23',frame:'#121218',line:'#2e2e3a',label:'#6b6b7a',bg:'dark',particles:true}};
-function plan(moves,track,themeKey){
+function plan(moves,track,themeKey,camMode){camMode=camMode||'mid';
   const A=analyze(moves);const {n,fin,W,boards,ev}=A;if(n<4)throw new Error('手数が少なすぎます');
   const B=60/track.bpm,PH=track.phase;const GB=B>=0.5?B:2*B;const beat=t=>PH+Math.round((t-PH)/GB)*GB;
   const L=Array(n+1).fill(null);L[n]=track.winT;L[fin]=track.finT;L[n-1]=beat((track.finT+track.winT)/2);
@@ -215,9 +215,22 @@ function plan(moves,track,themeKey){
   const cam=[];const used=[];const startOf=k=>LAND[k-1]-Math.min(0.32,(LAND[k-1]-(k>1?LAND[k-2]:0))*0.45);
   const want=[];if(A.firstArr)want.push(A.firstArr);for(const k of Object.keys(ev).map(Number))if(k<fin&&ev[k].some(x=>x==='bait'||x==='bocchi')&&!want.includes(k)){want.push(k);break}
   for(const k of want.sort((a,b)=>a-b)){const t=LAND[k-1]-0.12;const nx=k<n?startOf(k+1):1e9;const h=Math.min(4*B,nx-t-0.95);if(h<0.6)continue;cam.push({t:+t.toFixed(3),sq:[moves[k-1][2]],z:1.42,d:0.22},{t:+(t+h).toFixed(3),sq:null,d:0.8})}
+  if(camMode==='calm'){cam.length=0}
+  else if(camMode==='wild'){ /* 激しい：k1のカメラワーク。手の間が短いところは寄らずに待つ（行ったり来たりしない） */
+    cam.length=0;cam.push({t:0,sq:[14,15,20,21],z:2.0,d:0});
+    const KEY=new Set([fin,n,n-1]);if(A.firstArr)KEY.add(A.firstArr);for(const k in ev)if(ev[k].some(x=>x==='bait'||x==='bocchi'))KEY.add(+k);
+    const goal=p=>p===1?0:5,arrived=(bd,p)=>[0,1,2,3,4,5].some(c=>bd[goal(p)*6+c]===p);
+    for(let i=0;i<n;i++){const m=i+1,[pp,f,t]=moves[i],prev=i?LAND[i-1]:0,gap=LAND[i]-prev,nextGap=i+1<n?LAND[i+1]-LAND[i]:9,key=KEY.has(m);
+      if(key||gap>=1.0){const fly=Math.min(0.32,gap*0.45);cam.push({t:+Math.max(prev+0.05,LAND[i]-fly-0.3).toFixed(3),sq:[f,t],z:key?2.3:1.5,d:0.28})}
+      if(key||nextGap>=1.3){const R=REACH(boards[m]);const sq=[...new Set(R.flatMap(r=>[r[0],r[1]]))];cam.push({t:+(LAND[i]+0.12).toFixed(3),sq:sq.length?sq:[t],z:key?2.3:1.6,d:0.4})}}
+    for(const pl of [1,2]){for(let m=1;m<n-1;m++){if(arrived(boards[m],pl)){cam.push({t:+(LAND[m-1]+0.15).toFixed(3),sq:[moves[m-1][2]],z:2.5,d:0.3});break}}}
+    for(let i=1;i<n;i++)if(LAND[i]-LAND[i-1]>4.5)cam.push({t:+(LAND[i-1]+1.6).toFixed(3),sq:null,d:Math.min(3,LAND[i]-LAND[i-1]-2.2)});
+    if(fin>=1)cam.push({t:+(LAND[fin-1]-1.6).toFixed(3),sq:[moves[fin-1][1]],z:2.6,d:0.6});
+    const W=A.W,arr=[0,1,2,3,4,5].map(c=>goal(W)*6+c).filter(x=>boards[n][x]===W);
+    cam.push({t:+(track.winT-0.1).toFixed(3),sq:arr,z:2.2,d:0.6},{t:+(track.winT+1.1).toFixed(3),sq:null,d:1.2})}
   const badge={};badge[fin]=['!!','CYAN'];for(const k in ev)if(+k<fin&&ev[k].includes('bait'))badge[k]=['!?','PURPLE'];
   const th=themeKey==='rand'?'ABCD'[Math.floor(Math.random()*4)]:themeKey;
-  const cfg={bpm:track.bpm,phase:PH,pulseAmp:0,drift:0,moves,land:LAND,total:track.end,tel:[],badge,shake:[fin,n],boom:[],blunder:0,iso:0,seqT:{[fin]:track.seq},pulse:[[track.finT,track.winT]],cam,words:track.words,hot:['home','three','four','two','lanes','lane','move','over','done','mistake','first','block'],theme:THEMES[th],flipT:track.finT};
+  const cfg={bpm:track.bpm,phase:PH,pulseAmp:0,drift:0,moves,land:LAND,total:track.end,tel:[],badge,shake:camMode==='calm'?[]:[fin,n],boom:[],blunder:0,iso:0,seqT:{[fin]:track.seq},pulse:[[track.finT,track.winT]],cam,words:track.words,hot:['home','three','four','two','lanes','lane','move','over','done','mistake','first','block'],theme:THEMES[th],flipT:track.finT};
   return {cfg,A,theme:th}}
 
 const THN={A:'ラベンダー',B:'サーモン',C:'ティール',D:'ピンク',E:'ダーク'};
@@ -229,7 +242,7 @@ function load(){if(ready)return ready;
 #bmv h3{margin:0;font-size:17px;font-weight:800}
 #bmv .x{background:none;border:none;color:#9aa6c0;min-height:0;font-size:15px;padding:8px;cursor:pointer}
 #bmv canvas{height:min(56vh,640px);width:auto;max-width:100%;aspect-ratio:9/16;border-radius:18px;background:#000;display:block;flex:none}
-#bmv .opt{width:100%;max-width:420px;display:grid;grid-template-columns:1fr;gap:8px}
+#bmv .opt{width:100%;max-width:420px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
 #bmv label{font-size:12px;color:#9aa6c0;font-weight:700;display:block;margin-bottom:3px}
 #bmv select{width:100%;background:#1a2234;color:#eef2fa;border:1px solid rgba(200,215,240,.18);border-radius:12px;padding:10px;font-size:14px}
 #bmv .row{width:100%;max-width:420px;display:flex;gap:8px}
@@ -253,7 +266,7 @@ async function open(o){
   close();bgm(true);
   UI=el(`<div id="bmv" role="dialog" aria-modal="true"><div class="top"><h3>${T('動画を作る')}</h3><button class="x" id="bmvX">${T('閉じる')} ✕</button></div>
 <canvas id="bmvCv" width="1080" height="1920"></canvas>
-<div class="opt"><div><label for="bmvTh">${T('見た目')}</label><select id="bmvTh"></select></div></div>
+<div class="opt"><div><label for="bmvTh">${T('見た目')}</label><select id="bmvTh"></select></div><div><label for="bmvCam">${T('カメラ')}</label><select id="bmvCam"><option value="wild">${T('激しい')}</option><option value="mid">${T('普通')}</option><option value="calm">${T('大人しい')}</option></select></div></div>
 <div class="row"><button id="bmvPrev">▶ ${T('プレビュー')}</button><button id="bmvMake" class="main">${T('動画を作る')}</button></div>
 <div class="bar"><i id="bmvProg"></i></div><div class="msg" id="bmvMsg">${T('読み込み中…')}</div>
 <div class="row" id="bmvOut" hidden><button id="bmvSave" class="main">${T('保存')}</button><button id="bmvShare">${T('共有')}</button></div></div>`);
@@ -265,16 +278,16 @@ async function open(o){
   /* 曲は手数で自動に選ぶ：決め手までを1手およそ1.2秒で見せられる曲（短い対局は短い曲、長い対局は長い曲） */
   const want=0.6+(mv.length-2)*1.2,df=TRACKS.map((t,i)=>[Math.abs(t.finT-want),i]).sort((a,b)=>a[0]-b[0]),near=df.filter(d=>d[0]<=Math.max(7,df[0][0]+3));
   const TI=near[Math.floor(Math.random()*near.length)][1],thPick='ABCD'[Math.floor(Math.random()*4)];
-  for(const k of 'ABCDE'){const op=document.createElement('option');op.value=k;op.textContent=T(THN[k]);q('bmvTh').appendChild(op)}q('bmvTh').value=thPick;
+  for(const k of 'ABCDE'){const op=document.createElement('option');op.value=k;op.textContent=T(THN[k]);q('bmvTh').appendChild(op)}q('bmvTh').value=thPick;{let c='mid';try{c=localStorage.getItem('bocch-mvcam')||'mid'}catch(e){}q('bmvCam').value=c}
   let P=null,RR=null,blob=null,busy=false,ac=null;const AB={};
-  const build=()=>{blob=null;q('bmvOut').hidden=true;P=plan(mv,TRACKS[TI],q('bmvTh').value);RR=makeRenderer(CV,P.cfg);RR.renderAt(0.01)};
+  const build=()=>{blob=null;q('bmvOut').hidden=true;P=plan(mv,TRACKS[TI],q('bmvTh').value,q('bmvCam').value);RR=makeRenderer(CV,P.cfg);RR.renderAt(0.01)};
   const safe=()=>{try{build();msg(T('勝った側の視点で、曲に合わせた縦型動画を作ります'))}catch(e){msg(T('動画を作れませんでした'))}};
-  q('bmvTh').onchange=()=>{if(!busy)safe()};
+  q('bmvTh').onchange=()=>{if(!busy)safe()};q('bmvCam').onchange=()=>{try{localStorage.setItem('bocch-mvcam',q('bmvCam').value)}catch(e){}if(!busy)safe()};
   safe();q('bmvPrev').disabled=q('bmvMake').disabled=false;
   async function audio(i){ac=ac||new AudioContext();if(!AB[i])AB[i]=await fetch(BASE+TRACKS[i].file).then(r=>r.arrayBuffer()).then(b=>ac.decodeAudioData(b));return AB[i]}
   const LB={bmvPrev:'▶ '+T('プレビュー'),bmvMake:T('動画を作る')};let curBtn=null;
   function stopRun(){if(!ST||ST.stop)return;ST.stop=1;try{ST.src&&ST.src.stop()}catch(e){}if(ST.rec&&ST.rec.state!=='inactive')try{ST.rec.stop()}catch(e){}q('bmvProg').style.width='0%';RR.renderAt(0.01);msg(T('止めました'))}
-  async function run(record){if(busy){if(curBtn===(record?'bmvMake':'bmvPrev'))stopRun();return}busy=true;const me=UI;curBtn=record?'bmvMake':'bmvPrev';q('bmvPrev').disabled=q('bmvMake').disabled=q('bmvTh').disabled=true;
+  async function run(record){if(busy){if(curBtn===(record?'bmvMake':'bmvPrev'))stopRun();return}busy=true;const me=UI;curBtn=record?'bmvMake':'bmvPrev';q('bmvPrev').disabled=q('bmvMake').disabled=q('bmvTh').disabled=q('bmvCam').disabled=true;
     {const b=q(curBtn);b.disabled=false;b.textContent='■ '+T(record?'やめる':'止める')}
     ST={};try{safe();msg(T('読み込み中…'));const buf=await audio(TI);if(UI!==me)return;await ac.resume();
       const src=ac.createBufferSource();src.buffer=buf;ST.src=src;let chunks=[],mime='';
@@ -288,7 +301,7 @@ async function open(o){
       if(ST.rec){await new Promise(r=>{ST.rec.onstop=r;ST.rec.stop()});blob=new Blob(chunks,{type:(mime||'video/webm').split(';')[0]});q('bmvOut').hidden=false;msg(T('できました。保存か共有を押してください。'))}
       else msg('');
     }catch(e){msg(T('動画を作れませんでした'))}
-    finally{busy=false;curBtn=null;if(UI===me){q('bmvPrev').disabled=q('bmvMake').disabled=q('bmvTh').disabled=false;q('bmvPrev').textContent=LB.bmvPrev;q('bmvMake').textContent=LB.bmvMake}}}
+    finally{busy=false;curBtn=null;if(UI===me){q('bmvPrev').disabled=q('bmvMake').disabled=q('bmvTh').disabled=q('bmvCam').disabled=false;q('bmvPrev').textContent=LB.bmvPrev;q('bmvMake').textContent=LB.bmvMake}}}
   q('bmvPrev').onclick=()=>run(false);q('bmvMake').onclick=()=>run(true);
   const fname=()=>'bocch_'+new Date().toISOString().slice(0,19).replace(/\D/g,'')+'.'+(blob.type.includes('mp4')?'mp4':'webm');
   q('bmvSave').onclick=()=>{if(!blob)return;const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname();document.body.appendChild(a);a.click();a.remove();msg(T('保存しました'))};
