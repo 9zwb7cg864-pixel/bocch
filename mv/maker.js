@@ -272,7 +272,10 @@ async function open(o){
   q('bmvTh').onchange=()=>{if(!busy)safe()};
   safe();q('bmvPrev').disabled=q('bmvMake').disabled=false;
   async function audio(i){ac=ac||new AudioContext();if(!AB[i])AB[i]=await fetch(BASE+TRACKS[i].file).then(r=>r.arrayBuffer()).then(b=>ac.decodeAudioData(b));return AB[i]}
-  async function run(record){if(busy)return;busy=true;const me=UI;q('bmvPrev').disabled=q('bmvMake').disabled=q('bmvTh').disabled=true;
+  const LB={bmvPrev:'▶ '+T('プレビュー'),bmvMake:T('動画を作る')};let curBtn=null;
+  function stopRun(){if(!ST||ST.stop)return;ST.stop=1;try{ST.src&&ST.src.stop()}catch(e){}if(ST.rec&&ST.rec.state!=='inactive')try{ST.rec.stop()}catch(e){}q('bmvProg').style.width='0%';RR.renderAt(0.01);msg(T('止めました'))}
+  async function run(record){if(busy){if(curBtn===(record?'bmvMake':'bmvPrev'))stopRun();return}busy=true;const me=UI;curBtn=record?'bmvMake':'bmvPrev';q('bmvPrev').disabled=q('bmvMake').disabled=q('bmvTh').disabled=true;
+    {const b=q(curBtn);b.disabled=false;b.textContent='■ '+T(record?'やめる':'止める')}
     ST={};try{safe();msg(T('読み込み中…'));const buf=await audio(TI);if(UI!==me)return;await ac.resume();
       const src=ac.createBufferSource();src.buffer=buf;ST.src=src;let chunks=[],mime='';
       if(record){const dest=ac.createMediaStreamDestination();src.connect(dest);
@@ -285,7 +288,7 @@ async function open(o){
       if(ST.rec){await new Promise(r=>{ST.rec.onstop=r;ST.rec.stop()});blob=new Blob(chunks,{type:(mime||'video/webm').split(';')[0]});q('bmvOut').hidden=false;msg(T('できました。保存か共有を押してください。'))}
       else msg('');
     }catch(e){msg(T('動画を作れませんでした'))}
-    finally{busy=false;if(UI===me)q('bmvPrev').disabled=q('bmvMake').disabled=q('bmvTh').disabled=false}}
+    finally{busy=false;curBtn=null;if(UI===me){q('bmvPrev').disabled=q('bmvMake').disabled=q('bmvTh').disabled=false;q('bmvPrev').textContent=LB.bmvPrev;q('bmvMake').textContent=LB.bmvMake}}}
   q('bmvPrev').onclick=()=>run(false);q('bmvMake').onclick=()=>run(true);
   const fname=()=>'bocch_'+new Date().toISOString().slice(0,19).replace(/\D/g,'')+'.'+(blob.type.includes('mp4')?'mp4':'webm');
   q('bmvSave').onclick=()=>{if(!blob)return;const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname();document.body.appendChild(a);a.click();a.remove();msg(T('保存しました'))};
