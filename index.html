@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=34"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=35"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -1055,13 +1055,40 @@ body,button,input,select,textarea{font-family:var(--f-body)!important;letter-spa
 .grid .stone.w.rk,.hm-hg .stone.w.rk{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%)!important;color:#2a2c33!important}
 .grid .stone.dan::before,.hm-hg .stone.dan::before,.grid .cell:not(.reachG):not(.reachR) .stone.dan::after,.hm-hg .stone.dan::after{display:none!important}
 .sel .grid .stone.rk,.grid .sel .stone.rk{box-shadow:0 0 0 3px var(--b-acc),0 3px 4px rgba(0,0,0,.35)!important}
+/* 先月の1位：キャッチコピーに重ねず、Bの見た目の横長の欄にする */
+.hm .hm-chp{width:100%!important;margin:14px 0 0!important;padding:10px 14px!important;gap:10px!important;border-radius:16px!important;background:var(--b-p1)!important;box-shadow:none!important;border:0!important;justify-content:flex-start}
+.hm-chp .cr{width:30px!important;height:30px!important;padding:6px;border-radius:10px;background:var(--b-p2);filter:none!important;box-sizing:border-box}
+.hm-chp .cr path,.hm-chp .cr rect{fill:var(--b-acc)!important;stroke:none!important}
+.hm-chp small{color:var(--sub)!important;font-size:12px!important;letter-spacing:.02em!important;font-weight:700}
+.hm-chp b{font-size:15px!important;color:var(--fg)}
+.hm-chp em{color:var(--fg)!important;font-size:13px!important;font-weight:700!important}
+.hm-chp>svg:last-child,.hm-chp .chv{margin-left:auto;color:var(--sub)}
+/* 段級のバー・対局するボタンの整え */
+.hm-bar{height:8px!important;border-radius:99px!important;background:var(--b-p2)!important;box-shadow:none!important}
+.hm-bar u{display:none!important}
+.hm-bar i{border-radius:99px;background:linear-gradient(90deg,var(--b-acc),var(--b-acc2))!important}
+.hm-box .hm-play{display:flex!important;align-items:center;justify-content:center;gap:12px;flex-direction:row-reverse;min-height:68px}
+.hm-box .hm-play .hm-go{position:static!important;transform:none!important;width:auto!important;height:auto!important}
+.hm-box .hm-play .hm-fimg{padding-right:0!important}
+.hm-box .hm-play .online{position:absolute;left:0;right:0;bottom:4px;margin:0;text-align:center;font-size:11px;color:#3a4d70!important}
+/* ホームをすっきり：箱の間隔をそろえ、オンライン人数はボタンの下 */
+.hm>*+*{margin-top:12px!important}
+.hm .hm-head{margin-bottom:0!important}
+.hm-box .hm-play .online{position:static!important}
+.hm-box .hm-play{flex-wrap:wrap}
+.hm-box .online{display:none}
+.hm-online2{margin:10px 0 0;text-align:center;font-size:12px;color:var(--sub);font-weight:700}
+.hm-online2 i{display:inline-block;width:7px;height:7px;border-radius:50%;background:#7fd6a0;margin-right:6px;vertical-align:1px}
+.home-rules{border:0!important;box-shadow:none!important;padding:16px!important}
+.home-rules h3{color:var(--fg)!important;font-size:15px}
+.hm-daily,.hm-menu,.hm-chp,.home-rules,.hm-box{border:0!important}
 </style>
 </head>
 <body>
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.38</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.39</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -1093,11 +1120,6 @@ body,button,input,select,textarea{font-family:var(--f-body)!important;letter-spa
       <p class="online" id="onlineNow" hidden><i></i><span></span></p>
       <span class="hm-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg></span>
     </button>
-    </div>
-    <div class="hm-tiles">
-      <button class="hm-t" id="hmTRand" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><b>ランダム対戦</b><small>自動で相手を探す</small></button>
-      <button class="hm-t" data-go="solo" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="7" width="14" height="11" rx="3"/><path d="M12 3v4M9 12h.01M15 12h.01M9 15.5h6"/></svg><b>CPUと対局</b><small>やさしい〜最強</small></button>
-      <button class="hm-t" data-go="friend" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M17 8v6M14 11h6"/></svg><b>友だちと</b><small>リンクで招待</small></button>
     </div>
 
     <button class="hm-seek" id="seekNow" type="button" hidden><i class="hm-sd"></i><span class="stone b" id="seekSt"></span><span class="hm-st"><span class="hm-sn"><b id="seekNm"></b><span id="seekLv"></span></span><span>が対戦相手を探しています</span></span><span class="hm-sg">対局する</span></button>
@@ -2646,7 +2668,7 @@ $('showLab').addEventListener('change',()=>{try{localStorage.setItem('bocch-lab'
 
 
 render();
-$('randomBtn').addEventListener('click',startMatch);{const t=$('hmTRand');if(t)t.addEventListener('click',()=>$('randomBtn').click())}
+$('randomBtn').addEventListener('click',startMatch);
 $('reseek').addEventListener('click',()=>startMatch());
 addEventListener('pagehide',()=>{if(MATCH.on&&MATCH.mine){try{fetch(LOBBY,{method:'POST',keepalive:true,body:JSON.stringify({t:'cancel',room:MATCH.mine,from:MATCH.id})})}catch(e){}}});
 $('matchCancel').addEventListener('click',()=>{cancelMatch();show('home')});
@@ -4856,6 +4878,9 @@ const COACH_PREVIEW=/[?&]coach=1\b/.test(location.search);
 if(COACH_PREVIEW){const go=()=>{try{COACH.on=true;COACH.mv=0;show('game');S=initState(1);S.hc=1;S.coach=true;KICK='';render()}catch(e){}};if(document.readyState==='complete')setTimeout(go,0);else addEventListener('load',go,{once:true})}
 else if(coachEligible()){const go=()=>{try{if(CUR==='home'&&coachEligible())coachStart()}catch(e){}};if(document.readyState==='complete')setTimeout(go,0);else addEventListener('load',go,{once:true})}
 try{document.querySelectorAll('.cpu-lv').forEach(e=>{e.textContent=lvName(lvOfRate(CPU_RATE[+e.dataset.lv]))})}catch(e){}
+/* オンライン人数は「対局する」の下に小さく出す */
+(function(){const o=$('onlineNow');if(!o)return;const box=document.querySelector('.hm-box');if(!box)return;const m=document.createElement('p');m.className='hm-online2';m.hidden=true;box.appendChild(m);
+  const sync=()=>{m.hidden=o.hidden;m.innerHTML='<i></i>';m.append(document.createTextNode(o.textContent||''))};new MutationObserver(sync).observe(o,{attributes:true,childList:true,subtree:true,characterData:true});sync()})();
 {const _rT=render;render=function(){_rT();try{for(const id of ['plTop','plBot']){const el=$(id);if(!el||el.hidden)continue;const d=el.querySelector('.dot');const c=d?(d.classList.contains('b')?1:2):0;
   let t=el.querySelector('.pl-turn');if(!t){t=document.createElement('span');t.className='pl-turn';el.appendChild(t)}
   const on=!S.over&&c&&S.turn===c;el.classList.toggle('on',!!on);const me=id==='plBot';t.textContent=S.over?'':on?(me?'あなたの番':'考え中'):'';t.hidden=!t.textContent}}catch(e){}}}
