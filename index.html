@@ -24,7 +24,7 @@
 <meta name="google-adsense-account" content="ca-pub-7697290378023391">
 <!-- AdSense の読み込みは、ゲーム画面（操作のための画面）には置かない。文章のあるページ（guide.html など）だけに置く。H5ゲーム広告が承認されたら、ここに戻して adBreak を使う -->
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#302e2b">
+<meta name="theme-color" content="#222326">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1577,22 +1577,22 @@ body.tabs-on .scr:is([data-scr=daily],[data-scr=history],[data-scr=profile],[dat
 .hm-seek .hm-sg{background:linear-gradient(180deg,var(--acc2),var(--acc));color:var(--ink);border-radius:999px;font-weight:900;padding:8px 14px}
 
 /* =====================================================================
-   C：暗い部分は灰色（少し茶色）。水色のアクセントはそのまま。
+   C：暗い部分は墨色（青みも茶色みもない黒灰）。水色のアクセントはそのまま。
    ボタンは下に厚みのある立体にする
    ===================================================================== */
-:root{--bg:#302e2b;--bar:#262522;--p1:#3a3936;--p2:#4a4947;--p3:#575553;
+:root{--bg:#222326;--bar:#191a1d;--p1:#2d2e31;--p2:#3d3e41;--p3:#494a4d;
   --line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.14);--fg:#ffffff;--sub:#c3c2c1;--mute:#8b8987;
-  --card:linear-gradient(180deg,#3c3b39 0%,#31302e 100%);--cardsh:inset 0 1px 0 #4b4a48,0 3px 0 #21201d;
-  --btn3:inset 0 1px 0 rgba(255,255,255,.09),0 4px 0 #282725;--btn3d:inset 0 1px 0 rgba(255,255,255,.09),0 1px 0 #282725;
+  --card:linear-gradient(180deg,#2f3033 0%,#242528 100%);--cardsh:inset 0 1px 0 #3e3f42,0 3px 0 #141518;
+  --btn3:inset 0 1px 0 rgba(255,255,255,.09),0 4px 0 #1b1c1f;--btn3d:inset 0 1px 0 rgba(255,255,255,.09),0 1px 0 #1b1c1f;
   --pri3:inset 0 1px 0 rgba(255,255,255,.65),0 4px 0 #6c93c3;--pri3d:inset 0 1px 0 rgba(255,255,255,.65),0 1px 0 #6c93c3}
-.topbar{background:linear-gradient(180deg,var(--bg) 70%,rgba(48,46,43,0))}
-.tabbar{background:rgba(38,37,34,.97);border-top:1px solid rgba(255,255,255,.06)}
+.topbar{background:linear-gradient(180deg,var(--bg) 70%,rgba(34,35,38,0))}
+.tabbar{background:rgba(26,27,30,.97);border-top:1px solid rgba(255,255,255,.06)}
 /* カード */
 .hm-box,.hcard,.hm-daily,.card,.st-pick,.rev-graph,.wcard,.pf-hero,.rs-hd,.pm button.pm-r,.st-cpus button,.hm-seek{background:var(--card)!important;box-shadow:var(--cardsh)}
-.mvcard,.rs-list{background:#262522}.mvhd{background:linear-gradient(180deg,#3c3b39,#31302e)}
-.rk-pod .pod.p1{background:linear-gradient(180deg,#45433f,#31302e)}
+.mvcard,.rs-list{background:#191a1d}.mvhd{background:linear-gradient(180deg,#2f3033,#242528)}
+.rk-pod .pod.p1{background:linear-gradient(180deg,#37383b,#242528)}
 .st-cpus button[aria-pressed=true]{box-shadow:inset 0 0 0 2px var(--acc),var(--cardsh)}
-.hm-seek{box-shadow:0 8px 24px rgba(0,0,0,.45),inset 0 1px 0 #4b4a48}
+.hm-seek{box-shadow:0 8px 24px rgba(0,0,0,.45),inset 0 1px 0 #3e3f42}
 /* 立体ボタン（水色） */
 button.primary,.primary,.hm-play,.hc-btn,.rev-mv,.mvbtn.main,.endb.main,.hm-seek .hm-sg,#stGo{box-shadow:var(--pri3);margin-bottom:4px}
 button.primary:active,.primary:active,.hm-play:active,.hc-btn:active,.rev-mv:active,.mvbtn.main:active,.endb.main:active,#stGo:active{transform:translateY(3px);box-shadow:var(--pri3d)}
@@ -1601,13 +1601,13 @@ button.primary:active,.primary:active,.hm-play:active,.hc-btn:active,.rev-mv:act
 .hm-modes button:hover,.hm-menu button:hover,.st-more button:hover,.rev-nav button:hover,#localCtl button:hover,#netCtl button:hover{background:var(--p3)}
 .hm-modes button:active,.hm-menu button:active,.st-more button:active,.mvbtn:not(.main):active,.endb:not(.main):active,.rev-nav button:active,#localCtl button:active,#netCtl button:active,.rev-cpu button:active{transform:translateY(3px);box-shadow:var(--btn3d)}
 .hm-modes button[aria-pressed=true]{background:linear-gradient(180deg,#d6e8fc,#a9cdf7);color:var(--ink);box-shadow:var(--pri3)}
-.hm-box .hm-modes button{background:#4a4947}
+.hm-box .hm-modes button{background:#3d3e41}
 .hm-box .hm-modes button[aria-pressed=true]{background:linear-gradient(180deg,#d6e8fc,#a9cdf7)}
 .hcard .hc-more{box-shadow:none;margin:0}
 /* 細部 */
-.players .clk{background:#262522}
+.players .clk{background:#191a1d}
 .cav.sm,.players .cav.sm{box-shadow:0 0 0 2px var(--bg)}
-.rg-dots i{box-shadow:0 0 0 2px #3a3936}
+.rg-dots i{box-shadow:0 0 0 2px #2d2e31}
 /* カラーの絵 */
 .ic3w{display:inline-flex;flex:none}.ic3w svg{width:100%;height:100%;display:block}
 .hm-modes .ic3w{width:38px;height:38px}
@@ -1630,7 +1630,7 @@ button.primary:active,.primary:active,.hm-play:active,.hc-btn:active,.rev-mv:act
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.47</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.48</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -3726,8 +3726,8 @@ function drawGraph(){const svg=$('revGraph'),n=REV.pos.length-1,W=300,H=84;if(!n
   let h=`<rect x="0" y="0" width="${W}" height="${H}" fill="${UP}"/>`;
   if(pts.length){const last=pts[pts.length-1],poly=pts.map(q=>q[0].toFixed(1)+','+q[1].toFixed(1)).join(' ');
     h+=`<polygon points="0,${H} ${poly} ${last[0].toFixed(1)},${H}" fill="${LOW}"/>`;
-    if(last[2]<n)h+=`<rect x="${last[0].toFixed(1)}" y="0" width="${(W-last[0]).toFixed(1)}" height="${H}" fill="#454340"/>`}
-  else h+=`<rect x="0" y="0" width="${W}" height="${H}" fill="#454340"/>`;
+    if(last[2]<n)h+=`<rect x="${last[0].toFixed(1)}" y="0" width="${(W-last[0]).toFixed(1)}" height="${H}" fill="#37383b"/>`}
+  else h+=`<rect x="0" y="0" width="${W}" height="${H}" fill="#37383b"/>`;
   h+=`<line x1="0" y1="${H/2}" x2="${W}" y2="${H/2}" stroke="#8f9bb6" stroke-opacity=".55" stroke-width="1" vector-effect="non-scaling-stroke"/>`;
   h+=`<line x1="${xs(REV.i)}" y1="0" x2="${xs(REV.i)}" y2="${H}" stroke="#a9cdf7" stroke-width="2" vector-effect="non-scaling-stroke"/>`;
   svg.innerHTML=h;
