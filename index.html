@@ -1506,13 +1506,21 @@ body.tabs-on .scr:is([data-scr=daily],[data-scr=history],[data-scr=profile],[dat
 .mvghost.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%)}
 .target.mvhov{box-shadow:inset 0 0 0 100vmax rgba(169,205,247,.38)}
 
+/* ---------- リーチの矢印と照準（動画と同じ見た目）。石の光る輪は出さない ---------- */
+.reachG .stone::after,.reachR .stone::after{display:none}
+.rch.in{animation:rchIn .22s cubic-bezier(.2,.8,.3,1) both;animation-delay:var(--d)}
+@keyframes rchIn{from{opacity:0}to{opacity:1}}
+.rct{animation:rctBlink .9s steps(1) infinite}
+@keyframes rctBlink{0%{opacity:1}50%{opacity:.45}}
+@media (prefers-reduced-motion:reduce){.rch.in,.rct{animation:none}}
+
 </style>
 </head>
 <body>
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.42</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.43</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -2455,12 +2463,25 @@ const MV_NS='http://www.w3.org/2000/svg',MV_RM=matchMedia('(prefers-reduced-moti
 let MV_SVG=null,MV_UID=0;
 function mvLive(){try{return CUR==='game'&&(typeof VIEW==='undefined'||VIEW.i==null)}catch(e){return false}}
 function mvSvg(){if(!MV_SVG||!MV_SVG.isConnected){MV_SVG=document.createElementNS(MV_NS,'svg');MV_SVG.setAttribute('class','mvfx');MV_SVG.setAttribute('viewBox','0 0 600 600');MV_SVG.setAttribute('preserveAspectRatio','none');MV_SVG.setAttribute('aria-hidden','true');
-  MV_SVG.innerHTML='<g data-l="cand"></g><g data-l="move"></g>';gridEl.appendChild(MV_SVG)}return MV_SVG}
+  MV_SVG.innerHTML='<defs><filter id="rchGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g data-l="reach"></g><g data-l="cand"></g><g data-l="move"></g>';gridEl.appendChild(MV_SVG)}return MV_SVG}
 const mvL=n=>mvSvg().querySelector('[data-l="'+n+'"]');
 function mvMe(){try{const m=fxMe();return m||0}catch(e){return 0}}
 /* 次の手でゴールに届く石：自分（見ている側）は金、相手は赤。選んでいる間と終局後は出さない */
-function mvReach(b){const o={s:{},t:{}};if(S.over||S.sel>=0||S.learn||!mvLive())return o;const me=mvMe()||1;
-  for(let i=0;i<N*N;i++){const p=b[i];if(!p)continue;const g=goalRow(p);if((i/N|0)===g)continue;for(const m of movesFrom(b,i))if((m[1]/N|0)===g){const k=p===me?'G':'R';o.s[i]=k;o.t[m[1]]=k}}return o}
+function mvReach(b){const o={s:{},t:{},l:[]};if(S.over||S.sel>=0||S.learn||!mvLive()){try{mvReachDraw([])}catch(e){}return o}const me=mvMe()||1;
+  for(let i=0;i<N*N;i++){const p=b[i];if(!p)continue;const g=goalRow(p);if((i/N|0)===g)continue;for(const m of movesFrom(b,i))if((m[1]/N|0)===g){const k=p===me?'G':'R';o.s[i]=k;o.t[m[1]]=k;o.l.push([i,m[1],p])}}mvReachDraw(o.l);return o}
+/* リーチの矢印：動画と同じく、石からゴールのマスへ矢印（黒はオレンジ、白は青）、ゴールに点滅する照準 */
+let RCH_KEY='';
+function mvReachDraw(L){const key=L.map(x=>x.join('.')).join('|');if(key===RCH_KEY&&mvL('reach').childNodes.length===L.length)return;const prev=RCH_KEY;RCH_KEY=key;const g=mvL('reach');g.replaceChildren();
+  const old=new Set(prev.split('|')),seen={};
+  L.forEach((r,q)=>{const [f,t,p]=r,col=p===1?'#ff8a3d':'#5fb2ff',rc=p===1?'#ff2d3d':'#5fb2ff',[x1,y1]=mvC(f),[x2,y2]=mvC(t),d=Math.hypot(x2-x1,y2-y1),ux=(x2-x1)/d,uy=(y2-y1)/d;
+    const ax=x1+ux*36,ay=y1+uy*36,bx=x2-ux*14,by=y2-uy*14,a=Math.atan2(by-ay,bx-ax),hl=30,fresh=!old.has(r.join('.'));
+    const gr=mvEl('g',{class:'rch'+(fresh?' in':''),style:'--d:'+(q*60)+'ms',filter:'url(#rchGlow)'});
+    gr.append(mvEl('line',{x1:ax,y1:ay,x2:bx-Math.cos(a)*hl*.8,y2:by-Math.sin(a)*hl*.8,stroke:col,'stroke-width':10,'stroke-linecap':'round'}),
+      mvEl('path',{d:`M${bx} ${by}L${bx-Math.cos(a-.45)*hl} ${by-Math.sin(a-.45)*hl}L${bx-Math.cos(a+.45)*hl} ${by-Math.sin(a+.45)*hl}Z`,fill:col}));
+    g.append(gr);
+    if(!seen[t]){seen[t]=1;const s=46,l=16,rt=mvEl('g',{class:'rct',fill:'none',stroke:rc,'stroke-width':4.5,filter:'url(#rchGlow)'});
+      rt.append(mvEl('rect',{x:x2-s,y:y2-s,width:2*s,height:2*s,fill:rc,'fill-opacity':.16,stroke:'none'}));
+      for(const[sx,sy]of[[-1,-1],[1,-1],[1,1],[-1,1]])rt.append(mvEl('path',{d:`M${x2+sx*s} ${y2+sy*(s-l)}V${y2+sy*s}H${x2+sx*(s-l)}`}));g.prepend(rt)}})}
 function mvPre(){const P=MV.prev,cur={S,ply:S.ply||0,b:S.b.slice(),last:S.last};MV.prev=cur;
   if(P&&P.S!==S){const e=$('mvEnd');if(e)e.hidden=true}
   if(!P||P.S!==S||cur.ply!==P.ply+1||!S.last){if(!P||P.S!==S||cur.ply!==P.ply){mvStop();MV.badge={}}return}
