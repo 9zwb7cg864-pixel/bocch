@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=33"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=34"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -32,7 +32,7 @@
 <meta name="apple-mobile-web-app-title" content="bocch">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&family=Shippori+Mincho+B1:wght@500;700;800&family=Yuji+Boku&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,600&family=Shippori+Mincho+B1:wght@500;700;800&family=Yuji+Boku&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Outfit:wght@600;700;800&display=swap">
 <link rel="prefetch" href="guide.html">
 <style>
 /* 墨と金箔：和紙の墨色に金の細線、焦げ茶の木目の盤、那智黒と蛤の石 */
@@ -918,12 +918,138 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
 .players .cg-bust{width:54px;height:54px;flex:none;margin:-16px 4px -10px 0;object-fit:contain;-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent);filter:drop-shadow(0 3px 5px rgba(0,0,0,.6))}
 .players>span{display:inline-flex;align-items:center}
 </style>
+<style id="thB">/* 見た目B（夜・淡い青・碁石）：古い金と木目の見た目を上書きする */
+:root{--bg:#121826;--panel:#1c2436;--fg:#eef2fa;--sub:#9aa6c0;--mute:#6d7894;
+ --gold:#a9cdf7;--gold-hi:#cfe3fb;--gold-soft:rgba(169,205,247,.28);--gold-line:rgba(169,205,247,.18);
+ --line:rgba(200,215,240,.12);--soft:#1c2436;--wood:#8f9bb6;--wood-line:transparent;--wood-edge:transparent;
+ --ai:#a9cdf7;--dot:rgba(169,205,247,.9);--win:#9fd8b0;--lose:#ff9a8b;
+ --b-p1:#1c2436;--b-p2:#252f45;--b-acc:#a9cdf7;--b-acc2:#cfe3fb;--b-ink:#0f1a30;--sqL:#c9d2e3;--sqD:#8f9bb6;
+ --f-latin:"Outfit","Zen Kaku Gothic New",sans-serif;--f-disp:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;--f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif}
+html,body{background:var(--bg)!important}body{background-image:none!important;font-weight:500}
+h1{font-family:"Outfit",sans-serif;font-style:normal;font-weight:800;letter-spacing:-.01em}
+.topbar h2,.panel h2,.status,.about h2{letter-spacing:.04em;font-weight:800}
+/* ボタン */
+button{border-radius:12px;border-color:rgba(200,215,240,.16);letter-spacing:.04em}
+.scr:not([data-scr=home]) button.big,.endb,.mvbtn{background:var(--b-p2)!important;box-shadow:none!important;border:0!important;border-radius:14px!important;color:var(--fg)!important;font-family:var(--f-disp)!important;font-weight:800!important;letter-spacing:.04em!important}
+button.primary,.scr:not([data-scr=home]) button.big.primary,.endb.main,.mvbtn.main{background:linear-gradient(180deg,var(--b-acc2),var(--b-acc))!important;color:var(--b-ink)!important;border:0!important;box-shadow:none!important;border-radius:999px!important;font-weight:900!important}
+.endb.main::before,.endb.main::after{display:none!important}
+.endb{border-radius:999px!important}
+button.back{color:var(--fg)}
+input[type=checkbox]{accent-color:var(--b-acc)}
+/* 盤：平らな2色、角丸 */
+.board{background:transparent!important;box-shadow:none!important;border-radius:16px}
+.grid{background:var(--sqD)!important;background-image:none!important;box-shadow:none!important;border:0!important;border-radius:12px;overflow:hidden}
+.grid .cell,.cell{border:0!important;background:var(--sqD)}
+.grid>.cell:nth-child(1),.grid>.cell:nth-child(3),.grid>.cell:nth-child(5),.grid>.cell:nth-child(8),.grid>.cell:nth-child(10),.grid>.cell:nth-child(12),.grid>.cell:nth-child(13),.grid>.cell:nth-child(15),.grid>.cell:nth-child(17),.grid>.cell:nth-child(20),.grid>.cell:nth-child(22),.grid>.cell:nth-child(24),.grid>.cell:nth-child(25),.grid>.cell:nth-child(27),.grid>.cell:nth-child(29),.grid>.cell:nth-child(32),.grid>.cell:nth-child(34),.grid>.cell:nth-child(36){background:var(--sqL)}
+.cell.goal{background-image:none}
+.grid .cell:not(.goal):not(.last):hover{background:inherit}
+.cell.lastTo,.cell.lastFrom{box-shadow:inset 0 0 0 100vmax rgba(169,205,247,.55)}
+.cell.lastTo::before,.cell.lastFrom::before{display:none}
+.lab{color:rgba(170,184,212,.75)}
+/* 碁石（縁なし） */
+.stone{font-family:"Outfit",var(--f-disp);font-weight:700;box-shadow:0 3px 4px rgba(0,0,0,.35),0 1px 1px rgba(0,0,0,.3)}
+.stone.b{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);color:#f4f4f4;text-shadow:0 1px 1px rgba(0,0,0,.6)}
+.stone.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%),repeating-linear-gradient(-28deg,transparent 0 5px,rgba(150,140,120,.06) 5px 6px);color:#2a2c33}
+.stone.zero{opacity:.6}.stone.zero::before{background:transparent}
+/* ホームまわり */
+:root{--f-chic:"Outfit","Zen Kaku Gothic New",sans-serif;--chic:#eef2fa}
+.hm-logo-t{font-family:"Outfit",sans-serif!important;font-weight:800!important;letter-spacing:-.01em!important;font-size:56px!important;filter:none!important}
+.hm .hm-tag{color:var(--sub);letter-spacing:.06em}
+.hm-fimg b,.pm .hm-fimg b{font-family:var(--f-disp)!important;font-weight:900!important;letter-spacing:.04em!important;filter:none!important}
+.hm-card,.hm-sub,.hm-daily,.hm-menu{background:var(--b-p1)!important;border-radius:18px!important;box-shadow:none!important}
+.hm .hm-play{background:linear-gradient(180deg,var(--b-acc2),var(--b-acc))!important;box-shadow:none!important;border-radius:999px!important;color:var(--b-ink)!important}
+.hm .hm-play .hm-fimg b{-webkit-text-fill-color:var(--b-ink)!important;color:var(--b-ink)!important;font-size:30px!important}
+.hm .hm-play .hm-go svg{fill:var(--b-ink)}.hm .hm-play .hm-go{border-color:rgba(15,26,48,.35)!important;color:var(--b-ink)}
+.hm-leaf{display:none}
+.pm button,.pm button.pm-r{background:var(--b-p1)!important;box-shadow:none!important;border-radius:18px!important}.pm-r .pm-d,.hm-play small{color:var(--sub)!important}
+.hm-hg>*:nth-child(1){background:var(--sqL)}.hm-hg>*:nth-child(3){background:var(--sqL)}.hm-hg>*:nth-child(5){background:var(--sqL)}.hm-hg>*:nth-child(8){background:var(--sqL)}.hm-hg>*:nth-child(10){background:var(--sqL)}.hm-hg>*:nth-child(12){background:var(--sqL)}.hm-hg>*:nth-child(13){background:var(--sqL)}.hm-hg>*:nth-child(15){background:var(--sqL)}.hm-hg>*:nth-child(17){background:var(--sqL)}.hm-hg>*:nth-child(20){background:var(--sqL)}.hm-hg>*:nth-child(22){background:var(--sqL)}.hm-hg>*:nth-child(24){background:var(--sqL)}.hm-hg>*:nth-child(25){background:var(--sqL)}.hm-hg>*:nth-child(27){background:var(--sqL)}.hm-hg>*:nth-child(29){background:var(--sqL)}.hm-hg>*:nth-child(32){background:var(--sqL)}.hm-hg>*:nth-child(34){background:var(--sqL)}.hm-hg>*:nth-child(36){background:var(--sqL)}
+.home-rules{background:var(--b-p1)!important;border:0!important;border-radius:18px}
+.hm-hb{background:transparent!important;box-shadow:0 30px 50px rgba(0,0,0,.5)!important;border-radius:10px;overflow:hidden}
+.hm-hg{background:var(--sqD)!important;background-image:none!important;border:0!important;inset:0!important}
+.hm .hm-menu button{color:var(--b-acc)}
+.seg{border-radius:999px!important;border:0!important;background:var(--b-p1)!important;padding:4px;gap:4px}
+.seg button{border:0!important;border-radius:999px!important}
+.seg button[aria-pressed="true"]{background:var(--b-p2)!important;color:#fff!important}
+.bd-it.on,.ln-list button.on{border-color:var(--b-acc);background:rgba(169,205,247,.10)}
+.cs-dots i{border-color:var(--b-acc)}.cs-dots i.on{background:var(--b-acc)}
+/* 対局画面：操作は下に固定、表示設定は「設定」の中、対局者は盤の上下の欄 */
+:root{--i-set:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.49.49 0 0 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6a3.6 3.6 0 1 1 0-7.2 3.6 3.6 0 0 1 0 7.2z' fill='black'/%3E%3C/svg%3E")}
+.i-set::before{content:"";display:inline-block;width:1.25em;height:1.25em;background:currentColor;-webkit-mask:var(--i-set) no-repeat center/contain;mask:var(--i-set) no-repeat center/contain}
+.scr[data-scr=game]:not(.duo){padding-bottom:104px}
+.scr[data-scr=game]:not(.duo) #localCtl:not([hidden]),.scr[data-scr=game]:not(.duo) #netCtl:not([hidden]){position:fixed;left:0;right:0;bottom:0;z-index:30;margin:0 auto;max-width:520px;padding:12px 12px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(18,24,38,0),var(--bg) 26%);display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:10px}
+.scr[data-scr=game] #localCtl>button,.scr[data-scr=game] #netCtl>button:not([hidden]){display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:58px;padding:6px 4px;border:0;border-radius:16px;background:var(--b-p2);color:var(--fg);font-size:12px;font-weight:800;letter-spacing:.02em;line-height:1.2}
+.scr[data-scr=game] #localCtl>button::before,.scr[data-scr=game] #netCtl>button::before{margin:0!important;width:1.35em!important;height:1.35em!important}
+.scr[data-scr=game] #netCtl>#rematch{background:linear-gradient(180deg,var(--b-acc2),var(--b-acc));color:var(--b-ink)}
+.scr[data-scr=game] #netCtl>#resign{color:#ffb4a8}
+.scr[data-scr=game] .gset[aria-expanded=true]{background:var(--b-acc);color:var(--b-ink)}
+.scr[data-scr=game] #gChks{display:none}
+.scr[data-scr=game] #gChks.open{display:flex;position:fixed;left:12px;right:12px;bottom:calc(92px + env(safe-area-inset-bottom));max-width:496px;margin:0 auto;z-index:31;background:var(--b-p2);border-radius:18px;padding:16px 14px;gap:14px 18px;box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.scr[data-scr=game] #gChks.open .chk{color:var(--fg);font-size:14px}
+.players{width:min(100%,calc(100dvh - 330px));min-width:min(100%,260px);margin:4px auto 8px;min-height:46px;font-size:15px;color:var(--sub);justify-content:space-between!important;padding:0 2px}
+.players.bot{margin:8px auto 4px}
+.players>span{gap:8px}
+.players .dot{width:30px!important;height:30px!important;margin-right:4px!important;flex:none}
+.players b{font-weight:800;color:var(--fg)}
+.players .r{font-family:var(--f-disp);color:var(--sub);font-size:13px;font-weight:700}
+.players .you{display:none}
+.players .pl-turn{margin-left:auto;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:800;background:var(--b-p1);color:var(--mute)}
+.players.on .pl-turn{background:linear-gradient(180deg,var(--b-acc2),var(--b-acc));color:var(--b-ink)}
+/* 終局カード */
+.mvend.bcard{background:rgba(8,12,22,.62)!important;backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;padding:20px}
+.mvend.bcard[hidden]{display:none!important}
+.mvcard{width:min(100%,340px);background:#151c2c;border-radius:24px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.55);animation:mvCardIn .35s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes mvCardIn{from{transform:translateY(16px) scale(.96);opacity:0}to{transform:none;opacity:1}}
+.mvhd{background:linear-gradient(180deg,#25304a,#1c2436);text-align:center;padding:22px 12px 16px}
+.mvhd h3{margin:0;font-size:28px;font-weight:900;color:var(--fg);letter-spacing:.02em}
+.mvend.win .mvhd h3{color:var(--b-acc2)}.mvend.lose .mvhd h3{color:#c9d2e3}
+.mvhd p{margin:6px 0 0;color:var(--sub);font-size:13px;font-weight:700}
+.mvrate{margin:14px 18px 0;padding:10px 12px;border-radius:12px;background:var(--b-p1);color:var(--fg);font-size:13px;font-weight:700;text-align:center}
+.mvacts{padding:16px 18px 18px;display:grid;gap:10px}
+.mvtwo{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:10px}
+.mvcard .mvbtn{min-height:50px;border-radius:999px!important;font-size:15px}
+.mvcard .mvbtn.main{min-height:58px;font-size:20px}
+.mvcard .mvbtn.ghost{background:transparent!important;color:var(--sub)!important;min-height:38px;font-size:13px}
+/* ホーム（B） */
+.hm-hb{display:none!important}
+.hm-head{margin-bottom:6px}
+.hm-box{margin-top:6px;padding:14px;border-radius:22px;background:radial-gradient(120% 100% at 0% 0%,#2d3a5c,#1c2436)}
+.hm-box .hm-card{margin:0!important;background:transparent!important;padding:2px 2px 12px!important}
+.hm-box .hm-play{margin-top:4px!important;padding:12px 18px!important}
+.hm-box .hm-play .hm-fimg{margin-top:0!important}
+.hm-box .hm-resume{margin:6px 0 0}
+.hm-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+.hm .hm-t{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-height:112px;padding:12px 10px;border:0!important;border-radius:18px!important;background:var(--b-p1)!important;color:var(--fg);text-align:left;letter-spacing:0}
+.hm-t svg{width:30px;height:30px;padding:6px;border-radius:10px;background:var(--b-p2);fill:none;stroke:var(--b-acc);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;box-sizing:content-box}
+.hm-t b{font-size:13px;font-weight:800;margin-top:auto;letter-spacing:-.01em;line-height:1.25}.hm-t small{font-size:11px;color:var(--sub);line-height:1.3;min-height:2.6em}
+/* CPUを選ぶ（B）：キャラの絵ができるまでは石のマーク */
+.cpu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.scr[data-scr=solo] .cpu-c{display:flex!important;flex-direction:column;align-items:flex-start;justify-content:flex-end;gap:4px;min-height:132px!important;padding:14px!important;border-radius:20px!important;text-align:left;background:var(--b-p1)!important}
+.cpu-c b{font-size:16px;font-weight:900}.cpu-c small{font-size:12px;color:var(--sub);font-weight:700}
+.cpu-st{width:44px;height:44px;border-radius:50%;margin-bottom:auto;background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.cpu-st.l1{box-shadow:0 0 0 3px #4f9a8a,0 3px 4px rgba(0,0,0,.35)}.cpu-st.l2{box-shadow:0 0 0 3px #6f9bd6,0 3px 4px rgba(0,0,0,.35)}
+.cpu-st.l3{box-shadow:0 0 0 3px #a98be0,0 3px 4px rgba(0,0,0,.35)}.cpu-st.l4{box-shadow:0 0 0 3px #e38fa8,0 0 16px 2px rgba(227,143,168,.45)}
+.scr[data-scr=solo] .stack>button.big:not(.cpu-c){min-height:50px!important;font-size:14px!important}
+.scr[data-scr=solo] .stack{gap:10px}
+/* 振り返りのまとめ */
+.rev-sum{margin:6px 0 12px}
+.rs-hd{padding:14px 16px;border-radius:20px 20px 0 0;background:radial-gradient(120% 100% at 0% 0%,#2d3a5c,#1c2436)}
+.rs-hd small{display:block;color:var(--sub);font-size:12px;font-weight:700}.rs-hd b{display:block;font-size:20px;font-weight:900;margin-top:2px}
+.rs-list{display:grid;gap:2px;background:#151c2c;border-radius:0 0 20px 20px;overflow:hidden;padding:4px}
+.rs-it{display:flex;align-items:center;gap:12px;width:100%;min-height:0;padding:10px 12px;border:0!important;border-radius:14px!important;background:transparent!important;text-align:left;letter-spacing:0}
+.rs-it:hover{background:var(--b-p1)!important}
+.rs-n{flex:none;width:40px;height:40px;border-radius:12px;background:var(--b-p2);display:flex;align-items:center;justify-content:center;font-family:"Outfit",sans-serif;font-weight:800;font-size:16px}
+.rs-it.fin .rs-n{color:var(--b-acc)}.rs-it.bad .rs-n{color:#ff9a8b}.rs-it.iso .rs-n{color:#c9d2e3}
+.rs-t b{display:block;font-size:14px;font-weight:800}.rs-t small{font-size:12px;color:var(--sub)}
+.rs-go{margin-left:auto;color:var(--b-acc);font-size:13px;font-weight:800}.rs-go::after{content:" ›"}
+.rev-nav button,#watchNav button{border:0!important;border-radius:16px!important;background:var(--b-p2)!important;color:var(--fg)}
+.rev-cpu button,.rshare{border-radius:999px!important}
+</style>
 </head>
 <body>
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.37</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.38</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -934,6 +1060,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
     </div>
     <button class="hm-chp" id="hmChamp" data-go="rank" type="button" hidden><svg class="cr" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18 L5 8 L9.5 12 L12 5 L14.5 12 L19 8 L21 18 Z" fill="#e9c46a" stroke="#8a6a3a" stroke-width="1" stroke-linejoin="round"/><rect x="3" y="18" width="18" height="2.4" rx="1" fill="#c9a24e"/></svg><small id="hmChampM"></small><b id="hmChampN" class="no-i18n"></b><span class="hm-cst"><span class="stone b" id="hmChampS"></span></span><em id="hmChampL"></em><svg class="chv" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
 
+    <div class="hm-box">
     <button class="hm-card" id="meBtn" data-go="profile" type="button" aria-label="アカウント・段級・棋風">
       <span class="hm-me" id="meTop">
         <span class="hm-rk"><span class="stone b" id="meStone"></span></span>
@@ -954,6 +1081,12 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
       <p class="online" id="onlineNow" hidden><i></i><span></span></p>
       <span class="hm-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z"/></svg></span>
     </button>
+    </div>
+    <div class="hm-tiles">
+      <button class="hm-t" id="hmTRand" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><b>ランダム対戦</b><small>自動で相手を探す</small></button>
+      <button class="hm-t" data-go="solo" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="7" width="14" height="11" rx="3"/><path d="M12 3v4M9 12h.01M15 12h.01M9 15.5h6"/></svg><b>CPUと対局</b><small>やさしい〜最強</small></button>
+      <button class="hm-t" data-go="friend" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><path d="M17 8v6M14 11h6"/></svg><b>友だちと</b><small>リンクで招待</small></button>
+    </div>
 
     <button class="hm-seek" id="seekNow" type="button" hidden><i class="hm-sd"></i><span class="stone b" id="seekSt"></span><span class="hm-st"><span class="hm-sn"><b id="seekNm"></b><span id="seekLv"></span></span><span>が対戦相手を探しています</span></span><span class="hm-sg">対局する</span></button>
 
@@ -1124,6 +1257,7 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
   <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>感想戦</h2><span class="rbtns"><button class="back rshare" id="revMv" hidden>動画を作る</button><button class="back rshare" id="revImg" hidden><span class="i-ext">画像</span></button><button class="back rshare" id="revShare" hidden><span class="i-ext">共有</span></button></span></div>
   <p class="rev-head" id="revHead"></p>
   <p class="rev-share-msg" id="revShareMsg" hidden></p>
+  <div class="rev-sum" id="revSum" hidden></div>
   <div class="boardwrap rev-board"><div class="board" id="rboard"><div class="lab lab-top" id="rlabTop" aria-hidden="true"></div><div class="lab lab-left" id="rlabLeft" aria-hidden="true"></div><div class="grid" id="rgrid" aria-label="感想戦の盤"></div></div></div>
   <div class="row rev-nav">
     <button id="rPrev" class="i-only i-prev" aria-label="1手戻る"></button><span class="rev-ply" id="revPly"></span><button id="rNext" class="i-only i-next" aria-label="1手進む"></button>
@@ -1230,10 +1364,12 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
     </div>
   </div>
   <div class="stack" id="modeSeg">
-    <button class="big" data-mode="1">CPU やさしい</button>
-    <button class="big" data-mode="2">CPU ふつう</button>
-    <button class="big" data-mode="3">CPU つよい</button>
-    <button class="big" data-mode="4">CPU 最強</button>
+    <div class="cpu-grid">
+    <button class="big cpu-c" data-mode="1"><i class="cpu-st l1"></i><b>CPU やさしい</b><small class="cpu-lv" data-lv="1"></small></button>
+    <button class="big cpu-c" data-mode="2"><i class="cpu-st l2"></i><b>CPU ふつう</b><small class="cpu-lv" data-lv="2"></small></button>
+    <button class="big cpu-c" data-mode="3"><i class="cpu-st l3"></i><b>CPU つよい</b><small class="cpu-lv" data-lv="3"></small></button>
+    <button class="big cpu-c" data-mode="4"><i class="cpu-st l4"></i><b>CPU 最強</b><small class="cpu-lv" data-lv="4"></small></button>
+    </div>
     <button class="big" data-mode="0">1台で2人</button>
     <button class="big" id="studyBtn">研究（AI同士・評価値つき）</button>
   </div>
@@ -1306,8 +1442,9 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
     <button id="wPrev" class="i-only i-prev" aria-label="1手戻る"></button><span class="rev-ply" id="wPly"></span><button id="wNext" class="i-only i-next" aria-label="1手進む"></button><button id="wLive" class="w-live">最新へ</button>
   </div>
   <div class="row" id="localCtl">
-    <button id="undo">1手戻す</button>
-    <button id="reset" class="primary">最初から</button>
+    <button id="undo" class="i-undo">1手戻す</button>
+    <button id="reset" class="i-reset">最初から</button>
+    <button type="button" class="gset i-set" aria-expanded="false">設定</button>
   </div>
   <div class="row" id="netCtl" hidden>
     <button id="resign" class="danger">投了する</button>
@@ -1315,9 +1452,10 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-play .hm-fimg img{height:66px}html:is
     <button id="reseek" hidden>相手を探し直す</button>
     <button id="leave" hidden>対戦をやめる</button>
     <button id="frOpp" class="i-plus" hidden>フレンド申請</button>
+    <button type="button" class="gset i-set" aria-expanded="false">設定</button>
   </div>
   <div class="endrow" id="reviewRow" hidden><button id="reviewNow" class="endb main"><span>感想戦で振り返る</span></button><button id="xNow" class="endb"><span>Xで共有</span></button><button id="mvNow" class="endb" hidden><span>動画を作る</span></button></div>
-  <div class="row chks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label><label class="chk"><input type="checkbox" id="bgmOn"> BGM</label></div>
+  <div class="row chks" id="gChks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label><label class="chk"><input type="checkbox" id="bgmOn"> BGM</label></div>
   <div class="ad-slot ad-over" data-ad="over" hidden aria-label="広告"></div>
 </section>
 
@@ -2496,7 +2634,7 @@ $('showLab').addEventListener('change',()=>{try{localStorage.setItem('bocch-lab'
 
 
 render();
-$('randomBtn').addEventListener('click',startMatch);
+$('randomBtn').addEventListener('click',startMatch);{const t=$('hmTRand');if(t)t.addEventListener('click',()=>$('randomBtn').click())}
 $('reseek').addEventListener('click',()=>startMatch());
 addEventListener('pagehide',()=>{if(MATCH.on&&MATCH.mine){try{fetch(LOBBY,{method:'POST',keepalive:true,body:JSON.stringify({t:'cancel',room:MATCH.mine,from:MATCH.id})})}catch(e){}}});
 $('matchCancel').addEventListener('click',()=>{cancelMatch();show('home')});
@@ -2681,7 +2819,7 @@ function fxEnd(win,why,me){const b=S.b.slice(),cell=S.last?S.last[1]:-1;fxQueue(
 function fxEnd0(win,why,me,b,cell){if(!$('showJos').checked||CUR!=='game')return false;
   /* 勝ち負けの画面（試作どおり）：勝ちは金箔と筆の「勝」、負けは墨のしずくと薄墨の「負」 */
   let e=$('mvEnd');if(!e){e=document.createElement('div');e.id='mvEnd';e.className='mvend';e.setAttribute('role','dialog');e.setAttribute('aria-modal','true');document.body.appendChild(e);
-    e.addEventListener('click',ev=>{const a=ev.target.closest('[data-a]');if(!a)return;e.hidden=true;if(a.dataset.a==='again'){const r=S.mode==='net'?$('rematch'):$('reset');if(r&&!r.hidden)r.click()}})}
+    e.addEventListener('click',ev=>{const a=ev.target.closest('[data-a]');if(!a)return;e.hidden=true;const k=a.dataset.a;if(k==='again'){const r=S.mode==='net'?$('rematch'):$('reset');if(r&&!r.hidden)r.click()}else if(k==='rev')$('reviewNow').click();else if(k==='mv')$('mvNow').click();else if(k==='x')$('xNow').click()})}
   const lose=!!(me&&win&&me!==win),mine=me&&me===win,cn=win===1?'黒':'白';let h='';
   /* 大きな字は言語ごとの筆文字で */
   const draw=!win,LG=window.BOCCH_LANG||'ja',RK3=draw?'draw':lose?'lose':'win';
@@ -2692,11 +2830,17 @@ function fxEnd0(win,why,me,b,cell){if(!$('showJos').checked||CUR!=='game')return
   if(!lose&&!draw)for(let k=0;k<28;k++){const z=4+(k*7)%9;h+='<span class="mvflake" aria-hidden="true" style="left:'+((k*37+11)%100)+'%;top:'+((k*53+7)%80)+'%;width:'+z+'px;height:'+Math.round(z*.7)+'px;transform:rotate('+(k*37%180)+'deg);animation-delay:'+((k*13)%20)/10+'s"></span>'}
   else if(lose)for(let k=0;k<8;k++)h+='<span class="mvdrop" aria-hidden="true" style="left:'+(10+(k*23)%80)+'%;top:'+(15+(k*29)%60)+'%;height:'+(10+(k*5)%10)+'px;animation-delay:'+k*.6+'s"></span>';
   const canAgain=S.mode!=='net'||(!NET.watch&&colorOf(NET.me)>0);
-  h+='<div class="mvk"'+bigSt+'>'+bigT+'</div><div class="mvwho">'+(draw?'':mine?'あなたの勝ち':lose?'あなたの負け':cn+'の勝ち')+'</div><div class="mvwhy">'+esc0(why)+'　'+(S.ply||0)+'手</div><div class="mvrow">';
-  h+=lose?'<button class="mvbtn solid" type="button" data-a="look">盤面を振り返る</button>'+(canAgain?'<button class="mvbtn" type="button" data-a="again">もう一局</button>':'')
-         :(canAgain?'<button class="mvbtn solid" type="button" data-a="again">もう一局</button>':'')+'<button class="mvbtn'+(canAgain?'':' solid')+'" type="button" data-a="look">盤面を見る</button>';
-  e.className='mvend'+(lose?' lose':'')+(draw?' draw':'')+(!lose&&!draw?' win':'');e.innerHTML=h+'</div>';e.hidden=false;try{e.querySelector('.mvbtn').focus({preventScroll:true})}catch(x){}
+  /* 見た目B：盤の上に出すカード */
+  const ttl=draw?'引き分け':mine?'あなたの勝ち！':lose?'あなたの負け':cn+'の勝ち',canRev=!!(S.log&&S.log.length)&&!S.fromPos,canMv=canRev&&typeof mvOK==='function'&&mvOK(S.log);
+  h='<div class="mvcard"><div class="mvhd"><h3>'+ttl+'</h3><p>'+esc0(why)+'　'+(S.ply||0)+'手</p></div>'+(S.rateMsg?'<p class="mvrate">'+esc0(S.rateMsg)+'</p>':'')+'<div class="mvacts">';
+  if(canAgain)h+='<button class="mvbtn main" type="button" data-a="again">もう一局</button>';
+  if(canRev||canMv)h+='<div class="mvtwo">'+(canRev?'<button class="mvbtn" type="button" data-a="rev">振り返る</button>':'')+(canMv?'<button class="mvbtn" type="button" data-a="mv">動画を作る</button>':'')+'</div>';
+  h+='<div class="mvtwo"><button class="mvbtn ghost" type="button" data-a="look">盤面を見る</button>'+(canRev?'<button class="mvbtn ghost" type="button" data-a="x">Xで共有</button>':'')+'</div></div></div>';
+  e.className='mvend bcard'+(lose?' lose':'')+(draw?' draw':'')+(!lose&&!draw?' win':'');e.innerHTML=h;e.hidden=false;try{e.querySelector('.mvbtn').focus({preventScroll:true})}catch(x){}
   return false}
+/* 見た目B：設定ボタンで表示設定を開閉、対局者の欄に手番の印 */
+document.addEventListener('click',e=>{const g=e.target.closest('.gset');const box=$('gChks');if(!box)return;if(g){const op=!box.classList.contains('open');box.classList.toggle('open',op);document.querySelectorAll('.gset').forEach(b=>b.setAttribute('aria-expanded',op?'true':'false'));return}
+  if(box.classList.contains('open')&&!e.target.closest('#gChks')){box.classList.remove('open');document.querySelectorAll('.gset').forEach(b=>b.setAttribute('aria-expanded','false'))}});
 function esc0(t){return String(t||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function fxMe(){if(S.mode==='net')return NET.ai?0:(colorOf(NET.me)||0);if(S.mode===0||S.study)return 0;return hcOf()}
 function fxCheck(){if(!S||S.study)return;const live=typeof VIEW==='undefined'||VIEW.i==null;const gid=(S.mode==='net'?'n'+(NET.code||'')+'-'+(NET.game||''):S.gid||(S._fx||(S._fx=Math.random().toString(36).slice(2))))+':'+S.mode;
@@ -2845,7 +2989,26 @@ function pvAuto(on){const v=REV.pv;if(!v)return;clearInterval(REV.pvT);v.auto=on
   if(on){if(v.k>=v.line.length)v.k=0;REV.pvT=setInterval(()=>{if(!REV.pv||CUR!=='review'){clearInterval(REV.pvT);return}pvStep(1)},900)}}
 function pvClose(){clearInterval(REV.pvT);REV.pv=null;REV.sel=-1;renderReview()}
 function fmtMove(m,n){return (n+1)+'. '+(n%2?'白':'黒')+' '+sqName(m[0])+'→'+sqName(m[1])}
-function renderReview(){const g=REV.g;if(!g)return;const i=REV.i,flip=g.me===2,n=g.log.length,PV=REV.pv;
+/* 振り返りのまとめ（見た目B）：決め手・ぼっちにした手・悪手を、手数つきで出す。「見る」でその手へ */
+function revSumRender(){const box=$('revSum');const g=REV.g;if(!box||!g)return;const n=g.log.length,me=g.me||0,P=REV.pos;
+  const nb=(b,i)=>{const r=i/6|0,c=i%6;let k=0;for(let dr=-1;dr<=1;dr++)for(let dc=-1;dc<=1;dc++){if(!dr&&!dc)continue;const R=r+dr,C=c+dc;if(R>=0&&R<6&&C>=0&&C<6&&b[R*6+C])k++}return k};
+  const iso=(b,c)=>{let k=0;for(let i=0;i<36;i++)if(b[i]===c&&(i/6|0)!==(c===1?0:5)&&nb(b,i)===0)k++;return k};
+  const W=g.win||0,items=[];
+  // 決め手：勝った側の手で、そこから最後まで形勢が9割以上のまま続いた最初の手（解析が足りない間は、最後の1つ前の自分の手）
+  if(W){let fin=-1;for(let k=0;k<n;k++){if(P[k].turn!==W)continue;let ok=true,any=false;for(let j=k+1;j<=n;j++){const v=blackPct(j);if(v==null){ok=false;break}any=true;if((W===1?v:1-v)<.9){ok=false;break}}if(ok&&any){fin=k;break}}
+    if(fin<0&&n>=3&&P[n-3]&&P[n-3].turn===W)fin=n-3;if(fin>=0)items.push({k:fin,t:'決め手',d:W===me||!me?'ここで勝ちが決まった':'相手の勝ちが決まった手',c:'fin'})}
+  // ぼっちにした：自分（観戦なら勝った側）の手で、相手の動けない石が増えた最初の手
+  const who=me||W;if(who){for(let k=0;k<n;k++){if(P[k].turn!==who)continue;if(iso(P[k+1].b,3-who)>iso(P[k].b,3-who)){items.push({k,t:'ぼっちにした',d:'相手の石を動けなくした',c:'iso'});break}}}
+  // 悪手：自分の手でいちばん形勢を落とした手
+  {let worst=null;for(let k=0;k<n;k++){if(me&&P[k].turn!==me)continue;const m=markOf(k);if(m&&m.k==='bad'&&(!worst||m.loss>worst.loss))worst={k,loss:m.loss}}if(worst)items.push({k:worst.k,t:'悪手',d:'形勢が大きく傾いた手',c:'bad'})}
+  items.sort((a,b)=>a.k-b.k);
+  const res=!W?'引き分け':me?(W===me?'勝ち':'負け'):(W===1?'黒の勝ち':'白の勝ち');
+  const fi=items.find(x=>x.c==='fin');
+  let h='<div class="rs-hd"><small>この対局のハイライト</small><b>'+(fi&&W&&me&&W===me?'決め手で勝ち':res)+'</b></div><div class="rs-list">';
+  for(const it of items)h+='<button type="button" class="rs-it '+it.c+'" data-k="'+(it.k+1)+'"><span class="rs-n">'+(it.k+1)+'</span><span class="rs-t"><b>'+it.t+'</b><small>'+it.d+'</small></span><span class="rs-go">見る</span></button>';
+  h+='</div>';if(box.dataset.h!==h){box.dataset.h=h;box.innerHTML=h}box.hidden=false}
+$('revSum')&&$('revSum').addEventListener('click',e=>{const b=e.target.closest('.rs-it');if(!b)return;setRev(+b.dataset.k);try{$('rboard').scrollIntoView({behavior:'smooth',block:'center'})}catch(x){}});
+function renderReview(){const g=REV.g;if(!g)return;try{revSumRender()}catch(e){}const i=REV.i,flip=g.me===2,n=g.log.length,PV=REV.pv;
   const p=PV?pvState():REV.pos[i];
   const last=PV?(PV.k>0?PV.line[PV.k-1]:(PV.base>0?g.log[PV.base-1]:null)):(i>0?g.log[i-1]:null),a=REV.an[i];
   const HN=PV?exHint():null;const nextM=PV?(HN&&HN.m?HN.m:null):($('rShowBest').checked&&a&&a.m&&i<n?a.m:null);
@@ -4680,6 +4843,10 @@ try{if(IB.app)statFirst('bocch-ib','ib');if(/[?&]from=ib\b/.test(location.search
 const COACH_PREVIEW=/[?&]coach=1\b/.test(location.search);
 if(COACH_PREVIEW){const go=()=>{try{COACH.on=true;COACH.mv=0;show('game');S=initState(1);S.hc=1;S.coach=true;KICK='';render()}catch(e){}};if(document.readyState==='complete')setTimeout(go,0);else addEventListener('load',go,{once:true})}
 else if(coachEligible()){const go=()=>{try{if(CUR==='home'&&coachEligible())coachStart()}catch(e){}};if(document.readyState==='complete')setTimeout(go,0);else addEventListener('load',go,{once:true})}
+try{document.querySelectorAll('.cpu-lv').forEach(e=>{e.textContent=lvName(lvOfRate(CPU_RATE[+e.dataset.lv]))})}catch(e){}
+{const _rT=render;render=function(){_rT();try{for(const id of ['plTop','plBot']){const el=$(id);if(!el||el.hidden)continue;const d=el.querySelector('.dot');const c=d?(d.classList.contains('b')?1:2):0;
+  let t=el.querySelector('.pl-turn');if(!t){t=document.createElement('span');t.className='pl-turn';el.appendChild(t)}
+  const on=!S.over&&c&&S.turn===c;el.classList.toggle('on',!!on);const me=id==='plBot';t.textContent=S.over?'':on?(me?'あなたの番':'考え中'):'';t.hidden=!t.textContent}}catch(e){}}}
 </script>
 </body>
 </html>
