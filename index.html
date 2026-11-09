@@ -1811,7 +1811,7 @@ p a,.hf-more,.about li a{text-decoration:underline;text-underline-offset:3px;tex
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.67</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.68</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -5749,10 +5749,9 @@ function hmBot(){const el=$('hmBot');if(!el)return;let my=0;try{my=myLv()}catch(
   const bd=document.createElement('button');bd.type='button';bd.className='hc-board';bd.setAttribute('aria-label',c.n+' と対局');bd.append(miniB(startBoard(),{c:c.c}));bd.onclick=()=>cpuStart(c.m);
   const sd=document.createElement('div');sd.className='hc-side';const hd=document.createElement('div');hd.className='hc-who';
   const nm=document.createElement('span');nm.className='hc-nm';const b=document.createElement('b');b.textContent=c.n;const sm=document.createElement('small');sm.textContent='Lv'+c.lv+'　'+c.t;nm.append(b,sm);hd.append(cpuAv(c),nm);
-  const bub=document.createElement('div');bub.className='bub hc-bub';bub.textContent=CPU_LINES[c.n][0];
   const go=document.createElement('button');go.type='button';go.className='hc-btn';go.textContent='対局する';go.onclick=()=>cpuStart(c.m);
   const more=document.createElement('button');more.type='button';more.className='hc-more';more.textContent='ほかの相手';more.onclick=()=>stOpen('cpu');
-  sd.append(hd,bub,go,more);el.append(bd,sd)}
+  sd.append(hd,go,more);el.append(bd,sd)}
 /* ---------- いま対局中：フレンドの対局を先に。ホームと観戦リストが見えている間だけ30秒ごとに読み出す（つなぎっぱなしにしない） ---------- */
 const HW={rooms:new Map(),peek:new Map(),fr:[],busy:false,at:0};
 async function hwLive(){const ms=await frRead('bocch-v1-live','3h');if(!ms)return;const R=new Map();
