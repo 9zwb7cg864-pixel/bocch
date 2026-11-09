@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=44"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=45"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -802,68 +802,8 @@ html:is([lang=en],[lang=es],[lang=de]) .hm-sub .hm-fimg img{height:36px}
 .pm .hm-fimg b{font-size:26px}
 .hm-play .hm-leaf,.pm-r .hm-leaf{display:none}
 .hm-play .hm-go svg,.pm .hm-go svg{width:26px;height:26px}
-.hm .cg-bg{position:absolute;right:2%;bottom:38px;width:44%;height:218px;z-index:2;padding:0;cursor:pointer;-webkit-mask-image:linear-gradient(#000 82%,transparent);mask-image:linear-gradient(#000 82%,transparent)}
-.cg-bg img{position:absolute;left:50%;bottom:0;transform:translateX(-50%);height:100%;width:auto;max-width:none}
-.cg-bg img:not([src]){display:none}
-.hm.cg-on .hm-hero{overflow:visible;padding-bottom:44px;min-height:232px}
-.hm.cg-on .hm-hero:after{display:none}
-.hm.cg-on .hm-hb{width:46%;margin:14px 0 0 3%}
-.hm.cg-on .hm-chp{margin-top:12px}
-.hm .cg-pull{position:absolute;right:calc(2% + 22% - 66px);bottom:0;z-index:3;width:132px;display:block;padding:8px 10px 7px;text-align:center}
-.cg-pull b,.cg-pull2 b{display:block;font-size:15px;line-height:1.2}
-.cg-pull small,.cg-pull2 small{display:block;font-size:10.5px;margin-top:2px;line-height:1.3}
-.cg-pull.dim,.cg-pull2.dim{opacity:.6}
-.cg-cnt{font-size:13px;text-align:right}
-.cg-stage{position:relative;height:min(62vh,460px);margin:6px 0 0;overflow:hidden}
-.cg-stage>img{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);height:calc(100% - 12px);width:auto;max-width:none;transition:opacity .25s}
-.cg-lv{position:absolute;left:10px;top:10px;display:flex;gap:4px;z-index:2}
-.cg-lv button{min-height:0;font-size:11px;padding:3px 9px}
-.cg-lv button:disabled{opacity:.35}
-.cg-nm{position:absolute;right:12px;top:8px;text-align:right;z-index:2}
-.cg-nm img{height:40px;display:block;margin-left:auto}
-.cg-nm b{display:block;font-size:28px;line-height:1.2}
-.cg-prog{margin-top:10px;padding:11px 13px}
-.cg-pr{display:flex;justify-content:space-between;font-size:13px}
-.cg-bar{height:8px;margin-top:8px;overflow:hidden}
-.cg-bar i{display:block;height:100%;width:0;transition:width .6s}
-.cg-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.cg-btns button{min-height:44px;white-space:nowrap;font-size:14px;padding:0 8px}
-.cg-inv{margin-top:10px}
-.cg-goods{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:6px}
-.cg-gd{position:relative;min-height:0;aspect-ratio:1;padding:4px}
-.cg-gd img{width:100%;height:100%;object-fit:contain}
-.cg-gd i{position:absolute;right:3px;bottom:2px;font-style:normal;font-size:11px}
-.cg-gd:disabled{opacity:.35}
-.cg-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:12px}
-.cg-cell{position:relative;min-height:0;padding:0;aspect-ratio:3/4;overflow:hidden}
-.cg-cell img{width:100%;height:100%;object-fit:cover;object-position:top}
-.cg-cell.home:after{content:"";position:absolute;right:3px;top:3px;width:7px;height:7px}
-.cg-pull2{display:block;width:100%;margin-top:12px;padding:12px;text-align:center}
-.cg-rates{margin-top:10px;font-size:12px}
-.cg-ov{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.cg-ov video{width:100%;height:100%;object-fit:cover;object-position:center}
 @media (min-aspect-ratio:3/4){
- .cg-ov video{width:auto;height:100%;max-width:100%;aspect-ratio:9/16;object-fit:contain}
 }
-.cg-skip{position:absolute;right:14px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:3;min-height:0;padding:7px 14px;font-size:13px}
-.cg-res{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;animation:cgIn .5s ease-out}
-@keyframes cgIn{from{opacity:0;filter:brightness(3)}to{opacity:1;filter:none}}
-.cg-rays{position:absolute;left:50%;top:56%;width:1000px;height:1000px;transform:translate(-50%,-50%);-webkit-mask-image:radial-gradient(closest-side,#000,transparent);mask-image:radial-gradient(closest-side,#000,transparent);animation:cgSpin 40s linear infinite}
-@keyframes cgSpin{to{transform:translate(-50%,-50%) rotate(360deg)}}
-.cg-rhead{position:relative;z-index:2;margin-top:calc(34px + env(safe-area-inset-top,0px));text-align:center}
-.cg-rhead img{height:86px;display:block;margin:0 auto}
-.cg-rhead b{display:block;font-size:32px;margin-top:2px}
-.cg-new{display:inline-block;margin-top:4px;font-size:12px;padding:2px 12px}
-.cg-rch{position:relative;z-index:1;flex:1;min-height:0;width:auto;max-width:96%;object-fit:contain;margin-top:-6px;animation:cgUp .7s cubic-bezier(.2,.8,.3,1)}
-@keyframes cgUp{from{transform:translateY(30px) scale(1.06);opacity:0}}
-.cg-rg{position:relative;z-index:1;margin:auto 0;width:min(64vw,250px);aspect-ratio:1;display:grid;place-items:center;animation:cgUp .6s cubic-bezier(.2,.8,.3,1)}
-.cg-rg img{width:84%}
-.cg-rpt{position:relative;z-index:2;margin:0 16px 8px;padding:10px 14px;font-size:14px;text-align:center}
-.cg-rbtns{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:8px;width:calc(100% - 32px);max-width:420px}
-.cg-rbtns button{min-height:46px;font-size:14px;white-space:nowrap;padding:0 8px}
-.cg-rbtns button:disabled{opacity:.5}
-.cg-rclose{position:relative;z-index:2;min-height:0;margin:8px 0 calc(14px + env(safe-area-inset-bottom,0px));border:0;font-size:13px}
-.players .cg-bust{width:54px;height:54px;flex:none;margin:-16px 4px -10px 0;object-fit:contain;-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent)}
 .players>span{display:inline-flex;align-items:center}
 </style>
 <style id="skin">
@@ -1049,7 +989,6 @@ details>summary{cursor:pointer;color:var(--sub)}
 .foot-links{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}.foot-links a{color:var(--sub)}
 .lang-row select{min-height:38px;padding:6px 10px;font-size:13px}
 /* キャラ（いまは出さない） */
-.cg-bg,.cg-pull{background:transparent}
 
 /* =====================================================================
    対局する／ひとりで遊ぶ／友だち／招待／マッチング
@@ -1700,20 +1639,102 @@ svg.rchfx{z-index:1}
 .pzl-more{width:100%;margin-top:10px;height:38px;font-size:13px;background:transparent;border:1px solid var(--line2);box-shadow:none;color:var(--sub)}
 .kf-opt{margin-top:14px}.kf-sw{font-weight:700;font-size:14.5px}.kf-opt .prof-note{margin:6px 0 0}
 
+/* トレーニング（コーチ）：デュオリンゴと同じ道とレッスン */
+:root{--tb:#5fa8f0;--tbD:#3d7fc4;--tok:#3ecf9b;--tokD:#23946d;--tg:#f0c24b;--tgD:#c2962a;--tgr:#3a3b3f;--tgrD:#2a2b2e;--tln:#3a3b3f}
+.tr-top{display:flex;align-items:center;gap:18px;padding:8px 4px 12px;border-bottom:2px solid var(--tln);font-family:var(--fn);font-weight:800;font-size:15px}
+.tr-top span{display:inline-flex;align-items:center;gap:5px}.tr-top svg{width:20px;height:20px}
+.tr-fl{color:#ff9f43}.tr-fl svg{fill:#ff9f43}.tr-dy{color:var(--tb)}.tr-dy svg{fill:var(--tb)}
+.tr-h{margin:0 0 0 auto;font-size:14px;font-weight:800;color:var(--sub)}
+.tr-links{display:flex;gap:8px;margin:12px 0 0}
+.tr-links button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:9px 11px;border-radius:12px;border:2px solid var(--tln);background:transparent;box-shadow:0 3px 0 var(--tln);color:var(--fg);text-align:left}
+.tr-links b{font-size:13px;font-weight:900;white-space:nowrap}.tr-links small{font-size:11.5px;color:var(--sub);font-family:var(--fn);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.tr-links button:active{transform:translateY(3px);box-shadow:none}
+.tr-diag{margin:12px 0 0;padding:10px 12px;border-radius:12px;border:2px solid var(--tln);font-size:13px;line-height:1.5;color:var(--sub);text-align:left}
+.tr-path{padding:4px 0 24px}
+.tr-unit{margin:18px 0 0;border-radius:14px;background:var(--tb);padding:14px 16px;display:flex;align-items:center;gap:10px;box-shadow:0 4px 0 var(--tbD);text-align:left;color:#0d2440}
+.tr-unit small{display:block;font-size:12.5px;font-weight:800;opacity:.85}.tr-unit b{font-size:18px;font-weight:900}
+.tr-unit.lock{background:var(--tgr);box-shadow:0 4px 0 var(--tgrD);color:var(--mute)}
+.tr-gb{margin-left:auto;flex:none;border:2px solid rgba(13,36,64,.35);border-radius:12px;padding:8px 10px;font-size:12px;font-weight:900;color:inherit;background:transparent;min-height:0}
+.tr-unit.lock .tr-gb{border-color:rgba(255,255,255,.14)}
+.tr-nodes{display:flex;flex-direction:column;align-items:center;gap:26px;padding:30px 0 6px}
+.tr-nd{position:relative;width:70px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0;min-height:0;border:0;transform:translateX(var(--x));font-family:var(--fn);font-size:26px;font-weight:900}
+.tr-nd svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+.tr-nd.done{background:var(--tg);box-shadow:0 7px 0 var(--tgD);color:#5a3f00}
+.tr-nd.cur{background:var(--tb);box-shadow:0 7px 0 var(--tbD);color:#fff;outline:6px solid var(--tln);outline-offset:6px}
+.tr-nd.lock{background:var(--tgr);box-shadow:0 7px 0 var(--tgrD);color:#6a6a6d}
+.tr-nd:not(.lock):active{transform:translateX(var(--x)) translateY(5px);box-shadow:0 2px 0 var(--tbD)}
+.tr-st{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 34% 28%,#5a5c5e,#232526 38%,#0c0d0e 72%);box-shadow:0 2px 3px rgba(0,0,0,.4)}
+.tr-tip{position:absolute;bottom:calc(100% + 18px);left:50%;transform:translateX(-50%);background:#2d2e31;border:2px solid var(--tln);border-radius:12px;padding:7px 13px;font-family:var(--f);font-weight:900;color:var(--tb);font-size:14px;white-space:nowrap;animation:trBob 1.6s ease-in-out infinite}
+.tr-tip::after{content:"";position:absolute;left:50%;bottom:-9px;width:14px;height:14px;background:#2d2e31;border-right:2px solid var(--tln);border-bottom:2px solid var(--tln);transform:translateX(-50%) rotate(45deg)}
+@keyframes trBob{50%{margin-bottom:-4px}}
+@media (prefers-reduced-motion:reduce){.tr-tip{animation:none}}
+.tr-guide{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center}
+.tr-guide[hidden]{display:none}
+.tr-gcard{width:min(520px,100%);background:#2a2b2e;border-radius:18px 18px 0 0;padding:20px 18px 26px;text-align:left}
+.tr-gcard h3{margin:0 0 8px;font-size:18px;font-weight:900}.tr-gcard p{margin:0 0 16px;color:var(--sub);font-size:14.5px;line-height:1.65}
+/* レッスン */
+[data-scr=coachq]{display:flex;flex-direction:column;min-height:100dvh;padding-bottom:0!important}
+[data-scr=coachq][hidden]{display:none}
+.cq-top{display:flex;align-items:center;gap:14px;padding:10px 0 4px}
+.cq-x{width:36px;height:36px;min-height:0;padding:0;border:0;background:transparent;color:var(--mute)}.cq-x svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round}
+.cq-bar{flex:1;height:16px;border-radius:99px;background:var(--tln);overflow:hidden}.cq-bar i{display:block;height:100%;width:0;background:var(--tok);border-radius:99px;box-shadow:inset 0 4px 0 rgba(255,255,255,.25);transition:width .4s}
+.cq-q{margin:12px 0 2px;font-size:22px;font-weight:900;line-height:1.35;text-align:left}
+.cq-sub{margin:0 0 10px;font-size:12.5px;color:var(--mute);text-align:left;font-weight:700}
+.cq-bw{margin:0 auto;width:100%}
+.cq-abl{position:absolute;z-index:6;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;background:var(--tg);color:#3a2a00;font:900 15px var(--fn);display:flex;align-items:center;justify-content:center;pointer-events:none;box-shadow:0 2px 0 var(--tgD)}
+.board.flip .cq-abl{transform:translate(-50%,-50%) rotate(180deg)}
+#cogrid .cell.cq-pk::after{content:"";position:absolute;inset:22%;border-radius:50%;border:4px solid var(--tb)}
+#cogrid .cell.cq-ok{box-shadow:inset 0 0 0 100px rgba(62,207,155,.42)}#cogrid .cell.cq-ng{box-shadow:inset 0 0 0 100px rgba(255,107,107,.42)}
+.cq-opts{display:flex;gap:12px;padding:14px 0 0}.cq-opts:empty{display:none}
+.cq-op{flex:1;height:56px;min-height:0;border-radius:14px;border:2px solid var(--tln);background:transparent;box-shadow:0 4px 0 var(--tln);color:var(--fg);font-size:18px;font-weight:900;font-family:var(--fn)}
+.cq-op.on{border-color:var(--tb);box-shadow:0 4px 0 var(--tbD);color:var(--tb);background:rgba(95,168,240,.12)}
+.cq-foot{margin:auto -16px 0;border-top:2px solid var(--tln);padding:16px 16px calc(22px + env(safe-area-inset-bottom))}
+.cq-foot[hidden]{display:none}
+.cq-btn{width:100%;height:52px;min-height:0;border:0;border-radius:14px;background:var(--tok);box-shadow:0 5px 0 var(--tokD);color:#0b2a1f;font-size:17px;font-weight:900}
+.cq-btn:disabled{background:var(--tln);box-shadow:none;color:var(--mute);opacity:1}
+.cq-btn:not(:disabled):active{transform:translateY(4px);box-shadow:0 1px 0 var(--tokD)}
+.cq-sheet{margin:auto -16px 0;background:#203a30;padding:18px 16px calc(22px + env(safe-area-inset-bottom));text-align:left;animation:cqUp .22s ease-out}
+.cq-sheet[hidden]{display:none}.cq-sheet.ng{background:#3d2426}
+@keyframes cqUp{from{transform:translateY(30px);opacity:0}}
+.cq-st{display:flex;align-items:center;gap:12px;font-size:22px;font-weight:900;color:var(--tok)}.cq-sheet.ng .cq-st{color:#ff6b6b}
+.cq-ic{width:36px;height:36px;border-radius:50%;background:var(--tok);color:#0b2a1f;display:flex;align-items:center;justify-content:center;font-size:19px;flex:none}.cq-sheet.ng .cq-ic{background:#ff6b6b;color:#3d0d10}
+.cq-sheet p{color:#bfe9d6;font-size:14.5px;line-height:1.6;margin:10px 0 0;font-weight:600}.cq-sheet.ng p{color:#f3c9cb}
+.cq-sheet p.cq-tag{font-size:12.5px;opacity:.75;margin:6px 0 14px}.cq-sheet p.cq-tag[hidden]{display:block;visibility:hidden;height:4px;margin:0}
+.cq-sheet.ng .cq-btn{background:#ff6b6b;box-shadow:0 5px 0 #b8434a;color:#3d0d10}
+/* 終局画面：のがした場面 */
+.cqend{display:flex;align-items:center;gap:10px;margin:10px 0 0;padding:10px 12px;border-radius:12px;border:2px solid var(--tln);text-align:left;font-size:13.5px;color:var(--sub)}
+.cqend b{color:var(--fg);margin-right:2px}.cqend button{margin-left:auto;flex:none;min-height:0;padding:8px 12px;border-radius:10px;border:0;background:var(--tb);box-shadow:0 3px 0 var(--tbD);color:#0d2440;font-weight:900;font-size:13px}
+.cq-btn:hover{background:var(--tok)}.cq-sheet.ng .cq-btn:hover{background:#ff6b6b}.cq-btn:disabled:hover{background:var(--tln)}
+.cq-op:hover,.tr-links button:hover,.tr-gb:hover,.cq-x:hover{background:transparent}.cq-op.on:hover{background:rgba(95,168,240,.12)}
+.tr-nd.done:hover{background:var(--tg)}.tr-nd.cur:hover{background:var(--tb)}.tr-nd.lock:hover{background:var(--tgr)}.cqend button:hover{background:var(--tb)}
+.tr-top{position:sticky;top:0;z-index:5;background:var(--bg);margin:0 -16px;padding-left:20px;padding-right:20px}
+.tr-nodes:has(.tr-nd.cur:first-child){padding-top:72px}
+#cogrid .cell.cq-src .stone{box-shadow:0 0 0 4px var(--tg),0 0 18px 4px rgba(240,194,75,.75)}
+#cogrid .cell.cq-mv{box-shadow:inset 0 0 0 100px rgba(240,194,75,.35)}
+.cq-s::after{content:"。"}html:not([lang=ja]):not([lang^=zh]) .cq-s::after{content:". "}
+.cq-w::after{content:"　"}
+.cq-w:last-child::after{content:""}html:not([lang=ja]):not([lang^=zh]) .cqend .cq-w:first-child::after{content:": "}
+.cqend .cq-w:first-child{color:var(--fg);font-weight:900}.tr-diag .cq-w:nth-child(2){color:var(--fg);font-weight:800}
+.mvcard .cqend{margin:14px 18px 0}
+.tr-links b{white-space:normal;line-height:1.2}
+.cq-face{width:64px;height:64px;flex:none;margin:-10px 0 -6px -4px}
+.cq-dface{display:block;width:180px;height:180px;margin:40px auto 8px}.cq-dface[hidden]{display:none}
+.cq-bw[hidden]{display:none}
+[data-scr=coachq] .cq-dface:not([hidden])~.cq-q,[data-scr=coachq] .cq-dface:not([hidden])~.cq-sub{text-align:center}
+.cqend-f{width:44px;height:44px;flex:none;margin:-4px 0}
+
 </style>
 </head>
 <body>
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.54</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.55</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
-    <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
     <div class="hm-hero" aria-hidden="true">
       <div class="hm-hb"><div class="hm-hg" id="hmG"></div><div class="hm-hl" id="hmL"></div></div>
-      <button class="cg-pull" id="cgPull" type="button"><b>ガチャを引く</b><small id="cgLeft"></small></button>
     </div>
     <button class="hm-chp" id="hmChamp" data-go="rank" type="button" hidden><svg class="cr" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18 L5 8 L9.5 12 L12 5 L14.5 12 L19 8 L21 18 Z" fill="#e9c46a" stroke="#8a6a3a" stroke-width="1" stroke-linejoin="round"/><rect x="3" y="18" width="18" height="2.4" rx="1" fill="#c9a24e"/></svg><small id="hmChampM"></small><b id="hmChampN" class="no-i18n"></b><span class="hm-cst"><span class="stone b" id="hmChampS"></span></span><em id="hmChampL"></em><svg class="chv" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
 
@@ -1872,16 +1893,6 @@ svg.rchfx{z-index:1}
   <ol class="rk-list rk-me" id="rkMe" hidden></ol>
   <p class="hist-empty" id="rkEmpty" hidden>まだ載っている人がいません。</p>
 </section>
-<section class="scr" data-scr="chara" hidden>
-  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>キャラ</h2><span class="sp cg-cnt" id="cgCnt"></span></div>
-  <div class="cg-stage" id="cgStage"><img id="cgImg" alt=""><div class="cg-lv" id="cgLv"></div><div class="cg-nm"><img id="cgRar" alt="UR"><b id="cgName"></b></div></div>
-  <div class="cg-prog" id="cgProg"><div class="cg-pr"><span id="cgNext"></span><span><b id="cgPt"></b></span></div><div class="cg-bar"><i id="cgBar"></i></div></div>
-  <div class="cg-btns"><button class="primary" id="cgSel" type="button">ホームに出す</button><button id="cgGive" type="button">グッズを渡す</button></div>
-  <div class="cg-inv" id="cgInv" hidden><p class="note" id="cgInvNote"></p><div class="cg-goods" id="cgGoods"></div></div>
-  <div class="cg-grid" id="cgGrid"></div>
-  <button class="cg-pull2" id="cgPull2" type="button"><b>ガチャを引く</b><small id="cgLeft2"></small></button>
-  <p class="note cg-rates">出る確率：UR（キャラ）1%・SSR 10%・SR 25%・R 64%。初めての1回は必ずキャラ。ガチャは1日3回と、5局ごとに1回引けます。グッズはR 1点・SR 3点・SSR 10点で、60点で豪華1、200点で豪華2になります。</p>
-</section>
 <section class="scr" data-scr="course" hidden>
   <div class="topbar"><button class="back i-l" id="csBack">戻る</button><h2 id="csTitle">学ぶ</h2><span class="sp cs-tot" id="csTot"></span></div>
   <div id="csMap">
@@ -1919,13 +1930,21 @@ svg.rchfx{z-index:1}
   <p class="note dq-note">相手がどう受けても、2手で勝てる手が1つだけあります。その日の最初の挑戦だけが連続記録に入ります（2回目からは練習）。問題は毎日0時に変わります。</p>
 </section>
 <section class="scr" data-scr="pzhub" hidden>
-  <div class="topbar"><span class="sp"></span><h2>パズル</h2><span class="sp"></span></div>
-  <div class="pzh-hero"><span class="pzh-ic" data-ic="puzzle"></span><div><small>パズルレート</small><div><b id="phR">1000</b><span class="pzh-d" id="phD"></span></div></div><div class="pzh-n"><small>解いた問題</small><b><span id="phN">0</span><i> / <span id="phT">0</span></i></b></div></div>
-  <div class="pzh-spark"><div class="pzh-sh"><span>この30問のレート</span><span id="phMax"></span></div><svg id="phG" viewBox="0 0 330 70" preserveAspectRatio="none" aria-hidden="true"></svg><p class="pzh-empty" id="phEmpty">レート戦を解くと、ここにグラフが出ます</p></div>
-  <div class="pzh-card pzh-big"><div class="pzh-row"><span class="pzh-ic" data-ic="bolt"></span><div><b>レート戦</b><small>あなたに合った問題が次々に出ます</small></div></div><button class="primary big" id="phGo" type="button">解く</button></div>
-  <button class="pzh-card pzh-link" id="phDaily" type="button"><span class="pzh-ic" data-ic="review"></span><div><b>今日の1問<span class="pzh-fl" id="phFl" hidden></span></b><small id="phDs"></small></div><span class="pzh-go">›</span></button>
-  <button class="pzh-card pzh-link" id="phBook" type="button"><span class="pzh-ic" data-ic="trophy"></span><div><b>問題集</b><small id="phBs">レベル別の問題</small></div><span class="pzh-go">›</span></button>
+  <div class="tr-top"><span class="tr-fl" id="trStreak"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 4 5 5.5 5 11a5 5 0 0 1-10 0c0-2.6 1.3-4.3 2.5-5.4.2 1.8 1 2.9 2 3.4C11 8.3 11.2 5 12 2z"/></svg><b>0</b></span><span class="tr-dy" id="trDay"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 9-8 9-8-9z"/></svg><b>0/4</b></span><h2 class="tr-h">トレーニング</h2></div>
+  <div class="tr-links"><button type="button" id="phDaily"><b>今日の1問</b><small id="phDs"></small></button><button type="button" id="phGo"><b>レート戦</b><small id="phR">1000</small></button><button type="button" id="phBook"><b>問題集</b><small id="phBs"></small></button></div>
+  <div class="tr-diag" id="trDiag" hidden></div>
+  <div class="tr-path" id="trPath"></div>
 </section>
+<section class="scr" data-scr="coachq" hidden>
+  <div class="cq-top"><button type="button" class="cq-x" id="cqX" aria-label="やめる"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button><div class="cq-bar"><i id="cqBar"></i></div></div>
+  <img class="cq-dface" id="cqDFace" src="img/coach/coach-ok.webp?v=1" alt="" width="200" height="200" hidden><h2 class="cq-q" id="cqQ"></h2>
+  <p class="cq-sub" id="cqSub"></p>
+  <div class="boardwrap cq-bw"><div class="board" id="coboard"><div class="lab lab-top" id="colabTop" aria-hidden="true"></div><div class="lab lab-left" id="colabLeft" aria-hidden="true"></div><div class="grid" id="cogrid" aria-label="トレーニングの盤"></div></div></div>
+  <div class="cq-opts" id="cqOpts"></div>
+  <div class="cq-foot" id="cqFoot"><button type="button" class="cq-btn" id="cqCheck" disabled>チェック</button></div>
+  <div class="cq-sheet" id="cqSheet" hidden><div class="cq-st"><img class="cq-face" id="cqFace" src="img/coach/coach-ok.webp?v=1" alt="" width="64" height="64"><b id="cqTt"></b></div><p id="cqTx"></p><p class="cq-tag" id="cqTag"></p><button type="button" class="cq-btn" id="cqNext">続ける</button></div>
+</section>
+<div class="tr-guide" id="trGuide" hidden role="dialog" aria-modal="true"><div class="tr-gcard"><h3 id="trGt"></h3><p id="trGx"></p><button type="button" class="cq-btn" id="trGok">わかった</button></div></div>
 <section class="scr" data-scr="pzlist" hidden>
   <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>問題集</h2><span class="sp"></span></div>
   <div class="pzl-flt" id="plF"><button type="button" class="on" data-f="all">すべて</button><button type="button" data-f="new">未挑戦</button><button type="button" data-f="ng">まちがえた</button><button type="button" data-f="ok">解いた</button></div>
@@ -2171,7 +2190,7 @@ svg.rchfx{z-index:1}
 <nav class="tabbar" id="tabbar" aria-label="メイン">
   <button type="button" data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>ホーム</span></button>
   <button type="button" data-tab="setup"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z"/></svg><span>対局</span></button>
-  <button type="button" data-tab="daily"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4a2 2 0 1 1 4 0h4v4a2 2 0 1 1 0 4v3H4z"/></svg><span>パズル</span></button>
+  <button type="button" data-tab="daily"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4a2 2 0 1 1 4 0h4v4a2 2 0 1 1 0 4v3H4z"/></svg><span>トレーニング</span></button>
   <button type="button" data-tab="history"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>履歴</span></button>
   <button type="button" data-tab="profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg><span>アカウント</span></button>
 </nav>
@@ -2848,7 +2867,7 @@ function negamax(b,p,depth,alpha,beta){
 const CPUS=[[5,'Mia','入門','#f9a8c9'],[1,'Kevin','やさしい','#f59e7b'],[6,'Lily','やさしい','#fbbf5a'],[2,'Max','ふつう','#6fd39a'],[7,'Nora','ふつう','#5cc8d6'],[3,'Leo','つよい','#7c8cf5'],[8,'Emma','つよい','#a78bfa'],[9,'Oscar','とてもつよい','#c084fc'],[10,'Ivy','とてもつよい','#f472b6'],[4,'Victor','最強','#e5c07b']].map((a,i)=>({m:a[0],n:a[1],t:a[2],c:a[3],lv:i+1}));
 const CPU_BY={};CPUS.forEach(c=>CPU_BY[c.m]=c);
 /* 顔：絵ができるまでは色の丸に頭文字。絵ができたら img/cpu/名前.webp を使う */
-const CPU_IMG={};CPUS.forEach(c=>{CPU_IMG[c.n]='img/cpu/'+c.n.toLowerCase()+'.webp?v=1'});
+const CPU_IMG={};CPUS.forEach(c=>{CPU_IMG[c.n]='img/cpu/'+c.n.toLowerCase()+'.webp?v=2'});
 function cpuAv(c,cls){const e=document.createElement('span');e.className='cav'+(cls?' '+cls:'');e.style.setProperty('--c',c.c);
   if(CPU_IMG[c.n]){const im=document.createElement('img');im.src=CPU_IMG[c.n];im.alt='';e.append(im)}else e.textContent=c.n[0];return e}
 const cpuRate=m=>CPU_RATE[m]||0;
@@ -4232,11 +4251,11 @@ const _renderP=render;render=function(){_renderP();
   // 相手は盤の左上、自分は盤の右下（観戦中は手前側の黒を右下）
   const pt=$('plTop'),pbt=$('plBot');pt.innerHTML='';pbt.innerHTML='';
   if(S.mode==='net'&&NET.host){const hc=colorOf(NET.host),bId=hc===1?NET.host:NET.guest,wId=hc===1?NET.guest:NET.host;
-    const nm=id=>id?(id===NET.me&&!NET.watch?{name:myName(),rate:lvName(myLv()),off:isOff(),bd:bdSel(),ch:typeof cgMine==='function'?cgMine():''}:(NM[id]?Object.assign({},NM[id],{rate:lvTxt(oppLv(NM[id]))}):{name:'…',rate:null})):{name:'待機中',rate:null};const bn=nm(bId),wn=nm(wId);
+    const nm=id=>id?(id===NET.me&&!NET.watch?{name:myName(),rate:lvName(myLv()),off:isOff(),bd:bdSel()}:(NM[id]?Object.assign({},NM[id],{rate:lvTxt(oppLv(NM[id]))}):{name:'…',rate:null})):{name:'待機中',rate:null};const bn=nm(bId),wn=nm(wId);
     const meW=colorOf(NET.me)===2;
     const bs=plSpan(1,bn.name,bn.rate,bId&&bId===NET.me,bn.off,bn.bd,bn.ch),ws=plSpan(2,wn.name,wn.rate,wId&&wId===NET.me,wn.off,wn.bd,wn.ch);
     if(meW){pbt.append(ws);pt.append(bs)}else{pbt.append(bs);pt.append(ws)}pt.hidden=pbt.hidden=false}
-  else if(CPU_RATE[S.mode]){pbt.append(plSpan(hcOf(),myName(),lvName(myLv()),true,isOff(),bdSel(),typeof cgMine==='function'?cgMine():''));{const sp=plSpan(3-hcOf(),CPU_BY[S.mode]?CPU_BY[S.mode].n:MODE_NAME(S.mode),lvName(lvOfRate(CPU_RATE[S.mode])),false);if(CPU_BY[S.mode]){const d=sp.querySelector('.dot');(d||sp.firstChild).after(cpuAv(CPU_BY[S.mode],'sm'));const r=sp.querySelector('.r');if(r)r.textContent='Lv'+CPU_BY[S.mode].lv+'　'+r.textContent}pt.append(sp)}pt.hidden=pbt.hidden=false}
+  else if(CPU_RATE[S.mode]){pbt.append(plSpan(hcOf(),myName(),lvName(myLv()),true,isOff(),bdSel()));{const sp=plSpan(3-hcOf(),CPU_BY[S.mode]?CPU_BY[S.mode].n:MODE_NAME(S.mode),lvName(lvOfRate(CPU_RATE[S.mode])),false);if(CPU_BY[S.mode]){const d=sp.querySelector('.dot');(d||sp.firstChild).after(cpuAv(CPU_BY[S.mode],'sm'));const r=sp.querySelector('.r');if(r)r.textContent='Lv'+CPU_BY[S.mode].lv+'　'+r.textContent}pt.append(sp)}pt.hidden=pbt.hidden=false}
   else pt.hidden=pbt.hidden=true;
   const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?(S.fromPos?'途中の局面から始めた対局なので段級は変わりません':'1手戻しを使ったので段級は変わりません'):'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
   {const mn=$('meName');mn.textContent=myName();if(isOff())mn.prepend(offBadge(18));const sb=bdSel();if(sb)mn.append(bdBadge(sb,17))}$('meRate').textContent=lvName(myLv());try{hmCard()}catch(e){}};
@@ -4779,13 +4798,9 @@ function pzRender(){const pr=!!DQ.prac;$('pzBar').hidden=!pr;$('pzHist').hidden=
 function pzResult(ok,d,txt){const r=$('pzRes');r.hidden=false;r.className='pzres '+(ok?'ok':'ng');$('pzRic').textContent=ok?'✓':'✕';$('pzRtt').textContent=ok?'正解！':'不正解';
   const rd=$('pzRd');rd.hidden=!d;if(d)rd.textContent=(d>0?'+':'')+d;$('pzRtx').textContent=txt||'';$('pzRans').hidden=ok;$('dqMsg').textContent='';pzRender()}
 /* パズルのトップ */
-async function pzHub(){const L=await dqLoad(),o=pzRt(),sv=pzGet();$('phR').textContent=o.r;const d=$('phD');d.textContent=o.last?(o.last>0?'▲':'▼')+Math.abs(o.last):'';d.className='pzh-d '+(o.last>0?'up':'down');
-  $('phN').textContent=sv.size;$('phT').textContent=L.length;$('phBs').textContent=L.length+'問をレベル別に';
-  const g=$('phG'),h=o.h;$('phEmpty').hidden=h.length>1;g.style.display=h.length>1?'':'none';$('phMax').textContent=h.length>1?'最高 '+Math.max(...h):'';
-  if(h.length>1){const mn=Math.min(...h)-10,mx=Math.max(...h)+10,X=i=>i*330/(h.length-1),Y=v=>64-(v-mn)/(mx-mn)*58,pts=h.map((v,i)=>X(i).toFixed(1)+' '+Y(v).toFixed(1));
-    g.innerHTML='<defs><linearGradient id="phGr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3ecf9b" stop-opacity=".35"/><stop offset="1" stop-color="#3ecf9b" stop-opacity="0"/></linearGradient></defs><path d="M'+pts.join(' L')+' L330 70 L0 70Z" fill="url(#phGr)"/><path d="M'+pts.join(' L')+'" fill="none" stroke="#3ecf9b" stroke-width="3" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>'}
-  const c=dqCur(),fl=$('phFl');fl.hidden=!c;fl.textContent='🔥 '+c+'日';
-  if(L.length){const n=dqIndex(),q=L[((n%L.length)+L.length)%L.length],dt=new Date(),done=bdStats().dlast===dqDay();$('phDs').textContent=(dt.getMonth()+1)+'月'+dt.getDate()+'日　'+(q[1]===1?'黒番':'白番')+'・2手で勝ち'+(done?'　済':'')}}
+async function pzHub(){const L=await dqLoad(),o=pzRt();$('phR').textContent=o.r;$('phBs').textContent=L.length+'問';
+  if(L.length){const n=dqIndex(),q=L[((n%L.length)+L.length)%L.length],done=bdStats().dlast===dqDay();$('phDs').textContent=(q[1]===1?'黒番':'白番')+(done?'・済':'')}
+  try{trRender()}catch(e){console.error(e)}}
 /* 問題集：レベル別。すべて／未挑戦／まちがえた／解いた */
 let PL_F='all';const PL_OPEN={};
 const PZ_LV=[['入門','#3ecf9b',0,900],['初級','#5fb2ff',900,1200],['中級','#f0c24b',1200,1500],['上級','#ff6b6b',1500,9999]];
@@ -5509,134 +5524,8 @@ function bgmTick(){if(!BGM.ok||!KOMA.ctx)return;const w=bgmWant();if(w===BGM.cur
 setInterval(bgmTick,700);document.addEventListener('visibilitychange',bgmTick);
 $('bgmOn').checked=BGM.on;$('bgmOn').addEventListener('change',e=>{BGM.on=e.target.checked;try{localStorage.setItem('bocch-bgm',BGM.on?'1':'0')}catch(_){}bgmTick();if(!BGM.on&&!BGM.cur)komaSleep()});
 </script>
-<div class="cg-ov" id="cgOv" hidden>
-  <video id="cgVid" playsinline preload="auto"></video>
-  <button class="cg-skip" id="cgSkip" type="button" hidden>スキップ</button>
-  <div class="cg-res" id="cgRes" hidden>
-    <div class="cg-rays" id="cgRays"></div>
-    <div class="cg-rhead"><img id="cgRRar" alt=""><b id="cgRName"></b><span class="cg-new" id="cgRNew" hidden>NEW</span></div>
-    <img class="cg-rch" id="cgRCh" alt="" hidden>
-    <div class="cg-rg" id="cgRG" hidden><img id="cgRGImg" alt=""></div>
-    <p class="cg-rpt" id="cgRPt" hidden></p>
-    <div class="cg-rbtns"><button id="cgRAgain" type="button"></button><button class="primary" id="cgRMain" type="button"></button></div>
-    <button class="cg-rclose" id="cgRClose" type="button">閉じる</button>
-  </div>
-</div>
 <script>
-/* ===== キャラとガチャ（2026-11）
-   ・キャラ21体（黒鉄は最初から持っている）。ガチャはUR（キャラ）1%・SSR 10%・SR 25%・R 64%。初回は必ずキャラ
-   ・SSRのグッズは持っているキャラの分だけ出る。グッズはR 1点・SR 3点・SSR 10点。60点で豪華1、200点で豪華2
-   ・1日3回（リワード広告。広告の準備ができるまでは広告なし）＋5局ごとに1回
-   ・記録は PROF.cg に入れて、アカウントにも保存する */
-const CG_CH=[['kurogane','黒鉄'],['shirotae','白妙'],['yashamaru','夜叉丸'],['kasumi','霞'],['gendo','玄道'],['chihaya','千早'],['sogen','宗玄'],['oborozuki','朧月'],['shido','獅童'],['koyuki','小雪'],['hozuki','鬼灯'],['tessai','鉄斎'],['momiji','紅葉'],['sorai','蒼雷'],['ayano','綾乃'],['jubei','十兵衛'],['amane','天音'],['iori','伊織'],['kikuno','菊乃'],['taiga','大河'],['mumyo','無明']];
-const CG_NM=Object.fromEntries(CG_CH);
-const CG_GD={r1:['団子','R'],r2:['抹茶碗','R'],r3:['手ぬぐい','R'],r4:['扇子','R'],r5:['墨と筆','R'],
- s1:['金の盃','SR'],s2:['香木','SR'],s3:['蒔絵の櫛','SR'],s4:['古い棋譜','SR'],s5:['碁石の根付','SR'],
- x01:['三日月の手裏剣','SSR','kasumi'],x02:['鉄の数珠','SSR','gendo'],x03:['金の軍旗','SSR','chihaya'],x04:['舵輪の懐中時計','SSR','sogen'],x05:['小さな天球儀','SSR','oborozuki'],x06:['獅子頭の鈴','SSR','shido'],x07:['白狼の牙の首飾り','SSR','koyuki'],
- x08:['狐火の提灯','SSR','hozuki'],x09:['金の歯車','SSR','tessai'],x10:['金の舞扇','SSR','momiji'],x11:['雷の紋章','SSR','sorai'],x12:['白テンの手袋','SSR','ayano'],x13:['古い軍旗の切れ端','SSR','jubei'],x14:['黒い羽の団扇','SSR','amane'],
- x15:['名刀の鍔','SSR','iori'],x16:['金のかんざし','SSR','kikuno'],x17:['金の錨','SSR','taiga'],x18:['白黒の仮面の欠片','SSR','mumyo'],x19:['黒鉄の前立て','SSR','kurogane'],x20:['神楽鈴','SSR','shirotae'],x21:['夜叉の面','SSR','yashamaru']};
-const CG_PT={R:1,SR:3,SSR:10},CG_LV=[0,60,200],CG_DAY=3,CG_EVERY=5;
-const CG_COL={R:['rgba(230,230,230,.35)','#1c1c1c','rgba(255,255,255,.10)','#d8d8d8'],SR:['rgba(90,169,255,.45)','#0a1a33','rgba(120,180,255,.12)','#5aa9ff'],SSR:['rgba(230,190,90,.45)','#2e2208','rgba(255,215,120,.13)','#e6be5a'],UR:['rgba(224,64,44,.55)','#3a0d08','rgba(255,120,80,.12)','#e0402c']};
-const CG_NEW_T=Date.UTC(2026,10,1,10,25); // この時刻より後に登録したアカウントにも出す
-const CG_PAUSE=true; // キャラは一旦なし（falseに戻せば元どおり）
-const cgOn=()=>{if(CG_PAUSE)return false;try{return localStorage.getItem('bocch-own')==='1'||localStorage.getItem('bocch-cgnew')!=='0'}catch(e){return true}}; // 出さないのは、この時刻より前からあるアカウント（オーナー以外）でログインしている人だけ
-{const _ar=acctRender;acctRender=function(){_ar();try{const u=FB.user;if(u&&u.emailVerified){const ct=Date.parse(u.metadata&&u.metadata.creationTime);localStorage.setItem('bocch-cgnew',ct>=CG_NEW_T?'1':'0')}else localStorage.removeItem('bocch-cgnew')}catch(e){}try{cgHome()}catch(e){}}}
-const cgOkId=id=>typeof id==='string'&&!!CG_NM[id];
-function cgToday(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
-function cgP(x){const o={own:{},sel:'kurogane',inv:{},day:'',ad:0,tk:0,gb:-1,first:1,t:0};if(x&&typeof x==='object'){
-  if(x.own&&typeof x.own==='object')for(const k in x.own)if(cgOkId(k)){const v=x.own[k]||{};o.own[k]={lv:Math.max(1,Math.min(3,v.lv|0||1)),pt:Math.max(0,Math.min(CG_LV[2],v.pt|0))}}
-  if(cgOkId(x.sel))o.sel=x.sel;if(x.inv&&typeof x.inv==='object')for(const k in x.inv)if(CG_GD[k]&&(x.inv[k]|0)>0)o.inv[k]=Math.min(999,x.inv[k]|0);
-  if(typeof x.day==='string')o.day=x.day.slice(0,10);o.ad=Math.max(0,Math.min(CG_DAY,x.ad|0));o.tk=Math.max(0,Math.min(99,x.tk|0));o.gb=Number.isFinite(x.gb)?x.gb|0:-1;o.first=x.first===0?0:1;o.t=+x.t||0}
-  if(!o.own.kurogane)o.own.kurogane={lv:1,pt:0};if(!o.own[o.sel])o.sel='kurogane';return o}
-try{PROF.cg=cgP(JSON.parse(localStorage.getItem(PKEY)||'{}').cg)}catch(e){PROF.cg=cgP(null)}
-const CG=()=>PROF.cg||(PROF.cg=cgP(null));
-function cgSave(){CG().t=Date.now();saveProf()}
-// アカウントへの保存：新しい方を残す
-{const _pd=profData;profData=function(){const o=_pd();o.cg=CG();return o}}
-{const _ap=acctPull;acctPull=async function(){let d=null;try{if(FB.user&&FB.user.emailVerified){const snap=await FB.db.collection('users').doc(FB.user.uid).get();if(snap.exists)d=snap.data()}}catch(e){}
-  if(d&&d.cg&&(+d.cg.t||0)>(CG().t||0)){PROF.cg=cgP(d.cg);try{localStorage.setItem(PKEY,JSON.stringify(PROF))}catch(e){}}
-  await _ap();try{cgRender()}catch(e){}}}
-// 引ける回数：今日の残り（広告）＋5局ごとの券
-function cgTick(){const c=CG(),g=bdStats().games|0;let ch=false;if(c.gb<0){c.gb=g;ch=true}
-  while(g-c.gb>=CG_EVERY){c.gb+=CG_EVERY;c.tk=Math.min(99,c.tk+1);ch=true}
-  if(c.day!==cgToday()){c.day=cgToday();c.ad=0;ch=true}if(ch)cgSave()}
-const cgLeftAd=()=>{const c=CG();return c.day===cgToday()?Math.max(0,CG_DAY-c.ad):CG_DAY};
-const cgLeft=()=>cgLeftAd()+CG().tk;
-const cgImg=(id,lv)=>'ch/'+id+'_'+(lv||1)+'.webp';
-function cgLvOf(pt){return pt>=CG_LV[2]?3:pt>=CG_LV[1]?2:1}
-// 抽選
-function cgDraw(){const c=CG(),not=CG_CH.map(x=>x[0]).filter(id=>!c.own[id]);
-  if(c.first&&not.length){c.first=0;return {k:'UR',id:not[Math.random()*not.length|0]}}
-  c.first=0;const r=Math.random()*100;
-  if(r<1&&not.length)return {k:'UR',id:not[Math.random()*not.length|0]};
-  if(r<11){const ss=Object.keys(CG_GD).filter(g=>CG_GD[g][1]==='SSR'&&c.own[CG_GD[g][2]]);return {k:'SSR',g:ss[Math.random()*ss.length|0]}}
-  const pool=r<36?['s1','s2','s3','s4','s5']:['r1','r2','r3','r4','r5'];return {k:r<36?'SR':'R',g:pool[Math.random()*pool.length|0]}}
-function cgApply(res){const c=CG();if(res.k==='UR'){c.own[res.id]={lv:1,pt:0}}else{c.inv[res.g]=(c.inv[res.g]|0)+1}cgSave();}
-// グッズを渡す
-function cgCanGive(g,id){const d=CG_GD[g];if(!d||!CG().own[id])return false;if(d[1]==='SSR'&&d[2]!==id)return false;return CG().own[id].pt<CG_LV[2]}
-function cgGive(g,id){const c=CG();if(!(c.inv[g]>0)||!cgCanGive(g,id))return null;const o=c.own[id],before=o.pt,blv=o.lv;
-  o.pt=Math.min(CG_LV[2],o.pt+CG_PT[CG_GD[g][1]]);o.lv=Math.max(o.lv,cgLvOf(o.pt));c.inv[g]--;if(!c.inv[g])delete c.inv[g];cgSave();return {before,after:o.pt,up:o.lv>blv,lv:o.lv}}
-/* ホーム */
-function cgHome(){const on=cgOn();$('cgBg').hidden=!on;$('cgPull').hidden=!on;document.querySelector('.hm').classList.toggle('cg-on',on);if(!on){if(CUR==='chara')show('home',true);return}const c=CG(),o=c.own[c.sel]||{lv:1},im=$('cgBgImg');{const bg=$('cgBg'),hero=document.querySelector('.hm-hero');if(hero&&bg.parentElement!==hero)hero.append(bg)}const src=cgImg(c.sel,o.lv);if(im.getAttribute('src')!==src)im.setAttribute('src',src);
-  document.querySelector('.hm').classList.add('cg-on');
-  const n=cgLeft();for(const [b,l] of [['cgPull','cgLeft'],['cgPull2','cgLeft2']]){$(l).textContent=n>0?'あと'+n+'回':'明日また引けます';$(b).classList.toggle('dim',n<=0)}}
-$('cgBg').addEventListener('click',()=>{CGV.id=CG().sel;CGV.lv=0;show('chara');cgRender()});
-/* キャラ画面 */
-const CGV={id:'',lv:0,inv:false};
-function cgRender(){try{cgTick();cgHome()}catch(e){}if(CUR!=='chara')return;const c=CG();if(!c.own[CGV.id])CGV.id=c.sel;const id=CGV.id,o=c.own[id];
-  const n=Object.keys(c.own).length;$('cgCnt').textContent=n+' / '+CG_CH.length+'体';
-  const lv=CGV.lv&&CGV.lv<=o.lv?CGV.lv:o.lv;$('cgImg').src=cgImg(id,lv);$('cgName').textContent=CG_NM[id];$('cgRar').src='ui/rar_UR.webp';
-  const L=$('cgLv');L.innerHTML='';['基本','豪華1','豪華2'].forEach((t,i)=>{const b=document.createElement('button');b.type='button';b.textContent=t;b.className=lv===i+1?'on':'';b.disabled=i+1>o.lv;b.onclick=()=>{CGV.lv=i+1;cgRender()};L.append(b)});
-  const nxt=o.lv>=3?null:CG_LV[o.lv];$('cgNext').textContent=nxt?(o.lv===1?'豪華1まで':'豪華2まで'):'豪華2になりました';$('cgPt').textContent=nxt?o.pt+' / '+nxt+'点':CG_LV[2]+'点';
-  $('cgBar').style.width=(nxt?Math.min(100,o.pt/nxt*100):100)+'%';
-  const sb=$('cgSel');sb.disabled=c.sel===id;sb.textContent=c.sel===id?'ホームに表示中':'ホームに出す';
-  $('cgInv').hidden=!CGV.inv;$('cgGive').textContent=CGV.inv?'閉じる':'グッズを渡す';
-  if(CGV.inv){const box=$('cgGoods');box.innerHTML='';const ks=Object.keys(c.inv).filter(k=>c.inv[k]>0).sort((a,b)=>'rsx'.indexOf(a[0])-'rsx'.indexOf(b[0])||a.localeCompare(b));
-    $('cgInvNote').textContent=ks.length?(o.pt>=CG_LV[2]?'このキャラは豪華2になっているので、もう渡せません。':'押すと1つ渡します。SSRはそのキャラ専用です。'):'グッズを持っていません。ガチャで手に入ります。';
-    for(const k of ks){const d=CG_GD[k],b=document.createElement('button');b.type='button';b.className='cg-gd '+d[1];b.innerHTML='<img alt=""><i></i>';b.querySelector('img').src='g/'+k+'.webp';b.querySelector('img').alt=d[0];b.querySelector('i').textContent='×'+c.inv[k];b.title=d[0]+'（'+d[1]+'・'+CG_PT[d[1]]+'点）';
-      b.disabled=!cgCanGive(k,id);b.onclick=()=>{const r=cgGive(k,id);if(r){if(r.up)CGV.lv=r.lv;cgRender()}};box.append(b)}}
-  const G=$('cgGrid');G.innerHTML='';for(const [cid,nm] of CG_CH){const b=document.createElement('button');b.type='button';b.className='cg-cell'+(c.own[cid]?'':' no')+(cid===id?' on':'')+(cid===c.sel?' home':'');b.setAttribute('aria-label',c.own[cid]?nm:'？');b.innerHTML='<img alt="">';b.querySelector('img').src='ch/t_'+cid+'.webp';
-    if(c.own[cid])b.onclick=()=>{CGV.id=cid;CGV.lv=0;cgRender()};G.append(b)}}
-$('cgSel').addEventListener('click',()=>{CG().sel=CGV.id;cgSave();cgRender();render()});
-$('cgGive').addEventListener('click',()=>{CGV.inv=!CGV.inv;cgRender()});
-{const _r=render;render=function(){_r();try{cgRender()}catch(e){console.error(e)}}}
-addEventListener('popstate',()=>setTimeout(()=>{try{cgRender()}catch(e){}},0));
-/* ガチャ */
-const CGR={busy:false,res:null,skipT:0};
-function cgStart(){if(CGR.busy)return;cgTick();if(cgLeft()<=0){cgHome();return}
-  const c=CG();const go=()=>{CGR.busy=true;if(c.tk>0)c.tk--;else{if(c.day!==cgToday()){c.day=cgToday();c.ad=0}c.ad++}const res=cgDraw();cgApply(res);CGR.res=res;cgPlay(res)};
-  if(c.tk>0||isOff()||!ADS.client||typeof adBreak!=='function'){go();return}
-  let done=false;const fin=()=>{if(!done){done=true;go()}};setTimeout(fin,8000);
-  adBreak({type:'reward',name:'gacha',beforeReward:f=>f(),adViewed:fin,adDismissed:()=>{done=true},adBreakDone:()=>{if(!done)fin()}})}
-function cgPlay(res){const ov=$('cgOv'),v=$('cgVid');ov.hidden=false;$('cgRes').hidden=true;$('cgSkip').hidden=true;
-  v.src='v/summon_'+res.k+'.mp4';v.currentTime=0;try{v.muted=!(window.BGM_ON!==false)}catch(e){}v.muted=false;
-  const p=v.play();if(p&&p.catch)p.catch(()=>{v.muted=true;v.play().catch(()=>cgShow())});
-  clearTimeout(CGR.skipT);CGR.skipT=setTimeout(()=>{if(!ov.hidden&&$('cgRes').hidden)$('cgSkip').hidden=false},3000)}
-$('cgVid').addEventListener('ended',()=>cgShow());
-$('cgSkip').addEventListener('click',()=>{try{$('cgVid').pause()}catch(e){}cgShow()});
-function cgShow(){const r=CGR.res;if(!r)return;$('cgSkip').hidden=true;const R=$('cgRes');R.hidden=false;const col=CG_COL[r.k];
-  R.style.setProperty('--cg-c',col[0]);R.style.setProperty('--cg-d',col[1]);R.style.setProperty('--cg-r',col[2]);R.style.setProperty('--cg-b',col[3]);
-  $('cgRRar').src='ui/rar_'+r.k+'.webp';$('cgRRar').alt=r.k;const c=CG();
-  if(r.k==='UR'){$('cgRName').textContent=CG_NM[r.id];$('cgRNew').hidden=false;$('cgRCh').hidden=false;$('cgRCh').src=cgImg(r.id,1);$('cgRG').hidden=true;$('cgRPt').hidden=true;
-    $('cgRMain').textContent='ホームに出す';$('cgRMain').disabled=false;$('cgRMain').onclick=()=>{c.sel=r.id;cgSave();cgClose()}}
-  else{const d=CG_GD[r.g];$('cgRName').textContent=d[0];$('cgRNew').hidden=true;$('cgRCh').hidden=true;$('cgRG').hidden=false;$('cgRGImg').src='g/'+r.g+'.webp';
-    const to=d[1]==='SSR'?d[2]:c.sel,o=c.own[to],ok=cgCanGive(r.g,to);$('cgRPt').hidden=false;
-    $('cgRPt').textContent=ok?CG_NM[to]+'　'+o.pt+' → '+Math.min(CG_LV[2],o.pt+CG_PT[d[1]])+'点（+'+CG_PT[d[1]]+'）':'グッズは持ち物に入れました。キャラの画面で渡せます。';
-    $('cgRMain').textContent=ok?CG_NM[to]+'に渡す':'持ち物に入れる';$('cgRMain').disabled=false;
-    $('cgRMain').onclick=()=>{if(ok){const g=cgGive(r.g,to);if(g&&g.up){CGV.id=to;CGV.lv=g.lv}}cgClose()}}
-  const n=cgLeft();$('cgRAgain').textContent=n>0?'もう一回（残り'+n+'）':'今日はここまで';$('cgRAgain').disabled=n<=0;
-  $('cgRAgain').onclick=()=>{CGR.busy=false;cgStart()}}
-function cgClose(){$('cgOv').hidden=true;try{$('cgVid').pause()}catch(e){}CGR.busy=false;CGR.res=null;render()}
-$('cgRClose').addEventListener('click',cgClose);
-$('cgPull').addEventListener('click',e=>{e.stopPropagation();cgStart()});$('cgPull2').addEventListener('click',cgStart);
-/* 対局：名前の横に胸像。部屋に「キャラ.段階」を添えて送る */
-const cgMine=()=>{const c=CG(),o=c.own[c.sel];return c.sel+'.'+(o?o.lv:1)};
-function cgParse(x){if(typeof x!=='string')return null;const m=/^([a-z]+)\.([123])$/.exec(x);return m&&cgOkId(m[1])?{id:m[1],lv:+m[2]}:null}
-function cgBust(ch){const p=cgParse(ch);if(!p)return null;const im=document.createElement('img');im.className='cg-bust';im.alt=CG_NM[p.id];im.src='ch/b_'+p.id+'.webp';return im}
-
-const CG_OPP={};
-{const _pl=plSpan;plSpan=function(color,name,rate,you,off,bd,ch){const sp=_pl(color,name,rate,you,off,bd);const im=you&&cgOn()?cgBust(ch):null;if(im)sp.prepend(im);return sp}}
-try{cgTick()}catch(e){}render();
+render();
 </script>
 <script>
 /* はじめての1局（2026-11）：初めて開いた端末は、ホームを飛ばして「CPU やさしい」との対局をすぐ始め、説明を出しながら指してもらう。
@@ -5862,6 +5751,154 @@ setTimeout(()=>{try{hmBot();hwTick(true)}catch(e){}},1200);
 /* ---------- render のたびに ---------- */
 {const _r=render;render=function(){_r.apply(this,arguments);try{stripSync();if(CUR==='home'){hmSync();hmBot()}}catch(e){}try{cbSync()}catch(e){}}}
 try{tabSync(CUR);if(CUR==='home')hmSync()}catch(e){}
+})();
+
+</script>
+<script>
+/* ===== コーチ（2026-11）：読みの8段階を、デュオリンゴと同じ道（ステージ×4レッスン×5問）で練習する =====
+   問題は coach.json（人の対局から作った局面）。[段階, 種類, 盤36, 手番, 答え..., 難しさ]  手は 元*36+先 */
+(function(){
+const CO={list:null,L:null,i:0,step:0,sel:-1,pick:-1,tg:new Set(),ch:'',ok:0,st:0,lv:0,checked:false,one:false};
+const ST=[null,
+ ['盤が見える','移動力は、まわりの石の数'],
+ ['1手の攻め','ゴールに届く石を探す'],
+ ['1手の守り','相手のリーチを先に見る'],
+ ['自分から渡さない','動かしたあと、相手の石の移動力が変わる'],
+ ['守りながら攻める','止めながら、自分のリーチを作る'],
+ ['2手の攻め','相手のどの受けにも勝てるか'],
+ ['2手の守り','相手の2手の狙いを先に消す'],
+ ['3手の読み','3手先まで読む']];
+const GUIDE=[null,
+ '石は、まわりの8マスにある石の数だけ、まっすぐ進めます。途中の石は飛び越えられますが、着地するマスに石があると進めません。',
+ '自分の石で、次の1手でゴールに届く石を探そう。ゴールにもう1つ着いているなら、届いた瞬間に勝ちです。',
+ '自分の手を考える前に、相手の石がゴールに届くか見よう。届くなら、その石の移動力を変えるか、着地するマスをふさぐ。',
+ '石を動かすと、まわりの石の移動力が変わります。動かしたあとに、相手の石がゴールに届くようにならないか確かめよう。',
+ '相手のリーチを止める手の中から、次に自分がゴールに届く形になる手を選ぼう。',
+ '1手目のあと、相手のすべての受けを考えて、どれにも次の1手で勝てるか読もう。',
+ '相手が2手で勝つ形を持っているとき、その形ごと消す手を探そう。',
+ '自分、相手、自分の3手で勝ちきる手順を読もう。'];
+const LSK='bocch_coach';
+function cGet(){let o=null;try{o=JSON.parse(localStorage.getItem(LSK)||'null')}catch(e){}o=o||{};o.done=o.done||{};o.miss=o.miss||[];o.auto=o.auto||{};return o}
+function cPut(o){try{localStorage.setItem(LSK,JSON.stringify(o))}catch(e){}}
+const day=()=>dqDay(),K=m=>m[0]*36+m[1],U=k=>[k/36|0,k%36],sq=i=>sqName(i),mv=k=>sq(k/36|0)+'→'+sq(k%36);
+const has1=(b,p)=>allMoves(b,p).some(m=>dqWinNow(b,p,m));
+const w1=(b,p)=>allMoves(b,p).filter(m=>dqWinNow(b,p,m));
+function w2(b,p){const q=3-p,o=[];for(const m of allMoves(b,p)){if(dqWinNow(b,p,m)){o.push(m);continue}const a=apply(b,m);if(has1(a,q))continue;const rs=allMoves(a,q);if(rs.length&&rs.every(r=>has1(apply(a,r),p)))o.push(m)}return o}
+const has2=(b,p)=>w2(b,p).length>0;
+async function cLoad(){if(CO.list)return CO.list;try{CO.list=await fetch('coach.json?v=1').then(r=>r.json())}catch(e){CO.list=[]}return CO.list}
+function norm(e,id){const o={id,st:e[0],kind:e[1],b:e[2].split('').map(Number),p:e[3]};if(e[1]==='ab'){o.good=e[4];o.bad=e[5];o.d=e[6]}else{o.ans=e[4];o.d=e[5]}return o}
+/* 段階1：その場で作る。光っている石が行けるマスをぜんぶ選ぶ */
+function mk1(L){for(let t=0;t<50;t++){const e=L[Math.random()*L.length|0],b=e[2].split('').map(Number),p=e[3];const S_=[];for(let i=0;i<36;i++)if(b[i]===p&&movesFrom(b,i).length>=2)S_.push(i);if(!S_.length)continue;
+  const s=S_[Math.random()*S_.length|0];return {id:-1,st:1,kind:'t',b,p,s,ans:movesFrom(b,s).map(m=>m[1])}}return null}
+function lessonOf(st,lv){const L=CO.list,o=cGet();if(st===1){const r=[];for(let k=0;k<5;k++){const q=mk1(L);if(q)r.push(q)}return r}
+  const Y=[],N_=[];L.forEach((e,i)=>{if(e[0]!==st)return;(e[1]==='n'?N_:Y).push(i)});Y.sort((a,b)=>L[a][L[a][1]==='ab'?6:5]-L[b][L[b][1]==='ab'?6:5]);
+  const band=lv>=4?Y:Y.slice(Math.floor(Y.length*lv/4),Math.floor(Y.length*(lv+1)/4)),pick=new Set();
+  const mq=o.miss.filter(i=>L[i]&&L[i][0]===st);if(mq.length)pick.add(mq[0]);
+  const want=N_.length?4:5;let g=0;while(pick.size<want&&g++<200)pick.add(band[Math.random()*band.length|0]);
+  if(N_.length)pick.add(N_[Math.random()*N_.length|0]);
+  return [...pick].map(i=>norm(L[i],i)).sort(()=>Math.random()-.5)}
+/* ---------- 道 ---------- */
+function curStage(o){for(let s=1;s<=8;s++)if((o.done[s]|0)<4&&!o.auto[s])return s;return 9}
+window.trRender=async function(){const L=await cLoad(),o=cGet(),box=$('trPath');const t=day();
+const sk=(o.last===t||o.last===dqYest())?(o.streak|0):0;$('trStreak').lastChild.textContent=sk;$('trDay').lastChild.textContent=(o.today===t?o.n|0:0)+'/4';
+  const dg=$('trDiag');try{const d=diag();if(d){dg.hidden=false;spans(dg,d,1)}else dg.hidden=true}catch(e){dg.hidden=true}
+  box.replaceChildren();const cs=curStage(o),X=[0,-56,0,56];
+  for(let s=1;s<=8;s++){const u=document.createElement('div');u.className='tr-unit'+(s>cs?' lock':'');
+    u.innerHTML='<div><small>ステージ'+s+'</small><b>'+ST[s][0]+'</b></div>';const g=document.createElement('button');g.type='button';g.className='tr-gb';g.textContent='ヒント集';g.addEventListener('click',()=>guide(s));u.append(g);box.append(u);
+    const w=document.createElement('div');w.className='tr-nodes';const dn=o.done[s]|0;
+    for(let k=0;k<4;k++){const n=document.createElement('button');n.type='button';const st_=s<cs||o.auto[s]||k<dn?'done':s===cs&&k===dn?'cur':'lock';n.className='tr-nd '+st_;n.style.setProperty('--x',X[k]+'px');
+      n.innerHTML=st_==='done'?'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>':st_==='cur'?'<i class="tr-st"></i>':'<b>'+(k+1)+'</b>';n.setAttribute('aria-label','ステージ'+s+' レッスン'+(k+1));
+      if(st_==='cur'){const tp=document.createElement('span');tp.className='tr-tip';tp.textContent='スタート';n.append(tp)}
+      n.disabled=st_==='lock';n.addEventListener('click',()=>start(s,st_==='done'?4:k));w.append(n)}
+    box.append(w)}
+  if(cs<9){const c=box.querySelector('.tr-nd.cur');if(c&&CUR==='pzhub'&&!CO.scrolled){CO.scrolled=1;setTimeout(()=>c.scrollIntoView({block:'center'}),60)}}};
+function guide(s){spans($('trGt'),['ステージ'+s,ST[s][0]],1);$('trGx').textContent=GUIDE[s];$('trGuide').hidden=false}
+$('trGok').addEventListener('click',()=>$('trGuide').hidden=true);$('trGuide').addEventListener('click',e=>{if(e.target===$('trGuide'))$('trGuide').hidden=true});
+/* ---------- レッスン ---------- */
+async function start(st,lv){await cLoad();CO.L=lessonOf(st,lv);if(!CO.L.length)return;CO.st=st;CO.lv=lv;CO.i=0;CO.ok=0;CO.tot=CO.L.length;CO.one=false;CO.wrong=new Set();show('coachq');qOpen()}
+window.coachOne=function(q){CO.L=[q];CO.st=q.st;CO.lv=-1;CO.i=0;CO.ok=0;CO.tot=1;CO.one=true;CO.wrong=new Set();show('coachq');qOpen()};
+(function(){const t=$('colabTop'),l=$('colabLeft'),gr=$('cogrid');for(let i=0;i<6;i++){t.appendChild(document.createElement('span'));l.appendChild(document.createElement('span'))}
+  for(let i=0;i<36;i++){const d=document.createElement('div');d.className='cell';d.id='cq'+i;gr.appendChild(d)}})();
+const Q=()=>CO.L[CO.i];
+function mode(){const q=Q();if(q.st===1)return 't';if(q.kind==='ab')return 'c';if((q.st===2||q.st===3||q.st===6)&&CO.step===0)return 'c';return 'm'}
+function qText(q){const s=q.st;if(s===1)return '光っている石が行けるマスを、ぜんぶタップしよう';if(s===4)return '相手に勝ちを渡さないのは、AとBのどっち？';
+  if(CO.step===0){if(s===2)return '次の1手で勝てる手はある？';if(s===3)return '相手に、次の1手で勝つ手はある？';if(s===6)return '2手で勝てる手順はある？'}
+  return {2:'勝つ手を指そう',3:'止める手を指そう',5:'相手を止めながら、次に勝てる形を作ろう',6:'勝ちにつながる1手目を指そう',7:'相手の2手の狙いを消す手を指そう',8:'3手で勝つ手順の1手目を指そう'}[s]}
+function qOpen(){const q=Q();CO.sel=-1;CO.pick=-1;CO.tg=new Set();CO.ch='';CO.checked=false;if(CO.stepKeep!==true)CO.step=q.kind==='m'?1:0;CO.stepKeep=false;$('cogrid').querySelectorAll('.cq-abl').forEach(e=>e.remove());
+  $('cqSheet').hidden=true;$('cqDFace').hidden=true;$('coboard').closest('.cq-bw').hidden=false;$('cqFoot').hidden=false;$('cqCheck').disabled=true;$('cqCheck').textContent='チェック';$('cqBar').style.width=(CO.ok/CO.tot*100)+'%';
+  $('cqQ').textContent=qText(q);spans($('cqSub'),[q.p===1?'黒の番':'白の番','ステージ'+q.st,ST[q.st][0]],1);
+  const op=$('cqOpts');op.replaceChildren();const m=mode();
+  if(m==='c'){const A=q.kind==='ab'?[['A','A'],['B','B']]:[['y','ある'],['n','ない']];
+    for(const[k,t]of A){const b=document.createElement('button');b.type='button';b.className='cq-op';b.dataset.k=k;b.textContent=t;b.addEventListener('click',()=>{if(CO.checked)return;CO.ch=k;op.querySelectorAll('.cq-op').forEach(x=>x.classList.toggle('on',x===b));$('cqCheck').disabled=false});op.append(b)}}
+  if(q.kind==='ab'){CO.ab=Math.random()<.5?[q.good,q.bad]:[q.bad,q.good]}
+  rchDraw($('cogrid'),'C',[]);draw();arrowsAB()}
+function arrowsAB(){const q=Q();if(q.kind!=='ab'||CO.checked)return;const L=CO.ab.map(k=>[...U(k),q.p]);rchDraw($('cogrid'),'C',L);
+  const g=$('cogrid');g.querySelectorAll('.cq-abl').forEach(e=>e.remove());CO.ab.forEach((k,j)=>{const e=document.createElement('span');e.className='cq-abl';e.textContent='AB'[j];const t=k%36;e.style.left=((t%6)+.5)/6*100+'%';e.style.top=((t/6|0)+.5)/6*100+'%';g.append(e)})}
+function draw(mark){const q=Q(),b=CO.board||q.b,p=q.p,flip=p===2,m=mode(),tg=CO.sel>=0?movesFrom(b,CO.sel).map(x=>x[1]):[];mark=mark||{};
+  for(let i=0;i<36;i++){const v=b[i],r=i/6|0,n=v?nbCount(b,i):0;let cls='cell';if(r===0||r===5)cls+=' goal';
+    if(q.st===1&&i===q.s)cls+=' cq-src';if(m==='m'&&!CO.checked&&v===p&&movesFrom(b,i).length)cls+=' mine';if(i===CO.sel)cls+=' sel';
+    if(m==='m'&&!CO.checked&&tg.includes(i))cls+=' target';if(CO.pick>=0&&(i===CO.pick%36))cls+=' last';if(CO.tg.has(i))cls+=' cq-pk';if(mark[i])cls+=' '+mark[i];
+    setCell($('cq'+i),cls,v?`<div class="stone ${v===1?'b':'w'}${n?'':' zero'}"><span>${n}</span></div>`:'')}
+  $('coboard').classList.toggle('flip',flip);[...$('colabTop').children].forEach((e,k)=>e.textContent=String(flip?6-k:k+1));[...$('colabLeft').children].forEach((e,k)=>e.textContent='abcdef'[flip?5-k:k])}
+$('cogrid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(!c||CO.checked||!CO.L)return;const i=+c.id.slice(2),q=Q(),m=mode(),b=q.b;
+  if(m==='t'){if(b[i])return;CO.tg.has(i)?CO.tg.delete(i):CO.tg.add(i);$('cqCheck').disabled=!CO.tg.size;draw();return}
+  if(m!=='m')return;if(CO.sel>=0&&movesFrom(b,CO.sel).some(x=>x[1]===i)){CO.pick=CO.sel*36+i;CO.sel=-1;$('cqCheck').disabled=false;draw();rchDraw($('cogrid'),'C',[[...U(CO.pick),q.p]]);return}
+  if(b[i]===q.p&&movesFrom(b,i).length){CO.sel=i===CO.sel?-1:i;CO.pick=-1;$('cqCheck').disabled=true;rchDraw($('cogrid'),'C',[]);draw()}});
+/* ---------- 答え合わせ ---------- */
+const LV=(b,p,k)=>{const a=apply(b,U(k)),r=w1(a,3-p);if(!r.length)return null;const mark={};mark[k/36|0]='cq-mv';mark[k%36]='cq-mv';return {board:a,L:[[...r[0],3-p]],mark}};
+const WHY=(b,p,k)=>{const a=apply(b,U(k)),r=w1(a,3-p);return r.length?'、相手の'+mv(K(r[0]))+'で負ける':''};
+function judge(){const q=Q(),b=q.b,p=q.p,o=3-p,m=mode();let ok=false,tx=[],L=[],mark={};
+  const ansL=k=>[...U(k),p],lose=k=>{const r=w1(apply(b,U(k)),o);return r.length?mv(k)+'だと、相手の'+mv(K(r[0]))+'で負ける':''};
+  if(q.st===1){const A=new Set(q.ans);ok=A.size===CO.tg.size&&[...A].every(x=>CO.tg.has(x));const n=nbCount(b,q.s);
+    tx=['まわりに石が'+n+'つあるので、'+sq(q.s)+'は'+n+'マスまっすぐ進める'];q.ans.forEach(t=>mark[t]='cq-ok');[...CO.tg].forEach(t=>{if(!A.has(t))mark[t]='cq-ng'});return {ok,tx,L,mark}}
+  if(q.kind==='ab'){const pk=CO.ab['AB'.indexOf(CO.ch)];ok=pk===q.good;
+    tx=[lose(q.bad)||mv(q.bad)+'だと、相手に勝ちを渡す',mv(q.good)+'なら安全'];const lv=LV(b,p,q.bad);if(lv)return Object.assign({ok,tx},lv);return {ok,tx,L:[ansL(q.good)],mark}}
+  if(m==='c'){const y=q.kind==='y';ok=(CO.ch==='y')===y;
+    if(q.st===2)tx=[y?'1手で勝てる手がある':'どの手でも、次の1手では勝てない'];
+    if(q.st===3){if(y){const r=w1(b,o);tx=['相手は'+mv(K(r[0]))+'で勝ちを狙っている'];L=r.map(x=>[...x,o])}else tx=['相手に、次の1手で勝つ手はない']}
+    if(q.st===6)tx=[y?'2手で勝てる手順がある':'2手で勝てる手順はない'];
+    return {ok,tx,L,mark,next:ok&&y}}
+  const k=CO.pick,A=q.ans;ok=A.includes(k);const best=ok?k:A[0];L=[ansL(best)];const ls=ok?'':lose(k);
+  if(q.st===2)tx=ok?[mv(k)+'で勝ち']:['その手では勝てない',mv(best)+'で勝ち'];
+  if(q.st===3){const r=w1(b,o);L=L.concat(r.map(x=>[...x,o]));tx=ok?[mv(k)+'なら止められる']:[ls||mv(k)+'では止められない',mv(best)+'なら止められる']}
+  if(q.st===5){const nx=w1(apply(b,U(best)),p);tx=ok?[mv(k)+'で止めつつ、次に'+mv(K(nx[0]))+'で勝てる']:[ls||'止められたけど、次に勝てる形がない',mv(best)+'が正解']}
+  if(q.st===6)tx=ok?[mv(k)+'のあと、相手がどう受けても次に勝てる']:[ls||mv(k)+'では、相手に受けられる',mv(best)+'が正解'];
+  if(q.st===7)tx=ok?[mv(k)+'なら、相手の2手の狙いが消える']:[ls||mv(k)+'だと、相手に2手で勝つ形が残る',mv(best)+'が正解'];
+  if(q.st===8)tx=ok?[mv(k)+'から、3手で勝ちきれる']:[ls||'その手では勝ちきれない',mv(best)+'が正解'];
+  if(!ok){const lv=LV(b,p,k);if(lv)return Object.assign({ok,tx},lv)}
+  return {ok,tx,L,mark}}
+const spans=(el,a,w)=>{el.replaceChildren();a.forEach(t=>{const e=document.createElement('span');e.className=w?'cq-w':'cq-s';e.textContent=t;el.append(e)})};
+$('cqCheck').addEventListener('click',()=>{if(CO.checked||!CO.L)return;const q=Q(),r=judge();
+  if(r.next){CO.step=1;CO.stepKeep=true;rchDraw($('cogrid'),'C',r.L);sheet(true,r.tx.concat([qText(q)]),q,true);return}
+  CO.checked=true;CO.board=r.board||null;CO.pick=r.board?-1:CO.pick;draw(r.mark);rchDraw($('cogrid'),'C',r.L);$('cogrid').querySelectorAll('.cq-abl').forEach(e=>e.remove());
+  const o=cGet();if(r.ok){CO.ok++;if(q.id>=0)o.miss=o.miss.filter(x=>x!==q.id)}else{if(q.id>=0&&!o.miss.includes(q.id))o.miss.push(q.id);o.miss=o.miss.slice(-60);if(!CO.wrong.has(CO.i)){CO.wrong.add(CO.i);CO.L.push(Object.assign({},q));CO.tot++}}
+  cPut(o);sheet(r.ok,r.tx,q,false)});
+function sheet(ok,tx,q,mid){$('cqFoot').hidden=true;const s=$('cqSheet');s.hidden=false;s.className='cq-sheet '+(ok?'ok':'ng');$('cqFace').src='img/coach/coach-'+(ok?'ok':'ng')+'.webp?v=1';
+  $('cqTt').textContent=ok?(mid?'そのとおり':'正解！'):'不正解';spans($('cqTx'),tx);$('cqTag').textContent=mid?'':'観点：'+ST[q.st][1];$('cqTag').hidden=mid;$('cqBar').style.width=((CO.ok+(ok&&!mid?0:0))/CO.tot*100)+'%'}
+$('cqNext').addEventListener('click',()=>{if(CO.stepKeep){qOpen();return}CO.i++;CO.board=null;if(CO.i<CO.L.length){qOpen();return}finish()});
+function finish(){const o=cGet(),t=day();if(!CO.one){if(CO.lv<4&&CO.lv>=(o.done[CO.st]|0))o.done[CO.st]=Math.min(4,CO.lv+1);
+    if(o.last!==t){o.streak=(o.last===dqYest()?(o.streak|0):0)+1;o.last=t}o.n=(o.today===t?(o.n|0):0)+1;o.today=t;o.cnt=(o.cnt|0)+1}cPut(o);
+  $('cqBar').style.width='100%';$('cqOpts').replaceChildren();$('cqDFace').hidden=false;$('coboard').closest('.cq-bw').hidden=true;rchDraw($('cogrid'),'C',[]);$('cqQ').textContent=CO.one?'解き直した！':'レッスンクリア！';
+  $('cqSub').textContent='正解 '+(CO.tot-CO.wrong.size)+' / '+(CO.tot-CO.wrong.size+CO.wrong.size);$('cqSheet').hidden=true;$('cqFoot').hidden=false;$('cqCheck').disabled=false;$('cqCheck').textContent='続ける';CO.L=null}
+$('cqCheck').addEventListener('click',()=>{if(CO.L)return;CO.scrolled=0;history.length>1?history.back():show('pzhub')},true);
+$('cqX').addEventListener('click',()=>{CO.L=null;history.length>1?history.back():show('pzhub')});
+/* ---------- 対局から：最近の10局で、逃した場面 ---------- */
+function scan(g){const out=[];if(!g||!g.log||!g.me||g.mode==='study')return out;let b=startBoard(),p=1;
+  for(let i=0;i<g.log.length;i++){const m=g.log[i];if(p===g.me&&i>=2){const my=w1(b,p);
+      if(my.length){out.push({st:2,i,ok:my.some(x=>x[0]===m[0]&&x[1]===m[1]),b:b.slice(),p,ans:my.map(K)})}
+      else{const th=w1(b,3-p);if(th.length){const B=allMoves(b,p).filter(x=>!has1(apply(b,x),3-p));if(B.length)out.push({st:3,i,ok:B.some(x=>x[0]===m[0]&&x[1]===m[1]),b:b.slice(),p,ans:B.map(K)})}}}
+    b=apply(b,m);p=3-p}return out}
+function diag(){let gs=[];try{gs=loadGames().slice(0,10)}catch(e){}if(gs.length<3)return '';const o=cGet(),key=gs.map(g=>g.id).join(',');
+  if(o.dk!==key){const c={2:[0,0],3:[0,0]};for(const g of gs)for(const x of scan(g)){c[x.st][0]++;if(x.ok)c[x.st][1]++}o.dk=key;o.dg=c;
+    for(const s of [2,3]){const pre=[...Array(s-1)].every((_,j)=>(o.done[j+1]|0)>=4||o.auto[j+1]);if(pre&&c[s][0]>=3&&c[s][1]/c[s][0]>=.8)o.auto[s]=1}cPut(o)}
+  const c=o.dg;let w=0,wr=2;for(const s of [2,3]){if(c[s][0]>=2){const r=c[s][1]/c[s][0];if(r<wr){wr=r;w=s}}}
+  if(!w||wr>=.8)return '';return ['最近の'+gs.length+'局',ST[w][0],c[w][0]+'回中'+(c[w][0]-c[w][1])+'回のがしている']}
+/* 終局画面：のがした場面を1つ出して、その場で解き直す */
+{const _fe=fxEnd0;fxEnd0=function(win,why,me,b,cell){const r=_fe(win,why,me,b,cell);try{setTimeout(()=>{const e=$('mvEnd');if(!e||e.hidden||!S||!S.over||S.fromPos||!S.log)return;const row=e.querySelector('.mvacts')||e.querySelector('.mvrow');if(!row||e.querySelector('.cqend'))return;
+    const g={log:S.log.map(m=>[m[0],m[1]]),me:S.mode==='net'?colorOf(NET.me):S.mode===0?0:hcOf(),mode:S.study?'study':S.mode};const miss=scan(g).find(x=>!x.ok);if(!miss)return;
+    const c=document.createElement('div');c.className='cqend';const fi=document.createElement('img');fi.className='cqend-f';fi.src='img/coach/coach-n.webp?v=1';fi.alt='';c.append(fi);const tt=document.createElement('span');spans(tt,[(miss.i+1)+'手目',miss.st===2?'1手で勝てる手があった':'相手のリーチを止めなかった'],1);c.append(tt);
+    const bt=document.createElement('button');bt.type='button';bt.textContent='解き直す';bt.addEventListener('click',ev=>{ev.stopPropagation();e.hidden=true;cLoad().then(()=>coachOne({id:-1,st:miss.st,kind:'m',b:miss.b,p:miss.p,ans:miss.ans}))});
+    c.append(bt);row.parentNode.insertBefore(c,row)},1700)}catch(x){}return r}}
 })();
 
 </script>
