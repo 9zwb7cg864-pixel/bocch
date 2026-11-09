@@ -7,6 +7,8 @@
 //   POST /bocch-v1-stats/hit             … 遊んだ時間・終局・訪問の集計（端末はランダムIDのみ。個人は特定しない）
 //   POST /bocch-v1-tally/note            … 上の別名（広告ブロッカー対策。ゲームはこちらを使う）
 //   GET  /bocch-v1-stats/view            … 集計を見る（ヘッダー X-Pass のパスワードが合うときだけ）
+//   POST /bocch-v1-kifu/rec              … 終わった対局の棋譜を残す（コーチづくり・改善用。端末のランダムIDだけで、名前・メールは受け取らない。2年で消す）
+//   GET  /bocch-v1-kifu/dump?since=…     … 残した棋譜を1行1局で取り出す（X-Pass が合うときだけ）
 // since は all / 90s / 15m / 3h / UNIX秒。
 import { DurableObject } from "cloudflare:workers";
 
@@ -14,6 +16,8 @@ const KEEP_SEC = 12 * 3600;     // 保存期間
 const KEEP_MAX = 1000;          // 1話題あたりの最大件数
 const BODY_MAX = 4096;          // 1件の最大バイト数
 const STATS_HASH = "c301ac70fe153803d6486e1b8651e4369b180c2b20904f6c57b70c17169a7055";   // 利用状況ページのパスワードの SHA-256
+const KIFU_KEEP = 2 * 365 * 86400;  // 棋譜の保存期間（2年）
+const KIFU_MAX = 16384;             // 1局の最大バイト数
 const ORIGINS = [/^https?:\/\/(www\.)?bocchgame\.com$/, /^https:\/\/9zwb7cg864-pixel\.github\.io$/, /^http:\/\/localhost(:\d+)?$/, /^http:\/\/127\.0\.0\.1(:\d+)?$/];
 
 function cors(req) {
@@ -141,6 +145,9 @@ export class Topic extends DurableObject {
     // 利用状況の集計（話題 bocch-v1-stats だけ）
     if (topic === "bocch-v1-stats" && action === "hit" && req.method === "POST") return this.statHit(req, h);
     if (topic === "bocch-v1-stats" && action === "view" && req.method === "GET") return this.statView(req, h);
+    // 棋譜（話題 bocch-v1-kifu だけ）
+    if (topic === "bocch-v1-kifu" && action === "rec" && req.method === "POST") return this.kifuRec(req, h, now);
+    if (topic === "bocch-v1-kifu" && action === "dump" && req.method === "GET") return this.kifuDump(req, h, url);
 
     return new Response("not found\n", { status: 404, headers: h });
   }
@@ -192,6 +199,41 @@ export class Topic extends DurableObject {
     put.tot = T; put["day:" + day] = D;
     await st.put(put);
     return new Response("ok\n", { headers: h });
+  }
+  // ---- 棋譜 ----
+  // 1局1行。同じ端末から同じ対局が2回届いても1回だけ残す（k = 端末ID + 対局ID）
+  async kifuRec(req, h, now) {
+    const txt = await req.text();
+    if (new TextEncoder().encode(txt).length > KIFU_MAX) return new Response("too large\n", { status: 413, headers: h });
+    let b; try { b = JSON.parse(txt); } catch (e) { return new Response("bad\n", { status: 400, headers: h }); }
+    const d = String(b && b.d || ""), gid = String(b && b.k || "");
+    if (!/^[a-z0-9]{8,32}$/.test(d) || !/^[A-Za-z0-9_-]{1,48}$/.test(gid)) return new Response("bad\n", { status: 400, headers: h });
+    const log = Array.isArray(b.log) ? b.log : null;
+    if (!log || log.length < 1 || log.length > 400 || !log.every(m => Array.isArray(m) && m.length === 2 && m.every(x => Number.isInteger(x) && x >= 0 && x < 36)))
+      return new Response("bad\n", { status: 400, headers: h });
+    const ms = Array.isArray(b.ms) && b.ms.length === log.length ? b.ms.map(x => Math.max(0, Math.min(36e5, Math.round(Number(x) || 0)))) : null;
+    const num = (x, lo, hi) => { const v = Number(x); return Number.isFinite(v) ? Math.max(lo, Math.min(hi, Math.round(v))) : null; };
+    const str = (x, n) => String(x == null ? "" : x).replace(/[^A-Za-z0-9_.-]/g, "").slice(0, n);
+    const rec = { d, k: gid, at: now, cc: String(req.headers.get("CF-IPCountry") || "").slice(0, 2), v: str(b.v, 12), m: str(b.m, 12), me: num(b.me, 0, 2), win: num(b.win, 0, 2), why: str(b.why, 16),
+      ra: num(b.ra, 0, 4000), oa: num(b.oa, 0, 4000), lg: str(b.lg, 8), log, ms };
+    const st = this.ctx.storage;
+    this.sql.exec("CREATE TABLE IF NOT EXISTS g (k TEXT PRIMARY KEY, time INTEGER, body TEXT)");
+    this.sql.exec("INSERT OR IGNORE INTO g (k, time, body) VALUES (?, ?, ?)", d + ":" + gid, now, JSON.stringify(rec));
+    this.sql.exec("DELETE FROM g WHERE time < ?", now - KIFU_KEEP);
+    return new Response("ok\n", { headers: h });
+  }
+  async kifuDump(req, h, url) {
+    if (!(await this.passOk(req))) { await new Promise(r => setTimeout(r, 800)); return new Response("forbidden\n", { status: 401, headers: h }); }
+    this.sql.exec("CREATE TABLE IF NOT EXISTS g (k TEXT PRIMARY KEY, time INTEGER, body TEXT)");
+    const since = Number(url.searchParams.get("since")) || 0, lim = Math.max(1, Math.min(5000, Number(url.searchParams.get("limit")) || 5000));
+    const rows = this.sql.exec("SELECT time, body FROM g WHERE time >= ? ORDER BY time LIMIT ?", since, lim).toArray();
+    const cnt = this.sql.exec("SELECT COUNT(*) AS n FROM g").one().n;
+    return new Response(rows.map(r => r.body).join("\n") + (rows.length ? "\n" : ""), { headers: { ...h, "Content-Type": "application/x-ndjson", "Cache-Control": "no-store", "X-Total": String(cnt), "Access-Control-Expose-Headers": "X-Total" } });
+  }
+  async passOk(req) {
+    const got = req.headers.get("X-Pass") || "";
+    const dg = [...new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(got)))].map(x => x.toString(16).padStart(2, "0")).join("");
+    return got.length >= 6 && (dg === STATS_HASH || (!!this.env.STATS_PASS && got === this.env.STATS_PASS));
   }
   async statView(req, h) {
     // パスワードそのものは置かず、SHA-256 の値だけを持つ（秘密 STATS_PASS があればそちらでも可）

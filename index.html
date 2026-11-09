@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=43"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=44"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -1698,6 +1698,7 @@ svg.rchfx{z-index:1}
 .pzl-t.o{background:rgba(62,207,155,.2);color:#7fe6c0}.pzl-t.x{background:rgba(255,107,107,.18);color:#ff9b93}
 .pzl-none{grid-column:1/-1;font-size:13px;color:var(--mute);margin:4px 0}
 .pzl-more{width:100%;margin-top:10px;height:38px;font-size:13px;background:transparent;border:1px solid var(--line2);box-shadow:none;color:var(--sub)}
+.kf-opt{margin-top:14px}.kf-sw{font-weight:700;font-size:14.5px}.kf-opt .prof-note{margin:6px 0 0}
 
 </style>
 </head>
@@ -1705,7 +1706,7 @@ svg.rchfx{z-index:1}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.53</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.54</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -2032,6 +2033,10 @@ svg.rchfx{z-index:1}
       <div class="row acct-btns"><button id="acctLogout">ログアウト</button></div>
     </div>
     <p class="prof-msg" id="acctMsg"></p>
+  </div>
+  <div class="card prof kf-opt">
+    <label class="chk kf-sw"><input type="checkbox" id="kifuOpt" checked> 対局の記録をbocchの改善に使う</label>
+    <p class="prof-note">終わった対局の指し手と考えた時間を、名前やメールなしで送ります。コーチ機能づくりと、AIや問題の改善に使います。<a href="privacy.html">くわしく</a></p>
   </div>
 </section>
 
@@ -2954,7 +2959,7 @@ function onCell(i){
 /* 盤のマス：変わったところだけ書き換える（毎回36マスを作り直さない） */
 function setCell(el,cls,html,aria){if(el.className!==cls)el.className=cls;if(el._h!==html){el.innerHTML=html;el._h=html}if(aria!=null&&el._a!==aria){el.setAttribute('aria-label',aria);el._a=aria}}
 const NAME={1:'黒',2:'白'};
-function render(){
+function render(){try{if(S&&S.log){const n=S.log.length;if(!S.tm){S.tm=[];S.t0=Date.now()}if(n>S.tm.length){while(S.tm.length<n)S.tm.push(Date.now())}else if(n<S.tm.length)S.tm.length=n}}catch(e){}
   const b=S.b,targets=S.sel>=0?movesFrom(b,S.sel).map(m=>m[1]):[];
   const nbs=new Set();if(S.sel>=0){const r=S.sel/N|0,c=S.sel%N;for(const[x,y]of DIRS)if(ok(r+x,c+y)&&b[(r+x)*N+c+y])nbs.add((r+x)*N+c+y)}
   const canAct=human(),rk=[0,colorRank(1),colorRank(2)];mvPre();const RCH=mvReach(b);
@@ -3632,7 +3637,17 @@ function saveFinished(){
   const g=loadGames(),ix=g.findIndex(x=>x.id===id),old=ix>=0?g[ix]:null;
   const same=old&&old.log.length===S.log.length&&old.log.every((m,i)=>m[0]===S.log[i][0]&&m[1]===S.log[i][1]);
   const e={id,t:old?old.t:Date.now(),mode:S.study?'study':S.mode,me,win:S.over.win,why:S.over.why,log:S.log.map(m=>[m[0],m[1]]),an:same?old.an:null};if(old&&same){if(old.rd!=null)e.rd=old.rd;if(old.opp)e.opp=old.opp;if(old.ra!=null)e.ra=old.ra}
-  if(ix>=0)g.splice(ix,1);g.unshift(e);storeGames(g)}
+  if(ix>=0)g.splice(ix,1);g.unshift(e);storeGames(g);if(!S.study&&!S.learn&&!(S.mode==='net'&&NET.watch))kifuSend(e)}
+/* 対局の記録（2026-11）：終わった対局の指し手と1手ごとの考えた時間を中継サーバーに残す。名前・メール・アカウントは送らない（端末のランダムIDだけ）。
+   コーチ機能づくりと、AI・問題の改善に使う。アカウント画面のスイッチでオフにできる。保存は2年 */
+function kifuOn(){try{return localStorage.getItem('bocch-kifu-off')!=='1'}catch(e){return true}}
+const KIFU_SENT=new Set();
+function kifuSend(e){try{if(!kifuOn()||KIFU_SENT.has(e.id)||/[?&](nostat|coach=1)/.test(location.search))return;const d=statId();if(!d||!/^[A-Za-z0-9_-]{1,48}$/.test(e.id))return;KIFU_SENT.add(e.id);
+  const tm=S.tm||[],ms=e.log.length===tm.length?tm.map((t,i)=>t-(i?tm[i-1]:(S.t0||t))):null;
+  let oa=null;if(S.mode==='net'){const o=NM[oppIdOf()];oa=o?o.rate:null}else if(CPU_RATE[S.mode])oa=CPU_RATE[S.mode];
+  const body=JSON.stringify({d,k:e.id,v:($('ver')||{}).textContent||'',m:String(e.mode),me:e.me,win:e.win,why:(w=>/到着/.test(w)?'goal':/動けな/.test(w)?'nomove':/3回/.test(w)?'repeat':/投了/.test(w)?'resign':/時間切れ/.test(w)?'time':'other')(String(e.why||'')),ra:Math.round(PROF.rating||0),oa,lg:window.BOCCH_LANG||'ja',log:e.log,ms});
+  fetch(RELAY+TOPIC('kifu')+'/rec',{method:'POST',body,keepalive:true}).catch(()=>{})}catch(x){}}
+(function(){const c=$('kifuOpt');if(!c)return;c.checked=kifuOn();c.addEventListener('change',()=>{try{if(c.checked)localStorage.removeItem('bocch-kifu-off');else localStorage.setItem('bocch-kifu-off','1')}catch(e){}})})();
 const _renderR=render;
 render=function(){_renderR();
   if(S.over)saveFinished();
@@ -5432,7 +5447,7 @@ const ONLINE_MIN=20; // この人数に届かないときは表示しない（�
   poll();setInterval(poll,15000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)poll()});
   window.bocchSeekPoll=poll})();
 </script>
-<script>/* ガイドとプライバシーポリシーは、選んだ言語のページを開く */(function(){var L=window.BOCCH_LANG||'ja',S={'en':'-en','zh-Hans':'-zh-hans','zh-Hant':'-zh-hant','ko':'-ko','es':'-es','de':'-de'}[L]||'';window.BOCCH_PAGES={guide:'guide'+S+'.html',privacy:'privacy'+S+'.html'};var a=document.querySelector('.foot-links a[href="privacy.html"]');if(a)a.href=window.BOCCH_PAGES.privacy;var fl=document.getElementById('footLearn'),fa=document.getElementById('footAbout');if(S){if(fl)fl.href='learn/'+S.slice(1)+'/';if(fa)fa.href='about'+S+'.html'}if(S){var l=document.createElement('link');l.rel='prefetch';l.href=window.BOCCH_PAGES.guide;document.head.appendChild(l)}})();</script>
+<script>/* ガイドとプライバシーポリシーは、選んだ言語のページを開く */(function(){var L=window.BOCCH_LANG||'ja',S={'en':'-en','zh-Hans':'-zh-hans','zh-Hant':'-zh-hant','ko':'-ko','es':'-es','de':'-de'}[L]||'';window.BOCCH_PAGES={guide:'guide'+S+'.html',privacy:'privacy'+S+'.html'};document.querySelectorAll('.foot-links a[href="privacy.html"],.kf-opt a[href="privacy.html"]').forEach(function(a){a.href=window.BOCCH_PAGES.privacy});var fl=document.getElementById('footLearn'),fa=document.getElementById('footAbout');if(S){if(fl)fl.href='learn/'+S.slice(1)+'/';if(fa)fa.href='about'+S+'.html'}if(S){var l=document.createElement('link');l.rel='prefetch';l.href=window.BOCCH_PAGES.guide;document.head.appendChild(l)}})();</script>
 <script>/* 言語の切り替え：選んだら保存して読み直す */(function(){var e=document.getElementById('langSel');if(!e)return;e.value=window.BOCCH_LANG||'ja';e.addEventListener('change',function(){try{localStorage.setItem('bocch-lang',e.value)}catch(x){}var u=new URL(location.href);u.searchParams.delete('lang');location.replace(u.toString())})})();</script>
 <script>
 /* ?fps を付けて開いたときだけ、画面の隅にfpsを出す（演出の重さをスマホで確かめる用） */
