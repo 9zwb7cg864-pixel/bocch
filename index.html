@@ -1781,7 +1781,7 @@ a.cl-next h4::after{content:" ›";color:var(--tb)}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.60</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.61</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -2046,7 +2046,6 @@ a.cl-next h4::after{content:" ›";color:var(--tb)}
 <section class="scr" data-scr="watch" hidden>
   <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>観戦する</h2><span class="sp"></span></div>
   <p class="lead hist-note">いま対局中の部屋です。選ぶと観戦できます（指すことはできません）。</p>
-  <button class="big primary ai-watch" id="aiWatch">AIを観戦する（最強 対 最強）</button>
   <div class="hist" id="watchList"></div>
   <p class="hist-empty" id="watchEmpty">いま対局中の部屋はありません。</p>
   <p class="hist-note watch-st" id="watchSt"></p>
@@ -4036,7 +4035,7 @@ function startWatchList(){stopWatchList();LV.rooms=new Map();LV.seen=new Set();$
   LV.tick=setInterval(renderWatch,30000)}
 function stopWatchList(){LV.on=false;clearInterval(LV.tick);if(LV.es){LV.es.close();LV.es=null}}
 function renderWatch(){const box=$('watchList');box.innerHTML='';
-  const now=Date.now()/1000;const list=[...LV.rooms.entries()].filter(([,r])=>now-r.at<5400).sort((a,b)=>b[1].at-a[1].at);
+  const now=Date.now()/1000;const list=[...LV.rooms.entries()].filter(([,r])=>now-r.at<5400&&!r.ai).sort((a,b)=>b[1].at-a[1].at);
   $('watchEmpty').hidden=!!list.length||$('watchSt').textContent!=='';
   list.forEach(([room,r])=>{const b=document.createElement('button');
     const st=document.createElement('span');st.className='res live'+(r.ai?' ai':'');st.textContent=r.ai?'AI対局':'対局中';
@@ -4044,26 +4043,6 @@ function renderWatch(){const box=$('watchList');box.innerHTML='';
     m.append(mb,document.createElement('br'),document.createTextNode(((now-r.at)<60?'始まったところ':Math.floor((now-r.at)/60)+'分前に開始')+(r.g?'　'+(r.g+1)+'局目':'')+(r.names&&r.names.length===2?'　部屋 '+room.toUpperCase():'')));
     b.append(st,m);b.addEventListener('click',()=>{stopWatchList();openRoom(room,true);show('game')});box.appendChild(b)})}
 document.querySelectorAll('[data-go="watch"]').forEach(b=>b.addEventListener('click',startWatchList));
-/* AIを観戦する：最強対最強を1手3秒で。誰かが観ていればその部屋に入る。
-   観ている人全員が手を出せる仕組み（同じ手が二重に届いても2回目は無視される）なので、最初の人が抜けても続く */
-const AIW={on:false,code:null,b:null,w:null,lastPly:-1,lastAt:0,thinkKey:'',res:null,worker:null,primary:false,beat:0,overFor:-1,posted:0,seen:'',thinkAt:0};
-function aiWorker(){if(AIW.worker!==null)return AIW.worker;try{const src=$('eng').textContent+'\nonmessage=e=>{const d=e.data;const r=BocchEngine.think(d.b,d.p,d.ms,{shuffle:d.shuffle,book:true});postMessage({key:d.key,r})}';
-  AIW.worker=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));AIW.worker.onmessage=e=>{if(e.data.key===AIW.thinkKey)AIW.res=e.data}}catch(e){AIW.worker=false}return AIW.worker}
-function aiRaw(o){o.from=o.from||NET.me;return fetch(RELAY+TOPIC(NET.code),{method:'POST',body:JSON.stringify(o)}).catch(()=>{})}
-function aiLive(){livePost({t:'live',room:NET.code,g:NET.game,ai:1,names:['最強AI','最強AI']})}
-function aiHost(){const code=newCode();openRoom(code,true);NET.claimed=true;NET.watch=true;NET.ai=true;
-  AIW.b='ai'+newCode()+'b';AIW.w='ai'+newCode()+'w';AIW.primary=true;
-  aiRaw({t:'create',from:AIW.b,name:'最強AI',rate:2100,ai:1}).then(()=>aiRaw({t:'join',from:AIW.w,name:'最強AI',rate:2100,ai:1})).then(()=>{aiLive();AIW.beat=Date.now()});
-  aiStart(code)}
-function aiRawTo(code,o){return fetch(RELAY+TOPIC(code),{method:'POST',body:JSON.stringify(o)}).catch(()=>{})}
-// 次の局は新しい部屋で始め、いまの部屋に行き先を書いておく（観ている人は自動でついてくる）
-async function aiNextRoom(){if(AIW.nextFor===NET.code||AIW.followTo)return;const old=NET.code;AIW.nextFor=old;const code=newCode(),b='ai'+newCode()+'b',w='ai'+newCode()+'w';
-  await aiRawTo(code,{t:'create',from:b,name:'最強AI',rate:2100,ai:1});await aiRawTo(code,{t:'join',from:w,name:'最強AI',rate:2100,ai:1});
-  if(AIW.followTo||NET.code!==old)return;
-  await aiRawTo(old,{t:'next',room:code,from:NET.me});livePost({t:'end',room:old,g:NET.game});livePost({t:'live',room:code,g:0,ai:1,names:['最強AI','最強AI']})}
-function aiFollow(code){if(AIW.followTo===code)return;AIW.followTo=code;setTimeout(()=>{if(AIW.followTo!==code)return;const pr=AIW.primary;
-  openRoom(code,true);NET.ai=true;aiStart(code);AIW.primary=pr;AIW.beat=Date.now();AIW.followTo=null;if(typeof VIEW!=='undefined')VIEW.i=null;render()},300)}
-function aiStart(code){AIW.on=true;AIW.code=code;AIW.lastPly=-1;AIW.thinkKey='';AIW.res=null;AIW.overFor=-1}
 /* CPU戦：スマホでアプリを裏に回すと、考えている途中の処理が止まって消えることがある。
    画面に戻ったとき・CPUの手番のまま9秒動かないときは、考え直させる（最強の別スレッドも作り直す） */
 function cpuRekick(hard){if(!S||S.study||S.over||!(S.mode>=1&&S.mode<=10)||S.turn===hcOf())return;
@@ -4071,28 +4050,7 @@ function cpuRekick(hard){if(!S||S.study||S.over||!(S.mode>=1&&S.mode<=10)||S.tur
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)cpuRekick(true)});
 addEventListener('pageshow',()=>cpuRekick(true));
 setInterval(()=>{if(!document.hidden&&S&&!S.study&&!S.over&&S.mode>=1&&S.mode<=10&&S.turn!==hcOf()&&KICK&&Date.now()-KICK_AT>9000)cpuRekick(true)},2000);
-document.addEventListener('visibilitychange',()=>{if(!document.hidden&&AIW.on){AIW.lastPly=-1}if(!document.hidden&&S&&S.study){KICK='';WKkey='';try{kick()}catch(e){}}}); // 画面に戻ったらすぐ再開
-$('aiWatch').addEventListener('click',()=>{stopWatchList();const now=Date.now()/1000;
-  const room=[...LV.rooms.entries()].filter(([,r])=>r.ai&&now-r.at<5400).sort((a,b)=>b[1].at-a[1].at)[0];
-  if(room){openRoom(room[0],true);AIW.primary=false;aiStart(room[0])}else aiHost();show('game')});
-setInterval(()=>{if(!AIW.on){if(S&&S.mode==='net'&&NET.watch&&NET.ai&&NET.code&&!colorOf(NET.me)&&!AIW.followTo){aiStart(NET.code);AIW.primary=false}return}if(S.mode!=='net'||NET.code!==AIW.code){AIW.on=false;return}
-  if(!NET.ai||!NET.host||!NET.guest)return;
-  const now=Date.now();
-  if(AIW.primary&&now-AIW.beat>60000){AIW.beat=now;aiLive()} // 一覧から消えないよう1分ごとに知らせる
-  if(S.over){ // 終わったら8秒後に次の局
-    if(AIW.overFor!==NET.game){AIW.overFor=NET.game;AIW.lastAt=now;if(AIW.primary)livePost({t:'end',room:NET.code,g:NET.game})}
-    else if(now-AIW.lastAt>(AIW.primary?8000:14000)){AIW.lastAt=now+60000;aiNextRoom()}
-    return}
-  // 見張り：送った手が届かない／考えが返ってこないときは、考え直して送り直す
-  if(S.ply===AIW.lastPly&&((AIW.posted&&now-AIW.posted>10000)||(!AIW.posted&&!AIW.res&&now-AIW.thinkAt>25000))){AIW.lastPly=-1}
-  if(S.ply!==AIW.lastPly){const key2=NET.game+':'+S.ply;if(AIW.seen!==key2){AIW.seen=key2;AIW.lastAt=now}AIW.lastPly=S.ply;AIW.res=null;AIW.posted=0;AIW.thinkAt=now;AIW.thinkKey=NET.game+':'+S.ply+':'+key(S.b,S.turn);
-    const w=aiWorker(),job={key:AIW.thinkKey,b:S.b.slice(),p:S.turn,ms:2500,shuffle:S.ply<4};
-    if(w)w.postMessage(job);else{const k=AIW.thinkKey;setTimeout(()=>{if(AIW.thinkKey===k)AIW.res={key:k,r:BocchEngine.think(job.b,job.p,1500,job)}},50)}
-    return}
-  const wait=AIW.primary?3000:3000+5000+((NET.me||'').charCodeAt(0)%4)*1000; // 観ているだけの人は、手が来ないときだけ代わりに指す
-  if(AIW.res&&AIW.res.key===AIW.thinkKey&&AIW.res.r&&now-AIW.lastAt>=wait){const m=AIW.res.r.move;AIW.res=null;
-    const from=colorOf(NET.host)===S.turn?NET.host:NET.guest;aiRaw({t:'move',g:NET.game,ply:S.ply,m,from});AIW.posted=now;if(!AIW.primary){AIW.primary=true;AIW.beat=0}} // 代わりに指したら、以後はこの人が進める
-},400);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S&&S.study){KICK='';WKkey='';try{kick()}catch(e){}}}); // 画面に戻ったらすぐ再開
 addEventListener('popstate',()=>{if(CUR==='watch'){if(!LV.on)startWatchList()}else stopWatchList()});
 
 /* 名前とレート（この端末に保存。オンラインでは部屋の記録に名前とレートを添えて送る） */
@@ -4123,7 +4081,6 @@ var NM={};
 const _post=post;post=async function(o){if(o&&(o.t==='create'||o.t==='join'||o.t==='hi')){o.name=myName();o.rate=Math.round(PROF.rating);o.lv=PROF.dan.lv;o.off=isOff()?1:0;o.bd=bdSel();try{if(FB.ready&&FB.user&&FB.user.emailVerified)o.uid=FB.user.uid}catch(e){}}return _post(o)};
 const _reduce=reduce;reduce=function(m){
   if(m&&m.t==='create'&&m.ai===1){NET.ai=true;if(!NET.watch&&!colorOf(NET.me)){NET.watch=true;NET.claimed=true;clearTimeout(NET.timer);try{history.replaceState(null,'','?watch='+NET.code)}catch(e){}}}
-  if(m&&m.t==='next'&&typeof m.room==='string'&&/^[a-z0-9]{6}$/.test(m.room)&&NET.ai){aiFollow(m.room);return}
   if(m&&m.from&&typeof m.from==='string'&&(m.name!=null||m.rate!=null)){const r=Number(m.rate);NM[m.from]={name:cleanName(m.name)||'名無し',rate:Number.isFinite(r)?Math.max(0,Math.min(4000,Math.round(r))):1500,lv:(m.lv!=null&&Number.isFinite(+m.lv))?lvC(m.lv):null,off:m.off===1,bd:typeof m.bd==='string'&&BD[m.bd]?m.bd:'',uid:typeof m.uid==='string'&&/^[A-Za-z0-9]{10,40}$/.test(m.uid)?m.uid:null,ch:typeof m.ch==='string'?m.ch.slice(0,20):''}}
   return _reduce(m)};
 function oppIdOf(){return NET.me===NET.host?NET.guest:NET.host}
@@ -5765,17 +5722,14 @@ function hwList(){const out=[],seen=new Set();
   for(const {f,snap} of HW.fr){const r=replay(frLog(snap.k)||[]);if(snap.room)seen.add(snap.room);const me=snap.me===2?2:1;
     out.push({fr:true,f,snap,room:snap.room,b:r.b,n:r.n,last:r.last,flip:me===2,names:me===1?[f.name,snap.opp||'']:[snap.opp||'',f.name]})}
   const pub=[...HW.rooms.entries()].filter(([k])=>!seen.has(k)).sort((a,b)=>(a[1].ai-b[1].ai)||(b[1].at-a[1].at));
-  for(const [room,r] of pub){const pk=HW.peek.get(room);out.push({room,ai:r.ai,names:r.names,at:r.at,b:pk?pk.b:null,n:pk?pk.n:0,last:pk?pk.last:null})}
+  for(const [room,r] of pub){if(r.ai)continue; // AI同士の対局は出さない（AI観戦はやめた）
+const pk=HW.peek.get(room);out.push({room,ai:r.ai,names:r.names,at:r.at,b:pk?pk.b:null,n:pk?pk.n:0,last:pk?pk.last:null})}
   return out}
 function hwOpen(e){try{stopWatchList()}catch(x){}if(e.fr){if(e.room)frWatchRoom(e.room);else frOpen(e.f,e.snap,true);return}
   try{if(S.mode==='net')leave()}catch(x){}openRoom(e.room,true);show('game')}
 function hwNames(e){const w=document.createElement('span');w.className='hw-ns';e.names.forEach((n,i)=>{const r=document.createElement('span');const d=document.createElement('i');d.className='dot '+(i?'w':'b');const b=document.createElement('b');b.textContent=n||'…';r.append(d,b);w.append(r)});return w}
 function hwTag(e){const t=document.createElement('span');t.className='hw-tag'+(e.fr?' fr':e.ai?' ai':'');t.textContent=e.fr?'フレンド':e.ai?'AI対局':'対局中';return t}
-function hmLive(){const el=$('hmLive'),h=$('hmLiveH');if(!el)return;const L=hwList(),e=L[0];el.hidden=h.hidden=false;{const sp=h.querySelector('span:not(.hs-ic)');if(sp)sp.textContent=e?'いま対局中':'観戦'}
-  /* 対局がないときも、最強AI同士の観戦の入口を出す */
-  if(!e){if(el.dataset.k==='none')return;el.dataset.k='none';el.innerHTML='';const bd=document.createElement('button');bd.type='button';bd.className='hc-board';bd.setAttribute('aria-label','最強AI同士を観る');bd.append(miniB(startBoard(),{}));
-    const sd=document.createElement('div');sd.className='hc-side';const top=document.createElement('div');top.className='hw-top';const st=document.createElement('span');st.className='hw-st';st.textContent='いまは対局がありません';top.append(st);
-    const go=document.createElement('button');go.type='button';go.className='hc-btn';go.textContent='最強AI同士を観る';const open=()=>{const a=$('aiWatch');if(a)a.click()};go.onclick=open;bd.onclick=open;sd.append(top,go);el.append(bd,sd);return}
+function hmLive(){const el=$('hmLive'),h=$('hmLiveH');if(!el)return;const L=hwList(),e=L[0];el.hidden=h.hidden=!e;if(!e){el.innerHTML='';el.dataset.k='';return}
   const key=(e.room||'')+'|'+(e.fr?e.f.uid:'')+'|'+e.n+'|'+!!e.b+'|'+L.length;if(el.dataset.k===key)return;el.dataset.k=key;el.innerHTML='';
   const bd=document.createElement('button');bd.type='button';bd.className='hc-board';bd.setAttribute('aria-label','観戦する');bd.append(miniB(e.b||startBoard(),{flip:e.flip,last:e.last}));if(!e.b)bd.classList.add('ld');bd.onclick=()=>hwOpen(e);
   const sd=document.createElement('div');sd.className='hc-side';const st=document.createElement('span');st.className='hw-st';st.textContent=e.n?e.n+'手目':'始まったところ';
