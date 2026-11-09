@@ -1781,7 +1781,7 @@ a.cl-next h4::after{content:" ›";color:var(--tb)}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.61</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.62</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -5953,7 +5953,9 @@ $('cqX').addEventListener('click',()=>{CO.L=null;CO.after=null;history.length>1?
 const LS={on:false};
 function boardEl(b,p,L,mark,id){const w=document.createElement('div');w.className='boardwrap cl-bw';const bd=document.createElement('div');bd.className='board'+(p===2?' flip':'');const g=document.createElement('div');g.className='grid';
   for(let i=0;i<36;i++){const c=document.createElement('div');let cls='cell';const r=i/6|0;if(r===0||r===5)cls+=' goal';if(mark&&mark[i])cls+=' '+mark[i];c.className=cls;c.innerHTML=cellsHtml(b,i);g.append(c)}
-  bd.append(g);w.append(bd);setTimeout(()=>{try{rchDraw(g,id,L||[])}catch(e){}},30);return w}
+  const flip=p===2,lt=document.createElement('div'),ll=document.createElement('div');lt.className='lab lab-top';ll.className='lab lab-left';lt.setAttribute('aria-hidden','true');ll.setAttribute('aria-hidden','true');
+  for(let k=0;k<6;k++){const a1=document.createElement('span');a1.textContent=String(flip?6-k:k+1);lt.append(a1);const a2=document.createElement('span');a2.textContent='abcdef'[flip?5-k:k];ll.append(a2)} // 符号（1〜6・a〜f）
+  bd.append(lt,ll,g);w.append(bd);setTimeout(()=>{try{rchDraw(g,id,L||[])}catch(e){}},30);return w}
 function bubble(face,parts,cls){const d=document.createElement('div');d.className='cl-co';const im=document.createElement('img');im.src='img/coach/coach-'+face+'.webp?v=1';im.alt='';im.width=56;im.height=56;
   const b=document.createElement('div');b.className='cl-bub';spans(b,parts,cls==null?'l':cls);d.append(im,b);return d}
 function steps(k){[...$('clSteps').children].forEach((e,i)=>e.className=i<k?'d':i===k?'c':'')}
