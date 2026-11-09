@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>読みの8段階：bocchが強くなる順番｜bocch</title>
+<meta name="description" content="bocchで強くなるための「読み」を、盤が見える・1手の攻め・1手の守りから3手の読みまで、8つの段階に分けて解説します。各段階に盤の図と練習問題があります。">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/yomi.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="読みの8段階：bocchが強くなる順番">
+<meta property="og:description" content="bocchで強くなるための「読み」を、盤が見える・1手の攻め・1手の守りから3手の読みまで、8つの段階に分けて解説します。各段階に盤の図と練習問題があります。">
+<meta property="og:url" content="https://bocchgame.com/learn/yomi.html">
+<meta property="og:image" content="https://bocchgame.com/og.jpg">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "読みの8段階：bocchが強くなる順番", "description": "bocchで強くなるための「読み」を、盤が見える・1手の攻め・1手の守りから3手の読みまで、8つの段階に分けて解説します。各段階に盤の図と練習問題があります。", "inLanguage": "ja", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/yomi.html", "datePublished": "2026-11-10", "dateModified": "2026-11-10"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+.sn{display:flex;justify-content:space-between;gap:12px;margin-top:36px;font-size:14px}.sn a{text-decoration:none}details.ans{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--card)}details.ans summary{cursor:pointer;font-weight:700;color:var(--gold)}details.ans[open] summary{margin-bottom:8px}.qn{font-weight:700}</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="../">bocch</a><nav><a href="../learn/">記事</a><a href="../guide.html">ガイド</a><a class="play" href="../">対局する</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">読みの8段階</div>
+<h1>読みの8段階：<br>bocchが強くなる順番</h1>
+<p class="meta">kairo・2026年11月10日</p>
+<p class="lead">bocchで強くなるために必要な「読み」を、やさしい順に8つに分けました。各段階に盤の図と練習問題があります。自分がどこでつまずいているかを確かめながら読んでください。</p><p>bocchは、将棋やチェスのように「先を読む」ゲームです。ただ、駒の損得がなく、石も取られません。勝ち負けを決めるのは、<strong>どの石が次の1手でゴールに届くか</strong>という一点です。だから、強くなる道筋もはっきりしています。</p><p>このシリーズでは、bocchの読みを8つの段階に分けて解説します。下の段階ができないと、上の段階は役に立ちません。リーチ（次の1手でゴールに届く石）に気づけない人が2手先を読んでも、その前に負けてしまうからです。</p><h2>8つの段階</h2><div class="tw"><table><tr><th>段階</th><th>できるようになること</th></tr><tr><td><a href="yomi-1-ban.html">1 盤が見える</a></td><td>石の数字（移動力）を数えて、どこへ行けるか分かる</td></tr><tr><td><a href="yomi-2-seme.html">2 1手の攻め</a></td><td>自分の石で、次の1手でゴールに届く石を見つける</td></tr><tr><td><a href="yomi-3-mamori.html">3 1手の守り</a></td><td>相手のリーチに気づいて、止める</td></tr><tr><td><a href="yomi-4-watasanai.html">4 自分から渡さない</a></td><td>自分の手で相手にリーチを作ってしまわない</td></tr><tr><td><a href="yomi-5-koubou.html">5 守りながら攻める</a></td><td>止める手の中から、自分のリーチも作れる手を選ぶ</td></tr><tr><td><a href="yomi-6-nite-seme.html">6 2手の攻め</a></td><td>相手がどう受けても勝てる1手目を見つける</td></tr><tr><td><a href="yomi-7-nite-mamori.html">7 2手の守り</a></td><td>相手の2手の狙いを、先に形ごと消す</td></tr><tr><td><a href="yomi-8-sante.html">8 3手の読み</a></td><td>自分・相手・自分の3手で勝ちきる</td></tr></table></div><h2>なぜこの順番なのか</h2><p>bocchの石は、まわり8マスにいる石の数だけまっすぐ進みます。色は関係ありません。つまり<strong>自分が石を1つ動かすと、まわりの石の数字がまとめて変わり、相手の石の行き先まで変わります</strong>。これが、bocchの読みの土台です。</p><p>段階1〜3は「今の盤」を見る力です。今どの石がどこへ行けるか、自分と相手のどちらにリーチがあるか。段階4〜5は「自分の手のあとの盤」を見る力です。動かした結果、数字がどう変わるか。段階6〜8は「何手か先の盤」を見る力で、ここからが本当の読み合いです。</p><p>AI同士の2万6千局を調べると、2,047回指されて、指した側が1局も勝てなかった手がありました。<strong>自分の手で相手の石の数字を変え、ゴールへ届く石を作ってしまう手</strong>です（<a href="yubaku.html">誘爆の記事</a>）。段階4の「自分から渡さない」にあたります。強い人とそうでない人の差は、難しい読みよりも、こうした基本のところに出ます。</p><h2>このシリーズの使い方</h2><ul><li>段階1から順に読み、各記事の練習問題を解いてください。答えはすぐに見ず、盤の上で数字を数えてから開いてください。</li><li>アプリの「トレーニング」では、同じ8段階の問題を解けます。あなたの対局から苦手な段階を見つけて、授業もしてくれます。</li><li>対局のあとは、負けた場面がどの段階のミスだったかを考えてみてください。たいていは段階3か4です。</li></ul><div class="pt"><b>まず覚えること</b>：毎手、指す前に「相手のリーチはあるか」「自分のこの手で、相手にリーチができないか」の2つを確かめる。それだけで、負けがはっきり減ります。</div>
+<p class="sn"><a href="yomi-1-ban.html">読み1 盤が見える →</a></p>
+</article>
+<section class="rel"><h2>読みの8段階シリーズ</h2><ul><li><b><a href="yomi.html">読みの8段階：bocchが強くなる順番</a></b></li><li><a href="yomi-1-ban.html">読み1 盤が見える：移動力を数える</a></li><li><a href="yomi-2-seme.html">読み2 1手の攻め：ゴールに届く石を探す</a></li><li><a href="yomi-3-mamori.html">読み3 1手の守り：リーチの止め方は2つだけ</a></li><li><a href="yomi-4-watasanai.html">読み4 自分から渡さない：動かしたあとの数字を見る</a></li><li><a href="yomi-5-koubou.html">読み5 守りながら攻める：止める手の中から選ぶ</a></li><li><a href="yomi-6-nite-seme.html">読み6 2手の攻め：どの受けにも勝てるか</a></li><li><a href="yomi-7-nite-mamori.html">読み7 2手の守り：狙いを形ごと消す</a></li><li><a href="yomi-8-sante.html">読み8 3手の読み：自分・相手・自分</a></li></ul></section>
+</main>
+<footer><p><a href="../learn/">記事一覧</a><a href="../learn/glossary.html">用語集</a><a href="../guide.html">勝ち方ガイド</a><a href="../about.html">運営者情報</a><a href="../privacy.html">プライバシーポリシー・お問い合わせ</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>読み2 1手の攻め：ゴールに届く石を探す｜bocch</title>
+<meta name="description" content="bocchの「リーチ」（次の1手でゴールに届く石）の見つけ方を解説します。ゴールまでの段数と数字の関係、相手が動けなくなる勝ち方も、盤の図と練習問題で紹介します。">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/yomi-2-seme.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="読み2 1手の攻め：ゴールに届く石を探す">
+<meta property="og:description" content="bocchの「リーチ」（次の1手でゴールに届く石）の見つけ方を解説します。ゴールまでの段数と数字の関係、相手が動けなくなる勝ち方も、盤の図と練習問題で紹介します。">
+<meta property="og:url" content="https://bocchgame.com/learn/yomi-2-seme.html">
+<meta property="og:image" content="https://bocchgame.com/og.jpg">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "読み2 1手の攻め：ゴールに届く石を探す", "description": "bocchの「リーチ」（次の1手でゴールに届く石）の見つけ方を解説します。ゴールまでの段数と数字の関係、相手が動けなくなる勝ち方も、盤の図と練習問題で紹介します。", "inLanguage": "ja", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/yomi-2-seme.html", "datePublished": "2026-11-10", "dateModified": "2026-11-10"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+.sn{display:flex;justify-content:space-between;gap:12px;margin-top:36px;font-size:14px}.sn a{text-decoration:none}details.ans{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--card)}details.ans summary{cursor:pointer;font-weight:700;color:var(--gold)}details.ans[open] summary{margin-bottom:8px}.qn{font-weight:700}</style>
+</head>
+<body>
+<header class="top"><a class="logo" href="../">bocch</a><nav><a href="../learn/">記事</a><a href="../guide.html">ガイド</a><a class="play" href="../">対局する</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">読みの8段階</div>
+<h1>読み2 1手の攻め：<br>ゴールに届く石を探す</h1>
+<p class="meta">kairo・2026年11月10日</p>
+<p class="lead">bocchの勝ち方は、向こう岸に自分の石を2つ着けることです。次の1手でゴールに届く石を「リーチ」と呼びます。自分のリーチを見落とさないこと。それが攻めの第一歩です。</p><h2>リーチの探し方</h2><p>自分の石を1つずつ見て、数字の数だけ進んだ先がゴールの列に入るかを確かめます。全部の石を見るのは大変なので、次の順番で見ると早く見つかります。</p><ol><li>ゴールまでの段数と、数字が同じ石（真上・斜め上にまっすぐ届く）</li><li>ゴールまでの途中に、着地を邪魔する石がないか</li><li>着地するマスがあいているか</li></ol><p>黒のゴールは a の列、白のゴールは f の列です。黒の石が e の列にいれば、ゴールまで4段。数字4なら届きます。d の列なら3段で数字3、c の列なら2段で数字2、b の列なら1段で数字1です。</p><h2>例：勝てる手を見つける</h2><p>下の局面は黒の番です。黒はすでに1つゴールに着いています。あと1つ着けば勝ちです。</p><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">4</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"><b class="s w">3</b></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i></div></div><figcaption>黒の番。黒はすでに1つ着いている</figcaption></figure><p>黒のリーチになっているのは 2d→5a です。2d の数字は3で、ゴールの 5a まで3マス。途中に石があっても飛び越えられ、着地点の 5a はあいています。</p><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i><i class="c g to"></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">4</b></i><i class="c"></i><i class="c"></i><i class="c fr"><b class="s b">3</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"><b class="s w">3</b></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah1r" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker><marker id="ah1b" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#2f6fa8"/></marker><marker id="ah1o" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#d9822b"/></marker><marker id="ah1g" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#2f7d58"/></marker></defs><line x1="27.8" y1="55.5" x2="71.8" y2="11.5" stroke="#d9822b" stroke-opacity=".85" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah1o)"/></svg></div></div><figcaption>2d→5a で2つ目が着いて黒の勝ち</figcaption></figure><p>勝ちの手があるのに別の手を指すと、次の手番で相手に止められてしまうことがよくあります。<strong>指す前に、まず自分の勝ちがないかを見る</strong>。これが一番大事な習慣です。</p><h2>相手が動けなくなる勝ち方</h2><p>bocchでは、動かせる石が1つもなくなった側が負けです。なので、ゴールに届かなくても、相手の石を全部動けなくする手も勝ちになります。数は少ないですが、相手の石が数字0や数字4で固まっているときは、探してみる価値があります。</p><h2>練習問題</h2><p class="qn">問題1　黒の番です。次の1手で勝てる手を探してください。</p><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s b">1</b></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c g"></i><i class="c g"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">4</b></i><i class="c"><b class="s w">4</b></i><i class="c"><b class="s w">4</b></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"><b class="s b">4</b></i><i class="c"><b class="s b">4</b></i><i class="c"><b class="s b">4</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">3</b></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i></div></div><figcaption>問題1　黒の番</figcaption></figure><details class="ans"><summary>答えを見る</summary><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"><b class="s b">1</b></i><i class="c g to"></i><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c g"></i><i class="c g"></i><i class="c fr"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">4</b></i><i class="c"><b class="s w">4</b></i><i class="c"><b class="s w">4</b></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"><b class="s b">4</b></i><i class="c"><b class="s b">4</b></i><i class="c"><b class="s b">4</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">3</b></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah2r" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker><marker id="ah2b" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#2f6fa8"/></marker><marker id="ah2o" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#d9822b"/></marker><marker id="ah2g" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#2f7d58"/></marker></defs><line x1="11.2" y1="22.2" x2="21.8" y2="11.5" stroke="#d9822b" stroke-opacity=".85" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah2o)"/></svg></div></div><figcaption>答え：1b→2a</figcaption></figure><p>1b→2a です。1b の数字は1で、この手でゴールに2つ目が着きます。</p></details><p class="qn">問題2　黒の番です。次の1手で勝てる手を探してください。</p><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"><b class="s w">3</b></i><i class="c"></i><i class="c"><b class="s w">3</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">4</b></i><i class="c"><b class="s w">3</b></i><i class="c"></i><i class="c"><b class="s w z">0</b></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"><b class="s b">4</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i></div></div><figcaption>問題2　黒の番</figcaption></figure><details class="ans"><summary>答えを見る</summary><figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g to"></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c fr"><b class="s b">1</b></i><i class="c"></i><i class="c"><b class="s w">3</b></i><i class="c"></i><i class="c"><b class="s w">3</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">4</b></i><i class="c"><b class="s w">3</b></i><i class="c"></i><i class="c"><b class="s w z">0</b></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"><b class="s b">4</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah3r" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker><marker id="ah3b" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#2f6fa8"/></marker><marker id="ah3o" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#d9822b"/></marker><marker id="ah3g" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#2f7d58"/></marker></defs><line x1="8.3" y1="21.0" x2="8.3" y2="12.8" stroke="#d9822b" stroke-opacity=".85" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah3o)"/></svg></div></div><figcaption>答え：1b→1a</figcaption></figure><p>1b→1a です。1b の数字は1で、この手でゴールに2つ目が着きます。</p></details><div class="pt"><b>この段階のポイント</b><ul><li>ゴールまでの段数と数字が同じ石を探す</li><li>着地点があいているかを確かめる</li><li>指す前に、まず自分の勝ちを探す</li></ul></div>
+<p class="sn"><a href="yomi-1-ban.html">← 読み1 盤が見える</a><a href="yomi-3-mamori.html">読み3 1手の守り →</a></p>
+</article>
+<section class="rel"><h2>読みの8段階シリーズ</h2><ul><li><a href="yomi.html">読みの8段階：bocchが強くなる順番</a></li><li><a href="yomi-1-ban.html">読み1 盤が見える：移動力を数える</a></li><li><b><a href="yomi-2-seme.html">読み2 1手の攻め：ゴールに届く石を探す</a></b></li><li><a href="yomi-3-mamori.html">読み3 1手の守り：リーチの止め方は2つだけ</a></li><li><a href="yomi-4-watasanai.html">読み4 自分から渡さない：動かしたあとの数字を見る</a></li><li><a href="yomi-5-koubou.html">読み5 守りながら攻める：止める手の中から選ぶ</a></li><li><a href="yomi-6-nite-seme.html">読み6 2手の攻め：どの受けにも勝てるか</a></li><li><a href="yomi-7-nite-mamori.html">読み7 2手の守り：狙いを形ごと消す</a></li><li><a href="yomi-8-sante.html">読み8 3手の読み：自分・相手・自分</a></li></ul></section>
+</main>
+<footer><p><a href="../learn/">記事一覧</a><a href="../learn/glossary.html">用語集</a><a href="../guide.html">勝ち方ガイド</a><a href="../about.html">運営者情報</a><a href="../privacy.html">プライバシーポリシー・お問い合わせ</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>

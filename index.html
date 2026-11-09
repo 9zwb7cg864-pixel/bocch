@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=48"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=49"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -1776,6 +1776,21 @@ a.cl-next h4::after{content:" ›";color:var(--tb)}
 .board.flip .cq-abl.n{transform:translate(-20%,-90%) rotate(180deg)}
 .ev-bar{background:#f4f3ee;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}.ev-bar i{background:#111214;box-shadow:1px 0 0 rgba(0,0,0,.4)} /* 黒の割合を黒、白の割合を白で（2026-11 逆に見えていたのを直す） */
 .ev-bar{outline:1.5px solid rgba(255,255,255,.28);outline-offset:1px}
+/* ホーム下：bocchでできること・最新の記事・よくある質問（2026-11） */
+.about h2{margin-top:26px}
+.hf{display:flex;flex-direction:column}
+.hf-it{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line)}
+.hf-ic{width:44px;height:44px;border-radius:12px;background:var(--card);box-shadow:var(--cardsh);flex:none;display:flex;align-items:center;justify-content:center}
+.hf-ic svg{width:24px;height:24px;fill:none;stroke:var(--acc);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.hf-it h3{margin:0 0 3px;font-size:15.5px;font-weight:900}.hf-it p{margin:0;font-size:13px;line-height:1.65;color:var(--sub)}
+.hf-it button{margin-top:6px;padding:0;min-height:0;border:0;background:none;color:var(--acc);font-size:13px;font-weight:800}
+.hf-it button:hover{background:none;text-decoration:underline}
+.hf-art{display:block;padding:12px 14px;border-radius:14px;background:var(--card);box-shadow:var(--cardsh);margin-bottom:8px;text-decoration:none;color:var(--fg)}
+.hf-art small{font-size:11.5px;color:var(--mute)}.hf-art b{display:block;font-size:14.5px;margin:3px 0;line-height:1.45}.hf-art span{font-size:12.5px;color:var(--sub);line-height:1.55}
+.hf-more{display:inline-block;margin:2px 0 4px;font-size:13px;font-weight:800;color:var(--acc);text-decoration:none}.hf-more::after{content:" ›"}
+.hf-q{border-bottom:1px solid var(--line);padding:11px 0}.hf-q summary{font-size:14px;font-weight:800;cursor:pointer;list-style:none}.hf-q summary::-webkit-details-marker{display:none}
+.hf-q summary::after{content:"＋";float:right;color:var(--mute)}.hf-q[open] summary::after{content:"−"}
+.hf-q p{margin:6px 0 0;font-size:13px;color:var(--sub);line-height:1.65}
 
 </style>
 </head>
@@ -1783,7 +1798,7 @@ a.cl-next h4::after{content:" ›";color:var(--tb)}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.64</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.65</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -1855,9 +1870,25 @@ a.cl-next h4::after{content:" ›";color:var(--tb)}
 
     <section class="about" aria-labelledby="aboutH">
       <h2 id="aboutH">bocchとは</h2>
-      <p>bocch（ボッチ）は、6×6の盤で遊ぶ2人対戦のボードゲームです。運の要素はなく、読み合いだけで勝負が決まります。</p>
-      <p>石は、まわり8マスにいる石の数（最大4）だけ、縦・横・斜めにまっすぐ進みます。まわりに誰もいない石は動けません。向こう岸に自分の石を2つ着けたら勝ちです。</p>
-      <p>石を1つ動かすと、まわりの石の数字がまとめて変わります。前に出た手が守りにもなり、相手に道を開いてしまうこともあります。</p>
+      <p>bocch（ボッチ）は、6×6の盤で遊ぶ2人対戦のボードゲームです。運の要素はなく、読み合いだけで勝負が決まります。石は、まわり8マスにいる石の数（最大4）だけ、縦・横・斜めにまっすぐ進みます。まわりに誰もいない石は動けません。向こう岸に自分の石を2つ着けたら勝ちです。</p>
+      <p>石を1つ動かすと、まわりの石の数字がまとめて変わります。前に出た手が守りにもなり、相手に道を開いてしまうこともあります。1手に2つ以上の意味があるのが、bocchのいちばんの面白さです。</p>
+      <h2>bocchでできること</h2>
+      <div class="hf">
+        <div class="hf-it"><span class="hf-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="8" cy="12" r="4.5"/><circle cx="16.5" cy="12" r="4.5"/></svg></span><div><h3>人やCPUと対局</h3><p>ランダム対戦、友だちとの対戦、10段階の強さのCPU。持ち時間は7分です。勝つと段級が上がります。</p><button type="button" data-hf="play">対局する</button></div></div>
+        <div class="hf-it"><span class="hf-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg></span><div><h3>トレーニング</h3><p>あなたの対局から苦手を見つけて、コーチと約10分の授業。読みの力を8項目に分けて練習できます。</p><button type="button" data-hf="train">授業を受ける</button></div></div>
+        <div class="hf-it"><span class="hf-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 10h16M10 4v16"/></svg></span><div><h3>今日の1問と問題集</h3><p>毎日1問の詰め問題と、レベル別の401問。解くたびにパズルのレートが上下します。</p><button type="button" data-hf="daily">問題を解く</button></div></div>
+        <div class="hf-it"><span class="hf-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 18l5-6 4 3 7-9"/><path d="M4 21h16"/></svg></span><div><h3>感想戦と研究</h3><p>終わった対局をAIの評価値つきで振り返り、AI同士の検討もできます。</p><button type="button" data-hf="study">研究する</button></div></div>
+      </div>
+      <h2>最新の記事</h2>
+      <a class="hf-art" href="learn/yubaku.html" data-art="yubaku.html"><small>手筋　2026年11月1日</small><b>誘爆：自分の手で相手のとどめを作らないために</b><span>AI同士の2万6千局で、指した側が1局も勝てなかった手の見つけ方。</span></a>
+      <a class="hf-art" href="learn/souheki.html" data-art="souheki.html"><small>戦法　2026年11月1日</small><b>双璧：9割勝つ戦法と、ただ1つの弱点</b><span>ほとんどの相手に勝てる戦法と、勝てない唯一の受け「肩寄せ」。</span></a>
+      <a class="hf-art" href="learn/dokumanju.html" data-art="dokumanju.html"><small>手筋　2026年11月1日</small><b>毒まんじゅう：相手に渡して勝つ手</b><span>石を取らないbocchで、あえて相手に「数字」と「先着」を渡す手。</span></a>
+      <a class="hf-more" href="learn/" data-art="">記事をすべて見る</a>
+      <h2>よくある質問</h2>
+      <details class="hf-q"><summary>無料で遊べますか？</summary><p>はい、無料です。アカウントの登録も要りません。リンクを送るだけで、友だちと対局できます。</p></details>
+      <details class="hf-q"><summary>どうすれば強くなれますか？</summary><p>まずは毎手、相手のリーチ（次の1手でゴールに届く石）を確かめることです。トレーニングの授業では、あなたの対局の場面から練習できます。</p></details>
+      <details class="hf-q"><summary>引き分けはありますか？</summary><p>同じ局面が3回出たら引き分けです。</p></details>
+      <details class="hf-q"><summary>石が動けなくなったらどうなりますか？</summary><p>動かせる石が1つもなくなった側の負けです。まわりに石がない石（数字が0の石）は動けません。</p></details>
       <ul class="about-links">
         <li><a id="aboutGuide" href="guide.html">勝ち方ガイド（定跡・手筋・戦法）</a></li>
         <li><a href="https://www.youtube.com/@bocch.official" target="_blank" rel="noopener">YouTube「bocch定石研究」</a></li>
@@ -4346,6 +4377,8 @@ function kfAxRender(){const k=kfCalc(),c=$('kfAxCard');if(!c)return;c.hidden=!k.
   $('kfAx').innerHTML=KF_LAB.map((l,i)=>`<div class="kf-ax"><span>${l}</span><b>${k.sc[i]}</b><p>${KF_AXD[i]}</p></div>`).join('')}
 {const _pk=paint;paint=function(n){_pk(n);if(n==='kifu')try{kfRender();kfAxRender()}catch(e){console.error(e)}
   if(n==='home'||n==='profile')try{kfHome()}catch(e){console.error(e)}}}
+try{const LD={'en':'en','zh-Hans':'zh-hans','zh-Hant':'zh-hant','ko':'ko','es':'es','de':'de'}[window.BOCCH_LANG];if(LD)document.querySelectorAll('[data-art]').forEach(e=>e.href='learn/'+LD+'/'+e.dataset.art)}catch(e){} // ホーム下の記事は、その言語の記事へ
+document.querySelectorAll('[data-hf]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.hf;try{if(k==='play')document.querySelector('[data-tab=setup]').click();else if(k==='train')document.querySelector('[data-tab=daily]').click();else if(k==='daily')$('dailyBtn').click();else if(k==='study')$('studyBtn').click()}catch(e){}}));
 try{const G={'en':'guide-en.html','zh-Hans':'guide-zh-hans.html','zh-Hant':'guide-zh-hant.html','ko':'guide-ko.html','es':'guide-es.html','de':'guide-de.html'}[window.BOCCH_LANG];if(G)$('aboutGuide').href=G}catch(e){}
 try{kfHome()}catch(e){}
 // 開いた直後はログインの部品がまだ用意されていないので、読み込みが終わってからもう一度判定する
