@@ -1735,7 +1735,7 @@ svg.rchfx{z-index:1}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.56</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.57</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -3990,7 +3990,7 @@ function renderWatch(){const box=$('watchList');box.innerHTML='';
     m.append(mb,document.createElement('br'),document.createTextNode(((now-r.at)<60?'始まったところ':Math.floor((now-r.at)/60)+'分前に開始')+(r.g?'　'+(r.g+1)+'局目':'')+(r.names&&r.names.length===2?'　部屋 '+room.toUpperCase():'')));
     b.append(st,m);b.addEventListener('click',()=>{stopWatchList();openRoom(room,true);show('game')});box.appendChild(b)})}
 document.querySelectorAll('[data-go="watch"]').forEach(b=>b.addEventListener('click',startWatchList));
-/* AIを観戦する：最強対最強を1手7秒で。誰かが観ていればその部屋に入る。
+/* AIを観戦する：最強対最強を1手3秒で。誰かが観ていればその部屋に入る。
    観ている人全員が手を出せる仕組み（同じ手が二重に届いても2回目は無視される）なので、最初の人が抜けても続く */
 const AIW={on:false,code:null,b:null,w:null,lastPly:-1,lastAt:0,thinkKey:'',res:null,worker:null,primary:false,beat:0,overFor:-1,posted:0,seen:'',thinkAt:0};
 function aiWorker(){if(AIW.worker!==null)return AIW.worker;try{const src=$('eng').textContent+'\nonmessage=e=>{const d=e.data;const r=BocchEngine.think(d.b,d.p,d.ms,{shuffle:d.shuffle,book:true});postMessage({key:d.key,r})}';
@@ -4032,10 +4032,10 @@ setInterval(()=>{if(!AIW.on){if(S&&S.mode==='net'&&NET.watch&&NET.ai&&NET.code&&
   // 見張り：送った手が届かない／考えが返ってこないときは、考え直して送り直す
   if(S.ply===AIW.lastPly&&((AIW.posted&&now-AIW.posted>10000)||(!AIW.posted&&!AIW.res&&now-AIW.thinkAt>25000))){AIW.lastPly=-1}
   if(S.ply!==AIW.lastPly){const key2=NET.game+':'+S.ply;if(AIW.seen!==key2){AIW.seen=key2;AIW.lastAt=now}AIW.lastPly=S.ply;AIW.res=null;AIW.posted=0;AIW.thinkAt=now;AIW.thinkKey=NET.game+':'+S.ply+':'+key(S.b,S.turn);
-    const w=aiWorker(),job={key:AIW.thinkKey,b:S.b.slice(),p:S.turn,ms:3500,shuffle:S.ply<4};
+    const w=aiWorker(),job={key:AIW.thinkKey,b:S.b.slice(),p:S.turn,ms:2500,shuffle:S.ply<4};
     if(w)w.postMessage(job);else{const k=AIW.thinkKey;setTimeout(()=>{if(AIW.thinkKey===k)AIW.res={key:k,r:BocchEngine.think(job.b,job.p,1500,job)}},50)}
     return}
-  const wait=AIW.primary?7000:7000+5000+((NET.me||'').charCodeAt(0)%4)*1000; // 観ているだけの人は、手が来ないときだけ代わりに指す
+  const wait=AIW.primary?3000:3000+5000+((NET.me||'').charCodeAt(0)%4)*1000; // 観ているだけの人は、手が来ないときだけ代わりに指す
   if(AIW.res&&AIW.res.key===AIW.thinkKey&&AIW.res.r&&now-AIW.lastAt>=wait){const m=AIW.res.r.move;AIW.res=null;
     const from=colorOf(NET.host)===S.turn?NET.host:NET.guest;aiRaw({t:'move',g:NET.game,ply:S.ply,m,from});AIW.posted=now;if(!AIW.primary){AIW.primary=true;AIW.beat=0}} // 代わりに指したら、以後はこの人が進める
 },400);
