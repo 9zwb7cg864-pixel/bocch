@@ -34,7 +34,8 @@ section{margin-top:26px}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
 /* 数字のタイル */
 .tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-@media(min-width:680px){.tiles.four{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(min-width:680px){.tiles.four{grid-template-columns:repeat(4,minmax(0,1fr))}.tiles.five{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media(max-width:679px){.tiles.five .t:first-child{grid-column:1/-1}}
 .t{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
 .t .l{font-size:12px;color:var(--sub)}
 .t .v{font-size:30px;font-weight:700;line-height:1.2;font-variant-numeric:tabular-nums;color:var(--goldhi);margin-top:4px;letter-spacing:.01em}
@@ -108,9 +109,10 @@ td .sub{display:block;font-size:11px;color:var(--mute)}
     <!-- 1. いまの状況 -->
     <section style="margin-top:0">
       <div class="sh"><h2>いまの状況</h2><span class="hint">人数は端末ごと</span></div>
-      <div class="tiles four">
+      <div class="tiles five">
         <div class="t"><div class="l">DAU（直近7日の平均）</div><div class="v" id="kDau">—</div><div id="kDauD"></div></div>
         <div class="t"><div class="l">今日遊んだ人</div><div class="v" id="kToday">—</div><div id="kTodayD"></div></div>
+        <div class="t"><div class="l">今日開いた人</div><div class="v" id="kOpen">—</div><div id="kOpenD"></div></div>
         <div class="t"><div class="l">新しく来た人（直近7日）</div><div class="v" id="kNew">—</div><div class="s" id="kNewS"></div></div>
         <div class="t"><div class="l">翌日また来た率（7日）</div><div class="v" id="kRet">—</div><div class="s" id="kRetS"></div></div>
       </div>
@@ -212,7 +214,7 @@ async function load(){
   const dau=cur.length?sum(cur,'players')/cur.length:0,dauP=prv.length?sum(prv,'players')/prv.length:null;
   $('kDau').innerHTML=r1(dau)+'<small>人</small>';$('kDauD').innerHTML=delta(dau,dauP,'その前の7日');
   const td=D(keys[0]),yd=keys[1]?D(keys[1]):null;
-  $('kToday').innerHTML=fmt(td.players)+'<small>人</small>';$('kTodayD').innerHTML=delta(td.players||0,yd?yd.players||0:null,'昨日');
+  $('kToday').innerHTML=fmt(td.players)+'<small>人</small>';$('kTodayD').innerHTML=delta(td.players||0,yd?yd.players||0:null,'昨日');$('kOpen').innerHTML=fmt(td.visitors)+'<small>人</small>';$('kOpenD').innerHTML=delta(td.visitors||0,yd?yd.visitors||0:null,'昨日');
   const nv7=sum(cur,'nv'),fs7=sum(cur,'fs');
   $('kNew').innerHTML=fmt(nv7)+'<small>人</small>';$('kNewS').textContent='そのうち1局目を始めた '+pc(fs7,nv7);
   // 次の日にまた来た：今日はまだ戻れないので、昨日以前に来た人だけで割る
