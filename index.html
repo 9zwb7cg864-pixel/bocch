@@ -1791,6 +1791,19 @@ a.cl-next h4::after{content:" ›";color:var(--tb)}
 .hf-q{border-bottom:1px solid var(--line);padding:11px 0}.hf-q summary{font-size:14px;font-weight:800;cursor:pointer;list-style:none}.hf-q summary::-webkit-details-marker{display:none}
 .hf-q summary::after{content:"＋";float:right;color:var(--mute)}.hf-q[open] summary::after{content:"−"}
 .hf-q p{margin:6px 0 0;font-size:13px;color:var(--sub);line-height:1.65}
+/* =====================================================================
+   D：アクセントを白にする（ボタン・バー・選択中のタブなど）。
+   選んだ石の枠だけは、白い石に重なって見えなくならないよう水色のまま。
+   ===================================================================== */
+:root{--acc:#f4f4f2;--acc2:#ffffff;--ink:#151515;--ring:#a9cdf7;
+  --gold-soft:rgba(255,255,255,.22);--gold-line:rgba(255,255,255,.14);--dot:rgba(255,255,255,.9);
+  --b-acc:#f4f4f2;--b-acc2:#ffffff;--b-ink:#151515;
+  --pri3:inset 0 1px 0 rgba(255,255,255,.9),0 4px 0 #8d8d8a;--pri3d:inset 0 1px 0 rgba(255,255,255,.9),0 1px 0 #8d8d8a}
+.hm-modes button[aria-pressed=true],.hm-box .hm-modes button[aria-pressed=true]{background:linear-gradient(180deg,#ffffff,#ecebe8)}
+.cell.coachCan .stone,.sel .stone,.grid .sel .stone.rk{box-shadow:0 0 0 3px var(--ring),0 3px 4px rgba(0,0,0,.35)}
+.mvfly.drag .stone{box-shadow:0 14px 18px rgba(0,0,0,.45),0 0 0 2px var(--ring)}
+.goalpop{border-color:#ffffff}
+p a,.hf-more,.about li a{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
 
 </style>
 </head>
@@ -1798,7 +1811,7 @@ a.cl-next h4::after{content:" ›";color:var(--tb)}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.65</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.66</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
