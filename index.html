@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=46"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=47"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -1766,6 +1766,14 @@ a.cl-next h4::after{content:" ›";color:var(--tb)}
 .cgc-two .cq-btn.g{background:transparent;border:2px solid rgba(255,255,255,.18);box-shadow:none;color:var(--fg)}.cgc-two .cq-btn.g:hover{background:transparent}
 .cl-bw .cell.cq-mv{box-shadow:inset 0 0 0 100px rgba(240,194,75,.35)}.cl-bw .cell.cq-ok{box-shadow:inset 0 0 0 100px rgba(62,207,155,.42)}
 .cgc-two .cq-btn{white-space:nowrap}
+.cgc-b p,.cl-bub,.cq-sheet p,.cqend span{word-break:keep-all;overflow-wrap:anywhere}
+.cq-s.ja::after{content:none}
+.cgc-b p,.cl-bub,.cq-sheet p,.cqend span{line-break:strict}.cq-s.ja{white-space:normal}
+.cq-lines{display:flex;gap:8px;margin:0 0 12px;flex-wrap:wrap}.cq-lines[hidden]{display:none}
+.cq-lb{flex:1;min-height:0;height:38px;border-radius:12px;border:2px solid rgba(255,255,255,.18);background:transparent;color:var(--fg);font-size:13.5px;font-weight:800;white-space:nowrap}
+.cq-lb:hover{background:rgba(255,255,255,.06)}
+.cq-abl.n{background:#fff;color:#222;box-shadow:0 2px 0 rgba(0,0,0,.25);width:24px;height:24px;font-size:13px;transform:translate(-20%,-90%)}
+.board.flip .cq-abl.n{transform:translate(-20%,-90%) rotate(180deg)}
 
 </style>
 </head>
@@ -1773,7 +1781,7 @@ a.cl-next h4::after{content:" ›";color:var(--tb)}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.58</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.59</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -1993,7 +2001,7 @@ a.cl-next h4::after{content:" ›";color:var(--tb)}
   <div class="boardwrap cq-bw"><div class="board" id="coboard"><div class="lab lab-top" id="colabTop" aria-hidden="true"></div><div class="lab lab-left" id="colabLeft" aria-hidden="true"></div><div class="grid" id="cogrid" aria-label="トレーニングの盤"></div></div></div>
   <div class="cq-opts" id="cqOpts"></div>
   <div class="cq-foot" id="cqFoot"><button type="button" class="cq-btn" id="cqCheck" disabled>チェック</button></div>
-  <div class="cq-sheet" id="cqSheet" hidden><div class="cq-st"><img class="cq-face" id="cqFace" src="img/coach/coach-ok.webp?v=1" alt="" width="64" height="64"><b id="cqTt"></b></div><p id="cqTx"></p><p class="cq-tag" id="cqTag"></p><button type="button" class="cq-btn" id="cqNext">続ける</button></div>
+  <div class="cq-sheet" id="cqSheet" hidden><div class="cq-st"><img class="cq-face" id="cqFace" src="img/coach/coach-ok.webp?v=1" alt="" width="64" height="64"><b id="cqTt"></b></div><p id="cqTx"></p><p class="cq-tag" id="cqTag"></p><div class="cq-lines" id="cqLines" hidden></div><button type="button" class="cq-btn" id="cqNext">続ける</button></div>
 </section>
 <div class="tr-guide" id="trGuide" hidden role="dialog" aria-modal="true"><div class="tr-gcard"><h3 id="trGt"></h3><p id="trGx"></p><button type="button" class="cq-btn" id="trGok">わかった</button></div></div>
 <section class="scr" data-scr="pzlist" hidden>
@@ -5845,7 +5853,11 @@ const has2=(b,p)=>w2(b,p).length>0;
 async function cLoad(){if(CO.list)return CO.list;try{CO.list=await fetch('coach.json?v=1').then(r=>r.json())}catch(e){CO.list=[]}return CO.list}
 const dOf=e=>e[e[1]==='ab'?6:5];
 function norm(e,id){const o={id,st:e[0],kind:e[1],b:e[2].split('').map(Number),p:e[3]};if(e[1]==='ab'){o.good=e[4];o.bad=e[5]}else o.ans=e[4];return o}
-const spans=(el,a,w)=>{el.replaceChildren();a.forEach(t=>{if(!t)return;const e=document.createElement('span');e.className=w==='l'?'cl-l':w?'cq-w':'cq-s';e.textContent=t;el.append(e)})};
+const JA=!window.BOCCH_LANG||window.BOCCH_LANG==='ja';
+const spans=(el,a,w)=>{el.replaceChildren();a.forEach(t=>{if(!t)return;const e=document.createElement('span');e.className=w==='l'?'cl-l':w?'cq-w':'cq-s';
+  if(!w&&JA){e.className='cq-s ja';t+='。'} // 日本語は句点を文に含めて、句点だけが次の行に落ちないように
+  if(JA&&w!==1)t=t.replace(/([てでにをはがとの、])(?=[^、。！？」）\s])/g,'$1\u200b'); // 日本語は助詞のあとでだけ折り返す
+  e.textContent=t;el.append(e)})};
 /* 段階1：その場で作る。光っている石が行けるマスをぜんぶ選ぶ */
 function mk1(L){for(let t=0;t<50;t++){const e=L[Math.random()*L.length|0],b=e[2].split('').map(Number),p=e[3];const S_=[];for(let i=0;i<36;i++)if(b[i]===p&&movesFrom(b,i).length>=2)S_.push(i);if(!S_.length)continue;
   const s=S_[Math.random()*S_.length|0];return {id:-1,st:1,kind:'t',b,p,s,ans:movesFrom(b,s).map(m=>m[1])}}return null}
@@ -5928,6 +5940,14 @@ $('cogrid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(!c
   if(b[i]===q.p&&movesFrom(b,i).length){CO.sel=i===CO.sel?-1:i;CO.pick=-1;$('cqCheck').disabled=true;rchDraw($('cogrid'),'C',[]);draw()}});
 /* ---------- 答え合わせ ---------- */
 const LV=(b,p,k)=>{const a=apply(b,U(k)),r=w1(a,3-p);if(!r.length)return null;const mark={};mark[k/36|0]='cq-mv';mark[k%36]='cq-mv';return {board:a,L:[[...r[0],3-p]],mark}};
+/* 手順（読み筋）を作る：盤の上で順に動かして見せる */
+function pickReply(a,q,p){const R=allMoves(a,q);let best=null,bs=1e9;for(const r of R){const c=w1(apply(a,r),p).length;if(c<bs){bs=c;best=r}}return best} // 勝ち筋をいちばん減らす受け
+function proof2(b,p,k){const q=3-p,m=U(k);if(dqWinNow(b,p,m))return [m];const a=apply(b,m),r=pickReply(a,q,p);if(!r)return [m];const w=w1(apply(a,r),p);return w.length?[m,r,w[0]]:[m,r]}
+function refute2(b,p,k){const q=3-p,m=U(k),a=apply(b,m),t=w1(a,q);if(t.length)return [m,t[0]];const R=allMoves(a,q).find(r=>!has1(apply(a,r),p)&&!dqWinNow(a,q,r));return R?[m,R]:[m]}
+function oppTwo(b,p,k){const q=3-p,m=U(k),a=apply(b,m),t=w1(a,q);if(t.length)return [m,t[0]];const W=w2(a,q);if(!W.length)return [m];const m1=W[0];if(dqWinNow(a,q,m1))return [m,m1];const a2=apply(a,m1),u=allMoves(a2,p)[0];if(!u)return [m,m1];const w=w1(apply(a2,u),q);return w.length?[m,m1,u,w[0]]:[m,m1,u]}
+function proof3(b,p,k){const q=3-p,m=U(k),a=apply(b,m),r=pickReply(a,q,p);if(!r)return [m];const a2=apply(a,r),W=w2(a2,p);if(!W.length)return [m,r];const m2=W[0];if(dqWinNow(a2,p,m2))return [m,r,m2];const a3=apply(a2,m2),r2=pickReply(a3,q,p);if(!r2)return [m,r,m2];const w=w1(apply(a3,r2),p);return w.length?[m,r,m2,r2,w[0]]:[m,r,m2,r2]}
+function refute3(b,p,k){const q=3-p,m=U(k),a=apply(b,m),t=w1(a,q);if(t.length)return [m,t[0]];const R=allMoves(a,q).find(r=>{const a2=apply(a,r);return !has1(a2,p)&&!has2(a2,p)});return R?[m,R]:[m]}
+const lineTx=seq=>'手順：'+seq.map(x=>mv(K(x))).join(' / ');
 function judge(){const q=Q(),b=q.b,p=q.p,o=3-p,m=mode();let ok=false,tx=[],L=[],mark={};
   const ansL=k=>[...U(k),p],lose=k=>{const r=w1(apply(b,U(k)),o);return r.length?mv(k)+'だと、相手の'+mv(K(r[0]))+'で負ける':''};
   if(q.st===1){const A=new Set(q.ans);ok=A.size===CO.tg.size&&[...A].every(x=>CO.tg.has(x));const n=nbCount(b,q.s);
@@ -5944,20 +5964,27 @@ function judge(){const q=Q(),b=q.b,p=q.p,o=3-p,m=mode();let ok=false,tx=[],L=[],
   if(q.st===3){const r=w1(b,o);L=L.concat(r.map(x=>[...x,o]));tx=ok?[mv(k)+'なら止められる']:[ls||mv(k)+'では止められない',mv(best)+'なら止められる']}
   if(q.st===4)tx=ok?[mv(k)+'なら安全']:[ls||mv(k)+'だと、相手に勝ちを渡す',mv(best)+'なら安全'];
   if(q.st===5){const nx=w1(apply(b,U(best)),p);tx=ok?[mv(k)+'で止めつつ、次に'+mv(K(nx[0]))+'で勝てる']:[ls||'止められたけど、次に勝てる形がない',mv(best)+'が正解']}
-  if(q.st===6)tx=ok?[mv(k)+'のあと、相手がどう受けても次に勝てる']:[ls||mv(k)+'では、相手に受けられる',mv(best)+'が正解'];
-  if(q.st===7)tx=ok?[mv(k)+'なら、相手の2手の狙いが消える']:[ls||mv(k)+'だと、相手に2手で勝つ形が残る',mv(best)+'が正解'];
-  if(q.st===8)tx=ok?[mv(k)+'から、3手で勝ちきれる']:[ls||'その手では勝ちきれない',mv(best)+'が正解'];
-  if(!ok){const lv=LV(b,p,k);if(lv)return Object.assign({ok,tx},lv)}
-  return {ok,tx,L,mark}}
+  let lines=null;
+  if(q.st===6){const pr=proof2(b,p,best);if(ok){tx=[mv(k)+'のあと、相手がどう受けても次に勝てる',lineTx(pr)];lines=[['手順を見る',pr]]}else{const rf=refute2(b,p,k);tx=[ls||(rf[1]?mv(k)+'だと、相手は'+mv(K(rf[1]))+'で受けられる':mv(k)+'では、相手に受けられる'),mv(best)+'が正解',lineTx(pr)];lines=[['受け方を見る',rf],['正しい手順を見る',pr]]}}
+  if(q.st===7){if(ok)tx=[mv(k)+'なら、相手の2手の狙いが消える'];else{const ot=oppTwo(b,p,k);tx=[ls||mv(k)+'だと、相手に2手で勝つ形が残る',lineTx(ot),mv(best)+'が正解'];lines=[['相手の勝ち方を見る',ot]]}}
+  if(q.st===8){const pr=proof3(b,p,best);if(ok){tx=[mv(k)+'から、3手で勝ちきれる',lineTx(pr)];lines=[['手順を見る',pr]]}else{const rf=refute3(b,p,k);tx=[ls||(rf[1]?mv(k)+'だと、相手は'+mv(K(rf[1]))+'で受けられる':'その手では勝ちきれない'),mv(best)+'が正解',lineTx(pr)];lines=[['受け方を見る',rf],['正しい手順を見る',pr]]}}
+  if(!ok&&!lines){const lv=LV(b,p,k);if(lv)return Object.assign({ok,tx},lv)}
+  return {ok,tx,L,mark,lines}}
 $('cqCheck').addEventListener('click',()=>{if(CO.checked||!CO.L)return;const q=Q(),r=judge();
   if(r.next){CO.step=1;CO.stepKeep=true;rchDraw($('cogrid'),'C',r.L);sheet(true,r.tx.concat([qText(q)]),q,true);return}
   CO.checked=true;CO.board=r.board||null;CO.pick=r.board?-1:CO.pick;draw(r.mark);rchDraw($('cogrid'),'C',r.L);$('cogrid').querySelectorAll('.cq-abl').forEach(e=>e.remove());
   const first=!CO.wrong.has(CO.i)&&!q._again;if(first)record(q,r.ok);
   if(r.ok)CO.ok++;else if(!q._again){CO.wrong.add(CO.i);CO.L.push(Object.assign({},q,{_again:1}));CO.tot++}
-  sheet(r.ok,r.tx,q,false)});
+  sheet(r.ok,r.tx,q,false);lineBtns(r.lines,q);if(r.lines)setTimeout(()=>playLine(r.lines[0][1],q),500)});
+function lineBtns(lines,q){const box=$('cqLines');box.replaceChildren();box.hidden=!lines;if(!lines)return;
+  for(const [nm,seq] of lines){const b=document.createElement('button');b.type='button';b.className='cq-lb';b.textContent=nm;b.addEventListener('click',()=>playLine(seq,q));box.append(b)}}
+let PLAY=0;
+function playLine(seq,q){const id=++PLAY,g=$('cogrid');let b=q.b.slice(),p=q.p,i=0;CO.board=b;CO.pick=-1;g.querySelectorAll('.cq-abl').forEach(e=>e.remove());draw();rchDraw(g,'C',[]);const arr=[];
+  const step=()=>{if(id!==PLAY||!CO.L||i>=seq.length)return;const m=seq[i],mover=b[m[0]]||p;b=apply(b,m);CO.board=b;arr.push([m[0],m[1],mover]);const mark={};mark[m[1]]='cq-mv';draw(mark);rchDraw(g,'C',arr.slice(-2));
+    const e=document.createElement('span');e.className='cq-abl n';e.textContent=String(i+1);e.style.left=((m[1]%6)+.5)/6*100+'%';e.style.top=((m[1]/6|0)+.5)/6*100+'%';g.append(e);i++;setTimeout(step,1100)};step()}
 function sheet(ok,tx,q,mid){$('cqFoot').hidden=true;const s=$('cqSheet');s.hidden=false;s.className='cq-sheet '+(ok?'ok':'ng');$('cqFace').src='img/coach/coach-'+(ok?'ok':'ng')+'.webp?v=1';
   $('cqTt').textContent=ok?(mid?'そのとおり':'正解！'):'不正解';spans($('cqTx'),tx);$('cqTag').textContent=mid?'':'観点：'+ST[q.st][1];$('cqTag').hidden=mid;$('cqBar').style.width=(CO.ok/CO.tot*100)+'%'}
-$('cqNext').addEventListener('click',()=>{if(!CO.L)return;if(CO.stepKeep){qOpen();return}CO.i++;CO.board=null;if(CO.i<CO.L.length){qOpen();return}finish()});
+$('cqNext').addEventListener('click',()=>{if(!CO.L)return;PLAY++;$('cqLines').hidden=true;if(CO.stepKeep){qOpen();return}CO.i++;CO.board=null;if(CO.i<CO.L.length){qOpen();return}finish()});
 function finish(){const n=CO.L.filter(x=>!x._again).length;CO.res=[n-CO.wrong.size,n];
   if(CO.after){const f=CO.after;CO.after=null;CO.L=null;f(CO.res);return}
   $('cqBar').style.width='100%';$('cqOpts').replaceChildren();$('cqDFace').hidden=false;$('coboard').closest('.cq-bw').hidden=true;rchDraw($('cogrid'),'C',[]);$('cqQ').textContent=n===1?'解き直した！':'練習クリア！';
