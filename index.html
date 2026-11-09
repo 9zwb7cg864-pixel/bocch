@@ -1722,6 +1722,12 @@ svg.rchfx{z-index:1}
 .cq-bw[hidden]{display:none}
 [data-scr=coachq] .cq-dface:not([hidden])~.cq-q,[data-scr=coachq] .cq-dface:not([hidden])~.cq-sub{text-align:center}
 .cqend-f{width:44px;height:44px;flex:none;margin:-4px 0}
+.players .pl-turn{white-space:nowrap;flex:none;word-break:keep-all}
+/* ゴールに着いたときの軽い輪 */
+.goalpop{position:absolute;z-index:3;width:16.6%;aspect-ratio:1;border-radius:50%;border:4px solid #cfe3fb;transform:translate(-50%,-50%) scale(.6);opacity:.95;pointer-events:none;animation:goalPop .7s cubic-bezier(.2,.8,.3,1) forwards;will-change:transform,opacity}
+.goalpop.w{border-color:#fff}
+@keyframes goalPop{to{transform:translate(-50%,-50%) scale(2.2);opacity:0}}
+@media (prefers-reduced-motion:reduce){.goalpop{display:none}}
 
 </style>
 </head>
@@ -1729,7 +1735,7 @@ svg.rchfx{z-index:1}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.55</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.56</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -2715,9 +2721,7 @@ function rchDraw(grid,id,L){const sv=rchSvg(grid,id),g=sv.lastElementChild,key=L
     gr.append(mvEl('line',{x1:ax,y1:ay,x2:bx-Math.cos(a)*hl*.8,y2:by-Math.sin(a)*hl*.8,stroke:col,'stroke-width':10,'stroke-linecap':'round'}),
       mvEl('path',{d:`M${bx} ${by}L${bx-Math.cos(a-.45)*hl} ${by-Math.sin(a-.45)*hl}L${bx-Math.cos(a+.45)*hl} ${by-Math.sin(a+.45)*hl}Z`,fill:col}));
     g.append(gr);
-    if(!seen[t]){seen[t]=1;const s=46,l=16,rt=mvEl('g',{class:'rct',fill:'none',stroke:rc,'stroke-width':4.5,filter:F});
-      rt.append(mvEl('rect',{x:x2-s,y:y2-s,width:2*s,height:2*s,fill:rc,'fill-opacity':.16,stroke:'none'}));
-      for(const[sx,sy]of[[-1,-1],[1,-1],[1,1],[-1,1]])rt.append(mvEl('path',{d:`M${x2+sx*s} ${y2+sy*(s-l)}V${y2+sy*s}H${x2+sx*(s-l)}`}));g.prepend(rt)}})}
+    })}
 function rchList(b){const o=[];for(let i=0;i<N*N;i++){const p=b[i];if(!p)continue;const g=goalRow(p);if((i/N|0)===g)continue;for(const m of movesFrom(b,i))if((m[1]/N|0)===g)o.push([i,m[1],p])}return o}
 function mvReachDraw(L){rchDraw(gridEl,'G',L)}
 function mvPre(){const P=MV.prev,cur={S,ply:S.ply||0,b:S.b.slice(),last:S.last};MV.prev=cur;
@@ -3590,12 +3594,11 @@ function fxRipple(g,i,p,col,col1,big){big=big||1;const {x,P,k,W}=g,Q=P[i],maxR=W
     x.globalAlpha=(1-rp)*0.25;x.lineWidth=1*k;x.beginPath();x.arc(Q.x,Q.y,r*0.92,0,7);x.stroke()}
   x.restore()}
 function fxArrive(side,cell,mine){fxQueue(()=>fxArrive0(side,cell,mine))}
-function fxArrive0(side,cell,mine){if(!$('showJos').checked||CUR!=='game')return false;FX_FACE=side;const g=fxBase();if(!g)return false;
-  const col=side===1?'#cfe3fb':'#ffffff',col1=side===1?'#a9cdf7':'#dfe6ee',t0=performance.now(),PER=2200;
-  function f(now){const t=now-t0;if(CUR!=='game'){josStop();return}if(t>PER){fxDone();return}const {x,W,H,dpr}=g;x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
-    fxRipple(g,cell,t/PER,col,col1);
-    JOS.raf=requestAnimationFrame(f)}JOS.raf=requestAnimationFrame(f);return true}
-function fxEnd(win,why,me){const b=S.b.slice(),cell=S.last?S.last[1]:-1;fxQueue(()=>fxEnd0(win,why,me,b,cell))}
+function fxArrive0(side,cell,mine){if(!$('showJos').checked||CUR!=='game')return false;
+  /* ゴールに着いた演出：キャンバスを全面で描き直すと重いので、そのマスに軽い輪を1つだけ出す（CSSのアニメ） */
+  try{const r=document.createElement('i');r.className='goalpop '+(side===1?'b':'w');r.style.left=((cell%N)+.5)/N*100+'%';r.style.top=((cell/N|0)+.5)/N*100+'%';gridEl.appendChild(r);setTimeout(()=>r.remove(),800)}catch(e){}
+  return false}
+function fxEnd(win,why,me){const b=S.b.slice(),cell=S.last?S.last[1]:-1,S0=S;fxQueue(()=>(S===S0&&S.over)?fxEnd0(win,why,me,b,cell):false)} // 順番待ちのあいだに局面が戻った・変わったときは出さない
 function fxEnd0(win,why,me,b,cell){if(!$('showJos').checked||CUR!=='game')return false;
   /* 勝ち負けの画面（試作どおり）：勝ちは金箔と筆の「勝」、負けは墨のしずくと薄墨の「負」 */
   let e=$('mvEnd');if(!e){e=document.createElement('div');e.id='mvEnd';e.className='mvend';e.setAttribute('role','dialog');e.setAttribute('aria-modal','true');document.body.appendChild(e);
@@ -3630,7 +3633,8 @@ function fxCheck(){if(!S||S.study)return;const live=typeof VIEW==='undefined'||V
   if(!S.over&&ply===FX.ply+1&&S.last&&live){const m=S.b[S.last[1]];if(m&&a[m]>FX.arr[m]){const me=fxMe();fxArrive(m,S.last[1],me?me===m:undefined)}}
   if(ply!==FX.ply){FX.ply=ply;FX.arr=a}}
 const _render2=render;
-render=function(){_render2();if(CUR==='game'&&MATCH.on&&S.mode==='net'&&NET.guest)stopMatch();const el=$('joseki');let j=null,lab='';
+render=function(){_render2();{const e=document.getElementById('mvEnd');if(e&&!e.hidden&&S&&!S.over&&!e.classList.contains('rk'))e.hidden=true} // 終局が取り消されたら、終局のカードも閉じる
+  if(CUR==='game'&&MATCH.on&&S.mode==='net'&&NET.guest)stopMatch();const el=$('joseki');let j=null,lab='';
   if(!S.over&&S.ply===1){j=josekiOf(S.last);lab='1手目 定跡「'}
   else if(!S.over&&S.ply===2){const k2=keyOf(S.last,2),w=k2&&JOSEKI2[k2];if(w){const k1=S.firstKey;j=(k1&&k1===k2)?['鏡・'+w[0],'黒と同じ形で応じる。'+w[1]]:w;lab='2手目 定跡「'}}
   if(S.ply===1&&S.last)S.firstKey=keyOf(S.last,1);
