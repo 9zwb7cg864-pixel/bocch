@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=40"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=43"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -1626,6 +1626,78 @@ button.primary:active,.primary:active,.hm-play:active,.hc-btn:active,.rev-mv:act
 /* ホームのカードの盤：カードの端から離し、角を丸くする */
 .hcard .hc-board{padding:12px 0 12px 12px;aspect-ratio:auto}
 .hcard .hc-board .mb{aspect-ratio:1;height:auto;border-radius:10px;overflow:hidden}
+/* リーチの矢印は石の下を通す（マスの色より上、石より下） */
+svg.rchfx{z-index:1}
+.grid .cell .stone{z-index:2}
+/* ほかの問題（練習） */
+.pz-more{margin:22px 0 8px;padding:16px;border-radius:14px;background:var(--card,#2a2b2f)}
+.pz-hd{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:12px}
+.pz-hd h3{margin:0;font-size:17px;font-weight:800;color:var(--fg)}
+.pz-prog{font-size:13px;color:var(--sub)}.pz-prog b{color:var(--fg);font-size:16px}
+.pz-btns{justify-content:center;gap:10px;margin-bottom:14px}
+.pz-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;max-height:248px;overflow-y:auto;padding:2px}
+.pz-t{min-width:0;padding:0;height:34px;border-radius:8px;font-size:13px;font-weight:700;font-family:var(--fn);background:var(--btn,#3a3b40);color:var(--sub);box-shadow:none;border:0}
+.pz-t.done{background:rgba(129,182,76,.22);color:#a9d47c}
+.pz-t.cur{outline:2px solid var(--acc);outline-offset:-2px;color:var(--fg)}
+.dq-streak[hidden],.dq-note[hidden]{display:none}
+.pz-rate{display:flex;align-items:baseline;gap:10px;margin:-2px 0 12px}
+.pz-rl{font-size:13px;color:var(--sub)}
+.pz-rate b{font-family:var(--fn);font-size:30px;font-weight:800;color:var(--fg);line-height:1}
+.pz-rd{font-family:var(--fn);font-weight:800;font-size:15px}
+.pz-rd.up,.pz-del.up{color:#a9d47c}.pz-rd.down,.pz-del.down{color:#ff7b72}
+.pz-del{text-align:center;font-family:var(--fn);font-weight:800;font-size:15px;margin:-4px 0 10px}
+.pz-del[hidden],.pz-rd[hidden]{display:none}
+.pz-sort{display:flex;gap:6px;margin:0 0 10px}
+.pz-sort button{flex:1;height:32px;padding:0;border-radius:8px;font-size:13px;font-weight:700;background:transparent;color:var(--sub);box-shadow:none;border:1px solid rgba(255,255,255,.12)}
+.pz-sort button.on{background:var(--btn,#3a3b40);color:var(--fg);border-color:transparent}
+.pz-t{height:44px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.pz-t span{font-size:13px;line-height:1}.pz-t small{font-size:9.5px;font-weight:600;opacity:.7;line-height:1}
+.pz-grid{max-height:300px}
+/* ---------- パズル（トップ・レート戦・問題集） ---------- */
+:root{--pzok:#3ecf9b;--pzng:#ff6b6b}
+.pzh-hero,.pzh-spark,.pzh-card,.pzl-lv,.pzbar{background:var(--card)!important;box-shadow:var(--cardsh);border-radius:16px}
+.pzh-hero{display:flex;align-items:center;gap:14px;padding:16px 18px;margin:4px 0 0}
+.pzh-ic{display:inline-flex;width:56px;height:56px;flex:none}.pzh-ic img{width:100%;height:100%}
+.pzh-hero small,.pzh-n small{display:block;font-size:12px;color:var(--sub)}
+.pzh-hero b#phR{font-family:var(--fn);font-size:40px;font-weight:900;line-height:1.05}
+.pzh-d{font-family:var(--fn);font-size:14px;font-weight:800;margin-left:6px}.pzh-d.up{color:var(--pzok)}.pzh-d.down{color:var(--pzng)}
+.pzh-n{margin-left:auto;text-align:right}.pzh-n b{font-family:var(--fn);font-size:21px;font-weight:900}.pzh-n i{font-style:normal;font-size:12px;color:var(--sub)}
+.pzh-spark{margin-top:10px;padding:12px 14px}
+.pzh-sh{display:flex;justify-content:space-between;font-size:12px;color:var(--sub);margin-bottom:6px}
+.pzh-spark svg{width:100%;height:70px;display:block}
+.pzh-empty{font-size:13px;color:var(--mute);text-align:center;padding:18px 0}.pzh-empty[hidden]{display:none}
+.pzh-card{margin-top:12px;padding:14px 16px;display:flex;align-items:center;gap:14px;width:100%;text-align:left;color:var(--fg);border:0}
+.pzh-card b{display:block;font-size:17px;font-weight:800}.pzh-card small{display:block;font-size:12.5px;color:var(--sub);margin-top:2px;font-weight:500}
+.pzh-big{flex-direction:column;align-items:stretch;gap:12px}.pzh-row{display:flex;align-items:center;gap:14px}
+.pzh-big .primary{width:100%}
+.pzh-go{margin-left:auto;font-size:26px;color:var(--mute)}
+.pzh-fl{display:inline-flex;align-items:center;background:rgba(240,194,75,.15);color:#f0c24b;font-size:12px;font-weight:800;border-radius:99px;padding:1px 9px;margin-left:8px;vertical-align:2px}.pzh-fl[hidden]{display:none}
+.pzbar{display:flex;align-items:center;gap:12px;padding:10px 14px;margin:2px 0 10px}.pzbar[hidden],.pzhist[hidden],.pzres[hidden],.rev-head[hidden],.dq-btns[hidden]{display:none}
+.pzb-st{width:28px;height:28px;border-radius:50%;flex:none}
+.pzb-st.b{background:radial-gradient(circle at 34% 28%,#5a5c5e 0%,#232526 38%,#0c0d0e 72%)}.pzb-st.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%)}
+.pzb-t b{display:block;font-size:16px}.pzb-t small{font-size:12px;color:var(--sub)}
+.pzb-r{margin-left:auto;text-align:right}.pzb-r small{display:block;font-size:11px;color:var(--sub)}.pzb-r b{font-family:var(--fn);font-size:21px;font-weight:900}
+.pzhist{display:flex;justify-content:center;gap:8px;margin:0 0 10px}
+.pzhist i{width:16px;height:16px;border-radius:50%;background:var(--p2)}.pzhist i.o{background:var(--pzok)}.pzhist i.x{background:var(--pzng)}
+.pzres{margin:12px 0 0;padding:14px 16px 14px 18px;border-radius:12px;background:var(--p1);border-left:6px solid var(--pzok)}.pzres.ng{border-left-color:var(--pzng)}
+.pzr-t{display:flex;align-items:center;gap:10px}.pzr-t b{font-size:20px;font-weight:900}
+.pzr-ic{width:30px;height:30px;border-radius:50%;background:var(--pzok);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900}.pzres.ng .pzr-ic{background:var(--pzng)}
+.pzr-d{margin-left:auto;font-family:var(--fn);font-size:15px;font-weight:900;color:#0f1a30;background:var(--pzok);border-radius:99px;padding:2px 12px}.pzres.ng .pzr-d{background:var(--pzng)}.pzr-d[hidden]{display:none}
+.pzres p{font-size:13px;color:var(--sub);margin:6px 0 12px;min-height:1em}
+.pzr-bs{display:flex;gap:8px}.pzr-bs button{flex:0 0 auto;padding:0 14px;font-size:14px}.pzr-bs .primary{flex:1;font-size:16px}.pzr-bs [hidden]{display:none}
+.pzl-flt{display:flex;gap:6px;margin:2px 0 12px;overflow-x:auto}
+.pzl-flt button{flex:none;height:34px;padding:0 14px;border-radius:99px;font-size:13px;font-weight:700;background:var(--p1);color:var(--sub);box-shadow:none;border:0}
+.pzl-flt button.on{background:var(--acc);color:var(--ink)}
+.pzl-lv{padding:12px 14px;margin-bottom:10px}
+.pzl-h{display:flex;align-items:center;gap:8px;margin-bottom:10px}.pzl-h b{font-size:15px}.pzl-h small{font-size:12px;color:var(--sub)}
+.pzl-dot{width:10px;height:10px;border-radius:50%}.pzl-pg{margin-left:auto;font-size:12px;color:var(--sub)}
+.pzl-bar{height:6px;border-radius:3px;background:var(--p2);margin:-4px 0 10px;overflow:hidden}.pzl-bar i{display:block;height:100%;background:var(--pzok)}
+.pzl-tiles{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.pzl-t{min-width:0;height:44px;padding:0;border-radius:9px;background:var(--p2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:var(--sub);box-shadow:none;border:0}
+.pzl-t span{font-family:var(--fn);font-size:13px;font-weight:800;line-height:1}.pzl-t small{font-size:9.5px;opacity:.7;line-height:1}
+.pzl-t.o{background:rgba(62,207,155,.2);color:#7fe6c0}.pzl-t.x{background:rgba(255,107,107,.18);color:#ff9b93}
+.pzl-none{grid-column:1/-1;font-size:13px;color:var(--mute);margin:4px 0}
+.pzl-more{width:100%;margin-top:10px;height:38px;font-size:13px;background:transparent;border:1px solid var(--line2);box-shadow:none;color:var(--sub)}
 
 </style>
 </head>
@@ -1633,7 +1705,7 @@ button.primary:active,.primary:active,.hm-play:active,.hc-btn:active,.rev-mv:act
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.51</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.52</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <button class="cg-bg" id="cgBg" type="button" aria-label="キャラ"><img id="cgBgImg" alt=""></button>
@@ -1831,15 +1903,32 @@ button.primary:active,.primary:active,.hm-play:active,.hc-btn:active,.rev-mv:act
   <iframe id="refFrame" title="資料（勝ち方ガイド）" class="ref-frame" loading="lazy"></iframe>
 </section>
 <section class="scr" data-scr="daily" hidden>
-  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>毎日の1問</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2 id="dqTitle">毎日の1問</h2><span class="sp"></span></div>
   <p class="rev-head" id="dqHead"></p>
+  <div class="pzbar" id="pzBar" hidden><span class="pzb-st" id="pzBst"></span><div class="pzb-t"><b id="pzBside">白の番</b><small>2手で勝ち</small></div><div class="pzb-r"><small>問題</small><b id="pzBr">1000</b></div></div>
+  <div class="pzhist" id="pzHist" hidden></div>
   <div class="boardwrap rev-board"><div class="board" id="dboard"><div class="lab lab-top" id="dlabTop" aria-hidden="true"></div><div class="lab lab-left" id="dlabLeft" aria-hidden="true"></div><div class="grid" id="dgrid" aria-label="毎日の1問の盤"></div></div></div>
   <p class="dq-msg" id="dqMsg"></p>
+  <div class="pzres" id="pzRes" hidden><div class="pzr-t"><span class="pzr-ic" id="pzRic">✓</span><b id="pzRtt">正解！</b><span class="pzr-d" id="pzRd" hidden></span></div><p id="pzRtx"></p>
+    <div class="pzr-bs"><button type="button" id="pzRagain">もう一度</button><button type="button" id="pzRans">答え</button><button type="button" class="primary" id="pzRnext">次の問題</button></div></div>
   <div class="row dq-btns dq-share" id="dqShareRow" hidden><button class="primary" id="dqShare">結果をXでシェア</button></div>
   <p class="note dq-share-note" id="dqShareNote" hidden></p>
   <div class="row dq-btns"><button id="dqRetry">はじめから</button><button id="dqAns">答えを見る</button></div>
   <div class="dq-streak"><div><b id="dqCur">0</b><span>日連続</span></div><div><b id="dqMax">0</b><span>最高</span></div></div>
   <p class="note dq-note">相手がどう受けても、2手で勝てる手が1つだけあります。その日の最初の挑戦だけが連続記録に入ります（2回目からは練習）。問題は毎日0時に変わります。</p>
+</section>
+<section class="scr" data-scr="pzhub" hidden>
+  <div class="topbar"><span class="sp"></span><h2>パズル</h2><span class="sp"></span></div>
+  <div class="pzh-hero"><span class="pzh-ic" data-ic="puzzle"></span><div><small>パズルレート</small><div><b id="phR">1000</b><span class="pzh-d" id="phD"></span></div></div><div class="pzh-n"><small>解いた問題</small><b><span id="phN">0</span><i> / <span id="phT">0</span></i></b></div></div>
+  <div class="pzh-spark"><div class="pzh-sh"><span>この30問のレート</span><span id="phMax"></span></div><svg id="phG" viewBox="0 0 330 70" preserveAspectRatio="none" aria-hidden="true"></svg><p class="pzh-empty" id="phEmpty">レート戦を解くと、ここにグラフが出ます</p></div>
+  <div class="pzh-card pzh-big"><div class="pzh-row"><span class="pzh-ic" data-ic="bolt"></span><div><b>レート戦</b><small>あなたに合った問題が次々に出ます</small></div></div><button class="primary big" id="phGo" type="button">解く</button></div>
+  <button class="pzh-card pzh-link" id="phDaily" type="button"><span class="pzh-ic" data-ic="review"></span><div><b>今日の1問<span class="pzh-fl" id="phFl" hidden></span></b><small id="phDs"></small></div><span class="pzh-go">›</span></button>
+  <button class="pzh-card pzh-link" id="phBook" type="button"><span class="pzh-ic" data-ic="trophy"></span><div><b>問題集</b><small id="phBs">レベル別の問題</small></div><span class="pzh-go">›</span></button>
+</section>
+<section class="scr" data-scr="pzlist" hidden>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>問題集</h2><span class="sp"></span></div>
+  <div class="pzl-flt" id="plF"><button type="button" class="on" data-f="all">すべて</button><button type="button" data-f="new">未挑戦</button><button type="button" data-f="ng">まちがえた</button><button type="button" data-f="ok">解いた</button></div>
+  <div id="plLv"></div>
 </section>
 <section class="scr" data-scr="review" hidden>
   <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>感想戦</h2><span class="rbtns"><button class="back rshare" id="revImg" hidden><span class="i-ext">画像</span></button><button class="back rshare" id="revShare" hidden><span class="i-ext">共有</span></button></span></div>
@@ -3784,7 +3873,7 @@ function revWarn(t){REV.msg=t;clearTimeout(REV.msgT);REV.msgT=setTimeout(()=>{RE
 $('rgrid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(!c)return;revCell(+c.id.slice(1))});
 /* 動画を作る：手が1つでもある対局ならすべて作れる。勝者と終わり方を渡す。本体（mv/maker.js）は押したときに読み込む */
 function mvOK(log){return !!(log&&log.length)}
-function mvOpen(log,win,why,me){const go=()=>window.BocchVideo.open({log,win,why,me});if(window.BocchVideo)return go();const sc=document.createElement('script');sc.src='mv/maker.js?v=7';sc.onload=go;sc.onerror=()=>alert((window.bocchT||(x=>x))('読み込めませんでした'));document.head.appendChild(sc)}
+function mvOpen(log,win,why,me){const go=()=>window.BocchVideo.open({log,win,why,me});if(window.BocchVideo)return go();const sc=document.createElement('script');sc.src='mv/maker.js?v=8';sc.onload=go;sc.onerror=()=>alert((window.bocchT||(x=>x))('読み込めませんでした'));document.head.appendChild(sc)}
 $('mvNow').addEventListener('click',()=>{if(S.over&&S.log)mvOpen(S.log.map(m=>[m[0],m[1]]),S.over.win,S.over.why,(()=>{try{return S.mode==='net'?colorOf(NET.me):S.mode===0?0:hcOf()}catch(e){return 0}})())});
 $('revMv').addEventListener('click',()=>{if(REV.g)mvOpen(REV.g.log.map(m=>[m[0],m[1]]),REV.g.win,REV.g.why,REV.g.me)});
 $('reviewNow').addEventListener('click',()=>{saveFinished();const id=currentGameId();if(id)openReview(id)});
@@ -4647,15 +4736,56 @@ function dqIndex(){const d=new Date(),t0=new Date(2026,9,27);return Math.floor((
 function dqYest(){const d=new Date();d.setDate(d.getDate()-1);return dqDay(d)}
 function dqCur(){const s=bdStats();return (s.dlast===dqDay()||s.dlast===dqYest())?(s.dcur|0):0}
 function dqWinNow(b,p,m){const a=apply(b,m);return arrived(a,p)||!allMoves(a,3-p).length}
-async function dqLoad(){if(DQ.list)return DQ.list;try{DQ.list=await fetch('puzzles.json').then(r=>r.json())}catch(e){DQ.list=[]}return DQ.list}
+async function dqLoad(){if(DQ.list)return DQ.list;try{DQ.list=await fetch('puzzles.json?v=2').then(r=>r.json())}catch(e){DQ.list=[]}return DQ.list}
 (function(){const t=$('dlabTop'),l=$('dlabLeft'),gr=$('dgrid');for(let i=0;i<6;i++){t.appendChild(document.createElement('span'));l.appendChild(document.createElement('span'))}
   for(let i=0;i<36;i++){const d=document.createElement('div');d.className='cell';d.id='q'+i;gr.appendChild(d)}})();
-async function dqOpen(){const L=await dqLoad();if(!L.length){$('dqHead').textContent='問題を読み込めませんでした。通信を確かめてください。';return}
-  const n=dqIndex(),qi=((n%L.length)+L.length)%L.length,q=L[qi];DQ.q={b:q[0].split('').map(Number),p:q[1],ans:[q[2],q[3]],n:n+1,k:qi+1};dqReset();
-  const s=bdStats();DQ.first=s.dlast!==dqDay();dqRender()}
-function dqReset(){DQ.res=null;dqShareUpd();DQ.b=DQ.q.b.slice();DQ.turn=DQ.q.p;DQ.phase='p1';DQ.sel=-1;DQ.last=null;DQ.busy=false;$('dqMsg').textContent='';$('dqMsg').className='dq-msg'}
+async function dqOpen(pk){const L=await dqLoad();if(!L.length){$('dqHead').textContent='問題を読み込めませんでした。通信を確かめてください。';return}
+  const n=dqIndex(),qi=pk?pk-1:((n%L.length)+L.length)%L.length,q=L[qi];DQ.prac=!!pk;DQ.q={b:q[0].split('').map(Number),p:q[1],ans:[q[2],q[3]],n:n+1,k:qi+1,r:q[4]||1200};DQ.rated=false;$('pzRes').hidden=true;dqReset();
+  const s=bdStats();DQ.first=!pk&&s.dlast!==dqDay();dqRender();pzRender()}
+/* パズル：レート戦（chess.comと同じ考え方のレート）・問題集。今日の1問はこれまでどおり */
+function pzGet(){try{return new Set(JSON.parse(localStorage.getItem('bocch_pz')||'[]'))}catch(e){return new Set()}}
+function pzSave(S_){try{localStorage.setItem('bocch_pz',JSON.stringify([...S_]))}catch(e){}}
+function pzRt(){try{const o=JSON.parse(localStorage.getItem('bocch_pzr')||'null');if(o&&o.r)return Object.assign({h:[],res:[],last:0},o)}catch(e){}return {r:1000,n:0,h:[],res:[],last:0}}
+function pzTried(){try{return new Set(JSON.parse(localStorage.getItem('bocch_pza')||'[]'))}catch(e){return new Set()}}
+/* はじめて挑戦した問題だけで上下する。答えを見たら不正解あつかい */
+function pzRate(ok){if(DQ.rated||!DQ.q)return 0;DQ.rated=true;const T=pzTried();if(T.has(DQ.q.k))return 0;T.add(DQ.q.k);try{localStorage.setItem('bocch_pza',JSON.stringify([...T]))}catch(e){}
+  const o=pzRt(),K=o.n<10?48:o.n<30?32:20,E=1/(1+Math.pow(10,(DQ.q.r-o.r)/400)),d=Math.round(K*((ok?1:0)-E))||(ok?1:-1);
+  if(!o.h.length)o.h.push(o.r);o.r=Math.max(100,o.r+d);o.n++;o.last=d;o.h.push(o.r);o.h=o.h.slice(-31);o.res.push(ok?1:0);o.res=o.res.slice(-10);
+  try{localStorage.setItem('bocch_pzr',JSON.stringify(o))}catch(e){}return d}
+function pzNextK(){const L=DQ.list||[],sv=pzGet(),T=pzTried(),me=pzRt().r,c=DQ.prac&&DQ.q?DQ.q.k:0;let C=L.map((q,i)=>i+1).filter(k=>k!==c&&!sv.has(k)&&!T.has(k));if(!C.length)C=L.map((q,i)=>i+1).filter(k=>k!==c&&!sv.has(k));if(!C.length)return c%L.length+1;
+  C.sort((a,b)=>Math.abs((L[a-1][4]||1200)-me-30)-Math.abs((L[b-1][4]||1200)-me-30));const top=C.slice(0,6);return top[Math.random()*top.length|0]}
+function pzGo(k){show('daily');dqLoad().then(()=>dqOpen(k||pzNextK()))}
+/* 解いている画面の上の帯・最近の結果・下の結果パネル */
+function pzRender(){const pr=!!DQ.prac;$('pzBar').hidden=!pr;$('pzHist').hidden=!pr;$('dqHead').hidden=pr;$('dqTitle').textContent=pr?'レート戦':'毎日の1問';
+  document.querySelector('.dq-streak').hidden=pr;document.querySelector('.dq-note').hidden=pr;document.querySelectorAll('[data-scr="daily"] .dq-btns:not(.dq-share)').forEach(e=>e.hidden=pr);
+  if(!pr){$('pzRes').hidden=true;return}
+  const p=DQ.q.p;$('pzBst').className='pzb-st '+(p===1?'b':'w');$('pzBside').textContent=p===1?'黒の番':'白の番';$('pzBr').textContent=DQ.q.r;
+  const res=pzRt().res,h=$('pzHist');h.replaceChildren();for(let i=0;i<10;i++){const e=document.createElement('i');const v=res[res.length-10+i];if(v!==undefined)e.className=v?'o':'x';h.appendChild(e)}}
+function pzResult(ok,d,txt){const r=$('pzRes');r.hidden=false;r.className='pzres '+(ok?'ok':'ng');$('pzRic').textContent=ok?'✓':'✕';$('pzRtt').textContent=ok?'正解！':'不正解';
+  const rd=$('pzRd');rd.hidden=!d;if(d)rd.textContent=(d>0?'+':'')+d;$('pzRtx').textContent=txt||'';$('pzRans').hidden=ok;$('dqMsg').textContent='';pzRender()}
+/* パズルのトップ */
+async function pzHub(){const L=await dqLoad(),o=pzRt(),sv=pzGet();$('phR').textContent=o.r;const d=$('phD');d.textContent=o.last?(o.last>0?'▲':'▼')+Math.abs(o.last):'';d.className='pzh-d '+(o.last>0?'up':'down');
+  $('phN').textContent=sv.size;$('phT').textContent=L.length;$('phBs').textContent=L.length+'問をレベル別に';
+  const g=$('phG'),h=o.h;$('phEmpty').hidden=h.length>1;g.style.display=h.length>1?'':'none';$('phMax').textContent=h.length>1?'最高 '+Math.max(...h):'';
+  if(h.length>1){const mn=Math.min(...h)-10,mx=Math.max(...h)+10,X=i=>i*330/(h.length-1),Y=v=>64-(v-mn)/(mx-mn)*58,pts=h.map((v,i)=>X(i).toFixed(1)+' '+Y(v).toFixed(1));
+    g.innerHTML='<defs><linearGradient id="phGr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3ecf9b" stop-opacity=".35"/><stop offset="1" stop-color="#3ecf9b" stop-opacity="0"/></linearGradient></defs><path d="M'+pts.join(' L')+' L330 70 L0 70Z" fill="url(#phGr)"/><path d="M'+pts.join(' L')+'" fill="none" stroke="#3ecf9b" stroke-width="3" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>'}
+  const c=dqCur(),fl=$('phFl');fl.hidden=!c;fl.textContent='🔥 '+c+'日';
+  if(L.length){const n=dqIndex(),q=L[((n%L.length)+L.length)%L.length],dt=new Date(),done=bdStats().dlast===dqDay();$('phDs').textContent=(dt.getMonth()+1)+'月'+dt.getDate()+'日　'+(q[1]===1?'黒番':'白番')+'・2手で勝ち'+(done?'　済':'')}}
+/* 問題集：レベル別。すべて／未挑戦／まちがえた／解いた */
+let PL_F='all';const PL_OPEN={};
+const PZ_LV=[['入門','#3ecf9b',0,900],['初級','#5fb2ff',900,1200],['中級','#f0c24b',1200,1500],['上級','#ff6b6b',1500,9999]];
+async function pzList(){const L=await dqLoad(),sv=pzGet(),T=pzTried(),box=$('plLv');box.replaceChildren();
+  PZ_LV.forEach(([nm,col,lo,hi],li)=>{const ks=L.map((q,i)=>i+1).filter(k=>{const r=L[k-1][4]||1200;return r>=lo&&r<hi}).sort((a,b)=>(L[a-1][4]||0)-(L[b-1][4]||0));
+    const st=k=>sv.has(k)?'o':T.has(k)?'x':'';const vis=ks.filter(k=>PL_F==='all'||(PL_F==='new'&&!st(k))||(PL_F==='ng'&&st(k)==='x')||(PL_F==='ok'&&st(k)==='o'));
+    const done=ks.filter(k=>sv.has(k)).length,c=document.createElement('div');c.className='pzl-lv';
+    c.innerHTML='<div class="pzl-h"><span class="pzl-dot" style="background:'+col+'"></span><b>'+nm+'</b><small>'+(hi>3000?lo+'〜':lo?lo+'〜'+(hi-1):'〜'+(hi-1))+'</small><span class="pzl-pg">'+done+' / '+ks.length+'</span></div><div class="pzl-bar"><i style="width:'+(ks.length?done/ks.length*100:0)+'%"></i></div>';
+    const g=document.createElement('div');g.className='pzl-tiles';const lim=PL_OPEN[li]?vis.length:18;
+    vis.slice(0,lim).forEach(k=>{const b=document.createElement('button');b.type='button';b.className='pzl-t '+st(k);b.dataset.k=k;b.innerHTML='<span>'+k+'</span><small>'+(L[k-1][4]||'')+'</small>';g.appendChild(b)});
+    if(!vis.length){const p=document.createElement('p');p.className='pzl-none';p.textContent='ありません';g.appendChild(p)}
+    c.appendChild(g);if(vis.length>lim){const m=document.createElement('button');m.type='button';m.className='pzl-more';m.dataset.lv=li;m.textContent='すべて見る（'+vis.length+'問）';c.appendChild(m)}box.appendChild(c)})}
+function dqReset(){DQ.pzDone=false;if($('pzRes'))$('pzRes').hidden=true;DQ.res=null;dqShareUpd();DQ.b=DQ.q.b.slice();DQ.turn=DQ.q.p;DQ.phase='p1';DQ.sel=-1;DQ.last=null;DQ.busy=false;$('dqMsg').textContent='';$('dqMsg').className='dq-msg'}
 function dqRender(){if(!DQ.q)return;const b=DQ.b,p=DQ.q.p,flip=p===2,tg=DQ.sel>=0?movesFrom(b,DQ.sel).map(m=>m[1]):[];const my=(DQ.phase==='p1'||DQ.phase==='p2')&&!DQ.busy;
-  const d=new Date();$('dqHead').textContent=(d.getMonth()+1)+'月'+d.getDate()+'日の問題（第'+DQ.q.n+'問）　'+(p===1?'黒':'白')+'番・2手で勝ち';
+  const d=new Date();$('dqHead').textContent=(DQ.prac?'No.'+DQ.q.k:(d.getMonth()+1)+'月'+d.getDate()+'日の問題（第'+DQ.q.n+'問）')+'　'+(p===1?'黒':'白')+'番・2手で勝ち';
   for(let i=0;i<36;i++){const v=b[i],r=i/6|0,n=v?nbCount(b,i):0;let cls='cell';if(r===0||r===5)cls+=' goal';if(DQ.last&&(DQ.last[0]===i||DQ.last[1]===i))cls+=' last';
     if(my&&v===p&&movesFrom(b,i).length)cls+=' mine';if(i===DQ.sel)cls+=' sel';if(tg.includes(i))cls+=' target'+((p===1?r===0:r===5)?' fin':'');
     setCell($('q'+i),cls,v?`<div class="stone ${v===1?'b':'w'}${n?'':' zero'}"><span>${n}</span></div>`:'')}
@@ -4663,7 +4793,8 @@ function dqRender(){if(!DQ.q)return;const b=DQ.b,p=DQ.q.p,flip=p===2,tg=DQ.sel>=
   [...$('dlabTop').children].forEach((e,k)=>e.textContent=String(flip?6-k:k+1));[...$('dlabLeft').children].forEach((e,k)=>e.textContent='abcdef'[flip?5-k:k]);
   const s=bdStats();$('dqCur').textContent=dqCur();$('dqMax').textContent=s.daily|0;try{komaWatch('dgrid',DQ.q.n,CUR==='daily')}catch(e){}}
 function dqMsg(t,k){const m=$('dqMsg');m.textContent=t;m.className='dq-msg'+(k?' '+k:'')}
-function dqRecord(ok){DQ.res=ok?'ok':'ng';dqShareUpd();if(!DQ.first)return;DQ.first=false;const s=bdStats(),t=dqDay();if(s.dlast===t)return;
+function dqRecord(ok){let d=0;try{if(DQ.prac||DQ.first)d=pzRate(ok)}catch(e){}if(DQ.prac){if(DQ.pzDone)return;DQ.pzDone=true;if(ok&&DQ.phase!=='show'){const v=pzGet();v.add(DQ.q.k);pzSave(v)}DQ.res=null;dqShareUpd();const m=$('dqMsg').textContent;
+    pzResult(ok&&DQ.phase!=='show',d,ok?'相手がどう受けても、次の1手でゴールに2つ届きます':DQ.phase==='show'?'答えの手順を再生します':m);return}DQ.res=ok?'ok':'ng';dqShareUpd();if(!DQ.first)return;DQ.first=false;const s=bdStats(),t=dqDay();if(s.dlast===t)return;
   s.dcur=ok?((s.dlast===dqYest()?(s.dcur|0):0)+1):0;s.dlast=t;s.daily=Math.max(s.daily|0,s.dcur);saveProf();bdCheck();dqDot()}
 function dqMove(m){DQ.b=apply(DQ.b,m);DQ.last=m;DQ.sel=-1;dqRender()}
 function dqCell(i){if(CUR!=='daily'||!DQ.q||DQ.busy||!(DQ.phase==='p1'||DQ.phase==='p2'))return;const b=DQ.b,p=DQ.q.p;
@@ -4684,11 +4815,19 @@ function dqPlay(m){const p=DQ.q.p;
   if(DQ.phase==='p2'){const win=dqWinNow(DQ.b,p,m);DQ.ply=2;dqMove(m);DQ.phase='done';if(win){dqMsg('正解！','ok');dqRecord(true)}else{dqMsg('惜しい。勝ちの手はほかにありました','ng');dqRecord(false)}dqRender()}}
 function dqShow(){if(!DQ.q||DQ.busy)return;dqRecord(false);dqReset();DQ.busy=true;DQ.phase='show';dqRender();const p=DQ.q.p;dqMsg('答え：'+(p===1?'黒':'白')+' '+sqName(DQ.q.ans[0])+'→'+sqName(DQ.q.ans[1]));
   setTimeout(()=>{dqMove(DQ.q.ans);setTimeout(()=>{const b=DQ.b,rs=allMoves(b,3-p);let best=rs[0],mn=1e9;for(const r of rs){const c=apply(b,r),k=allMoves(c,p).filter(x=>dqWinNow(c,p,x)).length;if(k<mn){mn=k;best=r}}
-    if(best)dqMove(best);setTimeout(()=>{const w=allMoves(DQ.b,p).find(x=>dqWinNow(DQ.b,p,x));if(w)dqMove(w);DQ.busy=false;DQ.phase='done';DQ.res='ng';dqShareUpd();dqMsg('答え：'+sqName(DQ.q.ans[0])+'→'+sqName(DQ.q.ans[1])+'　相手がどう受けても、次の1手で勝てます','ok')},900)},900)},500)}
+    if(best)dqMove(best);setTimeout(()=>{const w=allMoves(DQ.b,p).find(x=>dqWinNow(DQ.b,p,x));if(w)dqMove(w);DQ.busy=false;DQ.phase='done';DQ.res='ng';dqShareUpd();dqMsg('答え：'+sqName(DQ.q.ans[0])+'→'+sqName(DQ.q.ans[1])+'　相手がどう受けても、次の1手で勝てます','ok');if(DQ.prac){$('pzRtx').textContent=$('dqMsg').textContent;$('dqMsg').textContent='';$('pzRans').hidden=true;$('pzRes').hidden=false}},900)},900)},500)}
 function dqDot(){const s=bdStats();$('dailyDot').hidden=s.dlast===dqDay();if(!$('dailyDot').hidden)$('dailyDot').textContent='!'}
 $('dgrid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(!c)return;dqCell(+c.id.slice(1))});
 $('dqRetry').addEventListener('click',()=>{if(!DQ.q||DQ.busy)return;dqReset();dqRender()});
 $('dqAns').addEventListener('click',dqShow);
+$('pzRnext').addEventListener('click',()=>{if(!DQ.busy)dqOpen(pzNextK())});
+$('pzRagain').addEventListener('click',()=>{if(DQ.busy)return;dqReset();dqRender();pzRender()});
+$('pzRans').addEventListener('click',()=>{if(DQ.busy)return;$('pzRes').hidden=true;dqShow()});
+$('phGo').addEventListener('click',()=>pzGo());
+$('phDaily').addEventListener('click',()=>$('dailyBtn').click());
+$('phBook').addEventListener('click',()=>show('pzlist'));
+$('plF').addEventListener('click',e=>{const b=e.target.closest('[data-f]');if(!b)return;PL_F=b.dataset.f;for(const x of b.parentNode.children)x.classList.toggle('on',x===b);pzList()});
+$('plLv').addEventListener('click',e=>{const m=e.target.closest('.pzl-more');if(m){PL_OPEN[m.dataset.lv]=1;pzList();return}const t=e.target.closest('.pzl-t');if(t)pzGo(+t.dataset.k)});
 /* 結果をXでシェア：投稿画面を開くだけ（APIは使わない）。正解の手は書かない。盤は解く人に見えている向きのまま、上の段から6行 */
 function dqShareUpd(){const r=$('dqShareRow');if(!r)return;r.hidden=!DQ.res;if(!DQ.res)$('dqShareNote').hidden=true;$('dqShare').textContent=window.BOCCH_LANG&&window.BOCCH_LANG!=='ja'?'Share on X':'結果をXでシェア'}
 function dqShareText(noGrid){const q=DQ.q,p=q.p,L=window.BOCCH_LANG||'ja',flip=p===2,rows=[];
@@ -4729,8 +4868,8 @@ function openX(u){
 $('dqShare').addEventListener('click',async()=>{if(!DQ.q||!DQ.res)return;const intent=t=>'https://x.com/intent/post?text='+encodeURIComponent(t);
   // 押したらすぐXの投稿画面へ。盤面の画像は、問題ごとのページ（/d/番号/）のリンクカードで出る
   openX(intent(dqShareText(true)))});
-$('dailyBtn').addEventListener('click',()=>{dqOpen()});
-addEventListener('popstate',()=>{if(CUR==='daily')dqOpen()});
+$('dailyBtn').addEventListener('click',()=>{DQ.prac=false;dqOpen()});
+addEventListener('popstate',()=>{if(CUR==='daily'&&!DQ.prac)dqOpen();if(CUR==='pzhub')pzHub();if(CUR==='pzlist')pzList()});
 try{dqDot()}catch(e){}
 
 /* 対局の画像：盤面・勝敗・名前を1枚の縦長画像にして、共有メニュー（なければ保存）へ */
@@ -5551,14 +5690,14 @@ const T=s=>{try{return window.bocchT&&window.BOCCH_LANG!=='ja'?window.bocchT(s):
 const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:v}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 const sqN=i=>(i%6+1)+'abcdef'[i/6|0];
 /* ---------- 下のタブ ---------- */
-const TABROOT={home:'home',setup:'setup',daily:'daily',history:'history',profile:'profile',rank:'profile',friends:'profile',watch:'profile',kifu:'profile'};
+const TABROOT={home:'home',setup:'setup',daily:'daily',pzhub:'daily',pzlist:'daily',history:'history',profile:'profile',rank:'profile',friends:'profile',watch:'profile',kifu:'profile'};
 const tabbar=$('tabbar');
 function tabSync(n){const t=TABROOT[n];document.body.classList.toggle('tabs-on',!!t);tabbar.querySelectorAll('button').forEach(b=>b.setAttribute('aria-current',b.dataset.tab===t?'page':'false'))}
 tabbar.addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;const k=b.dataset.tab;
-  if(k==='home')show('home');else if(k==='setup')stOpen();else if(k==='daily')$('dailyBtn').click();
+  if(k==='home')show('home');else if(k==='setup')stOpen();else if(k==='daily')show('pzhub');
   else if(k==='history'){const h=document.querySelector('.hm-menu [data-go="history"]');if(h)h.click();else show('history')}
   else if(k==='profile')$('meBtn').click()});
-{const _p=paint;paint=function(n){_p(n);try{tabSync(n);if(n==='home')hmSync();if(n==='profile')pfSync();if(n==='setup')stSync()}catch(e){console.error(e)}}}
+{const _p=paint;paint=function(n){_p(n);try{tabSync(n);if(n==='home')hmSync();if(n==='profile')pfSync();if(n==='setup')stSync();if(n==='pzhub')pzHub();if(n==='pzlist')pzList()}catch(e){console.error(e)}}}
 /* ---------- ホーム ---------- */
 let QM=LS.get('bocch-qm','rand');
 function hmSync(){try{$('hmPillS').className=$('meStone').className;$('hmPillR').textContent=$('meRate').textContent}catch(e){}
@@ -5623,7 +5762,7 @@ addEventListener('keydown',e=>{if(CUR!=='review'||e.target.closest('input,textar
 function pfSync(){const el=$('pfStats');if(!el)return;let s={};try{s=bdStats()}catch(e){}const g=s.games|0,w=s.wins|0;
   el.innerHTML='<div><b>'+g+'</b><small>'+T('対局')+'</small></div><div><b>'+(g?Math.round(w/g*100)+'%':'—')+'</b><small>'+T('勝率')+'</small></div><div><b>'+(s.streak|0)+'</b><small>'+T('連勝中')+'</small></div>'}
 /* カラーの絵（Geminiで生成して切り抜いたもの） */
-window.BOCCH_IC={};['bolt','pad','hand','puzzle','review','trophy','live'].forEach(k=>{window.BOCCH_IC[k]='<img src="img/ic/'+k+'.webp?v=2" alt="" decoding="async">'});
+window.BOCCH_IC={};['bolt','pad','hand','puzzle','review','trophy','live'].forEach(k=>{window.BOCCH_IC[k]='<img src="img/ic/'+k+'.webp?v=2" alt="" decoding="async">'});document.querySelectorAll('[data-ic]').forEach(e=>{e.innerHTML=window.BOCCH_IC[e.dataset.ic]||''});
 
 /* カラーの絵をホームのボタンに入れる */
 {const I=window.BOCCH_IC,put=(sel,k)=>{document.querySelectorAll(sel).forEach(b=>{const o=b.querySelector('svg');const w=document.createElement('span');w.className='ic3w';w.innerHTML=I[k];if(o)o.replaceWith(w);else b.prepend(w)})};

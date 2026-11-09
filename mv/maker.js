@@ -263,7 +263,7 @@ function load(){if(ready)return ready;
 #bmv .msg{width:100%;max-width:420px;font-size:13px;color:#9aa6c0;min-height:18px;line-height:1.6;text-align:center}`;
   document.head.appendChild(css);
   const ff=[new FontFace('Bebas','url('+BASE+'bebas.ttf)'),new FontFace('Outfit','url('+BASE+'outfit.ttf)',{weight:'700'})];
-  ready=Promise.all([fetch(BASE+'tracks.json?v=2').then(r=>r.json()).then(j=>{TRACKS=j}),...ff.map(f=>f.load().then(x=>document.fonts.add(x)).catch(()=>{}))]);
+  ready=Promise.all([fetch(BASE+'tracks.json?v=3').then(r=>r.json()).then(j=>{TRACKS=j}),...ff.map(f=>f.load().then(x=>document.fonts.add(x)).catch(()=>{}))]);
   return ready}
 let UI=null,ST=null;
 function el(h){const d=document.createElement('div');d.innerHTML=h;return d.firstElementChild}
