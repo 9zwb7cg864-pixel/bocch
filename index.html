@@ -1783,7 +1783,7 @@ a.cl-next h4::after{content:" ›";color:var(--tb)}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.63</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.64</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -2761,7 +2761,7 @@ function mvSvg(){if(!MV_SVG||!MV_SVG.isConnected){MV_SVG=document.createElementN
 const mvL=n=>mvSvg().querySelector('[data-l="'+n+'"]');
 function mvMe(){try{const m=fxMe();return m||0}catch(e){return 0}}
 /* 次の手でゴールに届く石：自分（見ている側）は金、相手は赤。選んでいる間と終局後は出さない */
-function mvReach(b){const o={s:{},t:{},l:[]};if(S.over||S.sel>=0||S.learn||S.coach||!mvLive()){try{mvReachDraw([])}catch(e){}return o}const me=mvMe()||1;
+function mvReach(b){const o={s:{},t:{},l:[]};if(S.over||S.sel>=0||S.learn||S.lesson||!mvLive()){try{mvReachDraw([])}catch(e){}return o}const me=mvMe()||1;
   for(let i=0;i<N*N;i++){const p=b[i];if(!p)continue;const g=goalRow(p);if((i/N|0)===g)continue;for(const m of movesFrom(b,i))if((m[1]/N|0)===g){const k=p===me?'G':'R';o.s[i]=k;o.t[m[1]]=k;o.l.push([i,m[1],p])}}mvReachDraw(o.l);return o}
 /* リーチの矢印：動画と同じく、石からゴールのマスへ矢印（黒はオレンジ、白は青）、ゴールに点滅する照準 */
 const RCH={};
@@ -5992,7 +5992,7 @@ function stepGameIntro(){steps(3);const body=$('clBody');body.replaceChildren();
   body.append(bubble(r&&r[0]===r[1]?'ok':'n',[r?'練習は'+r[1]+'問中'+r[0]+'問正解だ。':'', '次は実戦だ！ 対局の中で「'+ST[LS.th][0]+'」を意識しろ。','悪い手を指しそうになったら、俺が止めるぞ。']));
   clFoot('対局する',gameStart)}
 function gameStart(){let lv=2;try{lv=+localStorage.getItem('bocch-stl')||2}catch(e){}if(!CPU_RATE[lv])lv=2;
-  S=initState(lv);S.coach={th:LS.th};KICK='';show('game');render();coachSay('n',CPU_BY[lv]?['相手は'+CPU_BY[lv].n+'だ。落ち着いていこう！']:['落ち着いていこう！'],false)}
+  S=initState(lv);S.lesson={th:LS.th};KICK='';show('game');render();coachSay('n',CPU_BY[lv]?['相手は'+CPU_BY[lv].n+'だ。落ち着いていこう！']:['落ち着いていこう！'],false)}
 function stepSum(){steps(4);const body=$('clBody');body.replaceChildren();const r=LS.res,th=LS.th,o=cGet();o.lday=dqDay();cPut(o);
   const st=r.face?r.stop+'/'+r.face:'−';
   body.append(bubble('ok',['今日の授業はここまで！',r.face&&r.stop===r.face?'実戦でも全部止められたぞ。':r.matta?'待ったで直せた手は、次は最初から指せるようにしよう。':'よく頑張った！']));
@@ -6015,8 +6015,8 @@ function judgeMove(b,p,m){const q=3-p,my=w1(b,p);
   if(th.length&&!r.length)return {good:1,st:3,tx:['いい手だ！ 相手の'+mv(K(th[0]))+'を止めた。'+(has1(a,p)?'しかも自分のリーチも作れている！':'')]};
   if(has1(a,p)&&!has1(b,p))return {good:1,tx:['いいぞ、リーチを作った！ 相手がどう受けるか見ていよう。']};
   return null}
-{const _dm=doMove;doMove=function(m){try{if(S&&S.coach&&!S.over&&S.mode!=='net'&&!S.learn&&!S.study&&S.turn===hcOf()){
-    if(PEND&&same(PEND,m)&&PEND.ok){PEND=null}else{const j=judgeMove(S.b,S.turn,m),C=S.coach;
+{const _dm=doMove;doMove=function(m){try{if(S&&S.lesson&&!S.over&&S.mode!=='net'&&!S.learn&&!S.study&&S.turn===hcOf()){
+    if(PEND&&same(PEND,m)&&PEND.ok){PEND=null}else{const j=judgeMove(S.b,S.turn,m),C=S.lesson;
       C.seen=C.seen||{};if(j&&j.st&&!C.seen[S.ply]){C.seen[S.ply]=1;LS.res.face++;if(j.good)LS.res.stop++}
       if(j&&j.bad){PEND=Object.assign(m.slice(),{ok:false});coachSay('ng',j.tx,true);S.sel=-1;render();return}
       if(j&&j.good){LS.res.good++;coachSay('ok',j.tx,false)}else coachHide();void C}}}catch(e){console.error(e)}
@@ -6024,12 +6024,12 @@ function judgeMove(b,p,m){const q=3-p,my=w1(b,p);
 $('cgcBack').addEventListener('click',()=>{if(PEND){LS.res.matta++;PEND=null}coachSay('n',['よし、もう一度考えよう。'],false)});
 $('cgcGo').addEventListener('click',()=>{if(!PEND)return;const m=[PEND[0],PEND[1]];PEND=Object.assign(m.slice(),{ok:true});coachHide();doMove(m)});
 /* 相手の手のあと：リーチを作られたら、答えは言わずに知らせる */
-{const _r=render;let seen='';render=function(){_r();try{if(!S||!S.coach||S.over||S.mode==='net'||CUR!=='game'||S.turn!==hcOf()||PEND)return;const k=S.ply+':'+S.b.join('');if(k===seen)return;seen=k;
+{const _r=render;let seen='';render=function(){_r();try{if(!S||!S.lesson||S.over||S.mode==='net'||CUR!=='game'||S.turn!==hcOf()||PEND)return;const k=S.ply+':'+S.b.join('');if(k===seen)return;seen=k;
     const p=S.turn,q=3-p;if(has1(S.b,p))coachSay('n',['チャンスだ！ 盤をよく見ろ。'],false);else if(has1(S.b,q))coachSay('n',['相手がリーチを作ったぞ。どう止める？'],false)}catch(e){}}}
 /* 終局：授業の続き（まとめ）へ。授業でない対局は、のがした場面を1つ出して解き直せる */
 {const _fe=fxEnd0;fxEnd0=function(win,why,me,b,cell){const r=_fe(win,why,me,b,cell);try{setTimeout(()=>{const e=$('mvEnd');if(!e||e.hidden||!S||!S.over||S.fromPos||!S.log)return;const row=e.querySelector('.mvacts')||e.querySelector('.mvrow');if(!row||e.querySelector('.cqend'))return;
     const c=document.createElement('div');c.className='cqend';const fi=document.createElement('img');fi.className='cqend-f';fi.alt='';fi.src='img/coach/coach-n.webp?v=1';c.append(fi);const tt=document.createElement('span');c.append(tt);const bt=document.createElement('button');bt.type='button';
-    if(S.coach&&LS.on){coachHide();spans(tt,['授業の実戦が終わった'],1);bt.textContent='まとめへ';bt.addEventListener('click',ev=>{ev.stopPropagation();e.hidden=true;show('coachl');stepSum()})}
+    if(S.lesson&&LS.on){coachHide();spans(tt,['授業の実戦が終わった'],1);bt.textContent='まとめへ';bt.addEventListener('click',ev=>{ev.stopPropagation();e.hidden=true;show('coachl');stepSum()})}
     else{const g={log:S.log.map(m=>[m[0],m[1]]),me:S.mode==='net'?colorOf(NET.me):S.mode===0?0:hcOf(),mode:S.study?'study':S.mode};const miss=scan(g).find(x=>!x.ok&&(x.st===2||x.st===3));if(!miss)return;
       spans(tt,[(miss.i+1)+'手目',miss.st===2?'1手で勝てる手があった':'相手のリーチを止めなかった'],1);bt.textContent='解き直す';
       bt.addEventListener('click',ev=>{ev.stopPropagation();e.hidden=true;cLoad().then(()=>coachOne({id:-1,st:miss.st,kind:'m',b:miss.b,p:miss.p,ans:miss.ans}))})}
