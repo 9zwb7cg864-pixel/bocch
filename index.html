@@ -1807,6 +1807,25 @@ p a,.hf-more,.about li a{text-decoration:underline;text-underline-offset:3px;tex
 
 /* そのほか：一覧なので立体ボタンの見た目を外す */
 .st-more button,.st-more button:hover,.st-more button:active{background:transparent;box-shadow:none;margin-bottom:0;transform:none}
+/* ホームに追加（2026-11） */
+.a2-ov{position:fixed;inset:0;z-index:9000;background:rgba(5,8,15,.6);display:flex;align-items:flex-end;justify-content:center}
+.a2-sh{width:100%;max-width:520px;background:var(--p1);border-radius:22px 22px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto;text-align:left}
+.a2-sh h2{font-size:20px;font-weight:800;line-height:1.4;margin:0}
+.a2-sh p{font-size:14px;color:var(--sub);margin:6px 0 0;line-height:1.6}
+.a2-ben{margin:14px 0 4px;display:flex;flex-direction:column;gap:9px}
+.a2-ben>div{display:flex;gap:12px;align-items:center;background:var(--p2);border-radius:14px;padding:11px 13px;font-size:15px}
+.a2-ben b{font-weight:800}.a2-ben small{display:block;font-size:12px;color:var(--sub);font-weight:500;margin-top:2px}
+.a2-ic{width:34px;height:34px;border-radius:10px;background:var(--ink);display:grid;place-items:center;flex:none;color:var(--acc);font-size:15px;font-weight:800}
+.a2-step{display:flex;gap:12px;align-items:center;margin-top:12px;font-size:15px}
+.a2-num{width:26px;height:26px;border-radius:50%;background:var(--acc);color:var(--ink);font-weight:800;display:grid;place-items:center;flex:none;font-size:14px}
+.a2-btn{display:block;width:100%;margin-top:16px;padding:15px;border-radius:14px;background:var(--acc)!important;color:var(--ink)!important;font-size:16px;font-weight:800;box-shadow:0 4px 0 #6f97c7}
+.a2-ghost{display:block;width:100%;margin-top:8px;padding:10px;background:transparent!important;box-shadow:none!important;color:var(--sub);font-size:14px}
+.a2-tag{font-style:normal;font-size:10.5px;font-weight:800;color:var(--ink);background:var(--acc);border-radius:7px;padding:2px 6px;margin-left:6px;white-space:nowrap;vertical-align:1px}
+#stLv .cn small em.a2-tag{position:static;font-size:10px;padding:1px 5px;margin-left:5px}#stLv [data-lv="4"]{position:relative}
+.a2-band{display:flex;align-items:center;gap:10px;background:var(--p2);border-radius:14px;padding:10px 12px;margin:10px 0;font-size:13.5px;line-height:1.5;text-align:left}
+.a2-band b{color:var(--acc2);font-weight:800}
+.a2-go{flex:none;background:var(--acc)!important;color:var(--ink)!important;font-weight:800;border-radius:10px;padding:6px 12px;font-size:13px;min-height:0;box-shadow:none!important}
+.a2-x{flex:none;background:transparent!important;box-shadow:none!important;color:var(--mute);font-size:18px;padding:2px 4px;min-height:0}
 
 </style>
 </head>
@@ -1814,7 +1833,7 @@ p a,.hf-more,.about li a{text-decoration:underline;text-underline-offset:3px;tex
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.71</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.72</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -5816,6 +5835,65 @@ setTimeout(()=>{try{hmBot();hwTick(true)}catch(e){}},1200);
 /* ---------- render のたびに ---------- */
 {const _r=render;render=function(){_r.apply(this,arguments);try{stripSync();if(CUR==='home'){hmSync();hmBot()}}catch(e){}try{cbSync()}catch(e){}}}
 try{tabSync(CUR);if(CUR==='home')hmSync()}catch(e){}
+/* ---------- ホームに追加（2026-11）----------
+   ホーム画面のアイコンから開いた人だけ、最強CPU・研究・フレンド対局（自分から部屋を作るとき）が使える。
+   招待リンク・部屋コードから入る側は今までどおり。追加できないブラウザ（Firefoxなど）は、追加しなくても全部使える。
+   案内：1局目が終わったとき・限定の機能を押したとき・ホームの小さな帯。
+   計測：a2s 案内を見た・a2c 追加ボタンを押した・a2i 追加した・a2l ホームのアイコンから開いた・ar1 ホームから開いた端末が次の日にも来た */
+const A2=(()=>{const u=navigator.userAgent||'';const ios=/iPhone|iPad|iPod/.test(u)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  const inapp=typeof IB!=='undefined'&&!!IB.app;const mac=!ios&&/Macintosh/.test(u)&&/Safari\//.test(u)&&!/Chrome|Chromium|Edg|Firefox|OPR/.test(u);
+  const cr=!ios&&/Chrome|Chromium|Edg|SamsungBrowser/.test(u)&&!/Firefox|OPR/.test(u);return {ios,inapp,mac,cr,bip:null}})();
+function a2Stand(){try{return matchMedia('(display-mode: standalone)').matches||matchMedia('(display-mode: fullscreen)').matches||matchMedia('(display-mode: minimal-ui)').matches||navigator.standalone===true}catch(e){return false}}
+function a2Can(){return A2.ios||A2.inapp||A2.mac||A2.cr}
+function a2Locked(){return !isOwner()&&!a2Stand()&&a2Can()}
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();A2.bip=e});
+addEventListener('appinstalled',()=>{try{statFirst('bocch-a2i','a2i')}catch(e){}a2Close();a2Marks()});
+if(a2Stand()){try{const jd=new Date(Date.now()+9*3600e3).toISOString().slice(0,10);statFirst('bocch-a2l','a2l');let f=localStorage.getItem('bocch-a2d');if(!f){f=jd;localStorage.setItem('bocch-a2d',f)}
+  if(Math.round((Date.parse(jd)-Date.parse(f))/864e5)===1)statFirst('bocch-ar1','ar1')}catch(e){}}
+function a2Close(){const o=$('a2ov');if(o)o.remove()}
+function a2Sheet(kind){a2Close();try{statFirst('bocch-a2s','a2s')}catch(e){}
+  const ov=document.createElement('div');ov.id='a2ov';ov.className='a2-ov';const sh=document.createElement('div');sh.className='a2-sh';ov.append(sh);
+  ov.addEventListener('click',e=>{if(e.target===ov)a2Close()});
+  const h=document.createElement('h2'),p=document.createElement('p');sh.append(h,p);
+  const tl={first:['はじめての1局、おつかれさま！','bocchをホームに追加しよう'],cpu:['最強CPUは、ホームに追加すると使えます'],study:['研究は、ホームに追加すると使えます'],fr:['フレンド対局は、ホームに追加すると使えます'],band:['bocchをホームに追加しよう']}[kind]||['bocchをホームに追加しよう'];
+  const btn=(t,fn)=>{const b=document.createElement('button');b.type='button';b.className='a2-btn';b.textContent=t;b.addEventListener('click',fn);sh.append(b);return b};
+  const ghost=t=>{const b=document.createElement('button');b.type='button';b.className='a2-ghost';b.textContent=t;b.addEventListener('click',a2Close);sh.append(b)};
+  const close=kind==='first'||kind==='band'?'あとで':'やめる';
+  if(A2.inapp){h.textContent='ブラウザで開いてください';p.textContent='アプリの中のブラウザでは、ホームに追加できません。ブラウザで開いてから、ホームに追加してください。';
+    const u=typeof ibUrl==='function'?ibUrl():'';if(u)btn('ブラウザで開く',()=>{try{statFirst('bocch-ix','ix')}catch(e){}setTimeout(()=>{location.href=u},150)});
+    else btn('リンクをコピー',async()=>{try{await navigator.clipboard.writeText('https://bocchgame.com/')}catch(e){}});ghost(close);document.body.append(ov);return}
+  tl.forEach((t,i)=>{if(i)h.append(document.createElement('br'));const s=document.createElement('span');s.textContent=t;h.append(s)});
+  p.textContent=kind==='first'||kind==='band'?'追加すると、次の3つが使えるようになります。':'ホームに追加して、ホーム画面のアイコンから開くと使えます。ほかに次の機能も使えます。';
+  const bl=document.createElement('div');bl.className='a2-ben';
+  [['1','毎日の1問のお知らせ','毎日、今日の1問が届く'],['AI','最強CPU・研究','いちばん強いAIと対局／AI同士の評価値つき'],['友','フレンド対局','リンクを送って友だちと対戦']].forEach(([ic,b,s])=>{const d=document.createElement('div');const i=document.createElement('span');i.className='a2-ic';i.textContent=ic;
+    const tx=document.createElement('span');const bb=document.createElement('b');bb.textContent=b;const sm=document.createElement('small');sm.textContent=s;tx.append(bb,sm);d.append(i,tx);bl.append(d)});sh.append(bl);
+  const steps=a=>{a.forEach((t,i)=>{const d=document.createElement('div');d.className='a2-step';const n=document.createElement('span');n.className='a2-num';n.textContent=String(i+1);const s=document.createElement('span');s.textContent=t;d.append(n,s);sh.append(d)})};
+  if(A2.bip)btn('ホームに追加する',async()=>{try{statFirst('bocch-a2c','a2c')}catch(e){}const e=A2.bip;A2.bip=null;try{await e.prompt();const r=await e.userChoice;if(r&&r.outcome==='accepted'){try{statFirst('bocch-a2i','a2i')}catch(_){}a2Close()}}catch(_){}});
+  else if(A2.ios)steps(['画面の下（iPadは上）の共有ボタンを押す','「ホーム画面に追加」を押す','ホーム画面のbocchのアイコンから開く']);
+  else if(A2.mac)steps(['メニューの「ファイル」から「Dockに追加」を押す','Dockのbocchから開く']);
+  else steps(['ブラウザのメニュー（︙）から「アプリをインストール」または「ホーム画面に追加」を押す','追加したbocchのアイコンから開く']);
+  ghost(close);document.body.append(ov)}
+// 限定の機能を押したとき
+document.addEventListener('click',e=>{if(!a2Locked())return;const t=e.target&&e.target.closest?e.target:null;if(!t)return;let k='';
+  if(t.closest('#stGo')){if(STM==='cpu'&&STL===4)k='cpu';else if(STM==='fr')k='fr'}
+  else if(t.closest('#studyBtn,#stStudy'))k='study';else if(t.closest('#create'))k='fr';
+  else if(t.closest('#modeSeg [data-mode="4"],.cpu-c[data-mode="4"]'))k='cpu';
+  if(k){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();a2Sheet(k)}},true);
+try{const _fc=frChallenge;frChallenge=function(...a){if(a2Locked()){a2Sheet('fr');return}return _fc.apply(this,a)}}catch(e){}
+// 「ホーム限定」の印
+function a2Marks(){const on=a2Locked();const put=(el)=>{if(!el)return;let m=el.querySelector('.a2-tag');if(on&&!m){m=document.createElement('em');m.className='a2-tag';m.textContent='ホーム限定';el.append(m)}if(!on&&m)m.remove()};
+  put(document.querySelector('#stLv [data-lv="4"] .cn small'));put($('stStudy'));put(document.querySelector('.cpu-c[data-mode="4"]'));a2Band()}
+// 1局目が終わったとき（1回だけ）
+try{const _ge=statGameEnd;statGameEnd=function(...a){const r=_ge.apply(this,a);try{if(a2Locked()&&!localStorage.getItem('bocch-a2f')){localStorage.setItem('bocch-a2f','1');setTimeout(()=>{if(a2Locked())a2Sheet('first')},2600)}}catch(e){}return r}}catch(e){}
+// ホームの小さな帯（×で閉じると7日出さない）
+function a2Band(){const home=document.querySelector('[data-scr="home"]');if(!home)return;let b=$('a2band');let off=false;try{off=Date.now()<+(localStorage.getItem('bocch-a2b')||0)}catch(e){}
+  if(!a2Locked()||off){if(b)b.remove();return}if(b)return;b=document.createElement('div');b.id='a2band';b.className='a2-band';
+  const tx=document.createElement('span');const bb=document.createElement('b');bb.textContent='ホームに追加';tx.append(bb,document.createTextNode('すると、最強CPU・研究・フレンド対局・毎日のお知らせが使える'));
+  const go=document.createElement('button');go.type='button';go.className='a2-go';go.textContent='追加';go.addEventListener('click',()=>a2Sheet('band'));
+  const x=document.createElement('button');x.type='button';x.className='a2-x';x.setAttribute('aria-label','閉じる');x.textContent='×';x.addEventListener('click',()=>{try{localStorage.setItem('bocch-a2b',String(Date.now()+7*864e5))}catch(e){}b.remove()});
+  b.append(tx,go,x);const top=home.querySelector('.topbar')||home.firstElementChild;if(top&&top.nextSibling)home.insertBefore(b,top.nextSibling);else home.prepend(b)}
+a2Marks();
+window.bocchA2={locked:a2Locked,sheet:a2Sheet,close:a2Close,stand:a2Stand};
 })();
 
 </script>

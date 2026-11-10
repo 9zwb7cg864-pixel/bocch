@@ -168,6 +168,7 @@ td .sub{display:block;font-size:11px;color:var(--mute)}
       <details><summary>入口の細かい流れ<span class="hint">直近7日</span></summary><div class="dbody">
         <div class="wrapT"><table><thead><tr><th>段階</th><th>人数</th><th>開いた人から</th></tr></thead><tbody id="entry"></tbody></table></div>
         <div class="wrapT"><table><thead><tr><th>アプリ内ブラウザ</th><th>人数</th><th>開いた人から</th></tr></thead><tbody id="entryIB"></tbody></table></div>
+        <div class="wrapT"><table><thead><tr><th>ホームに追加</th><th>人数</th><th>開いた人から</th></tr></thead><tbody id="entryA2"></tbody></table></div>
         <div class="wrapT"><table><thead><tr><th>表示までの時間</th><th>人数</th><th>割合</th></tr></thead><tbody id="entryL"></tbody></table></div>
         <div class="wrapT"><table><thead><tr><th>1局も始めずに離れるまで</th><th>人数</th><th>割合</th></tr></thead><tbody id="entryQ"></tbody></table></div>
       </div></details>
@@ -249,6 +250,7 @@ async function load(){
    const row=(l,v,b)=>'<tr><td>'+l+'</td><td>'+fmt(v)+'</td><td>'+pc(v,b)+'</td></tr>',none='<tr><td colspan="3">まだ記録がありません</td></tr>';
    $('entry').innerHTML=!ks.length?none:[['開いた（すぐ帰った人も含む）','n0'],['4秒以上いた','nv'],['ルールの「読んだ」を押した','ho'],['「4問で覚える」を押した','hl'],['「Play」を押した','pg'],['1局目を始めた','fs']].map(([l,f])=>row(l,sm(f),n0)).join('');
    $('entryIB').innerHTML=!ks.length?none:[['アプリ内ブラウザ（Xなど）で来た','ib'],['「ブラウザで開く」を押した','ix'],['そのボタンからブラウザで来た','ia']].map(([l,f])=>row(l,sm(f),n0)).join('');
+   $('entryA2').innerHTML=!ks.length?none:[['「ホームに追加」の案内を見た','a2s'],['追加のボタンを押した','a2c'],['追加した（Android・パソコン）','a2i'],['ホームのアイコンから開いた','a2l'],['ホームから開いた人が次の日にも来た','ar1']].map(([l,f])=>row(l,sm(f),n0)).join('');
    const grp=(id,F)=>{const tt=F.reduce((a,[,f])=>a+sm(f),0);$(id).innerHTML=!ks.length?none:F.map(([l,f])=>row(l,sm(f),tt)).join('')};
    grp('entryL',[['2秒未満','l1'],['2〜5秒','l2'],['5〜10秒','l3'],['10秒以上','l4']]);grp('entryQ',[['10秒未満','q1'],['10〜30秒','q2'],['30秒〜2分','q3'],['2分以上','q4']])}
   $('days').innerHTML=keys.slice(0,45).map(k=>{const d=D(k);return '<tr><td>'+(+k.slice(5,7))+'/'+(+k.slice(8))+'</td><td>'+fmt(d.players)+'</td><td>'+fmt(d.visitors)+'</td><td>'+(d.nv!=null?fmt(d.nv):'—')+(d.n0!=null?'<span class="sub">全'+fmt(d.n0)+'</span>':'')+'</td><td>'+fmt(d.games)+'</td><td>'+Math.round((d.sec||0)/60)+'分</td><td>'+fmt(d.signups)+((d.ev||d.nm)?'<span class="sub">確認'+fmt(d.ev||0)+'・名前'+fmt(d.nm||0)+'</span>':'')+'</td></tr>'}).join('')||'<tr><td colspan="7">まだ記録がありません</td></tr>';
