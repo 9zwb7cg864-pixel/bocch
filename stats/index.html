@@ -115,6 +115,7 @@ td .sub{display:block;font-size:11px;color:var(--mute)}
         <div class="t"><div class="l">今日開いた人</div><div class="v" id="kOpen">—</div><div id="kOpenD"></div></div>
         <div class="t"><div class="l">新しく来た人（直近7日）</div><div class="v" id="kNew">—</div><div class="s" id="kNewS"></div></div>
         <div class="t"><div class="l">翌日また来た率（7日）</div><div class="v" id="kRet">—</div><div class="s" id="kRetS"></div></div>
+        <div class="t"><div class="l">ホームに追加した人（累計）</div><div class="v" id="kA2">—</div><div class="s" id="kA2S"></div></div>
       </div>
     </section>
 
@@ -220,6 +221,7 @@ async function load(){
   $('kNew').innerHTML=fmt(nv7)+'<small>人</small>';$('kNewS').textContent='そのうち1局目を始めた '+pc(fs7,nv7);
   // 次の日にまた来た：今日はまだ戻れないので、昨日以前に来た人だけで割る
   const old=keys.slice(1,8).map(D),r1s=sum(old,'r1'),nvo=sum(old,'nv');
+  {const a7=sum(cur,'a2l');$('kA2').innerHTML=fmt(t.a2l||0)+'<small>人</small>';$('kA2S').textContent='直近7日 '+fmt(a7)+'人・今日 '+fmt(td.a2l||0)+'人（ホームのアイコンから開いた端末）'}
   $('kRet').innerHTML=nvo?Math.round(100*r1s/nvo)+'<small>%</small>':'—';$('kRetS').textContent=nvo?fmt(nvo)+'人のうち '+fmt(r1s)+'人（今日来た人は除く）':'まだ記録がありません';
 
   // 2. 推移
