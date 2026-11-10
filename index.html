@@ -1842,7 +1842,7 @@ body.ibt #a2band{display:none!important}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.74</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.75</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -4087,9 +4087,11 @@ let liveEnd='',liveWait=null;
 function liveNames(){const hc=colorOf(NET.host),b=hc===1?NET.host:NET.guest,w=hc===1?NET.guest:NET.host;
   const nm=id=>(typeof NM!=='undefined'&&NM[id])?NM[id].name:null;return [nm(b),nm(w)]}
 function liveBeat(){
-  if(S.mode!=='net'||!NET.code||!NET.host||!NET.guest||NET.watch||NET.me!==NET.host)return;
+  if(S.mode!=='net'||!NET.code||!NET.host||!NET.guest||NET.watch)return;
   const k=NET.code+':'+NET.game;
-  if(S.over){if(liveEnd!==k&&liveLast===k){liveEnd=k;livePost({t:'end',room:NET.code,g:NET.game})}return}
+  // 終わりは対局者の2人とも、読み込み直した後でも必ず1回送る（送り漏れると観戦の一覧に終わった対局が残る）
+  if(S.over){if(liveEnd!==k){liveEnd=k;livePost({t:'end',room:NET.code,g:NET.game})}return}
+  if(NET.me!==NET.host)return;
   if(liveLast===k)return;
   const nm=liveNames();
   if(!nm[0]||!nm[1]){if(!liveWait)liveWait=setTimeout(()=>{liveWait=null;liveForce=k;render()},4000);if(liveForce!==k)return}
@@ -4111,7 +4113,7 @@ function startWatchList(){stopWatchList();LV.rooms=new Map();LV.seen=new Set();$
   LV.tick=setInterval(renderWatch,30000)}
 function stopWatchList(){LV.on=false;clearInterval(LV.tick);if(LV.es){LV.es.close();LV.es=null}}
 function renderWatch(){const box=$('watchList');box.innerHTML='';
-  const now=Date.now()/1000;const list=[...LV.rooms.entries()].filter(([,r])=>now-r.at<5400&&!r.ai).sort((a,b)=>b[1].at-a[1].at);
+  const now=Date.now()/1000;const list=[...LV.rooms.entries()].filter(([,r])=>now-r.at<1800&&!r.ai).sort((a,b)=>b[1].at-a[1].at);
   $('watchEmpty').hidden=!!list.length||$('watchSt').textContent!=='';
   list.forEach(([room,r])=>{const b=document.createElement('button');
     const st=document.createElement('span');st.className='res live'+(r.ai?' ai':'');st.textContent=r.ai?'AI対局':'対局中';
