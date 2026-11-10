@@ -1835,6 +1835,9 @@ p a,.hf-more,.about li a{text-decoration:underline;text-underline-offset:3px;tex
 #ibtop .ibt-x{flex:none;border:0;background:transparent;color:var(--mute,#6d7894);font-size:18px;min-width:32px;min-height:32px;padding:0}
 body.ibt{padding-top:calc(54px + env(safe-area-inset-top,0px))}
 body.ibt #a2band{display:none!important}
+/* 授業・問題の画面：外側の上下の余白でボタン欄が画面の外にはみ出さないように、開いている間は余白を0にする */
+body:has(>[data-scr=coachl]:not([hidden])),body:has(>[data-scr=coachq]:not([hidden])){padding-top:0!important;padding-bottom:0!important}
+body:has(>[data-scr=coachl]:not([hidden]))>[data-scr=coachl],body:has(>[data-scr=coachq]:not([hidden]))>[data-scr=coachq]{padding-top:max(14px,env(safe-area-inset-top))!important}
 
 </style>
 </head>
@@ -1842,7 +1845,7 @@ body.ibt #a2band{display:none!important}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.76</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.77</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
