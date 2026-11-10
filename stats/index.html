@@ -251,7 +251,7 @@ async function load(){
   {const ks=keys.slice(0,7).filter(k=>k>='2026-11-02'&&D(k).n0),sm=f=>ks.reduce((a,k)=>a+(D(k)[f]||0),0),n0=sm('n0');
    const row=(l,v,b)=>'<tr><td>'+l+'</td><td>'+fmt(v)+'</td><td>'+pc(v,b)+'</td></tr>',none='<tr><td colspan="3">まだ記録がありません</td></tr>';
    $('entry').innerHTML=!ks.length?none:[['開いた（すぐ帰った人も含む）','n0'],['4秒以上いた','nv'],['ルールの「読んだ」を押した','ho'],['「4問で覚える」を押した','hl'],['「Play」を押した','pg'],['1局目を始めた','fs']].map(([l,f])=>row(l,sm(f),n0)).join('');
-   $('entryIB').innerHTML=!ks.length?none:[['アプリ内ブラウザ（Xなど）で来た','ib'],['「ブラウザで開く」を押した','ix'],['そのボタンからブラウザで来た','ia']].map(([l,f])=>row(l,sm(f),n0)).join('');
+   $('entryIB').innerHTML=!ks.length?none:[['アプリ内ブラウザ（Xなど）で来た','ib'],['「ブラウザで開く」を押した','ix'],['└ そのうち上の帯から押した','ixt'],['そのボタンからブラウザで来た','ia']].map(([l,f])=>row(l,sm(f),n0)).join('');
    $('entryA2').innerHTML=!ks.length?none:[['「ホームに追加」の案内を見た','a2s'],['追加のボタンを押した','a2c'],['追加した（Android・パソコン）','a2i'],['ホームのアイコンから開いた','a2l'],['ホームから開いた人が次の日にも来た','ar1']].map(([l,f])=>row(l,sm(f),n0)).join('');
    const grp=(id,F)=>{const tt=F.reduce((a,[,f])=>a+sm(f),0);$(id).innerHTML=!ks.length?none:F.map(([l,f])=>row(l,sm(f),tt)).join('')};
    grp('entryL',[['2秒未満','l1'],['2〜5秒','l2'],['5〜10秒','l3'],['10秒以上','l4']]);grp('entryQ',[['10秒未満','q1'],['10〜30秒','q2'],['30秒〜2分','q3'],['2分以上','q4']])}

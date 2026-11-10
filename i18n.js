@@ -13,6 +13,8 @@ Object.assign(D,{"動画づくりは、ホームに追加すると使えます":
 "対局を曲つきの縦型ショートに":["Turn a game into a vertical short with music","把对局做成带音乐的竖屏短视频","把對局做成配樂的直式短影音","대국을 음악이 있는 세로 쇼츠로","Convierte una partida en un short vertical con música","Mach aus einer Partie ein Hochformat-Short mit Musik"],
 "追加すると、次の4つが使えるようになります。":["Adding it unlocks these 4 features.","添加后即可使用以下4项功能。","加入後即可使用以下4項功能。","추가하면 다음 4가지를 쓸 수 있어요.","Al añadirlo se desbloquean estas 4 funciones.","Damit schaltest du diese 4 Funktionen frei."],
 "すると、最強CPU・研究・フレンド対局・動画づくり・毎日のお知らせが使える":[" to unlock the strongest CPU, analysis, friend games, the video maker and daily reminders","后即可使用最强CPU・研究・好友对局・制作视频・每日提醒","後即可使用最強CPU・研究・好友對局・製作影片・每日提醒","하면 최강 CPU・연구・친구 대국・동영상 만들기・매일 알림을 쓸 수 있어요"," para desbloquear la CPU más fuerte, el análisis, las partidas con amigos, el creador de vídeos y los recordatorios diarios"," und schalte stärkste CPU, Analyse, Freundespartien, Videomacher und tägliche Erinnerungen frei"]});
+Object.assign(D,{"ブラウザで開くと快適に遊べます":["Play better in your browser","在浏览器中打开，玩得更顺畅","在瀏覽器中開啟，玩得更順暢","브라우저에서 열면 더 쾌적하게 즐길 수 있어요","Ábrelo en tu navegador para jugar mejor","Im Browser öffnen für das beste Spielerlebnis"],
+"段級や記録も次から続きます":["Keeps your rank and history","段级和记录下次也会保留","段級和紀錄下次也會保留","단급과 기록도 다음부터 이어져요","Tu rango y tu historial se conservarán","Rang und Verlauf bleiben erhalten"]});
 var J=/[぀-ヿ㐀-鿿！-｠　-〿]/,JK=/[぀-ヿ]/;
 var P=PS.map(function(p){return [new RegExp(p[0]),p[1]]});
 var cache=new Map(),DBG=/i18ndebug/.test(location.search)?(window.__i18nMiss=new Set()):null;

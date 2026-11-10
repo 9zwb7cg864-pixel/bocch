@@ -1827,13 +1827,22 @@ p a,.hf-more,.about li a{text-decoration:underline;text-underline-offset:3px;tex
 .a2-go{flex:none;background:var(--acc)!important;color:var(--ink)!important;font-weight:800;border-radius:10px;padding:6px 12px;font-size:13px;min-height:0;box-shadow:none!important}
 .a2-x{flex:none;background:transparent!important;box-shadow:none!important;color:var(--mute);font-size:18px;padding:2px 4px;min-height:0}
 
+#ibtop{position:fixed;left:0;right:0;top:0;z-index:45;display:flex;align-items:center;gap:10px;padding:calc(7px + env(safe-area-inset-top,0px)) 12px 7px;background:var(--p1,#1a2234);box-shadow:0 2px 12px rgba(0,0,0,.35);color:var(--fg,#eef2fa)}
+#ibtop .ibt-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+#ibtop .ibt-t b{font-size:12.5px;font-weight:800;line-height:1.35}
+#ibtop .ibt-t small{font-size:11px;font-weight:500;color:var(--sub,#9aa6c0);line-height:1.35}
+#ibtop .ibt-go{flex:none;background:var(--acc,#a9cdf7);color:var(--ink,#0f1a30);font-weight:800;border-radius:10px;padding:8px 12px;text-decoration:none;font-size:13px;white-space:nowrap}
+#ibtop .ibt-x{flex:none;border:0;background:transparent;color:var(--mute,#6d7894);font-size:18px;min-width:32px;min-height:32px;padding:0}
+body.ibt{padding-top:calc(54px + env(safe-area-inset-top,0px))}
+body.ibt #a2band{display:none!important}
+
 </style>
 </head>
 <body>
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.73</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.74</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -5655,6 +5664,14 @@ function ibUpdate(){const e=$('ibx');if(!e)return;e.hidden=!(IB.app&&ibUrl()&&!i
 {const _rI=render;render=function(){_rI();try{ibUpdate()}catch(e){}}}
 $('ibxGo').addEventListener('click',ev=>{ev.preventDefault();try{statFirst('bocch-ix','ix')}catch(e){}const u=ibUrl();if(u)setTimeout(()=>{location.href=u},150)});
 $('ibxX').addEventListener('click',()=>{try{sessionStorage.setItem('bocch-ibx','1')}catch(e){}ibUpdate()});
+// アプリ内ブラウザ：開いてすぐ、画面の上に「ブラウザで開く」の帯
+function ibtOff(){try{return sessionStorage.getItem('bocch-ibt')==='1'}catch(e){return false}}
+function ibTop(){let e=$('ibtop');const on=IB.app&&!!ibUrl()&&!ibtOff();document.body.classList.toggle('ibt',on);if(!on){if(e)e.remove();document.body.style.paddingTop='';return}if(e)return;
+  e=document.createElement('div');e.id='ibtop';e.setAttribute('role','region');const t=document.createElement('span');t.className='ibt-t';const b=document.createElement('b');b.textContent='ブラウザで開くと快適に遊べます';const sm=document.createElement('small');sm.textContent='段級や記録も次から続きます';t.append(b,sm);
+  const go=document.createElement('a');go.href='#';go.className='ibt-go';go.textContent='ブラウザで開く';go.addEventListener('click',ev=>{ev.preventDefault();try{statFirst('bocch-ixt','ixt');statFirst('bocch-ix','ix')}catch(_){}const u=ibUrl();if(u)setTimeout(()=>{location.href=u},150)});
+  const x=document.createElement('button');x.type='button';x.className='ibt-x';x.setAttribute('aria-label','閉じる');x.textContent='×';x.addEventListener('click',()=>{try{sessionStorage.setItem('bocch-ibt','1')}catch(_){}ibTop()});
+  e.append(t,go,x);document.body.append(e);const fit=()=>{if(document.body.classList.contains('ibt'))document.body.style.paddingTop=e.offsetHeight+'px'};fit();try{new ResizeObserver(fit).observe(e)}catch(_){}addEventListener('resize',fit)}
+try{ibTop()}catch(e){}
 try{if(IB.app)statFirst('bocch-ib','ib');if(/[?&]from=ib\b/.test(location.search))statFirst('bocch-ia','ia')}catch(e){}
 // はじめての1局の間は、AIの吹き出し（解説）を出さない（上の説明と重なってごちゃつくため）
 {const _sb=showBubble;showBubble=function(...a){if(COACH.on&&!COACH.off&&S&&S.coach&&!S.over)return;return _sb.apply(this,a)}}
