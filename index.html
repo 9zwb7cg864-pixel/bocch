@@ -1842,7 +1842,7 @@ body.ibt #a2band{display:none!important}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.75</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.76</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -5794,11 +5794,13 @@ function hmBot(){const el=$('hmBot');if(!el)return;let my=0;try{my=myLv()}catch(
   sd.append(hd,go,more);el.append(bd,sd)}
 /* ---------- いま対局中：フレンドの対局を先に。ホームと観戦リストが見えている間だけ30秒ごとに読み出す（つなぎっぱなしにしない） ---------- */
 const HW={rooms:new Map(),peek:new Map(),fr:[],busy:false,at:0};
+// 自分が対局者として入った部屋は、ホームと観戦リストに出さない（終局直後に古い記録から「始まったところ」と出てしまうため）
+const HW_MINE=new Set();setInterval(()=>{try{if(S&&S.mode==='net'&&NET.code&&!NET.watch)HW_MINE.add(NET.code)}catch(e){}},1500);
 async function hwLive(){const ms=await frRead('bocch-v1-live','3h');if(!ms)return;const R=new Map();
   for(const m of ms){if(!m||typeof m.room!=='string'||!/^[a-z0-9]{6}$/.test(m.room))continue;const g=m.g|0,cur=R.get(m.room);
     if(m.t==='live'){if(!cur||g>=cur.g)R.set(m.room,{g,ai:m.ai===1,at:(cur&&cur.g===g)?cur.at:m._t,names:Array.isArray(m.names)?m.names.slice(0,2).map(lvClean):[]})}
     else if(m.t==='end'){if(cur&&(m.g==null||g>=cur.g))R.delete(m.room)}}
-  const now=Date.now()/1000;for(const [k,r] of R)if(now-r.at>5400)R.delete(k);HW.rooms=R}
+  const now=Date.now()/1000;for(const [k,r] of R)if(now-r.at>1800)R.delete(k);HW.rooms=R}
 async function hwFriends(){if(!myUid()||!FR.friends||!FR.friends.length){HW.fr=[];return}const now=Date.now()/1000,out=[];
   await Promise.all(FR.friends.slice(0,12).map(async f=>{const ms=await frRead(frTopic('fd',f.uid),'20m');if(!ms)return;let last=null;for(const m of ms)if(m.t==='g'&&typeof m.k==='string'&&(!last||m._t>=last._t))last=m;
     if(last&&!last.over&&now-last._t<900&&frLog(last.k))out.push({f,snap:last})}));HW.fr=out}
@@ -5809,7 +5811,8 @@ function hwList(){const out=[],seen=new Set();
   for(const {f,snap} of HW.fr){const r=replay(frLog(snap.k)||[]);if(snap.room)seen.add(snap.room);const me=snap.me===2?2:1;
     out.push({fr:true,f,snap,room:snap.room,b:r.b,n:r.n,last:r.last,flip:me===2,names:me===1?[f.name,snap.opp||'']:[snap.opp||'',f.name]})}
   const pub=[...HW.rooms.entries()].filter(([k])=>!seen.has(k)).sort((a,b)=>(a[1].ai-b[1].ai)||(b[1].at-a[1].at));
-  for(const [room,r] of pub){if(r.ai)continue; // AI同士の対局は出さない（AI観戦はやめた）
+  const nowL=Date.now()/1000;for(const [room,r] of pub){if(r.ai||HW_MINE.has(room))continue;
+    {const p0=HW.peek.get(room);if(p0&&!p0.n&&nowL-r.at>180)continue} // 3分たっても1手もない部屋は、もう動いていない // AI同士の対局は出さない（AI観戦はやめた）
 const pk=HW.peek.get(room);out.push({room,ai:r.ai,names:r.names,at:r.at,b:pk?pk.b:null,n:pk?pk.n:0,last:pk?pk.last:null})}
   return out}
 function hwOpen(e){try{stopWatchList()}catch(x){}if(e.fr){if(e.room)frWatchRoom(e.room);else frOpen(e.f,e.snap,true);return}
@@ -5824,12 +5827,12 @@ function hmLive(){const el=$('hmLive'),h=$('hmLiveH');if(!el)return;const L=hwLi
   const go=document.createElement('button');go.type='button';go.className='hc-btn';go.textContent=L.length>1?'観戦リスト（'+L.length+'局）':'観戦リスト';go.onclick=()=>{const w=document.querySelector('[data-go="watch"]');if(w)w.click()};
   sd.append(top,hwNames(e),go);el.append(bd,sd)}
 async function hwTick(force){if(HW.busy||document.hidden||(CUR!=='home'&&CUR!=='watch'))return;if(!force&&Date.now()-HW.at<25000)return;HW.busy=true;HW.at=Date.now();
-  try{await Promise.all([hwLive(),hwFriends()]);const L=hwList().filter(e=>!e.fr&&e.room);const want=(CUR==='watch'?L.slice(0,8):L.slice(0,1));
+  try{await Promise.all([hwLive(),hwFriends()]);const L=hwList().filter(e=>!e.fr&&e.room);const want=(CUR==='watch'?L.slice(0,8):L.slice(0,4));
     await Promise.all(want.map(e=>hwPeek(e.room)));}catch(e){}HW.busy=false;try{if(CUR==='home')hmLive();if(CUR==='watch')renderWatch()}catch(e){}}
 setInterval(()=>hwTick(false),5000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)hwTick(true)});
 /* 観戦リスト：盤つきで並べる。フレンドの対局が先 */
 renderWatch=function(){const box=$('watchList');if(!box)return;
-  try{const now=Date.now()/1000;for(const [k,r] of LV.rooms)if(!HW.rooms.has(k)&&now-r.at<5400)HW.rooms.set(k,r);for(const k of [...HW.rooms.keys()])if(LV.on&&LV.rooms.size&&!LV.rooms.has(k))HW.rooms.delete(k)}catch(e){}
+  try{const now=Date.now()/1000;for(const [k,r] of LV.rooms)if(!HW.rooms.has(k)&&now-r.at<1800)HW.rooms.set(k,r);for(const k of [...HW.rooms.keys()])if(LV.on&&LV.rooms.size&&!LV.rooms.has(k))HW.rooms.delete(k)}catch(e){}
   const L=hwList();box.innerHTML='';$('watchEmpty').hidden=!!L.length||$('watchSt').textContent!=='';
   for(const e of L){const b=document.createElement('button');b.type='button';b.className='wcard';const bd=document.createElement('span');bd.className='wc-b'+(e.b?'':' ld');bd.append(miniB(e.b||startBoard(),{flip:e.flip,last:e.last}));
     const tx=document.createElement('span');tx.className='wc-t';const top=document.createElement('span');top.className='hw-top';const st=document.createElement('span');st.className='hw-st';
