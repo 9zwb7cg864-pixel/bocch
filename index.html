@@ -1839,13 +1839,28 @@ body.ibt #a2band{display:none!important}
 body:has(>[data-scr=coachl]:not([hidden])),body:has(>[data-scr=coachq]:not([hidden])){padding-top:0!important;padding-bottom:0!important}
 body:has(>[data-scr=coachl]:not([hidden]))>[data-scr=coachl],body:has(>[data-scr=coachq]:not([hidden]))>[data-scr=coachq]{padding-top:max(14px,env(safe-area-inset-top))!important}
 
+/* 分かれ道の説明 */
+.cq-br{margin:8px 0 2px;max-height:20vh;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.cq-br[hidden]{display:none}
+.cq-g{background:rgba(0,0,0,.18);border-radius:12px;padding:9px 11px}
+.cq-gh{font-size:14px;font-weight:700}.cq-gh b{color:#ffd84a;font-size:16px;margin-right:4px}
+.cq-g>p{margin:3px 0 5px;font-size:12px;opacity:.8}
+.cq-chips{display:flex;flex-wrap:wrap;gap:5px}
+.cq-chips button{border:0;border-radius:8px;padding:4px 8px;font-size:12.5px;font-weight:700;background:rgba(0,0,0,.28);color:inherit;min-height:28px}
+.cq-chips button.on{background:#5aa9f5;color:#0b1a2e}
+.cq-gn{margin:6px 0 0;font-size:12.5px;line-height:1.6;display:flex;flex-direction:column}
+.cq-gn[hidden]{display:none}
+/* 日本語以外では、説明文の文と文の間にすき間を入れる（「。」が付かないため） */
+html:not([lang=ja]) #cqTx .cq-s+.cq-s::before{content:" "}
+.cq-sheet.has-br{padding-top:12px}.cq-sheet.has-br .cq-face{width:40px;height:40px}.cq-sheet.has-br .cq-tag{display:none}.cq-sheet.has-br #cqTx{font-size:13.5px;line-height:1.55;margin-top:4px}
+
 </style>
 </head>
 <body>
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.77</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.78</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -2080,7 +2095,7 @@ body:has(>[data-scr=coachl]:not([hidden]))>[data-scr=coachl],body:has(>[data-scr
   <div class="boardwrap cq-bw"><div class="board" id="coboard"><div class="lab lab-top" id="colabTop" aria-hidden="true"></div><div class="lab lab-left" id="colabLeft" aria-hidden="true"></div><div class="grid" id="cogrid" aria-label="トレーニングの盤"></div></div></div>
   <div class="cq-opts" id="cqOpts"></div>
   <div class="cq-foot" id="cqFoot"><button type="button" class="cq-btn" id="cqCheck" disabled>チェック</button></div>
-  <div class="cq-sheet" id="cqSheet" hidden><div class="cq-st"><img class="cq-face" id="cqFace" src="img/coach/coach-ok.webp?v=1" alt="" width="64" height="64"><b id="cqTt"></b></div><p id="cqTx"></p><p class="cq-tag" id="cqTag"></p><div class="cq-lines" id="cqLines" hidden></div><button type="button" class="cq-btn" id="cqNext">続ける</button></div>
+  <div class="cq-sheet" id="cqSheet" hidden><div class="cq-st"><img class="cq-face" id="cqFace" src="img/coach/coach-ok.webp?v=1" alt="" width="64" height="64"><b id="cqTt"></b></div><p id="cqTx"></p><p class="cq-tag" id="cqTag"></p><div class="cq-br" id="cqBr" hidden></div><div class="cq-lines" id="cqLines" hidden></div><button type="button" class="cq-btn" id="cqNext">続ける</button></div>
 </section>
 <div class="tr-guide" id="trGuide" hidden role="dialog" aria-modal="true"><div class="tr-gcard"><h3 id="trGt"></h3><p id="trGx"></p><button type="button" class="cq-btn" id="trGok">わかった</button></div></div>
 <section class="scr" data-scr="pzlist" hidden>
@@ -6010,7 +6025,7 @@ function scan(g){if(!g||!g.log||!g.me||g.mode==='study')return [];if(g.id&&SCAN[
           if(i<=7&&!has2(b,q)){const sf=M.filter(x=>{const a=apply(b,x);return !has1(a,q)&&!has2(a,q)}),i0=isoN(b,p),gd=sf.filter(x=>isoN(apply(b,x),p)===0);
             if(gd.length&&sf.some(x=>isoN(apply(b,x),p)>i0))out.push({st:10,i,ok:gd.some(x=>same(x,m)),b:b.slice(),p,ans:gd.map(K),m})}
           if(arrivedCount(b,q)===1&&arrivedCount(b,p)===0&&canH(b,p)){const A=M.filter(x=>{const a=apply(b,x);return arrivedCount(a,p)===1&&!has1(a,q)});if(A.length)out.push({st:11,i,ok:A.some(x=>same(x,m)),b:b.slice(),p,ans:A.map(K),m})}
-          if(arrivedCount(b,p)===1&&arrivedCount(b,q)===0&&canH(b,q)){const A=M.filter(x=>{const a=apply(b,x);return !canH(a,q)&&!has1(a,q)});if(A.length&&A.length<M.length)out.push({st:12,i,ok:A.some(x=>same(x,m)),b:b.slice(),p,ans:A.map(K),m})}
+          if(false&&arrivedCount(b,p)===1&&arrivedCount(b,q)===0&&canH(b,q)){const A=M.filter(x=>{const a=apply(b,x);return !canH(a,q)&&!has1(a,q)});if(A.length&&A.length<M.length)out.push({st:12,i,ok:A.some(x=>same(x,m)),b:b.slice(),p,ans:A.map(K),m})}
           const W2=w2(b,p);if(W2.length)out.push({st:6,i,ok:W2.some(x=>same(x,m)),b:b.slice(),p,ans:W2.map(K),m});
           else if(has2(b,q)){const Sv=M.filter(x=>{const a=apply(b,x);return !has1(a,q)&&!has2(a,q)});if(Sv.length)out.push({st:7,i,ok:Sv.some(x=>same(x,m)),b:b.slice(),p,ans:Sv.map(K),m})}}}}
     b=apply(b,m);if(arrivedCount(b,p)>=2)break;p=3-p}
@@ -6019,8 +6034,8 @@ function diag(){let gs=[];try{gs=loadGames().filter(g=>g.me&&g.mode!=='study').s
   for(const g of gs)for(const x of scan(g)){const a=c[x.st]=c[x.st]||[0,0];a[0]++;if(x.ok)a[1]++;else if(!last[x.st])last[x.st]=Object.assign({g},x)}
   return {n:gs.length,c,last}}
 /* 今日のテーマ：対局でのがした割合がいちばん高い段階。対局が少なければ、練習の正解率が低い段階、まだの段階 */
-function theme(D,o){let best=0,br=-1;for(const s of [2,3,4,6,7,9,10,11,12]){const a=D.c[s];if(!a||a[0]<2)continue;const r=(a[0]-a[1])/a[0];if(a[0]-a[1]>=1&&r>br){br=r;best=s}}
-  if(best)return best;for(const s of [2,3,4,5,6,7,8,9,10,11,12]){const ac=accOf(o,s);if(ac==null||ac<80)return s}return 8}
+function theme(D,o){let best=0,br=-1;for(const s of [2,3,4,6,7,9,10,11]){const a=D.c[s];if(!a||a[0]<2)continue;const r=(a[0]-a[1])/a[0];if(a[0]-a[1]>=1&&r>br){br=r;best=s}}
+  if(best)return best;for(const s of [2,3,4,5,6,7,8,9,10,11]){const ac=accOf(o,s);if(ac==null||ac<80)return s}return 8}
 /* ---------- トレーニングのトップ ---------- */
 let TD=null;
 window.trRender=async function(){await cLoad();const o=cGet(),D=diag(),th=theme(D,o);TD={D,th};
@@ -6076,6 +6091,31 @@ function oppTwo(b,p,k){const q=3-p,m=U(k),a=apply(b,m),t=w1(a,q);if(t.length)ret
 function proof3(b,p,k){const q=3-p,m=U(k),a=apply(b,m),r=pickReply(a,q,p);if(!r)return [m];const a2=apply(a,r),W=w2(a2,p);if(!W.length)return [m,r];const m2=W[0];if(dqWinNow(a2,p,m2))return [m,r,m2];const a3=apply(a2,m2),r2=pickReply(a3,q,p);if(!r2)return [m,r,m2];const w=w1(apply(a3,r2),p);return w.length?[m,r,m2,r2,w[0]]:[m,r,m2,r2]}
 function refute3(b,p,k){const q=3-p,m=U(k),a=apply(b,m),t=w1(a,q);if(t.length)return [m,t[0]];const R=allMoves(a,q).find(r=>{const a2=apply(a,r);return !has1(a2,p)&&!has2(a2,p)});return R?[m,R]:[m]}
 const lineTx=seq=>'手順：'+seq.map(x=>mv(K(x))).join(' / ');
+/* 分かれ道の説明：正解のあと、相手の受けを「勝ち方」ごとにまとめて全部見せる（2手の攻め・3手の読み） */
+function brGroups(x,o,winFn){const R=allMoves(x,o),W=new Map(R.map(r=>[r,winFn(apply(x,r))]));let rem=R.slice();const out=[];
+  while(rem.length){const cnt=new Map();for(const r of rem)for(const m of W.get(r)){const k=K(m);cnt.set(k,(cnt.get(k)||0)+1)}
+    if(!cnt.size){out.push([null,rem]);break}let bk=-1,bn=0;for(const [k,n] of cnt)if(n>bn){bn=n;bk=k}
+    const cov=rem.filter(r=>W.get(r).some(m=>K(m)===bk));out.push([U(bk),cov]);rem=rem.filter(r=>!cov.includes(r))}
+  return out}
+function why(x,r,base){if(!base)return '';if(r[1]===base[1])return sq(base[1])+'をふさいだ';const a=nbCount(x,base[0]),b=nbCount(apply(x,r),base[0]);return a!==b?sq(base[0])+'の数字が'+a+'から'+b+'に変わった':''}
+function win3(y,p){const q=3-p,im=w1(y,p);if(im.length)return im;return allMoves(y,p).filter(m=>{const z=apply(y,m);if(w1(z,q).length)return false;const RR=allMoves(z,q);return RR.length&&RR.every(r2=>w1(apply(z,r2),p).length)})}
+function brTail(y,p,m2){const q=3-p;if(dqWinNow(y,p,m2))return ['続き：その手で着いて勝ち',[m2]];const z=apply(y,m2),RR=allMoves(z,q);const fin=new Set();
+  for(const r2 of RR){const w=w1(apply(z,r2),p);if(w.length)fin.add(K(w[0]))}
+  const r2=pickReply(z,q,p),w=r2?w1(apply(z,r2),p):[];const seq=r2&&w.length?[m2,r2,w[0]]:[m2];
+  const F=[...fin];return [F.length===1?'続き：相手がどう受けても'+mv(F[0])+'で勝ち':'続き：相手の受けによって'+F.map(mv).join(' / ')+'で勝ち',seq]}
+function brShow(q,best,deep){const box=$('cqBr');box.replaceChildren();const b=q.b,p=q.p,o=3-p,m=U(best),x=apply(b,m);
+  const G=brGroups(x,o,deep?(y=>win3(y,p)):(y=>w1(y,p)));if(!G.length||G[0][0]==null){box.hidden=true;return 0}
+  const base=G[0][0];
+  G.forEach(([w,cov],gi)=>{if(!w)return;const g=document.createElement('div');g.className='cq-g';const h=document.createElement('div');h.className='cq-gh';const bm=document.createElement('b');bm.textContent=mv(K(w));const t=document.createElement('span');t.textContent=deep?'と指せば勝ちきれる':'で勝ち';h.append(bm,t);
+    const sub=document.createElement('p');sub.textContent=G.length===1?'相手のすべての受け（'+cov.length+'通り）':gi===0?'相手のほとんどの受け（'+cov.length+'通り）':'相手がこう受けたとき';
+    const ch=document.createElement('div');ch.className='cq-chips';const note=document.createElement('p');note.className='cq-gn';note.hidden=true;
+    for(const r of cov){const c=document.createElement('button');c.type='button';c.textContent=mv(K(r));
+      c.addEventListener('click',()=>{ch.querySelectorAll('button').forEach(e=>e.classList.toggle('on',e===c));const y=apply(x,r);let seq=[m,r,w];const lines=[];
+        if(gi>0){let y0=why(x,r,base);if(!y0){const z=apply(y,base);y0=w1(z,o).length?mv(K(base))+'だと、相手に先に勝たれる':mv(K(base))+'では勝ちきれない'}lines.push(y0)}
+        if(deep){const [tt,tl]=brTail(y,p,w);seq=[m,r].concat(tl);lines.push(tt)}
+        note.replaceChildren(...lines.map(l=>{const e=document.createElement('span');e.textContent=l;return e}));note.hidden=!lines.length;playLine(seq,q)});ch.append(c)}
+    g.append(h,sub,ch,note);box.append(g)});
+  box.hidden=false;$('cqSheet').classList.add('has-br');requestAnimationFrame(()=>window.scrollTo({top:document.documentElement.scrollHeight,behavior:'smooth'}));return G.filter(g=>g[0]).length}
 function judge(){const q=Q(),b=q.b,p=q.p,o=3-p,m=mode();let ok=false,tx=[],L=[],mark={};
   const ansL=k=>[...U(k),p],lose=k=>{const r=w1(apply(b,U(k)),o);return r.length?mv(k)+'だと、相手の'+mv(K(r[0]))+'で負ける':''};
   if(q.st===1){const A=new Set(q.ans);ok=A.size===CO.tg.size&&[...A].every(x=>CO.tg.has(x));const n=nbCount(b,q.s);
@@ -6097,25 +6137,25 @@ function judge(){const q=Q(),b=q.b,p=q.p,o=3-p,m=mode();let ok=false,tx=[],L=[],
   if(q.st===9){const r=q.rates||[];tx=ok?[mv(k)+'は、AI同士の対局で勝率がいちばん高い手のひとつ'+(r[0]?'（'+r[0]+'%）':'')]:['AI同士の対局では、'+mv(best)+'のほうが勝っている'+(r[0]?'（'+r[0]+'%）':'')]}
   if(q.st===11){tx=ok?[mv(k)+'で自分も1つ着いた。これで1対1だ']:[ls||mv(k)+'では1つ目を着けられない',mv(best)+'で自分も1つ着ける']}
   if(q.st===12){const hm=hMoves(apply(b,U(k)),o);tx=ok?[mv(k)+'なら、相手は次に1つ目を着けられない']:[ls||(hm.length?mv(k)+'だと、相手に'+mv(K(hm[0]))+'で1つ目を着けられる':mv(k)+'では止められない'),mv(best)+'なら止められる'];if(!ok&&hm.length)L.push([...hm[0],o])}
-  let lines=null;
-  if(q.st===6){const pr=proof2(b,p,best);if(ok){tx=[mv(k)+'のあと、相手がどう受けても次に勝てる',lineTx(pr)];lines=[['手順を見る',pr]]}else{const rf=refute2(b,p,k);tx=[ls||(rf[1]?mv(k)+'だと、相手は'+mv(K(rf[1]))+'で受けられる':mv(k)+'では、相手に受けられる'),mv(best)+'が正解',lineTx(pr)];lines=[['受け方を見る',rf],['正しい手順を見る',pr]]}}
+  let lines=null,br=null;
+  if(q.st===6){const pr=proof2(b,p,best);br=[best,0];if(ok){tx=[mv(k)+'のあと、相手がどう受けても次に勝てる'];lines=null}else{const rf=refute2(b,p,k);tx=[ls||(rf[1]?mv(k)+'だと、相手は'+mv(K(rf[1]))+'で受けられる':mv(k)+'では、相手に受けられる'),mv(best)+'が正解',lineTx(pr)];lines=[['受け方を見る',rf],['正しい手順を見る',pr]]}}
   if(q.st===7){if(ok)tx=[mv(k)+'なら、相手の2手の狙いが消える'];else{const ot=oppTwo(b,p,k);tx=[ls||mv(k)+'だと、相手に2手で勝つ形が残る',lineTx(ot),mv(best)+'が正解'];lines=[['相手の勝ち方を見る',ot]]}}
-  if(q.st===8){const pr=proof3(b,p,best);if(ok){tx=[mv(k)+'から、3手で勝ちきれる',lineTx(pr)];lines=[['手順を見る',pr]]}else{const rf=refute3(b,p,k);tx=[ls||(rf[1]?mv(k)+'だと、相手は'+mv(K(rf[1]))+'で受けられる':'その手では勝ちきれない'),mv(best)+'が正解',lineTx(pr)];lines=[['受け方を見る',rf],['正しい手順を見る',pr]]}}
+  if(q.st===8){const pr=proof3(b,p,best);br=[best,1];if(ok){tx=[mv(k)+'から、3手で勝ちきれる'];lines=null}else{const rf=refute3(b,p,k);tx=[ls||(rf[1]?mv(k)+'だと、相手は'+mv(K(rf[1]))+'で受けられる':'その手では勝ちきれない'),mv(best)+'が正解',lineTx(pr)];lines=[['受け方を見る',rf],['正しい手順を見る',pr]]}}
   if(!ok&&!lines){const lv=LV(b,p,k);if(lv)return Object.assign({ok,tx},lv)}
-  return {ok,tx,L,mark,lines}}
+  return {ok,tx,L,mark,lines,br}}
 $('cqCheck').addEventListener('click',()=>{if(CO.checked||!CO.L)return;const q=Q(),r=judge();
   if(r.next){CO.step=1;CO.stepKeep=true;rchDraw($('cogrid'),'C',r.L);sheet(true,r.tx.concat([qText(q)]),q,true);return}
   CO.checked=true;CO.board=r.board||null;CO.pick=r.board?-1:CO.pick;draw(r.mark);rchDraw($('cogrid'),'C',r.L);$('cogrid').querySelectorAll('.cq-abl').forEach(e=>e.remove());
   const first=!CO.wrong.has(CO.i)&&!q._again;if(first)record(q,r.ok);
   if(r.ok)CO.ok++;else if(!q._again){CO.wrong.add(CO.i);CO.L.push(Object.assign({},q,{_again:1}));CO.tot++}
-  sheet(r.ok,r.tx,q,false);lineBtns(r.lines,q);if(r.lines)setTimeout(()=>playLine(r.lines[0][1],q),500)});
+  sheet(r.ok,r.tx,q,false);lineBtns(r.lines,q);if(r.br&&!r.lines){const pr=q.st===8?proof3(q.b,q.p,r.br[0]):proof2(q.b,q.p,r.br[0]);setTimeout(()=>playLine(pr,q),500)}if(r.br){const n=brShow(q,r.br[0],r.br[1]);if(n)spans($('cqTx'),r.tx.concat([r.br[1]?'相手の受けごとの2手目は'+n+'通り。受けをタップすると、盤で動く':'勝ち方は'+n+'つ。受けをタップすると、盤で動く']))}if(r.lines)setTimeout(()=>playLine(r.lines[0][1],q),500)});
 function lineBtns(lines,q){const box=$('cqLines');box.replaceChildren();box.hidden=!lines;if(!lines)return;
   for(const [nm,seq] of lines){const b=document.createElement('button');b.type='button';b.className='cq-lb';b.textContent=nm;b.addEventListener('click',()=>playLine(seq,q));box.append(b)}}
 let PLAY=0;
 function playLine(seq,q){const id=++PLAY,g=$('cogrid');let b=q.b.slice(),p=q.p,i=0;CO.board=b;CO.pick=-1;g.querySelectorAll('.cq-abl').forEach(e=>e.remove());draw();rchDraw(g,'C',[]);const arr=[];
   const step=()=>{if(id!==PLAY||!CO.L||i>=seq.length)return;const m=seq[i],mover=b[m[0]]||p;b=apply(b,m);CO.board=b;arr.push([m[0],m[1],mover]);const mark={};mark[m[1]]='cq-mv';draw(mark);rchDraw(g,'C',arr.slice(-2));
     const e=document.createElement('span');e.className='cq-abl n';e.textContent=String(i+1);e.style.left=((m[1]%6)+.5)/6*100+'%';e.style.top=((m[1]/6|0)+.5)/6*100+'%';g.append(e);i++;setTimeout(step,1100)};step()}
-function sheet(ok,tx,q,mid){$('cqFoot').hidden=true;const s=$('cqSheet');s.hidden=false;s.className='cq-sheet '+(ok?'ok':'ng');$('cqFace').src='img/coach/coach-'+(ok?'ok':'ng')+'.webp?v=1';
+function sheet(ok,tx,q,mid){{const bx=$('cqBr');if(bx){bx.replaceChildren();bx.hidden=true}}$('cqFoot').hidden=true;const s=$('cqSheet');s.hidden=false;s.className='cq-sheet '+(ok?'ok':'ng');$('cqFace').src='img/coach/coach-'+(ok?'ok':'ng')+'.webp?v=1';
   $('cqTt').textContent=ok?(mid?'そのとおり':'正解！'):'不正解';spans($('cqTx'),tx);$('cqTag').textContent=mid?'':'観点：'+ST[q.st][1];$('cqTag').hidden=mid;$('cqBar').style.width=(CO.ok/CO.tot*100)+'%'}
 $('cqNext').addEventListener('click',()=>{if(!CO.L)return;PLAY++;$('cqLines').hidden=true;if(CO.stepKeep){qOpen();return}CO.i++;CO.board=null;if(CO.i<CO.L.length){qOpen();return}finish()});
 function finish(){const n=CO.L.filter(x=>!x._again).length;CO.res=[n-CO.wrong.size,n];
@@ -6175,7 +6215,7 @@ function stepSum(){steps(4);const body=$('clBody');body.replaceChildren();const 
   body.append(bubble('ok',['今日の授業はここまで！',r.face&&r.stop===r.face?'実戦でも全部止められたぞ。':r.matta?'待ったで直せた手は、次は最初から指せるようにしよう。':'よく頑張った！']));
   const res=document.createElement('div');res.className='cl-res';res.innerHTML='<div><b></b><small>練習</small></div><div><b></b><small>実戦で気づけた</small></div><div><b></b><small>待った</small></div>';
   const bs=res.querySelectorAll('b');bs[0].textContent=r.prac?r.prac[0]+'/'+r.prac[1]:'−';bs[1].textContent=st;bs[2].textContent=String(r.matta);body.append(res);
-  const good=(!r.prac||r.prac[0]===r.prac[1])&&(!r.face||r.stop===r.face),nx=th>=9?(good?(th===10?11:th===12?9:th+1):th):good?Math.min(8,th+1):th;
+  const good=(!r.prac||r.prac[0]===r.prac[1])&&(!r.face||r.stop===r.face),nx=th>=9?(good?(th===10?11:th===11?9:th+1):th):good?Math.min(8,th+1):th;
   const n1=document.createElement('div');n1.className='cl-next';n1.innerHTML='<small>次の課題</small><h4></h4><p></p>';n1.querySelector('h4').textContent=ST[nx][0];n1.querySelector('p').textContent=good?'次はここを伸ばそう。'+ST[nx][1]+'。':'もう一度ここを固めよう。'+ST[nx][1]+'。';
   const sh=SHAPE[th];body.append(n1);if(sh){const n2=document.createElement('a');n2.className='cl-next';n2.href=sh[2];n2.innerHTML='<small>覚える形</small><h4></h4><p></p>';n2.querySelector('h4').textContent=sh[0];n2.querySelector('p').textContent=sh[1];body.append(n2)}clFoot('終わる',()=>{LS.on=false;show('pzhub')})}
 $('clX').addEventListener('click',()=>{LS.on=false;show('pzhub')});
