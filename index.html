@@ -1860,7 +1860,7 @@ html:not([lang=ja]) #cqTx .cq-s+.cq-s::before{content:" "}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.78</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.79</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -5876,7 +5876,7 @@ setTimeout(()=>{try{hmBot();hwTick(true)}catch(e){}},1200);
 {const _r=render;render=function(){_r.apply(this,arguments);try{stripSync();if(CUR==='home'){hmSync();hmBot()}}catch(e){}try{cbSync()}catch(e){}}}
 try{tabSync(CUR);if(CUR==='home')hmSync()}catch(e){}
 /* ---------- ホームに追加（2026-11）----------
-   ホーム画面のアイコンから開いた人だけ、最強CPU・研究・フレンド対局（自分から部屋を作るとき）が使える。
+   ホーム画面のアイコンから開いた人だけ、最強CPU・研究・動画づくりが使える（フレンド対局は誰でも使える）。
    招待リンク・部屋コードから入る側は今までどおり。追加できないブラウザ（Firefoxなど）は、追加しなくても全部使える。
    案内：1局目が終わったとき・限定の機能を押したとき・ホームの小さな帯。
    計測：a2s 案内を見た・a2c 追加ボタンを押した・a2i 追加した・a2l ホームのアイコンから開いた・ar1 ホームから開いた端末が次の日にも来た */
@@ -5903,9 +5903,9 @@ function a2Sheet(kind){a2Close();try{statFirst('bocch-a2s','a2s')}catch(e){}
     const u=typeof ibUrl==='function'?ibUrl():'';if(u)btn('ブラウザで開く',()=>{try{statFirst('bocch-ix','ix')}catch(e){}setTimeout(()=>{location.href=u},150)});
     else btn('リンクをコピー',async()=>{try{await navigator.clipboard.writeText('https://bocchgame.com/')}catch(e){}});ghost(close);document.body.append(ov);return}
   tl.forEach((t,i)=>{if(i)h.append(document.createElement('br'));const s=document.createElement('span');s.textContent=t;h.append(s)});
-  p.textContent=kind==='first'||kind==='band'?'追加すると、次の4つが使えるようになります。':'ホームに追加して、ホーム画面のアイコンから開くと使えます。ほかに次の機能も使えます。';
+  p.textContent=kind==='first'||kind==='band'?'追加すると、次の3つが使えるようになります。':'ホームに追加して、ホーム画面のアイコンから開くと使えます。ほかに次の機能も使えます。';
   const bl=document.createElement('div');bl.className='a2-ben';
-  [['1','毎日の1問のお知らせ','毎日、今日の1問が届く'],['AI','最強CPU・研究','いちばん強いAIと対局／AI同士の評価値つき'],['友','フレンド対局','リンクを送って友だちと対戦'],['▶','動画づくり','対局を曲つきの縦型ショートに']].forEach(([ic,b,s])=>{const d=document.createElement('div');const i=document.createElement('span');i.className='a2-ic';i.textContent=ic;
+  [['1','毎日の1問のお知らせ','毎日、今日の1問が届く'],['AI','最強CPU・研究','いちばん強いAIと対局／AI同士の評価値つき'],['▶','動画づくり','対局を曲つきの縦型ショートに']].forEach(([ic,b,s])=>{const d=document.createElement('div');const i=document.createElement('span');i.className='a2-ic';i.textContent=ic;
     const tx=document.createElement('span');const bb=document.createElement('b');bb.textContent=b;const sm=document.createElement('small');sm.textContent=s;tx.append(bb,sm);d.append(i,tx);bl.append(d)});sh.append(bl);
   const steps=a=>{a.forEach((t,i)=>{const d=document.createElement('div');d.className='a2-step';const n=document.createElement('span');n.className='a2-num';n.textContent=String(i+1);const s=document.createElement('span');s.textContent=t;d.append(n,s);sh.append(d)})};
   if(A2.bip)btn('ホームに追加する',async()=>{try{statFirst('bocch-a2c','a2c')}catch(e){}const e=A2.bip;A2.bip=null;try{await e.prompt();const r=await e.userChoice;if(r&&r.outcome==='accepted'){try{statFirst('bocch-a2i','a2i')}catch(_){}a2Close()}}catch(_){}});
@@ -5915,11 +5915,11 @@ function a2Sheet(kind){a2Close();try{statFirst('bocch-a2s','a2s')}catch(e){}
   ghost(close);document.body.append(ov)}
 // 限定の機能を押したとき
 document.addEventListener('click',e=>{if(!a2Locked())return;const t=e.target&&e.target.closest?e.target:null;if(!t)return;let k='';
-  if(t.closest('#stGo')){if(STM==='cpu'&&STL===4)k='cpu';else if(STM==='fr')k='fr'}
-  else if(t.closest('#studyBtn,#stStudy'))k='study';else if(t.closest('#create'))k='fr';else if(t.closest('#mvNow,#revMv'))k='mv';
+  if(t.closest('#stGo')){if(STM==='cpu'&&STL===4)k='cpu'}
+  else if(t.closest('#studyBtn,#stStudy'))k='study';else if(t.closest('#mvNow,#revMv'))k='mv';
   else if(t.closest('#modeSeg [data-mode="4"],.cpu-c[data-mode="4"]'))k='cpu';
   if(k){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();a2Sheet(k)}},true);
-try{const _fc=frChallenge;frChallenge=function(...a){if(a2Locked()){a2Sheet('fr');return}return _fc.apply(this,a)}}catch(e){}
+/* フレンド対局は誘って人を増やす入口なので、ホーム限定にしない */
 // 「ホーム限定」の印
 function a2Marks(){const on=a2Locked();const put=(el)=>{if(!el)return;let m=el.querySelector('.a2-tag');if(on&&!m){m=document.createElement('em');m.className='a2-tag';m.textContent='ホーム限定';el.append(m)}if(!on&&m)m.remove()};
   put(document.querySelector('#stLv [data-lv="4"] .cn small'));put($('stStudy'));put(document.querySelector('.cpu-c[data-mode="4"]'));put(document.querySelector('#revMv .rmv-tx b'));put(document.querySelector('#mvNow span'));a2Band()}
@@ -5928,7 +5928,7 @@ try{const _ge=statGameEnd;statGameEnd=function(...a){const r=_ge.apply(this,a);t
 // ホームの小さな帯（×で閉じると7日出さない）
 function a2Band(){const home=document.querySelector('[data-scr="home"]');if(!home)return;let b=$('a2band');let off=false;try{off=Date.now()<+(localStorage.getItem('bocch-a2b')||0)}catch(e){}
   if(!a2Locked()||off){if(b)b.remove();return}if(b)return;b=document.createElement('div');b.id='a2band';b.className='a2-band';
-  const tx=document.createElement('span');const bb=document.createElement('b');bb.textContent='ホームに追加';tx.append(bb,document.createTextNode('すると、最強CPU・研究・フレンド対局・動画づくり・毎日のお知らせが使える'));
+  const tx=document.createElement('span');const bb=document.createElement('b');bb.textContent='ホームに追加';tx.append(bb,document.createTextNode('すると、最強CPU・研究・動画づくり・毎日のお知らせが使える'));
   const go=document.createElement('button');go.type='button';go.className='a2-go';go.textContent='追加';go.addEventListener('click',()=>a2Sheet('band'));
   const x=document.createElement('button');x.type='button';x.className='a2-x';x.setAttribute('aria-label','閉じる');x.textContent='×';x.addEventListener('click',()=>{try{localStorage.setItem('bocch-a2b',String(Date.now()+7*864e5))}catch(e){}b.remove()});
   b.append(tx,go,x);const top=home.querySelector('.topbar')||home.firstElementChild;if(top&&top.nextSibling)home.insertBefore(b,top.nextSibling);else home.prepend(b)}
