@@ -1860,7 +1860,7 @@ html:not([lang=ja]) #cqTx .cq-s+.cq-s::before{content:" "}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.79</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.80</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -2853,7 +2853,7 @@ function mvSvg(){if(!MV_SVG||!MV_SVG.isConnected){MV_SVG=document.createElementN
 const mvL=n=>mvSvg().querySelector('[data-l="'+n+'"]');
 function mvMe(){try{const m=fxMe();return m||0}catch(e){return 0}}
 /* 次の手でゴールに届く石：自分（見ている側）は金、相手は赤。選んでいる間と終局後は出さない */
-function mvReach(b){const o={s:{},t:{},l:[]};if(S.over||S.sel>=0||S.learn||S.lesson||!mvLive()){try{mvReachDraw([])}catch(e){}return o}const me=mvMe()||1;
+function mvReach(b){const o={s:{},t:{},l:[]};if(S.over||S.sel>=0||S.learn||!mvLive()){try{mvReachDraw([])}catch(e){}return o}const me=mvMe()||1;
   for(let i=0;i<N*N;i++){const p=b[i];if(!p)continue;const g=goalRow(p);if((i/N|0)===g)continue;for(const m of movesFrom(b,i))if((m[1]/N|0)===g){const k=p===me?'G':'R';o.s[i]=k;o.t[m[1]]=k;o.l.push([i,m[1],p])}}mvReachDraw(o.l);return o}
 /* リーチの矢印：動画と同じく、石からゴールのマスへ矢印（黒はオレンジ、白は青）、ゴールに点滅する照準 */
 const RCH={};
