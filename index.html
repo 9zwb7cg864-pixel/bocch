@@ -1869,6 +1869,8 @@ p.rate-msg.adv-bonus{display:block;width:max-content;max-width:100%;margin:6px a
 .hm-adv-t{flex:1;display:flex;flex-direction:column;gap:4px;text-align:left}.hm-adv-t b{font-size:15px;font-weight:800;color:#e8f1fc}.hm-adv-t small{font-size:12px;line-height:1.5;color:#aab4c5}
 #hmAdvB{flex:none;padding:9px 14px;border-radius:999px;border:0;font-size:13px;font-weight:800;color:#1c2436;background:#cfe3fb;cursor:pointer}
 .hm-adv.on #hmAdvB{color:#cfd6e4;background:#2f333c}
+.rev-kshare{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin:12px 0 0;min-height:52px;border:0;border-radius:16px;background:var(--p1,#2d2e31);color:#f4f4f2;font-size:16px;font-weight:800;cursor:pointer}
+.rev-kshare::before{content:"";width:18px;height:18px;background:currentColor;-webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M18 16a3 3 0 0 0-2.4 1.2l-6.7-3.4a3 3 0 0 0 0-1.6l6.7-3.4A3 3 0 1 0 15 7l-6.7 3.4a3 3 0 1 0 0 3.2L15 17a3 3 0 1 0 3-1z'/></svg>") center/contain no-repeat;mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M18 16a3 3 0 0 0-2.4 1.2l-6.7-3.4a3 3 0 0 0 0-1.6l6.7-3.4A3 3 0 1 0 15 7l-6.7 3.4a3 3 0 1 0 0 3.2L15 17a3 3 0 1 0 3-1z'/></svg>") center/contain no-repeat}
 
 </style>
 </head>
@@ -1876,7 +1878,7 @@ p.rate-msg.adv-bonus{display:block;width:max-content;max-width:100%;margin:6px a
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.82</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.83</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -2130,6 +2132,7 @@ p.rate-msg.adv-bonus{display:block;width:max-content;max-width:100%;margin:6px a
     <button id="rFirst" type="button" class="rv-end" aria-label="最初へ">|◀</button><button id="rPrev" class="i-only i-prev" aria-label="1手戻る"></button><span class="rev-ply" id="revPly"></span><button id="rNext" class="i-only i-next" aria-label="1手進む"></button><button id="rLast" type="button" class="rv-end" aria-label="最後へ">▶|</button>
   </div>
   <button class="rev-mv" id="revMv" type="button" hidden><span class="rmv-ic" aria-hidden="true"></span><span class="rmv-tx"><b>動画を作る</b><small>この対局を、曲つきの縦型ショートに</small></span><span class="rmv-go" aria-hidden="true">›</span></button>
+  <button class="rev-kshare" id="revShare2" type="button">棋譜を共有</button>
   <div class="row rev-cpu"><button id="revPlayCpu" class="i-play">この局面からCPUと対局</button></div>
   <div class="rev-info">
     <p class="rev-move" id="revMove"></p>
@@ -4094,6 +4097,7 @@ function shareLink(g,i){const q=new URLSearchParams();q.set('kifu',g.log.map(m=>
   if(g.me)q.set('me',String(g.me));if(g.opp)q.set('o',g.opp);if(i)q.set('i',String(i));
   return location.origin+location.pathname+'?'+q.toString()}
 function revMsg(t){const m=$('revShareMsg');m.textContent=t;m.hidden=!t;clearTimeout(revMsg.T);if(t)revMsg.T=setTimeout(()=>{m.hidden=true},4000)}
+$('revShare2').addEventListener('click',()=>$('revShare').click());
 $('revShare').addEventListener('click',async()=>{const g=REV.g;if(!g)return;const url=shareLink(g,REV.i),[rt]=resultOf(g);
   const text='bocchの感想戦　'+MODE_NAME(g.mode)+'　'+rt+'（'+g.log.length+'手）';
   if(navigator.share){try{await navigator.share({title:'bocchの感想戦',text:text+'\n'+url});return}catch(e){if(e&&e.name==='AbortError')return}}
