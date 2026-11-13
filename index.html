@@ -1878,7 +1878,7 @@ p.rate-msg.adv-bonus{display:block;width:max-content;max-width:100%;margin:6px a
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.83</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.84</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -3462,10 +3462,10 @@ async function take(room){
 }
 // 組み合わせのあと、相手が部屋に来ないとき（同時に取り合った等）は、自動で探し直す
 function armWait(){clearTimeout(NET.waitT);NET.waitT=setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.watch&&!NET.guest&&!S.over){netMsg('相手が来なかったので、探し直します…');setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.guest)startMatch()},1200)}},12000)}
-/* 影の相手：ランダム対戦で30〜50秒だれも来なければ、CPU（やさしい61%・ふつう39%）が「名無しの石」として部屋に入る。
+/* 影の相手：ランダム対戦で30〜50秒だれも来なければ、CPU が入る（61%は「名無しの石」＝CPUふつうくらい、39%は名前付き）。
    部屋の記録に普通の参加者として join・move・rematch を流すので、時計・チャット・再戦・レート計算はオンライン対戦のまま動く */
 const SHADOW={bot:null,timer:null,key:'',rates:null};
-// ふつうのときに名乗る名前（それぞれ自分のレートを持ち、勝ち負けで増減する）。やさしいのときは「名無しの石」のまま
+// 名前付きのときに名乗る名前（それぞれ自分のレートを持ち、勝ち負けで増減する）。level 1 は「名無しの石」のまま
 const BOT_NAMES=['サタン二世','ピコまる','パワーボマー','どら焼き三太郎','ノルマンディー上陸作戦','防人','屯田兵受かりました','Kebin67','beckman','tompson','ketty','婦真理','ネギトロ','がちぼっち','ぷらごみ募集','このげーむおもろい','あらびっくり','さいばいまん','これ毒かも！','私に嘘はつかないでえ','藤井壮太','大','The sun','tiny rion','Mac','死して尚','歌人チャンネル','明日は我が身','迷惑メール','ルーキー１２３４'];
 const BOTS_KV=RELAY+'bocch-v1-bots/kv';
 async function botRates(){try{const r=await fetch(BOTS_KV,{cache:'no-store'});if(!r.ok)return null;const j=await r.json();return j&&typeof j==='object'?j:null}catch(e){return null}}
@@ -3508,22 +3508,25 @@ function shadowWait(info){
   w=Math.min(w,Math.max(2,remain-45));                      // 時間切れにはしない
   return Math.max(1.0,w)*1000}
 // 手の選び方：上位候補から温度付きで選ぶ。勝ち筋をたまに見逃す、相手のリーチをたまに無視する、序盤は散らす、同じ石ばかり動かさない
+// 強さ：win＝勝てる手に気づく率、ignore＝相手のリーチを見落とす率、depth＝読む深さ、T＝手の散らし具合（大きいほど悪手を混ぜる）
+const SHADOW_LV={1:{win:1,ignore:0.05,depth:3,T:15},2:{win:0.85,ignore:0.25,depth:2,T:32}}; // 1＝名無しの石（CPUふつうと互角：80局で44勝35敗1分）、2＝名前付き
 function shadowPick(b,p,level,hist){
   const ms=allMoves(b,p);if(!ms.length)return null;const info={};
   const wins=ms.filter(m=>arrived(apply(b,m),p));
-  if(wins.length&&Math.random()<(level===1?0.7:0.85)){info.instant=true;return {m:wins[Math.random()*wins.length|0],info}}
-  const depth=level===1?1:2;deadline=performance.now()+600;
+  const P=SHADOW_LV[level]||SHADOW_LV[2];
+  if(wins.length&&Math.random()<P.win){info.instant=true;return {m:wins[Math.random()*wins.length|0],info}}
+  const depth=P.depth;deadline=performance.now()+600;
   const sc=ms.map(m=>{aborted=false;let v=-negamax(apply(b,m),3-p,depth-1,-Infinity,Infinity);if(aborted)v=evaluate(apply(b,m),p);return {m,v}});
   // 相手の即勝ちを許す手（受けないといけない局面）を見つける
   const losing=sc.filter(x=>x.v<=-90000);info.threat=losing.length>0&&losing.length<sc.length;
   let cand=sc;
-  if(info.threat){const ignore=Math.random()<(level===1?0.45:0.25);if(!ignore)cand=sc.filter(x=>x.v>-90000)}
+  if(info.threat){const ignore=Math.random()<P.ignore;if(!ignore)cand=sc.filter(x=>x.v>-90000)}
   // 人間っぽい癖：前に出る手を少し好む、直前に動かした石をまた動かすのは少し避ける、ぼっちを作る手は少し避ける
   const last=hist&&hist.length>=2?hist[hist.length-2]:null; // 2手前＝自分の前の手
   for(const x of cand){const [f,t]=x.m;const fw=(p===1?(f/6|0)-(t/6|0):(t/6|0)-(f/6|0));x.h=x.v+fw*4+(last&&last[1]===f?-6:0)+(nbCount(apply(b,x.m),t)===0?-8:0)+(Math.random()-0.5)*6}
   cand.sort((u,v)=>v.h-u.h);
   if(S.ply<=2){const top=cand.slice(0,5);return {m:top[Math.random()*top.length|0].m,info}}
-  const best=cand[0].h,T=level===1?70:32;
+  const best=cand[0].h,T=P.T;
   const ws=cand.map(x=>Math.exp((x.h-best)/T));const tot=ws.reduce((u,v)=>u+v,0);let r=Math.random()*tot;
   let pick=cand[0];for(let i=0;i<cand.length;i++){r-=ws[i];if(r<=0){pick=cand[i];break}}
   info.few=cand.length<=4||(cand[1]&&best-cand[1].h>60);
