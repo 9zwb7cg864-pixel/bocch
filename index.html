@@ -1853,6 +1853,22 @@ body:has(>[data-scr=coachl]:not([hidden]))>[data-scr=coachl],body:has(>[data-scr
 /* 日本語以外では、説明文の文と文の間にすき間を入れる（「。」が付かないため） */
 html:not([lang=ja]) #cqTx .cq-s+.cq-s::before{content:" "}
 .cq-sheet.has-br{padding-top:12px}.cq-sheet.has-br .cq-face{width:40px;height:40px}.cq-sheet.has-br .cq-tag{display:none}.cq-sheet.has-br #cqTx{font-size:13.5px;line-height:1.55;margin-top:4px}
+/* 上級者モード：数字・増減バッジ・ぼっちの色を隠す */
+.adv .mvb{display:none}.adv .stone.zero{opacity:1}.adv .stone.zero::before{display:none}.adv .stone.b.zero,.adv .stone.w.zero{color:inherit}
+.boardwrap{position:relative}
+.adv-pill{position:absolute;top:-12px;right:10px;z-index:6;padding:4px 11px 4px 25px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.02em;color:#1c2436;background:#cfe3fb;box-shadow:0 2px 10px rgba(0,0,0,.35);pointer-events:none}
+.adv-pill::before{content:"";position:absolute;left:9px;top:50%;width:10px;height:10px;margin-top:-5px;border-radius:50%;background:#1c2436}
+.adv-pill.wait{color:#aab4c5;background:#2f333c}.adv-pill.wait::before{background:#5d6575}
+#gChks .adv-row{flex:1 1 100%;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;border:1px solid rgba(169,205,247,.45);background:rgba(169,205,247,.07)}
+#gChks .adv-row input{width:20px;height:20px;accent-color:#a9cdf7;flex:none}
+.adv-tx{display:flex;flex-direction:column;gap:3px;text-align:left}.adv-tx b{font-size:15px;color:#e8f1fc;font-weight:800}.adv-tx small{font-size:12px;line-height:1.45;color:#aab4c5}
+.adv-bonus{padding:6px 14px;border-radius:999px;font-size:14px!important;font-weight:800;color:#1c2436!important;background:#cfe3fb;opacity:1!important}
+p.rate-msg.adv-bonus{display:block;width:max-content;max-width:100%;margin:6px auto 0}p.rate-msg.adv-bonus[hidden]{display:none}
+.mvrate.adv-bonus{display:block;width:max-content;margin:8px auto 0}
+.hm-adv{display:flex;align-items:center;gap:12px;margin:14px 0 4px;padding:14px;border-radius:16px;border:1px solid rgba(169,205,247,.45);background:rgba(169,205,247,.07)}
+.hm-adv-t{flex:1;display:flex;flex-direction:column;gap:4px;text-align:left}.hm-adv-t b{font-size:15px;font-weight:800;color:#e8f1fc}.hm-adv-t small{font-size:12px;line-height:1.5;color:#aab4c5}
+#hmAdvB{flex:none;padding:9px 14px;border-radius:999px;border:0;font-size:13px;font-weight:800;color:#1c2436;background:#cfe3fb;cursor:pointer}
+.hm-adv.on #hmAdvB{color:#cfd6e4;background:#2f333c}
 
 </style>
 </head>
@@ -1860,7 +1876,7 @@ html:not([lang=ja]) #cqTx .cq-s+.cq-s::before{content:" "}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.80</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.81</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -1907,6 +1923,7 @@ html:not([lang=ja]) #cqTx .cq-s+.cq-s::before{content:" "}
       <div class="row"><button id="hrOk">読んだ</button><button class="primary i-r" id="hrLearn">4問で覚える</button></div>
     </div>
 
+    <div class="hm-adv" id="hmAdv" hidden><div class="hm-adv-t"><b>上級者モード</b><small id="hmAdvS">5級になったので挑戦できます。数字と矢印を隠して指すと、勝ったとき段級が1.5倍上がりやすくなります</small></div><button type="button" id="hmAdvB">オンにする</button></div>
     <div class="hm-sh"><span>今日の1問</span></div>
     <button class="hm-daily" data-go="daily" id="dailyBtn" type="button">
       <span class="hm-mini"><span class="g" id="hmMini"></span></span>
@@ -2279,14 +2296,15 @@ html:not([lang=ja]) #cqTx .cq-s+.cq-s::before{content:" "}
   <div class="coach" id="coach" hidden aria-live="polite"><b id="coachT"></b><span id="coachS"></span><button type="button" id="coachX" aria-label="説明を閉じる">×</button></div>
   <div class="players top" id="plTop" hidden></div>
   <div class="cpu-bub-a"><div class="bub cpu-bub" id="cpuBub" hidden aria-live="polite"></div></div>
-  <div class="boardwrap"><div class="board" id="board"><div class="lab lab-top" id="labTop" aria-hidden="true"></div><div class="lab lab-left" id="labLeft" aria-hidden="true"></div><div class="lab lab-bot" id="labBot" aria-hidden="true"></div><div class="lab lab-right" id="labRight" aria-hidden="true"></div><div class="grid" id="grid" role="grid" aria-label="盤"></div></div></div>
+  <div class="boardwrap"><span class="adv-pill" id="advTag" hidden></span><div class="board" id="board"><div class="lab lab-top" id="labTop" aria-hidden="true"></div><div class="lab lab-left" id="labLeft" aria-hidden="true"></div><div class="lab lab-bot" id="labBot" aria-hidden="true"></div><div class="lab lab-right" id="labRight" aria-hidden="true"></div><div class="grid" id="grid" role="grid" aria-label="盤"></div></div></div>
   <div class="cg-coach" id="cgCoach" hidden><img id="cgcFace" src="img/coach/coach-n.webp?v=1" alt="" width="48" height="48"><div class="cgc-b"><p id="cgcTx"></p><div class="cgc-two" id="cgcTwo" hidden><button type="button" class="cq-btn" id="cgcBack">待った</button><button type="button" class="cq-btn g" id="cgcGo">このまま指す</button></div></div></div>
   <div class="players bot" id="plBot" hidden></div>
   <div class="gameinfo">
     <div class="ibx" id="ibx" hidden><p id="ibxT">ブラウザで開くと、次からも段級や記録が続きます</p><a id="ibxGo" href="#">ブラウザで開く</a><button type="button" id="ibxX" aria-label="閉じる">×</button></div>
     <div class="status" id="status"></div>
     <p class="hint" id="hint"></p>
-    <p class="rate-msg" id="rateMsg" hidden></p>
+        <p class="rate-msg" id="rateMsg" hidden></p>
+    <p class="rate-msg adv-bonus" id="advMsg" hidden>上級者ボーナス ×1.5</p>
     <p class="joseki" id="joseki" hidden></p>
     <details class="kifu" id="kifuBox" hidden><summary id="kifuSum"></summary><div id="kifu" aria-label="棋譜"></div></details>
     <div class="chat" id="chatBox" hidden aria-label="チャット">
@@ -2337,7 +2355,7 @@ html:not([lang=ja]) #cqTx .cq-s+.cq-s::before{content:" "}
     <button type="button" class="gset i-set" aria-expanded="false">設定</button>
   </div>
   <div class="endrow" id="reviewRow" hidden><button id="reviewNow" class="endb main"><span>感想戦で振り返る</span></button><button id="xNow" class="endb"><span>Xで共有</span></button><button id="mvNow" class="endb" hidden><span>動画を作る</span></button></div>
-  <div class="row chks" id="gChks"><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label><label class="chk" hidden><input type="checkbox" id="bgmOn"> BGM</label></div>
+  <div class="row chks" id="gChks"><label class="chk adv-row"><input type="checkbox" id="advOn"><span class="adv-tx"><b>上級者モード</b><small>数字と矢印を隠して指す。勝つと段級が1.5倍上がりやすい</small></span></label><label class="chk"><input type="checkbox" id="showNum" checked> 進める距離</label><label class="chk"><input type="checkbox" id="showLab" checked> 盤の符号</label><label class="chk"><input type="checkbox" id="showTalk" checked> AIの解説</label><label class="chk"><input type="checkbox" id="showJos" checked> 演出</label><label class="chk"><input type="checkbox" id="komaOn" checked> 音</label><label class="chk" hidden><input type="checkbox" id="bgmOn"> BGM</label></div>
 </section>
 
 <nav class="tabbar" id="tabbar" aria-label="メイン">
@@ -2853,7 +2871,7 @@ function mvSvg(){if(!MV_SVG||!MV_SVG.isConnected){MV_SVG=document.createElementN
 const mvL=n=>mvSvg().querySelector('[data-l="'+n+'"]');
 function mvMe(){try{const m=fxMe();return m||0}catch(e){return 0}}
 /* 次の手でゴールに届く石：自分（見ている側）は金、相手は赤。選んでいる間と終局後は出さない */
-function mvReach(b){const o={s:{},t:{},l:[]};if(S.over||S.sel>=0||S.learn||!mvLive()){try{mvReachDraw([])}catch(e){}return o}const me=mvMe()||1;
+function mvReach(b){const o={s:{},t:{},l:[]};if(S.over||S.sel>=0||S.learn||!mvLive()||advOn()){try{mvReachDraw([])}catch(e){}return o}const me=mvMe()||1;
   for(let i=0;i<N*N;i++){const p=b[i];if(!p)continue;const g=goalRow(p);if((i/N|0)===g)continue;for(const m of movesFrom(b,i))if((m[1]/N|0)===g){const k=p===me?'G':'R';o.s[i]=k;o.t[m[1]]=k;o.l.push([i,m[1],p])}}mvReachDraw(o.l);return o}
 /* リーチの矢印：動画と同じく、石からゴールのマスへ矢印（黒はオレンジ、白は青）、ゴールに点滅する照準 */
 const RCH={};
@@ -2976,7 +2994,9 @@ let S;
 const key=(b,t)=>b.join('')+t;
 const ok=(r,c)=>r>=0&&r<N&&c>=0&&c<N;
 function startBoard(){const b=Array(N*N).fill(0);for(let c=0;c<N;c++){b[c]=2;b[(N-1)*N+c]=1}return b}
-function initState(mode){const b=startBoard();return {b,turn:1,mode,hc:(typeof mode==='number'&&mode>=1&&mode<=10)?pickSide():1,hist:[],sel:-1,last:null,over:null,reps:{[key(b,1)]:1},ply:0,log:[]}}
+function advOn(){const e=document.getElementById('advOn');return !!(e&&e.checked)}
+function initState(mode){return Object.assign(initState0(mode),{adv:advOn()})}
+function initState0(mode){const b=startBoard();return {b,turn:1,mode,hc:(typeof mode==='number'&&mode>=1&&mode<=10)?pickSide():1,hist:[],sel:-1,last:null,over:null,reps:{[key(b,1)]:1},ply:0,log:[]}}
 // CPU戦の手番：b=先手（黒） w=後手（白） r=ランダム。選んだものはこの端末に覚える
 let SIDE='b';try{const v=localStorage.getItem('bocch-side');if(v==='b'||v==='w'||v==='r')SIDE=v}catch(e){}
 function pickSide(){return SIDE==='w'?2:SIDE==='r'?(Math.random()<.5?1:2):1}
@@ -3142,7 +3162,8 @@ function render(){try{if(S&&S.log){const n=S.log.length;if(!S.tm){S.tm=[];S.t0=D
   mvPost();
   const net=S.mode==='net';
   $('board').classList.toggle('flip',net?colorOf(NET.me)===2:(!!S.mode&&hcOf()===2));
-  $('board').classList.toggle('hideNum',!$('showNum').checked);
+  $('board').classList.toggle('hideNum',!$('showNum').checked||advOn());$('board').classList.toggle('adv',advOn());{const sn=$('showNum');sn.disabled=advOn();sn.closest('label').style.opacity=advOn()?'.4':''}
+  {const at=$('advTag');if(at){const on=advOn();at.hidden=!on;if(on){at.textContent=S.adv?'上級者モード':'上級者モード（次の対局から）';at.classList.toggle('wait',!S.adv)}}}
   document.querySelectorAll('#modeSeg button').forEach(x=>x.setAttribute('aria-pressed',String(!net&&+x.dataset.mode===S.mode)));
   $('localCtl').hidden=net;$('netCtl').hidden=!net;
   $('reseek').hidden=!(net&&NET.auto&&!NET.watch&&!NET.guest&&!S.over);
@@ -3335,6 +3356,8 @@ $('undo').addEventListener('click',()=>{
   while(steps--&&S.hist.length){const h=S.hist.pop();S.b=h.b;S.turn=h.turn;S.last=h.last;S.reps=h.reps;S.ply=h.ply}
   S.over=null;S.sel=-1;S.log=(S.log||[]).slice(0,S.ply||0);KICK='';render()});
 $('showNum').addEventListener('change',render);
+try{$('advOn').checked=localStorage.getItem('bocch-adv')==='1'}catch(_){}
+$('advOn').addEventListener('change',e=>{try{localStorage.setItem('bocch-adv',e.target.checked?'1':'0')}catch(_){}if(!e.target.checked&&S)S.adv=false;render();try{advHome()}catch(_){}});
 $('komaOn').checked=KOMA.on;$('komaOn').addEventListener('change',e=>{KOMA.on=e.target.checked;try{localStorage.setItem('bocch-koma',KOMA.on?'1':'0')}catch(_){}if(KOMA.on){komaUnlock();setTimeout(()=>komaPlay(true),120)}});
 try{localStorage.removeItem('bocch-skin');localStorage.removeItem('bocch-hibinum')}catch(e){} // 廃止したスキンの設定を消す
 $('create').addEventListener('click',createRoom);
@@ -3762,7 +3785,7 @@ function fxEnd0(win,why,me,b,cell){if(!$('showJos').checked||CUR!=='game')return
   const canAgain=S.mode!=='net'||(!NET.watch&&colorOf(NET.me)>0);
   /* 見た目B：盤の上に出すカード */
   const ttl=draw?'引き分け':mine?'あなたの勝ち！':lose?'あなたの負け':cn+'の勝ち',canRev=!!(S.log&&S.log.length)&&!S.fromPos,canMv=canRev&&typeof mvOK==='function'&&mvOK(S.log);
-  h='<div class="mvcard"><div class="mvhd"><h3>'+ttl+'</h3><p>'+esc0(why)+'　'+(S.ply||0)+'手</p></div>'+(S.rateMsg?'<p class="mvrate">'+esc0(S.rateMsg)+'</p>':'')+'<div class="mvacts">';
+  h='<div class="mvcard"><div class="mvhd"><h3>'+ttl+'</h3><p>'+esc0(why)+'　'+(S.ply||0)+'手</p></div>'+(S.rateMsg?'<p class="mvrate">'+esc0(S.rateMsg)+'</p>':'')+(S.rateMsg&&S.advBonus?'<p class="mvrate adv-bonus">上級者ボーナス ×1.5</p>':'')+'<div class="mvacts">';
   if(canAgain)h+='<button class="mvbtn main" type="button" data-a="again">もう一局</button>';
   if(canRev||canMv)h+='<div class="mvtwo">'+(canRev?'<button class="mvbtn" type="button" data-a="rev">振り返る</button>':'')+(canMv?'<button class="mvbtn" type="button" data-a="mv">動画を作る</button>':'')+'</div>';
   h+='<div class="mvtwo"><button class="mvbtn ghost" type="button" data-a="look">盤面を見る</button>'+(canRev?'<button class="mvbtn ghost" type="button" data-a="x">Xで共有</button>':'')+'</div></div></div>';
@@ -4191,7 +4214,8 @@ function rateGame(){
   const res=S.over.win===0?.5:S.over.win===my?1:0,K=PROF.games<30?40:PROF.peak?10:20;
   const df=Math.max(-400,Math.min(400,opp-PROF.rating)),exp=1/(1+Math.pow(10,df/400)),before=Math.round(PROF.rating);
   PROF.rating=Math.max(100,PROF.rating+K*(res-exp));PROF.games++;if(res===1)PROF.w++;else if(res===0)PROF.l++;else PROF.d++;
-  const D=PROF.dan,b0={lv:D.lv,pct:D.pct};{const o=S.mode==='net'?NM[oppIdOf()]:null,oR=o&&o.lv!=null?danR(o.lv,50):opp;danStep(D,res,(oR-danR(D.lv,D.pct))/40,PROF.rating)}
+  const D=PROF.dan,b0={lv:D.lv,pct:D.pct};const advM=(S.adv&&advOn()&&res===1)?1.5:1;let jmp=false;{const o=S.mode==='net'?NM[oppIdOf()]:null,oR=o&&o.lv!=null?danR(o.lv,50):opp;jmp=danStep(D,res,(oR-danR(D.lv,D.pct))/40,PROF.rating,advM)==='j'}
+  S.advBonus=advM>1&&b0.lv>=10&&!jmp;
   PROF.rated.push(id);PROF.rated=PROF.rated.slice(-200);saveProf();
   const fp=x=>Math.floor(x);S.danUp=null;
   if(D.lv>b0.lv){S.rateMsg=lvName(D.lv)+(D.lv>=30?'に昇段！':'に昇級！');S.danUp=D.lv;setTimeout(()=>{try{danFx(D.lv)}catch(e){}},1700)}
@@ -4208,10 +4232,10 @@ function rateGame(){
    ・強さの比べ方：段級をレートに見立てる（30級=600、1つごとに+40。初段=1800、九段=2120）。CPUは やさしい900・ふつう1200・つよい1500・最強2100 */
 function danR(lv,pct){return 600+40*(lv+Math.max(0,Math.min(100,pct||0))/100)}
 function danWin(d){d=Math.max(-2,Math.min(2,d));return d>1?4+d:d<-1?3+d:3.5+1.5*d}
-function danStep(D,res,d,hid){const lv=D.lv;
-  if(res===1&&(lv<10||(hid!=null&&hid>=danR(lv+1,0)&&d>-2))){if(lv<LV_MAX){D.lv=lv+1;D.pct=D.lv>=10?20:0;D.z=0}return}
+function danStep(D,res,d,hid,mul){const lv=D.lv;
+  if(res===1&&(lv<10||(hid!=null&&hid>=danR(lv+1,0)&&d>-2))){if(lv<LV_MAX){D.lv=lv+1;D.pct=D.lv>=10?20:0;D.z=0}return 'j'}
   if(lv<10)return;
-  const w=danWin(d),was0=D.pct<=0;let dl=res===1?w:res===0?-(7-w):w-3.5;if(D.pct<20)dl/=4;
+  const w=danWin(d),was0=D.pct<=0;let dl=res===1?w:res===0?-(7-w):w-3.5;if(res===1&&mul>1)dl*=mul;if(D.pct<20)dl/=4;
   if(res===1)D.z=0;D.pct+=dl;
   if(D.pct>=100){if(lv<LV_MAX){D.lv=lv+1;D.pct=20;D.z=0}else D.pct=100}
   else if(D.pct<=0){D.pct=0;if(res===0&&was0){D.z++;if(D.z>=5){D.lv=lv-1;D.pct=50;D.z=0}}}
@@ -4368,7 +4392,7 @@ const _renderP=render;render=function(){_renderP();
     if(meW){pbt.append(ws);pt.append(bs)}else{pbt.append(bs);pt.append(ws)}pt.hidden=pbt.hidden=false}
   else if(CPU_RATE[S.mode]){pbt.append(plSpan(hcOf(),myName(),lvName(myLv()),true,isOff(),bdSel()));{const sp=plSpan(3-hcOf(),CPU_BY[S.mode]?CPU_BY[S.mode].n:MODE_NAME(S.mode),lvName(lvOfRate(CPU_RATE[S.mode])),false);if(CPU_BY[S.mode]){const d=sp.querySelector('.dot');(d||sp.firstChild).after(cpuAv(CPU_BY[S.mode],'sm'));const r=sp.querySelector('.r');if(r)r.textContent='Lv'+CPU_BY[S.mode].lv+'　'+r.textContent}pt.append(sp)}pt.hidden=pbt.hidden=false}
   else pt.hidden=pbt.hidden=true;
-  const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?(S.fromPos?'途中の局面から始めた対局なので段級は変わりません':'1手戻しを使ったので段級は変わりません'):'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
+  {const am=$('advMsg');if(am)am.hidden=!(S.over&&S.advBonus&&S.rateMsg)}const rm=$('rateMsg');rm.hidden=!(S.over&&S.rateMsg);rm.textContent=S.over&&S.rateMsg?S.rateMsg:(S.over&&S.noRate&&CPU_RATE[S.mode]?(S.fromPos?'途中の局面から始めた対局なので段級は変わりません':'1手戻しを使ったので段級は変わりません'):'');if(S.over&&S.noRate&&CPU_RATE[S.mode])rm.hidden=false;
   {const mn=$('meName');mn.textContent=myName();if(isOff())mn.prepend(offBadge(18));const sb=bdSel();if(sb)mn.append(bdBadge(sb,17))}$('meRate').textContent=lvName(myLv());try{hmCard()}catch(e){}};
 /* ===== 棋風診断：その端末に残っている対局の手順から、将棋の棋風の分け方を参考に6つの物差しで測る ===== */
 // 人に近い指し手（やさしい・ふつうのCPUをいろいろな相手と組ませた110人×12局）の、1人あたり平均の平均と散らばり。
@@ -5409,7 +5433,10 @@ function hmCard(){const lv=myLv(),D=PROF.dan||{lv:0,pct:0},st=$('meStone');if(!s
   $('meNext').textContent=lv>=LV_MAX&&pct>=100?'最高位':lv<10?'1勝で昇級':(lv+1>=30?'昇段まで あと':'昇級まで あと')+(100-pct)+'%';
   for(const [p,q] of [['meStone','pfStone'],['meBar','pfBar'],['mePct','pfPct'],['meNext','pfNext'],['meRate','pfRate'],['meStreak','pfStreak']]){const A=$(p),B=$(q);if(!A||!B)continue;B.className=A.className;B.style.width=A.style.width;B.innerHTML=A.innerHTML}
   {const n=$('pfName');if(n)n.textContent=myName()}
-  let k=0;try{k=Math.min(5,bdStats().streak|0)}catch(e){}$('meStreak').innerHTML='<i></i>'.repeat(k);$('meStreak').title=k?k+'連勝中':'';}
+  let k=0;try{k=Math.min(5,bdStats().streak|0)}catch(e){}$('meStreak').innerHTML='<i></i>'.repeat(k);$('meStreak').title=k?k+'連勝中':'';try{advHome()}catch(e){}}
+/* 5級になったら、ホームに上級者モードの案内を出す */
+function advHome(){const c=$('hmAdv');if(!c)return;const ok=myLv()>=25;c.hidden=!ok;if(!ok)return;const on=advOn();c.classList.toggle('on',on);$('hmAdvB').textContent=on?'オフにする':'オンにする';$('hmAdvS').textContent=on?'オンになっています。数字と矢印を隠して指し、勝つと段級が1.5倍上がりやすくなります':'5級になったので挑戦できます。数字と矢印を隠して指すと、勝ったとき段級が1.5倍上がりやすくなります'}
+document.addEventListener('click',e=>{if(!e.target.closest('#hmAdvB'))return;const a=$('advOn');a.checked=!a.checked;a.dispatchEvent(new Event('change'));advHome()});
 try{hmCard()}catch(e){}
 /* 先月の1位：盤の下に1行で出す。押すとランキング */
 function hmChamp(kv){const nm=RK.prev;if(!nm||!kv)return;const r=rankRows(kv).find(x=>x[0]===nm),lv=r&&r[1]>100?rkDec(r[1]).lv:0;
