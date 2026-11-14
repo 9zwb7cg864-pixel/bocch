@@ -276,7 +276,7 @@ async function open(o){
   close();bgm(true);
   UI=el(`<div id="bmv" role="dialog" aria-modal="true"><div class="top"><h3>${T('動画を作る')}</h3><button class="x" id="bmvX">${T('閉じる')} ✕</button></div>
 <canvas id="bmvCv" width="1080" height="1920"></canvas>
-<div class="opt"><div><label for="bmvTh">${T('見た目')}</label><select id="bmvTh"></select></div><div><label for="bmvCam">${T('カメラ')}</label><select id="bmvCam"><option value="wild">${T('激しい')}</option><option value="mid">${T('普通')}</option><option value="calm">${T('大人しい')}</option></select></div></div>
+<div class="opt"><div><label for="bmvTh">${T('見た目')}</label><select id="bmvTh"></select></div><div><label for="bmvCam">${T('カメラ')}</label><select id="bmvCam"><option value="mid">${T('普通（おすすめ）')}</option><option value="wild">${T('激しい')}</option><option value="calm">${T('大人しい')}</option></select></div></div>
 <div class="row"><button id="bmvPrev">▶ ${T('プレビュー')}</button><button id="bmvMake" class="main">${T('動画を作る')}</button></div>
 <div class="bar"><i id="bmvProg"></i></div><div class="msg" id="bmvMsg">${T('読み込み中…')}</div>
 <div class="row" id="bmvOut" hidden><button id="bmvSave" class="main">${T('保存')}</button><button id="bmvShare">${T('共有')}</button></div></div>`);
