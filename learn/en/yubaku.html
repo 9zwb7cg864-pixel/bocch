@@ -20,7 +20,7 @@
 <meta property="og:title" content="Backfire: How Not to Set Up Your Opponent&#x27;s Winning Move">
 <meta property="og:description" content="In 26,000 AI-vs-AI games, one kind of move was played 2,047 times, and the side that played it never won a single game. How to spot a &quot;backfire&quot;, where you change your opponent&#x27;s numbers yourself, with board diagrams and a practice problem.">
 <meta property="og:url" content="https://bocchgame.com/learn/en/yubaku.html">
-<meta property="og:image" content="https://bocchgame.com/og-en.jpg">
+<meta property="og:image" content="https://bocchgame.com/og-en.jpg?v=2">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
@@ -113,6 +113,18 @@ footer .cp{margin-top:10px}
 @media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
 footer .langs{margin-top:10px;gap:4px 12px}
 footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+/* 今のサイトと同じ見た目の盤（2026-11-14以降の記事） */
+.nb .grid{background:#c9d2e3;border:0;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.nb .c{border:0}
+.nb .c:nth-child(12n+2),.nb .c:nth-child(12n+4),.nb .c:nth-child(12n+6),.nb .c:nth-child(12n+7),.nb .c:nth-child(12n+9),.nb .c:nth-child(12n+11){background:#8f9bb6}
+.nb .c.to{background:#a9cdf7!important}
+.nb .c.fr::before{border-color:rgba(28,36,54,.45)}
+.nb .c.mk{box-shadow:inset 0 0 0 3px #2f6fa8}
+.nb .s{width:80%;height:80%;font-family:"Outfit","Zen Kaku Gothic New",sans-serif;font-weight:700}
+.nb .s.b{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);color:#f4f4f4;box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.nb .s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%);color:#2a2c33;box-shadow:0 3px 4px rgba(0,0,0,.3)}
+.nb .s.z{opacity:.55}
+.nb .ar line{stroke:#2f7fd6;stroke-dasharray:none;stroke-width:2.2}.nb .ar path{fill:#2f7fd6}
 </style>
 </head>
 <body>

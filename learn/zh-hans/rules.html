@@ -20,7 +20,7 @@
 <meta property="og:title" content="bocch的规则与玩法">
 <meta property="og:description" content="用棋盘图讲解“bocch”的规则——一款在6×6棋盘上、按周围棋子数量跳跃的棋盘游戏。从移动距离怎么决定、胜负判定，到最初几手要注意什么。">
 <meta property="og:url" content="https://bocchgame.com/learn/zh-hans/rules.html">
-<meta property="og:image" content="https://bocchgame.com/og-zh-hans.jpg">
+<meta property="og:image" content="https://bocchgame.com/og-zh-hans.jpg?v=2">
 <meta property="og:locale" content="zh_CN">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
@@ -113,6 +113,18 @@ footer .cp{margin-top:10px}
 @media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
 footer .langs{margin-top:10px;gap:4px 12px}
 footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+/* 今のサイトと同じ見た目の盤（2026-11-14以降の記事） */
+.nb .grid{background:#c9d2e3;border:0;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.nb .c{border:0}
+.nb .c:nth-child(12n+2),.nb .c:nth-child(12n+4),.nb .c:nth-child(12n+6),.nb .c:nth-child(12n+7),.nb .c:nth-child(12n+9),.nb .c:nth-child(12n+11){background:#8f9bb6}
+.nb .c.to{background:#a9cdf7!important}
+.nb .c.fr::before{border-color:rgba(28,36,54,.45)}
+.nb .c.mk{box-shadow:inset 0 0 0 3px #2f6fa8}
+.nb .s{width:80%;height:80%;font-family:"Outfit","Zen Kaku Gothic New",sans-serif;font-weight:700}
+.nb .s.b{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);color:#f4f4f4;box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.nb .s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%);color:#2a2c33;box-shadow:0 3px 4px rgba(0,0,0,.3)}
+.nb .s.z{opacity:.55}
+.nb .ar line{stroke:#2f7fd6;stroke-dasharray:none;stroke-width:2.2}.nb .ar path{fill:#2f7fd6}
 </style>
 </head>
 <body>
@@ -142,10 +154,10 @@ footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:7
 <p>抵达终点的棋子会原样留在棋盘上。留下的棋子同样计入周围棋子的数字。</p>
 <h2>先记住就能变强的要点</h2>
 <p>记住规则之后，只要注意下面3点，能赢的对局就会变多。</p>
-<ol><li><strong>尽早把边上的棋子往内侧收。</strong>初始布局中，边上的棋子旁边只有1颗，数字是1。用“依偎”往斜前方靠一格，这颗棋子和旁边棋子的数字都会上升。</li><li><strong>仔细看对方棋子的数字。</strong>把自己的棋子放到对方棋子旁边，对方的数字就会上升。走之前先确认，会不会让对方正好能抵达终点。</li><li><strong>不要停在终点前一行。</strong>前一行的棋子，只有数字正好是1时才能抵达。旁边棋子一多，就会跳过头。</li></ol>
-<p>术语整理在<a href="glossary.html">术语表</a>里，开局的下法整理在<a href="yorisoi-yagura.html">依偎与橹</a>一文中。<a href="../../zh-hans.html">bocch</a>免费、无需注册，马上就能和电脑或朋友对局。</p>
+<ol><li><strong>尽早把边上的棋子往内侧收。</strong>初始布局中，边上的棋子旁边只有1颗，数字是1。用“角落开局”往斜前方靠一格，这颗棋子和旁边棋子的数字都会上升。</li><li><strong>仔细看对方棋子的数字。</strong>把自己的棋子放到对方棋子旁边，对方的数字就会上升。走之前先确认，会不会让对方正好能抵达终点。</li><li><strong>不要停在终点前一行。</strong>前一行的棋子，只有数字正好是1时才能抵达。旁边棋子一多，就会跳过头。</li></ol>
+<p>术语整理在<a href="glossary.html">术语表</a>里。<a href="../../zh-hans.html">bocch</a>免费、无需注册，马上就能和电脑或朋友对局。</p>
 </article>
-<section class="rel"><h2>相关文章</h2><ul><li><a href="../../learn/zh-hans/glossary.html">bocch 术语表</a></li><li><a href="../../learn/zh-hans/yorisoi-yagura.html">依偎与橹：最初的2手，以及如何应对打入</a></li></ul></section>
+<section class="rel"><h2>相关文章</h2><ul><li><a href="../../learn/zh-hans/glossary.html">bocch 术语表</a></li><li><a href="../../learn/zh-hans/yubaku.html">引爆：别用自己的手替对方造出致命一击</a></li></ul></section>
 </main>
 <footer><p><a href="../../learn/zh-hans/">文章列表</a><a href="../../learn/zh-hans/glossary.html">术语表</a><a href="../../guide-zh-hans.html">获胜攻略</a><a href="../../about-zh-hans.html">运营者信息</a><a href="../../privacy-zh-hans.html">隐私政策·联系我们</a></p><p class="langs"><a href="../../learn/rules.html" lang="ja">日本語</a><a href="../../learn/en/rules.html" lang="en">English</a><a href="../../learn/zh-hans/rules.html" aria-current="page" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/rules.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/rules.html" lang="ko">한국어</a><a href="../../learn/es/rules.html" lang="es">Español</a><a href="../../learn/de/rules.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
 </body>

@@ -18,9 +18,6 @@
   <url><loc>https://bocchgame.com/learn/</loc><lastmod>2026-11-01</lastmod><priority>0.8</priority></url>
   <url><loc>https://bocchgame.com/learn/rules.html</loc><lastmod>2026-11-01</lastmod><priority>0.7</priority></url>
   <url><loc>https://bocchgame.com/learn/glossary.html</loc><lastmod>2026-11-01</lastmod><priority>0.7</priority></url>
-  <url><loc>https://bocchgame.com/learn/yorisoi-yagura.html</loc><lastmod>2026-11-01</lastmod><priority>0.7</priority></url>
-  <url><loc>https://bocchgame.com/learn/souheki.html</loc><lastmod>2026-11-01</lastmod><priority>0.7</priority></url>
-  <url><loc>https://bocchgame.com/learn/ai-joseki-senpo.html</loc><lastmod>2026-11-01</lastmod><priority>0.7</priority></url>
   <url><loc>https://bocchgame.com/learn/yomi.html</loc><lastmod>2026-11-10</lastmod><priority>0.7</priority></url>
   <url><loc>https://bocchgame.com/learn/yomi-1-ban.html</loc><lastmod>2026-11-10</lastmod><priority>0.7</priority></url>
   <url><loc>https://bocchgame.com/learn/yomi-2-seme.html</loc><lastmod>2026-11-10</lastmod><priority>0.7</priority></url>
@@ -35,49 +32,31 @@
   <url><loc>https://bocchgame.com/learn/en/</loc><lastmod>2026-11-01</lastmod><priority>0.6</priority></url>
   <url><loc>https://bocchgame.com/learn/en/rules.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/en/glossary.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/en/yorisoi-yagura.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/en/souheki.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/en/ai-joseki-senpo.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/en/yubaku.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/en/dokumanju.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/zh-hans/</loc><lastmod>2026-11-01</lastmod><priority>0.6</priority></url>
   <url><loc>https://bocchgame.com/learn/zh-hans/rules.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/zh-hans/glossary.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/zh-hans/yorisoi-yagura.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/zh-hans/souheki.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/zh-hans/ai-joseki-senpo.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/zh-hans/yubaku.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/zh-hans/dokumanju.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/zh-hant/</loc><lastmod>2026-11-01</lastmod><priority>0.6</priority></url>
   <url><loc>https://bocchgame.com/learn/zh-hant/rules.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/zh-hant/glossary.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/zh-hant/yorisoi-yagura.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/zh-hant/souheki.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/zh-hant/ai-joseki-senpo.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/zh-hant/yubaku.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/zh-hant/dokumanju.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/ko/</loc><lastmod>2026-11-01</lastmod><priority>0.6</priority></url>
   <url><loc>https://bocchgame.com/learn/ko/rules.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/ko/glossary.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/ko/yorisoi-yagura.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/ko/souheki.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/ko/ai-joseki-senpo.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/ko/yubaku.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/ko/dokumanju.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/es/</loc><lastmod>2026-11-01</lastmod><priority>0.6</priority></url>
   <url><loc>https://bocchgame.com/learn/es/rules.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/es/glossary.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/es/yorisoi-yagura.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/es/souheki.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/es/ai-joseki-senpo.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/es/yubaku.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/es/dokumanju.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/de/</loc><lastmod>2026-11-01</lastmod><priority>0.6</priority></url>
   <url><loc>https://bocchgame.com/learn/de/rules.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/de/glossary.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/de/yorisoi-yagura.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/de/souheki.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
-  <url><loc>https://bocchgame.com/learn/de/ai-joseki-senpo.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/de/yubaku.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/learn/de/dokumanju.html</loc><lastmod>2026-11-01</lastmod><priority>0.5</priority></url>
   <url><loc>https://bocchgame.com/about.html</loc><lastmod>2026-11-01</lastmod><priority>0.4</priority></url>

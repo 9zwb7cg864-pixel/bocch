@@ -20,7 +20,7 @@
 <meta property="og:title" content="bocch Rules and How to Play">
 <meta property="og:description" content="The rules of bocch, a board game on a 6×6 board where each stone jumps as far as the number of stones around it, explained with board diagrams. How move distance works, how to win, and what to watch for in your first few moves.">
 <meta property="og:url" content="https://bocchgame.com/learn/en/rules.html">
-<meta property="og:image" content="https://bocchgame.com/og-en.jpg">
+<meta property="og:image" content="https://bocchgame.com/og-en.jpg?v=2">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
@@ -113,6 +113,18 @@ footer .cp{margin-top:10px}
 @media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
 footer .langs{margin-top:10px;gap:4px 12px}
 footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+/* 今のサイトと同じ見た目の盤（2026-11-14以降の記事） */
+.nb .grid{background:#c9d2e3;border:0;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.nb .c{border:0}
+.nb .c:nth-child(12n+2),.nb .c:nth-child(12n+4),.nb .c:nth-child(12n+6),.nb .c:nth-child(12n+7),.nb .c:nth-child(12n+9),.nb .c:nth-child(12n+11){background:#8f9bb6}
+.nb .c.to{background:#a9cdf7!important}
+.nb .c.fr::before{border-color:rgba(28,36,54,.45)}
+.nb .c.mk{box-shadow:inset 0 0 0 3px #2f6fa8}
+.nb .s{width:80%;height:80%;font-family:"Outfit","Zen Kaku Gothic New",sans-serif;font-weight:700}
+.nb .s.b{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);color:#f4f4f4;box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.nb .s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%);color:#2a2c33;box-shadow:0 3px 4px rgba(0,0,0,.3)}
+.nb .s.z{opacity:.55}
+.nb .ar line{stroke:#2f7fd6;stroke-dasharray:none;stroke-width:2.2}.nb .ar path{fill:#2f7fd6}
 </style>
 </head>
 <body>
@@ -142,10 +154,10 @@ footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:7
 <p>A stone that has arrived on the far row stays on the board, and it still counts toward the numbers of the stones around it.</p>
 <h2>Three things that will make you stronger right away</h2>
 <p>Once you know the rules, just keeping these three things in mind will win you more games.</p>
-<ol><li><strong>Bring your edge stones inward early.</strong> In the starting position, an edge stone has only one neighbor, so its number is 1. Sliding it one square diagonally forward, the "Snuggle", raises the numbers of both that stone and its neighbor.</li><li><strong>Watch your opponent's numbers.</strong> Putting your stone next to an opponent's stone raises its number. Before you move, check that you aren't giving it exactly the distance it needs to reach the far row.</li><li><strong>Don't stop one row short of the far row.</strong> A stone one row away can only arrive when its number is exactly 1. If more stones gather around it, it jumps past.</li></ol>
-<p>Terms are collected in the <a href="glossary.html">glossary</a>, and opening play is covered in <a href="yorisoi-yagura.html">The Snuggle and the Tower</a>. <a href="../../en.html">bocch</a> is free and needs no sign-up, so you can start a game against the CPU or a friend right away.</p>
+<ol><li><strong>Bring your edge stones inward early.</strong> In the starting position, an edge stone has only one neighbor, so its number is 1. Sliding it one square diagonally forward, the Corner Opening, raises the numbers of both that stone and its neighbor.</li><li><strong>Watch your opponent's numbers.</strong> Putting your stone next to an opponent's stone raises its number. Before you move, check that you aren't giving it exactly the distance it needs to reach the far row.</li><li><strong>Don't stop one row short of the far row.</strong> A stone one row away can only arrive when its number is exactly 1. If more stones gather around it, it jumps past.</li></ol>
+<p>Terms are collected in the <a href="glossary.html">glossary</a>. <a href="../../en.html">bocch</a> is free and needs no sign-up, so you can start a game against the CPU or a friend right away.</p>
 </article>
-<section class="rel"><h2>Related articles</h2><ul><li><a href="../../learn/en/glossary.html">bocch Glossary</a></li><li><a href="../../learn/en/yorisoi-yagura.html">The Snuggle and the Tower: The First Two Moves, and How to Answer an Invasion</a></li></ul></section>
+<section class="rel"><h2>Related articles</h2><ul><li><a href="../../learn/en/glossary.html">bocch Glossary</a></li><li><a href="../../learn/en/yubaku.html">Backfire: How Not to Set Up Your Opponent's Winning Move</a></li></ul></section>
 </main>
 <footer><p><a href="../../learn/en/">All articles</a><a href="../../learn/en/glossary.html">Glossary</a><a href="../../guide-en.html">Strategy guide</a><a href="../../about-en.html">About</a><a href="../../privacy-en.html">Privacy policy & contact</a></p><p class="langs"><a href="../../learn/rules.html" lang="ja">日本語</a><a href="../../learn/en/rules.html" aria-current="page" lang="en">English</a><a href="../../learn/zh-hans/rules.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/rules.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/rules.html" lang="ko">한국어</a><a href="../../learn/es/rules.html" lang="es">Español</a><a href="../../learn/de/rules.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
 </body>

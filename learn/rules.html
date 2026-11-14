@@ -113,6 +113,18 @@ footer .cp{margin-top:10px}
 @media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
 footer .langs{margin-top:10px;gap:4px 12px}
 footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+/* 今のサイトと同じ見た目の盤（2026-11-14以降の記事） */
+.nb .grid{background:#c9d2e3;border:0;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.nb .c{border:0}
+.nb .c:nth-child(12n+2),.nb .c:nth-child(12n+4),.nb .c:nth-child(12n+6),.nb .c:nth-child(12n+7),.nb .c:nth-child(12n+9),.nb .c:nth-child(12n+11){background:#8f9bb6}
+.nb .c.to{background:#a9cdf7!important}
+.nb .c.fr::before{border-color:rgba(28,36,54,.45)}
+.nb .c.mk{box-shadow:inset 0 0 0 3px #2f6fa8}
+.nb .s{width:80%;height:80%;font-family:"Outfit","Zen Kaku Gothic New",sans-serif;font-weight:700}
+.nb .s.b{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);color:#f4f4f4;box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.nb .s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%);color:#2a2c33;box-shadow:0 3px 4px rgba(0,0,0,.3)}
+.nb .s.z{opacity:.55}
+.nb .ar line{stroke:#2f7fd6;stroke-dasharray:none;stroke-width:2.2}.nb .ar path{fill:#2f7fd6}
 </style>
 </head>
 <body>
@@ -142,10 +154,10 @@ footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:7
 <p>向こう岸に着いた石は、そのまま盤に残ります。残った石も、まわりの石の数字に数えられます。</p>
 <h2>最初に覚えておくと強くなること</h2>
 <p>ルールを覚えたら、次の3つを意識するだけで、勝てる対局が増えます。</p>
-<ol><li><strong>端の石を早めに内側へ寄せる。</strong>最初の配置で、端の石は隣が1つしかなく、数字1です。斜め前に1つ寄せる「寄り添い」で、その石も隣の石も数字が上がります。</li><li><strong>相手の石の数字をよく見る。</strong>自分の石を相手の石の隣に置くと、相手の数字が上がります。相手を向こう岸にぴったり届かせてしまわないか、指す前に確かめます。</li><li><strong>向こう岸の1段手前で止まらない。</strong>1段手前の石は、数字がちょうど1のときしか着けません。隣に石が増えると跳び越してしまいます。</li></ol>
-<p>用語は<a href="glossary.html">用語集</a>に、序盤の指し方は<a href="yorisoi-yagura.html">寄り添いと櫓</a>の記事にまとめています。<a href="../">bocch</a>は無料・登録なしで、CPUや友だちとすぐに対局できます。</p>
+<ol><li><strong>端の石を早めに内側へ寄せる。</strong>最初の配置で、端の石は隣が1つしかなく、数字1です。斜め前に1つ寄せる「コーナー・オープニング」で、その石も隣の石も数字が上がります。</li><li><strong>相手の石の数字をよく見る。</strong>自分の石を相手の石の隣に置くと、相手の数字が上がります。相手を向こう岸にぴったり届かせてしまわないか、指す前に確かめます。</li><li><strong>向こう岸の1段手前で止まらない。</strong>1段手前の石は、数字がちょうど1のときしか着けません。隣に石が増えると跳び越してしまいます。</li></ol>
+<p>用語は<a href="glossary.html">用語集</a>ににまとめています。<a href="../">bocch</a>は無料・登録なしで、CPUや友だちとすぐに対局できます。</p>
 </article>
-<section class="rel"><h2>関連する記事</h2><ul><li><a href="../learn/glossary.html">bocch 用語集</a></li><li><a href="../learn/yorisoi-yagura.html">寄り添いと櫓：最初の2手と、打ち込みの受け方</a></li></ul></section>
+<section class="rel"><h2>関連する記事</h2><ul><li><a href="../learn/glossary.html">bocch 用語集</a></li><li><a href="../learn/yubaku.html">誘爆：自分の手で相手のとどめを作らないために</a></li></ul></section>
 </main>
 <footer><p><a href="../learn/">記事一覧</a><a href="../learn/glossary.html">用語集</a><a href="../guide.html">勝ち方ガイド</a><a href="../about.html">運営者情報</a><a href="../privacy.html">プライバシーポリシー・お問い合わせ</a></p><p class="langs"><a href="../learn/rules.html" aria-current="page" lang="ja">日本語</a><a href="../learn/en/rules.html" lang="en">English</a><a href="../learn/zh-hans/rules.html" lang="zh-Hans">简体中文</a><a href="../learn/zh-hant/rules.html" lang="zh-Hant">繁體中文</a><a href="../learn/ko/rules.html" lang="ko">한국어</a><a href="../learn/es/rules.html" lang="es">Español</a><a href="../learn/de/rules.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
 </body>

@@ -20,7 +20,7 @@
 <meta property="og:title" content="bocch Articles">
 <meta property="og:description" content="Articles on the rules, opening theory, strategies and tactics of the board game bocch, explained with board diagrams and data from AI-vs-AI games.">
 <meta property="og:url" content="https://bocchgame.com/learn/en/">
-<meta property="og:image" content="https://bocchgame.com/og-en.jpg">
+<meta property="og:image" content="https://bocchgame.com/og-en.jpg?v=2">
 <meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
@@ -113,6 +113,18 @@ footer .cp{margin-top:10px}
 @media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
 footer .langs{margin-top:10px;gap:4px 12px}
 footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+/* 今のサイトと同じ見た目の盤（2026-11-14以降の記事） */
+.nb .grid{background:#c9d2e3;border:0;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.nb .c{border:0}
+.nb .c:nth-child(12n+2),.nb .c:nth-child(12n+4),.nb .c:nth-child(12n+6),.nb .c:nth-child(12n+7),.nb .c:nth-child(12n+9),.nb .c:nth-child(12n+11){background:#8f9bb6}
+.nb .c.to{background:#a9cdf7!important}
+.nb .c.fr::before{border-color:rgba(28,36,54,.45)}
+.nb .c.mk{box-shadow:inset 0 0 0 3px #2f6fa8}
+.nb .s{width:80%;height:80%;font-family:"Outfit","Zen Kaku Gothic New",sans-serif;font-weight:700}
+.nb .s.b{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);color:#f4f4f4;box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.nb .s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%);color:#2a2c33;box-shadow:0 3px 4px rgba(0,0,0,.3)}
+.nb .s.z{opacity:.55}
+.nb .ar line{stroke:#2f7fd6;stroke-dasharray:none;stroke-width:2.2}.nb .ar path{fill:#2f7fd6}
 </style>
 </head>
 <body>
@@ -123,7 +135,7 @@ footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:7
 <h1>bocch Articles</h1>
 
 <p class="lead">From the basic rules to theory, strategies and tactics. Every board diagram is drawn by replaying the moves one by one under the actual rules, and every figure is counted from AI-vs-AI games.</p>
-<h2>Basics</h2><ul class="cards"><li><a href="rules.html"><b>bocch Rules and How to Play</b><span>The rules of bocch, a board game on a 6×6 board where each stone jumps as far as the number of stones around it, explained with board diagrams. How move distance works, how to win, and what to watch for in your first few moves.</span></a></li><li><a href="glossary.html"><b>bocch Glossary</b><span>What the words used in bocch articles and videos mean: number, loner, reach, gap, Snuggle, Shoulder to Shoulder, tower, backfire, push-up and more.</span></a></li></ul><h2>Theory</h2><ul class="cards"><li><a href="yorisoi-yagura.html"><b>The Snuggle and the Tower: The First Two Moves, and How to Answer an Invasion</b><span>Why the first move "Snuggle" is so strong in bocch, explained through the total of the stones' numbers and the AI's evaluation. With board diagrams of how to build a Tower and the right way to respond when the opponent invades.</span></a></li></ul><h2>Strategies</h2><ul class="cards"><li><a href="souheki.html"><b>Twin Walls: A Strategy That Wins 90%, and Its One Weakness</b><span>In AI-vs-AI games, the bocch strategy "Twin Walls" wins over 90% against almost every reply. Here is the one defense it can't beat, Shoulder to Shoulder, and what to play against it instead, with win rates.</span></a></li><li><a href="ai-joseki-senpo.html"><b>How the New AI Changed Move-3 Theory, and 10 Strategies</b><span>We rebuilt bocch's Strongest CPU, replacing its scoring table with a neural network. Here is opening theory for move 3 as the new AI sees it, plus 10 "strategies": named combinations of your first and second moves.</span></a></li></ul><h2>Tactics</h2><ul class="cards"><li><a href="yubaku.html"><b>Backfire: How Not to Set Up Your Opponent's Winning Move</b><span>In 26,000 AI-vs-AI games, one kind of move was played 2,047 times, and the side that played it never won a single game. How to spot a "backfire", where you change your opponent's numbers yourself, with board diagrams and a practice problem.</span></a></li><li><a href="dokumanju.html"><b>The Poisoned Bun: Winning by Giving Something Away</b><span>bocch has no captures. What you can give away instead is "numbers" and "first arrival". Using real AI games, this article shows the "wake-up", where you deliberately let an opponent stone move, and the "draw-back", where you pull a stone back.</span></a></li></ul>
+<h2>Basics</h2><ul class="cards"><li><a href="rules.html"><b>bocch Rules and How to Play</b><span>The rules of bocch, a board game on a 6×6 board where each stone jumps as far as the number of stones around it, explained with board diagrams. How move distance works, how to win, and what to watch for in your first few moves.</span></a></li><li><a href="glossary.html"><b>bocch Glossary</b><span>What the words used in bocch articles and videos mean: number, loner, reach, gap, tower, backfire, push-up, opening names and more.</span></a></li></ul><h2>Tactics</h2><ul class="cards"><li><a href="yubaku.html"><b>Backfire: How Not to Set Up Your Opponent's Winning Move</b><span>In 26,000 AI-vs-AI games, one kind of move was played 2,047 times, and the side that played it never won a single game. How to spot a "backfire", where you change your opponent's numbers yourself, with board diagrams and a practice problem.</span></a></li><li><a href="dokumanju.html"><b>The Poisoned Bun: Winning by Giving Something Away</b><span>bocch has no captures. What you can give away instead is "numbers" and "first arrival". Using real AI games, this article shows the "wake-up", where you deliberately let an opponent stone move, and the "draw-back", where you pull a stone back.</span></a></li></ul>
 </article>
 
 </main>

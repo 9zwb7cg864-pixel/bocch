@@ -1871,6 +1871,10 @@ p.rate-msg.adv-bonus{display:block;width:max-content;max-width:100%;margin:6px a
 .hm-adv.on #hmAdvB{color:#cfd6e4;background:#2f333c}
 .rev-kshare{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin:12px 0 0;min-height:52px;border:0;border-radius:16px;background:var(--p1,#2d2e31);color:#f4f4f2;font-size:16px;font-weight:800;cursor:pointer}
 .rev-kshare::before{content:"";width:18px;height:18px;background:currentColor;-webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M18 16a3 3 0 0 0-2.4 1.2l-6.7-3.4a3 3 0 0 0 0-1.6l6.7-3.4A3 3 0 1 0 15 7l-6.7 3.4a3 3 0 1 0 0 3.2L15 17a3 3 0 1 0 3-1z'/></svg>") center/contain no-repeat;mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M18 16a3 3 0 0 0-2.4 1.2l-6.7-3.4a3 3 0 0 0 0-1.6l6.7-3.4A3 3 0 1 0 15 7l-6.7 3.4a3 3 0 1 0 0 3.2L15 17a3 3 0 1 0 3-1z'/></svg>") center/contain no-repeat}
+.rev-op{display:flex;align-items:center;gap:8px;margin:6px 0 4px;padding:7px 12px;border-radius:10px;background:#cfe3fb;border:1px solid #a9cdf7;color:#1b2333;font-size:.92rem}
+.rev-op[hidden]{display:none}
+.rev-op b{color:#2f7fd6;font-variant-numeric:tabular-nums}
+.rev-op span{font-weight:700}
 
 </style>
 </head>
@@ -1878,7 +1882,7 @@ p.rate-msg.adv-bonus{display:block;width:max-content;max-width:100%;margin:6px a
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.84</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.85</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -1962,7 +1966,6 @@ p.rate-msg.adv-bonus{display:block;width:max-content;max-width:100%;margin:6px a
       </div>
       <h2>最新の記事</h2>
       <a class="hf-art" href="learn/yubaku.html" data-art="yubaku.html"><small>手筋　2026年11月1日</small><b>誘爆：自分の手で相手のとどめを作らないために</b><span>AI同士の2万6千局で、指した側が1局も勝てなかった手の見つけ方。</span></a>
-      <a class="hf-art" href="learn/souheki.html" data-art="souheki.html"><small>戦法　2026年11月1日</small><b>双璧：9割勝つ戦法と、ただ1つの弱点</b><span>ほとんどの相手に勝てる戦法と、勝てない唯一の受け「肩寄せ」。</span></a>
       <a class="hf-art" href="learn/dokumanju.html" data-art="dokumanju.html"><small>手筋　2026年11月1日</small><b>毒まんじゅう：相手に渡して勝つ手</b><span>石を取らないbocchで、あえて相手に「数字」と「先着」を渡す手。</span></a>
       <a class="hf-more" href="learn/" data-art="">記事をすべて見る</a>
       <h2>よくある質問</h2>
@@ -2127,6 +2130,7 @@ p.rate-msg.adv-bonus{display:block;width:max-content;max-width:100%;margin:6px a
   <p class="rev-head" id="revHead"></p>
   <p class="rev-share-msg" id="revShareMsg" hidden></p>
   <div class="rev-sum" id="revSum" hidden></div>
+  <p class="rev-op" id="revOp" hidden><b id="revOpC"></b><span id="revOpN"></span></p>
   <div class="boardwrap rev-board"><div class="rev-ev" id="revEv" aria-hidden="true"><i></i></div><div class="board" id="rboard"><div class="lab lab-top" id="rlabTop" aria-hidden="true"></div><div class="lab lab-left" id="rlabLeft" aria-hidden="true"></div><div class="grid" id="rgrid" aria-label="感想戦の盤"></div></div></div>
   <div class="row rev-nav">
     <button id="rFirst" type="button" class="rv-end" aria-label="最初へ">|◀</button><button id="rPrev" class="i-only i-prev" aria-label="1手戻る"></button><span class="rev-ply" id="revPly"></span><button id="rNext" class="i-only i-next" aria-label="1手進む"></button><button id="rLast" type="button" class="rv-end" aria-label="最後へ">▶|</button>
@@ -3462,10 +3466,10 @@ async function take(room){
 }
 // 組み合わせのあと、相手が部屋に来ないとき（同時に取り合った等）は、自動で探し直す
 function armWait(){clearTimeout(NET.waitT);NET.waitT=setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.watch&&!NET.guest&&!S.over){netMsg('相手が来なかったので、探し直します…');setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.guest)startMatch()},1200)}},12000)}
-/* 影の相手：ランダム対戦で30〜50秒だれも来なければ、CPU が入る（61%は「名無しの石」＝CPUふつうくらい、39%は名前付き）。
+/* 影の相手：ランダム対戦で30〜50秒だれも来なければ、CPU（やさしい61%・ふつう39%）が「名無しの石」として部屋に入る。
    部屋の記録に普通の参加者として join・move・rematch を流すので、時計・チャット・再戦・レート計算はオンライン対戦のまま動く */
 const SHADOW={bot:null,timer:null,key:'',rates:null};
-// 名前付きのときに名乗る名前（それぞれ自分のレートを持ち、勝ち負けで増減する）。level 1 は「名無しの石」のまま
+// ふつうのときに名乗る名前（それぞれ自分のレートを持ち、勝ち負けで増減する）。やさしいのときは「名無しの石」のまま
 const BOT_NAMES=['サタン二世','ピコまる','パワーボマー','どら焼き三太郎','ノルマンディー上陸作戦','防人','屯田兵受かりました','Kebin67','beckman','tompson','ketty','婦真理','ネギトロ','がちぼっち','ぷらごみ募集','このげーむおもろい','あらびっくり','さいばいまん','これ毒かも！','私に嘘はつかないでえ','藤井壮太','大','The sun','tiny rion','Mac','死して尚','歌人チャンネル','明日は我が身','迷惑メール','ルーキー１２３４'];
 const BOTS_KV=RELAY+'bocch-v1-bots/kv';
 async function botRates(){try{const r=await fetch(BOTS_KV,{cache:'no-store'});if(!r.ok)return null;const j=await r.json();return j&&typeof j==='object'?j:null}catch(e){return null}}
@@ -3508,25 +3512,22 @@ function shadowWait(info){
   w=Math.min(w,Math.max(2,remain-45));                      // 時間切れにはしない
   return Math.max(1.0,w)*1000}
 // 手の選び方：上位候補から温度付きで選ぶ。勝ち筋をたまに見逃す、相手のリーチをたまに無視する、序盤は散らす、同じ石ばかり動かさない
-// 強さ：win＝勝てる手に気づく率、ignore＝相手のリーチを見落とす率、depth＝読む深さ、T＝手の散らし具合（大きいほど悪手を混ぜる）
-const SHADOW_LV={1:{win:1,ignore:0.05,depth:3,T:15},2:{win:0.85,ignore:0.25,depth:2,T:32}}; // 1＝名無しの石（CPUふつうと互角：80局で44勝35敗1分）、2＝名前付き
 function shadowPick(b,p,level,hist){
   const ms=allMoves(b,p);if(!ms.length)return null;const info={};
   const wins=ms.filter(m=>arrived(apply(b,m),p));
-  const P=SHADOW_LV[level]||SHADOW_LV[2];
-  if(wins.length&&Math.random()<P.win){info.instant=true;return {m:wins[Math.random()*wins.length|0],info}}
-  const depth=P.depth;deadline=performance.now()+600;
+  if(wins.length&&Math.random()<(level===1?0.7:0.85)){info.instant=true;return {m:wins[Math.random()*wins.length|0],info}}
+  const depth=level===1?1:2;deadline=performance.now()+600;
   const sc=ms.map(m=>{aborted=false;let v=-negamax(apply(b,m),3-p,depth-1,-Infinity,Infinity);if(aborted)v=evaluate(apply(b,m),p);return {m,v}});
   // 相手の即勝ちを許す手（受けないといけない局面）を見つける
   const losing=sc.filter(x=>x.v<=-90000);info.threat=losing.length>0&&losing.length<sc.length;
   let cand=sc;
-  if(info.threat){const ignore=Math.random()<P.ignore;if(!ignore)cand=sc.filter(x=>x.v>-90000)}
+  if(info.threat){const ignore=Math.random()<(level===1?0.45:0.25);if(!ignore)cand=sc.filter(x=>x.v>-90000)}
   // 人間っぽい癖：前に出る手を少し好む、直前に動かした石をまた動かすのは少し避ける、ぼっちを作る手は少し避ける
   const last=hist&&hist.length>=2?hist[hist.length-2]:null; // 2手前＝自分の前の手
   for(const x of cand){const [f,t]=x.m;const fw=(p===1?(f/6|0)-(t/6|0):(t/6|0)-(f/6|0));x.h=x.v+fw*4+(last&&last[1]===f?-6:0)+(nbCount(apply(b,x.m),t)===0?-8:0)+(Math.random()-0.5)*6}
   cand.sort((u,v)=>v.h-u.h);
   if(S.ply<=2){const top=cand.slice(0,5);return {m:top[Math.random()*top.length|0].m,info}}
-  const best=cand[0].h,T=P.T;
+  const best=cand[0].h,T=level===1?70:32;
   const ws=cand.map(x=>Math.exp((x.h-best)/T));const tot=ws.reduce((u,v)=>u+v,0);let r=Math.random()*tot;
   let pick=cand[0];for(let i=0;i<cand.length;i++){r-=ws[i];if(r<=0){pick=cand[i];break}}
   info.few=cand.length<=4||(cand[1]&&best-cand[1].h>60);
@@ -3979,6 +3980,7 @@ function revSumRender(){const box=$('revSum');const g=REV.g;if(!box||!g)return;c
 $('revSum')&&$('revSum').addEventListener('click',e=>{const b=e.target.closest('.rs-it');if(!b)return;setRev(+b.dataset.k);try{$('rboard').scrollIntoView({behavior:'smooth',block:'center'})}catch(x){}});
 function renderReview(){const g=REV.g;if(!g)return;try{revSumRender()}catch(e){}const i=REV.i,flip=g.me===2,n=g.log.length,PV=REV.pv;
   const p=PV?pvState():REV.pos[i];
+  try{revOpRender(i)}catch(e){}
   const last=PV?(PV.k>0?PV.line[PV.k-1]:(PV.base>0?g.log[PV.base-1]:null)):(i>0?g.log[i-1]:null),a=REV.an[i];
   const HN=PV?exHint():null;const nextM=PV?(HN&&HN.m?HN.m:null):($('rShowBest').checked&&a&&a.m&&i<n?a.m:null);
   const OVER=PV?(PV.k>0&&revWon(p.b,3-p.turn)):(i>=n&&g.win);const TG=REV.sel>=0?movesFrom(p.b,REV.sel).map(m=>m[1]):[];
@@ -4087,7 +4089,7 @@ function revWarn(t){REV.msg=t;clearTimeout(REV.msgT);REV.msgT=setTimeout(()=>{RE
 $('rgrid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(!c)return;revCell(+c.id.slice(1))});
 /* 動画を作る：手が1つでもある対局ならすべて作れる。勝者と終わり方を渡す。本体（mv/maker.js）は押したときに読み込む */
 function mvOK(log){return !!(log&&log.length)}
-function mvOpen(log,win,why,me){const go=()=>window.BocchVideo.open({log,win,why,me});if(window.BocchVideo)return go();const sc=document.createElement('script');sc.src='mv/maker.js?v=9';sc.onload=go;sc.onerror=()=>alert((window.bocchT||(x=>x))('読み込めませんでした'));document.head.appendChild(sc)}
+function mvOpen(log,win,why,me){const go=()=>window.BocchVideo.open({log,win,why,me});if(window.BocchVideo)return go();const sc=document.createElement('script');sc.src='mv/maker.js?v=10';sc.onload=go;sc.onerror=()=>alert((window.bocchT||(x=>x))('読み込めませんでした'));document.head.appendChild(sc)}
 $('mvNow').addEventListener('click',()=>{if(S.over&&S.log)mvOpen(S.log.map(m=>[m[0],m[1]]),S.over.win,S.over.why,(()=>{try{return S.mode==='net'?colorOf(NET.me):S.mode===0?0:hcOf()}catch(e){return 0}})())});
 $('revMv').addEventListener('click',()=>{if(REV.g)mvOpen(REV.g.log.map(m=>[m[0],m[1]]),REV.g.win,REV.g.why,REV.g.me)});
 $('reviewNow').addEventListener('click',()=>{saveFinished();const id=currentGameId();if(id)openReview(id)});
@@ -4278,7 +4280,7 @@ const BADGES=[
  ['毎日の1問','d30','月','ひと月','30日連続で正解','silver',s=>s.daily>=30],
  ['毎日の1問','d100','年','百日','100日連続で正解','gold',s=>s.daily>=100],
  ['技','fast','速','速攻','20手以内で勝つ','silver',s=>s.fast>=1],
- ['技','yori','寄','寄り添い使い','初手寄り添いで20勝','silver',s=>s.yori>=20],
+ ['技','yori','寄','コーナー使い','初手コーナー・オープニングで20勝','silver',s=>s.yori>=20],
  ['技','long','粘','粘り勝ち','80手以上の対局で勝つ','silver',s=>s.long>=1],
  ['技','hunt','孤','ぼっち狩り','相手の石を3つ以上ぼっちにして勝つ','gold',s=>s.hunt>=1],
  ['交流','rev','研','研究熱心','感想戦を20局開く','bronze',s=>s.rev>=20],
@@ -4411,7 +4413,7 @@ const KF_AX=[ // [キー, 高いときの名前, 低いときの名前, 低い�
  ['seme','攻め','受け',1],['kyu','急戦','持久戦',1],['atsu','厚み','さばき',1],['jo','定跡','力戦',1],['osa','押さえ込み','',0],['neb','粘り','',0]];
 const KF_LAB=['攻め','急戦','厚み','定跡','押さえ込み','粘り'];
 const KF_DESC={'攻め':'向こう岸へ向かう手が多く、自分から仕掛けるタイプ。','受け':'相手の届く石を消す手が多く、守りから入るタイプ。','急戦':'早いうちに1つ目を着けにいくタイプ。','持久戦':'じっくり形を作り、長い勝負に持ち込むタイプ。',
- '厚み':'石どうしを寄せて、まとまって進むタイプ。','さばき':'大きく跳ぶ手が多く、軽く動き回るタイプ。','定跡':'双璧や送り鳥など、名前のある序盤をよく使うタイプ。','力戦':'定跡を外れた自分の形で戦うタイプ。',
+ '厚み':'石どうしを寄せて、まとまって進むタイプ。','さばき':'大きく跳ぶ手が多く、軽く動き回るタイプ。','定跡':'ピュロス・ギャンビットやタワー・バリエーションなど、名前のある序盤をよく使うタイプ。','力戦':'定跡を外れた自分の形で戦うタイプ。',
  '押さえ込み':'相手の石を数字4や動けない石にして縛るタイプ。','粘り':'先に着かれてからの逆転が多いタイプ。'};
 const KF_ID={'攻め':'seme','受け':'uke','急戦':'kyusen','持久戦':'jikyu','厚み':'atsumi','さばき':'sabaki','定跡':'joseki','力戦':'rikisen','押さえ込み':'osae','粘り':'nebari'};
 /* 1局ぶんの指し方のくせ。攻め・受け・さばき・押さえ込み・厚みは「その局面で選べた手の平均と比べて、選んだ手がどうだったか」で測る
@@ -4429,19 +4431,19 @@ function kfGame(log,me){let b=startBoard(),t=1;const opp=3-me,g=goalRow(me);
         const c=feat(b,m,r0,b0);fwd+=c[0]-av[0]/ms.length;def+=c[1]-av[1]/ms.length;big+=c[2]-av[2]/ms.length;bind+=c[3]-av[3]/ms.length;coh+=c[4]-av[4]/ms.length;mv++}
       b=apply(b,m);if(!first&&arrivedCount(b,me)>0)first=k+1}
     else{b=apply(b,m);if(!first&&!oppFirst&&arrivedCount(b,opp)>0)oppFirst=k+1}t=3-t}
-  if(!mv)return null;let sp=-1;try{sp=me===1?senpoOf(log[0],log[2],1):senpoOf(log[1],log[3],2)}catch(e){}
-  return {fwd:fwd/mv,def:def/mv,big:big/mv,coh:coh/mv,bind:bind/mv,first:first||log.length+10,len:log.length,open:sp>=0?1:0,sp,behind:!!oppFirst}}
+  if(!mv)return null;let sp='';try{let bb=startBoard();for(let k=0;k<Math.min(12,log.length);k++){bb=apply(bb,log[k]);const o=opOf(bb,k%2?1:2);if(o&&!/00$/.test(o[0]))sp=o[1]}}catch(e){}
+  return {fwd:fwd/mv,def:def/mv,big:big/mv,coh:coh/mv,bind:bind/mv,first:first||log.length+10,len:log.length,open:sp?1:0,sp,behind:!!oppFirst}}
 // 診断は重い（100局で数百ミリ秒）ので、対局の記録が変わらないあいだは前の結果を使い回す
 const KF_MEMO={key:'',v:null};
 function kfCalc(){let key='';try{key=localStorage.getItem(GKEY)||''}catch(e){}key=key.length+':'+key.slice(0,200);if(KF_MEMO.v&&KF_MEMO.key===key)return KF_MEMO.v;const v=kfCalc0();KF_MEMO.key=key;KF_MEMO.v=v;return v}
 function kfCalc0(){const gs=loadGames().filter(g=>g&&g.mode!=='study'&&(g.me===1||g.me===2)&&g.log&&g.log.length>=6).slice(0,100);
-  const rs=[];let bh=0,bw=0;const spc={};for(const g of gs){const r=kfGame(g.log,g.me);if(!r)continue;rs.push(r);if(r.behind){bh++;if(g.win===g.me)bw++}if(r.sp>=0)spc[r.sp]=(spc[r.sp]||0)+1}
+  const rs=[];let bh=0,bw=0;const spc={};for(const g of gs){const r=kfGame(g.log,g.me);if(!r)continue;rs.push(r);if(r.behind){bh++;if(g.win===g.me)bw++}if(r.sp)spc[r.sp]=(spc[r.sp]||0)+1}
   if(rs.length<5)return {n:rs.length};
   const avg=k=>rs.reduce((a,r)=>a+r[k],0)/rs.length,z=k=>(avg(k)-KF_BASE[k][0])/KF_BASE[k][1];
   const Z=[z('fwd')-z('def'),-z('first')-z('len'),z('coh')-z('big'),z('open'),z('bind'),bh>=2?((bw/bh)-KF_COME[0])/KF_COME[1]:0].map((v,i)=>v/KF_AXS[i]);
   const sc=Z.map(v=>Math.max(4,Math.min(96,Math.round(50+16*v))));
   const cand=[];Z.forEach((v,i)=>{const a=KF_AX[i];if(v>=0)cand.push([v,a[1]]);else if(a[3])cand.push([-v,a[2]])});cand.sort((x,y)=>y[0]-x[0]);
-  const p=cand[0][1],q=cand[1]?cand[1][1]:'';let fav='';const top=Object.entries(spc).sort((a,b)=>b[1]-a[1])[0];if(top&&top[1]>=2)fav=SENPO[+top[0]][0]+'（'+top[1]+'局）';
+  const p=cand[0][1],q=cand[1]?cand[1][1]:'';let fav='';const top=Object.entries(spc).sort((a,b)=>b[1]-a[1])[0];if(top&&top[1]>=2)fav=top[0]+'（'+top[1]+'局）';
   return {n:rs.length,sc,p,q,name:p+(q?'・'+q:'')+'型',fav}}
 function kfRadar(sc){const cx=130,cy=120,R=88,ang=i=>-Math.PI/2+i*Math.PI/3,P=(i,r)=>[cx+Math.cos(ang(i))*r,cy+Math.sin(ang(i))*r];
   let o='';for(const f of [1,.66,.33])o+=`<polygon points="${[0,1,2,3,4,5].map(i=>P(i,R*f).join(',')).join(' ')}" fill="none" stroke="rgba(169,205,247,.2)"/>`;
@@ -4456,7 +4458,7 @@ function kfRender(){const el=$('kfBody');if(!el)return;if(!named()){el.innerHTML
    <button class="endb kf-share" id="kfShare" type="button">Xで共有</button>`;
   $('kfShare').onclick=()=>{const id=KF_ID[k.p]+(k.q?'-'+KF_ID[k.q]:'');const T=window.bocchT||(x=>x);openX('https://x.com/intent/post?text='+encodeURIComponent(T('bocchで棋風を診断したら「'+k.name+'」でした。')+'\n'+T(KF_DESC[k.p])+'\nhttps://bocchgame.com/k/'+id+'/\n#bocch'))}}
 {const _rp=renderProf;renderProf=function(){_rp();try{kfHome()}catch(e){console.error(e)}}}
-const KF_AXD=['高いほど向こう岸へ進む手が多い。低いほど、相手の届く石を消す守りの手が多い。','高いほど早く1つ目を着けて、短い対局で決める。低いほど、じっくり長い勝負になる。','高いほど石どうしを寄せて、まとまって進む。低いほど、大きく跳ぶ軽い手が多い。','高いほど双璧や送り鳥など、名前のある序盤を使う。低いほど自分の形で戦う。','高いほど、相手の石を数字4や動けない石にして縛る。','先に1つ着かれた対局から、どれだけ逆転したか。'];
+const KF_AXD=['高いほど向こう岸へ進む手が多い。低いほど、相手の届く石を消す守りの手が多い。','高いほど早く1つ目を着けて、短い対局で決める。低いほど、じっくり長い勝負になる。','高いほど石どうしを寄せて、まとまって進む。低いほど、大きく跳ぶ軽い手が多い。','高いほどピュロス・ギャンビットやタワー・バリエーションなど、名前のある序盤を使う。低いほど自分の形で戦う。','高いほど、相手の石を数字4や動けない石にして縛る。','先に1つ着かれた対局から、どれだけ逆転したか。'];
 function kfMini(sc){const c=17,R=15,P=(i,r)=>[c+Math.cos(-Math.PI/2+i*Math.PI/3)*r,c+Math.sin(-Math.PI/2+i*Math.PI/3)*r];
   return `<svg viewBox="0 0 34 34" aria-hidden="true"><polygon points="${[0,1,2,3,4,5].map(i=>P(i,R).join(',')).join(' ')}" fill="none" stroke="rgba(169,205,247,.35)"/><polygon points="${sc.map((v,i)=>P(i,R*v/100).join(',')).join(' ')}" fill="rgba(169,205,247,.35)" stroke="#cfe3fb" stroke-width="1.2"/></svg>`}
 function kfHome(){let k;try{k=kfCalc()}catch(e){return}
@@ -5166,7 +5168,7 @@ const LN_TAC=[
   ['陣地の壁','ok','相手のゴールの段（自分の陣地）に残っている石は、着地点をふさいでいます。相手のリーチの前にいる陣地の石を動かすと、着地点が空いて届くようになります。',['WWWWWW','......','..B...','.B.B..','......','......'],[{f:[0,2],t:[2,0],c:'白が3aの石を動かすと、3aが空いて黒が届く'}],'3cは数字2でズレ0だが、着地点が全部ふさがっている']]],
  ['落とし穴',[['着き誘爆','ng','押し上げの着地点の隣に、相手のズレ+1の石がいると、その石の数字も上がってリーチになります。1つ止めて、1つ作ってしまいます。',['......','......','..B.B.','.B.B..','......','......'],[{add:[1,3],c:'白が4bに入ると、3cは止まるが5cがリーチになる'}],'3cがリーチ、5cはズレ+1'],
   ['抜き誘爆','ng','引き抜きの出発点の隣に、相手のズレ−1の石がいると、その石の数字が下がってリーチになります。',['......','......','..B..B','.B.WB.','....BB','......'],[{f:[3,3],t:[0,3],c:'白が4dを離れると、3cは止まるが5dがリーチになる'}],'3cがリーチ、5dは数字4でズレ−1']]],
- ['序盤',[['端の片づけ','ok','自陣の端（1f・6f）に残る石はいちばんのマイナスでした。端の石は最初の数手で斜め内側へ寄せます。黒の1手目で勝率トップの「寄り添い」も、この片づけです。',['WWWWWW','......','......','......','......','BBBBBB'],[{f:[5,0],t:[4,1],c:'1fの石を2eへ。端を空けて、真ん中の石の隣に着ける'},{f:[5,5],t:[4,4],c:'反対側も同じ。6fを5eへ'}],'初期配置。端の2個が最初に片づける石'],
+ ['序盤',[['端の片づけ','ok','自陣の端（1f・6f）に残る石はいちばんのマイナスでした。端の石は最初の数手で斜め内側へ寄せます。黒の1手目で勝率トップの「コーナー・オープニング」も、この片づけです。',['WWWWWW','......','......','......','......','BBBBBB'],[{f:[5,0],t:[4,1],c:'1fの石を2eへ。端を空けて、真ん中の石の隣に着ける'},{f:[5,5],t:[4,4],c:'反対側も同じ。6fを5eへ'}],'初期配置。端の2個が最初に片づける石'],
   ['居残り','ok','陣地の真ん中の石（3f・4f）は急いで出しません。強いAIは2〜3個を陣地に残したまま櫓を組みます（半櫓）。残した石は相手の着地点をふさぐ壁になります。',['......','......','......','..BB..','.BB...','..BB..'],[],'3f・4fを残して組んだ半櫓']]],
  ['攻防一体',[['止めながら作る','ok','着地点の隣に「相手のリーチ」と「自分のズレ+1の石」が両方あるマスを探します。1手で相手を止めて、自分のリーチも作れます。',['......','.....W','..B.WW','.BB...','......','......'],[{add:[1,3],c:'白が4bに入る。黒の3cは止まり、白の5cがリーチになる'}],'黒3cがリーチ、白5cはズレ+1'],
   ['ぼっち狩り','ok','相手の石の隣が自分の石だけなら、その石をどかすと相手の石は数字0になって動けなくなります。',['......','......','..W...','...B..','....B.','......'],[{f:[3,3],t:[3,5],c:'黒が4dから6dへ離れると、白の3cは数字0で動けない'}],'白3cの隣は黒4dだけ']]]];
@@ -5220,6 +5222,11 @@ function learnPanel(){const P=$('learnPanel');if(!P)return;P.hidden=!(S&&S.learn
   const n=$('lnNext');if(n)n.addEventListener('click',lnStep);const a=$('lnAgain');if(a)a.addEventListener('click',learnLoad);
   B.querySelectorAll('[data-jm]').forEach(b=>b.addEventListener('click',()=>{LN.path.push(b.dataset.jm.split('-').map(Number));learnLoad()}));
   const jb=$('lnJBack');if(jb)jb.addEventListener('click',()=>{LN.path.pop();learnLoad()})}
+const OPN={"2222220000000000000000000100000111112":["A00","コーナー・オープニング"],"2222220000000000000000000000101111102":["A00","コーナー・オープニング"],"0222220200000000000000000100000111111":["A10","シンメトリカル・ディフェンス"],"2222200000200000000000000000101111101":["A10","シンメトリカル・ディフェンス"],"0222200200200000000000000100100111101":["A11","フォー・コーナーズ・ゲーム"],"0222220200000010000000000100000101112":["A14","リープ・アタック"],"2222200000200001000000000000101110102":["A14","リープ・アタック"],"0222220200000000000100000100000011112":["A16","スピア・バリエーション"],"2222200000200000000000100000101111002":["A16","スピア・バリエーション"],"0022200200200012000000000100000011111":["A17","ピュロス・ギャンビット"],"0222000200200021000000000000101111001":["A17","ピュロス・ギャンビット"],"1022200200200002000000000100000011112":["A17-1","ピュロス・ギャンビット・アクセプテッド"],"0222010200200020000000000000101111002":["A17-1","ピュロス・ギャンビット・アクセプテッド"],"0022200200200012000000000100100011102":["A17-2","ピュロス・ギャンビット・ディクラインド"],"0222000200200021000000000100100111002":["A17-2","ピュロス・ギャンビット・ディクラインド"],"0222200000200000000112000100000001111":["A18","カンナエ・ギャンビット"],"0222200200000000000021100000101110001":["A18","カンナエ・ギャンビット"],"0200220000200000201120000100000110102":["A19","ヘイスティングズ・ギャンビット"],"2200200200000200000002110000100101102":["A19","ヘイスティングズ・ギャンビット"],"2222200000200000000000000100000111111":["A20","クロス・ディフェンス"],"0222220200000000000000000000101111101":["A20","クロス・ディフェンス"],"2220200000200000000002000100100111101":["A21","タワー・バリエーション"],"0202220200000000000020000100100111101":["A21","タワー・バリエーション"],"2222220000000000000010000000001101112":["B00","センター・オープニング"],"2222220000000000000001000000001110112":["B00","センター・オープニング"],"2222220000000000000100000000001011112":["C00","スピア・オープニング"],"2222220000000000000000100000001111012":["C00","スピア・オープニング"],"2222220000000000000000001000000111112":["D00","コーナー・ガード"],"2222220000000000000000000000011111102":["D00","コーナー・ガード"],"2222220000000000000001000000001011112":["E00","バード・オープニング"],"2222220000000000000010000000001111012":["E00","バード・オープニング"],"2222220000000000001000000000001101112":["E01","クラウド・オープニング"],"2222220000000000000000010000001110112":["E01","クラウド・オープニング"]};
+function opOf(b,turn){return OPN[b.join('')+turn]||null}
+function revOpRender(i){const el=$('revOp');if(!el)return;let r=null;for(let k=1;k<=i&&k<REV.pos.length;k++){const q=REV.pos[k];const o=opOf(q.b,q.turn);if(o)r=o}
+  el.hidden=!r;if(r){$('revOpC').textContent=r[0];$('revOpN').textContent=r[1]}}
+function lnPN(seq){let b=startBoard();for(const m of seq)b=apply(b,m);const r=opOf(b,seq.length%2?2:1);return r?r[1]:''}
 const LN_NM={'0-4-1':'寄り添い','0-4-0':'隅守り','2-3-2':'正面突破','1-3-3':'渡り鳥','2-3-4':'十字路','1-3-1':'一本槍','2-3-0':'はぐれ雲'};
 function lnName(m,p){let f=m[0],t=m[1],fr=f/6|0,tr=t/6|0,fc=f%6,tc=t%6;if(p===2){fr=5-fr;tr=5-tr}if(fr!==5)return '';if(fc>2){fc=5-fc;tc=5-tc}const n=LN_NM[fc+'-'+tr+'-'+tc]||'';return p===2&&n==='寄り添い'?'肩寄せ':n}
 function lnJos(){const P=LN.path||[],pct=s=>Math.round(100/(1+Math.exp(-0.013*s))),mv=m=>sqName(m[0])+'→'+sqName(m[1]);let opts=[],q='';
@@ -5228,11 +5235,11 @@ function lnJos(){const P=LN.path||[],pct=s=>Math.round(100/(1+Math.exp(-0.013*s)
   else if(P.length===1){const e=LJ_T[P[0].join('-')];q='白の2手目';opts=e?Object.entries(e[1]).map(([k,v])=>({m:k.split('-').map(Number),s:v[0],p:2})):[]}
   else if(P.length===2){opts=t3(P[0],P[1]);q='黒の3手目（全'+opts.length+'通り）'}
   let h='<h3>3手目までの定跡</h3><p class="ln-note">最強に、3手目までの全部の手を読ませた評価です。手を押すと盤が進みます。右は、その手を指したあとの黒の勝率の目安。盤の上で自由に動かしても評価値が出ます。</p>';
-  h+='<div class="cap">'+(P.length?P.map((m,k)=>(k+1)+'. '+(k%2?'白':'黒')+' '+(lnName(m,k%2?2:1)||'')+' '+mv(m)).join('　'):'開始局面（黒の番）')+'</div>';
+  h+='<div class="cap">'+(P.length?P.map((m,k)=>(k+1)+'. '+(k%2?'白':'黒')+' '+(lnPN(P.slice(0,k+1))||'')+' '+mv(m)).join('　'):'開始局面（黒の番）')+'</div>';
   h+='<div class="ctl">'+(P.length?'<button class="i-prev" id="lnJBack">1手戻る</button>':'')+'</div>';
   if(P.length>=3)return h+'<p>ここまでが定跡です。4手目からは、最強もその場で読んで指します。盤の上でそのまま続きを試せます。</p>';
   opts.sort((a,b)=>a.p===1?b.s-a.s:a.s-b.s);const best=opts.length?opts[0].s:0,LV=[['最善','q0'],['好手','l1'],['ふつう','l2'],['疑問手','l3'],['悪手','l4']],lv=d=>d<=0?0:d<=20?1:d<=60?2:d<=120?3:4;
-  h+='<p><b>'+q+'</b></p><div class="ln-ex">'+opts.map(o=>{const L=LV[lv(Math.abs(o.s-best))],bp=pct(o.s);return '<button class="'+(o.s===best?'best ':'')+L[1]+'" data-jm="'+o.m.join('-')+'"><span>'+L[0]+'</span><span>'+(lnName(o.m,o.p)||'その他')+'<small>'+mv(o.m)+'</small></span><span class="tr"><i style="width:'+bp+'%"></i></span><span class="pc">黒'+bp+'%</span></button>'}).join('')+'</div>';
+  h+='<p><b>'+q+'</b></p><div class="ln-ex">'+opts.map(o=>{const L=LV[lv(Math.abs(o.s-best))],bp=pct(o.s);return '<button class="'+(o.s===best?'best ':'')+L[1]+'" data-jm="'+o.m.join('-')+'"><span>'+L[0]+'</span><span>'+(lnPN(P.concat([o.m]))||'その他')+'<small>'+mv(o.m)+'</small></span><span class="tr"><i style="width:'+bp+'%"></i></span><span class="pc">黒'+bp+'%</span></button>'}).join('')+'</div>';
   return h}
 document.querySelectorAll('#lnTabs button').forEach(b=>b.addEventListener('click',()=>{LN.tab=b.dataset.t;const first=LN_LIST[LN.tab].find(x=>!x[0].startsWith('#'));LN.id=first[0];if(LN.id==='jos')LN.path=[];learnLoad()}));
 // 石を置くモード：マスを押すと 黒→白→空き
@@ -6009,8 +6016,7 @@ const TEACH=[null,
  'まわりに石がない「ぼっち」の石は動けない！ AI同士の対局では、4手目のあとにぼっちが0個の黒は58%勝ち、3個以上だと37%まで下がる。',
  '相手に先に1つ着かれたら、すぐに自分も1つ着けろ！ AI同士の対局では、着けるときに着いた側は48%勝ち、着かなかった側は31%しか勝てていない。',
  '先に1つ着いたら、相手の1つ目を止めろ！ AI同士の対局では、止めた側は83%勝ち、止めなかった側は68%だ。'];
-const SHAPE={1:['寄り添いと櫓','石の数字の合計で、最初の2手の強さが分かる形。','learn/yorisoi-yagura.html'],2:['双璧','ほとんどの相手に9割勝つ戦法と、ただ1つの弱点。','learn/souheki.html'],
- 3:['押し上げ','リーチの石のとなりに着けて、数字を上げて止める形。','learn/yubaku.html'],4:['誘爆','自分の手で、相手のとどめを作ってしまう形。','learn/yubaku.html'],
+const SHAPE={3:['押し上げ','リーチの石のとなりに着けて、数字を上げて止める形。','learn/yubaku.html'],4:['誘爆','自分の手で、相手のとどめを作ってしまう形。','learn/yubaku.html'],
  5:['押し上げ','リーチの石のとなりに着けて、数字を上げて止める形。','learn/yubaku.html'],6:['毒まんじゅう','わざと相手の石を動けるようにして勝つ手。','learn/dokumanju.html'],
  7:['誘爆','自分の手で、相手のとどめを作ってしまう形。','learn/yubaku.html'],8:['毒まんじゅう','わざと相手の石を動けるようにして勝つ手。','learn/dokumanju.html']};
 const LSK='bocch_coach',DAY=86400000;

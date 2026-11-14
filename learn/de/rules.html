@@ -20,7 +20,7 @@
 <meta property="og:title" content="bocch: Regeln und Spielablauf">
 <meta property="og:description" content="Die Regeln von „bocch“, dem Brettspiel auf 6×6 Feldern, in dem jeder Stein so weit springt, wie Steine um ihn herumstehen – erklärt mit Diagrammen: wie sich die Zugweite ergibt, wann man gewinnt und worauf man in den ersten Zügen achten sollte.">
 <meta property="og:url" content="https://bocchgame.com/learn/de/rules.html">
-<meta property="og:image" content="https://bocchgame.com/og-de.jpg">
+<meta property="og:image" content="https://bocchgame.com/og-de.jpg?v=2">
 <meta property="og:locale" content="de_DE">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
@@ -113,6 +113,18 @@ footer .cp{margin-top:10px}
 @media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
 footer .langs{margin-top:10px;gap:4px 12px}
 footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+/* 今のサイトと同じ見た目の盤（2026-11-14以降の記事） */
+.nb .grid{background:#c9d2e3;border:0;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.nb .c{border:0}
+.nb .c:nth-child(12n+2),.nb .c:nth-child(12n+4),.nb .c:nth-child(12n+6),.nb .c:nth-child(12n+7),.nb .c:nth-child(12n+9),.nb .c:nth-child(12n+11){background:#8f9bb6}
+.nb .c.to{background:#a9cdf7!important}
+.nb .c.fr::before{border-color:rgba(28,36,54,.45)}
+.nb .c.mk{box-shadow:inset 0 0 0 3px #2f6fa8}
+.nb .s{width:80%;height:80%;font-family:"Outfit","Zen Kaku Gothic New",sans-serif;font-weight:700}
+.nb .s.b{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);color:#f4f4f4;box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.nb .s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%);color:#2a2c33;box-shadow:0 3px 4px rgba(0,0,0,.3)}
+.nb .s.z{opacity:.55}
+.nb .ar line{stroke:#2f7fd6;stroke-dasharray:none;stroke-width:2.2}.nb .ar path{fill:#2f7fd6}
 </style>
 </head>
 <body>
@@ -142,10 +154,10 @@ footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:7
 <p>Ein Stein, der auf der gegnerischen Grundreihe angekommen ist, bleibt auf dem Brett. Er zählt weiterhin als Nachbar für die Zahlen der Steine um ihn herum.</p>
 <h2>Drei Dinge, die dich sofort stärker machen</h2>
 <p>Wenn du die Regeln kennst, gewinnst du schon deutlich mehr Partien, wenn du nur auf diese drei Punkte achtest.</p>
-<ol><li><strong>Hol die Randsteine früh nach innen.</strong> In der Startstellung haben die Steine am Rand nur einen Nachbarn und damit die Zahl 1. Mit dem „Anschmiegen“, einem Zug ein Feld diagonal nach vorn, steigt die Zahl dieses Steins und die seines Nachbarn.</li><li><strong>Achte auf die Zahlen der gegnerischen Steine.</strong> Stellst du einen eigenen Stein neben einen gegnerischen, steigt dessen Zahl. Prüf vor jedem Zug, ob du dem Gegner damit nicht genau die Zugweite gibst, mit der er auf deiner Grundreihe ankommt.</li><li><strong>Bleib nicht eine Reihe vor dem Ziel stehen.</strong> Ein Stein eine Reihe vor dem Ziel kommt nur an, wenn seine Zahl genau 1 ist. Bekommt er mehr Nachbarn, springt er über das Ziel hinaus.</li></ol>
-<p>Die Fachbegriffe findest du im <a href="glossary.html">Glossar</a>, wie man die Eröffnung spielt, im Artikel <a href="yorisoi-yagura.html">Anschmiegen und Turm</a>. <a href="../../de.html">bocch</a> ist kostenlos und ohne Anmeldung spielbar – sofort gegen die CPU oder gegen Freunde.</p>
+<ol><li><strong>Hol die Randsteine früh nach innen.</strong> In der Startstellung haben die Steine am Rand nur einen Nachbarn und damit die Zahl 1. Mit der „Eckeröffnung“, einem Zug ein Feld diagonal nach vorn, steigt die Zahl dieses Steins und die seines Nachbarn.</li><li><strong>Achte auf die Zahlen der gegnerischen Steine.</strong> Stellst du einen eigenen Stein neben einen gegnerischen, steigt dessen Zahl. Prüf vor jedem Zug, ob du dem Gegner damit nicht genau die Zugweite gibst, mit der er auf deiner Grundreihe ankommt.</li><li><strong>Bleib nicht eine Reihe vor dem Ziel stehen.</strong> Ein Stein eine Reihe vor dem Ziel kommt nur an, wenn seine Zahl genau 1 ist. Bekommt er mehr Nachbarn, springt er über das Ziel hinaus.</li></ol>
+<p>Die Fachbegriffe findest du im <a href="glossary.html">Glossar</a>. <a href="../../de.html">bocch</a> ist kostenlos und ohne Anmeldung spielbar – sofort gegen die CPU oder gegen Freunde.</p>
 </article>
-<section class="rel"><h2>Verwandte Artikel</h2><ul><li><a href="../../learn/de/glossary.html">bocch-Glossar</a></li><li><a href="../../learn/de/yorisoi-yagura.html">Anschmiegen und Turm: die ersten zwei Züge und wie man einen Einbruch abwehrt</a></li></ul></section>
+<section class="rel"><h2>Verwandte Artikel</h2><ul><li><a href="../../learn/de/glossary.html">bocch-Glossar</a></li><li><a href="../../learn/de/yubaku.html">Eigentor: Wie du dem Gegner nicht selbst den Siegzug baust</a></li></ul></section>
 </main>
 <footer><p><a href="../../learn/de/">Alle Artikel</a><a href="../../learn/de/glossary.html">Glossar</a><a href="../../guide-de.html">Strategie-Anleitung</a><a href="../../about-de.html">Über den Betreiber</a><a href="../../privacy-de.html">Datenschutz & Kontakt</a></p><p class="langs"><a href="../../learn/rules.html" lang="ja">日本語</a><a href="../../learn/en/rules.html" lang="en">English</a><a href="../../learn/zh-hans/rules.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/rules.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/rules.html" lang="ko">한국어</a><a href="../../learn/es/rules.html" lang="es">Español</a><a href="../../learn/de/rules.html" aria-current="page" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
 </body>

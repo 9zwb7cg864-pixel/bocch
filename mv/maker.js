@@ -297,9 +297,39 @@ async function open(o){
   async function audio(i){ac=ac||new AudioContext();if(!AB[i])AB[i]=await fetch(BASE+TRACKS[i].file).then(r=>r.arrayBuffer()).then(b=>ac.decodeAudioData(b));return AB[i]}
   const LB={bmvPrev:'▶ '+T('プレビュー'),bmvMake:T('動画を作る')};let curBtn=null;
   function stopRun(){if(!ST||ST.stop)return;ST.stop=1;try{ST.src&&ST.src.stop()}catch(e){}if(ST.rec&&ST.rec.state!=='inactive')try{ST.rec.stop()}catch(e){}q('bmvProg').style.width='0%';RR.renderAt((P.cfg.start||0)+0.01);msg(T('止めました'))}
+
+  /* 録画：使える端末では1コマずつ描いて自分でmp4にする（WebCodecs）。コマ飛び・画質の自動低下が起きない。使えない端末は従来のMediaRecorder */
+  let MUXP=null;const loadMux=()=>MUXP||(MUXP=new Promise((res,rej)=>{if(window.Mp4Muxer)return res(window.Mp4Muxer);const s=document.createElement('script');s.src=BASE+'mp4-muxer.js?v=1';s.onload=()=>res(window.Mp4Muxer);s.onerror=rej;document.head.appendChild(s)}));
+  async function wcVideoCfg(){if(!window.VideoEncoder||!window.AudioEncoder||!window.VideoFrame||!window.AudioData)return null;
+    for(const codec of ['avc1.640028','avc1.4d0028','avc1.42e028']){const v={codec,width:1080,height:1920,bitrate:12e6,framerate:30,avc:{format:'avc'}};try{const r=await VideoEncoder.isConfigSupported(v);if(r&&r.supported)return v}catch(e){}}return null}
+  async function encodeWC(buf,S0,TT,me){
+    const v=await wcVideoCfg();if(!v)return null;
+    const sr=buf.sampleRate,ch=Math.min(2,buf.numberOfChannels),a={codec:'mp4a.40.2',sampleRate:sr,numberOfChannels:ch,bitrate:160000};
+    try{const r=await AudioEncoder.isConfigSupported(a);if(!r||!r.supported)return null}catch(e){return null}
+    let MX;try{MX=await loadMux()}catch(e){return null}if(!MX)return null;
+    const target=new MX.ArrayBufferTarget();
+    const mux=new MX.Muxer({target,video:{codec:'avc',width:1080,height:1920},audio:{codec:'aac',numberOfChannels:ch,sampleRate:sr},fastStart:'in-memory',firstTimestampBehavior:'offset'});
+    let err=null;const ve=new VideoEncoder({output:(c,m)=>mux.addVideoChunk(c,m),error:e=>{err=e}});ve.configure(v);
+    const ae=new AudioEncoder({output:(c,m)=>mux.addAudioChunk(c,m),error:e=>{err=e}});ae.configure(a);
+    const s0=Math.floor(S0*sr),s1=Math.min(buf.length,Math.ceil(TT*sr)),CHD=[];for(let k=0;k<ch;k++)CHD.push(buf.getChannelData(k));
+    for(let p=s0;p<s1;p+=4096){const n=Math.min(4096,s1-p),d=new Float32Array(n*ch);for(let k=0;k<ch;k++)d.set(CHD[k].subarray(p,p+n),k*n);
+      const ad=new AudioData({format:'f32-planar',sampleRate:sr,numberOfFrames:n,numberOfChannels:ch,timestamp:Math.round((p-s0)/sr*1e6),data:d});ae.encode(ad);ad.close()}
+    const FPS=30,N=Math.ceil((TT-S0)*FPS);
+    for(let i=0;i<=N;i++){if(ST.stop||UI!==me||err)break;RR.renderAt(Math.min(TT,S0+i/FPS));
+      const fr=new VideoFrame(CV,{timestamp:Math.round(i/FPS*1e6),duration:Math.round(1e6/FPS)});ve.encode(fr,{keyFrame:i%60===0});fr.close();
+      if(i%10===0)q('bmvProg').style.width=Math.min(100,i/N*100)+'%';
+      while(ve.encodeQueueSize>4&&!err)await new Promise(r=>setTimeout(r,4));
+      if(i%12===0)await new Promise(r=>setTimeout(r,0))}
+    if(ST.stop||UI!==me){try{ve.close();ae.close()}catch(e){}return 'stop'}
+    await ve.flush();await ae.flush();if(err)throw err;mux.finalize();try{ve.close();ae.close()}catch(e){}
+    return new Blob([target.buffer],{type:'video/mp4'})}
   async function run(record){if(busy){if(curBtn===(record?'bmvMake':'bmvPrev'))stopRun();return}busy=true;const me=UI;curBtn=record?'bmvMake':'bmvPrev';q('bmvPrev').disabled=q('bmvMake').disabled=q('bmvTh').disabled=q('bmvCam').disabled=true;
     {const b=q(curBtn);b.disabled=false;b.textContent='■ '+T(record?'やめる':'止める')}
-    ST={};try{safe();msg(T('読み込み中…'));const buf=await audio(TI);if(UI!==me)return;await ac.resume();
+    ST={};try{safe();msg(T('読み込み中…'));const buf=await audio(TI);if(UI!==me)return;
+      if(record){let r=null;try{msg(T('録画中…終わるまでこの画面を開いたままにしてください'));r=await encodeWC(buf,P.cfg.start||0,RR.TOTAL,me)}catch(e){r=null}
+        if(r==='stop'||UI!==me)return;
+        if(r instanceof Blob&&r.size>1000){RR.renderAt(Math.min(RR.TOTAL,TRACKS[TI].winT+1));q('bmvProg').style.width='100%';blob=r;q('bmvOut').hidden=false;msg(T('できました。保存か共有を押してください。'));return}}
+await ac.resume();
       const src=ac.createBufferSource();src.buffer=buf;ST.src=src;let chunks=[],mime='';
       if(record){const dest=ac.createMediaStreamDestination();src.connect(dest);
         const types=['video/mp4;codecs=avc1.42E01F,mp4a.40.2','video/mp4','video/webm;codecs=vp9,opus','video/webm'];mime=types.find(t=>window.MediaRecorder&&MediaRecorder.isTypeSupported(t))||'';

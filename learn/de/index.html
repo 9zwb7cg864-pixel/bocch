@@ -20,7 +20,7 @@
 <meta property="og:title" content="bocch: alle Artikel">
 <meta property="og:description" content="Alle Artikel zum Brettspiel „bocch“: Regeln, Eröffnungstheorie, Strategien und Taktiken, erklärt mit Diagrammen und Daten aus Partien KI gegen KI.">
 <meta property="og:url" content="https://bocchgame.com/learn/de/">
-<meta property="og:image" content="https://bocchgame.com/og-de.jpg">
+<meta property="og:image" content="https://bocchgame.com/og-de.jpg?v=2">
 <meta property="og:locale" content="de_DE">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
@@ -113,6 +113,18 @@ footer .cp{margin-top:10px}
 @media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
 footer .langs{margin-top:10px;gap:4px 12px}
 footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+/* 今のサイトと同じ見た目の盤（2026-11-14以降の記事） */
+.nb .grid{background:#c9d2e3;border:0;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.nb .c{border:0}
+.nb .c:nth-child(12n+2),.nb .c:nth-child(12n+4),.nb .c:nth-child(12n+6),.nb .c:nth-child(12n+7),.nb .c:nth-child(12n+9),.nb .c:nth-child(12n+11){background:#8f9bb6}
+.nb .c.to{background:#a9cdf7!important}
+.nb .c.fr::before{border-color:rgba(28,36,54,.45)}
+.nb .c.mk{box-shadow:inset 0 0 0 3px #2f6fa8}
+.nb .s{width:80%;height:80%;font-family:"Outfit","Zen Kaku Gothic New",sans-serif;font-weight:700}
+.nb .s.b{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);color:#f4f4f4;box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.nb .s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%);color:#2a2c33;box-shadow:0 3px 4px rgba(0,0,0,.3)}
+.nb .s.z{opacity:.55}
+.nb .ar line{stroke:#2f7fd6;stroke-dasharray:none;stroke-width:2.2}.nb .ar path{fill:#2f7fd6}
 </style>
 </head>
 <body>
@@ -123,7 +135,7 @@ footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:7
 <h1>bocch: alle Artikel</h1>
 
 <p class="lead">Von den Grundregeln bis zu Theorie, Strategien und Taktiken. Alle Diagramme wurden Zug für Zug nach den echten Regeln nachgestellt. Die Zahlen stammen aus Partien KI gegen KI.</p>
-<h2>Grundlagen</h2><ul class="cards"><li><a href="rules.html"><b>bocch: Regeln und Spielablauf</b><span>Die Regeln von „bocch“, dem Brettspiel auf 6×6 Feldern, in dem jeder Stein so weit springt, wie Steine um ihn herumstehen – erklärt mit Diagrammen: wie sich die Zugweite ergibt, wann man gewinnt und worauf man in den ersten Zügen achten sollte.</span></a></li><li><a href="glossary.html"><b>bocch-Glossar</b><span>Die Begriffe, die in den Artikeln und Videos zu bocch vorkommen: Zahl, Einzelgänger, Reach, Lücke, Anschmiegen, Schulter an Schulter, Turm, Eigentor, Hochdrücken und mehr.</span></a></li></ul><h2>Theorie</h2><ul class="cards"><li><a href="yorisoi-yagura.html"><b>Anschmiegen und Turm: die ersten zwei Züge und wie man einen Einbruch abwehrt</b><span>Warum ist der Eröffnungszug „Anschmiegen“ in bocch so stark? Wir erklären es mit der Summe der Steinzahlen und der Bewertung der KI – und zeigen mit Diagrammen, wie man einen Turm baut und richtig reagiert, wenn der Gegner einbricht.</span></a></li></ul><h2>Strategie</h2><ul class="cards"><li><a href="souheki.html"><b>Doppelmauer: eine Strategie, die 9 von 10 Partien gewinnt – und ihre einzige Schwäche</b><span>Die bocch-Strategie „Doppelmauer“ gewinnt in Partien KI gegen KI gegen fast jeden Gegner über 90 % der Partien. Wir zeigen die einzige Antwort, gegen die sie nicht gewinnt – „Schulter an Schulter“ – und welche Züge du dann spielen solltest, mit Gewinnraten.</span></a></li><li><a href="ai-joseki-senpo.html"><b>Wie die neue KI die Theorie des 3. Zugs verändert hat – und 10 Strategien</b><span>Wir haben die stärkste CPU von bocch von einer Punktetabelle auf ein neuronales Netz umgestellt. Hier stellen wir die Theorie für den 3. Zug vor, wie sie die neue KI sieht, und zehn „Strategien“ – Kombinationen aus erstem und zweitem Zug der Eröffnung.</span></a></li></ul><h2>Taktik</h2><ul class="cards"><li><a href="yubaku.html"><b>Eigentor: Wie du dem Gegner nicht selbst den Siegzug baust</b><span>In 26.000 Partien KI gegen KI gibt es einen Zug, der 2.047-mal gespielt wurde – und die Seite, die ihn spielte, hat keine einzige Partie gewonnen. Mit Diagrammen und einer Übungsaufgabe zeigen wir, wie du das „Eigentor“ erkennst, bei dem du selbst die Zahl eines gegnerischen Steins veränderst.</span></a></li><li><a href="dokumanju.html"><b>Giftköder: gewinnen, indem man dem Gegner etwas schenkt</b><span>In bocch werden keine Steine geschlagen. Was man hergeben kann, sind „Zahlen“ und die „Erstankunft“. Anhand echter KI-Partien zeigen wir das „Ansprechen“, bei dem du einen gegnerischen Stein absichtlich beweglich machst, und das „Bogenspannen“, bei dem du einen Stein zurückziehst.</span></a></li></ul>
+<h2>Grundlagen</h2><ul class="cards"><li><a href="rules.html"><b>bocch: Regeln und Spielablauf</b><span>Die Regeln von „bocch“, dem Brettspiel auf 6×6 Feldern, in dem jeder Stein so weit springt, wie Steine um ihn herumstehen – erklärt mit Diagrammen: wie sich die Zugweite ergibt, wann man gewinnt und worauf man in den ersten Zügen achten sollte.</span></a></li><li><a href="glossary.html"><b>bocch-Glossar</b><span>Die Begriffe, die in den Artikeln und Videos zu bocch vorkommen: Zahl, Einzelgänger, Reach, Lücke, Turm, Eigentor, Hochdrücken, Eröffnungsnamen und mehr.</span></a></li></ul><h2>Taktik</h2><ul class="cards"><li><a href="yubaku.html"><b>Eigentor: Wie du dem Gegner nicht selbst den Siegzug baust</b><span>In 26.000 Partien KI gegen KI gibt es einen Zug, der 2.047-mal gespielt wurde – und die Seite, die ihn spielte, hat keine einzige Partie gewonnen. Mit Diagrammen und einer Übungsaufgabe zeigen wir, wie du das „Eigentor“ erkennst, bei dem du selbst die Zahl eines gegnerischen Steins veränderst.</span></a></li><li><a href="dokumanju.html"><b>Giftköder: gewinnen, indem man dem Gegner etwas schenkt</b><span>In bocch werden keine Steine geschlagen. Was man hergeben kann, sind „Zahlen“ und die „Erstankunft“. Anhand echter KI-Partien zeigen wir das „Ansprechen“, bei dem du einen gegnerischen Stein absichtlich beweglich machst, und das „Bogenspannen“, bei dem du einen Stein zurückziehst.</span></a></li></ul>
 </article>
 
 </main>

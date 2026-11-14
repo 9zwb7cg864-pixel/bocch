@@ -20,7 +20,7 @@
 <meta property="og:title" content="bocch 규칙과 노는 법">
 <meta property="og:description" content="6×6 판에서 주변 돌의 수만큼 뛰는 보드게임 “bocch”의 규칙을 판 그림으로 설명합니다. 움직일 수 있는 거리가 정해지는 방식, 승패, 처음 몇 수에서 조심할 점까지.">
 <meta property="og:url" content="https://bocchgame.com/learn/ko/rules.html">
-<meta property="og:image" content="https://bocchgame.com/og-ko.jpg">
+<meta property="og:image" content="https://bocchgame.com/og-ko.jpg?v=2">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
@@ -113,6 +113,18 @@ footer .cp{margin-top:10px}
 @media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
 footer .langs{margin-top:10px;gap:4px 12px}
 footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+/* 今のサイトと同じ見た目の盤（2026-11-14以降の記事） */
+.nb .grid{background:#c9d2e3;border:0;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.nb .c{border:0}
+.nb .c:nth-child(12n+2),.nb .c:nth-child(12n+4),.nb .c:nth-child(12n+6),.nb .c:nth-child(12n+7),.nb .c:nth-child(12n+9),.nb .c:nth-child(12n+11){background:#8f9bb6}
+.nb .c.to{background:#a9cdf7!important}
+.nb .c.fr::before{border-color:rgba(28,36,54,.45)}
+.nb .c.mk{box-shadow:inset 0 0 0 3px #2f6fa8}
+.nb .s{width:80%;height:80%;font-family:"Outfit","Zen Kaku Gothic New",sans-serif;font-weight:700}
+.nb .s.b{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);color:#f4f4f4;box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.nb .s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%);color:#2a2c33;box-shadow:0 3px 4px rgba(0,0,0,.3)}
+.nb .s.z{opacity:.55}
+.nb .ar line{stroke:#2f7fd6;stroke-dasharray:none;stroke-width:2.2}.nb .ar path{fill:#2f7fd6}
 </style>
 </head>
 <body>
@@ -142,10 +154,10 @@ footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:7
 <p>건너편에 도착한 돌은 그대로 판에 남습니다. 남은 돌도 주변 돌의 숫자에 포함됩니다.</p>
 <h2>처음에 알아 두면 강해지는 것</h2>
 <p>규칙을 익혔다면, 다음 3가지만 의식해도 이기는 대국이 늘어납니다.</p>
-<ol><li><strong>끝 돌을 일찍 안쪽으로 붙인다.</strong> 처음 배치에서 끝 돌은 이웃이 하나뿐이라 숫자 1입니다. 대각선 앞으로 한 칸 붙이는 “붙이기”로, 그 돌도 옆 돌도 숫자가 올라갑니다.</li><li><strong>상대 돌의 숫자를 잘 본다.</strong> 내 돌을 상대 돌 옆에 놓으면 상대의 숫자가 올라갑니다. 상대를 건너편에 딱 닿게 만들어 버리지 않는지, 두기 전에 확인합니다.</li><li><strong>건너편 한 줄 앞에서 멈추지 않는다.</strong> 한 줄 앞의 돌은 숫자가 정확히 1일 때만 도착할 수 있습니다. 옆에 돌이 늘면 뛰어넘어 버립니다.</li></ol>
-<p>용어는 <a href="glossary.html">용어집</a>에, 초반에 두는 법은 <a href="yorisoi-yagura.html">붙이기와 망루</a> 글에 정리했습니다. <a href="../../ko.html">bocch</a>는 무료이고 가입 없이 CPU나 친구와 바로 대국할 수 있습니다.</p>
+<ol><li><strong>끝 돌을 일찍 안쪽으로 붙인다.</strong> 처음 배치에서 끝 돌은 이웃이 하나뿐이라 숫자 1입니다. 대각선 앞으로 한 칸 붙이는 “코너 오프닝”으로, 그 돌도 옆 돌도 숫자가 올라갑니다.</li><li><strong>상대 돌의 숫자를 잘 본다.</strong> 내 돌을 상대 돌 옆에 놓으면 상대의 숫자가 올라갑니다. 상대를 건너편에 딱 닿게 만들어 버리지 않는지, 두기 전에 확인합니다.</li><li><strong>건너편 한 줄 앞에서 멈추지 않는다.</strong> 한 줄 앞의 돌은 숫자가 정확히 1일 때만 도착할 수 있습니다. 옆에 돌이 늘면 뛰어넘어 버립니다.</li></ol>
+<p>용어는 <a href="glossary.html">용어집</a>에 정리했습니다. <a href="../../ko.html">bocch</a>는 무료이고 가입 없이 CPU나 친구와 바로 대국할 수 있습니다.</p>
 </article>
-<section class="rel"><h2>관련 글</h2><ul><li><a href="../../learn/ko/glossary.html">bocch 용어집</a></li><li><a href="../../learn/ko/yorisoi-yagura.html">붙이기와 망루: 처음 두 수와 뛰어들기 받는 법</a></li></ul></section>
+<section class="rel"><h2>관련 글</h2><ul><li><a href="../../learn/ko/glossary.html">bocch 용어집</a></li><li><a href="../../learn/ko/yubaku.html">자폭: 내 수로 상대의 결정타를 만들지 않으려면</a></li></ul></section>
 </main>
 <footer><p><a href="../../learn/ko/">글 목록</a><a href="../../learn/ko/glossary.html">용어집</a><a href="../../guide-ko.html">승리 가이드</a><a href="../../about-ko.html">운영자 정보</a><a href="../../privacy-ko.html">개인정보 처리방침 · 문의</a></p><p class="langs"><a href="../../learn/rules.html" lang="ja">日本語</a><a href="../../learn/en/rules.html" lang="en">English</a><a href="../../learn/zh-hans/rules.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/rules.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/rules.html" aria-current="page" lang="ko">한국어</a><a href="../../learn/es/rules.html" lang="es">Español</a><a href="../../learn/de/rules.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
 </body>

@@ -20,7 +20,7 @@
 <meta property="og:title" content="Reglas de bocch y cómo se juega">
 <meta property="og:description" content="Las reglas de bocch, el juego de mesa de tablero 6×6 en el que cada piedra salta tantas casillas como piedras tiene alrededor, explicadas con diagramas: cómo se decide la distancia, cómo se gana y se pierde, y qué cuidar en las primeras jugadas.">
 <meta property="og:url" content="https://bocchgame.com/learn/es/rules.html">
-<meta property="og:image" content="https://bocchgame.com/og-es.jpg">
+<meta property="og:image" content="https://bocchgame.com/og-es.jpg?v=2">
 <meta property="og:locale" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
@@ -113,6 +113,18 @@ footer .cp{margin-top:10px}
 @media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
 footer .langs{margin-top:10px;gap:4px 12px}
 footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+/* 今のサイトと同じ見た目の盤（2026-11-14以降の記事） */
+.nb .grid{background:#c9d2e3;border:0;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.nb .c{border:0}
+.nb .c:nth-child(12n+2),.nb .c:nth-child(12n+4),.nb .c:nth-child(12n+6),.nb .c:nth-child(12n+7),.nb .c:nth-child(12n+9),.nb .c:nth-child(12n+11){background:#8f9bb6}
+.nb .c.to{background:#a9cdf7!important}
+.nb .c.fr::before{border-color:rgba(28,36,54,.45)}
+.nb .c.mk{box-shadow:inset 0 0 0 3px #2f6fa8}
+.nb .s{width:80%;height:80%;font-family:"Outfit","Zen Kaku Gothic New",sans-serif;font-weight:700}
+.nb .s.b{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);color:#f4f4f4;box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.nb .s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%);color:#2a2c33;box-shadow:0 3px 4px rgba(0,0,0,.3)}
+.nb .s.z{opacity:.55}
+.nb .ar line{stroke:#2f7fd6;stroke-dasharray:none;stroke-width:2.2}.nb .ar path{fill:#2f7fd6}
 </style>
 </head>
 <body>
@@ -142,10 +154,10 @@ footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:7
 <p>Las piedras que llegan a la meta se quedan en el tablero, y también cuentan para los números de las piedras de alrededor.</p>
 <h2>Lo primero que te hará más fuerte</h2>
 <p>Una vez sepas las reglas, basta con tener en cuenta estas tres cosas para ganar más partidas.</p>
-<ol><li><strong>Mete pronto hacia dentro las piedras de los extremos.</strong> En la posición inicial, las piedras de los extremos solo tienen una vecina y su número es 1. Con el «Arrimo», que las acerca una casilla en diagonal hacia delante, sube el número de esa piedra y también el de su vecina.</li><li><strong>Vigila los números de las piedras rivales.</strong> Si pones una piedra junto a una del rival, su número sube. Antes de jugar, comprueba que no le estás dando justo la distancia que necesita para llegar a la meta.</li><li><strong>No te pares en la fila anterior a la meta.</strong> Una piedra en esa fila solo llega si su número es exactamente 1. Si se le juntan más vecinas, se pasa de largo.</li></ol>
-<p>Los términos están en el <a href="glossary.html">glosario</a>, y cómo jugar la apertura, en el artículo <a href="yorisoi-yagura.html">Arrimo y torre</a>. <a href="../../es.html">bocch</a> es gratis y sin registro: puedes jugar al momento contra la CPU o con amigos.</p>
+<ol><li><strong>Mete pronto hacia dentro las piedras de los extremos.</strong> En la posición inicial, las piedras de los extremos solo tienen una vecina y su número es 1. Con la «Apertura de Esquina», que las acerca una casilla en diagonal hacia delante, sube el número de esa piedra y también el de su vecina.</li><li><strong>Vigila los números de las piedras rivales.</strong> Si pones una piedra junto a una del rival, su número sube. Antes de jugar, comprueba que no le estás dando justo la distancia que necesita para llegar a la meta.</li><li><strong>No te pares en la fila anterior a la meta.</strong> Una piedra en esa fila solo llega si su número es exactamente 1. Si se le juntan más vecinas, se pasa de largo.</li></ol>
+<p>Los términos están en el <a href="glossary.html">glosario</a>. <a href="../../es.html">bocch</a> es gratis y sin registro: puedes jugar al momento contra la CPU o con amigos.</p>
 </article>
-<section class="rel"><h2>Artículos relacionados</h2><ul><li><a href="../../learn/es/glossary.html">Glosario de bocch</a></li><li><a href="../../learn/es/yorisoi-yagura.html">Arrimo y torre: las dos primeras jugadas y cómo responder a una incursión</a></li></ul></section>
+<section class="rel"><h2>Artículos relacionados</h2><ul><li><a href="../../learn/es/glossary.html">Glosario de bocch</a></li><li><a href="../../learn/es/yubaku.html">Rebote: no le prepares tú el golpe final al rival</a></li></ul></section>
 </main>
 <footer><p><a href="../../learn/es/">Todos los artículos</a><a href="../../learn/es/glossary.html">Glosario</a><a href="../../guide-es.html">Guía de estrategia</a><a href="../../about-es.html">Sobre el sitio</a><a href="../../privacy-es.html">Política de privacidad y contacto</a></p><p class="langs"><a href="../../learn/rules.html" lang="ja">日本語</a><a href="../../learn/en/rules.html" lang="en">English</a><a href="../../learn/zh-hans/rules.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/rules.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/rules.html" lang="ko">한국어</a><a href="../../learn/es/rules.html" aria-current="page" lang="es">Español</a><a href="../../learn/de/rules.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
 </body>

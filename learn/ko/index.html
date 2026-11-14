@@ -20,7 +20,7 @@
 <meta property="og:title" content="bocch 글 목록">
 <meta property="og:description" content="보드게임 “bocch”의 규칙, 정석, 전법, 수법을 판 그림과 AI끼리의 대국 데이터로 해설하는 글 목록입니다.">
 <meta property="og:url" content="https://bocchgame.com/learn/ko/">
-<meta property="og:image" content="https://bocchgame.com/og-ko.jpg">
+<meta property="og:image" content="https://bocchgame.com/og-ko.jpg?v=2">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
@@ -113,6 +113,18 @@ footer .cp{margin-top:10px}
 @media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
 footer .langs{margin-top:10px;gap:4px 12px}
 footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+/* 今のサイトと同じ見た目の盤（2026-11-14以降の記事） */
+.nb .grid{background:#c9d2e3;border:0;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.nb .c{border:0}
+.nb .c:nth-child(12n+2),.nb .c:nth-child(12n+4),.nb .c:nth-child(12n+6),.nb .c:nth-child(12n+7),.nb .c:nth-child(12n+9),.nb .c:nth-child(12n+11){background:#8f9bb6}
+.nb .c.to{background:#a9cdf7!important}
+.nb .c.fr::before{border-color:rgba(28,36,54,.45)}
+.nb .c.mk{box-shadow:inset 0 0 0 3px #2f6fa8}
+.nb .s{width:80%;height:80%;font-family:"Outfit","Zen Kaku Gothic New",sans-serif;font-weight:700}
+.nb .s.b{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);color:#f4f4f4;box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.nb .s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%);color:#2a2c33;box-shadow:0 3px 4px rgba(0,0,0,.3)}
+.nb .s.z{opacity:.55}
+.nb .ar line{stroke:#2f7fd6;stroke-dasharray:none;stroke-width:2.2}.nb .ar path{fill:#2f7fd6}
 </style>
 </head>
 <body>
@@ -123,7 +135,7 @@ footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:7
 <h1>bocch 글 목록</h1>
 
 <p class="lead">규칙의 기본부터 정석·전법·수법까지. 판 그림은 모두 실제 규칙대로 한 수씩 다시 두어 그렸습니다. 숫자는 AI끼리의 대국에서 센 것입니다.</p>
-<h2>기본</h2><ul class="cards"><li><a href="rules.html"><b>bocch 규칙과 노는 법</b><span>6×6 판에서 주변 돌의 수만큼 뛰는 보드게임 “bocch”의 규칙을 판 그림으로 설명합니다. 움직일 수 있는 거리가 정해지는 방식, 승패, 처음 몇 수에서 조심할 점까지.</span></a></li><li><a href="glossary.html"><b>bocch 용어집</b><span>bocch 해설과 영상에서 쓰는 말의 뜻을 정리했습니다. 숫자, 외톨이, 리치, 차이, 붙이기, 어깨 붙이기, 망루, 자폭, 밀어 올리기 등.</span></a></li></ul><h2>정석</h2><ul class="cards"><li><a href="yorisoi-yagura.html"><b>붙이기와 망루: 처음 두 수와 뛰어들기 받는 법</b><span>bocch의 첫 수 “붙이기”가 왜 강한지를 돌 숫자의 합계와 AI 평가로 설명합니다. 망루 짜는 법과, 뛰어들기를 당했을 때 올바르게 받는 법도 판 그림으로 소개합니다.</span></a></li></ul><h2>전법</h2><ul class="cards"><li><a href="souheki.html"><b>쌍벽: 9할을 이기는 전법과 단 하나의 약점</b><span>bocch의 전법 “쌍벽”은 AI끼리의 대국에서 대부분의 상대에게 9할 이상 이깁니다. 이길 수 없는 유일한 받기 “어깨 붙이기”와, 그때 두어야 할 수를 승률과 함께 소개합니다.</span></a></li><li><a href="ai-joseki-senpo.html"><b>새 AI가 바꾼 셋째 수 정석과 10가지 전법</b><span>bocch의 최강 CPU를 채점표 방식에서 신경망으로 새로 만들었습니다. 새 AI의 눈으로 다시 본 셋째 수 정석과, 초반 첫 수·둘째 수의 조합인 “전법” 10가지를 소개합니다.</span></a></li></ul><h2>수법</h2><ul class="cards"><li><a href="yubaku.html"><b>자폭: 내 수로 상대의 결정타를 만들지 않으려면</b><span>AI끼리의 2만 6천 판에서 2,047번 두어졌는데, 둔 쪽이 한 판도 이기지 못한 수가 있습니다. 상대 돌의 숫자를 스스로 바꿔 버리는 “자폭”을 찾아내는 법을 판 그림과 연습 문제로 해설합니다.</span></a></li><li><a href="dokumanju.html"><b>독 만두: 상대에게 내주고 이기는 수</b><span>bocch에는 돌을 잡는 규칙이 없습니다. 대신 내줄 수 있는 것은 “숫자”와 “선착”입니다. 일부러 상대 돌을 움직일 수 있게 만드는 “말 걸기”와, 돌을 뒤로 물리는 “시위 당기기”를 AI의 실전으로 소개합니다.</span></a></li></ul>
+<h2>기본</h2><ul class="cards"><li><a href="rules.html"><b>bocch 규칙과 노는 법</b><span>6×6 판에서 주변 돌의 수만큼 뛰는 보드게임 “bocch”의 규칙을 판 그림으로 설명합니다. 움직일 수 있는 거리가 정해지는 방식, 승패, 처음 몇 수에서 조심할 점까지.</span></a></li><li><a href="glossary.html"><b>bocch 용어집</b><span>bocch 해설과 영상에서 쓰는 말의 뜻을 정리했습니다. 숫자, 외톨이, 리치, 차이, 망루, 자폭, 밀어 올리기, 정석 이름 등.</span></a></li></ul><h2>수법</h2><ul class="cards"><li><a href="yubaku.html"><b>자폭: 내 수로 상대의 결정타를 만들지 않으려면</b><span>AI끼리의 2만 6천 판에서 2,047번 두어졌는데, 둔 쪽이 한 판도 이기지 못한 수가 있습니다. 상대 돌의 숫자를 스스로 바꿔 버리는 “자폭”을 찾아내는 법을 판 그림과 연습 문제로 해설합니다.</span></a></li><li><a href="dokumanju.html"><b>독 만두: 상대에게 내주고 이기는 수</b><span>bocch에는 돌을 잡는 규칙이 없습니다. 대신 내줄 수 있는 것은 “숫자”와 “선착”입니다. 일부러 상대 돌을 움직일 수 있게 만드는 “말 걸기”와, 돌을 뒤로 물리는 “시위 당기기”를 AI의 실전으로 소개합니다.</span></a></li></ul>
 </article>
 
 </main>
