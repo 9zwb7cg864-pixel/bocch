@@ -1882,7 +1882,7 @@ p.rate-msg.adv-bonus{display:block;width:max-content;max-width:100%;margin:6px a
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.88</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.89</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -5989,6 +5989,7 @@ window.bocchA2={locked:a2Locked,sheet:a2Sheet,close:a2Close,stand:a2Stand};
    ・自由練習：読みの力8項目の表。押すと5問。難しさは正解率が85%前後になるよう自動で上下、間違えた問題は1・3・7日後に復習
    問題は coach.json（人の対局から作った局面）。[段階, 種類, 盤36, 手番, 答え..., 難しさ]  手は 元*36+先 */
 (function(){
+let PLAY=0; // 手順の再生の番号。問題を開くたびに上げて、前の問題の再生を止める
 const CO={list:null,L:null,i:0,step:0,sel:-1,pick:-1,tg:new Set(),ch:'',ok:0,st:0,checked:false,after:null};
 const ST=[null,
  ['盤が見える','移動力は、まわりの石の数'],
@@ -6045,7 +6046,8 @@ const spans=(el,a,w)=>{el.replaceChildren();a.forEach(t=>{if(!t)return;const e=d
 function mk1(L){for(let t=0;t<50;t++){const e=L[Math.random()*L.length|0],b=e[2].split('').map(Number),p=e[3];const S_=[];for(let i=0;i<36;i++)if(b[i]===p&&movesFrom(b,i).length>=2)S_.push(i);if(!S_.length)continue;
   const s=S_[Math.random()*S_.length|0];return {id:-1,st:1,kind:'t',b,p,s,ans:movesFrom(b,s).map(m=>m[1])}}return null}
 /* 段階ごとの問題を、今の力（0〜1：やさしい→むずかしい）に合わせて選ぶ。期限の来た復習を先に入れる */
-const BYST={};function byst(st){if(BYST[st])return BYST[st];const L=CO.list,Y=[],N_=[];L.forEach((e,i)=>{if(e[0]!==st)return;(e[1]==='n'?N_:Y).push(i)});Y.sort((a,b)=>dOf(L[a])-dOf(L[b]));return BYST[st]={Y,N:N_}}
+const BYST={},SKIP=new Set([1415,1421,1466,1473,1481,2319,2328]); // 自分に2手で勝つ手があるのに「守り」を問う問題は出さない
+function byst(st){if(BYST[st])return BYST[st];const L=CO.list,Y=[],N_=[];L.forEach((e,i)=>{if(e[0]!==st||SKIP.has(i))return;(e[1]==='n'?N_:Y).push(i)});Y.sort((a,b)=>dOf(L[a])-dOf(L[b]));return BYST[st]={Y,N:N_}}
 function pickSet(st,n){const L=CO.list;if(st===1){const r=[];for(let k=0;k<n;k++){const q=mk1(L);if(q)r.push(q)}return r}
   const o=cGet(),{Y,N:N_}=byst(st),lv=o.lvl[st]==null?.15:o.lvl[st],now=Date.now(),pick=new Set();
   Object.keys(o.rev).map(Number).filter(i=>L[i]&&L[i][0]===st&&o.rev[i][0]<=now).slice(0,2).forEach(i=>pick.add(i));
@@ -6105,7 +6107,7 @@ function mode(){const q=Q();if(q.st===1)return 't';if(q.kind==='ab')return 'c';i
 function qText(q){const s=q.st;if(s===1)return '光っている石が行けるマスを、ぜんぶタップしよう';if(s===4&&q.kind==='ab')return '相手に勝ちを渡さないのは、AとBのどっち？';if(s===10)return 'ぼっちを作らないのは、AとBのどっち？';
   if(CO.step===0){if(s===2)return '次の1手で勝てる手はある？';if(s===3)return '相手に、次の1手で勝つ手はある？';if(s===6)return '2手で勝てる手順はある？'}
   return {2:'勝つ手を指そう',3:'止める手を指そう',4:'相手に勝ちを渡さない手を指そう',5:'相手を止めながら、次に勝てる形を作ろう',6:'勝ちにつながる1手目を指そう',7:'相手の2手の狙いを消す手を指そう',8:'3手で勝つ手順の1手目を指そう',9:'いちばん勝っている1手目を指そう',11:'自分も1つ着ける手を指そう',12:'相手の1つ目を止める手を指そう'}[s]}
-function qOpen(){const q=Q();CO.sel=-1;CO.pick=-1;CO.tg=new Set();CO.ch='';CO.checked=false;CO.board=null;if(CO.stepKeep!==true)CO.step=q.kind==='m'?1:0;CO.stepKeep=false;$('cogrid').querySelectorAll('.cq-abl').forEach(e=>e.remove());
+function qOpen(){PLAY++;const q=Q();CO.sel=-1;CO.pick=-1;CO.tg=new Set();CO.ch='';CO.checked=false;CO.board=null;if(CO.stepKeep!==true)CO.step=q.kind==='m'?1:0;CO.stepKeep=false;$('cogrid').querySelectorAll('.cq-abl').forEach(e=>e.remove());
   $('cqSheet').hidden=true;$('cqDFace').hidden=true;$('coboard').closest('.cq-bw').hidden=false;$('cqFoot').hidden=false;$('cqCheck').disabled=true;$('cqCheck').textContent='チェック';$('cqBar').style.width=(CO.ok/CO.tot*100)+'%';
   $('cqQ').textContent=qText(q);spans($('cqSub'),[q.p===1?'黒の番':'白の番',ST[q.st][0]],1);
   const op=$('cqOpts');op.replaceChildren();const m=mode();
@@ -6166,12 +6168,12 @@ function judge(){const q=Q(),b=q.b,p=q.p,o=3-p,m=mode();let ok=false,tx=[],L=[],
   if(q.st===1){const A=new Set(q.ans);ok=A.size===CO.tg.size&&[...A].every(x=>CO.tg.has(x));const n=nbCount(b,q.s);
     tx=['まわりに石が'+n+'つあるので、'+sq(q.s)+'は'+n+'マスまっすぐ進める'];q.ans.forEach(t=>mark[t]='cq-ok');[...CO.tg].forEach(t=>{if(!A.has(t))mark[t]='cq-ng'});return {ok,tx,L,mark}}
   if(q.kind==='ab'&&q.st===10){const pk=CO.ab['AB'.indexOf(CO.ch)];ok=pk===q.good;const nb_=isoL(apply(b,U(q.bad)),p).filter(i=>!isoL(b,p).includes(i));nb_.forEach(i=>mark[i]='cq-ng');
-    tx=[mv(q.bad)+'だと、'+nb_.map(sq).join('・')+'がぼっちになって動けない',mv(q.good)+'なら、ぼっちを作らない'];return {ok,tx,L:[ansL(q.good)],mark}}
+    tx=[mv(q.bad)+'だと、'+nb_.map(sq).join('・')+(nb_.length>1?'の石が':'が')+'ぼっちになって動けない',mv(q.good)+'なら、ぼっちを作らない'];return {ok,tx,L:[ansL(q.good)],mark}}
   if(q.kind==='ab'){const pk=CO.ab['AB'.indexOf(CO.ch)];ok=pk===q.good;
     tx=[lose(q.bad)||mv(q.bad)+'だと、相手に勝ちを渡す',mv(q.good)+'なら安全'];const lv=LV(b,p,q.bad);if(lv)return Object.assign({ok,tx},lv);return {ok,tx,L:[ansL(q.good)],mark}}
   if(m==='c'){const y=q.kind==='y';ok=(CO.ch==='y')===y;
     if(q.st===2){tx=[y?'1手で勝てる手がある':'どの手でも、次の1手では勝てない'];if(y&&!ok&&q.ans.length){tx.push(mv(q.ans[0])+'で勝ち');L=[ansL(q.ans[0])]}} // 「ない」と間違えたら勝つ手を見せる
-    if(q.st===3){if(y){const r=w1(b,o);tx=['相手は'+mv(K(r[0]))+'で勝ちを狙っている'];L=r.map(x=>[...x,o])}else tx=['相手に、次の1手で勝つ手はない']}
+    if(q.st===3){if(y){const r=w1(b,o);tx=['相手は'+mv(K(r[0]))+'で勝ちを狙っている'];L=r.map(x=>[...x,o]);if(!ok&&q.ans.length){tx.push(mv(q.ans[0])+'なら止められる');L.push(ansL(q.ans[0]))}}else tx=['相手に、次の1手で勝つ手はない']}
     if(q.st===6){tx=[y?'2手で勝てる手順がある':'2手で勝てる手順はない'];if(y&&!ok&&q.ans.length){const best=q.ans[0];tx.push(mv(best)+'のあと、相手がどう受けても次に勝てる',lineTx(proof2(b,p,best)));return {ok,tx,L:[ansL(best)],mark,br:[best,0]}}} // 「ない」と間違えたら手順を盤で動かして見せる
     return {ok,tx,L,mark,next:ok&&y}}
   const k=CO.pick,A=q.ans;ok=A.includes(k);const best=ok?k:A[0];L=[ansL(best)];const ls=ok?'':lose(k);
@@ -6193,10 +6195,9 @@ $('cqCheck').addEventListener('click',()=>{if(CO.checked||!CO.L)return;const q=Q
   CO.checked=true;CO.board=r.board||null;CO.pick=r.board?-1:CO.pick;draw(r.mark);rchDraw($('cogrid'),'C',r.L);$('cogrid').querySelectorAll('.cq-abl').forEach(e=>e.remove());
   const first=!CO.wrong.has(CO.i)&&!q._again;if(first)record(q,r.ok);
   if(r.ok)CO.ok++;else if(!q._again){CO.wrong.add(CO.i);CO.L.push(Object.assign({},q,{_again:1}));CO.tot++}
-  sheet(r.ok,r.tx,q,false);lineBtns(r.lines,q);if(r.br&&!r.lines){const pr=q.st===8?proof3(q.b,q.p,r.br[0]):proof2(q.b,q.p,r.br[0]);setTimeout(()=>playLine(pr,q),500)}if(r.br){const n=brShow(q,r.br[0],r.br[1]);if(n)spans($('cqTx'),r.tx.concat([r.br[1]?'相手の受けごとの2手目は'+n+'通り。受けをタップすると、盤で動く':'勝ち方は'+n+'つ。受けをタップすると、盤で動く']))}if(r.lines)setTimeout(()=>playLine(r.lines[0][1],q),500)});
+  sheet(r.ok,r.tx,q,false);lineBtns(r.lines,q);if(r.br&&!r.lines){const pr=q.st===8?proof3(q.b,q.p,r.br[0]):proof2(q.b,q.p,r.br[0]);const id=PLAY;setTimeout(()=>{if(id===PLAY&&Q()===q)playLine(pr,q)},500)}if(r.br){const n=brShow(q,r.br[0],r.br[1]);if(n)spans($('cqTx'),r.tx.concat([r.br[1]?'相手の受けごとの2手目は'+n+'通り。受けをタップすると、盤で動く':'勝ち方は'+n+'つ。受けをタップすると、盤で動く']))}if(r.lines){const id=PLAY;setTimeout(()=>{if(id===PLAY&&Q()===q)playLine(r.lines[0][1],q)},500)}});
 function lineBtns(lines,q){const box=$('cqLines');box.replaceChildren();box.hidden=!lines;if(!lines)return;
   for(const [nm,seq] of lines){const b=document.createElement('button');b.type='button';b.className='cq-lb';b.textContent=nm;b.addEventListener('click',()=>playLine(seq,q));box.append(b)}}
-let PLAY=0;
 function playLine(seq,q){const id=++PLAY,g=$('cogrid');let b=q.b.slice(),p=q.p,i=0;CO.board=b;CO.pick=-1;g.querySelectorAll('.cq-abl').forEach(e=>e.remove());draw();rchDraw(g,'C',[]);const arr=[];
   const step=()=>{if(id!==PLAY||!CO.L||i>=seq.length)return;const m=seq[i],mover=b[m[0]]||p;b=apply(b,m);CO.board=b;arr.push([m[0],m[1],mover]);const mark={};mark[m[1]]='cq-mv';draw(mark);rchDraw(g,'C',arr.slice(-2));
     const e=document.createElement('span');e.className='cq-abl n';e.textContent=String(i+1);e.style.left=((m[1]%6)+.5)/6*100+'%';e.style.top=((m[1]/6|0)+.5)/6*100+'%';g.append(e);i++;setTimeout(step,1100)};step()}
@@ -6244,7 +6245,7 @@ function stepExample(){steps(1);const body=$('clBody');body.replaceChildren();co
   if(th===5){const nx=w1(apply(q.b,U(best)),p);tx=[mv(best)+'で止めつつ、次に'+mv(K(nx[0]))+'で勝てる']}
   if(th===6)tx=[mv(best)+'のあと、相手がどう受けても次に勝てる'];if(th===7)tx=[mv(best)+'なら、相手の2手の狙いが消える'];if(th===8)tx=[mv(best)+'から、3手で勝ちきれる'];
   if(th===9){const r=q.rates||[];tx=[mv(best)+'が、AI同士の対局でいちばん勝っている'+(r[0]?'（'+r[0]+'%）':''),r.length>1?'いちばん勝てていない手は'+r[r.length-1]+'%':'']}
-  if(th===10){const bd=q.bad;const nb_=bd!=null?isoL(apply(q.b,U(bd)),p).filter(i=>!isoL(q.b,p).includes(i)):[];tx=[bd!=null&&nb_.length?mv(bd)+'だと、'+nb_.map(sq).join('・')+'がぼっちになる':'',mv(best)+'なら、ぼっちを作らない']}
+  if(th===10){const bd=q.bad;const nb_=bd!=null?isoL(apply(q.b,U(bd)),p).filter(i=>!isoL(q.b,p).includes(i)):[];tx=[bd!=null&&nb_.length?mv(bd)+'だと、'+nb_.map(sq).join('・')+(nb_.length>1?'の石が':'が')+'ぼっちになる':'',mv(best)+'なら、ぼっちを作らない']}
   if(th===11)tx=['相手は1つ着いている',mv(best)+'で、自分も1つ着ける'];
   if(th===12){const hm=hMoves(q.b,o);tx=['相手は'+(hm.length?mv(K(hm[0]))+'で':'')+'1つ目を着けられる',mv(best)+'なら、それを止められる'];if(hm.length)L.push([...hm[0],o])}
   const meta=document.createElement('p');meta.className='cl-meta';meta.textContent='例題　'+(p===1?'黒の番':'白の番');
