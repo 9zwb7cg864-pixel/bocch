@@ -304,11 +304,14 @@ async function open(o){
     for(const codec of ['avc1.640028','avc1.4d0028','avc1.42e028']){const v={codec,width:1080,height:1920,bitrate:12e6,framerate:30,avc:{format:'avc'}};try{const r=await VideoEncoder.isConfigSupported(v);if(r&&r.supported)return v}catch(e){}}return null}
   async function encodeWC(buf,S0,TT,me){
     const v=await wcVideoCfg();if(!v)return null;
-    const sr=buf.sampleRate,ch=Math.min(2,buf.numberOfChannels),a={codec:'mp4a.40.2',sampleRate:sr,numberOfChannels:ch,bitrate:160000};
-    try{const r=await AudioEncoder.isConfigSupported(a);if(!r||!r.supported)return null}catch(e){return null}
+    const ch=Math.min(2,buf.numberOfChannels);let a=null,acodec='aac',sr=buf.sampleRate;
+    // 音声はAAC（どこでも再生できる）を優先。使えない端末はOpus（48kHz）で同じmp4に入れる
+    for(const [c,mc,r0] of [['mp4a.40.2','aac',buf.sampleRate],['opus','opus',48000]]){const x={codec:c,sampleRate:r0,numberOfChannels:ch,bitrate:160000};try{const r=await AudioEncoder.isConfigSupported(x);if(r&&r.supported){a=x;acodec=mc;sr=r0;break}}catch(e){}}
+    if(!a)return null;
+    if(sr!==buf.sampleRate){const oc=new OfflineAudioContext(ch,Math.ceil(buf.duration*sr),sr);const bs=oc.createBufferSource();bs.buffer=buf;bs.connect(oc.destination);bs.start();buf=await oc.startRendering()}
     let MX;try{MX=await loadMux()}catch(e){return null}if(!MX)return null;
     const target=new MX.ArrayBufferTarget();
-    const mux=new MX.Muxer({target,video:{codec:'avc',width:1080,height:1920},audio:{codec:'aac',numberOfChannels:ch,sampleRate:sr},fastStart:'in-memory',firstTimestampBehavior:'offset'});
+    const mux=new MX.Muxer({target,video:{codec:'avc',width:1080,height:1920},audio:{codec:acodec,numberOfChannels:ch,sampleRate:sr},fastStart:'in-memory',firstTimestampBehavior:'offset'});
     let err=null;const ve=new VideoEncoder({output:(c,m)=>mux.addVideoChunk(c,m),error:e=>{err=e}});ve.configure(v);
     const ae=new AudioEncoder({output:(c,m)=>mux.addAudioChunk(c,m),error:e=>{err=e}});ae.configure(a);
     const s0=Math.floor(S0*sr),s1=Math.min(buf.length,Math.ceil(TT*sr)),CHD=[];for(let k=0;k<ch;k++)CHD.push(buf.getChannelData(k));

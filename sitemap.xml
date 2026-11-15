@@ -73,4 +73,12 @@
   <url><loc>https://bocchgame.com/privacy-ko.html</loc><lastmod>2026-10-25</lastmod><priority>0.2</priority></url>
   <url><loc>https://bocchgame.com/privacy-es.html</loc><lastmod>2026-10-25</lastmod><priority>0.2</priority></url>
   <url><loc>https://bocchgame.com/privacy-de.html</loc><lastmod>2026-10-25</lastmod><priority>0.2</priority></url>
+
+  <url><loc>https://bocchgame.com/learn/cannae.html</loc><lastmod>2026-11-15</lastmod><priority>0.7</priority></url>
+  <url><loc>https://bocchgame.com/learn/en/cannae.html</loc><lastmod>2026-11-15</lastmod><priority>0.5</priority></url>
+  <url><loc>https://bocchgame.com/learn/zh-hans/cannae.html</loc><lastmod>2026-11-15</lastmod><priority>0.5</priority></url>
+  <url><loc>https://bocchgame.com/learn/zh-hant/cannae.html</loc><lastmod>2026-11-15</lastmod><priority>0.5</priority></url>
+  <url><loc>https://bocchgame.com/learn/ko/cannae.html</loc><lastmod>2026-11-15</lastmod><priority>0.5</priority></url>
+  <url><loc>https://bocchgame.com/learn/es/cannae.html</loc><lastmod>2026-11-15</lastmod><priority>0.5</priority></url>
+  <url><loc>https://bocchgame.com/learn/de/cannae.html</loc><lastmod>2026-11-15</lastmod><priority>0.5</priority></url>
 </urlset>

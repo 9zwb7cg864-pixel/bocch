@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Das Cannae-Gambit: ein geschenktes Ziel, das die Partie kostet | bocch</title>
+<meta name="description" content="Im Cannae-Gambit bietet Weiß Schwarz absichtlich das erste Ziel an. Mit der KI zeigen wir Zug um Zug, warum das Annehmen innerhalb von drei Zügen verliert und wie man es richtig ablehnt.">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/de/cannae.html">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/cannae.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/cannae.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/cannae.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/cannae.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/cannae.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/cannae.html">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/cannae.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/cannae.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="Das Cannae-Gambit: ein geschenktes Ziel, das die Partie kostet">
+<meta property="og:description" content="Im Cannae-Gambit bietet Weiß Schwarz absichtlich das erste Ziel an. Mit der KI zeigen wir Zug um Zug, warum das Annehmen innerhalb von drei Zügen verliert und wie man es richtig ablehnt.">
+<meta property="og:url" content="https://bocchgame.com/learn/de/cannae.html">
+<meta property="og:image" content="https://bocchgame.com/og-de.jpg?v=2">
+<meta property="og:locale" content="de_DE">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Das Cannae-Gambit: ein geschenktes Ziel, das die Partie kostet", "description": "Im Cannae-Gambit bietet Weiß Schwarz absichtlich das erste Ziel an. Mit der KI zeigen wir Zug um Zug, warum das Annehmen innerhalb von drei Zügen verliert und wie man es richtig ablehnt.", "inLanguage": "de", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about-de.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/de/cannae.html", "datePublished": "2026-11-15", "dateModified": "2026-11-15"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+/* 今のサイトと同じ見た目の盤（2026-11-14以降の記事） */
+.nb .grid{background:#c9d2e3;border:0;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.nb .c{border:0}
+.nb .c:nth-child(12n+2),.nb .c:nth-child(12n+4),.nb .c:nth-child(12n+6),.nb .c:nth-child(12n+7),.nb .c:nth-child(12n+9),.nb .c:nth-child(12n+11){background:#8f9bb6}
+.nb .c.to{background:#a9cdf7!important}
+.nb .c.fr::before{border-color:rgba(28,36,54,.45)}
+.nb .c.mk{box-shadow:inset 0 0 0 3px #2f6fa8}
+.nb .s{width:80%;height:80%;font-family:"Outfit","Zen Kaku Gothic New",sans-serif;font-weight:700}
+.nb .s.b{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);color:#f4f4f4;box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.nb .s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%);color:#2a2c33;box-shadow:0 3px 4px rgba(0,0,0,.3)}
+.nb .s.z{opacity:.55}
+.nb .ar line{stroke:#2f7fd6;stroke-dasharray:none;stroke-width:2.2}.nb .ar path{fill:#2f7fd6}
+</style>
+</head>
+<body class="nb">
+<header class="top"><a class="logo" href="../../de.html">bocch</a><nav><a href="../../learn/de/">Artikel</a><a href="../../guide-de.html">Leitfaden</a><a class="play" href="../../de.html">Spielen</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">Eröffnungen</div>
+<h1>Das Cannae-Gambit: ein geschenktes Ziel, das die Partie kostet</h1>
+<p class="meta">kairo · 15. November 2026</p>
+<p class="lead">Es gibt einen Zug, mit dem Weiß einen schwarzen Stein direkt ins Ziel gehen lässt. Ein geschenktes erstes Ziel. Doch laut KI steht Schwarz nach dem Annehmen deutlich schlechter. In der bocch-Eröffnungstheorie nennen wir einen Zug, der dem Gegner ein Ziel anbietet, ein „Gambit“. Das Cannae-Gambit ist das klassische Beispiel.</p>
+<h2>Die Züge bis hierher</h2>
+<p>Schwarz zieht einen Randstein diagonal nach innen, die <strong>Eckeröffnung</strong> (1f→2e), und Weiß antwortet mit derselben Form, der <strong>Symmetrischen Verteidigung</strong> (1a→2b). Zieht Schwarz den zweiten Stein zwei Felder gerade nach vorn, ist das die <strong>Speer-Variante</strong> (2f→2d). Dann holt Weiß die andere Ecke herein (6a→5b), und Schwarz zieht den Mittelstein vor (3f→3d).</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>Fortsetzung der Speer-Variante. Weiß am Zug</figcaption></figure>
+<h2>2b→4d von Weiß: das Ziel anbieten</h2>
+<p>Weiß springt 2b→4d, direkt neben den schwarzen 3d.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c fr"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">2</b></i><i class="c"><b class="s b">3</b></i><i class="c to mk"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="45.2" y1="54.8" x2="87.4" y2="12.6" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>3d hat jetzt drei Nachbarn: 2d, 2e und 4d. Seine Zahl ist 3, er erreicht 6a</figcaption></figure>
+<p>Mit drei Nachbarn (2d, 2e und 4d) hat 3d die Zahl 3. Er kann drei Felder diagonal springen, direkt ins Ziel auf 6a. Weiß hat Schwarz das erste Ziel angeboten.</p>
+<p>Trotzdem ist das kein Fehler. Die KI bewertet den Zug nur wenig schlechter als den besten Zug von Weiß (5b→3b), um 16. Ein kleiner Preis für eine große Falle.</p>
+<h2>Nimm an, und du verlierst in drei Zügen</h2>
+<p>Schwarz spielt 3d→6a und geht ins Ziel. Schwarz kommt zuerst an.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">3</b></i><i class="c g to"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">3</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c fr"></i><i class="c"><b class="s w z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>3d→6a. Schwarz hat ein Ziel, doch die KI sieht Weiß bei +115</figcaption></figure>
+<p>Doch schon jetzt sieht die KI Weiß bei +115, ein großer Vorteil. Verfolgen wir die Züge einzeln.</p>
+<p>Weiß spielt 3a→5c. Jetzt hat der weiße 5b vier Nachbarn: 4a, 5a, 5c und den schwarzen Stein, der gerade auf 6a angekommen ist.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c g fr"></i><i class="c g mk"><b class="s w">2</b></i><i class="c g mk"><b class="s w">3</b></i><i class="c g mk"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">4</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to mk"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="71.5" y1="28.5" x2="12.6" y2="87.4" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>Die Zahl von 5b ist 4. Einer seiner Nachbarn ist der schwarze Stein im Ziel</figcaption></figure>
+<p>Die Zahl von 5b ist 4. Vier Felder diagonal ist genau das Ziel auf 1f. <strong>Der Zielstein, den Schwarz geschenkt bekam, hat die Zahl von Weiß erhöht.</strong></p>
+<p>Schwarz muss reagieren. Die beste Verteidigung laut KI ist 2d→3c. Aber 3c steht diagonal neben dem weißen 4d. Die Zahl von 4d wird 2, und jetzt erreicht er auch 2f.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">4</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">1</b></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c fr"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="71.5" y1="28.5" x2="12.6" y2="87.4" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/><line x1="54.8" y1="61.9" x2="29.2" y2="87.4" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>Weiß hat zwei Reach. Schwarz kann nicht beide stoppen</figcaption></figure>
+<p>Zwei Reach, und Schwarz kann nicht beide stoppen. Weiß geht mit genau dem Stein ins Ziel, den es angeboten hat: 4d→2f.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">4</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b z">0</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c fr"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g to"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>Der angebotene 4d geht direkt ins Ziel. Eins zu eins</figcaption></figure>
+<p>Schwarz blockiert den verbleibenden Reach mit 2e→1f. Aber sieh aufs Brett: Der schwarze 3c hat keine Nachbarn. Er ist ein Einzelgänger und kann nicht ziehen. Die schwarze Front ist weg.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">4</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b z">0</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c fr"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g to"><b class="s b">1</b></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>Der schwarze 3c ist ein Einzelgänger. Von hier wächst die KI-Bewertung bis Weiß +210</figcaption></figure>
+<div class="pt">Ein Stein im Ziel erhöht auch die Zahlen des Gegners</div>
+<h2>Wie man es ablehnt</h2>
+<p>Wie soll Schwarz also auf 2b→4d antworten? Wir haben die KI alle Antworten von Schwarz berechnen lassen.</p>
+<div class="tw"><table><thead><tr><th>Antwort von Schwarz</th><th>KI-Bewertung</th></tr></thead><tbody><tr><td>6f→6e</td><td>Ausgeglichen</td></tr><tr><td>2e→2c</td><td>Weiß +8</td></tr><tr><td>4f→3f</td><td>Weiß +13</td></tr><tr><td>3d→6a (annehmen)</td><td>Weiß +106</td></tr><tr><td>6f→5e</td><td>Weiß +150</td></tr></tbody></table></div>
+<p>Am besten ist das ruhige 6f→6e. Schwarz geht nicht ins Ziel und lässt den Reach von 3d auf dem Brett. Solange 3d jederzeit hinein kann, muss Weiß ihn im Auge behalten. Richtig ist, <strong>das Geschenk als Drohung zu behalten</strong>, statt es einzulösen.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"><b class="s b">3</b></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">1</b></i><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="45.2" y1="54.8" x2="87.4" y2="12.6" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>6f→6e. Der Reach von 3d bleibt auf dem Brett. Die Partie ist ausgeglichen</figcaption></figure>
+<p>Vorsicht vor 6f→5e, dem Hereinholen der anderen Ecke. Es sieht natürlich aus, ist aber noch schlechter als das Annehmen.</p>
+<h2>Woher der Name kommt</h2>
+<p>In der Schlacht bei Cannae 216 v. Chr. ließ Hannibal die Mitte seines Heeres absichtlich zurückweichen, zog die Römer hinein und schloss sie von beiden Seiten ein – ein vernichtender Sieg. Eine Lücke zeigen, den Feind hineinziehen, aus zwei Richtungen angreifen: dieselbe Form wie diese Eröffnung.</p>
+<h2>Zusammenfassung</h2>
+<ul><li>In der Speer-Variante kann Weiß Schwarz mit 2b→4d ein Ziel anbieten.</li><li>Nimmt Schwarz an: Weiß +115.</li><li>Der Zielstein erhöht die Zahlen von Weiß, und der angebotene Stein geht als Nächstes ins Ziel.</li><li>Schwarz lehnt mit 6f→6e ab und lässt den Reach als Drohung auf dem Brett.</li></ul>
+<p class="note">Wir haben begonnen, Eröffnungen zu benennen, nachdem ein Zuschauer aus dem Ausland vorgeschlagen hatte, sie wie im Schach zu benennen. Die Bewertungen stammen von der KI.</p>
+</article>
+<section class="rel"><h2>Verwandte Artikel</h2><ul><li><a href="../../learn/de/glossary.html">bocch-Glossar</a></li><li><a href="../../learn/de/dokumanju.html">Giftköder: gewinnen, indem man dem Gegner etwas schenkt</a></li></ul></section>
+</main>
+<footer><p><a href="../../learn/de/">Alle Artikel</a><a href="../../learn/de/glossary.html">Glossar</a><a href="../../guide-de.html">Strategie-Anleitung</a><a href="../../about-de.html">Über den Betreiber</a><a href="../../privacy-de.html">Datenschutz & Kontakt</a></p><p class="langs"><a href="../../learn/cannae.html" lang="ja">日本語</a><a href="../../learn/en/cannae.html" lang="en">English</a><a href="../../learn/zh-hans/cannae.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/cannae.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/cannae.html" lang="ko">한국어</a><a href="../../learn/es/cannae.html" lang="es">Español</a><a href="../../learn/de/cannae.html" aria-current="page" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>
