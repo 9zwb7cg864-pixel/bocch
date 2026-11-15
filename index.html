@@ -1882,7 +1882,7 @@ p.rate-msg.adv-bonus{display:block;width:max-content;max-width:100%;margin:6px a
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.87</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.88</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -6170,9 +6170,9 @@ function judge(){const q=Q(),b=q.b,p=q.p,o=3-p,m=mode();let ok=false,tx=[],L=[],
   if(q.kind==='ab'){const pk=CO.ab['AB'.indexOf(CO.ch)];ok=pk===q.good;
     tx=[lose(q.bad)||mv(q.bad)+'だと、相手に勝ちを渡す',mv(q.good)+'なら安全'];const lv=LV(b,p,q.bad);if(lv)return Object.assign({ok,tx},lv);return {ok,tx,L:[ansL(q.good)],mark}}
   if(m==='c'){const y=q.kind==='y';ok=(CO.ch==='y')===y;
-    if(q.st===2)tx=[y?'1手で勝てる手がある':'どの手でも、次の1手では勝てない'];
+    if(q.st===2){tx=[y?'1手で勝てる手がある':'どの手でも、次の1手では勝てない'];if(y&&!ok&&q.ans.length){tx.push(mv(q.ans[0])+'で勝ち');L=[ansL(q.ans[0])]}} // 「ない」と間違えたら勝つ手を見せる
     if(q.st===3){if(y){const r=w1(b,o);tx=['相手は'+mv(K(r[0]))+'で勝ちを狙っている'];L=r.map(x=>[...x,o])}else tx=['相手に、次の1手で勝つ手はない']}
-    if(q.st===6)tx=[y?'2手で勝てる手順がある':'2手で勝てる手順はない'];
+    if(q.st===6){tx=[y?'2手で勝てる手順がある':'2手で勝てる手順はない'];if(y&&!ok&&q.ans.length){const best=q.ans[0];tx.push(mv(best)+'のあと、相手がどう受けても次に勝てる',lineTx(proof2(b,p,best)));return {ok,tx,L:[ansL(best)],mark,br:[best,0]}}} // 「ない」と間違えたら手順を盤で動かして見せる
     return {ok,tx,L,mark,next:ok&&y}}
   const k=CO.pick,A=q.ans;ok=A.includes(k);const best=ok?k:A[0];L=[ansL(best)];const ls=ok?'':lose(k);
   if(q.st===2)tx=ok?[mv(k)+'で勝ち']:['その手では勝てない',mv(best)+'で勝ち'];
