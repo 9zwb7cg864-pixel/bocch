@@ -1892,7 +1892,7 @@ body.tabs-on .scr{padding-bottom:124px}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.90</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.91</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -3497,7 +3497,7 @@ async function take(room){
 }
 // 組み合わせのあと、相手が部屋に来ないとき（同時に取り合った等）は、自動で探し直す
 function armWait(){clearTimeout(NET.waitT);NET.waitT=setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.watch&&!NET.guest&&!S.over){netMsg('相手が来なかったので、探し直します…');setTimeout(()=>{if(S.mode==='net'&&NET.auto&&!NET.guest)startMatch()},1200)}},12000)}
-/* 影の相手：ランダム対戦で30〜50秒だれも来なければ、CPU（やさしい61%・ふつう39%）が「名無しの石」として部屋に入る。
+/* 影の相手：ランダム対戦で30〜50秒だれも来なければ、CPU（強さは全員「つよい」相当）が「名無しの石」として部屋に入る。
    部屋の記録に普通の参加者として join・move・rematch を流すので、時計・チャット・再戦・レート計算はオンライン対戦のまま動く */
 const SHADOW={bot:null,timer:null,key:'',rates:null};
 // ふつうのときに名乗る名前（それぞれ自分のレートを持ち、勝ち負けで増減する）。やさしいのときは「名無しの石」のまま
@@ -3542,27 +3542,16 @@ function shadowWait(info){
   if(remain<90)w=Math.min(w,8);if(remain<40)w=Math.min(w,3);
   w=Math.min(w,Math.max(2,remain-45));                      // 時間切れにはしない
   return Math.max(1.0,w)*1000}
-// 手の選び方：上位候補から温度付きで選ぶ。勝ち筋をたまに見逃す、相手のリーチをたまに無視する、序盤は散らす、同じ石ばかり動かさない
+// 手の選び方：だれに対しても「つよい」と同じくらいの強さで指す。勝てる手は必ず指し、相手の1手勝ちは必ず受ける。
+// 8割は最強と同じ評価（ニューラルネット）の手、2割は「ふつう」の読みの手で、毎局同じ指し方にならないようにする
 function shadowPick(b,p,level,hist){
   const ms=allMoves(b,p);if(!ms.length)return null;const info={};
   const wins=ms.filter(m=>arrived(apply(b,m),p));
-  if(wins.length&&Math.random()<(level===1?0.7:0.85)){info.instant=true;return {m:wins[Math.random()*wins.length|0],info}}
-  const depth=level===1?1:2;deadline=performance.now()+600;
-  const sc=ms.map(m=>{aborted=false;let v=-negamax(apply(b,m),3-p,depth-1,-Infinity,Infinity);if(aborted)v=evaluate(apply(b,m),p);return {m,v}});
-  // 相手の即勝ちを許す手（受けないといけない局面）を見つける
-  const losing=sc.filter(x=>x.v<=-90000);info.threat=losing.length>0&&losing.length<sc.length;
-  let cand=sc;
-  if(info.threat){const ignore=Math.random()<(level===1?0.45:0.25);if(!ignore)cand=sc.filter(x=>x.v>-90000)}
-  // 人間っぽい癖：前に出る手を少し好む、直前に動かした石をまた動かすのは少し避ける、ぼっちを作る手は少し避ける
-  const last=hist&&hist.length>=2?hist[hist.length-2]:null; // 2手前＝自分の前の手
-  for(const x of cand){const [f,t]=x.m;const fw=(p===1?(f/6|0)-(t/6|0):(t/6|0)-(f/6|0));x.h=x.v+fw*4+(last&&last[1]===f?-6:0)+(nbCount(apply(b,x.m),t)===0?-8:0)+(Math.random()-0.5)*6}
-  cand.sort((u,v)=>v.h-u.h);
-  if(S.ply<=2){const top=cand.slice(0,5);return {m:top[Math.random()*top.length|0].m,info}}
-  const best=cand[0].h,T=level===1?70:32;
-  const ws=cand.map(x=>Math.exp((x.h-best)/T));const tot=ws.reduce((u,v)=>u+v,0);let r=Math.random()*tot;
-  let pick=cand[0];for(let i=0;i<cand.length;i++){r-=ws[i];if(r<=0){pick=cand[i];break}}
-  info.few=cand.length<=4||(cand[1]&&best-cand[1].h>60);
-  return {m:pick.m,info}}
+  if(wins.length){info.instant=true;return {m:wins[Math.random()*wins.length|0],info}}
+  info.threat=allMoves(b,3-p).some(m=>arrived(apply(b,m),3-p));info.few=ms.length<=4;
+  const safe=m=>{const b2=apply(b,m);return !allMoves(b2,3-p).some(x=>arrived(apply(b2,x),3-p))};
+  if(typeof BocchEngine!=='undefined'&&Math.random()<0.8){try{const r=BocchEngine.think(b.slice(),p,300,{history:[],shuffle:(S.ply||0)<4,book:false,maxDepth:1});if(r&&r.move&&safe(r.move))return {m:r.move,info}}catch(e){}}
+  return {m:cpuMove(b,p,2),info}}
 function shadowTick(){
   const b=SHADOW.bot;if(!b)return;
   if(S.mode!=='net'||NET.code!==b.room){shadowStop();return}
