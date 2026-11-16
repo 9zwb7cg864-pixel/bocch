@@ -9,10 +9,16 @@
 //   GET  /bocch-v1-stats/view            … 集計を見る（ヘッダー X-Pass のパスワードが合うときだけ）
 //   POST /bocch-v1-kifu/rec              … 終わった対局の棋譜を残す（コーチづくり・改善用。端末のランダムIDだけで、名前・メールは受け取らない。2年で消す）
 //   GET  /bocch-v1-kifu/dump?since=…     … 残した棋譜を1行1局で取り出す（X-Pass が合うときだけ）
+//   GET  /bocch-v1-news/list             … 運営のお知らせ（新しい順・無期限に保存）
+//   POST /bocch-v1-news/post {title,body} … お知らせを出す（X-Pass が合うときだけ。日本語を6言語に訳して保存）
+//   POST /bocch-v1-news/del {id}          … お知らせを消す（X-Pass が合うときだけ）
+// フレンドの受信箱（bocch-v1-in-…）だけは30日保存する（12時間だと、開かない人に申請が届かない）
 // since は all / 90s / 15m / 3h / UNIX秒。
 import { DurableObject } from "cloudflare:workers";
 
 const KEEP_SEC = 12 * 3600;     // 保存期間
+const KEEP_IN = 30 * 86400;     // フレンドの受信箱の保存期間
+const keepOf = t => /^bocch-v1-in-/.test(t || "") ? KEEP_IN : KEEP_SEC;
 const KEEP_MAX = 1000;          // 1話題あたりの最大件数
 const BODY_MAX = 4096;          // 1件の最大バイト数
 const STATS_HASH = "c301ac70fe153803d6486e1b8651e4369b180c2b20904f6c57b70c17169a7055";   // 利用状況ページのパスワードの SHA-256
@@ -63,6 +69,24 @@ function parseSince(s, now) {
   if (!m[2]) return n;                       // UNIX秒
   return now - n * { s: 1, m: 60, h: 3600, d: 86400 }[m[2]];
 }
+// 日本語を訳す（Google 翻訳の公開窓口。失敗したら空を返し、その言語は日本語のまま出す）
+// URL は訳す前に ⟦0⟧ のような目印に置きかえ、訳したあとで元に戻す（翻訳で URL が崩れないように）
+async function gtx(q, tl) {
+  const urls = [];
+  const src = q.replace(/https?:\/\/[^\s<>"'　]+/g, u => "⟦" + (urls.push(u) - 1) + "⟧");
+  const out = await gtx0(src, tl);
+  if (!out) return "";
+  let ok = true;
+  const back = out.replace(/⟦\s*(\d+)\s*⟧/g, (m, i) => urls[+i] != null ? urls[+i] : m);
+  for (const u of urls) if (!back.includes(u)) ok = false;
+  return ok ? back : "";
+}
+async function gtx0(q, tl) {
+  const r = await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&dt=t&tl=" + tl + "&q=" + encodeURIComponent(q));
+  if (!r.ok) return "";
+  const j = await r.json();
+  return Array.isArray(j && j[0]) ? j[0].map(x => x && x[0] || "").join("") : "";
+}
 function rid() {
   const a = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   const r = crypto.getRandomValues(new Uint8Array(12));
@@ -82,10 +106,10 @@ export class Topic extends DurableObject {
     return this.sql.exec("SELECT id, time, body FROM m WHERE time >= ? ORDER BY seq", since).toArray();
   }
   ev(topic, r) {
-    return { id: r.id, time: r.time, expires: r.time + KEEP_SEC, event: "message", topic, message: r.body };
+    return { id: r.id, time: r.time, expires: r.time + keepOf(topic), event: "message", topic, message: r.body };
   }
-  prune(now) {
-    this.sql.exec("DELETE FROM m WHERE time < ?", now - KEEP_SEC);
+  prune(now, topic) {
+    this.sql.exec("DELETE FROM m WHERE time < ?", now - keepOf(topic));
     this.sql.exec("DELETE FROM m WHERE seq <= (SELECT seq FROM m ORDER BY seq DESC LIMIT 1 OFFSET ?)", KEEP_MAX);
   }
 
@@ -101,7 +125,7 @@ export class Topic extends DurableObject {
       if (new TextEncoder().encode(body).length > BODY_MAX) return new Response("too large\n", { status: 413, headers: h });
       const r = { id: rid(), time: now, body };
       this.sql.exec("INSERT INTO m (id, time, body) VALUES (?, ?, ?)", r.id, r.time, r.body);
-      this.prune(now);
+      this.prune(now, topic);
       const out = JSON.stringify(this.ev(topic, r));
       for (const ws of this.ctx.getWebSockets()) { try { ws.send(out); } catch (e) {} }
       return new Response(out + "\n", { headers: { ...h, "Content-Type": "application/json" } });
@@ -149,6 +173,35 @@ export class Topic extends DurableObject {
     if (topic === "bocch-v1-kifu" && action === "rec" && req.method === "POST") return this.kifuRec(req, h, now);
     if (topic === "bocch-v1-kifu" && action === "dump" && req.method === "GET") return this.kifuDump(req, h, url);
 
+    // 運営のお知らせ（話題 bocch-v1-news だけ）
+    if (topic === "bocch-v1-news") return this.news(req, h, action, now);
+
+    return new Response("not found\n", { status: 404, headers: h });
+  }
+
+  // ---- 運営のお知らせ ----
+  async news(req, h, action, now) {
+    const st = this.ctx.storage, J = o => new Response(JSON.stringify(o), { headers: { ...h, "Content-Type": "application/json", "Cache-Control": "no-store" } });
+    if (action === "list" && req.method === "GET") {
+      const m = await st.list({ prefix: "n:", reverse: true, limit: 50 });
+      return J([...m.values()]);
+    }
+    if ((action === "post" || action === "del") && req.method === "POST") {
+      if (!(await this.passOk(req))) { await new Promise(r => setTimeout(r, 800)); return new Response("forbidden\n", { status: 401, headers: h }); }
+      let b; try { b = JSON.parse(await req.text()); } catch (e) { return new Response("bad\n", { status: 400, headers: h }); }
+      if (action === "del") { const id = String(b && b.id || ""); if (!/^n:\d{10}:[A-Za-z0-9]{12}$/.test(id)) return new Response("bad\n", { status: 400, headers: h }); await st.delete(id); return J({ ok: 1 }); }
+      const title = String(b && b.title || "").trim().slice(0, 80), body = String(b && b.body || "").trim().slice(0, 2000);
+      if (!title) return new Response("bad\n", { status: 400, headers: h });
+      const tr = { ja: { t: title, b: body } };
+      const LG = { en: "en", "zh-Hans": "zh-CN", "zh-Hant": "zh-TW", ko: "ko", es: "es", de: "de" };
+      await Promise.all(Object.entries(LG).map(async ([k, tl]) => {
+        try { const [t, bb] = await Promise.all([gtx(title, tl), body ? gtx(body, tl) : ""]); if (t) tr[k] = { t, b: bb || body }; } catch (e) {}
+      }));
+      const id = "n:" + now + ":" + rid();
+      const it = { id, t: now, tr };
+      await st.put(id, it);
+      return J(it);
+    }
     return new Response("not found\n", { status: 404, headers: h });
   }
 

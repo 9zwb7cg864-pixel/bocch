@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg?v=2">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=49"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=50"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -1885,6 +1885,29 @@ p.rate-msg.adv-bonus{display:block;width:max-content;max-width:100%;margin:6px a
 .tabbar .tb-orb{position:absolute;top:-27px;left:0;width:50px;height:50px;margin-left:-25px;border-radius:50%;background:linear-gradient(180deg,var(--acc2),var(--acc));color:var(--ink);display:grid;place-items:center;box-shadow:0 6px 16px rgba(169,205,247,.35);pointer-events:none}
 .tabbar .tb-orb svg{width:24px;height:24px;stroke-width:2;opacity:1}
 body.tabs-on .scr{padding-bottom:124px}
+/* メール（ホームの上の列の封筒と、メール画面） */
+.hm-mail{position:relative;margin-left:auto;margin-right:8px;width:40px;height:40px;min-height:0;padding:0;border-radius:50%;background:var(--p1);display:grid;place-items:center;color:var(--acc2);flex:none}
+.hm-mail svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round}
+.hm-mail-b{position:absolute;top:-3px;right:-4px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#ff4d4d;color:#fff;font-size:11px;font-weight:800;line-height:18px;text-align:center;border:2px solid var(--bg)}
+.hm-mail-b[hidden]{display:none}
+.ml-seg{display:flex;background:var(--p1);border-radius:12px;padding:3px;margin:0 0 14px}
+.ml-seg button{flex:1;min-height:38px;padding:0;border-radius:10px;background:none;font-size:14px;font-weight:700;color:var(--mute)}
+.ml-seg button[aria-selected=true]{background:var(--p2,#3a404d);color:var(--fg,#fff)}
+.ml-seg em{font-style:normal;display:inline-block;min-width:18px;height:18px;line-height:18px;padding:0 5px;margin-left:6px;border-radius:9px;background:#ff4d4d;color:#fff;font-size:11px;vertical-align:1px}
+.ml-seg em[hidden]{display:none}
+.ml-it{background:var(--p1);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.ml-h{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:12px 14px;background:none;border-radius:0;text-align:left;font-size:15px;font-weight:700;color:var(--fg,#fff)}
+.ml-h b{flex:1;min-width:0}
+.ml-dot{width:8px;height:8px;border-radius:50%;background:var(--acc);flex:none}
+.ml-it.read .ml-dot{visibility:hidden}.ml-it.read .ml-h{color:var(--sub);font-weight:600}
+.ml-d{font-size:12px;color:var(--mute);font-weight:500;flex:none}
+.ml-b{padding:0 14px 14px 32px;font-size:14px;line-height:1.75;color:var(--sub);white-space:pre-wrap}
+.ml-del{display:block;margin-top:10px;min-height:32px;padding:4px 12px;font-size:12px;border-radius:999px}
+.ml-admin input,.ml-admin textarea{width:100%;margin-bottom:8px;font:inherit;font-size:15px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:inherit}
+.ml-admin textarea{resize:vertical;min-height:110px}
+.ml-note{font-size:12px;color:var(--mute);margin-top:8px}
+.ml-link{display:block;margin:6px auto 0;background:none;color:var(--acc);font-size:14px;min-height:40px}
+.ml-b a{color:var(--acc);text-decoration:underline;word-break:break-all}
 
 </style>
 </head>
@@ -1892,10 +1915,10 @@ body.tabs-on .scr{padding-bottom:124px}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.91</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.92</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
-    <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
+    <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
     <div class="hm-hero" aria-hidden="true">
       <div class="hm-hb"><div class="hm-hg" id="hmG"></div><div class="hm-hl" id="hmL"></div></div>
     </div>
@@ -2161,6 +2184,18 @@ body.tabs-on .scr{padding-bottom:124px}
 </section>
 
 <!-- 観戦 -->
+<section class="scr" data-scr="mail" hidden>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>メール</h2><span class="sp"></span></div>
+  <div class="ml-seg" role="tablist"><button type="button" role="tab" id="mlTabN" aria-selected="true">お知らせ<em id="mlCntN" hidden></em></button><button type="button" role="tab" id="mlTabF" aria-selected="false">フレンド申請<em id="mlCntF" hidden></em></button></div>
+  <div id="mlN">
+    <div class="fr-sec ml-admin" id="mlAdmin" hidden><h3>お知らせを書く</h3><input id="mlTitle" maxlength="80" placeholder="タイトル" autocomplete="off"><textarea id="mlBody" maxlength="2000" rows="5" placeholder="本文"></textarea><input id="mlPass" type="password" placeholder="管理用パスワード（利用状況と同じ）" autocomplete="current-password" hidden><button class="primary" id="mlPost" type="button">送る</button><p class="fr-msg" id="mlMsg" hidden></p><p class="ml-note">日本語で書けば、ほかの言語の人には自動で訳して届きます</p></div>
+    <div id="mlList"></div><p class="hist-empty" id="mlEmpty">お知らせはまだありません</p>
+  </div>
+  <div id="mlF" hidden>
+    <div class="fr-sec" id="mlFrSec" hidden><div id="mlFr"></div></div><p class="hist-empty" id="mlFrEmpty">届いている申請はありません</p>
+    <button class="ml-link" type="button" data-go="friends">フレンド画面へ</button>
+  </div>
+</section>
 <section class="scr" data-scr="friends" hidden>
   <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>フレンド</h2><span class="sp"></span></div>
   <div id="frNeed" class="card prof" hidden><p class="note">フレンド機能は、アカウントに登録してログインし、名前を付けると使えます。</p><button class="primary" data-go="profile">アカウントへ</button></div>
@@ -4674,7 +4709,7 @@ function frAccept(uid){const f=FR.fin.find(x=>x.uid===uid);if(!f)return;frAdd(ui
 function frDecline(uid){FR.fin=FR.fin.filter(x=>x.uid!==uid);frSave();frBadge();frRender()}
 function frRemove(uid){const f=FR.friends.find(x=>x.uid===uid);if(!f)return;if(!confirm(f.name+' さんをフレンドから外しますか？'))return;FR.friends=FR.friends.filter(x=>x.uid!==uid);delete FR.feeds[uid];frSave();frPostList();frRender()}
 function frCancelOut(uid){FR.fout=FR.fout.filter(x=>x.uid!==uid);frSave();frRender()}
-async function frPollInbox(){const me=myUid();if(!me||!FR.loaded)return;const ms=await frRead(frTopic('in',me),'12h');if(!ms||myUid()!==me)return;let ch=false;
+async function frPollInbox(){const me=myUid();if(!me||!FR.loaded)return;const ms=await frRead(frTopic('in',me),'30d');if(!ms||myUid()!==me)return;let ch=false;
   for(const m of ms){if(FR.seen.has(m._id))continue;FR.seen.add(m._id);ch=true;if(!okUid(m.uid)||m.uid===me)continue;const nm=cleanName(m.name)||'名無し';
     if(m.t==='freq'){if(isFriend(m.uid))continue;
       if(FR.fout.some(f=>f.uid===m.uid)){frAdd(m.uid,nm);frRelay(frTopic('in',m.uid),{t:'facc',uid:me,name:myName()});continue}
@@ -5771,6 +5806,63 @@ try{document.querySelectorAll('.cpu-lv').forEach(e=>{e.textContent=lvName(lvOfRa
 {const _rT=render;render=function(){_rT();try{for(const id of ['plTop','plBot']){const el=$(id);if(!el||el.hidden)continue;const d=el.querySelector('.dot');const c=d?(d.classList.contains('b')?1:2):0;
   let t=el.querySelector('.pl-turn');if(!t){t=document.createElement('span');t.className='pl-turn';el.appendChild(t)}
   const on=!S.over&&c&&S.turn===c;el.classList.toggle('on',!!on);const me=id==='plBot';t.textContent=S.over?'':on?(me?'あなたの番':'考え中'):'';t.hidden=!t.textContent}}catch(e){}}}
+</script>
+<script>
+/* メール：運営のお知らせ＋届いたフレンド申請。ホームの上の列の封筒に、未読のお知らせと申請の合計を出す。
+   お知らせは中継サーバー（bocch-v1-news）に置く。運営のアカウントでログインしたときだけ「お知らせを書く」が出る（送るときは利用状況と同じパスワード） */
+(function(){
+const ML={items:[],read:new Set(),tab:'n',admin:false,loadedAt:0};
+const ADMIN_H=['c456eecd7b8f88e455b24fa3ea6a79afc110e4fcdc4a13ea732a5816e0644567','2401f63807df65e610e3d264949e675963812516f7608b8ef954c750094e75a6'];
+const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
+try{const v=JSON.parse(localStorage.getItem('bocch-news-read')||'[]');if(Array.isArray(v))ML.read=new Set(v)}catch(e){}
+const saveRead=()=>{try{localStorage.setItem('bocch-news-read',JSON.stringify([...ML.read].slice(-300)))}catch(e){}};
+const txOf=it=>{const t=it&&it.tr||{};return t[window.BOCCH_LANG||'ja']||t.ja||{t:'',b:''}};
+// 本文の https:// から始まる部分だけをリンクにする（ほかは文字のまま）
+function linkify(box,s){const re=/https?:\/\/[^\s<>"'　]+/g;let i=0,m;while((m=re.exec(s))){if(m.index>i)box.append(document.createTextNode(s.slice(i,m.index)));let u=m[0].replace(/[。、．，,.)）」』]+$/,'');
+  const a=document.createElement('a');a.href=u;a.textContent=u;a.target='_blank';a.rel='noopener noreferrer';box.append(a);i=m.index+u.length;re.lastIndex=i}if(i<s.length)box.append(document.createTextNode(s.slice(i)))}
+const md=s=>{const d=new Date(s*1000);return (d.getMonth()+1)+'/'+d.getDate()};
+async function load(){try{const r=await fetch(RELAY+'bocch-v1-news/list',{cache:'no-store'});if(!r.ok)return;const a=await r.json();if(Array.isArray(a)){ML.items=a.filter(x=>x&&x.id&&x.tr);ML.loadedAt=Date.now();
+  if(!localStorage.getItem('bocch-news-seen0')){ML.items.forEach(x=>{if(x.t*1000<Date.now()-14*864e5)ML.read.add(x.id)});saveRead();try{localStorage.setItem('bocch-news-seen0','1')}catch(e){}}
+  render()}}catch(e){}}
+function unread(){return ML.items.filter(x=>!ML.read.has(x.id)).length}
+function badge(){const n=unread(),f=(typeof FR!=='undefined'&&FR.fin)?FR.fin.length:0,b=$('mailBadge');if(!b)return;b.textContent=String(n+f>99?'99+':n+f);b.hidden=!(n+f);
+  const m=$('hmMail');if(m)m.setAttribute('aria-label',n+f?'メール（'+(n+f)+'件）':'メール');
+  $('mlCntN').textContent=String(n);$('mlCntN').hidden=!n;$('mlCntF').textContent=String(f);$('mlCntF').hidden=!f}
+function setTab(t){ML.tab=t;$('mlTabN').setAttribute('aria-selected',String(t==='n'));$('mlTabF').setAttribute('aria-selected',String(t==='f'));$('mlN').hidden=t!=='n';$('mlF').hidden=t!=='f'}
+function render(){badge();
+  const L=$('mlList');L.replaceChildren();$('mlEmpty').hidden=!!ML.items.length;
+  for(const it of ML.items){const x=txOf(it),box=el('div','ml-it'+(ML.read.has(it.id)?' read':'')),hd=el('button','ml-h');hd.type='button';hd.setAttribute('aria-expanded','false');
+    hd.append(el('span','ml-dot'),el('b','',x.t),el('span','ml-d',md(it.t)));const bd=el('div','ml-b');linkify(bd,x.b||'');bd.hidden=true;
+    hd.onclick=()=>{bd.hidden=!bd.hidden;hd.setAttribute('aria-expanded',String(!bd.hidden));if(!ML.read.has(it.id)){ML.read.add(it.id);saveRead();box.classList.add('read');badge()}};
+    box.append(hd,bd);
+    if(ML.admin){const d=el('button','ml-del','消す');d.type='button';d.onclick=()=>del(it.id);bd.append(d)}
+    L.append(box)}
+  const F=$('mlFr');F.replaceChildren();const fin=(typeof FR!=='undefined'&&FR.fin)||[];$('mlFrSec').hidden=!fin.length;$('mlFrEmpty').hidden=!!fin.length;
+  for(const f of fin){const it=el('div','fr-item'),top=el('div','fr-top');top.append(el('b','',f.name));const a=el('button','primary','承認'),d=el('button','','断る');a.type=d.type='button';
+    a.onclick=()=>{frAccept(f.uid)};d.onclick=()=>{frDecline(f.uid)};top.append(a,d);it.append(top);F.append(it)}}
+async function isAdmin(){try{const u=FB&&FB.user;if(!u||!u.email||!u.emailVerified)return false;const dg=[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(u.email.toLowerCase())))].map(x=>x.toString(16).padStart(2,'0')).join('');return ADMIN_H.includes(dg)}catch(e){return false}}
+function pass(){try{return localStorage.getItem('bocch-admin-pass')||''}catch(e){return ''}}
+function msg(t,err){const m=$('mlMsg');m.textContent=t||'';m.hidden=!t;m.classList.toggle('err',!!err)}
+async function send(path,o){const pw=pass()||$('mlPass').value;if(!pw){$('mlPass').hidden=false;msg('パスワードを入れてください',true);return null}
+  const r=await fetch(RELAY+'bocch-v1-news/'+path,{method:'POST',headers:{'X-Pass':pw},body:JSON.stringify(o)});
+  if(r.status===401){try{localStorage.removeItem('bocch-admin-pass')}catch(e){}$('mlPass').hidden=false;$('mlPass').value='';msg('パスワードが違います',true);return null}
+  if(!r.ok){msg('送れませんでした。時間をおいて試してください',true);return null}
+  try{localStorage.setItem('bocch-admin-pass',pw)}catch(e){}$('mlPass').hidden=true;$('mlPass').value='';return r.json()}
+async function post(){const t=$('mlTitle').value.trim(),b=$('mlBody').value.trim();if(!t){msg('タイトルを入れてください',true);return}
+  const btn=$('mlPost');btn.disabled=true;msg('送っています…（ほかの言語に訳しています）');
+  try{const it=await send('post',{title:t,body:b});if(it){$('mlTitle').value='';$('mlBody').value='';msg('送りました。みんなのメールに届きます');ML.read.add(it.id);saveRead();await load()}}catch(e){msg('送れませんでした（'+(e.message||e)+'）',true)}
+  btn.disabled=false}
+async function del(id){if(!confirm('このお知らせを消しますか？（みんなのメールから消えます）'))return;try{if(await send('del',{id})){ML.items=ML.items.filter(x=>x.id!==id);render()}}catch(e){}}
+async function open_(){setTab((typeof FR!=='undefined'&&FR.fin&&FR.fin.length&&!unread())?'f':'n');render();
+  ML.admin=await isAdmin();$('mlAdmin').hidden=!ML.admin;$('mlPass').hidden=!ML.admin||!!pass();if(ML.admin)render();
+  if(Date.now()-ML.loadedAt>60000)load()}
+$('mlTabN').onclick=()=>setTab('n');$('mlTabF').onclick=()=>setTab('f');$('mlPost').onclick=post;
+document.querySelectorAll('[data-go="mail"]').forEach(b=>b.addEventListener('click',open_));
+// 申請が増えたり減ったりしたら、封筒の数字とメール画面も直す
+if(typeof frBadge==='function'){const _b=frBadge;frBadge=function(){_b.apply(this,arguments);try{render()}catch(e){}}}
+setTimeout(load,2500);setInterval(()=>{if(!document.hidden)load()},15*60*1000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-ML.loadedAt>5*60*1000)load()});
+})();
 </script>
 <script>
 /* ===== 新しい組み立て（2026-11）：下のタブ・ホーム・対局の設定・棋譜の帯・形勢バー・成績 =====
