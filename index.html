@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg?v=2">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=50"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=51"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -1915,7 +1915,7 @@ body.tabs-on .scr{padding-bottom:124px}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.92</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.93</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -4708,13 +4708,14 @@ async function frByName(nm){nm=cleanName(nm);if(!nm)return;frMsg('探してい�
 function frAccept(uid){const f=FR.fin.find(x=>x.uid===uid);if(!f)return;frAdd(uid,f.name);frSave();frRelay(frTopic('in',uid),{t:'facc',uid:myUid(),name:myName()});frPostList();frBadge();frRender();frPollFeeds()}
 function frDecline(uid){FR.fin=FR.fin.filter(x=>x.uid!==uid);frSave();frBadge();frRender()}
 function frRemove(uid){const f=FR.friends.find(x=>x.uid===uid);if(!f)return;if(!confirm(f.name+' さんをフレンドから外しますか？'))return;FR.friends=FR.friends.filter(x=>x.uid!==uid);delete FR.feeds[uid];frSave();frPostList();frRender()}
-function frCancelOut(uid){FR.fout=FR.fout.filter(x=>x.uid!==uid);frSave();frRender()}
+function frCancelOut(uid){FR.fout=FR.fout.filter(x=>x.uid!==uid);frSave();frRender();const me=myUid();if(me)frRelay(frTopic('in',uid),{t:'fcan',uid:me,name:myName()})} // 取り消したら相手の「届いた申請」からも消す
 async function frPollInbox(){const me=myUid();if(!me||!FR.loaded)return;const ms=await frRead(frTopic('in',me),'30d');if(!ms||myUid()!==me)return;let ch=false;
   for(const m of ms){if(FR.seen.has(m._id))continue;FR.seen.add(m._id);ch=true;if(!okUid(m.uid)||m.uid===me)continue;const nm=cleanName(m.name)||'名無し';
-    if(m.t==='freq'){if(isFriend(m.uid))continue;
+    if(m.t==='freq'){if(isFriend(m.uid)){frRelay(frTopic('in',m.uid),{t:'facc',uid:me,name:myName()});continue}
       if(FR.fout.some(f=>f.uid===m.uid)){frAdd(m.uid,nm);frRelay(frTopic('in',m.uid),{t:'facc',uid:me,name:myName()});continue}
       if(!FR.fin.some(f=>f.uid===m.uid))FR.fin.push({uid:m.uid,name:nm,t:Date.now()})}
     else if(m.t==='facc'){if(FR.fout.some(f=>f.uid===m.uid))frAdd(m.uid,nm)}
+    else if(m.t==='fcan'){FR.fin=FR.fin.filter(f=>f.uid!==m.uid)}
     else if(m.t==='finv'||m.t==='fdec'){m._pre=1;frInvMsg(m)}}
   if(ch){frSeenSave();frSave();frBadge();frRender();frPostList()}}
 // フレンドと申請先の公開欄を読む（申請先の「フレンド一覧」に自分が入っていたら、承認されたとみなす）
@@ -4816,10 +4817,13 @@ function frInvShow(uid,nm,room){let el=$('frInv');if(!el){el=document.createElem
   clearTimeout(FR.invT);FR.invT=setTimeout(()=>{el.hidden=true},120000);
   ok.onclick=()=>{el.hidden=true;try{if(S.mode==='net')leave()}catch(e){}openRoom(room);show('game')};
   no.onclick=()=>{el.hidden=true;frRelay(frTopic('in',uid),{t:'fdec',uid:myUid(),name:myName(),room})}}
-$('frSend').addEventListener('click',()=>frByName($('frName').value));
+// 押したらすぐ反応を出す。途中で何か起きても、黙らずに理由を出す。入力欄でEnterを押しても申請する
+async function frSendNow(){const v=$('frName').value;if(!cleanName(v)){frMsg('相手の名前を入れてください',true);return}const b=$('frSend');if(b.disabled)return;b.disabled=true;frMsg('探しています…');
+  try{await frByName(v)}catch(e){frMsg('申請できませんでした（'+(e&&(e.code||e.message)||e)+'）',true)}finally{b.disabled=false}}
+$('frSend').addEventListener('click',frSendNow);$('frName').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing){e.preventDefault();frSendNow()}});
 $('frFind').addEventListener('input',frRender);
 $('frName').addEventListener('keydown',e=>{if(e.key==='Enter')frByName($('frName').value)});
-document.querySelector('[data-go="friends"]').addEventListener('click',()=>{fbInit().catch(()=>{});frRender();frMsg('');frPollFeeds();clearInterval(FR.pollT);frSubAll();FR.pollT=setInterval(()=>{if(CUR!=='friends'){clearInterval(FR.pollT);frUnsubAll();return}if(!document.hidden)frPollFeeds()},30000)});
+document.querySelectorAll('[data-go="friends"]').forEach(el=>el.addEventListener('click',()=>{fbInit().catch(()=>{});frRender();frMsg('');frPollFeeds();clearInterval(FR.pollT);frSubAll();FR.pollT=setInterval(()=>{if(CUR!=='friends'){clearInterval(FR.pollT);frUnsubAll();return}if(!document.hidden)frPollFeeds()},30000)}));
 $('frOpp').addEventListener('click',async()=>{const o=NM[oppIdOf()];if(!o||!o.uid)return;const ok=await frRequest(o.uid,o.name);netMsg(ok?o.name+' さんにフレンド申請しました':($('frMsg').textContent||'申請できませんでした'),!ok);render()});
 {const _renderF=render;render=function(){_renderF();try{frTick();const o=S.mode==='net'&&!NET.watch&&NET.code?NM[oppIdOf()]:null;const u=myUid();
   $('frOpp').hidden=!(o&&o.uid&&u&&o.uid!==u&&!isFriend(o.uid)&&!FR.fout.some(f=>f.uid===o.uid))}catch(e){}}}
