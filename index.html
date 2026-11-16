@@ -1875,6 +1875,16 @@ p.rate-msg.adv-bonus{display:block;width:max-content;max-width:100%;margin:6px a
 .rev-op[hidden]{display:none}
 .rev-op b{color:#2f7fd6;font-variant-numeric:tabular-nums}
 .rev-op span{font-weight:700}
+/* タブバー：フローティングノッチ（くぼみが選んだタブに付いて動く） */
+.tabbar{left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));max-width:496px;height:64px;padding:0 18px;background:transparent!important;border:0!important;border-radius:0!important;backdrop-filter:none;overflow:visible}
+.tabbar svg.tb-shape{position:absolute;inset:0;width:100%;height:100%;fill:rgba(38,39,44,.97);stroke:none;overflow:visible;z-index:-1;pointer-events:none;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5))}
+.tabbar svg.tb-shape path{fill:rgba(38,39,44,.97);stroke:none}
+.tabbar button{min-height:64px;justify-content:flex-end;padding:0 0 8px;gap:3px}
+.tabbar button svg{transition:opacity .2s}
+.tabbar button[aria-current=page] svg{opacity:0}
+.tabbar .tb-orb{position:absolute;top:-27px;left:0;width:50px;height:50px;margin-left:-25px;border-radius:50%;background:linear-gradient(180deg,var(--acc2),var(--acc));color:var(--ink);display:grid;place-items:center;box-shadow:0 6px 16px rgba(169,205,247,.35);pointer-events:none}
+.tabbar .tb-orb svg{width:24px;height:24px;stroke-width:2;opacity:1}
+body.tabs-on .scr{padding-bottom:124px}
 
 </style>
 </head>
@@ -1882,7 +1892,7 @@ p.rate-msg.adv-bonus{display:block;width:max-content;max-width:100%;margin:6px a
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v1.89</div>
+  <div class="ver" id="ver" aria-label="バージョン">v1.90</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -2373,6 +2383,26 @@ p.rate-msg.adv-bonus{display:block;width:max-content;max-width:100%;margin:6px a
   <button type="button" data-tab="history"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>履歴</span></button>
   <button type="button" data-tab="profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg><span>アカウント</span></button>
 </nav>
+<script>
+/* タブバーのくぼみ（ノッチ） */
+(function(){var nav=document.getElementById('tabbar');if(!nav)return;var NS='http://www.w3.org/2000/svg';
+ var sv=document.createElementNS(NS,'svg');sv.setAttribute('class','tb-shape');sv.setAttribute('aria-hidden','true');var pa=document.createElementNS(NS,'path');sv.appendChild(pa);nav.insertBefore(sv,nav.firstChild);
+ var orb=document.createElement('div');orb.className='tb-orb';orb.setAttribute('aria-hidden','true');nav.appendChild(orb);
+ var bs=[].slice.call(nav.querySelectorAll('button')),x=null,cur=-1,raf=0;
+ function shape(w,h,c){var R=33,d=34,a=c-R-6,b=c+R+6,r=Math.max(2,Math.min(20,a,w-b));return 'M'+r+',0 L'+a+',0 C'+(c-R+2)+',0 '+(c-R+2)+','+d+' '+c+','+d+' C'+(c+R-2)+','+d+' '+(c+R-2)+',0 '+b+',0 L'+(w-r)+',0 Q'+w+',0 '+w+','+r+' L'+w+','+(h-r)+' Q'+w+','+h+' '+(w-r)+','+h+' L'+r+','+h+' Q0,'+h+' 0,'+(h-r)+' L0,'+r+' Q0,0 '+r+',0 Z'}
+ function draw(c){var w=nav.clientWidth,h=nav.clientHeight;if(!w)return;pa.setAttribute('d',shape(w,h,c));orb.style.left=c+'px'}
+ function cx(i){var b=bs[i];return b.offsetLeft+b.offsetWidth/2}
+ function sync(anim){var i=-1;bs.forEach(function(b,j){if(b.getAttribute('aria-current')==='page')i=j});if(i<0)i=cur<0?0:cur;
+  if(i!==cur){var s=bs[i].querySelector('svg');orb.innerHTML=s?s.outerHTML:''}
+  var to=cx(i),from=(x==null||!anim||i===cur)?to:x;cur=i;cancelAnimationFrame(raf);
+  var D=(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)?0:320,t0=performance.now();
+  (function f(now){var u=D?Math.min(1,(now-t0)/D):1,e=1-Math.pow(1-u,3);x=from+(to-from)*e;draw(x);if(u<1)raf=requestAnimationFrame(f)})(t0)}
+ new MutationObserver(function(){sync(true)}).observe(nav,{subtree:true,attributes:true,attributeFilter:['aria-current']});
+ new MutationObserver(function(){sync(false)}).observe(document.body,{attributes:true,attributeFilter:['class']});
+ if(window.ResizeObserver)new ResizeObserver(function(){x=null;sync(false)}).observe(nav);
+ sync(false)})();
+</script>
+
 <script id="eng">
 /* bocch 最強エンジン (eng_nn7 高速化: diff=true, int=true, evalTT=true) */
 var BocchEngine=(function(){
