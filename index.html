@@ -2210,7 +2210,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.17</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.18</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -6246,9 +6246,10 @@ b.addEventListener('click',async()=>{const m=document.getElementById('kifuExMsg'
 </script>
 <script>
 /* ホームのバナー：画像を横に流す（5秒ごとに次へ・指で送る・左右の矢印・点）。押すとその先を開く。
-   足すときは BANNERS に1行足す。画像は ui/banner/<名前>-<言語>.webp（1200×360）を全言語分置く。from/to（年-月-日）で出す期間を決められる */
+   足すときは BANNERS に1行足す。url の {p} は記事の言語の場所（日本語は空、ほかは en/ など）に置き換わる。画像は ui/banner/<名前>-<言語>.webp（1200×360）を全言語分置く。from/to（年-月-日）で出す期間を決められる */
 (function(){
 const BANNERS=[
+  {id:'mon1-2026-10',img:'mon1-2026-10',v:1,url:'learn/{p}player-2026-10-asa.html',alt:'Asa',from:'2026-11-01',to:'2026-11-30'},
   {id:'discord',img:'discord',v:2,url:'https://discord.gg/hKm7UVFgG',alt:'bocch Discord'},
 ];
 const W=document.getElementById('hmBnW'),tr=document.getElementById('hmBnT'),D=document.getElementById('hmBnD');if(!W)return;
@@ -6256,7 +6257,8 @@ const L=window.BOCCH_LANG||'ja',now=Date.now();
 const list=BANNERS.filter(b=>(!b.from||now>=Date.parse(b.from))&&(!b.to||now<Date.parse(b.to)+864e5));
 if(!list.length)return;
 let i=0,hold=0;
-list.forEach(b=>{const a=document.createElement('a');a.className='hm-bn-s';a.href=b.url;if(/^https?:/.test(b.url)){a.target='_blank';a.rel='noopener'}
+const P=L==='ja'?'':L.toLowerCase()+'/';
+list.forEach(b=>{const a=document.createElement('a');a.className='hm-bn-s';a.href=b.url.replace('{p}',P);if(/^https?:/.test(b.url)){a.target='_blank';a.rel='noopener'}
   const im=document.createElement('img');const q='.webp?v='+(b.v||1);im.src='ui/banner/'+b.img+'-'+L+q;im.alt=b.alt||'';im.decoding='async';im.width=1200;im.height=360;
   im.onerror=()=>{if(!im.dataset.f){im.dataset.f=1;im.src='ui/banner/'+b.img+'-en'+q}};a.append(im);tr.append(a);D.append(document.createElement('i'))});
 W.classList.toggle('one',list.length<2);W.hidden=false;
