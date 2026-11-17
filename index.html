@@ -2067,6 +2067,37 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 [data-scr=review][data-rvt=sum] #revMv{margin-top:12px}
 
 [data-scr=review].rv-live #rvTabs{display:none!important}
+/* 週の成績レポート（メールの中） */
+.ml-b.ml-rich{white-space:normal;padding:2px 14px 16px 14px}
+.wk{--wup:#7fd39a;--wdn:#ff8b80}
+.wk-vd{font-size:19px;font-weight:900;color:var(--fg,#f4f4f2);line-height:1.5;margin:4px 0 14px}.wk-vd em{font-style:normal;color:var(--gold,#e6c46a)}
+.wk-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.wk-tl{background:rgba(255,255,255,.05);border-radius:14px;padding:10px 12px}
+.wk-tl small{display:block;font-size:12px;color:var(--mute,#8b90a0);line-height:1.4}
+.wk-tl b{display:block;font-size:26px;line-height:1.25;color:var(--fg,#f4f4f2);font-weight:800;font-variant-numeric:tabular-nums}.wk-tl b u{text-decoration:none;font-size:14px;font-weight:600;margin-left:2px}
+.wk-tl i{display:block;font-style:normal;font-size:12px;font-weight:700}
+.wk-up{color:var(--wup)}.wk-dn{color:var(--wdn)}.wk-nu{color:var(--mute,#8b90a0)}
+.wk-sec{margin-top:18px}.wk-sec h4{font-size:12px;color:var(--mute,#8b90a0);font-weight:600;margin:0 0 8px;display:flex;justify-content:space-between;align-items:center}
+.wk-lg{display:flex;gap:10px;font-weight:500}.wk-lg span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:4px}
+.wk-lg .a::before{background:var(--wup)}.wk-lg .b::before{background:#5a5d66}
+.wk-days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;height:80px}
+.wk-day{display:flex;flex-direction:column-reverse;gap:2px;height:100%}.wk-day i{display:block;border-radius:3px}.wk-day .w{background:var(--wup)}.wk-day .l{background:#5a5d66}
+.wk-dl{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:5px;font-size:11px;color:var(--mute,#8b90a0);text-align:center}
+.wk-op{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid rgba(255,255,255,.07)}.wk-sec h4+.wk-op{border-top:0}
+.wk-tg{flex:none;font-size:11px;font-weight:800;padding:2px 7px;border-radius:6px}.wk-tg.g{background:#25402f;color:var(--wup)}.wk-tg.r{background:#4a2420;color:var(--wdn)}
+.wk-nm{flex:1;min-width:0}.wk-nm b{display:block;font-size:14px;color:var(--fg,#f4f4f2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wk-bar{height:5px;border-radius:3px;background:#5a5d66;margin-top:5px;overflow:hidden}.wk-bar i{display:block;height:100%;background:var(--wup)}
+.wk-sc{flex:none;font-size:13px;font-variant-numeric:tabular-nums}
+.wk-rk{display:flex;align-items:baseline;gap:12px;background:rgba(255,255,255,.05);border-radius:14px;padding:11px 12px}.wk-rk b{color:var(--gold,#e6c46a);font-size:17px}.wk-rk span{font-size:13px;color:var(--mute,#8b90a0)}
+.wk-bg{display:flex!important;align-items:center;gap:12px;width:100%;text-align:left;background:rgba(255,255,255,.05)!important;border:0!important;box-shadow:none!important;border-radius:14px!important;padding:11px 12px!important;margin:0!important;min-height:0}
+.wk-bg b{display:block;color:var(--fg,#f4f4f2);font-size:14px}.wk-bg span{font-size:12px;color:var(--mute,#8b90a0)}.wk-bg .wk-go{margin-left:auto;color:var(--acc,#a9cdf7);font-weight:700;font-size:13px;white-space:nowrap}
+.wk-cta{display:block!important;width:100%;margin:18px 0 0!important;text-align:center;padding:13px 0!important;border-radius:14px!important;background:var(--fg,#f4f4f2)!important;color:#111!important;font-weight:800;font-size:15px;border:0!important}
+.wk-cta small{display:block;font-size:11px;font-weight:600;color:#555;margin-top:1px}
+
+/* 会員バッジ：金縁の石に冠（★の代わり） */
+.mb-ic{background:none!important;border-radius:50%!important;padding:0}
+.mb-ic svg{display:block}
+.pf-grp .mb-ic{width:34px;height:34px}
 
 </style>
 </head>
@@ -2074,7 +2105,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.06</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.07</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -2443,7 +2474,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
   <div class="pf-stats" id="pfStats"></div>
   <button class="kf-chip kf-chip-prof" data-go="kifu" id="kfChipProf" type="button"></button>
   
-  <button class="mb-entry" id="mbEntry" type="button" data-go="member" hidden><span class="mb-ic" aria-hidden="true">★</span><span class="mb-tx"><b>bocch会員</b><small>試作：あなただけに表示中</small></span><span class="mb-go" aria-hidden="true">›</span></button>
+  <button class="mb-entry" id="mbEntry" type="button" data-go="member" hidden><span class="mb-ic" aria-hidden="true"><svg viewBox="0 0 100 100" width="100%" height="100%"><defs><linearGradient id="mbGd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e3a1"/><stop offset=".5" stop-color="#d9b14e"/><stop offset="1" stop-color="#8a6a22"/></linearGradient><radialGradient id="mbSt" cx=".34" cy=".3" r=".8"><stop offset="0" stop-color="#6a6c70"/><stop offset=".3" stop-color="#2a2b2e"/><stop offset=".7" stop-color="#111214"/><stop offset="1" stop-color="#050506"/></radialGradient></defs><circle cx="50" cy="50" r="47" fill="url(#mbGd)"/><circle cx="50" cy="50" r="41" fill="#1d1e22"/><circle cx="50" cy="50" r="37" fill="url(#mbSt)"/><path d="M33 58 L36 40 L44 49 L50 36 L56 49 L64 40 L67 58 Z" fill="url(#mbGd)"/><rect x="33" y="60" width="34" height="5" rx="1.5" fill="url(#mbGd)"/></svg></span><span class="mb-tx"><b>bocch会員</b><small>試作：あなただけに表示中</small></span><span class="mb-go" aria-hidden="true">›</span></button>
   <div class="card prof">
     <label class="prof-l" for="nameIn">名前（12文字まで）</label>
     <div class="row prof-row"><input type="text" id="nameIn" maxlength="12" autocomplete="nickname" placeholder="名無し"><button id="nameSave" class="primary">保存</button></div>
@@ -4346,7 +4377,7 @@ function revWarn(t){REV.msg=t;clearTimeout(REV.msgT);REV.msgT=setTimeout(()=>{RE
 $('rgrid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(!c)return;revCell(+c.id.slice(1))});
 /* 動画を作る：手が1つでもある対局ならすべて作れる。勝者と終わり方を渡す。本体（mv/maker.js）は押したときに読み込む */
 function mvOK(log){return !!(log&&log.length)}
-function mvOpen(log,win,why,me){const go=()=>window.BocchVideo.open({log,win,why,me,pro:!!(window.bocchMember&&window.bocchMember())});if(window.BocchVideo)return go();const sc=document.createElement('script');sc.src='mv/maker.js?v=15';sc.onload=go;sc.onerror=()=>alert((window.bocchT||(x=>x))('読み込めませんでした'));document.head.appendChild(sc)}
+function mvOpen(log,win,why,me){const go=()=>window.BocchVideo.open({log,win,why,me,pro:!!(window.bocchMember&&window.bocchMember())});if(window.BocchVideo)return go();const sc=document.createElement('script');sc.src='mv/maker.js?v=16';sc.onload=go;sc.onerror=()=>alert((window.bocchT||(x=>x))('読み込めませんでした'));document.head.appendChild(sc)}
 $('mvNow').addEventListener('click',()=>{if(S.over&&S.log)mvOpen(S.log.map(m=>[m[0],m[1]]),S.over.win,S.over.why,(()=>{try{return S.mode==='net'?colorOf(NET.me):S.mode===0?0:hcOf()}catch(e){return 0}})())});
 $('revMv').addEventListener('click',()=>{if(REV.g)mvOpen(REV.g.log.map(m=>[m[0],m[1]]),REV.g.win,REV.g.why,REV.g.me)});
 $('reviewNow').addEventListener('click',()=>{saveFinished();const id=currentGameId();if(id)openReview(id)});
@@ -6042,7 +6073,7 @@ function setTab(t){ML.tab=t;$('mlTabN').setAttribute('aria-selected',String(t===
 function render(){badge();
   const L=$('mlList');L.replaceChildren();const AI=allItems();$('mlEmpty').hidden=!!AI.length;
   for(const it of AI){const x=txOf(it),box=el('div','ml-it'+(ML.read.has(it.id)?' read':'')),hd=el('button','ml-h');hd.type='button';hd.setAttribute('aria-expanded','false');
-    hd.append(el('span','ml-dot'),el('b','',x.t),el('span','ml-d',md(it.t)));const bd=el('div','ml-b');linkify(bd,x.b||'');bd.hidden=true;
+    hd.append(el('span','ml-dot'),el('b','',x.t),el('span','ml-d',md(it.t)));const bd=el('div','ml-b');let rich=null;if(it.rich){try{rich=it.rich()}catch(e){rich=null}}if(rich){bd.classList.add('ml-rich');bd.append(rich)}else linkify(bd,x.b||'');bd.hidden=true;
     hd.onclick=()=>{bd.hidden=!bd.hidden;hd.setAttribute('aria-expanded',String(!bd.hidden));if(!ML.read.has(it.id)){ML.read.add(it.id);saveRead();box.classList.add('read');badge()}};
     box.append(hd,bd);
     if(it.acts){const r=el('div','ml-acts');for(const a of it.acts){const b=el('button',a.pri?'primary':'',a.label);b.type='button';b.onclick=a.fn;r.append(b)}bd.append(r)}
@@ -6251,7 +6282,45 @@ function wkStart(d){const x=new Date(d);x.setHours(0,0,0,0);const w=(x.getDay()+
 function wkStats(a,b){const gs=myGames().filter(g=>g.t>=a&&g.t<b&&(g.win===0||g.win===1||g.win===2));if(!gs.length)return null;const W=g=>g.win===g.me?1:0;
   const acc=[];let bad=0,an=0;for(const g of gs){if(g.an&&g.an.length){const v=accOf(g,g.me);if(v!=null)acc.push(v);try{bad+=countMarks(g).bad;an++}catch(e){}}}
   const op={};for(const g of gs){const o=gameOp(g);if(!o)continue;(op[o]=op[o]||[0,0,0]);op[o][W(g)?0:1]++;op[o][2]++}
-  return {n:gs.length,wr:Math.round(gs.reduce((s,g)=>s+W(g),0)/gs.length*100),acc:acc.length?Math.round(acc.reduce((s,x)=>s+x,0)/acc.length):null,bad:an?bad/an:null,op}}
+  return {gs,n:gs.length,wr:Math.round(gs.reduce((s,g)=>s+W(g),0)/gs.length*100),acc:acc.length?Math.round(acc.reduce((s,x)=>s+x,0)/acc.length):null,bad:an?bad/an:null,op}}
+// ---- 週の成績レポート（見た目つき）：一言 → 4つの数字 → 曜日 → 戦型 → 段級 → いちばんの1局 → おすすめ ----
+function wkRich(st,pv,best,worst){const R=el('div','wk');const tx=t=>(typeof T==='function'?T(t):t);
+  const dWr=pv?st.wr-pv.wr:null,dAcc=pv&&st.acc!=null&&pv.acc!=null?st.acc-pv.acc:null,dBad=pv&&st.bad!=null&&pv.bad!=null?st.bad-pv.bad:null;
+  const weak=worst&&worst[1][1]>worst[1][0]?worst[0]:null;
+  // 一言（数字から作る。作り話はしない）
+  const v=el('p','wk-vd');let a='';if(pv&&st.n>=pv.n*1.5&&st.n-pv.n>=5)a='たくさん指した週。';else if(pv&&st.n<=pv.n*0.5)a='対局は少なめの週。';
+  const put=(...xs)=>{for(const x of xs)v.append(typeof x==='string'?document.createTextNode(x):x)};const em=t=>el('em','',t);
+  if(!pv)put('先週は'+st.n+'局指しました。');
+  else if(dWr!=null&&dWr<=-5){if(a)put(a,el('br'));if(weak)put(a?'ただ':'',em(weak),'で崩れて、勝率が下がりました。');else put('勝率が下がりました。')}
+  else if(dWr!=null&&dWr>=5){if(a)put(a,el('br'));put(dAcc!=null&&dAcc>=0?'勝率も正確度も上がった、いい週でした。':'勝率が上がった週でした。')}
+  else if(dBad!=null&&dBad<=-0.3){if(a)put(a,el('br'));put('悪手が減りました。')}
+  else{if(a)put(a,el('br'));put('先週とほぼ同じ調子でした。')}
+  R.append(v);
+  // 4つの数字（良くなったら緑、悪くなったら赤。悪手は増えたら赤）
+  const tiles=el('div','wk-tiles');const tile=(lab,val,unit,d,good,fmt)=>{const t=el('div','wk-tl');t.append(el('small','',lab));const b=el('b','',String(val));b.append(el('u','',unit));t.append(b);
+      if(d!=null){const z=Math.abs(d)<1e-9;const cls=z?'nu':(good==null?'nu':(d>0)===good?'up':'dn');t.append(el('i','wk-'+cls,good==null?'先週より '+(d>=0?'+':'')+fmt(d):(z?'先週と同じ':(d>0?'▲ ':'▼ ')+fmt(Math.abs(d)))))}tiles.append(t)};
+  tile('対局',st.n,'局',pv?st.n-pv.n:null,null,x=>String(x));tile('勝率',st.wr,'%',dWr,true,x=>String(Math.round(x)));
+  if(st.acc!=null)tile('正確度',st.acc,'%',dAcc,true,x=>String(Math.round(x)));if(st.bad!=null)tile('悪手（1局あたり）',st.bad.toFixed(1),'回',dBad,false,x=>(Math.round(x*10)/10).toFixed(1));
+  R.append(tiles);
+  // 曜日ごとの勝ち負け
+  const D=[0,1,2,3,4,5,6].map(()=>[0,0]);for(const g of st.gs){const k=(new Date(g.t).getDay()+6)%7;D[k][g.win===g.me?0:1]++}const mx=Math.max(1,...D.map(x=>x[0]+x[1]));
+  const sd=el('div','wk-sec');const h=el('h4','','曜日ごと');const lg=el('span','wk-lg');lg.append(el('span','a','勝ち'),el('span','b','負け・引き分け'));h.append(lg);sd.append(h);
+  const days=el('div','wk-days');for(const [w,l] of D){const d=el('div','wk-day');const iw=el('i','w'),il=el('i','l');iw.style.height=(w/mx*100)+'%';il.style.height=(l/mx*100)+'%';d.append(iw,il);d.title=w+'勝'+l+'敗';days.append(d)}
+  const dl=el('div','wk-dl');for(const n of ['月','火','水','木','金','土','日'])dl.append(el('span','',n));sd.append(days,dl);R.append(sd);
+  // 戦型
+  if(best||weak){const so=el('div','wk-sec');so.append(el('h4','','戦型'));const op=(tag,cls,e)=>{const r=el('div','wk-op');r.append(el('span','wk-tg '+cls,tag));const nm=el('div','wk-nm');nm.append(el('b','',e[0]));const bar=el('div','wk-bar');const fi=el('i');fi.style.width=Math.round(e[1][0]/Math.max(1,e[1][2])*100)+'%';bar.append(fi);nm.append(bar);r.append(nm,el('span','wk-sc',e[1][0]+'勝'+e[1][1]+'敗'));so.append(r)};
+    if(best&&best[1][0]>best[1][1])op('得意','g',best);if(weak&&(!best||weak!==best[0]))op('苦手','r',worst);if(so.children.length>1)R.append(so)}
+  // 段級（週の最初と最後の対局のときの段級）
+  const rk=st.gs.filter(g=>g.dn).sort((x,y)=>x.t-y.t);if(rk.length){const f=rk[0].dn,l=rk[rk.length-1].dn;const sr=el('div','wk-sec');sr.append(el('h4','','段級'));const r=el('div','wk-rk');r.append(el('b','',l));
+    const up=(typeof RANK_NAMES!=='undefined')?RANK_NAMES.indexOf(l)-RANK_NAMES.indexOf(f):0;r.append(el('span','',f===l?'先週は '+l+' のまま':f+' → '+l+(up>0?'　上がった':up<0?'　下がった':'')));sr.append(r);R.append(sr)}
+  // 先週いちばんの1局（正確度がいちばん高い勝ち）
+  let bg=null,ba=-1;for(const g of st.gs){if(g.win!==g.me||!g.an)continue;const x=accOf(g,g.me);if(x!=null&&x>ba){ba=x;bg=g}}
+  if(bg){const sb=el('div','wk-sec');sb.append(el('h4','','先週いちばんの1局'));const r=el('button','wk-bg');r.type='button';const d=new Date(bg.t);
+    const tx2=el('div');tx2.append(el('b','','正確度 '+ba+'%で勝ち'),el('span','',(d.getMonth()+1)+'/'+d.getDate()+'・'+(bg.opp||MODE_NAME(bg.mode))+'・'+bg.log.length+'手'));r.append(tx2,el('span','wk-go','見る ›'));r.onclick=()=>openReview(bg);sb.append(r);R.append(sb)}
+  // おすすめ（押すとすぐ弱点CPU）
+  if(weak){const wl=weakList().ops.find(e=>e.name===weak);const c=el('button','wk-cta');c.type='button';c.append(document.createTextNode('弱点CPUと「'+weak+'」を指す'),el('small','','今週のおすすめ・3局'));
+    c.onclick=()=>{if(wl)startMb('weak',wl.me,{lv:(typeof WK_LV!=='undefined'&&WK_LV.v)||3,state:{mbSeq:wl.seq,mbOp:wl.name}});else{show('weak');try{renderWeak()}catch(e){}}};R.append(c)}
+  return R}
 function weekReports(){if(!MB.own)return[];const out=[];const now=Date.now();let s=wkStart(now);
   for(let k=0;k<4;k++){const e=new Date(s),b=new Date(s);b.setDate(b.getDate()-7);const st=wkStats(+b,+e);const show=new Date(e);show.setHours(7,0,0,0);if(st&&+show<=now){
       const pb=new Date(b);pb.setDate(pb.getDate()-7);const pv=wkStats(+pb,+b);const dif=(x,y,u)=>x!=null&&y!=null?'（'+(x-y>=0?'+':'')+(Math.round((x-y)*10)/10)+u+'）':'';
@@ -6260,7 +6329,7 @@ function weekReports(){if(!MB.own)return[];const out=[];const now=Date.now();let
       const L=['対局　'+st.n+'局'+dif(st.n,pv&&pv.n,'局'),'勝率　'+st.wr+'%'+dif(st.wr,pv&&pv.wr,'')];if(st.acc!=null)L.push('正確度　'+st.acc+'%'+dif(st.acc,pv&&pv.acc,''));if(st.bad!=null)L.push('悪手　1局に'+st.bad.toFixed(1)+'回'+dif(st.bad,pv&&pv.bad,''));
       if(best)L.push('いちばん勝てた戦型　'+best[0]+'（'+best[1][0]+'勝'+best[1][1]+'敗）');if(worst&&(!best||worst[0]!==best[0]))L.push('いちばん負けた戦型　'+worst[0]+'（'+worst[1][0]+'勝'+worst[1][1]+'敗）');
       if(worst&&worst[1][1]>worst[1][0])L.push('','今週のおすすめ：弱点を突くCPUで「'+worst[0]+'」を3局');
-      out.push({id:'wr:'+md(b),local:1,t:Math.floor(+show/1000),tr:{ja:{t:'先週の成績（'+md(b)+'〜'+md(last)+'）',b:L.join('\n')}}})}
+      out.push({id:'wr:'+md(b),local:1,t:Math.floor(+show/1000),tr:{ja:{t:'先週の成績（'+md(b)+'〜'+md(last)+'）',b:L.join('\n')}},rich:()=>wkRich(st,pv,best,worst)})}
     s=new Date(s);s.setDate(s.getDate()-7)}
   return out}
 // ---- 分身への挑戦状：フレンドに送り、受けた人はメールから分身と対局する。結果は送った人のメールに返る ----
@@ -6362,7 +6431,7 @@ const g1=grp('あなた');
 const rName=row(g1,'名前',{panel:[card.querySelector('.prof-row'),$('nameMsg'),$('nameNote')]});
 g1.append($('kfChipProf'));$('kfChipProf').classList.add('pf-row');
 const bdNodes=[...card.querySelectorAll('.bd-head ~ .prof-note, #bdList')];
-const rBd=row(g1,'バッジ',{panel:bdNodes});
+const rBd=row(g1,'バッジ',{panel:bdNodes});rBd.r.addEventListener('click',()=>{try{bdRender()}catch(e){}});
 g1.append($('mbEntry'));
 // 設定
 const g2=grp('設定');
@@ -6371,10 +6440,11 @@ row(g2,'段級のしくみ',{panel:rkNodes});
 if(kfo){kfo.classList.remove('card','prof');kfo.classList.add('pf-opt');g2.append(kfo)}
 // アカウント
 const g3=grp('アカウント');acct.classList.remove('card');acct.classList.add('pf-acct');g3.append(acct);
-card.querySelector('.bd-head')&&card.querySelector('.bd-head').remove();
+{const bh=card.querySelector('.bd-head');if(bh){const bc=$('bdCount');if(bc){bc.hidden=true;rBd.r.append(bc)}bh.remove()}}
 card.hidden=true;card.classList.add('pf-old');
 function vals(){try{rName.v.textContent=$('nameIn').value||(typeof myName==='function'?myName():'');const c=$('bdCount');rBd.v.textContent=c?c.textContent:''}catch(e){}}
-if(typeof renderProf==='function'){const _r=renderProf;renderProf=function(){const x=_r.apply(this,arguments);vals();return x}}
+if(typeof renderProf==='function'){const _r=renderProf;renderProf=function(){const x=_r.apply(this,arguments);try{bdRender()}catch(e){}vals();return x}}
+new MutationObserver(()=>{if(!sec.hidden){try{renderProf()}catch(e){}}}).observe(sec,{attributes:true,attributeFilter:['hidden']});
 vals();setInterval(()=>{if(CUR==='profile')vals()},3000);
 })();
 </script>

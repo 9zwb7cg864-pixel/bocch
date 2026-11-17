@@ -342,11 +342,11 @@ ${o&&o.pro?`<div class="opt pro"><div><label for="bmvFmt">★ ${T('形')}</label
     const target=new MX.ArrayBufferTarget();
     const mux=new MX.Muxer({target,video:{codec:'avc',width:SRC.width,height:SRC.height},audio:{codec:acodec,numberOfChannels:ch,sampleRate:sr},fastStart:'in-memory',firstTimestampBehavior:'offset'});
     let err=null;const ve=new VideoEncoder({output:(c,m)=>mux.addVideoChunk(c,m),error:e=>{err=e}});ve.configure(v);
-    // 端末によっては音の設定情報（AudioSpecificConfig）が付かない・ADTSの頭が付くので、ここで補う（付かないとiPhoneで無音になる）
+    // 音の設定情報（AudioSpecificConfig）は毎回ここで作る。iPhoneのブラウザは外側の情報ごと返してきて、そのまま使うと無音になる。ADTSの頭が付く端末もあるので外す
     const FI=[96000,88200,64000,48000,44100,32000,24000,22050,16000,12000,11025,8000,7350].indexOf(sr),ASC=FI<0?null:new Uint8Array([(2<<3)|(FI>>1),((FI&1)<<7)|(ch<<3)]);let nA=0,metaSet=false;
     const ae=new AudioEncoder({output:(c,m)=>{try{if(acodec==='aac'){let d=new Uint8Array(c.byteLength);c.copyTo(d);
         if(d.length>7&&d[0]===0xFF&&(d[1]&0xF0)===0xF0){const hl=(d[1]&1)?7:9;d=d.slice(hl);c=new EncodedAudioChunk({type:'key',timestamp:c.timestamp,duration:c.duration,data:d})}
-        if(!metaSet){const has=m&&m.decoderConfig&&m.decoderConfig.description&&(m.decoderConfig.description.byteLength||0)>0;if(!has&&ASC)m={decoderConfig:{codec:'mp4a.40.2',sampleRate:sr,numberOfChannels:ch,description:ASC}};metaSet=true}}
+        if(!metaSet){if(ASC)m={decoderConfig:{codec:'mp4a.40.2',sampleRate:sr,numberOfChannels:ch,description:ASC}};metaSet=true}}
       mux.addAudioChunk(c,m);nA++}catch(e){err=e}},error:e=>{err=e}});ae.configure(a);
     const s0=Math.floor(S0*sr),s1=Math.min(buf.length,Math.ceil(TT*sr)),CHD=[];for(let k=0;k<ch;k++)CHD.push(buf.getChannelData(k));
     for(let p=s0;p<s1;p+=4096){const n=Math.min(4096,s1-p),d=new Float32Array(n*ch);for(let k=0;k<ch;k++)d.set(CHD[k].subarray(p,p+n),k*n);
