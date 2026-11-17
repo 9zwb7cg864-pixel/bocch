@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>毒まんじゅう：相手に渡して勝つ手｜bocch</title>
+<title>ギャンビット：相手に渡して勝つ手｜bocch</title>
 <meta name="description" content="bocchには石を取るルールがありません。代わりに渡せるのは「数字」と「先着」です。わざと相手の石を動けるようにする「話しかけ」と、石を下げる「引き絞り」を、AIの実戦で紹介します。">
 <meta name="google-adsense-account" content="ca-pub-7697290378023391">
 <link rel="canonical" href="https://bocchgame.com/learn/dokumanju.html">
@@ -17,7 +17,7 @@
 <link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/dokumanju.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="bocch">
-<meta property="og:title" content="毒まんじゅう：相手に渡して勝つ手">
+<meta property="og:title" content="ギャンビット：相手に渡して勝つ手">
 <meta property="og:description" content="bocchには石を取るルールがありません。代わりに渡せるのは「数字」と「先着」です。わざと相手の石を動けるようにする「話しかけ」と、石を下げる「引き絞り」を、AIの実戦で紹介します。">
 <meta property="og:url" content="https://bocchgame.com/learn/dokumanju.html">
 <meta property="og:image" content="https://bocchgame.com/og.jpg?v=2">
@@ -26,7 +26,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="../icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800;900&family=Outfit:wght@600;700;800&display=swap">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "毒まんじゅう：相手に渡して勝つ手", "description": "bocchには石を取るルールがありません。代わりに渡せるのは「数字」と「先着」です。わざと相手の石を動けるようにする「話しかけ」と、石を下げる「引き絞り」を、AIの実戦で紹介します。", "inLanguage": "ja", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/dokumanju.html", "datePublished": "2026-11-01", "dateModified": "2026-11-01"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "ギャンビット：相手に渡して勝つ手", "description": "bocchには石を取るルールがありません。代わりに渡せるのは「数字」と「先着」です。わざと相手の石を動けるようにする「話しかけ」と、石を下げる「引き絞り」を、AIの実戦で紹介します。", "inLanguage": "ja", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/dokumanju.html", "datePublished": "2026-11-01", "dateModified": "2026-11-01"}</script>
 <style>:root{
   --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
   --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
@@ -133,9 +133,9 @@ footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:7
 <main>
 <article>
 <div class="eyebrow">手筋</div>
-<h1>毒まんじゅう：相手に渡して勝つ手</h1>
+<h1>ギャンビット：相手に渡して勝つ手</h1>
 <p class="meta">kairo・2026年11月1日</p>
-<p class="lead">AI同士の2万6千局の中に、黒が5手目にわざと敵の石を助ける手があります。動けなかった白の石を、動けるようにしてしまう手です。それを指した黒の勝率は98パーセントでした。相手に何かを渡して、もっと大きなものを取る。bocchの「毒まんじゅう」です。</p>
+<p class="lead">AI同士の2万6千局の中に、黒が5手目にわざと敵の石を助ける手があります。動けなかった白の石を、動けるようにしてしまう手です。それを指した黒の勝率は98パーセントでした。相手に何かを渡して、もっと大きなものを取る。bocchの「ギャンビット」です。</p>
 <h2>bocchで渡せるもの</h2>
 <p>チェスには、駒を捨てて得を取るギャンビットという手があります。けれどbocchには、石を取るルールがありません。bocchで渡せるのは、石ではなく<strong>数字と先着</strong>です。</p>
 <p>AIの2万6千局で、何かを自分から渡した手を全部数えました。</p>
@@ -156,11 +156,11 @@ footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:7
 <figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s w z">0</b></i><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"><b class="s w">4</b></i><i class="c"><b class="s b">3</b></i><i class="c to"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">4</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i><i class="c g"><b class="s b">1</b></i><i class="c g"></i></div></div><figcaption>黒の番。前に出た 4c をどうするか</figcaption></figure>
 <p>黒が選んだのは、4c を 4f まで3マス下げる手でした。弓を引き絞るような手です。</p>
 <figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c g"></i><i class="c g"><b class="s w z">0</b></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"><b class="s w">3</b></i><i class="c fr"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g mk"><b class="s b">2</b></i><i class="c g to"><b class="s b">3</b></i><i class="c g mk"><b class="s b">2</b></i><i class="c g"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="45.2" y1="45.2" x2="87.4" y2="87.4" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>4c→4f。3f と 5f が1から2に。ただし白の 3c から 6f への道が開く</figcaption></figure>
-<p>下げた 4f は 3f と 5f の隣です。2つの石の数字が1から2に上がり、後ろで眠っていた石が跳べるようになりました。その代わり、白の 3c から 6f への道が開きます。白は先着できる。これが毒まんじゅうです。</p>
-<p>実戦では、白 5c→5b、黒 5f→5d と進み、ここで白はまんじゅうを食べました。3c→6f で1つ目のゴールです。</p>
+<p>下げた 4f は 3f と 5f の隣です。2つの石の数字が1から2に上がり、後ろで眠っていた石が跳べるようになりました。その代わり、白の 3c から 6f への道が開きます。白は先着できる。これがギャンビットです。</p>
+<p>実戦では、白 5c→5b、黒 5f→5d と進み、ここで白はギャンビットを受けました。3c→6f で1つ目のゴールです。</p>
 <figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c fr"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">4</b></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"></i><i class="c g to"><b class="s w">1</b></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="75.0" y1="70.0" x2="75.0" y2="14.3" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>白の先着で、黒の 5e が3から4に。5e→5a ですぐ追いつく</figcaption></figure>
 <p>でも、6f に着いた白は黒の 5e の隣です。5e の数字が3から4に上がります。これが毒でした。黒は 5e→5a と4マス跳んで、すぐに追いつきます。</p>
-<p>白の最善は、まんじゅうを食べない手です。それでも黒の有利は動きません。同じ局面で、下がらずに 5f→4f と指した黒の勝率は17パーセント、下がった黒は76パーセントでした。</p>
+<p>白の最善は、ギャンビットを受けない手です。それでも黒の有利は動きません。同じ局面で、下がらずに 5f→4f と指した黒の勝率は17パーセント、下がった黒は76パーセントでした。</p>
 <div class="pt">1つ目は、2つ目を止められるなら譲っていい</div>
 <h2>まとめ</h2>
 <ul><li>渡すのは、石ではなく、数字と先着。</li><li>話しかけても、味方の数字が伸びれば得。</li><li>引き絞りは、後ろの石に力をためる。</li><li>1つ目は、2つ目を止められるなら譲っていい。</li></ul>
