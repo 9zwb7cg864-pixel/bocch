@@ -88,6 +88,13 @@ td .sub{display:block;font-size:11px;color:var(--mute)}
 .wrapT{overflow-x:auto;margin-bottom:12px}
 .note{font-size:12px;color:var(--mute);line-height:1.75}
 .note p{margin:0 0 8px}
+/* 継続率 */
+.coT td.h{position:relative}.coT td.h b{font-weight:500}
+.coT td.na{color:var(--mute)}
+.coT td.h::before{content:"";position:absolute;inset:3px 2px;border-radius:4px;background:var(--gold);opacity:var(--o,0);z-index:-1}
+.coT{position:relative;z-index:0}
+.t .goal{font-size:11px;color:var(--mute);margin-top:2px}
+.t .goal.ok{color:var(--up)}.t .goal.ng{color:var(--down)}
 </style>
 </head>
 <body>
@@ -117,6 +124,20 @@ td .sub{display:block;font-size:11px;color:var(--mute)}
         <div class="t"><div class="l">翌日また来た率（7日）</div><div class="v" id="kRet">—</div><div class="s" id="kRetS"></div></div>
         <div class="t"><div class="l">ホームに追加した人（累計）</div><div class="v" id="kA2">—</div><div class="s" id="kA2S"></div></div>
       </div>
+    </section>
+
+    <!-- 継続率 -->
+    <section>
+      <div class="sh"><h2>継続率</h2><span class="hint">初めて開いた日ごと</span></div>
+      <div class="cTop" style="margin-bottom:10px"><div class="note" id="coFrom" style="margin:0"></div><div class="seg" id="coSeg"><button data-k="a" class="on">開いた全員</button><button data-k="b">初日に遊んだ人</button></div></div>
+      <div class="tiles four">
+        <div class="t"><div class="l">D1（翌日に来た）</div><div class="v" id="co1">—</div><div class="goal" id="co1g"></div><div class="s" id="co1s"></div></div>
+        <div class="t"><div class="l">D7（7日後に来た）</div><div class="v" id="co7">—</div><div class="goal" id="co7g"></div><div class="s" id="co7s"></div></div>
+        <div class="t"><div class="l">D30（30日後に来た）</div><div class="v" id="co30">—</div><div class="goal" id="co30g"></div><div class="s" id="co30s"></div></div>
+        <div class="t"><div class="l">数えている人</div><div class="v" id="coN">—</div><div class="s" id="coNs"></div></div>
+      </div>
+      <div class="card" style="margin-top:10px"><h3>初めて開いた日ごとの継続率（色が濃いほど高い）</h3><div class="wrapT" style="margin:0"><table class="coT" id="coTbl"><tbody><tr><td class="na">読み込み中…</td></tr></tbody></table></div>
+        <div class="note" style="margin-top:8px">目安（スマホのカジュアルゲームの一般的な数字）：D1 30〜40%・D7 10〜15%・D30 5%前後。その日に1回でも開いたら「来た」と数えます。上の3つは、その日数がすでに過ぎた日の人だけで割った平均です。「—」はまだその日が来ていない日です。</div></div>
     </section>
 
     <!-- 2. 推移 -->
@@ -225,6 +246,7 @@ async function load(){
   $('kRet').innerHTML=nvo?Math.round(100*r1s/nvo)+'<small>%</small>':'—';$('kRetS').textContent=nvo?fmt(nvo)+'人のうち '+fmt(r1s)+'人（今日来た人は除く）':'まだ記録がありません';
 
   // 2. 推移
+  window.__co=j.co||{};window.__coNow=j.now;drawCo();
   window.__days=days;drawU();
 
   // 3. 新しく来た人
@@ -274,6 +296,27 @@ async function load(){
 const USER_S=[['players','遊んだ人','#3987e5','遊んだ'],['visitors','開いた人','#d95926','開いた'],['nv','初めて来た人','#199e70','初めて']];let URNG=30;
 $('uLeg').innerHTML=USER_S.map(([,l,c])=>'<span><i style="background:'+c+'"></i>'+l+'</span>').join('');
 $('uRng').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;URNG=+b.dataset.n;[...$('uRng').children].forEach(x=>x.classList.toggle('on',x===b));drawU()});
+// 継続率：co[初日]={n,p,a:{日:人},b:{日:人}}。a は開いた全員、b は初日に遊んだ人
+let COK='a';
+function drawCo(){const co=window.__co||{},today=new Date((window.__coNow||Date.now())+9*3600e3).toISOString().slice(0,10);
+  const age=d=>Math.round((Date.parse(today)-Date.parse(d))/864e5),ks=Object.keys(co).sort().reverse();
+  const base=c=>COK==='a'?c.n||0:c.p||0,got=(c,k)=>((COK==='a'?c.a:c.b)||{})[k]||0;
+  $('coFrom').textContent=ks.length?ks[ks.length-1].replace(/^\d+-0?(\d+)-0?(\d+)$/,'$1月$2日')+'から数えています':'';
+  const G={1:[30,40],7:[10,15],30:[5,5]};
+  for(const k of [1,7,30]){let n=0,r=0;for(const d of ks)if(age(d)>=k+1){n+=base(co[d]);r+=got(co[d],k)}
+    // その日がまるごと過ぎた日（今日を除く）だけで割る
+    const el=$('co'+k),g=$('co'+k+'g'),sv=$('co'+k+'s');
+    if(!n){el.textContent='—';g.className='goal';g.textContent='目安 '+(G[k][0]===G[k][1]?G[k][0]:G[k][0]+'〜'+G[k][1])+'%';sv.textContent=k+'日後がまだ来ていません';continue}
+    const v=100*r/n;el.innerHTML=(v<10?Math.round(v*10)/10:Math.round(v))+'<small>%</small>';
+    g.className='goal '+(v>=G[k][0]?'ok':'ng');g.textContent=(v>=G[k][0]?'目安に届いた（':'目安より下（')+(G[k][0]===G[k][1]?G[k][0]:G[k][0]+'〜'+G[k][1])+'%）';
+    sv.textContent=fmt(n)+'人のうち '+fmt(r)+'人'}
+  {let n=0;for(const d of ks)n+=base(co[d]);$('coN').innerHTML=fmt(n)+'<small>人</small>';$('coNs').textContent=COK==='a'?'初めて開いた端末（この仕組みを入れた後）':'そのうち初日に1局でも遊んだ端末'}
+  const C=[1,3,7,14,30],tb=$('coTbl');
+  if(!ks.length){tb.innerHTML='<tbody><tr><td class="na">まだ記録がありません。明日から数字が出ます</td></tr></tbody>';return}
+  tb.innerHTML='<thead><tr><th>初めて開いた日</th><th>人数</th>'+C.map(k=>'<th>D'+k+'</th>').join('')+'</tr></thead><tbody>'+ks.slice(0,30).map(d=>{const c=co[d],n=base(c);
+    return '<tr><td>'+d.replace(/^\d+-0?(\d+)-0?(\d+)$/,'$1/$2')+'</td><td>'+fmt(n)+'</td>'+C.map(k=>{if(age(d)<k+1)return '<td class="na">—</td>';if(!n)return '<td class="na">·</td>';
+      const v=got(c,k)/n;return '<td class="h" style="--o:'+Math.min(.42,v*1.1).toFixed(2)+'"><b>'+Math.round(100*v)+'%</b><span class="sub">'+got(c,k)+'人</span></td>'}).join('')+'</tr>'}).join('')+'</tbody>'}
+document.addEventListener('click',e=>{const b=e.target.closest('#coSeg button');if(!b)return;COK=b.dataset.k;for(const x of document.querySelectorAll('#coSeg button'))x.classList.toggle('on',x===b);drawCo()});
 function drawU(){const days=window.__days||{};const svg=$('uChart'),tip=$('uTip');let ks=Object.keys(days).sort();if(URNG)ks=ks.slice(-URNG);
  const W=svg.clientWidth||600,H=240,L=30,R=66,T=10,B=24;svg.setAttribute('viewBox','0 0 '+W+' '+H);
  if(!ks.length){svg.innerHTML='<text x="'+W/2+'" y="'+H/2+'" fill="#a29c8c" font-size="13" text-anchor="middle">まだ記録がありません</text>';return}

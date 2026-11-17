@@ -171,7 +171,7 @@ export class Topic extends DurableObject {
     }
 
     // 利用状況の集計（話題 bocch-v1-stats だけ）
-    if (topic === "bocch-v1-stats" && action === "hit" && req.method === "POST") return this.statHit(req, h);
+    if (topic === "bocch-v1-stats" && action === "hit" && req.method === "POST") return this.statHit(req, { ...h, "X-Stat": "co1" });
     if (topic === "bocch-v1-stats" && action === "view" && req.method === "GET") return this.statView(req, h);
     // 棋譜（話題 bocch-v1-kifu だけ）
     if (topic === "bocch-v1-kifu" && action === "rec" && req.method === "POST") return this.kifuRec(req, h, now);
@@ -235,7 +235,26 @@ export class Topic extends DurableObject {
       if (!(await st.get(key))) { put[key] = 1; T[field]++; }
       if (!(await st.get(key + ":" + day))) { put[key + ":" + day] = 1; D[field]++; }
     };
-    if (o || sec || g) await once("v:" + d, "visitors");
+    // 開いた端末：v:<端末> に初めて開いた日（その日に遊んだら末尾に p）を残し、継続率（初日ごと）を数える
+    // co:<初日> = { n 新しい端末, p そのうち初日に遊んだ端末, a:{何日後:その日に開いた端末}, b:{何日後:初日に遊んだ端末のうちその日に開いた端末} }
+    // この仕組みより前に来た端末（v:<端末> が 1）は継続率に入れない
+    if (o || sec || g) {
+      const fk = "v:" + d, dk = fk + ":" + day, f0 = await st.get(fk), seen = await st.get(dk), play = !!(sec || g);
+      if (!f0) { put[fk] = day + (play ? "p" : ""); T.visitors++; }
+      if (!seen) { put[dk] = 1; D.visitors++; }
+      const fd = !f0 ? day : (typeof f0 === "string" ? f0.slice(0, 10) : "");
+      if (fd) {
+        const ck = "co:" + fd, C = (await st.get(ck)) || { n: 0, p: 0, a: {}, b: {} };
+        let ch = false;
+        if (!f0) { C.n++; if (play) C.p++; ch = true; }
+        else if (fd === day) { if (play && f0.length === 10) { C.p++; put[fk] = day + "p"; ch = true; } }
+        else if (!seen) {
+          const k = Math.round((Date.parse(day) - Date.parse(fd)) / 864e5);
+          if (k >= 1 && k <= 90) { C.a[k] = (C.a[k] || 0) + 1; if (f0.length > 10) C.b[k] = (C.b[k] || 0) + 1; ch = true; }
+        }
+        if (ch) put[ck] = C;
+      }
+    }
     if (sec || g) await once("p:" + d, "players");
     if (/^[a-f0-9]{16,32}$/.test(u)) await once("a:" + u, "accounts");
     // 初めての人の流れ：nv 初めて開いた・fs 1局目を始めた・fg 1局目を終えた・r1 次の日に来た・r7 7日以内にまた来た（端末ごとに1回だけ）
@@ -322,7 +341,8 @@ export class Topic extends DurableObject {
     const tot = (await st.get("tot")) || {};
     const days = {}; for (const [k, v] of await st.list({ prefix: "day:", reverse: true, limit: 60 })) days[k.slice(4)] = v;
     const modes = {}; for (const [k, v] of await st.list({ prefix: "gm:" })) modes[k.slice(3)] = v;
-    return new Response(JSON.stringify({ tot, days, modes, now: Date.now() }), { headers: { ...h, "Content-Type": "application/json", "Cache-Control": "no-store" } });
+    const co = {}; for (const [k, v] of await st.list({ prefix: "co:", reverse: true, limit: 120 })) co[k.slice(3)] = v;
+    return new Response(JSON.stringify({ tot, days, modes, co, now: Date.now() }), { headers: { ...h, "Content-Type": "application/json", "Cache-Control": "no-store" } });
   }
 
   // 部屋にいる対局者（観戦者は除く）の数
