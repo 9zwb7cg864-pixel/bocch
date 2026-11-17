@@ -14,6 +14,12 @@
 //   GET  /bocch-v1-news/list             … 運営のお知らせ（新しい順・無期限に保存）
 //   POST /bocch-v1-news/post {title,body} … お知らせを出す（X-Pass が合うときだけ。日本語を6言語に訳して保存）
 //   POST /bocch-v1-news/del {id}          … お知らせを消す（X-Pass が合うときだけ）
+//   POST /bocch-v1-news/psub {...}        … 研究記事を確認に出す（会員。題名・本文・盤の図）
+//   GET  /bocch-v1-news/pmine?u=…         … 自分が出した研究記事の状態
+//   GET  /bocch-v1-news/pq                … 確認待ちの研究記事（X-Pass が合うときだけ。日本語以外は日本語訳つき）
+//   POST /bocch-v1-news/prev {id,act,note} … 公開（7言語に訳す）か差し戻し（X-Pass が合うときだけ。結果は書いた人のメールに届く）
+//   GET  /bocch-v1-news/plist             … 公開された研究記事の一覧（新しい順）
+//   GET  /bocch-v1-news/pget?id=…         … 公開された研究記事1本
 // フレンドの受信箱（bocch-v1-in-…）だけは30日保存する（12時間だと、開かない人に申請が届かない）
 // since は all / 90s / 15m / 3h / UNIX秒。
 import { DurableObject } from "cloudflare:workers";
@@ -75,18 +81,18 @@ function parseSince(s, now) {
 }
 // 日本語を訳す（Google 翻訳の公開窓口。失敗したら空を返し、その言語は日本語のまま出す）
 // URL は訳す前に ⟦0⟧ のような目印に置きかえ、訳したあとで元に戻す（翻訳で URL が崩れないように）
-async function gtx(q, tl) {
+async function gtx(q, tl, sl = "ja") {
   const urls = [];
   const src = q.replace(/https?:\/\/[^\s<>"'　]+/g, u => "⟦" + (urls.push(u) - 1) + "⟧");
-  const out = await gtx0(src, tl);
+  const out = await gtx0(src, tl, sl);
   if (!out) return "";
   let ok = true;
   const back = out.replace(/⟦\s*(\d+)\s*⟧/g, (m, i) => urls[+i] != null ? urls[+i] : m);
   for (const u of urls) if (!back.includes(u)) ok = false;
   return ok ? back : "";
 }
-async function gtx0(q, tl) {
-  const r = await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&dt=t&tl=" + tl + "&q=" + encodeURIComponent(q));
+async function gtx0(q, tl, sl = "ja") {
+  const r = await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=" + sl + "&dt=t&tl=" + tl + "&q=" + encodeURIComponent(q));
   if (!r.ok) return "";
   const j = await r.json();
   return Array.isArray(j && j[0]) ? j[0].map(x => x && x[0] || "").join("") : "";
@@ -209,6 +215,102 @@ export class Topic extends DurableObject {
       if (fq) it.fq = 1;   // 「紹介を断る」ボタンを付ける
       await st.put(id, it);
       return J(it);
+    }
+    if (action[0] === "p") return this.posts(req, h, action, now);
+    return new Response("not found\n", { status: 404, headers: h });
+  }
+
+  // ---- 研究記事（会員が書いて、運営が確認してから公開） ----
+  // p:<id> = { id, u（アカウント）, name, lang, t（作った時刻）, st: "q" 確認待ち | "pub" 公開 | "back" 差し戻し, title, blocks, note, pt（公開した時刻）, tr（言語ごとの題名と本文） }
+  // blocks は [{k:"p", x:文章}, {k:"b", pos:36文字の盤, mv:[from,to]（直前の手）, cap:ひとこと}]
+  async posts(req, h, action, now) {
+    const st = this.ctx.storage, url = new URL(req.url), J = o => new Response(JSON.stringify(o), { headers: { ...h, "Content-Type": "application/json", "Cache-Control": "no-store" } });
+    const bad = () => new Response("bad\n", { status: 400, headers: h });
+    const LG = { ja: "ja", en: "en", "zh-Hans": "zh-CN", "zh-Hant": "zh-TW", ko: "ko", es: "es", de: "de" };
+    const pub = p => ({ id: p.id, name: p.name, lang: p.lang, pt: p.pt, tr: p.tr });
+    if (action === "psub" && req.method === "POST") {
+      const txt = await req.text(); if (txt.length > 40000) return new Response("too large\n", { status: 413, headers: h });
+      let b; try { b = JSON.parse(txt); } catch (e) { return bad(); }
+      const u = String(b && b.u || ""), name = nmClean(b && b.name), title = String(b && b.title || "").replace(/[\u0000-\u001f]/g, " ").trim().slice(0, 80);
+      const lang = Object.keys(LG).includes(b && b.lang) ? b.lang : "ja";
+      if (!/^[A-Za-z0-9]{8,40}$/.test(u) || !name || !title || !Array.isArray(b.blocks)) return bad();
+      const blocks = [];
+      for (const x of b.blocks.slice(0, 40)) {
+        if (x && x.k === "p") { const t = String(x.x || "").trim().slice(0, 3000); if (t) blocks.push({ k: "p", x: t }); }
+        else if (x && x.k === "b" && /^[012]{36}$/.test(String(x.pos || ""))) {
+          const mv = Array.isArray(x.mv) && x.mv.length === 2 && x.mv.every(n => Number.isInteger(n) && n >= 0 && n < 36) ? x.mv : null;
+          blocks.push({ k: "b", pos: String(x.pos), mv, cap: String(x.cap || "").trim().slice(0, 200) });
+        }
+      }
+      if (!blocks.some(x => x.k === "p")) return bad();
+      // 同じ人の確認待ちは5本まで。書き直し（id 指定）は確認待ちか差し戻しのものだけ
+      let id = String(b.id || "");
+      if (id) { const o = await st.get("p:" + id); if (!o || o.u !== u || o.st === "pub") return bad(); }
+      else {
+        const mine = [...(await st.list({ prefix: "p:" })).values()].filter(p => p.u === u && p.st === "q");
+        if (mine.length >= 5) return new Response("too many\n", { status: 429, headers: h });
+        id = now + "-" + rid();
+      }
+      const it = { id, u, name, lang, t: now, st: "q", title, blocks };
+      await st.put("p:" + id, it);
+      return J({ id, st: "q" });
+    }
+    if (action === "pmine" && req.method === "GET") {
+      const u = String(url.searchParams.get("u") || "");
+      if (!/^[A-Za-z0-9]{8,40}$/.test(u)) return bad();
+      const m = [...(await st.list({ prefix: "p:" })).values()].filter(p => p.u === u);
+      return J(m.map(p => ({ id: p.id, title: p.title, st: p.st, note: p.note || "", t: p.t, pt: p.pt || 0, lang: p.lang, blocks: p.st === "pub" ? undefined : p.blocks })).sort((a, b) => b.t - a.t));
+    }
+    if (action === "plist" && req.method === "GET") {
+      const m = [...(await st.list({ prefix: "p:" })).values()].filter(p => p.st === "pub").sort((a, b) => b.pt - a.pt);
+      return J(m.map(p => { const o = pub(p); o.tr = Object.fromEntries(Object.entries(p.tr || {}).map(([k, v]) => [k, { t: v.t }])); return o; }));
+    }
+    if (action === "pget" && req.method === "GET") {
+      const p = await st.get("p:" + String(url.searchParams.get("id") || ""));
+      if (!p || p.st !== "pub") return new Response("not found\n", { status: 404, headers: h });
+      return J({ ...pub(p), blocks: p.blocks.map(x => x.k === "b" ? { k: "b", pos: x.pos, mv: x.mv } : { k: "p" }) });
+    }
+    if (action === "pq" || action === "prev") {
+      if (!(await this.passOk(req))) { await new Promise(r => setTimeout(r, 800)); return new Response("forbidden\n", { status: 401, headers: h }); }
+      if (action === "pq" && req.method === "GET") {
+        const q = [...(await st.list({ prefix: "p:" })).values()].filter(p => p.st === "q").sort((a, b) => a.t - b.t);
+        // 日本語以外は確認しやすいように日本語訳を付ける（保存はしない）
+        await Promise.all(q.map(async p => {
+          if (p.lang === "ja") return;
+          try {
+            const sl = LG[p.lang];
+            p.ja = { title: await gtx(p.title, "ja", sl), blocks: await Promise.all(p.blocks.map(async x => x.k === "p" ? { k: "p", x: await gtx(x.x, "ja", sl) } : { ...x, cap: x.cap ? await gtx(x.cap, "ja", sl) : "" })) };
+          } catch (e) {}
+        }));
+        return J(q);
+      }
+      if (action === "prev" && req.method === "POST") {
+        let b; try { b = JSON.parse(await req.text()); } catch (e) { return bad(); }
+        const p = await st.get("p:" + String(b && b.id || "")); if (!p || p.st !== "q") return bad();
+        const note = String(b.note || "").trim().slice(0, 500), act = b.act === "pub" ? "pub" : b.act === "back" ? "back" : "";
+        if (!act) return bad();
+        const mailT = { pub: "研究記事を公開しました", back: "研究記事を差し戻しました" }[act];
+        if (act === "pub") {
+          const sl = LG[p.lang], tr = {};
+          await Promise.all(Object.entries(LG).map(async ([k, tl]) => {
+            if (k === p.lang) { tr[k] = { t: p.title, b: p.blocks.map(x => x.k === "p" ? x.x : x.cap || "") }; return; }
+            try {
+              const t = await gtx(p.title, tl, sl);
+              const bb = await Promise.all(p.blocks.map(async x => { const s0 = x.k === "p" ? x.x : x.cap || ""; return s0 ? (await gtx(s0, tl, sl)) || s0 : ""; }));
+              tr[k] = { t: t || p.title, b: bb, auto: 1 };
+            } catch (e) {}
+          }));
+          p.tr = tr; p.st = "pub"; p.pt = now; p.note = note;
+        } else { p.st = "back"; p.note = note; }
+        await st.put("p:" + p.id, p);
+        // 書いた人のメールに結果を届ける（宛先つきのお知らせ）
+        const body = (act === "pub" ? "「" + p.title + "」が公開されました。アプリの「記事」から読めます。" : "「" + p.title + "」は、今のままでは公開できませんでした。直して、もう一度確認に出してください。") + (note ? "\n\n運営から：" + note : "");
+        const mtr = { ja: { t: mailT, b: body } };
+        await Promise.all(Object.entries(LG).filter(([k]) => k !== "ja").map(async ([k, tl]) => { try { const [t, bb] = await Promise.all([gtx(mailT, tl), gtx(body, tl)]); if (t) mtr[k] = { t, b: bb || body }; } catch (e) {} }));
+        const mid = "n:" + now + ":" + rid();
+        await st.put(mid, { id: mid, t: now, tr: mtr, to: p.name });
+        return J({ id: p.id, st: p.st });
+      }
     }
     return new Response("not found\n", { status: 404, headers: h });
   }
