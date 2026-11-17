@@ -6,6 +6,8 @@ self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.
 self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET')return;const u=new URL(r.url);if(u.origin!==location.origin)return; // 対戦の通信などは触らない
   if(/\.mp4$/.test(u.pathname))return; // ガチャの動画は途中から読む（部分取得）ので、保存も横取りもしない
   // ページや翻訳ファイルは、スマホに一時保存された古い版を使わず、毎回サイトに確認する（変わっていなければ通信は小さい）
+  // 記事（/learn/）は、先に読んでおいたものがあればすぐ出し、裏で新しい版に入れ替える（バナーから開くときに待たせない）
+  if(/\/learn\//.test(u.pathname)&&/(\.html|\/)$/.test(u.pathname)&&!u.search){e.respondWith(caches.open(CACHE).then(c=>c.match(r,{ignoreVary:true}).then(m=>{const up=fetch(new Request(r,{cache:'no-cache'})).then(res=>{if(res&&res.ok)c.put(r,res.clone()).catch(()=>{});return res});if(m){e.waitUntil(up.catch(()=>{}));return m}return up}).catch(()=>fetch(r))));return}
   const fresh=r.mode==='navigate'||/\.(html|js|json|webmanifest)$/.test(u.pathname)||u.pathname.endsWith('/');
   e.respondWith(fetch(fresh?new Request(r,{cache:'no-cache'}):r).then(res=>{if(res&&res.ok&&!u.search){const cp=res.clone();caches.open(CACHE).then(c=>c.put(r,cp)).catch(()=>{})}return res})
     .catch(()=>caches.match(r,{ignoreSearch:true}).then(m=>m||(r.mode==='navigate'?caches.match('./index.html'):Response.error()))))});
