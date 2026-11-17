@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg?v=2">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=56"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=58"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -1985,6 +1985,15 @@ body.tabs-on .scr{padding-bottom:124px}
 .dp-t{font-size:11px;font-weight:700;border-radius:6px;padding:2px 6px}
 .t-bad{background:#4a2420;color:#ff8b80}.t-dub{background:#4a3a1c;color:#e6b04a}.t-ok{background:rgba(255,255,255,.08);color:var(--sub)}.t-best{background:#25402f;color:#7fd39a}
 .dp-ar{color:var(--mute)}.dp-acc{margin-top:8px}
+.ml-acts{display:flex;gap:8px;margin-top:10px}.ml-acts button{flex:1;min-height:42px}
+/* 盤の色（会員の見た目）：盤だけ。石はそのまま */
+.th-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:12px}
+.th-it{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px;border-radius:16px;background:var(--p1);min-height:0;color:var(--sub);font-size:13px}
+.th-it.on{outline:2px solid #e6c46a;color:#e6c46a;font-weight:700}
+.th-bd{display:grid;grid-template-columns:repeat(4,1fr);width:100%;aspect-ratio:1;border-radius:8px;overflow:hidden}
+.th-bd i{display:grid;place-items:center}.th-bd em{width:62%;aspect-ratio:1;border-radius:50%}
+.th-bd em.sb{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%)}.th-bd em.sw{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%)}
+html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df9583}html.bth-teal{--sqL:#f1e8d2;--sqD:#3f9f95}html.bth-pink{--sqL:#fbe4ef;--sqD:#e48db3}html.bth-dark{--sqL:#20202a;--sqD:#1b1b23}
 
 </style>
 </head>
@@ -1992,7 +2001,7 @@ body.tabs-on .scr{padding-bottom:124px}
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.00</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.02</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -2303,6 +2312,11 @@ body.tabs-on .scr{padding-bottom:124px}
 <section class="scr" data-scr="weak" hidden>
   <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>弱点を突くCPU</h2><span class="sp"></span></div>
   <div id="wkBody"></div>
+</section>
+<section class="scr" data-scr="mtheme" hidden>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>盤の色</h2><span class="sp"></span></div>
+  <div class="th-grid" id="thGrid"></div>
+  <p class="ms-cap">自分の画面の盤にだけ反映されます。石の色は変わりません</p>
 </section>
 <section class="scr" data-scr="friends" hidden>
   <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>フレンド</h2><span class="sp"></span></div>
@@ -4253,7 +4267,7 @@ function revWarn(t){REV.msg=t;clearTimeout(REV.msgT);REV.msgT=setTimeout(()=>{RE
 $('rgrid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(!c)return;revCell(+c.id.slice(1))});
 /* 動画を作る：手が1つでもある対局ならすべて作れる。勝者と終わり方を渡す。本体（mv/maker.js）は押したときに読み込む */
 function mvOK(log){return !!(log&&log.length)}
-function mvOpen(log,win,why,me){const go=()=>window.BocchVideo.open({log,win,why,me});if(window.BocchVideo)return go();const sc=document.createElement('script');sc.src='mv/maker.js?v=11';sc.onload=go;sc.onerror=()=>alert((window.bocchT||(x=>x))('読み込めませんでした'));document.head.appendChild(sc)}
+function mvOpen(log,win,why,me){const go=()=>window.BocchVideo.open({log,win,why,me,pro:!!(window.bocchMember&&window.bocchMember())});if(window.BocchVideo)return go();const sc=document.createElement('script');sc.src='mv/maker.js?v=13';sc.onload=go;sc.onerror=()=>alert((window.bocchT||(x=>x))('読み込めませんでした'));document.head.appendChild(sc)}
 $('mvNow').addEventListener('click',()=>{if(S.over&&S.log)mvOpen(S.log.map(m=>[m[0],m[1]]),S.over.win,S.over.why,(()=>{try{return S.mode==='net'?colorOf(NET.me):S.mode===0?0:hcOf()}catch(e){return 0}})())});
 $('revMv').addEventListener('click',()=>{if(REV.g)mvOpen(REV.g.log.map(m=>[m[0],m[1]]),REV.g.win,REV.g.why,REV.g.me)});
 $('reviewNow').addEventListener('click',()=>{saveFinished();const id=currentGameId();if(id)openReview(id)});
@@ -4825,6 +4839,7 @@ async function frPollInbox(){const me=myUid();if(!me||!FR.loaded)return;const ms
       if(!FR.fin.some(f=>f.uid===m.uid))FR.fin.push({uid:m.uid,name:nm,t:Date.now()})}
     else if(m.t==='facc'){if(FR.fout.some(f=>f.uid===m.uid))frAdd(m.uid,nm)}
     else if(m.t==='fcan'){FR.fin=FR.fin.filter(f=>f.uid!==m.uid)}
+    else if((m.t==='chal'||m.t==='chres')&&window.bocchChalIn){try{bocchChalIn(m)}catch(e){}}
     else if(m.t==='finv'||m.t==='fdec'){m._pre=1;frInvMsg(m)}}
   if(ch){frSeenSave();frSave();frBadge();frRender();frPostList()}}
 // フレンドと申請先の公開欄を読む（申請先の「フレンド一覧」に自分が入っていたら、承認されたとみなす）
@@ -5937,18 +5952,22 @@ const md=s=>{const d=new Date(s*1000);return (d.getMonth()+1)+'/'+d.getDate()};
 async function load(){try{const r=await fetch(RELAY+'bocch-v1-news/list',{cache:'no-store'});if(!r.ok)return;const a=await r.json();if(Array.isArray(a)){ML.items=a.filter(x=>x&&x.id&&x.tr);ML.loadedAt=Date.now();
   if(!localStorage.getItem('bocch-news-seen0')){ML.items.forEach(x=>{if(x.t*1000<Date.now()-14*864e5)ML.read.add(x.id)});saveRead();try{localStorage.setItem('bocch-news-seen0','1')}catch(e){}}
   render()}}catch(e){}}
-function unread(){return ML.items.filter(x=>!ML.read.has(x.id)).length}
+// 中継サーバーのお知らせに、この端末で作るもの（週の成績レポート・挑戦状など）を足して新しい順に
+const xtra=()=>{try{return (window.bocchMailExtra&&window.bocchMailExtra())||[]}catch(e){return[]}};
+const allItems=()=>ML.items.concat(xtra()).sort((a,b)=>(b.t||0)-(a.t||0));
+function unread(){return allItems().filter(x=>!ML.read.has(x.id)).length}
 function badge(){const n=unread(),f=(typeof FR!=='undefined'&&FR.fin)?FR.fin.length:0,b=$('mailBadge');if(!b)return;b.textContent=String(n+f>99?'99+':n+f);b.hidden=!(n+f);
   const m=$('hmMail');if(m)m.setAttribute('aria-label',n+f?'メール（'+(n+f)+'件）':'メール');
   $('mlCntN').textContent=String(n);$('mlCntN').hidden=!n;$('mlCntF').textContent=String(f);$('mlCntF').hidden=!f}
 function setTab(t){ML.tab=t;$('mlTabN').setAttribute('aria-selected',String(t==='n'));$('mlTabF').setAttribute('aria-selected',String(t==='f'));$('mlN').hidden=t!=='n';$('mlF').hidden=t!=='f'}
 function render(){badge();
-  const L=$('mlList');L.replaceChildren();$('mlEmpty').hidden=!!ML.items.length;
-  for(const it of ML.items){const x=txOf(it),box=el('div','ml-it'+(ML.read.has(it.id)?' read':'')),hd=el('button','ml-h');hd.type='button';hd.setAttribute('aria-expanded','false');
+  const L=$('mlList');L.replaceChildren();const AI=allItems();$('mlEmpty').hidden=!!AI.length;
+  for(const it of AI){const x=txOf(it),box=el('div','ml-it'+(ML.read.has(it.id)?' read':'')),hd=el('button','ml-h');hd.type='button';hd.setAttribute('aria-expanded','false');
     hd.append(el('span','ml-dot'),el('b','',x.t),el('span','ml-d',md(it.t)));const bd=el('div','ml-b');linkify(bd,x.b||'');bd.hidden=true;
     hd.onclick=()=>{bd.hidden=!bd.hidden;hd.setAttribute('aria-expanded',String(!bd.hidden));if(!ML.read.has(it.id)){ML.read.add(it.id);saveRead();box.classList.add('read');badge()}};
     box.append(hd,bd);
-    if(ML.admin){const d=el('button','ml-del','消す');d.type='button';d.onclick=()=>del(it.id);bd.append(d)}
+    if(it.acts){const r=el('div','ml-acts');for(const a of it.acts){const b=el('button',a.pri?'primary':'',a.label);b.type='button';b.onclick=a.fn;r.append(b)}bd.append(r)}
+    if(ML.admin&&!it.local){const d=el('button','ml-del','消す');d.type='button';d.onclick=()=>del(it.id);bd.append(d)}
     L.append(box)}
   const F=$('mlFr');F.replaceChildren();const fin=(typeof FR!=='undefined'&&FR.fin)||[];$('mlFrSec').hidden=!fin.length;$('mlFrEmpty').hidden=!!fin.length;
   for(const f of fin){const it=el('div','fr-item'),top=el('div','fr-top');top.append(el('b','',f.name));const a=el('button','primary','承認'),d=el('button','','断る');a.type=d.type='button';
@@ -5969,6 +5988,7 @@ async function del(id){if(!confirm('このお知らせを消しますか？（�
 async function open_(){setTab((typeof FR!=='undefined'&&FR.fin&&FR.fin.length&&!unread())?'f':'n');render();
   ML.admin=await isAdmin();$('mlAdmin').hidden=!ML.admin;$('mlPass').hidden=!ML.admin||!!pass();if(ML.admin)render();
   if(Date.now()-ML.loadedAt>60000)load()}
+window.bocchMailRender=()=>{try{render()}catch(e){}};
 $('mlTabN').onclick=()=>setTab('n');$('mlTabF').onclick=()=>setTab('f');$('mlPost').onclick=post;
 document.querySelectorAll('[data-go="mail"]').forEach(b=>b.addEventListener('click',open_));
 // 申請が増えたり減ったりしたら、封筒の数字とメール画面も直す
@@ -5991,15 +6011,15 @@ setInterval(check,4000);setTimeout(check,1500);
 const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
 // ---- 会員ページ ----
 const BEN=[['成績の分析','戦型・先手後手・時間帯ごとの勝率、正確度、悪手の推移','mstats'],['検討','感想戦で別の手を試すと、相手の手をAIが指し返す','moshi'],
- ['局面の保存とメモ','感想戦で保存した、自分だけのノート','notes'],['週の成績レポート','毎週メールに届く'],['自分の分身CPU','自分の指し方の癖を覚えたCPU','clone'],['弱点を突くCPU','苦手な形に持ち込んでくる','weak'],
- ['感想戦の深い解析','深く読み直して、評価が変わった手を一覧に','deep'],['コーチの会員メニュー','苦手の集中練習・定跡の授業の追加'],['動画づくりの上位版','高画質・曲とカメラを選べる'],
- ['会員の見た目','盤と石の色など'],['広告なし','広告が始まったら有効'],['支援者として名前を載せる','希望する人だけ']];
+ ['局面の保存とメモ','感想戦で保存した、自分だけのノート','notes'],['週の成績レポート','毎週月曜の朝、メールに届く','report'],['自分の分身CPU','自分の指し方の癖を覚えたCPU','clone'],['弱点を突くCPU','苦手な形に持ち込んでくる','weak'],
+ ['感想戦の深い解析','深く読み直して、評価が変わった手を一覧に','deep'],['コーチの会員メニュー','苦手の集中練習・定跡の授業の追加'],['動画づくりの上位版','形・文字入れ・区間・60コマ/秒','video'],
+ ['盤の色','フォンク動画と同じ5色から選べる','theme'],['広告なし','広告が始まったら有効'],['支援者として名前を載せる','希望する人だけ']];
 function renderMember(){const L=$('mbList');L.replaceChildren();BEN.forEach((b,i)=>{const r=el(b[2]?'button':'div','mb-ben'+(b[2]?' on':''));if(b[2])r.type='button';
   r.append(el('span','mb-n',String(i+1)));const t=el('span','mb-t');t.append(el('b','',b[0]),el('small','',b[1]));r.append(t,el('em','mb-st '+(b[2]?'ok':'wip'),b[2]?'使える':'準備中'));
   if(b[2]==='mstats')r.onclick=()=>{show('mstats');renderStats()};
   if(b[2]==='moshi')r.onclick=()=>{alert('検討は感想戦で使えます。\n履歴から対局を開き、盤の右上の「検討」を入れて石を動かすと、相手の手をAIが指し返します。');show('history');try{renderHistory()}catch(e){}};
   if(b[2]==='deep')r.onclick=()=>{alert('感想戦の「最強で深く再解析」を押すと、読み直したあとに、評価が変わった手と正確度の変化が出ます。');show('history');try{renderHistory()}catch(e){}};
-  if(b[2]==='notes')r.onclick=()=>{show('notes');renderNotes()};if(b[2]==='clone')r.onclick=()=>{show('clone');renderClone()};if(b[2]==='weak')r.onclick=()=>{show('weak');renderWeak()};
+  if(b[2]==='notes')r.onclick=()=>{show('notes');renderNotes()};if(b[2]==='theme')r.onclick=()=>{show('mtheme');renderTheme()};if(b[2]==='report')r.onclick=()=>{show('mail');try{document.getElementById('mlTabN').click();window.bocchMailRender&&bocchMailRender()}catch(e){}};if(b[2]==='video')r.onclick=()=>{alert('感想戦の「動画を作る」を開くと、★の付いた設定（形・文字入れ・区間・なめらかさ）が出ます。');show('history');try{renderHistory()}catch(e){}};if(b[2]==='clone')r.onclick=()=>{show('clone');renderClone()};if(b[2]==='weak')r.onclick=()=>{show('weak');renderWeak()};
   L.append(r)})}
 document.querySelectorAll('[data-go="member"]').forEach(b=>b.addEventListener('click',renderMember));
 // ---- 正確度：1手ごとに「勝率をどれだけ落としたか」から 0〜100% を出し、その手番の平均にする（落とさなかった手は100%）----
@@ -6049,7 +6069,7 @@ $('msSeg').querySelectorAll('button').forEach(b=>b.onclick=()=>{MB.f=b.dataset.f
 // ---- 局面の保存とメモ（ノート）：この端末に保存 ----
 const NT={tag:'すべて',pick:'そのほか'};
 const ntLoad=()=>{try{const v=JSON.parse(localStorage.getItem('bocch-notes')||'[]');return Array.isArray(v)?v:[]}catch(e){return[]}};
-const ntStore=a=>{try{localStorage.setItem('bocch-notes',JSON.stringify(a.slice(0,300)))}catch(e){}};
+let ntStore=a=>{try{localStorage.setItem('bocch-notes',JSON.stringify(a.slice(0,300)))}catch(e){}};
 function miniBoard(b){const m=el('div','nt-mini');for(let i=0;i<36;i++){const c=el('i',(((i/6|0)+i)%2?'d':'l')+(b[i]==1?' b':b[i]==2?' w':''));m.append(c)}return m}
 function ntCur(){if(!REV.g)return null;const st=REV.pv?pvState():REV.pos[REV.i];if(!st)return null;const ply=REV.pv?REV.pv.base:REV.i;
   return {b:st.b.slice(),turn:st.turn,src:{gid:REV.g.id,ply,label:(REV.g.opp||MODE_NAME(REV.g.mode))+'　'+fmtDate(REV.g.t)+'　'+ply+'手目'+(REV.pv&&REV.pv.k?'からの検討':'')}}}
@@ -6091,7 +6111,9 @@ function renderClone(){const B=$('mcBody');B.replaceChildren();const P=cloneProf
   const c=card('覚えた指し方');for(const [k,v] of [['よく指す序盤（黒）',P.fav1],['よく指す序盤（白）',P.fav2],['正確度',P.acc!=null?Math.round(P.acc)+'%':'—（解析した対局がありません）'],['悪手の出やすさ',P.bad!=null?'1局に'+P.bad.toFixed(1)+'回':'—']]){const r=el('div','mc-kv');r.append(el('span','',k),el('em','',v));c.append(r)}B.append(c);
   const lv=P.acc==null?3:P.acc>=80?3:P.acc>=60?2:1;
   const r=el('div','mc-go');for(const [hc,l] of [[1,'自分は黒で対局'],[2,'自分は白で対局']]){const b=el('button','primary',l);b.type='button';b.onclick=()=>startMb('clone',hc,{lv,state:{mbBook:P.book,mbAcc:P.acc}});r.append(b)}B.append(r);
-  B.append(el('p','ms-cap','序盤（12手目まで）はあなたがよく指した手を指し、そのあとはあなたの正確度に近い強さで指します。段級には影響しません。'))}
+  B.append(el('p','ms-cap','序盤（12手目まで）はあなたがよく指した手を指し、そのあとはあなたの正確度に近い強さで指します。段級には影響しません。'));
+  {const c2=card('フレンドに挑戦状を送る');const fs=(typeof FR!=='undefined'&&FR.friends)||[];if(!fs.length)c2.append(el('p','ms-cap','フレンドがいると送れます'));
+   for(const f of fs){const r=el('div','mc-kv');const b=el('button','','送る');b.type='button';b.onclick=()=>chalSend(f,P,lv,b);r.append(el('span','',f.name),b);c2.append(r)}B.append(c2)}}
 function renderWeak(){const B=$('wkBody');B.replaceChildren();const W=weakList();
   if(!W.ops.length){B.append(el('p','hist-empty','同じ戦型を3局以上指すと、苦手が分かります'));return}
   const c=card('今の苦手（勝率の低い順）');W.ops.slice(0,4).forEach(e=>{const r=el('div','mc-kv');r.append(el('span','',e.name+'（'+(e.me===1?'黒':'白')+'）'),el('em','',pct(e.w,e.n)+'%・'+e.n+'局'));c.append(r)});B.append(c);
@@ -6108,10 +6130,10 @@ if(typeof cpuPlay==='function'){const _cp=cpuPlay;cpuPlay=function(p,lv){try{if(
   if(m&&allMoves(S.b,pp).some(x=>x[0]===m[0]&&x[1]===m[1])){const k0=S.ply+':'+key(S.b,S.turn);mvAfter(()=>{if(k0===S.ply+':'+key(S.b,S.turn)&&!S.over)doMove(m)});return}}}catch(e){}
   return _cp.apply(this,arguments)}}
 // 対局画面：相手の名前を「分身」「弱点CPU」に、上の表示も合わせる
-if(typeof render==='function'){const _rd=render;render=function(){_rd.apply(this,arguments);try{if(S&&S.mbKind&&CUR==='game'){const nm=S.mbKind==='clone'?((typeof myName==='function'&&myName())||'あなた')+'の分身':'弱点を突くCPU';
+if(typeof render==='function'){const _rd=render;render=function(){_rd.apply(this,arguments);try{if(S&&S.mbKind&&CUR==='game'){const nm=S.mbName||(S.mbKind==='clone'?((typeof myName==='function'&&myName())||'あなた')+'の分身':'弱点を突くCPU');
   const b=document.querySelector('#plTop b');if(b)b.textContent=nm;const av=document.querySelector('#plTop .cpu-av,#plTop img');if(av)av.remove();const r=document.querySelector('#plTop .r');if(r)r.textContent='';$('connTxt').textContent=nm}}catch(e){}}}
 // 保存した対局に印を付ける（成績の分析から外し、克服の記録に使う）
-if(typeof saveFinished==='function'){const _sf=saveFinished;saveFinished=function(){_sf.apply(this,arguments);try{if(S&&S.mbKind&&S.over){const id=currentGameId(),g=loadGames(),ix=g.findIndex(x=>x.id===id);if(ix>=0){g[ix].mb=S.mbKind;if(S.mbOp)g[ix].mbOp=S.mbOp;storeGames(g)}}}catch(e){}}}
+if(typeof saveFinished==='function'){const _sf=saveFinished;saveFinished=function(){_sf.apply(this,arguments);try{if(S&&S.mbChal&&S.over&&!S.mbChal.sent){S.mbChal.sent=1;const r=S.over.win===0?'d':S.over.win===S.hc?'w':'l';frRelay(frTopic('in',S.mbChal.uid),{t:'chres',uid:myUid(),name:myName(),id:S.mbChal.id,r,n:S.log.length})}}catch(e){}try{if(S&&S.mbKind&&S.over){const id=currentGameId(),g=loadGames(),ix=g.findIndex(x=>x.id===id);if(ix>=0){g[ix].mb=S.mbKind;if(S.mbOp)g[ix].mbOp=S.mbOp;storeGames(g)}}}catch(e){}}}
 // ---- 深い解析：読み直す前の判定を覚えておき、終わったら変わった手を出す ----
 if(typeof deepStart==='function'){const _ds=deepStart;deepStart=function(){try{if(MB.own&&REV.g&&REV.an.filter(Boolean).length>=REV.g.log.length-1){const g={...REV.g,an:REV.an};const save={g:REV.g,pos:REV.pos,an:REV.an};
   const mk=[];for(let i=0;i<REV.g.log.length;i++){const k=markOf(i);mk.push(k?k.k:null)}const pa={1:accOf(g,1),2:accOf(g,2)};REV.g.prevMk=mk;REV.g.prevAcc=pa;
@@ -6125,6 +6147,57 @@ function deepDiff(){const box=$('deepBox');if(!box)return;let d=box.querySelecto
   if(!ch.length)d.append(el('p','ms-cap','深く読んでも、悪手・疑問手の判定は変わりませんでした'));
   for(const [i,a,b] of ch){const r=el('button','dp-row');r.type='button';r.append(el('b','',(i+1)+'. '+(REV.pos[i].turn===1?'黒':'白')+' '+mvTxt(g.log[i])),el('span','dp-t t-'+a,MKN[a]),el('span','dp-ar','→'),el('span','dp-t t-'+b,MKN[b]));r.onclick=()=>setRev(i+1);d.append(r)}
   const na={1:accOf({...g,an:REV.an},1),2:accOf({...g,an:REV.an},2)};if(g.prevAcc&&g.prevAcc[1]!=null&&na[1]!=null){const c=el('div','dp-acc');for(const s of [1,2]){const r=el('div','mc-kv');r.append(el('span','',(s===1?'黒':'白')+'の正確度'+(g.me===s?'（あなた）':'')),el('em','',Math.round(g.prevAcc[s])+'% → '+Math.round(na[s])+'%'));c.append(r)}d.append(c)}}
+// ---- ノートをアカウントに保存して、別の端末でも同じノートにする（消した印も一緒に）----
+const ntDel=()=>{try{return JSON.parse(localStorage.getItem('bocch-notes-del')||'[]')}catch(e){return[]}};
+NT.synced=false;
+async function ownerNow(){try{const u=FB&&FB.user;if(!u||!u.emailVerified)return false;const dg=[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(String(u.email||'').toLowerCase())))].map(x=>x.toString(16).padStart(2,'0')).join('');return OWN_H.includes(dg)}catch(e){return false}}
+async function ntPull(){if(NT.synced||!(await ownerNow()))return;try{const snap=await FB.db.collection('users').doc(FB.user.uid).get();const d=snap.exists?snap.data():{};
+  const del=new Set([...ntDel(),...(Array.isArray(d.notesDel)?d.notesDel:[])]);const m=new Map();for(const x of [...ntLoad(),...(Array.isArray(d.notes)?d.notes:[])])if(x&&x.id&&!del.has(x.id)&&!m.has(x.id))m.set(x.id,x);
+  try{localStorage.setItem('bocch-notes-del',JSON.stringify([...del].slice(-300)))}catch(e){}ntStore([...m.values()].sort((a,b)=>(b.t||0)-(a.t||0)));NT.synced=true;if(CUR==='notes')renderNotes()}catch(e){}}
+if(typeof acctPull==='function'){const _ap=acctPull;acctPull=async function(){try{await ntPull()}catch(e){}return _ap.apply(this,arguments)}}
+if(typeof profData==='function'){const _pd=profData;profData=function(){const o=_pd.apply(this,arguments);if(NT.synced){o.notes=ntLoad().slice(0,200);o.notesDel=ntDel().slice(-300)}return o}}
+{const _ns=ntStore;ntStore=a=>{_ns(a);try{if(NT.synced&&typeof acctPush==='function')acctPush()}catch(e){}}}
+setInterval(()=>{if(MB.own&&!NT.synced)ntPull()},6000);
+// 消したノートは印を残す（別の端末から戻ってこないように）
+{const _rn=renderNotes;renderNotes=function(){_rn();document.querySelectorAll('#ntList .nt-del').forEach((b,i)=>{const old=b.onclick;b.onclick=()=>{const before=new Set(ntLoad().map(x=>x.id));old&&old();const after=new Set(ntLoad().map(x=>x.id));const gone=[...before].filter(x=>!after.has(x));if(gone.length){try{localStorage.setItem('bocch-notes-del',JSON.stringify([...ntDel(),...gone].slice(-300)))}catch(e){}ntStore(ntLoad())}}})}}
+// ---- 盤の色（会員の見た目）：フォンク動画の「見た目」と同じ5色。盤だけで、石の色は変えない。自分の画面にだけ ----
+const THM=[['','今の色','#c9d2e3','#8f9bb6'],['lav','ラベンダー','#ece6fb','#8b7bd8'],['sal','サーモン','#f8e6d8','#df9583'],['teal','ティール','#f1e8d2','#3f9f95'],['pink','ピンク','#fbe4ef','#e48db3'],['dark','ダーク','#20202a','#1b1b23']];
+function thApply(){let k='';try{k=localStorage.getItem('bocch-theme')||''}catch(e){}if(!THM.some(t=>t[0]===k))k='';const r=document.documentElement;THM.forEach(t=>{if(t[0])r.classList.toggle('bth-'+t[0],t[0]===k)})}
+thApply();
+function renderTheme(){const G=$('thGrid');G.replaceChildren();let cur='';try{cur=localStorage.getItem('bocch-theme')||''}catch(e){}
+  for(const [k,n,a,b] of THM){const d=el('button','th-it'+(k===cur?' on':''));d.type='button';const bd=el('span','th-bd');for(let i=0;i<16;i++){const c=el('i');c.style.background=((i>>2)+i)%2?b:a;if(i===1||i===6||i===12)c.append(el('em','sb'));if(i===3||i===9||i===14)c.append(el('em','sw'));bd.append(c)}
+    d.append(bd,el('span','th-n',n));d.onclick=()=>{try{localStorage.setItem('bocch-theme',k)}catch(e){}thApply();renderTheme()};G.append(d)}}
+// ---- 週の成績レポート：毎週月曜の朝7時に、先週（月〜日）の分をメールに出す（この端末の対局から作る）----
+function wkStart(d){const x=new Date(d);x.setHours(0,0,0,0);const w=(x.getDay()+6)%7;x.setDate(x.getDate()-w);return x}
+function wkStats(a,b){const gs=myGames().filter(g=>g.t>=a&&g.t<b&&(g.win===0||g.win===1||g.win===2));if(!gs.length)return null;const W=g=>g.win===g.me?1:0;
+  const acc=[];let bad=0,an=0;for(const g of gs){if(g.an&&g.an.length){const v=accOf(g,g.me);if(v!=null)acc.push(v);try{bad+=countMarks(g).bad;an++}catch(e){}}}
+  const op={};for(const g of gs){const o=gameOp(g);if(!o)continue;(op[o]=op[o]||[0,0,0]);op[o][W(g)?0:1]++;op[o][2]++}
+  return {n:gs.length,wr:Math.round(gs.reduce((s,g)=>s+W(g),0)/gs.length*100),acc:acc.length?Math.round(acc.reduce((s,x)=>s+x,0)/acc.length):null,bad:an?bad/an:null,op}}
+function weekReports(){if(!MB.own)return[];const out=[];const now=Date.now();let s=wkStart(now);
+  for(let k=0;k<4;k++){const e=new Date(s),b=new Date(s);b.setDate(b.getDate()-7);const st=wkStats(+b,+e);const show=new Date(e);show.setHours(7,0,0,0);if(st&&+show<=now){
+      const pb=new Date(b);pb.setDate(pb.getDate()-7);const pv=wkStats(+pb,+b);const dif=(x,y,u)=>x!=null&&y!=null?'（'+(x-y>=0?'+':'')+(Math.round((x-y)*10)/10)+u+'）':'';
+      const ops=Object.entries(st.op).sort((x,y)=>y[1][2]-x[1][2]);const best=ops.filter(x=>x[1][2]>=2).sort((x,y)=>y[1][0]/y[1][2]-x[1][0]/x[1][2])[0],worst=ops.filter(x=>x[1][2]>=2).sort((x,y)=>x[1][0]/x[1][2]-y[1][0]/y[1][2])[0];
+      const md=d=>(d.getMonth()+1)+'/'+d.getDate(),last=new Date(e);last.setDate(last.getDate()-1);
+      const L=['対局　'+st.n+'局'+dif(st.n,pv&&pv.n,'局'),'勝率　'+st.wr+'%'+dif(st.wr,pv&&pv.wr,'')];if(st.acc!=null)L.push('正確度　'+st.acc+'%'+dif(st.acc,pv&&pv.acc,''));if(st.bad!=null)L.push('悪手　1局に'+st.bad.toFixed(1)+'回'+dif(st.bad,pv&&pv.bad,''));
+      if(best)L.push('いちばん勝てた戦型　'+best[0]+'（'+best[1][0]+'勝'+best[1][1]+'敗）');if(worst&&(!best||worst[0]!==best[0]))L.push('いちばん負けた戦型　'+worst[0]+'（'+worst[1][0]+'勝'+worst[1][1]+'敗）');
+      if(worst&&worst[1][1]>worst[1][0])L.push('','今週のおすすめ：弱点を突くCPUで「'+worst[0]+'」を3局');
+      out.push({id:'wr:'+md(b),local:1,t:Math.floor(+show/1000),tr:{ja:{t:'先週の成績（'+md(b)+'〜'+md(last)+'）',b:L.join('\n')}}})}
+    s=new Date(s);s.setDate(s.getDate()-7)}
+  return out}
+// ---- 分身への挑戦状：フレンドに送り、受けた人はメールから分身と対局する。結果は送った人のメールに返る ----
+const CH_KEY='bocch-chal';const chLoad=()=>{try{const v=JSON.parse(localStorage.getItem(CH_KEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return[]}};const chStore=a=>{try{localStorage.setItem(CH_KEY,JSON.stringify(a.slice(0,60)))}catch(e){}};
+function packBook(book){const e=Object.entries(book).map(([k,v])=>{const best=Object.entries(v).sort((a,b)=>b[1]-a[1])[0];const tot=Object.values(v).reduce((s,x)=>s+x,0);return [k,best[0],tot]}).sort((a,b)=>b[2]-a[2]);
+  const out=[];let len=0;for(const [k,mv] of e){const [f,t]=mv.split('-').map(Number);const s2=k+':'+KC[f]+KC[t];if(len+s2.length+1>2900)break;out.push(s2);len+=s2.length+1}return out.join(',')}
+function unpackBook(s2){const b={};for(const x of String(s2||'').split(',')){const [k,m]=x.split(':');if(!k||!m||m.length!==2||k.length!==37)continue;const f=KC.indexOf(m[0]),t=KC.indexOf(m[1]);if(f<0||t<0)continue;b[k]={[f+'-'+t]:1}}return b}
+window.bocchChalIn=m=>{const a=chLoad();if(m.t==='chal'){if(!m.id||a.some(x=>x.id===m.id))return;a.unshift({id:String(m.id).slice(0,20),kind:'in',uid:m.uid,name:cleanName(m.name)||'名無し',t:Date.now(),bk:String(m.bk||'').slice(0,3200),lv:[1,2,3].includes(m.lv)?m.lv:2})}
+  else{const id='r'+String(m.id).slice(0,20)+String(m.uid).slice(0,8);if(a.some(x=>x.id===id))return;a.unshift({id,kind:'res',uid:m.uid,name:cleanName(m.name)||'名無し',t:Date.now(),r:['w','l','d'].includes(m.r)?m.r:'d',n:m.n|0})}
+  chStore(a);try{window.bocchMailRender&&bocchMailRender()}catch(e){}};
+function chalAccept(c){const a=chLoad(),x=a.find(y=>y.id===c.id);if(x){x.done=1;chStore(a)}startMb('clone',Math.random()<.5?1:2,{lv:c.lv,state:{mbBook:unpackBook(c.bk),mbName:c.name+'さんの分身',mbChal:{id:c.id,uid:c.uid}}})}
+function chalItems(){return chLoad().map(c=>c.kind==='in'?{id:'ch:'+c.id,local:1,t:Math.floor(c.t/1000),tr:{ja:{t:c.name+'さんから挑戦状',b:'「僕の分身に勝てるかな？」\n'+c.name+'さんの指し方を覚えたCPUと対局します。段級には影響しません。'+(c.done?'\n（受けて立ちました）':'')}},acts:c.done?null:[{label:'受けて立つ',pri:1,fn:()=>chalAccept(c)}]}
+  :{id:'ch:'+c.id,local:1,t:Math.floor(c.t/1000),tr:{ja:{t:'挑戦の結果',b:c.name+'さんが、あなたの分身に'+(c.r==='w'?'勝ちました':c.r==='l'?'負けました':'引き分けました')+'（'+c.n+'手）。'}}})}
+window.bocchMailExtra=()=>chalItems().concat(weekReports());
+function chalSend(f,P,lv,btn){const me=myUid();if(!me){alert('ログインすると送れます');return}const id='c'+Date.now().toString(36);
+  frRelay(frTopic('in',f.uid),{t:'chal',uid:me,name:myName(),id,bk:packBook(P.book),lv});btn.disabled=true;btn.textContent='送りました'}
 // ---- もしも検討（感想戦の検討に上乗せ）----
 if(typeof renderReview==='function'){const _rr=renderReview;renderReview=function(){_rr.apply(this,arguments);try{moshi()}catch(e){}}}
 function bpOf(h){if(!h||h.s==null)return null;const p=h.s>EWIN-1000?1:h.s<-EWIN+1000?0:sig(EK*h.s);return h.turn===1?p:1-p}

@@ -254,6 +254,7 @@ function load(){if(ready)return ready;
 #bmv canvas{height:min(56vh,640px);width:auto;max-width:100%;aspect-ratio:9/16;border-radius:18px;background:#000;display:block;flex:none}
 #bmv .opt{width:100%;max-width:420px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
 #bmv label{font-size:12px;color:#9aa6c0;font-weight:700;display:block;margin-bottom:3px}
+#bmv .opt.pro label{color:#e6c46a}#bmv .opt.pro div[style]{grid-column:1/3}#bmv input{width:100%;box-sizing:border-box;background:#1a2234;color:#eef2fa;border:1px solid rgba(200,215,240,.18);border-radius:12px;padding:10px;font-size:15px}#bmv .pro-note{font-size:12px;color:#e6c46a;margin:2px 0 4px;max-width:420px;text-align:center}
 #bmv select{width:100%;background:#1a2234;color:#eef2fa;border:1px solid rgba(200,215,240,.18);border-radius:12px;padding:10px;font-size:14px}
 #bmv .row{width:100%;max-width:420px;display:flex;gap:8px}
 #bmv .row button{flex:1;background:#232d43;color:#eef2fa;border:0;border-radius:999px;padding:12px;min-height:50px;font-size:15px;font-weight:800;cursor:pointer}
@@ -277,11 +278,17 @@ async function open(o){
   UI=el(`<div id="bmv" role="dialog" aria-modal="true"><div class="top"><h3>${T('動画を作る')}</h3><button class="x" id="bmvX">${T('閉じる')} ✕</button></div>
 <canvas id="bmvCv" width="1080" height="1920"></canvas>
 <div class="opt"><div><label for="bmvTh">${T('見た目')}</label><select id="bmvTh"></select></div><div><label for="bmvCam">${T('カメラ')}</label><select id="bmvCam"><option value="mid">${T('普通（おすすめ）')}</option><option value="wild">${T('激しい')}</option><option value="calm">${T('大人しい')}</option></select></div></div>
+${o&&o.pro?`<div class="opt pro"><div><label for="bmvFmt">★ ${T('形')}</label><select id="bmvFmt"><option value="v">${T('縦（ショート）')}</option><option value="sq">${T('正方形（X）')}</option><option value="h">${T('横（YouTube）')}</option></select></div><div><label for="bmvFps">★ ${T('なめらかさ')}</label><select id="bmvFps"><option value="30">${T('30コマ/秒')}</option><option value="60">${T('60コマ/秒')}</option></select></div></div>
+<div class="opt pro"><div style="flex:1"><label for="bmvT1">★ ${T('題')}</label><input id="bmvT1" maxlength="30" placeholder="${T('例：三段に上がった一局')}"></div></div>
+<div class="opt pro"><div style="flex:1"><label for="bmvT2">★ ${T('対戦カードなど')}</label><input id="bmvT2" maxlength="40"></div></div>
+<div class="opt pro"><div><label for="bmvFrom">★ ${T('何手目から')}</label><input id="bmvFrom" type="number" min="1" value="1"></div><div><label for="bmvTo">${T('何手目まで')}</label><input id="bmvTo" type="number" min="1"></div></div>
+<p class="pro-note">${T('★の設定は「動画を作る」で保存する動画に入ります（プレビューには出ません）')}</p>`:''}
 <div class="row"><button id="bmvPrev">▶ ${T('プレビュー')}</button><button id="bmvMake" class="main">${T('動画を作る')}</button></div>
 <div class="bar"><i id="bmvProg"></i></div><div class="msg" id="bmvMsg">${T('読み込み中…')}</div>
 <div class="row" id="bmvOut" hidden><button id="bmvSave" class="main">${T('保存')}</button><button id="bmvShare">${T('共有')}</button></div></div>`);
   document.body.appendChild(UI);const q=id=>UI.querySelector('#'+id),CV=q('bmvCv'),msg=t=>{q('bmvMsg').textContent=t};
   q('bmvX').onclick=close;
+  if(o&&o.pro){const n=mv.length;q('bmvTo').value=n;q('bmvTo').max=n;q('bmvFrom').max=n;try{const sv=JSON.parse(localStorage.getItem('bocch-mvpro')||'{}');if(sv.fmt)q('bmvFmt').value=sv.fmt;if(sv.fps)q('bmvFps').value=sv.fps}catch(e){}}
   q('bmvPrev').disabled=q('bmvMake').disabled=true;
   try{await load()}catch(e){msg(T('読み込めませんでした'));return}
   if(!UI)return;
@@ -300,10 +307,19 @@ async function open(o){
 
   /* 録画：使える端末では1コマずつ描いて自分でmp4にする（WebCodecs）。コマ飛び・画質の自動低下が起きない。使えない端末は従来のMediaRecorder */
   let MUXP=null;const loadMux=()=>MUXP||(MUXP=new Promise((res,rej)=>{if(window.Mp4Muxer)return res(window.Mp4Muxer);const s=document.createElement('script');s.src=BASE+'mp4-muxer.js?v=1';s.onload=()=>res(window.Mp4Muxer);s.onerror=rej;document.head.appendChild(s)}));
-  async function wcVideoCfg(){if(!window.VideoEncoder||!window.AudioEncoder||!window.VideoFrame||!window.AudioData)return null;
-    for(const codec of ['avc1.640028','avc1.4d0028','avc1.42e028']){const v={codec,width:1080,height:1920,bitrate:12e6,framerate:30,avc:{format:'avc'}};try{const r=await VideoEncoder.isConfigSupported(v);if(r&&r.supported)return v}catch(e){}}return null}
-  async function encodeWC(buf,S0,TT,me){
-    const v=await wcVideoCfg();if(!v)return null;
+  async function wcVideoCfg(w,h,fps){w=w||1080;h=h||1920;fps=fps||30;if(!window.VideoEncoder||!window.AudioEncoder||!window.VideoFrame||!window.AudioData)return null;
+    for(const codec of (fps>30?['avc1.64002a','avc1.4d002a','avc1.640028']:['avc1.640028','avc1.4d0028','avc1.42e028'])){const v={codec,width:w,height:h,bitrate:fps>30?18e6:12e6,framerate:fps,avc:{format:'avc'}};try{const r=await VideoEncoder.isConfigSupported(v);if(r&&r.supported)return v}catch(e){}}return null}
+  // 上位版：形（縦・正方形・横）と文字入れ。縦の絵をそのまま中央に置き、余白はぼかした同じ絵で埋める
+  function proOut(opt){if(!opt)return null;const fmt=opt.fmt||'v',W2=fmt==='h'?1920:1080,H2=fmt==='sq'?1080:fmt==='h'?1080:1920;if(fmt==='v'&&!opt.t1&&!opt.t2)return null;
+    const oc=document.createElement('canvas');oc.width=W2;oc.height=H2;const x=oc.getContext('2d');
+    const txt=(s2,y,size,col)=>{x.font='900 '+size+'px "Hiragino Sans","Noto Sans JP",system-ui,sans-serif';x.textAlign='center';x.textBaseline='middle';x.lineJoin='round';x.lineWidth=size*0.16;x.strokeStyle='rgba(0,0,0,.85)';x.strokeText(s2,W2/2,y,W2*0.92);x.fillStyle=col;x.fillText(s2,W2/2,y,W2*0.92)};
+    return {c:oc,draw(){x.clearRect(0,0,W2,H2);if(fmt!=='v'){const k=Math.max(W2/1080,H2/1920);x.save();x.filter='blur(28px) brightness(.45)';x.drawImage(CV,(W2-1080*k)/2,(H2-1920*k)/2,1080*k,1920*k);x.restore();
+        const f=H2/1920,w=1080*f;x.drawImage(CV,(W2-w)/2,0,w,H2)}else x.drawImage(CV,0,0);
+      if(opt.t1||opt.t2){const big=fmt==='v'?78:60;const g2=x.createLinearGradient(0,0,0,big*3.4);g2.addColorStop(0,'rgba(0,0,0,.7)');g2.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g2;x.fillRect(0,0,W2,big*3.4);
+        if(opt.t1)txt(opt.t1,big*1.05,big,'#ffffff');if(opt.t2)txt(opt.t2,big*(opt.t1?2.1:1.05),Math.round(big*0.6),'#e6c46a')}}}}
+  async function encodeWC(buf,S0,TT,me,opt){
+    const PO=proOut(opt),SRC=PO?PO.c:CV,FPS=opt&&opt.fps>30?60:30;
+    const v=await wcVideoCfg(SRC.width,SRC.height,FPS);if(!v)return null;
     const ch=Math.min(2,buf.numberOfChannels);let a=null,acodec='aac',sr=buf.sampleRate;
     // 音声はAAC（どこでも再生できる）を優先。使えない端末はOpus（48kHz）で同じmp4に入れる
     for(const [c,mc,r0] of [['mp4a.40.2','aac',buf.sampleRate],['opus','opus',48000]]){const x={codec:c,sampleRate:r0,numberOfChannels:ch,bitrate:160000};try{const r=await AudioEncoder.isConfigSupported(x);if(r&&r.supported){a=x;acodec=mc;sr=r0;break}}catch(e){}}
@@ -311,15 +327,15 @@ async function open(o){
     if(sr!==buf.sampleRate){const oc=new OfflineAudioContext(ch,Math.ceil(buf.duration*sr),sr);const bs=oc.createBufferSource();bs.buffer=buf;bs.connect(oc.destination);bs.start();buf=await oc.startRendering()}
     let MX;try{MX=await loadMux()}catch(e){return null}if(!MX)return null;
     const target=new MX.ArrayBufferTarget();
-    const mux=new MX.Muxer({target,video:{codec:'avc',width:1080,height:1920},audio:{codec:acodec,numberOfChannels:ch,sampleRate:sr},fastStart:'in-memory',firstTimestampBehavior:'offset'});
+    const mux=new MX.Muxer({target,video:{codec:'avc',width:SRC.width,height:SRC.height},audio:{codec:acodec,numberOfChannels:ch,sampleRate:sr},fastStart:'in-memory',firstTimestampBehavior:'offset'});
     let err=null;const ve=new VideoEncoder({output:(c,m)=>mux.addVideoChunk(c,m),error:e=>{err=e}});ve.configure(v);
     const ae=new AudioEncoder({output:(c,m)=>mux.addAudioChunk(c,m),error:e=>{err=e}});ae.configure(a);
     const s0=Math.floor(S0*sr),s1=Math.min(buf.length,Math.ceil(TT*sr)),CHD=[];for(let k=0;k<ch;k++)CHD.push(buf.getChannelData(k));
     for(let p=s0;p<s1;p+=4096){const n=Math.min(4096,s1-p),d=new Float32Array(n*ch);for(let k=0;k<ch;k++)d.set(CHD[k].subarray(p,p+n),k*n);
       const ad=new AudioData({format:'f32-planar',sampleRate:sr,numberOfFrames:n,numberOfChannels:ch,timestamp:Math.round((p-s0)/sr*1e6),data:d});ae.encode(ad);ad.close()}
-    const FPS=30,N=Math.ceil((TT-S0)*FPS);
-    for(let i=0;i<=N;i++){if(ST.stop||UI!==me||err)break;RR.renderAt(Math.min(TT,S0+i/FPS));
-      const fr=new VideoFrame(CV,{timestamp:Math.round(i/FPS*1e6),duration:Math.round(1e6/FPS)});ve.encode(fr,{keyFrame:i%60===0});fr.close();
+    const N=Math.ceil((TT-S0)*FPS);
+    for(let i=0;i<=N;i++){if(ST.stop||UI!==me||err)break;RR.renderAt(Math.min(TT,S0+i/FPS));if(PO)PO.draw();
+      const fr=new VideoFrame(SRC,{timestamp:Math.round(i/FPS*1e6),duration:Math.round(1e6/FPS)});ve.encode(fr,{keyFrame:i%(FPS*2)===0});fr.close();
       if(i%10===0)q('bmvProg').style.width=Math.min(100,i/N*100)+'%';
       while(ve.encodeQueueSize>4&&!err)await new Promise(r=>setTimeout(r,4));
       if(i%12===0)await new Promise(r=>setTimeout(r,0))}
@@ -329,7 +345,11 @@ async function open(o){
   async function run(record){if(busy){if(curBtn===(record?'bmvMake':'bmvPrev'))stopRun();return}busy=true;const me=UI;curBtn=record?'bmvMake':'bmvPrev';q('bmvPrev').disabled=q('bmvMake').disabled=q('bmvTh').disabled=q('bmvCam').disabled=true;
     {const b=q(curBtn);b.disabled=false;b.textContent='■ '+T(record?'やめる':'止める')}
     ST={};try{safe();msg(T('読み込み中…'));const buf=await audio(TI);if(UI!==me)return;
-      if(record){let r=null;try{msg(T('録画中…終わるまでこの画面を開いたままにしてください'));r=await encodeWC(buf,P.cfg.start||0,RR.TOTAL,me)}catch(e){r=null}
+      if(record){let r=null;try{msg(T('録画中…終わるまでこの画面を開いたままにしてください'));let S0=P.cfg.start||0,TT=RR.TOTAL,opt=null;
+          if(o&&o.pro){const n=mv.length,L=P.cfg.land||[],fr=Math.max(1,Math.min(n,+q('bmvFrom').value||1)),to=Math.max(fr,Math.min(n,+q('bmvTo').value||n));
+            if(fr>1&&L[fr-1]!=null)S0=Math.max(S0,L[fr-1]-1.2);if(to<n&&L[to-1]!=null)TT=Math.min(TT,L[to-1]+1.8);
+            opt={fmt:q('bmvFmt').value,fps:+q('bmvFps').value,t1:q('bmvT1').value.trim(),t2:q('bmvT2').value.trim()};try{localStorage.setItem('bocch-mvpro',JSON.stringify({fmt:opt.fmt,fps:opt.fps}))}catch(e){}}
+          r=await encodeWC(buf,S0,TT,me,opt);if(r===null&&opt&&(opt.fmt!=='v'||opt.fps>30||opt.t1||opt.t2)){msg(T('この端末では★の設定つきの動画を作れません'));return}}catch(e){r=null}
         if(r==='stop'||UI!==me)return;
         if(r instanceof Blob&&r.size>1000){RR.renderAt(Math.min(RR.TOTAL,TRACKS[TI].winT+1));q('bmvProg').style.width='100%';blob=r;q('bmvOut').hidden=false;msg(T('できました。保存か共有を押してください。'));return}}
 await ac.resume();
