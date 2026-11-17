@@ -2066,13 +2066,15 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 
 [data-scr=review][data-rvt=sum] #revMv{margin-top:12px}
 
+[data-scr=review].rv-live #rvTabs{display:none!important}
+
 </style>
 </head>
 <body>
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.05</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.06</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -6314,6 +6316,11 @@ $('rvTabs').querySelectorAll('button').forEach(b=>b.onclick=()=>setTab(b.dataset
 $('rvStart').onclick=()=>{setTab('play');if(REV.i>=REV.pos.length-1)setRev(1)};
 // 開いたら「まとめ」から
 if(typeof openReview==='function'){const _o=openReview;openReview=function(){const r=_o.apply(this,arguments);setTab('sum');return r}}
+// フレンドの対局を自動更新で見るとき（観戦）は、盤の側で開き、まとめ／振り返りの切り替えを隠す
+function rvLive(on){sec.classList.toggle('rv-live',!!on);const h=sec.querySelector('.topbar h2');if(h){const t=on?'観戦':'感想戦';h.textContent=(typeof T==='function'?T(t):t)}}
+if(typeof openReview==='function'){const _o2=openReview;openReview=function(){rvLive(false);return _o2.apply(this,arguments)}}
+if(typeof frOpen==='function'){const _f=frOpen;frOpen=function(f,snap,live){rvLive(!!live);const r=_f.apply(this,arguments);setTab(live?'play':'sum');return r}}
+if(typeof openShared==='function'){const _s=openShared;openShared=function(){rvLive(false);return _s.apply(this,arguments)}}
 const MK={best:['最善','k-best','★'],ok:['ふつう','k-ok','✓'],dub:['疑問手','k-dub','?!'],bad:['悪手','k-bad','??']};
 function table(){const T=$('rvTable');if(!T||!REV.g)return;const n=REV.g.log.length;const c={1:{best:0,ok:0,dub:0,bad:0},2:{best:0,ok:0,dub:0,bad:0}};let have=0;
   for(let i=0;i<n;i++){const k=markOf(i);if(!k)continue;have++;c[REV.pos[i].turn][k.k]++}
