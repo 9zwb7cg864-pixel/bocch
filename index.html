@@ -2200,6 +2200,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 .sd-seg button[aria-pressed=true]{background:var(--fg,#f4f4f2)!important;color:#111!important;font-weight:800}.sd-seg button:disabled{opacity:.35}
 .sd-row{display:flex;gap:8px;margin-top:14px}.sd-row button{flex:1;margin:0!important}
 .sd-opt em{font-style:normal;flex:1;min-width:0}.sd-opt span{flex:none;margin-left:8px}
+.st-lv,.st-cpus{grid-template-columns:repeat(2,minmax(0,1fr))!important}.st-cpus button{min-width:0}.st-cpus .cn{min-width:0}.st-cpus .cn small{white-space:normal;display:flex;flex-wrap:wrap;gap:2px 6px;align-items:center}
 
 </style>
 </head>
@@ -2207,7 +2208,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.15</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.16</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
