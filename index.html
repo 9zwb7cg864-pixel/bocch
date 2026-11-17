@@ -2042,6 +2042,8 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 /* アカウント画面（名札＋一覧） */
 .pf2 .pf-hero{background:none!important;border:0!important;box-shadow:none!important;padding:4px 6px 0!important;margin-bottom:6px}
 .pf2 .pf-hero .stone{width:60px!important;height:60px!important}
+.pf2 .pf-hero .hm-rk{width:60px!important;height:60px!important;flex:0 0 60px!important}
+.pf2 .pf-hero .hm-rk .stone{flex:0 0 auto!important}
 .pf2 .pf-hero #pfName{font-size:24px;font-weight:900}
 .pf2 .pf-stats{display:flex;align-items:baseline;gap:0;margin:8px 6px 4px;font-size:14px;color:var(--sub)}
 .pf2 .pf-stats div{background:none;border-radius:0;padding:0;display:flex;align-items:baseline;gap:4px;flex-direction:row-reverse;justify-content:flex-end}
@@ -2208,7 +2210,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.16</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.17</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
