@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg?v=2">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=61"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=62"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -2119,6 +2119,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 .mt-box p{font-size:14px;line-height:1.7;color:var(--sub,#c3c8d4)}.mt-box .mt-soon{font-size:12px;color:var(--mute,#8b90a0);margin-top:8px}.mt-box button{width:100%;margin-top:14px}
 .mb-prev{margin:14px 0}
 .st-mb .mb-lock{position:static;display:inline-block;margin-top:4px}
+.sp-info{font-size:13px;line-height:1.6;color:var(--sub,#c3c8d4);margin-top:4px}
 
 </style>
 </head>
@@ -2126,7 +2127,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.08</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.09</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -6250,11 +6251,11 @@ function renderWeak(){const B=$('wkBody');B.replaceChildren();const W=weakList()
   if(!W.ops.length){B.append(el('p','hist-empty','同じ戦型を3局以上指すと、苦手が分かります'));return}
   const c=card('今の苦手（勝率の低い順）');W.ops.slice(0,4).forEach(e=>{const r=el('div','mc-kv');r.append(el('span','',e.name+'（'+(e.me===1?'黒':'白')+'）'),el('em','',pct(e.w,e.n)+'%・'+e.n+'局'));c.append(r)});B.append(c);
   const tg=W.ops[0];if(!WK_LV.v)WK_LV.v=3;
-  const c2=card('強さ');const seg=el('div','ml-seg');for(const [v,l] of [[2,'ふつう'],[3,'つよい'],[4,'最強']]){const b=el('button','',l);b.type='button';b.setAttribute('aria-selected',String(WK_LV.v===v));b.onclick=()=>{WK_LV.v=v;renderWeak()};seg.append(b)}c2.append(seg,el('p','ms-cap','CPUは「'+tg.name+'」の形にあなたを誘導してきます（あなたは'+(tg.me===1?'黒':'白')+'）'));B.append(c2);
-  const go=el('button','primary mc-one','苦手の形で対局する');go.type='button';go.onclick=()=>startMb('weak',tg.me,{lv:WK_LV.v,state:{mbSeq:tg.seq,mbOp:tg.name}});B.append(go);
+  B.append(el('p','ms-cap','天敵は「'+tg.name+'」の形にあなたを誘導してきます（あなたは'+(tg.me===1?'黒':'白')+'）。強さは「つよい」です。'));
+  const go=el('button','primary mc-one','苦手の形で対局する');go.type='button';go.onclick=()=>startMb('weak',tg.me,{lv:3,state:{mbSeq:tg.seq,mbOp:tg.name}});B.append(go);
   const rec=loadGames().filter(g=>g.mb==='weak');if(rec.length){const c3=card('克服の記録');const m={};for(const g of rec){const k=g.mbOp||'—';(m[k]=m[k]||[0,0]);m[k][1]++;if(g.win===g.me)m[k][0]++}
     for(const [k,[w,n]] of Object.entries(m)){const r=el('div','mc-kv');r.append(el('span','',k),el('em','',w+'勝 / '+n+'局'));c3.append(r)}B.append(c3)}}
-const WK_LV={v:3};
+const WK_LV={v:3}; // 天敵の強さは「つよい」で固定
 // CPUの手：分身は自分の定跡帳、弱点CPUは苦手の手順をなぞる。外れたらふだんのCPU
 if(typeof cpuPlay==='function'){const _cp=cpuPlay;cpuPlay=function(p,lv){try{if(S&&S.mbKind&&!S.over){const pp=p||3-hcOf();let m=null;
   if(S.mbKind==='clone'&&S.mbBook&&S.ply<12){const e=S.mbBook[pkey(S.b,S.turn)];if(e){const ks=Object.entries(e);let r=Math.random()*ks.reduce((s,x)=>s+x[1],0);for(const [mk,c] of ks){r-=c;if(r<=0){m=mk.split('-').map(Number);break}}}}
@@ -6263,7 +6264,7 @@ if(typeof cpuPlay==='function'){const _cp=cpuPlay;cpuPlay=function(p,lv){try{if(
   return _cp.apply(this,arguments)}}
 // 対局画面：相手の名前を「分身」「弱点CPU」に、上の表示も合わせる
 if(typeof render==='function'){const _rd=render;render=function(){_rd.apply(this,arguments);try{if(S&&S.mbKind&&CUR==='game'){const nm=S.mbName||(((typeof myName==='function'&&myName())||'あなた')+(S.mbKind==='clone'?'の分身':'の天敵'));
-  const b=document.querySelector('#plTop b');if(b)b.textContent=nm;const av=document.querySelector('#plTop .cpu-av,#plTop img');if(av)av.remove();const r=document.querySelector('#plTop .r');if(r)r.textContent='';$('connTxt').textContent=nm}}catch(e){}}}
+  const b=document.querySelector('#plTop b');if(b)b.textContent=nm;const av=document.querySelector('#plTop .cav');if(av&&!av.classList.contains('mbav')){const na=mbAv(S.mbKind==='clone'?'clone':'weak');na.classList.add('sm');av.replaceWith(na)}{const bb=$('cpuBub');if(bb)bb.hidden=true}const r=document.querySelector('#plTop .r');if(r)r.textContent='';$('connTxt').textContent=nm}}catch(e){}}}
 // 保存した対局に印を付ける（成績の分析から外し、克服の記録に使う）
 if(typeof saveFinished==='function'){const _sf=saveFinished;saveFinished=function(){_sf.apply(this,arguments);try{if(S&&S.mbChal&&S.over&&!S.mbChal.sent){S.mbChal.sent=1;const r=S.over.win===0?'d':S.over.win===S.hc?'w':'l';frRelay(frTopic('in',S.mbChal.uid),{t:'chres',uid:myUid(),name:myName(),id:S.mbChal.id,r,n:S.log.length})}}catch(e){}try{if(S&&S.mbKind&&S.over){const id=currentGameId(),g=loadGames(),ix=g.findIndex(x=>x.id===id);if(ix>=0){g[ix].mb=S.mbKind;if(S.mbOp)g[ix].mbOp=S.mbOp;storeGames(g)}}}catch(e){}}}
 // ---- 深い解析：読み直す前の判定を覚えておき、終わったら変わった手を出す ----
@@ -6341,7 +6342,7 @@ function wkRich(st,pv,best,worst){const R=el('div','wk');const tx=t=>(typeof T==
     const tx2=el('div');tx2.append(el('b','','正確度 '+ba+'%で勝ち'),el('span','',(d.getMonth()+1)+'/'+d.getDate()+'・'+(bg.opp||MODE_NAME(bg.mode))+'・'+bg.log.length+'手'));r.append(tx2,el('span','wk-go','見る ›'));r.onclick=()=>openReview(bg);sb.append(r);R.append(sb)}
   // おすすめ（押すとすぐ弱点CPU）
   if(weak){const wl=weakList().ops.find(e=>e.name===weak);const c=el('button','wk-cta');c.type='button';c.append(document.createTextNode('天敵と「'+weak+'」を指す'),el('small','','今週のおすすめ・3局'));
-    c.onclick=()=>{if(wl)startMb('weak',wl.me,{lv:(typeof WK_LV!=='undefined'&&WK_LV.v)||3,state:{mbSeq:wl.seq,mbOp:wl.name}});else{show('weak');try{renderWeak()}catch(e){}}};R.append(c)}
+    c.onclick=()=>{if(wl)startMb('weak',wl.me,{lv:3,state:{mbSeq:wl.seq,mbOp:wl.name}});else{show('weak');try{renderWeak()}catch(e){}}};R.append(c)}
   return R}
 function weekReports(){if(!MB.own)return[];const out=[];const now=Date.now();let s=wkStart(now);
   for(let k=0;k<4;k++){const e=new Date(s),b=new Date(s);b.setDate(b.getDate()-7);const st=wkStats(+b,+e);const show=new Date(e);show.setHours(7,0,0,0);if(st&&+show<=now){
@@ -6424,11 +6425,11 @@ function stMbSync(){const box=$('stMb');if(box)box.querySelectorAll('button').fo
   const STMv=window.bocchSt?window.bocchSt.mode():'cpu';if(!MBK||STMv!=='cpu'){if(go)go.disabled=false;return}
   $('stLv').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false'));
   const pk=$('stPick');pk.innerHTML='';const tx=el('div','sp-tx'),h=el('div','sp-h');h.append(el('b','',mbName(MBK)),el('span','sp-tag',MBK==='clone'?'分身':'天敵'));let line='',ok=true;
-  if(MBK==='clone'){const P=cloneProfile();if(P.n<10){ok=false;line='分身を作るには、自分の対局が10局以上必要です（いま '+P.n+' 局）'}else line='あなたの指し方、覚えたよ。'+P.n+'局ぶん'}
-  else{const W=weakList();if(!W.ops.length){ok=false;line='同じ戦型を3局以上指すと、苦手が分かります'}else{const t=W.ops[0];line='「'+t.name+'」で来るよ。あなたは'+(t.me===1?'黒':'白')}}
-  tx.append(h,el('div','bub',line));pk.append(mbAv(MBK,true),tx);if(go){go.textContent=mbName(MBK)+' と対局';go.disabled=!ok}}
+  if(MBK==='clone'){const P=cloneProfile();if(P.n<10){ok=false;line='分身を作るには、自分の対局が10局以上必要です（いま '+P.n+' 局）'}else line=P.n+'局から、あなたの指し方の癖を覚えたCPU'}
+  else{const W=weakList();if(!W.ops.length){ok=false;line='同じ戦型を3局以上指すと、苦手が分かります'}else{const t=W.ops[0];line='「'+t.name+'」に誘導してくる・強さはつよい・あなたは'+(t.me===1?'黒':'白')}}
+  tx.append(h,el('p','sp-info',line));pk.append(mbAv(MBK,true),tx);if(go){go.textContent=mbName(MBK)+' と対局';go.disabled=!ok}}
 function stMbStart(k){if(k==='clone'){const P=cloneProfile();if(P.n<10)return;const lv=P.acc==null?3:P.acc>=80?3:P.acc>=60?2:1;startMb('clone',typeof pickSide==='function'?pickSide():1,{lv,state:{mbBook:P.book,mbAcc:P.acc}})}
-  else{const t=weakList().ops[0];if(!t)return;startMb('weak',t.me,{lv:WK_LV.v||3,state:{mbSeq:t.seq,mbOp:t.name}})}}
+  else{const t=weakList().ops[0];if(!t)return;startMb('weak',t.me,{lv:3,state:{mbSeq:t.seq,mbOp:t.name}})}}
 window.bocchStHook=()=>{try{stMbSync()}catch(e){}};
 {const lv=$('stLv');if(lv)lv.addEventListener('click',()=>{MBK=null},true);const sm=$('stMode');if(sm)sm.addEventListener('click',()=>{MBK=null},true);
  const go=$('stGo');if(go)go.addEventListener('click',e=>{if(!MBK||(window.bocchSt&&window.bocchSt.mode()!=='cpu'))return;e.stopImmediatePropagation();stMbStart(MBK)},true)}
@@ -6687,7 +6688,7 @@ renderWatch=function(){const box=$('watchList');if(!box)return;
   if(CUR==='watch'){const miss=L.filter(e=>!e.fr&&e.room&&!HW.peek.has(e.room)).slice(0,8);if(miss.length&&!HW.busy){HW.busy=true;Promise.all(miss.map(e=>hwPeek(e.room))).finally(()=>{HW.busy=false;renderWatch()})}}};
 /* ---------- CPUのひとこと：開始・いい手を指された・リーチ・勝ち負け。1局に数回だけ ---------- */
 const CB={s:null,ply:-1,over:false,at:0,t:null};
-function cbSay(k,stay){const c=CPU_BY[S.mode];const el=$('cpuBub');if(!c||!el)return;el.textContent=T(CPU_LINES[c.n][k]);el.hidden=false;el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');CB.at=Date.now();clearTimeout(CB.t);if(!stay)CB.t=setTimeout(()=>{el.hidden=true},3400)}
+function cbSay(k,stay){if(S&&S.mbKind)return;const c=CPU_BY[S.mode];const el=$('cpuBub');if(!c||!el)return;el.textContent=T(CPU_LINES[c.n][k]);el.hidden=false;el.classList.remove('pop');void el.offsetWidth;el.classList.add('pop');CB.at=Date.now();clearTimeout(CB.t);if(!stay)CB.t=setTimeout(()=>{el.hidden=true},3400)}
 function cbSync(){const el=$('cpuBub');if(!el)return;const on=CUR==='game'&&S&&!S.study&&!S.learn&&!S.fromPos&&typeof S.mode==='number'&&CPU_BY[S.mode];
   if(!on){if(!el.hidden){el.hidden=true;clearTimeout(CB.t)}return}
   if(CB.s!==S&&!(CB.s&&S.log&&CB.s.log&&S.ply===CB.ply+1&&S.mode===CB.s.mode)){const fresh=(S.ply||0)<=1;CB.s=S;CB.ply=S.ply||0;CB.over=!!S.over;el.hidden=true;if(fresh&&!S.over)cbSay(0);return}
