@@ -72,3 +72,17 @@ footer a{color:var(--mute)}
 footer .langs a[aria-current]{color:#fff}
 a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
 @media (prefers-reduced-motion:reduce){.cards a{transition:none}}
+/* 勝ち方ガイドの盤もアプリの盤に */
+.board{background:#c9d2e3;padding:0;border-radius:12px;overflow:hidden;box-shadow:0 10px 24px rgba(0,0,0,.35)}
+.board .cell,.board .cell.r0,.board .cell.c0{border:0}
+.board .cell:nth-child(12n+2),.board .cell:nth-child(12n+4),.board .cell:nth-child(12n+6),.board .cell:nth-child(12n+7),.board .cell:nth-child(12n+9),.board .cell:nth-child(12n+11){background:#8f9bb6}
+.st{font-family:var(--f-num)}
+.st.b{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);color:#f4f4f4;box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.st.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%);color:#2a2c33;box-shadow:0 3px 4px rgba(0,0,0,.3)}
+.cell.tgt::after{border-color:#2f7fd6;background:rgba(47,127,214,.18)}
+.cell.from::after{border-color:rgba(28,36,54,.45)}
+.cell.sel .st{outline-color:#2f7fd6}
+.keysq .cell{color:#1c2436}
+.strat,.ytbox{border-radius:16px!important;border-color:var(--line)!important;background:var(--card)}
+.strat.top{border-color:var(--gold)}
+.tabs button{font-family:inherit}
