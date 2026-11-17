@@ -48,6 +48,7 @@ function tr(s){
   if(c){var t=core(c);if(t!=null)r=a.replace(/　/g,' ')+t+z.replace(/　/g,' ')}
   cache.set(s,r);return r}
 Object.assign(D,{"前へ": ["Previous", "上一个", "上一個", "이전", "Anterior", "Zurück"]});
+Object.assign(D,{"対局の記録を書き出す": ["Export game records", "导出对局记录", "匯出對局紀錄", "대국 기록 내보내기", "Exportar partidas", "Partien exportieren"], "この端末とアカウントに残っている対局と成績を、1つのファイルに保存します。": ["Saves the games and stats on this device and account into one file.", "将此设备和账号中的对局与战绩保存为一个文件。", "將此裝置和帳號中的對局與戰績儲存為一個檔案。", "이 기기와 계정에 남아 있는 대국과 성적을 하나의 파일로 저장합니다.", "Guarda en un archivo las partidas y estadísticas de este dispositivo y cuenta.", "Speichert die Partien und Statistiken dieses Geräts und Kontos in einer Datei."], "対局の記録がありません": ["No game records", "没有对局记录", "沒有對局紀錄", "대국 기록이 없습니다", "No hay partidas", "Keine Partien"], "書き出しました": ["Exported", "已导出", "已匯出", "내보냈습니다", "Exportado", "Exportiert"]});
 window.bocchT=tr;
 var SKIP='#chatLog,script,style,textarea,.no-i18n,#langSel';
 var OUT=new WeakMap();
