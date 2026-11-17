@@ -2207,7 +2207,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.14</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.15</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -6233,7 +6233,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now(
    足すときは BANNERS に1行足す。画像は ui/banner/<名前>-<言語>.webp（1200×360）を全言語分置く。from/to（年-月-日）で出す期間を決められる */
 (function(){
 const BANNERS=[
-  {id:'discord',img:'discord',url:'https://discord.gg/hKm7UVFgG',alt:'bocch Discord'},
+  {id:'discord',img:'discord',v:2,url:'https://discord.gg/hKm7UVFgG',alt:'bocch Discord'},
 ];
 const W=document.getElementById('hmBnW'),tr=document.getElementById('hmBnT'),D=document.getElementById('hmBnD');if(!W)return;
 const L=window.BOCCH_LANG||'ja',now=Date.now();
@@ -6241,8 +6241,8 @@ const list=BANNERS.filter(b=>(!b.from||now>=Date.parse(b.from))&&(!b.to||now<Dat
 if(!list.length)return;
 let i=0,hold=0;
 list.forEach(b=>{const a=document.createElement('a');a.className='hm-bn-s';a.href=b.url;if(/^https?:/.test(b.url)){a.target='_blank';a.rel='noopener'}
-  const im=document.createElement('img');im.src='ui/banner/'+b.img+'-'+L+'.webp';im.alt=b.alt||'';im.decoding='async';im.width=1200;im.height=360;
-  im.onerror=()=>{if(!im.dataset.f){im.dataset.f=1;im.src='ui/banner/'+b.img+'-en.webp'}};a.append(im);tr.append(a);D.append(document.createElement('i'))});
+  const im=document.createElement('img');const q='.webp?v='+(b.v||1);im.src='ui/banner/'+b.img+'-'+L+q;im.alt=b.alt||'';im.decoding='async';im.width=1200;im.height=360;
+  im.onerror=()=>{if(!im.dataset.f){im.dataset.f=1;im.src='ui/banner/'+b.img+'-en'+q}};a.append(im);tr.append(a);D.append(document.createElement('i'))});
 W.classList.toggle('one',list.length<2);W.hidden=false;
 const dots=()=>[...D.children].forEach((d,j)=>d.classList.toggle('on',j===i));dots();
 const go=(n,sm)=>{i=(n+list.length)%list.length;tr.scrollTo({left:i*tr.clientWidth,behavior:sm===false?'auto':'smooth'});dots()};
