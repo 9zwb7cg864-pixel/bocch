@@ -1,0 +1,74 @@
+/* 記事の見た目をアプリにそろえる（墨色・淡い青・Noto Sans JP／Outfit・角の丸いカード・今の盤）。各記事の <style> のあとに読み込む */
+:root,:root:not([data-theme="light"]),:root[data-theme="dark"],:root[data-theme="light"]{
+  --bg:#222326;--fg:#f4f4f2;--sub:#c3c2c1;--mute:#8b8987;--line:rgba(255,255,255,.08);--card:#2d2e31;--card2:#3d3e41;
+  --gold:#a9cdf7;--good:#8fd6a8;--bad:#ff8f80;--blue:#a9cdf7;
+  --f-disp:"Noto Sans JP","Hiragino Sans","Yu Gothic",system-ui,sans-serif;--f-body:"Noto Sans JP","Hiragino Sans","Yu Gothic",system-ui,sans-serif;--f-num:"Outfit","Noto Sans JP",sans-serif;
+  color-scheme:dark}
+body{background:var(--bg);color:var(--sub);font-size:15.5px;line-height:1.9;-webkit-font-smoothing:antialiased}
+a{color:var(--gold);text-underline-offset:3px}
+/* 上の帯：アプリの上の帯と同じ */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  max-width:none;margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.top .logo{font-family:var(--f-num);font-weight:800;font-size:22px;letter-spacing:.02em;color:#fff}
+.top nav{gap:6px;font-size:13.5px}
+.top nav a{color:var(--sub);padding:6px 12px;border-radius:999px;font-weight:600}
+.top nav a:hover{background:var(--card)}
+.top nav a.play{background:#f4f4f2;color:#17181b;font-weight:800;padding:6px 14px}
+main{max-width:680px;padding:22px 0 36px}
+article>*+*{margin-top:16px}
+h1{font-family:var(--f-disp);font-weight:900;font-size:clamp(24px,6vw,30px);line-height:1.4;letter-spacing:0;color:#fff;margin-top:8px}
+h2{font-family:var(--f-disp);font-weight:800;font-size:19px;line-height:1.5;letter-spacing:0;color:#fff;margin-top:36px}
+h3{color:#fff;font-weight:700;font-size:16px}
+.eyebrow{display:inline-block;font-size:12px;letter-spacing:0;font-weight:700;color:var(--sub);background:var(--card);border-radius:999px;padding:3px 11px}
+.meta{color:var(--mute);font-size:12.5px;margin-top:6px}
+.lead{color:var(--sub);font-size:15px;padding:14px 16px;border:0;background:var(--card);border-radius:16px}
+.pt{padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--sub)}
+.pt b{color:#fff}
+.note{font-size:13px;color:var(--mute)}
+strong{background:none;color:#fff;font-weight:800}
+b{color:inherit}
+li::marker{color:var(--mute)}
+/* 表 */
+.tw{background:var(--card);border-radius:16px;padding:4px 12px}
+table{font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:10px 8px}
+tr:last-child td{border-bottom:0}
+th{color:var(--mute)}
+td{color:var(--sub)}
+dt{font-family:var(--f-disp);font-weight:800;letter-spacing:0;color:#fff;font-size:16.5px}
+/* 盤：アプリの盤（淡い青灰の2色・縁なしの石） */
+.grid{background:#c9d2e3;border:0;border-radius:12px;box-shadow:0 10px 24px rgba(0,0,0,.35)}
+.c{border:0}
+.c:nth-child(12n+2),.c:nth-child(12n+4),.c:nth-child(12n+6),.c:nth-child(12n+7),.c:nth-child(12n+9),.c:nth-child(12n+11){background:#8f9bb6}
+.c.g{background:inherit}
+.c.to{background:#a9cdf7!important}
+.c.fr::before{border-color:rgba(28,36,54,.45)}
+.c.mk{box-shadow:inset 0 0 0 3px #2f6fa8}
+.s{width:80%;height:80%;font-family:var(--f-num);font-weight:700}
+.s.b{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);color:#f4f4f4;box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%);color:#2a2c33;box-shadow:0 3px 4px rgba(0,0,0,.3)}
+.s.z{opacity:.55}
+.ar line{stroke:#2f7fd6;stroke-dasharray:none;stroke-width:2.2}.ar path{fill:#2f7fd6}
+.cl,.rl{color:var(--mute);font-family:var(--f-num)}
+figcaption{color:var(--mute);font-size:13px}
+/* 記事一覧：アプリの一覧と同じカード */
+article>h2:has(+ul.cards){font-size:13px;font-weight:700;color:var(--mute);margin-top:28px}
+.cards{gap:8px;margin-top:10px}
+.cards a{border:0;border-radius:16px;background:var(--card);padding:14px 16px;transition:background .15s}
+.cards a:hover,.cards a:focus-visible{background:var(--card2)}
+.cards b{font-family:var(--f-disp);font-weight:800;font-size:16px;letter-spacing:0;color:#fff;line-height:1.5}
+.cards span{color:var(--mute);font-size:13px;line-height:1.65}
+.rel{border-top:0}
+.rel h2{font-size:13px;color:var(--mute);font-weight:700}
+.rel ul{list-style:none;padding:0;display:grid;gap:8px}
+.rel li+li{margin-top:0}
+.rel a{display:block;background:var(--card);border-radius:14px;padding:12px 14px;color:#fff;text-decoration:none;font-weight:700;font-size:14.5px}
+.rel a:hover{background:var(--card2)}
+/* 読みシリーズなどの前後リンク */
+.sn a{display:inline-block;background:var(--card);border-radius:999px;padding:8px 16px;text-decoration:none;font-weight:700;color:#fff}
+footer{max-width:680px;border-top:1px solid var(--line);color:var(--mute)}
+footer a{color:var(--mute)}
+footer .langs a[aria-current]{color:#fff}
+a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){.cards a{transition:none}}
