@@ -9,6 +9,8 @@
 //   GET  /bocch-v1-stats/view            … 集計を見る（ヘッダー X-Pass のパスワードが合うときだけ）
 //   POST /bocch-v1-kifu/rec              … 終わった対局の棋譜を残す（コーチづくり・改善用。端末のランダムIDだけで、名前・メールは受け取らない。2年で消す）
 //   GET  /bocch-v1-kifu/dump?since=…     … 残した棋譜を1行1局で取り出す（X-Pass が合うときだけ）
+//   POST /bocch-v1-kifu/feat {nm,on}     … 「記事で紹介されてもいい」のオン・オフ（オフの名前を記録する）
+//   GET  /bocch-v1-kifu/feats            … 紹介を断った名前の一覧（X-Pass が合うときだけ）
 //   GET  /bocch-v1-news/list             … 運営のお知らせ（新しい順・無期限に保存）
 //   POST /bocch-v1-news/post {title,body} … お知らせを出す（X-Pass が合うときだけ。日本語を6言語に訳して保存）
 //   POST /bocch-v1-news/del {id}          … お知らせを消す（X-Pass が合うときだけ）
@@ -24,6 +26,8 @@ const BODY_MAX = 4096;          // 1件の最大バイト数
 const STATS_HASH = "c301ac70fe153803d6486e1b8651e4369b180c2b20904f6c57b70c17169a7055";   // 利用状況ページのパスワードの SHA-256
 const KIFU_KEEP = 2 * 365 * 86400;  // 棋譜の保存期間（2年）
 const KIFU_MAX = 16384;             // 1局の最大バイト数
+// 名前：制御文字と山かっこを除いて30文字まで
+const nmClean = x => String(x == null ? "" : x).replace(/[\u0000-\u001f\u007f<>]/g, "").trim().slice(0, 30);
 const ORIGINS = [/^https?:\/\/(www\.)?bocchgame\.com$/, /^https:\/\/9zwb7cg864-pixel\.github\.io$/, /^http:\/\/localhost(:\d+)?$/, /^http:\/\/127\.0\.0\.1(:\d+)?$/];
 
 function cors(req) {
@@ -172,6 +176,8 @@ export class Topic extends DurableObject {
     // 棋譜（話題 bocch-v1-kifu だけ）
     if (topic === "bocch-v1-kifu" && action === "rec" && req.method === "POST") return this.kifuRec(req, h, now);
     if (topic === "bocch-v1-kifu" && action === "dump" && req.method === "GET") return this.kifuDump(req, h, url);
+    if (topic === "bocch-v1-kifu" && action === "feat" && req.method === "POST") return this.featSet(req, h, now);
+    if (topic === "bocch-v1-kifu" && action === "feats" && req.method === "GET") return this.featList(req, h);
 
     // 運営のお知らせ（話題 bocch-v1-news だけ）
     if (topic === "bocch-v1-news") return this.news(req, h, action, now);
@@ -190,7 +196,7 @@ export class Topic extends DurableObject {
       if (!(await this.passOk(req))) { await new Promise(r => setTimeout(r, 800)); return new Response("forbidden\n", { status: 401, headers: h }); }
       let b; try { b = JSON.parse(await req.text()); } catch (e) { return new Response("bad\n", { status: 400, headers: h }); }
       if (action === "del") { const id = String(b && b.id || ""); if (!/^n:\d{10}:[A-Za-z0-9]{12}$/.test(id)) return new Response("bad\n", { status: 400, headers: h }); await st.delete(id); return J({ ok: 1 }); }
-      const title = String(b && b.title || "").trim().slice(0, 80), body = String(b && b.body || "").trim().slice(0, 2000);
+      const title = String(b && b.title || "").trim().slice(0, 80), body = String(b && b.body || "").trim().slice(0, 2000), to = nmClean(b && b.to), fq = !!(b && b.fq && to);
       if (!title) return new Response("bad\n", { status: 400, headers: h });
       const tr = { ja: { t: title, b: body } };
       const LG = { en: "en", "zh-Hans": "zh-CN", "zh-Hant": "zh-TW", ko: "ko", es: "es", de: "de" };
@@ -199,6 +205,8 @@ export class Topic extends DurableObject {
       }));
       const id = "n:" + now + ":" + rid();
       const it = { id, t: now, tr };
+      if (to) it.to = to;  // 宛先：この名前の人のメールにだけ出す
+      if (fq) it.fq = 1;   // 「紹介を断る」ボタンを付ける
       await st.put(id, it);
       return J(it);
     }
@@ -270,11 +278,26 @@ export class Topic extends DurableObject {
     const str = (x, n) => String(x == null ? "" : x).replace(/[^A-Za-z0-9_.-]/g, "").slice(0, n);
     const rec = { d, k: gid, at: now, cc: String(req.headers.get("CF-IPCountry") || "").slice(0, 2), v: str(b.v, 12), m: str(b.m, 12), me: num(b.me, 0, 2), win: num(b.win, 0, 2), why: str(b.why, 16),
       ra: num(b.ra, 0, 4000), oa: num(b.oa, 0, 4000), lg: str(b.lg, 8), log, ms };
+    // 「記事で紹介されてもいい」がオンの人だけ、名前が付いてくる
+    const nm = nmClean(b.nm); if (nm) rec.nm = nm;
     const st = this.ctx.storage;
     this.sql.exec("CREATE TABLE IF NOT EXISTS g (k TEXT PRIMARY KEY, time INTEGER, body TEXT)");
     this.sql.exec("INSERT OR IGNORE INTO g (k, time, body) VALUES (?, ?, ?)", d + ":" + gid, now, JSON.stringify(rec));
     this.sql.exec("DELETE FROM g WHERE time < ?", now - KIFU_KEEP);
     return new Response("ok\n", { headers: h });
+  }
+  // 記事での紹介：オフにした名前を "fo:名前" に残す（オンに戻したら消す）
+  async featSet(req, h, now) {
+    let b; try { b = JSON.parse(await req.text()); } catch (e) { return new Response("bad\n", { status: 400, headers: h }); }
+    const nm = nmClean(b && b.nm); if (!nm) return new Response("bad\n", { status: 400, headers: h });
+    const k = "fo:" + nm;
+    if (b.on) await this.ctx.storage.delete(k); else await this.ctx.storage.put(k, { nm, t: now });
+    return new Response("ok\n", { headers: h });
+  }
+  async featList(req, h) {
+    if (!(await this.passOk(req))) { await new Promise(r => setTimeout(r, 800)); return new Response("forbidden\n", { status: 401, headers: h }); }
+    const m = await this.ctx.storage.list({ prefix: "fo:" });
+    return new Response(JSON.stringify([...m.values()]), { headers: { ...h, "Content-Type": "application/json", "Cache-Control": "no-store" } });
   }
   async kifuDump(req, h, url) {
     if (!(await this.passOk(req))) { await new Promise(r => setTimeout(r, 800)); return new Response("forbidden\n", { status: 401, headers: h }); }
