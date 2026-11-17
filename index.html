@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg?v=2">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=62"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=63"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -2128,6 +2128,64 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 .tabbar.tb-anim svg.tb-shape,.tabbar.tb-anim .tb-orb{transition:transform .32s cubic-bezier(.22,1,.36,1)}
 @media (prefers-reduced-motion:reduce){.tabbar.tb-anim svg.tb-shape,.tabbar.tb-anim .tb-orb{transition:none}}
 .tabbar svg.tb-shape,.tabbar svg.tb-shape path{fill:#26272c!important}
+/* ===== 研究ノート ===== */
+.sd-rev{display:flex;align-items:center;gap:12px;background:var(--p1,#26272c);border-radius:16px;padding:12px 14px;margin:4px 0 6px}
+.sd-rev b{display:block;color:var(--fg,#f4f4f2);font-size:15px}.sd-rev span{font-size:12px;color:var(--mute,#8b90a0)}
+.sd-go{margin-left:auto!important;flex:none;background:var(--fg,#f4f4f2)!important;color:#111!important;font-weight:800;border-radius:999px!important;padding:8px 16px!important;min-height:0!important;border:0!important}
+.sd-sec{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--mute,#8b90a0);font-weight:600;margin:18px 2px 6px}
+.sd-new{background:none!important;border:0!important;color:var(--acc,#a9cdf7)!important;font-size:13px;font-weight:700;padding:4px 0!important;min-height:0!important}
+.sd-it{display:flex!important;align-items:center;gap:12px;width:100%;text-align:left;background:none!important;border:0!important;border-top:1px solid rgba(255,255,255,.07)!important;border-radius:0!important;padding:11px 2px!important;margin:0!important;min-height:0!important}
+.sd-it .nt-mini{width:52px;height:52px;flex:none}.sd-tx{flex:1;min-width:0}.sd-tx b{display:block;color:var(--fg,#f4f4f2);font-size:15px}.sd-tx span{font-size:12px;color:var(--mute,#8b90a0)}
+.sd-due{flex:none;font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px;background:rgba(230,196,106,.15);color:var(--gold,#e6c46a)}
+.sd-empty{font-size:13px;color:var(--mute,#8b90a0);padding:8px 2px}
+.sd-menu{background:none!important;border:0!important;color:var(--fg,#f4f4f2)!important;font-size:20px;min-height:0!important;padding:4px 8px!important}
+.sd-chs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}.sd-chs button{flex:none;padding:6px 12px!important;min-height:0!important;border-radius:999px!important;font-size:12.5px;background:var(--p1,#26272c)!important;border:0!important;color:var(--sub,#c3c8d4)}
+.sd-chs button[aria-pressed=true]{background:var(--fg,#f4f4f2)!important;color:#111!important;font-weight:800}.sd-chs .sd-chadd{color:var(--acc,#a9cdf7)!important}
+.sd-wrap{position:relative;width:100%;max-width:420px;margin:0 auto;aspect-ratio:1}
+.sd-board{position:absolute;inset:0;display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(6,1fr);border-radius:12px;overflow:hidden}
+.sd-c{position:relative;display:grid!important;place-items:center;padding:0!important;margin:0!important;min-height:0!important;border:0!important;border-radius:0!important;background:var(--sqD,#9aa6c0)!important}
+.sd-c.L{background:var(--sqL,#c9d2e3)!important}.sd-c.last::after{content:"";position:absolute;inset:0;background:rgba(230,196,106,.28)}
+.sd-c.sel{box-shadow:inset 0 0 0 3px #e6c46a}.sd-c.can::before{content:"";position:absolute;width:24%;height:24%;border-radius:50%;background:rgba(20,20,24,.35);z-index:1}
+.sd-s{position:relative;z-index:2;width:78%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:clamp(12px,4vw,17px)}
+.sd-s.b{background:radial-gradient(circle at 35% 30%,#4a4c50,#111214 70%);color:#fff}.sd-s.w{background:radial-gradient(circle at 35% 30%,#fff,#d9d4c8 75%);color:#222}
+.sd-arw{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3}
+.sd-ev{display:flex;align-items:center;gap:8px;margin:10px 2px 0;font-size:12px;color:var(--mute,#8b90a0);flex-wrap:wrap}
+.sd-bar{flex:1;min-width:120px;height:6px;border-radius:3px;background:#eeeae0;overflow:hidden}.sd-bar i{display:block;height:100%;background:#17181b}
+.sd-best{width:100%;margin:6px 0 0!important;padding:7px 10px!important;min-height:0!important;font-size:12.5px;text-align:left;background:rgba(106,168,255,.12)!important;color:#a9cdf7!important;border:0!important;border-radius:10px!important}
+.sd-nav{display:flex;align-items:center;gap:6px;margin-top:10px}.sd-nav button{flex:1;padding:9px 0!important;min-height:0!important;border-radius:12px!important;background:var(--p1,#26272c)!important;border:0!important;color:#fff}
+.sd-nav span{flex:1.3;text-align:center;font-size:12.5px;color:var(--mute,#8b90a0)}
+.sd-tree{margin-top:12px;font-size:14px;line-height:2}
+.sd-ml{display:flex;flex-wrap:wrap;gap:2px 4px;align-items:center}
+.sd-mv{display:inline-flex!important;align-items:center;gap:2px;padding:1px 7px!important;min-height:0!important;border-radius:7px!important;background:none!important;border:0!important;color:var(--fg,#f4f4f2);font-size:14px;font-variant-numeric:tabular-nums;width:auto!important;margin:0!important}
+.sd-mv.cur{background:var(--acc,#a9cdf7)!important;color:#0f1a30!important;font-weight:800}
+.sd-g{font-weight:900;font-size:12px}.sd-g.good{color:#7fd39a}.sd-g.bad{color:#ff8b80}.sd-g.int{color:#e6b04a}.sd-g.tag{color:#e6c46a;font-size:10px;margin-left:2px}
+.sd-mv.cur .sd-g{color:#0f1a30}.sd-cm{font-size:11px;opacity:.7}
+.sd-var{flex-basis:100%;display:flex;flex-wrap:wrap;gap:2px 4px;margin:2px 0 4px 10px;padding:2px 0 2px 10px;border-left:2px solid rgba(255,255,255,.1);font-size:13px}
+.sd-var .sd-mv{color:var(--sub,#c3c8d4);font-size:13px}
+.sd-rootc,.sd-hint{flex-basis:100%;font-size:12.5px;color:var(--mute,#8b90a0);line-height:1.6;margin:2px 0 6px}
+.sd-node{margin-top:8px}.sd-ta{width:100%;font:inherit;font-size:14px;line-height:1.6;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#17181b;color:#fff;resize:vertical}
+.sd-ta[readonly]{background:var(--p1,#26272c);border-color:transparent;color:var(--sub,#c3c8d4)}
+.sd-gp{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}.sd-gp button{padding:6px 11px!important;min-height:0!important;border-radius:9px!important;background:var(--p1,#26272c)!important;border:0!important;font-weight:900;font-size:13px}
+.sd-gp button.good{color:#7fd39a}.sd-gp button.bad{color:#ff8b80}.sd-gp button.int{color:#e6b04a}.sd-gp button.tag{color:#e6c46a;font-size:12px}
+.sd-gp button[aria-pressed=true]{outline:2px solid currentColor}
+.sd-acts{display:flex;gap:8px;margin-top:8px}.sd-acts button{flex:1;padding:8px 0!important;min-height:0!important;font-size:12.5px;border-radius:10px!important;background:var(--p1,#26272c)!important;border:0!important;color:var(--sub,#c3c8d4)}.sd-acts .sd-del{color:#ff8b80}
+.sd-samebtn{display:flex!important;align-items:center;gap:10px;width:100%;margin-top:10px!important;padding:10px 12px!important;min-height:0!important;border-radius:12px!important;background:var(--p1,#26272c)!important;border:0!important;text-align:left;font-size:12.5px}
+.sd-samebtn b{color:var(--fg,#f4f4f2)}.sd-samebtn span{color:var(--sub,#c3c8d4)}.sd-samebtn i{margin-left:auto;font-style:normal;color:var(--acc,#a9cdf7);font-weight:700}
+.sd-tools{position:sticky;bottom:0;display:flex;justify-content:space-around;margin:16px -16px 0;padding:10px 6px calc(12px + env(safe-area-inset-bottom));background:#17181b;border-top:1px solid #2a2c33;z-index:5}
+.sd-tools button{display:flex!important;flex-direction:column;align-items:center;gap:2px;background:none!important;border:0!important;color:var(--mute,#8b90a0);font-size:11px;min-height:0!important;padding:2px 10px!important}
+.sd-tools b{color:#fff;font-size:16px}.sd-tools button.on b,.sd-tools button.on{color:var(--gold,#e6c46a)}
+.sd-learn{margin-top:10px}.sd-prog{display:flex;gap:3px;margin-bottom:8px}.sd-prog i{flex:1;height:5px;border-radius:3px;background:#3a3c42}.sd-prog i.done{background:#7fd39a}.sd-prog i.now{background:var(--acc,#a9cdf7)}
+.sd-q{font-size:20px;font-weight:900;color:var(--fg,#f4f4f2);margin:4px 0 2px}.sd-qs{font-size:12.5px;color:var(--mute,#8b90a0);margin-bottom:8px}
+.sd-fb{border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.6;margin:8px 0}.sd-fb b{display:block;color:#fff}.sd-fb span{font-size:12px}.sd-fb p{margin-top:6px}
+.sd-fb.ok{background:#25402f;color:#cdeed8}.sd-fb.ng{background:#4a2420;color:#ffd0cb}
+.sd-sheet .mt-box>b{font-size:18px}.sd-opts{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.sd-opt{display:flex!important;align-items:center;justify-content:space-between;width:100%;text-align:left;padding:11px 12px!important;min-height:0!important;border-radius:12px!important;background:var(--p2,#303237)!important;border:0!important;color:var(--fg,#f4f4f2);font-size:14px}
+.sd-opt.on{outline:2px solid var(--acc,#a9cdf7)}.sd-opt span{font-size:11px;color:var(--mute,#8b90a0)}
+.sd-sel{width:100%;padding:10px;border-radius:10px;background:#17181b;color:#fff;border:1px solid rgba(255,255,255,.12);font:inherit}
+.sd-sm{font-size:12px;color:var(--mute,#8b90a0);margin:6px 0 4px}.sd-seg{display:flex;gap:6px}.sd-seg button{flex:1;padding:8px 0!important;min-height:0!important;border-radius:10px!important;background:var(--p2,#303237)!important;border:0!important;font-size:12.5px;color:var(--sub,#c3c8d4)}
+.sd-seg button[aria-pressed=true]{background:var(--fg,#f4f4f2)!important;color:#111!important;font-weight:800}.sd-seg button:disabled{opacity:.35}
+.sd-row{display:flex;gap:8px;margin-top:14px}.sd-row button{flex:1;margin:0!important}
+.sd-opt em{font-style:normal;flex:1;min-width:0}.sd-opt span{flex:none;margin-left:8px}
 
 </style>
 </head>
@@ -2135,7 +2193,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.10</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.11</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -2442,8 +2500,20 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 </section>
 <section class="scr" data-scr="notes" hidden>
   <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>ノート</h2><span class="sp"></span></div>
-  <div class="nt-tags" id="ntTags"></div>
-  <div id="ntList"></div><p class="hist-empty" id="ntEmpty">まだ保存した局面がありません。感想戦で「この局面を保存」を押すとここに並びます。</p>
+  <div class="nt-tags" id="ntTags" hidden></div>
+  <div id="ntList"></div><p class="hist-empty" id="ntEmpty" hidden>まだ研究がありません。感想戦で「保存」を押すか、「新しい研究」から作れます。</p>
+</section>
+<section class="scr" data-scr="study" hidden>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2 id="sdTitle">研究</h2><button type="button" class="sd-menu" id="sdMenuBtn" aria-label="研究のメニュー">…</button></div>
+  <div class="sd-chs" id="sdChs"></div>
+  <div class="sd-wrap"><div class="sd-board" id="sdBoard"></div><svg class="sd-arw" id="sdArw" viewBox="0 0 6 6" aria-hidden="true"></svg></div>
+  <div class="sd-learn" id="sdLearn" hidden></div>
+  <div class="sd-ev" id="sdEv"></div>
+  <div class="sd-nav"><button type="button" id="sdFirst" aria-label="最初へ">⏮</button><button type="button" id="sdPrev" aria-label="1手戻る">◀</button><span id="sdPly"></span><button type="button" id="sdNext" aria-label="1手進む">▶</button><button type="button" id="sdLast" aria-label="最後へ">⏭</button></div>
+  <div class="sd-tree" id="sdTree"></div>
+  <div class="sd-node" id="sdNode"></div>
+  <div class="sd-same" id="sdSame"></div>
+  <nav class="sd-tools" id="sdTools"><button type="button" data-t="glyph"><b>!?</b><span>記号</span></button><button type="button" data-t="arrow"><b>↗</b><span>矢印</span></button><button type="button" data-t="comment"><b>✎</b><span>コメント</span></button><button type="button" data-t="learn"><b>◎</b><span>覚える</span></button></nav>
 </section>
 <section class="scr" data-scr="clone" hidden>
   <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>自分の分身</h2><span class="sp"></span></div>
@@ -6226,7 +6296,7 @@ $('ntChips').querySelectorAll('button').forEach(b=>b.onclick=()=>{NT.pick=b.data
 $('ntDo').onclick=()=>{const c=ntCur();if(!c)return;const t=$('ntTitle').value.trim()||'無題';const a=ntLoad();
   a.unshift({id:'n'+Date.now().toString(36),t:Date.now(),b:c.b.join(''),turn:c.turn,title:t,memo:$('ntMemo').value.trim(),tag:NT.pick,src:c.src});ntStore(a);
   $('ntTitle').value='';$('ntMemo').value='';$('ntForm').hidden=true;$('ntOpen').hidden=false;const m=$('ntMsg');m.replaceChildren(document.createTextNode('ノートに保存しました'));{const v=el('button','nt-see','見る');v.type='button';v.onclick=()=>{m.hidden=true;show('notes');renderNotes()};m.append(v)}m.hidden=false;clearTimeout(NT.mt);NT.mt=setTimeout(()=>{m.hidden=true},4000)};
-function renderNotes(){const a=ntLoad(),T=$('ntTags'),L=$('ntList');T.replaceChildren();L.replaceChildren();
+function renderNotesOld(){const a=ntLoad(),T=$('ntTags'),L=$('ntList');T.replaceChildren();L.replaceChildren();
   const cnt={すべて:a.length};for(const x of a)cnt[x.tag]=(cnt[x.tag]||0)+1;
   for(const t of ['すべて','定跡','詰み','失敗','そのほか']){if(t!=='すべて'&&!cnt[t])continue;const b=el('button','',t+' '+(cnt[t]||0));b.type='button';b.setAttribute('aria-pressed',String(NT.tag===t));b.onclick=()=>{NT.tag=t;renderNotes()};T.append(b)}
   const xs=a.filter(x=>NT.tag==='すべて'||x.tag===NT.tag);$('ntEmpty').hidden=!!xs.length;
@@ -6298,14 +6368,172 @@ const ntDel=()=>{try{return JSON.parse(localStorage.getItem('bocch-notes-del')||
 NT.synced=false;
 async function ownerNow(){try{const u=FB&&FB.user;if(!u||!u.emailVerified)return false;const dg=[...new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(String(u.email||'').toLowerCase())))].map(x=>x.toString(16).padStart(2,'0')).join('');return OWN_H.includes(dg)}catch(e){return false}}
 async function ntPull(){if(NT.synced||!(await ownerNow()))return;try{const snap=await FB.db.collection('users').doc(FB.user.uid).get();const d=snap.exists?snap.data():{};
-  const del=new Set([...ntDel(),...(Array.isArray(d.notesDel)?d.notesDel:[])]);const m=new Map();for(const x of [...ntLoad(),...(Array.isArray(d.notes)?d.notes:[])])if(x&&x.id&&!del.has(x.id)&&!m.has(x.id))m.set(x.id,x);
+  const del=new Set([...ntDel(),...(Array.isArray(d.notesDel)?d.notesDel:[])]);const m=new Map();for(const x of [...ntLoad(),...(Array.isArray(d.notes)?d.notes:[])])if(x&&x.id&&!del.has(x.id)){const q=m.get(x.id);if(!q||(x.u||x.t||0)>(q.u||q.t||0))m.set(x.id,x)}
   try{localStorage.setItem('bocch-notes-del',JSON.stringify([...del].slice(-300)))}catch(e){}ntStore([...m.values()].sort((a,b)=>(b.t||0)-(a.t||0)));NT.synced=true;if(CUR==='notes')renderNotes()}catch(e){}}
 if(typeof acctPull==='function'){const _ap=acctPull;acctPull=async function(){try{await ntPull()}catch(e){}return _ap.apply(this,arguments)}}
 if(typeof profData==='function'){const _pd=profData;profData=function(){const o=_pd.apply(this,arguments);if(NT.synced){o.notes=ntLoad().slice(0,200);o.notesDel=ntDel().slice(-300)}return o}}
 {const _ns=ntStore;ntStore=a=>{_ns(a);try{if(NT.synced&&typeof acctPush==='function')acctPush()}catch(e){}}}
 setInterval(()=>{if(MB.own&&!NT.synced)ntPull()},6000);
 // 消したノートは印を残す（別の端末から戻ってこないように）
-{const _rn=renderNotes;renderNotes=function(){_rn();document.querySelectorAll('#ntList .nt-del').forEach((b,i)=>{const old=b.onclick;b.onclick=()=>{const before=new Set(ntLoad().map(x=>x.id));old&&old();const after=new Set(ntLoad().map(x=>x.id));const gone=[...before].filter(x=>!after.has(x));if(gone.length){try{localStorage.setItem('bocch-notes-del',JSON.stringify([...ntDel(),...gone].slice(-300)))}catch(e){}ntStore(ntLoad())}}})}}
+// （古いノート一覧の「消す」の包みは、研究ノートに置き換えたので使わない）
+// ======== 研究ノート（lichessの研究・将棋の変化つき棋譜・Chessableの復習を元に、bocch向けに組み直したもの） ========
+// 1件＝研究 {id,k:'st',t,u,name,op,ch:[章]}。章 {id,name,sb,st,me,n:根}。手の節 {i,m:[から,へ],c:コメント,g:記号,a:[[から,へ]]矢印,k:[子]}（子の1番目が本筋）
+// 覚える：研究の sr[節のi] = [次に出す時刻, 間隔(日)]
+const SD={id:null,ch:0,path:[],tool:null,arrowFrom:-1,sel:-1,learn:null,ev:{},evJob:0};
+const sdId=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const sdAll=()=>ntLoad().filter(x=>x&&x.k==='st');
+const sdGet=id=>sdAll().find(x=>x.id===id)||null;
+function sdPut(st){st.u=Date.now();const a=ntLoad().filter(x=>x.id!==st.id);a.unshift(st);ntStore(a)}
+function sdRemove(id){try{localStorage.setItem('bocch-notes-del',JSON.stringify([...ntDel(),id].slice(-300)))}catch(e){}ntStore(ntLoad().filter(x=>x.id!==id))}
+const sdNewNode=m=>({i:sdId('x'),m:m?[m[0],m[1]]:null,k:[]});
+function sdNewCh(name,b,turn,me){return {id:sdId('c'),name:name||'章1',sb:(b||startBoard()).join(''),st:turn||1,me:me||1,n:sdNewNode(null)}}
+const sdB0=ch=>[...ch.sb].map(Number);
+function sdNodeAt(ch,path){let n=ch.n;for(const k of path){n=n.k[k];if(!n)return null}return n}
+function sdPosAt(ch,path){let b=sdB0(ch),turn=ch.st,n=ch.n;const nodes=[n];for(const k of path){n=n.k[k];if(!n)break;b=apply(b,n.m);turn=3-turn;nodes.push(n)}return {b,turn,nodes}}
+function sdMain(ch){const path=[];let n=ch.n;while(n.k.length){path.push(0);n=n.k[0]}return path}
+// 手順を木に足す（同じ手があればたどり、なければ新しい枝）。たどり着いた道を返す
+function sdAddLine(ch,moves){let n=ch.n;const path=[];for(const m of moves){let k=n.k.findIndex(x=>x.m&&x.m[0]===m[0]&&x.m[1]===m[1]);if(k<0){n.k.push(sdNewNode(m));k=n.k.length-1}path.push(k);n=n.k[k]}return path}
+// その局面までの戦型の名前（いちばん後ろで付いたもの）
+const SD_OPN=(()=>{const m={};for(const v of Object.values(OPN))if(!m[v[0]])m[v[0]]=v[1];return m})();
+// 細かい変化（A17-1 など）は元の戦型（A17）にまとめる
+function sdOpOf(b0,turn0,moves){let b=b0.slice(),turn=turn0,last=null;const o0=opOf(b,turn);if(o0)last=o0;for(const m of moves){b=apply(b,m);turn=3-turn;const o=opOf(b,turn);if(o)last=o}if(!last)return null;const base=last[0].split('-')[0];return [base,SD_OPN[base]||last[1]]}
+function sdOpCh(ch){const path=sdMain(ch);const P=sdPosAt(ch,path);return sdOpOf(sdB0(ch),ch.st,P.nodes.slice(1).map(n=>n.m))}
+// 古いノート（局面1枚）を「以前のノート」の研究の章に移す
+function sdMigrate(){const a=ntLoad();const old=a.filter(x=>x&&!x.k&&x.b);if(!old.length)return;let st=a.find(x=>x.id==='s-legacy');
+  if(!st)st={id:'s-legacy',k:'st',t:Date.now(),u:Date.now(),name:'以前のノート',op:null,ch:[]};
+  for(const x of old.slice().reverse()){const ch=sdNewCh(x.title||'無題',[...x.b].map(Number),x.turn||1,1);if(x.memo)ch.n.c=x.memo;ch.src=x.src||null;st.ch.push(ch)}
+  const gone=old.map(x=>x.id);try{localStorage.setItem('bocch-notes-del',JSON.stringify([...ntDel(),...gone].slice(-300)))}catch(e){}
+  ntStore([st,...a.filter(x=>x.k==='st'&&x.id!=='s-legacy'),...a.filter(x=>x&&x.k!=='st'&&x.b&&false)])}
+// 覚える：自分の側の手（親の局面で手番が自分の節）を集める
+function sdCards(st){const out=[];st.ch.forEach((ch,ci)=>{(function walk(n,turn,path){n.k.forEach((c,k)=>{const p2=path.concat(k);if(turn===ch.me)out.push({ci,node:c,path:p2});walk(c,3-turn,p2)})})(ch.n,ch.st,[])});return out}
+const sdDue=(st,c,now)=>{const r=st.sr&&st.sr[c.node.i];return !r||r[0]<=now};
+function sdDueCount(st){const now=Date.now();return sdCards(st).filter(c=>sdDue(st,c,now)).length}
+const SD_IV=[1,3,7,14,30,60];
+// ---- AIの評価（別の処理で読む） ----
+let sdW=null;function sdWorker(){if(sdW!==null)return sdW;try{const src=$('eng').textContent+'\nonmessage=e=>{const d=e.data;const r=BocchEngine.think(d.b,d.p,d.ms,{});postMessage({k:d.k,r})}';sdW=new Worker(URL.createObjectURL(new Blob([src],{type:'text/javascript'})));sdW.onmessage=e=>{const d=e.data;SD.ev[d.k]=d.r||{};if(CUR==='study')sdEval()}}catch(e){sdW=false}return sdW}
+// ---- 一覧 ----
+function renderNotes(){sdMigrate();const L=$('ntList');L.replaceChildren();const all=sdAll().sort((a,b)=>(b.u||0)-(a.u||0));$('ntEmpty').hidden=!!all.length;
+  const due=all.reduce((s,x)=>s+sdDueCount(x),0);
+  if(due){const r=el('div','sd-rev');const t=el('div');t.append(el('b','','今日の復習 '+due+'手'),el('span','',all.filter(x=>sdDueCount(x)).map(x=>x.name).slice(0,2).join('・')+(all.filter(x=>sdDueCount(x)).length>2?' ほか':'')));
+    const g=el('button','sd-go','始める');g.type='button';g.onclick=()=>{const x=all.find(y=>sdDueCount(y));if(x){sdOpen(x.id);sdLearnStart()}};r.append(t,g);L.append(r)}
+  const sec=(t,act)=>{const h=el('div','sd-sec');h.append(el('span','',t));if(act)h.append(act);L.append(h)};
+  const item=x=>{const r=el('button','sd-it');r.type='button';const ch=x.ch[0];const b=ch?sdPosAt(ch,sdMain(ch)).b:startBoard();r.append(miniBoard(b));const tx=el('div','sd-tx');
+    let nv=0;for(const c of x.ch)(function w(n){if(n.k.length>1)nv+=n.k.length-1;n.k.forEach(w)})(c.n);
+    tx.append(el('b','',x.name),el('span','','章'+x.ch.length+(nv?'・変化'+nv:'')+(x.op?'・この形の対局 '+sdSameCount(x)+'局':'')));r.append(tx);const d=sdDueCount(x);if(d)r.append(el('span','sd-due','復習 '+d));r.onclick=()=>sdOpen(x.id);L.append(r)};
+  const ops=all.filter(x=>x.op),mine=all.filter(x=>!x.op);
+  if(ops.length){sec('戦型の研究（自動で振り分け）');ops.forEach(item)}
+  const nb=el('button','sd-new','＋ 新しい研究');nb.type='button';nb.onclick=()=>{const name=prompt('研究の名前','無題の研究');if(name==null)return;const st={id:sdId('s'),k:'st',t:Date.now(),u:Date.now(),name:name.trim()||'無題の研究',op:null,ch:[sdNewCh('章1',startBoard(),1,1)]};sdPut(st);sdOpen(st.id)};
+  sec('自分で作った研究',nb);mine.forEach(item);if(!mine.length)L.append(el('p','sd-empty','まだありません。'))}
+function sdSameCount(st){const ch=st.ch[0];if(!ch)return 0;const P=sdPosAt(ch,sdMain(ch).slice(0,Math.min(sdMain(ch).length,6)));return sdSame(P.b,P.turn).length}
+// この局面になった自分の対局
+function sdSame(b,turn){const k=b.join('')+turn,out=[];for(const g of myGames()){const pos=buildPos(g);const i=pos.findIndex(p=>p.b.join('')+p.turn===k);if(i>=0)out.push({g,i})}return out}
+// ---- 研究の画面 ----
+function sdOpen(id,ch,path){const st=sdGet(id);if(!st)return;SD.id=id;SD.ch=Math.min(ch||0,st.ch.length-1);SD.path=path||[];SD.tool=null;SD.sel=-1;SD.arrowFrom=-1;SD.learn=null;show('study');sdRender()}
+function sdCur(){const st=sdGet(SD.id);if(!st)return null;const ch=st.ch[SD.ch];return {st,ch}}
+function sdGo(path){SD.path=path;SD.sel=-1;SD.arrowFrom=-1;sdRender()}
+function sdRender(){const c=sdCur();if(!c)return;const {st,ch}=c;$('sdTitle').textContent=st.name;
+  // 章
+  const H=$('sdChs');H.replaceChildren();if(st.ch.length>1||true){st.ch.forEach((x,i)=>{const b=el('button','',x.name);b.type='button';b.setAttribute('aria-pressed',String(i===SD.ch));b.onclick=()=>{SD.ch=i;SD.path=[];SD.learn=null;sdRender()};H.append(b)});
+    const ad=el('button','sd-chadd','＋');ad.type='button';ad.setAttribute('aria-label','章を足す');ad.onclick=()=>{const P=sdPosAt(ch,SD.path);const nm=prompt('新しい章の名前（いまの局面から始まります）','章'+(st.ch.length+1));if(nm==null)return;st.ch.push(sdNewCh(nm.trim()||'章'+(st.ch.length+1),P.b,P.turn,ch.me));sdPut(st);SD.ch=st.ch.length-1;SD.path=[];sdRender()};H.append(ad)}
+  sdBoard();sdTree();sdNodeBar();sdEval();sdSameBar();
+  $('sdLearn').hidden=!SD.learn;$('sdTree').hidden=$('sdNode').hidden=$('sdSame').hidden=!!SD.learn;$('sdEv').hidden=!!SD.learn;
+  $('sdTools').querySelectorAll('button').forEach(b=>b.classList.toggle('on',SD.tool===b.dataset.t||(b.dataset.t==='learn'&&!!SD.learn)));if(SD.learn)sdLearnRender()}
+function sdBoard(){const c=sdCur();const {ch}=c;const P=sdPosAt(ch,SD.path),b=P.b,turn=P.turn,n=P.nodes[P.nodes.length-1];const B=$('sdBoard');B.replaceChildren();
+  const legal=SD.sel>=0?movesFrom(b,SD.sel).map(m=>m[1]):[];const last=n.m;
+  for(let i=0;i<36;i++){const d=el('button','sd-c'+((((i/6|0)+i)%2===0)?' L':''));d.type='button';d.dataset.i=i;
+    if(last&&(i===last[0]||i===last[1]))d.classList.add('last');if(i===SD.sel||i===SD.arrowFrom)d.classList.add('sel');if(legal.includes(i))d.classList.add('can');
+    if(b[i]){const s=el('span','sd-s '+(b[i]===1?'b':'w'),String(nbCount(b,i)));d.append(s)}
+    d.onclick=()=>sdTap(i);B.append(d)}
+  // 矢印（自分で描いたもの）と、AIの最善手
+  const A=$('sdArw');let h='';const line=(f,t,col,w)=>{const x1=f%6+.5,y1=(f/6|0)+.5,x2=t%6+.5,y2=(t/6|0)+.5;h+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${col}" stroke-width="${w}" stroke-linecap="round" opacity=".85"/><circle cx="${x2}" cy="${y2}" r="${w*1.3}" fill="${col}" opacity=".9"/>`};
+  for(const [f,t] of (n.a||[]))line(f,t,'#7fd39a',.12);const ev=SD.ev[sdEvKey()];if(ev&&ev.move&&!SD.learn)line(ev.move[0],ev.move[1],'#6aa8ff',.07);A.innerHTML=h;
+  $('sdPly').textContent=SD.path.length?SD.path.length+'手目':'開始局面'}
+function sdTap(i){const c=sdCur();const {st,ch}=c;const P=sdPosAt(ch,SD.path),b=P.b,turn=P.turn;
+  if(SD.learn){sdLearnTap(i);return}
+  if(SD.tool==='arrow'){const n=P.nodes[P.nodes.length-1];if(SD.arrowFrom<0){SD.arrowFrom=i;sdBoard();return}if(SD.arrowFrom!==i){n.a=n.a||[];const k=n.a.findIndex(x=>x[0]===SD.arrowFrom&&x[1]===i);if(k>=0)n.a.splice(k,1);else n.a.push([SD.arrowFrom,i]);sdPut(st)}SD.arrowFrom=-1;sdBoard();return}
+  if(SD.sel>=0&&movesFrom(b,SD.sel).some(m=>m[1]===i)){if(revWon(b,1)||revWon(b,2))return;const n=P.nodes[P.nodes.length-1];let k=n.k.findIndex(x=>x.m[0]===SD.sel&&x.m[1]===i);
+    if(k<0){n.k.push(sdNewNode([SD.sel,i]));k=n.k.length-1;sdPut(st)}sdGo(SD.path.concat(k));return}
+  if(b[i]===turn&&nbCount(b,i)>0){SD.sel=SD.sel===i?-1:i;sdBoard();return}SD.sel=-1;sdBoard()}
+// 手順の木：本筋を並べ、枝分かれは下に字下げして出す
+const GL={'!!':'good','!':'good','!?':'int','?!':'int','?':'bad','??':'bad','縛り':'tag','ぼっち':'tag','リーチ':'tag'};
+function sdTree(){const c=sdCur();const {ch}=c;const T=$('sdTree');T.replaceChildren();const cur=SD.path.join(',');
+  const chip=(n,path,turn,ply,showNo)=>{const b=el('button','sd-mv'+(path.join(',')===cur?' cur':''));b.type='button';b.textContent=(showNo?(Math.floor(ply/2)+1)+(turn===1?'.':'…')+' ':'')+sqName(n.m[0])+'-'+sqName(n.m[1]);
+    if(n.g){const g=el('span','sd-g '+(GL[n.g]||''),n.g);b.append(g)}if(n.c)b.append(el('span','sd-cm','✎'));b.onclick=()=>sdGo(path);return b};
+  function line(n,path,turn,ply,box,depth){let first=true;while(n.k.length){const mainK=0,m=n.k[mainK],p=path.concat(mainK);box.append(chip(m,p,turn,ply,first||turn===1));first=false;
+      if(n.k.length>1&&depth<6){for(let k=1;k<n.k.length;k++){const v=el('div','sd-var');const vp=path.concat(k);v.append(chip(n.k[k],vp,turn,ply,true));line(n.k[k],vp,3-turn,ply+1,v,depth+1);box.append(v)}first=true}
+      n=m;path=p;turn=3-turn;ply++}}
+  const root=el('div','sd-ml');if(ch.n.c){root.append(el('p','sd-rootc',ch.n.c))}line(ch.n,[],ch.st,ch.st===1?0:1,root,0);if(!ch.n.k.length)root.append(el('p','sd-hint','盤の石を動かすと、ここに手順が入ります。違う手を指すと、変化（枝分かれ）として足されます。'));T.append(root)}
+function sdNodeBar(){const c=sdCur();const {st,ch}=c;const P=sdPosAt(ch,SD.path),n=P.nodes[P.nodes.length-1];const B=$('sdNode');B.replaceChildren();
+  if(SD.tool==='glyph'&&n.m){const r=el('div','sd-gp');for(const g of ['!!','!','!?','?!','?','??','縛り','ぼっち','リーチ']){const b=el('button',GL[g]||'',g);b.type='button';b.setAttribute('aria-pressed',String(n.g===g));b.onclick=()=>{n.g=n.g===g?undefined:g;sdPut(st);sdRender()};r.append(b)}B.append(r)}
+  if(SD.tool==='arrow')B.append(el('p','sd-hint','矢印：始まりのマス → 終わりのマスの順に押す。同じ矢印をもう一度描くと消えます。'));
+  if(SD.tool==='comment'||n.c){const ta=el('textarea','sd-ta');ta.rows=3;ta.maxLength=600;ta.placeholder=n.m?'この手のコメント':'この章のはじめのコメント';ta.value=n.c||'';ta.readOnly=SD.tool!=='comment';
+    ta.oninput=()=>{n.c=ta.value.trim()||undefined;clearTimeout(SD.ct);SD.ct=setTimeout(()=>{sdPut(st);sdTree()},500)};B.append(ta)}
+  if(n.m){const par=P.nodes[P.nodes.length-2],k=SD.path[SD.path.length-1];const r=el('div','sd-acts');
+    if(k>0){const up=el('button','','本筋にする');up.type='button';up.onclick=()=>{const x=par.k.splice(k,1)[0];par.k.unshift(x);sdPut(st);sdGo(SD.path.slice(0,-1).concat(0))};r.append(up)}
+    const del=el('button','sd-del','この手から消す');del.type='button';del.onclick=()=>{if(!confirm('この手と、そのあとの手順を消しますか？'))return;par.k.splice(k,1);sdPut(st);sdGo(SD.path.slice(0,-1))};r.append(del);B.append(r)}}
+const sdEvKey=()=>{const c=sdCur();if(!c)return'';const P=sdPosAt(c.ch,SD.path);return P.b.join('')+P.turn};
+function sdEval(){const c=sdCur();if(!c||SD.learn)return;const P=sdPosAt(c.ch,SD.path),E=$('sdEv');const k=sdEvKey();
+  if(revWon(P.b,1)||revWon(P.b,2)){E.replaceChildren(el('span','sd-evt',revWon(P.b,1)?'黒の勝ち':'白の勝ち'));return}
+  const ev=SD.ev[k];if(!ev){E.replaceChildren(el('span','sd-evt','AIが読んでいます…'));const w=sdWorker();if(w&&SD.evJob!==k){SD.evJob=k;w.postMessage({k,b:P.b.slice(),p:P.turn,ms:900})}return}
+  const s=ev.score||0;let v=s>EWIN-1000?1:s<-EWIN+1000?0:sig(EK*s);const bp=P.turn===1?v:1-v;const bar=el('div','sd-bar');const f=el('i');f.style.width=Math.round(bp*100)+'%';bar.append(f);
+  const lab=bp>.8?'黒が勝勢':bp>.6?'黒が有利':bp>.53?'黒やや有利':bp<.2?'白が勝勢':bp<.4?'白が有利':bp<.47?'白やや有利':'互角';
+  E.replaceChildren(el('span','sd-evt','AI'),bar,el('span','sd-evt',lab));
+  if(ev.move){const n=P.nodes[P.nodes.length-1];const has=n.k.findIndex(x=>x.m[0]===ev.move[0]&&x.m[1]===ev.move[1]);const b=el('button','sd-best','最善手 '+sqName(ev.move[0])+'-'+sqName(ev.move[1])+(has<0?'（足す）':''));b.type='button';
+    b.onclick=()=>{const st=c.st;let kk=has;if(kk<0){n.k.push(sdNewNode(ev.move));kk=n.k.length-1;sdPut(st)}sdGo(SD.path.concat(kk))};E.append(b)}
+  sdBoard()}
+function sdSameBar(){const c=sdCur();const P=sdPosAt(c.ch,SD.path);const S2=$('sdSame');S2.replaceChildren();if(!SD.path.length&&c.ch.sb===startBoard().join('')&&c.ch.st===1)return;
+  const xs=sdSame(P.b,P.turn);if(!xs.length)return;const w=xs.filter(x=>x.g.win===x.g.me).length;const b=el('button','sd-samebtn');b.type='button';
+  b.append(el('b','','この局面の自分の対局'),el('span','',xs.length+'局・'+w+'勝'+(xs.length-w)+'敗'),el('i','','見る ›'));let k=0;b.onclick=()=>{const x=xs[k%xs.length];k++;openReview(x.g.id);setRev(x.i)};S2.append(b)}
+$('sdPrev').onclick=()=>{if(SD.learn)return;if(SD.path.length)sdGo(SD.path.slice(0,-1))};$('sdFirst').onclick=()=>{if(!SD.learn)sdGo([])};
+$('sdNext').onclick=()=>{if(SD.learn)return;const c=sdCur();const n=sdNodeAt(c.ch,SD.path);if(n&&n.k.length)sdGo(SD.path.concat(0))};
+$('sdLast').onclick=()=>{if(SD.learn)return;const c=sdCur();let p=SD.path.slice(),n=sdNodeAt(c.ch,p);while(n&&n.k.length){p.push(0);n=n.k[0]}sdGo(p)};
+$('sdTools').querySelectorAll('button').forEach(b=>b.onclick=()=>{const t=b.dataset.t;if(t==='learn'){if(SD.learn){SD.learn=null;sdRender()}else sdLearnStart();return}SD.learn=null;SD.tool=SD.tool===t?null:t;SD.arrowFrom=-1;sdRender()});
+$('sdMenuBtn').onclick=()=>{const c=sdCur();if(!c)return;const {st,ch}=c;const a=prompt('番号を入れてください\n1：研究の名前を変える\n2：この章の名前を変える\n3：この章で覚えるのを黒にする\n4：この章で覚えるのを白にする\n5：この章を消す\n6：この研究を消す','');
+  if(a==='1'){const v=prompt('研究の名前',st.name);if(v&&v.trim()){st.name=v.trim();sdPut(st);sdRender()}}
+  else if(a==='2'){const v=prompt('章の名前',ch.name);if(v&&v.trim()){ch.name=v.trim();sdPut(st);sdRender()}}
+  else if(a==='3'||a==='4'){ch.me=a==='3'?1:2;sdPut(st);sdRender()}
+  else if(a==='5'){if(st.ch.length<2){alert('最後の章は消せません。研究ごと消してください');return}if(!confirm('「'+ch.name+'」を消しますか？'))return;st.ch.splice(SD.ch,1);SD.ch=0;SD.path=[];sdPut(st);sdRender()}
+  else if(a==='6'){if(!confirm('研究「'+st.name+'」を消しますか？元に戻せません'))return;sdRemove(st.id);show('notes');renderNotes()}};
+// ---- 覚える（自分の側の手だけ当てる。間違えたら1日後、合ったら3日・7日…後に出し直す） ----
+function sdLearnStart(){const c=sdCur();if(!c)return;const {st}=c;const now=Date.now();let cards=sdCards(st).filter(x=>sdDue(st,x,now));
+  if(!cards.length){if(!confirm('今日の復習はありません。全部の手をもう一度やりますか？'))return;cards=sdCards(st)}if(!cards.length){alert('覚える手がありません。手順を入れてから使えます（覚えるのは「'+(c.ch.me===1?'黒':'白')+'」の手です。メニューで変えられます）');return}
+  // 章ごと・道ごとに、浅い順に並べる
+  cards.sort((a,b)=>a.ci-b.ci||a.path.length-b.path.length);SD.learn={q:cards,i:0,ok:0,ng:0,fb:null};SD.tool=null;sdLearnSet()}
+function sdLearnSet(){const L=SD.learn;const q=L.q[L.i];if(!q){sdRender();return}SD.ch=q.ci;SD.path=q.path.slice(0,-1);SD.sel=-1;sdRender()}
+function sdLearnTap(i){const L=SD.learn;const q=L.q[L.i];if(!q||L.fb)return;const c=sdCur();const P=sdPosAt(c.ch,SD.path),b=P.b;
+  if(SD.sel>=0&&movesFrom(b,SD.sel).some(m=>m[1]===i)){const par=sdNodeAt(c.ch,SD.path);const ok=q.node.m[0]===SD.sel&&q.node.m[1]===i;const alt=!ok&&par.k.some(x=>x.m[0]===SD.sel&&x.m[1]===i);
+    const st=c.st;st.sr=st.sr||{};const r=st.sr[q.node.i]||[0,0];
+    if(ok||alt){const lv=Math.min(SD_IV.length-1,(SD_IV.indexOf(r[1])+1));const iv=r[1]?SD_IV[lv]:SD_IV[1];st.sr[q.node.i]=[Date.now()+iv*864e5,iv];L.ok++;L.fb={ok:true,alt,iv}}
+    else{st.sr[q.node.i]=[Date.now()+864e5,1];L.ng++;L.fb={ok:false,tried:[SD.sel,i]}}
+    sdPut(st);SD.path=q.path.slice();SD.sel=-1;sdRender();return}
+  if(b[i]===P.turn&&nbCount(b,i)>0){SD.sel=SD.sel===i?-1:i;sdBoard()}}
+function sdLearnRender(){const L=SD.learn,box=$('sdLearn');box.replaceChildren();const q=L.q[L.i];const c=sdCur();
+  const pr=el('div','sd-prog');L.q.forEach((x,k)=>{const i=el('i');if(k<L.i)i.className='done';if(k===L.i)i.className='now';pr.append(i)});box.append(pr);
+  if(!q){box.append(el('p','sd-q','おつかれさま'),el('p','sd-qs','正解 '+L.ok+'・間違い '+L.ng+'。間違えた手は明日もう一度出ます。'));const b=el('button','primary','研究に戻る');b.type='button';b.onclick=()=>{SD.learn=null;SD.path=[];sdRender()};box.append(b);return}
+  const P=sdPosAt(c.ch,q.path.slice(0,-1));box.append(el('p','sd-q',(P.turn===1?'黒':'白')+'の番。次の手は？'),el('p','sd-qs',c.st.name+'　'+c.ch.name+'　あなたは'+(c.ch.me===1?'黒':'白')));
+  if(L.fb){const f=el('div','sd-fb '+(L.fb.ok?'ok':'ng'));const mv=sqName(q.node.m[0])+'-'+sqName(q.node.m[1]);
+    if(L.fb.ok)f.append(el('b','',L.fb.alt?'正解（研究にある別の手）':'正解：'+mv),el('span','','次は'+L.fb.iv+'日後に出ます'));
+    else f.append(el('b','','違います。正解は '+mv),el('span','','（指した手：'+sqName(L.fb.tried[0])+'-'+sqName(L.fb.tried[1])+'）この手は1日後にもう一度出ます'));
+    if(q.node.c)f.append(el('p','',q.node.c));box.append(f);const nx=el('button','primary','次へ');nx.type='button';nx.onclick=()=>{L.i++;L.fb=null;sdLearnSet()};box.append(nx)}}
+// ---- 感想戦から入れる ----
+function sdSaveSheet(){const c=ntCur();if(!c||!REV.g)return;const g=REV.g;const ply=REV.pv?REV.pv.base:REV.i;let moves=g.log.slice(0,ply).map(m=>[m[0],m[1]]);if(REV.pv&&REV.pv.line)moves=moves.concat(REV.pv.line.slice(0,REV.pv.k).map(m=>[m[0],m[1]]));
+  const op=sdOpOf(startBoard(),1,moves);const all=sdAll();const opSt=op?all.find(x=>x.op===op[0]):null;
+  let m=$('sdSheet');if(!m){m=el('div','mb-tease sd-sheet');m.id='sdSheet';document.body.append(m)}m.replaceChildren();const bx=el('div','mt-box');
+  bx.append(el('b','','ノートに入れる'));if(op)bx.append(el('p','','この局面は「'+op[1]+'」です'));
+  const opts=[];if(op)opts.push({k:'op',t:opSt?op[1]+' の研究に足す':op[1]+' の研究を作って入れる',rec:true});opts.push({k:'new',t:'新しい研究を作る'});if(all.length)opts.push({k:'pick',t:'ほかの研究を選ぶ'});
+  let pick=opts[0].k,range=moves.length?'start':'here',target=null;const ol=el('div','sd-opts');
+  const drawO=()=>{ol.replaceChildren();for(const o of opts){const b=el('button','sd-opt'+(pick===o.k?' on':''));b.append(el('em','',o.t));b.type='button';if(o.rec)b.append(el('span','','おすすめ'));b.onclick=()=>{pick=o.k;drawO()};ol.append(b);
+      if(o.k==='pick'&&pick==='pick'){const sel=el('select','sd-sel');for(const x of all){const op2=el('option','',x.name);op2.value=x.id;sel.append(op2)}target=target||all[0].id;sel.value=target;sel.onchange=()=>{target=sel.value};ol.append(sel)}}};drawO();bx.append(ol);
+  bx.append(el('p','sd-sm','どこから入れる？'));const seg=el('div','sd-seg');for(const [k,t] of [['start','対局の最初から'],['here','この局面から']]){const b=el('button','',t);b.type='button';b.setAttribute('aria-pressed',String(range===k));b.disabled=k==='start'&&!moves.length;b.onclick=()=>{range=k;seg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))};seg.append(b)}bx.append(seg);
+  const go=el('button','primary','入れる');go.type='button';const cancel=el('button','','やめる');cancel.type='button';cancel.onclick=()=>{m.hidden=true};
+  go.onclick=()=>{let st;if(pick==='op'){st=opSt||{id:sdId('s'),k:'st',t:Date.now(),u:Date.now(),name:op[1],op:op[0],ch:[]}}else if(pick==='new'){const nm=prompt('研究の名前',op?op[1]:'無題の研究');if(nm==null)return;st={id:sdId('s'),k:'st',t:Date.now(),u:Date.now(),name:nm.trim()||'無題の研究',op:null,ch:[]}}else st=sdGet(target);if(!st)return;
+    const me=g.me===2?2:1;let chI,path;
+    if(range==='start'){chI=st.ch.findIndex(x=>x.sb===startBoard().join('')&&x.st===1);if(chI<0){st.ch.push(sdNewCh(st.ch.length?'章'+(st.ch.length+1):(op?op[1]:'章1'),startBoard(),1,me));chI=st.ch.length-1}path=sdAddLine(st.ch[chI],moves)}
+    else{const nm=(g.opp||MODE_NAME(g.mode))+'　'+ply+'手目';st.ch.push(sdNewCh(nm,c.b,c.turn,me));chI=st.ch.length-1;path=[];st.ch[chI].src=c.src}
+    sdPut(st);m.hidden=true;const mm=$('ntMsg');mm.replaceChildren(document.createTextNode('ノートに入れました'));const v=el('button','nt-see','見る');v.type='button';v.onclick=()=>{mm.hidden=true;sdOpen(st.id,chI,path)};mm.append(v);mm.hidden=false;clearTimeout(NT.mt);NT.mt=setTimeout(()=>{mm.hidden=true},5000)};
+  const row=el('div','sd-row');row.append(cancel,go);bx.append(row);m.append(bx);m.hidden=false;m.onclick=e=>{if(e.target===m)m.hidden=true}}
+$('ntOpen').onclick=sdSaveSheet;
+window.bocchSD={SD,sdRender,sdTap,sdCur,sdPosAt,sdLearnStart,renderNotes};
 // ---- 盤の色（会員の見た目）：フォンク動画の「見た目」と同じ5色。盤だけで、石の色は変えない。自分の画面にだけ ----
 const THM=[['','今の色','#c9d2e3','#8f9bb6'],['lav','ラベンダー','#ece6fb','#8b7bd8'],['sal','サーモン','#f8e6d8','#df9583'],['teal','ティール','#f1e8d2','#3f9f95'],['pink','ピンク','#fbe4ef','#e48db3'],['dark','ダーク','#20202a','#1b1b23']];
 function thApply(){let k='';try{k=localStorage.getItem('bocch-theme')||''}catch(e){}if(!THM.some(t=>t[0]===k))k='';const r=document.documentElement;THM.forEach(t=>{if(t[0])r.classList.toggle('bth-'+t[0],t[0]===k)})}
@@ -6352,7 +6580,7 @@ function wkRich(st,pv,best,worst){const R=el('div','wk');const tx=t=>(typeof T==
   // 先週いちばんの1局（正確度がいちばん高い勝ち）
   let bg=null,ba=-1;for(const g of st.gs){if(g.win!==g.me||!g.an)continue;const x=accOf(g,g.me);if(x!=null&&x>ba){ba=x;bg=g}}
   if(bg){const sb=el('div','wk-sec');sb.append(el('h4','','先週いちばんの1局'));const r=el('button','wk-bg');r.type='button';const d=new Date(bg.t);
-    const tx2=el('div');tx2.append(el('b','','正確度 '+ba+'%で勝ち'),el('span','',(d.getMonth()+1)+'/'+d.getDate()+'・'+(bg.opp||MODE_NAME(bg.mode))+'・'+bg.log.length+'手'));r.append(tx2,el('span','wk-go','見る ›'));r.onclick=()=>openReview(bg);sb.append(r);R.append(sb)}
+    const tx2=el('div');tx2.append(el('b','','正確度 '+ba+'%で勝ち'),el('span','',(d.getMonth()+1)+'/'+d.getDate()+'・'+(bg.opp||MODE_NAME(bg.mode))+'・'+bg.log.length+'手'));r.append(tx2,el('span','wk-go','見る ›'));r.onclick=()=>openReview(bg.id);sb.append(r);R.append(sb)}
   // おすすめ（押すとすぐ弱点CPU）
   if(weak){const wl=weakList().ops.find(e=>e.name===weak);const c=el('button','wk-cta');c.type='button';c.append(document.createTextNode('天敵と「'+weak+'」を指す'),el('small','','今週のおすすめ・3局'));
     c.onclick=()=>{if(wl)startMb('weak',wl.me,{lv:3,state:{mbSeq:wl.seq,mbOp:wl.name}});else{show('weak');try{renderWeak()}catch(e){}}};R.append(c)}
@@ -6413,7 +6641,7 @@ function moshi(){modeBar();try{accRow()}catch(e){}try{ntSaveBar()}catch(e){}try{
 const MB_LAUNCH=false;MB.prev=false;
 const mbShow=()=>MB.own||MB_LAUNCH,mbLocked=()=>!MB.own||MB.prev;
 const myNm=()=>{try{return (typeof myName==='function'&&myName())||'あなた'}catch(e){return 'あなた'}};
-function mbLatest(tab){const g=loadGames().filter(x=>x&&x.log&&x.log.length>=4&&x.mode!=='study').sort((a,b)=>b.t-a.t)[0];if(!g){show('history');try{renderHistory()}catch(e){}return}openReview(g);setTimeout(()=>{try{window.rvTab&&window.rvTab(tab)}catch(e){}},0)}
+function mbLatest(tab){const g=loadGames().filter(x=>x&&x.log&&x.log.length>=4&&x.mode!=='study').sort((a,b)=>b.t-a.t)[0];if(!g){show('history');try{renderHistory()}catch(e){}return}openReview(g.id);setTimeout(()=>{try{window.rvTab&&window.rvTab(tab)}catch(e){}},0)}
 const SEEN_K='bocch-mbseen';const seenSet=()=>{try{return new Set(JSON.parse(localStorage.getItem(SEEN_K)||'[]'))}catch(e){return new Set()}};
 function markSeen(k){const st=seenSet();if(!st.has(k)){st.add(k);try{localStorage.setItem(SEEN_K,JSON.stringify([...st]))}catch(e){}}document.querySelectorAll('.nw-dot[data-k="'+k+'"]').forEach(d=>d.remove())}
 function nwDot(k){if(seenSet().has(k))return null;const d=el('span','nw-dot');d.dataset.k=k;d.setAttribute('aria-hidden','true');return d}
@@ -6449,8 +6677,8 @@ window.bocchStHook=()=>{try{stMbSync()}catch(e){}};
 // 履歴タブ：上に「成績の分析」「ノート」
 function hsMb(){const L=$('histList');if(!L)return;let box=$('hsMb');if(!mbShow()){if(box)box.remove();return}
   if(!box){box=el('div','hs-mb');box.id='hsMb';L.before(box)}box.replaceChildren();
-  const gs=myGames(),wr=gs.length?Math.round(gs.filter(g=>g.win===g.me).length/gs.length*100):null,nn=ntLoad().length;
-  for(const [k,t,sub,desc,fn] of [['hs-st','成績の分析',wr==null?'対局するとわかります':'勝率 '+wr+'%・'+gs.length+'局','戦型・先手後手・時間帯ごとの勝率、正確度、悪手の推移。',()=>{show('mstats');renderStats()}],['hs-nt','ノート','保存した局面 '+nn,'感想戦で保存した局面とメモ。押すとその局面から検討やCPU対局ができます。',()=>{show('notes');renderNotes()}]]){
+  const gs=myGames(),wr=gs.length?Math.round(gs.filter(g=>g.win===g.me).length/gs.length*100):null,nn=ntLoad().filter(x=>x&&x.k==='st').length;
+  for(const [k,t,sub,desc,fn] of [['hs-st','成績の分析',wr==null?'対局するとわかります':'勝率 '+wr+'%・'+gs.length+'局','戦型・先手後手・時間帯ごとの勝率、正確度、悪手の推移。',()=>{show('mstats');renderStats()}],['hs-nt','ノート','研究 '+nn,'感想戦で保存した局面とメモ。押すとその局面から検討やCPU対局ができます。',()=>{show('notes');renderNotes()}]]){
     const b=el('button','hs-tl');b.type='button';b.append(el('b','',t),el('span','',sub));if(mbLocked())b.append(lockTag());const d=nwDot(k);if(d)b.append(d);
     b.onclick=()=>{markSeen(k);if(mbLocked()){mbTease(t,desc);return}fn()};box.append(b)}}
 // アカウントの設定：「盤の色」
