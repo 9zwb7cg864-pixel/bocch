@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg?v=2">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=59"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=61"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -2098,6 +2098,27 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 .mb-ic{background:none!important;border-radius:50%!important;padding:0}
 .mb-ic svg{display:block}
 .pf-grp .mb-ic{width:34px;height:34px}
+/* 会員の機能の入口 */
+.nw-dot{position:absolute;top:8px;right:8px;width:8px;height:8px;border-radius:50%;background:#ff6b5e;pointer-events:none}
+.mb-lock{flex:none;font-size:10px;font-weight:800;line-height:1;padding:3px 6px;border-radius:6px;background:rgba(230,196,106,.16);color:var(--gold,#e6c46a);letter-spacing:.02em}
+.st-mb{margin-bottom:6px}.st-mb button{position:relative}.st-mb .mb-lock{position:absolute;right:9px;top:8px}
+.mbav{background:#1d1e22!important;display:grid!important;place-items:center;overflow:hidden}
+.mbav .mbst{display:block;width:82%;height:82%;border-radius:50%;background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);box-shadow:0 0 0 2px #a9cdf7}
+.mbav.weak{background:#4a2420!important}.mbav.weak svg{width:66%;height:66%}
+.hs-mb{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 14px}
+.hs-tl{position:relative;display:flex!important;flex-direction:column;align-items:flex-start;gap:3px;min-height:0!important;padding:12px 14px!important;border-radius:16px!important;background:var(--card,var(--p1))!important;text-align:left}
+.hs-tl b{font-size:15px;color:var(--fg,#f4f4f2)}.hs-tl span{font-size:12px;color:var(--mute,#8b90a0)}.hs-tl .mb-lock{position:absolute;right:10px;top:10px}
+.pf-row .mb-lock{margin-left:2px}.pf-row{position:relative}.pf-row .nw-dot{position:static;margin-left:4px}
+.pf-sw{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:6px;vertical-align:-2px}
+.fr-chal{position:relative;display:flex!important;align-items:center;justify-content:center;gap:8px;width:100%;margin:8px 0 0;padding:11px 0!important;border-radius:12px!important;background:linear-gradient(180deg,#f3dc93,#d9b14e)!important;color:#2a2008!important;font-weight:800}
+.fr-chal .mb-lock{background:rgba(42,32,8,.15);color:#2a2008}
+.nt-msg .nt-see{margin-left:10px;padding:4px 12px!important;min-height:0!important;border-radius:999px!important;font-size:13px;font-weight:800;color:var(--acc,#a9cdf7);background:transparent!important;border:1px solid currentColor!important}
+.mb-tease{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;justify-content:center;padding:16px}.mb-tease[hidden]{display:none}
+.mt-box{width:100%;max-width:440px;background:var(--bg2,#26272c);border-radius:22px;padding:20px 18px 16px;margin-bottom:max(8px,env(safe-area-inset-bottom))}
+.mt-box small{display:block;font-size:12px;color:var(--gold,#e6c46a);font-weight:700}.mt-box b{display:block;font-size:20px;color:var(--fg,#f4f4f2);margin:4px 0 6px}
+.mt-box p{font-size:14px;line-height:1.7;color:var(--sub,#c3c8d4)}.mt-box .mt-soon{font-size:12px;color:var(--mute,#8b90a0);margin-top:8px}.mt-box button{width:100%;margin-top:14px}
+.mb-prev{margin:14px 0}
+.st-mb .mb-lock{position:static;display:inline-block;margin-top:4px}
 
 </style>
 </head>
@@ -2105,7 +2126,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.07</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.08</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -2420,7 +2441,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
   <div id="mcBody"></div>
 </section>
 <section class="scr" data-scr="weak" hidden>
-  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>弱点を突くCPU</h2><span class="sp"></span></div>
+  <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>あなたの天敵</h2><span class="sp"></span></div>
   <div id="wkBody"></div>
 </section>
 <section class="scr" data-scr="mtheme" hidden>
@@ -5004,6 +5025,7 @@ function frRender(){if(!$('frMain'))return;const me=myUid();$('frNeed').hidden=!
       for(const g of gs.filter(g=>g.over).slice(0,5)){const lg=frLog(g.k);if(!lg)continue;const r=g.win===0?'引き分け':g.me?f.name+(g.win===g.me?'の勝ち':'の負け'):(g.win===1?'黒':'白')+'勝ち';
         const b=mk('button','',fmtDate(g._t*1000)+'　'+MODE_NAME(g.mode)+'　'+r+'（'+lg.length+'手）'+(g.opp?'　相手 '+g.opp:'')+'　感想戦');b.className='i-r';b.onclick=()=>frOpen(f,g,false);box.append(b)}
       if(!box.children.length)box.append(mk('div','fr-st',FR.feeds[f.uid]?'直近12時間の対局はありません':'読み込み中…'));
+      if(window.bocchChalBtn){try{const cb=window.bocchChalBtn(f);if(cb)box.append(cb)}catch(e){}}
       const x=mk('button','fr-rm','フレンドから外す');x.onclick=()=>frRemove(f.uid);box.append(x);it.append(box)}
     lb.append(it)}}
 function frWatchRoom(room){if(!/^[a-z0-9]{6}$/.test(room))return;try{if(S.mode==='net')leave()}catch(e){}openRoom(room,true);show('game')}
@@ -5515,7 +5537,7 @@ function learnPanel(){const P=$('learnPanel');if(!P)return;P.hidden=!(S&&S.learn
   const n=$('lnNext');if(n)n.addEventListener('click',lnStep);const a=$('lnAgain');if(a)a.addEventListener('click',learnLoad);
   B.querySelectorAll('[data-jm]').forEach(b=>b.addEventListener('click',()=>{LN.path.push(b.dataset.jm.split('-').map(Number));learnLoad()}));
   const jb=$('lnJBack');if(jb)jb.addEventListener('click',()=>{LN.path.pop();learnLoad()})}
-const OPN={"2222220000000000000000000100000111112":["A00","コーナー・オープニング"],"2222220000000000000000000000101111102":["A00","コーナー・オープニング"],"0222220200000000000000000100000111111":["A10","シンメトリカル・ディフェンス"],"2222200000200000000000000000101111101":["A10","シンメトリカル・ディフェンス"],"0222200200200000000000000100100111101":["A11","フォー・コーナーズ・ゲーム"],"0222200200200000000001000100100011102":["A12","センター・ゲーム"],"0222200200200000000010000100100111002":["A12","センター・ゲーム"],"0222200200000000000021000100100011101":["A12-1","センター・ゲーム：メイン・ライン"],"0222200000200000000012000100100111001":["A12-1","センター・ゲーム：メイン・ライン"],"0222200200000000000021000001100011102":["A12-2","ティリスク・ギャンビット"],"0222200000200000000012000110000111002":["A12-2","ティリスク・ギャンビット"],"0222200200000000000021100100100001102":["A12-3","ネモラ・ギャンビット"],"0222200000200000000112000100100110002":["A12-3","ネモラ・ギャンビット"],"0202220200000000000010020000101111001":["A22","ドルフィン・フォーメーション"],"2220200000200000002001000100000011111":["A22","ドルフィン・フォーメーション"],"0202220200000000000010000100120111001":["A22-1","ナグラマ・ギャンビット"],"2220200000200000000001002100100011101":["A22-1","ナグラマ・ギャンビット"],"0222220200000010000000000100000101112":["A14","リープ・アタック"],"2222200000200001000000000000101110102":["A14","リープ・アタック"],"0222220200000000000100000100000011112":["A16","スピア・バリエーション"],"2222200000200000000000100000101111002":["A16","スピア・バリエーション"],"0022200200200012000000000100000011111":["A17","ピュロス・ギャンビット"],"0222000200200021000000000000101111001":["A17","ピュロス・ギャンビット"],"1022200200200002000000000100000011112":["A17-1","ピュロス・ギャンビット・アクセプテッド"],"0222010200200020000000000000101111002":["A17-1","ピュロス・ギャンビット・アクセプテッド"],"0022200200200012000000000100100011102":["A17-2","ピュロス・ギャンビット・ディクラインド"],"0222000200200021000000000100100111002":["A17-2","ピュロス・ギャンビット・ディクラインド"],"0222200000200000000112000100000001111":["A18","カンナエ・ギャンビット"],"0222200200000000000021100000101110001":["A18","カンナエ・ギャンビット"],"2222200000200000000000000100000111111":["A20","クロス・ディフェンス"],"0222220200000000000000000000101111101":["A20","クロス・ディフェンス"],"2220200000200000000002000100100111101":["A21","タワー・バリエーション"],"0202220200000000000020000100100111101":["A21","タワー・バリエーション"],"2222220000000000000010000000001101112":["B00","センター・オープニング"],"2222220000000000000001000000001110112":["B00","センター・オープニング"],"2222220000000000000100000000001011112":["C00","スピア・オープニング"],"2222220000000000000000100000001111012":["C00","スピア・オープニング"],"2222220000000000000000001000000111112":["D00","コーナー・ガード"],"2222220000000000000000000000011111102":["D00","コーナー・ガード"],"2222220000000000000001000000001011112":["E00","バード・オープニング"],"2222220000000000000010000000001111012":["E00","バード・オープニング"],"2222220000000000001000000000001101112":["E01","クラウド・オープニング"],"2222220000000000000000010000001110112":["E01","クラウド・オープニング"]};
+const OPN={"2222220000000000000000000100000111112":["A00","コーナー・オープニング"],"2222220000000000000000000000101111102":["A00","コーナー・オープニング"],"0222220200000000000000000100000111111":["A10","シンメトリカル・ディフェンス"],"2222200000200000000000000000101111101":["A10","シンメトリカル・ディフェンス"],"0222200200200000000000000100100111101":["A11","フォー・コーナーズ・ゲーム"],"0222200200200000000001000100100011102":["A12","センター・ゲーム"],"0222200200200000000010000100100111002":["A12","センター・ゲーム"],"0222200200000000000021000100100011101":["A12-1","センター・ゲーム：メイン・ライン"],"0222200000200000000012000100100111001":["A12-1","センター・ゲーム：メイン・ライン"],"0222200200000000000021000001100011102":["A12-2","ティリスク・ギャンビット"],"0222200000200000000012000110000111002":["A12-2","ティリスク・ギャンビット"],"0222200200000000000021100100100001102":["A12-3","ネモラ・ギャンビット"],"0222200000200000000112000100100110002":["A12-3","ネモラ・ギャンビット"],"0202220200000000000010020000101111001":["A22","ドルフィン・フォーメーション"],"2220200000200000002001000100000011111":["A22","ドルフィン・フォーメーション"],"0202220200000000000010000100120111001":["A22-1","ナグラマ・ギャンビット"],"2220200000200000000001002100100011101":["A22-1","ナグラマ・ギャンビット"],"0222220200000010000000000100000101112":["A14","リープ・アタック"],"2222200000200001000000000000101110102":["A14","リープ・アタック"],"0222220200000000000100000100000011112":["A16","スピア・バリエーション"],"2222200000200000000000100000101111002":["A16","スピア・バリエーション"],"0022200200200012000000000100000011111":["A17","ピュロス・ギャンビット"],"0222000200200021000000000000101111001":["A17","ピュロス・ギャンビット"],"1022200200200002000000000100000011112":["A17-1","ピュロス・ギャンビット・アクセプテッド"],"0222010200200020000000000000101111002":["A17-1","ピュロス・ギャンビット・アクセプテッド"],"0022200200200012000000000100100011102":["A17-2","ピュロス・ギャンビット・ディクラインド"],"0222000200200021000000000100100111002":["A17-2","ピュロス・ギャンビット・ディクラインド"],"0222200000200000000112000100000001111":["A18","カンナエ・ギャンビット"],"0222200200000000000021100000101110001":["A18","カンナエ・ギャンビット"],"2222200000200000000000000100000111111":["A20","クロス・ディフェンス"],"0222220200000000000000000000101111101":["A20","クロス・ディフェンス"],"2220200000200000000002000100100111101":["A21","タワー・バリエーション"],"0202220200000000000020000100100111101":["A21","タワー・バリエーション"],"2222220000000000000010000000001101112":["B00","センター・オープニング"],"2222220000000000000001000000001110112":["B00","センター・オープニング"],"2222220000000000000100000000001011112":["C00","スピア・オープニング"],"2222220000000000000000100000001111012":["C00","スピア・オープニング"],"2222220000000000000000001000000111112":["D00","コーナー・ガード"],"2222220000000000000000000000011111102":["D00","コーナー・ガード"],"2222220000000000000001000000001011112":["E00","バード・オープニング"],"2222220000000000000010000000001111012":["E00","バード・オープニング"],"2222220000000000001000000000001101112":["E01","クラウド・オープニング"],"2222220000000000000000010000001110112":["E01","クラウド・オープニング"],"2202220000000020000100000000001110111":["F00","カイルマ・アタック"],"2202220000000020000000000100001110112":["F00-1","シデン・ディフェンス"],"2220220000000002000000100000001101111":["F00","カイルマ・アタック"],"2220220000000002000000000000101101112":["F00-1","シデン・ディフェンス"]};
 function opOf(b,turn){return OPN[b.join('')+turn]||null}
 function revOpRender(i){const el=$('revOp');if(!el)return;let r=null;for(let k=1;k<=i&&k<REV.pos.length;k++){const q=REV.pos[k];const o=opOf(q.b,q.turn);if(o)r=o}
   el.hidden=!r;if(r){$('revOpC').textContent=r[0];$('revOpN').textContent=r[1]}}
@@ -6121,14 +6143,14 @@ setInterval(check,4000);setTimeout(check,1500);
 const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e};
 // ---- 会員ページ ----
 const BEN=[['成績の分析','戦型・先手後手・時間帯ごとの勝率、正確度、悪手の推移','mstats'],['検討','感想戦で別の手を試すと、相手の手をAIが指し返す','moshi'],
- ['局面の保存とメモ','感想戦で保存した、自分だけのノート','notes'],['週の成績レポート','毎週月曜の朝、メールに届く','report'],['自分の分身CPU','自分の指し方の癖を覚えたCPU','clone'],['弱点を突くCPU','苦手な形に持ち込んでくる','weak'],
+ ['局面の保存とメモ','感想戦で保存した、自分だけのノート','notes'],['週の成績レポート','毎週月曜の朝、メールに届く','report'],['自分の分身CPU','自分の指し方の癖を覚えたCPU','clone'],['あなたの天敵','苦手な形に持ち込んでくる','weak'],
  ['感想戦の深い解析','深く読み直して、評価が変わった手を一覧に','deep'],['コーチの会員メニュー','苦手の集中練習・定跡の授業の追加'],['動画づくりの上位版','形・文字入れ・区間・60コマ/秒','video'],
  ['盤の色','フォンク動画と同じ5色から選べる','theme'],['広告なし','広告が始まったら有効'],['支援者として名前を載せる','希望する人だけ']];
 function renderMember(){const L=$('mbList');L.replaceChildren();BEN.forEach((b,i)=>{const r=el(b[2]?'button':'div','mb-ben'+(b[2]?' on':''));if(b[2])r.type='button';
   r.append(el('span','mb-n',String(i+1)));const t=el('span','mb-t');t.append(el('b','',b[0]),el('small','',b[1]));r.append(t,el('em','mb-st '+(b[2]?'ok':'wip'),b[2]?'使える':'準備中'));
   if(b[2]==='mstats')r.onclick=()=>{show('mstats');renderStats()};
-  if(b[2]==='moshi')r.onclick=()=>{alert('検討は感想戦で使えます。\n履歴から対局を開き、盤の右上の「検討」を入れて石を動かすと、相手の手をAIが指し返します。');show('history');try{renderHistory()}catch(e){}};
-  if(b[2]==='deep')r.onclick=()=>{alert('感想戦の「最強で深く再解析」を押すと、読み直したあとに、評価が変わった手と正確度の変化が出ます。');show('history');try{renderHistory()}catch(e){}};
+  if(b[2]==='moshi')r.onclick=()=>{alert('感想戦の「振り返り」で、下の「検討」を押して石を動かすと、相手の手をAIが指し返します。\nいちばん新しい対局の感想戦を開きます。');mbLatest('play')};
+  if(b[2]==='deep')r.onclick=()=>{alert('感想戦の「まとめ」の「最強で深く再解析」を押すと、読み直したあとに、評価が変わった手と正確度の変化が出ます。\nいちばん新しい対局の感想戦を開きます。');mbLatest('sum')};
   if(b[2]==='notes')r.onclick=()=>{show('notes');renderNotes()};if(b[2]==='theme')r.onclick=()=>{show('mtheme');renderTheme()};if(b[2]==='report')r.onclick=()=>{show('mail');try{document.getElementById('mlTabN').click();window.bocchMailRender&&bocchMailRender()}catch(e){}};if(b[2]==='video')r.onclick=()=>{alert('感想戦の「動画を作る」を開くと、★の付いた設定（形・文字入れ・区間・なめらかさ）が出ます。');show('history');try{renderHistory()}catch(e){}};if(b[2]==='clone')r.onclick=()=>{show('clone');renderClone()};if(b[2]==='weak')r.onclick=()=>{show('weak');renderWeak()};
   L.append(r)})}
 document.querySelectorAll('[data-go="member"]').forEach(b=>b.addEventListener('click',renderMember));
@@ -6189,7 +6211,7 @@ $('ntCancel').onclick=()=>{$('ntForm').hidden=true;$('ntOpen').hidden=false};
 $('ntChips').querySelectorAll('button').forEach(b=>b.onclick=()=>{NT.pick=b.dataset.t;$('ntChips').querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)))});
 $('ntDo').onclick=()=>{const c=ntCur();if(!c)return;const t=$('ntTitle').value.trim()||'無題';const a=ntLoad();
   a.unshift({id:'n'+Date.now().toString(36),t:Date.now(),b:c.b.join(''),turn:c.turn,title:t,memo:$('ntMemo').value.trim(),tag:NT.pick,src:c.src});ntStore(a);
-  $('ntTitle').value='';$('ntMemo').value='';$('ntForm').hidden=true;$('ntOpen').hidden=false;const m=$('ntMsg');m.textContent='ノートに保存しました';m.hidden=false;setTimeout(()=>{m.hidden=true},2500)};
+  $('ntTitle').value='';$('ntMemo').value='';$('ntForm').hidden=true;$('ntOpen').hidden=false;const m=$('ntMsg');m.replaceChildren(document.createTextNode('ノートに保存しました'));{const v=el('button','nt-see','見る');v.type='button';v.onclick=()=>{m.hidden=true;show('notes');renderNotes()};m.append(v)}m.hidden=false;clearTimeout(NT.mt);NT.mt=setTimeout(()=>{m.hidden=true},4000)};
 function renderNotes(){const a=ntLoad(),T=$('ntTags'),L=$('ntList');T.replaceChildren();L.replaceChildren();
   const cnt={すべて:a.length};for(const x of a)cnt[x.tag]=(cnt[x.tag]||0)+1;
   for(const t of ['すべて','定跡','詰み','失敗','そのほか']){if(t!=='すべて'&&!cnt[t])continue;const b=el('button','',t+' '+(cnt[t]||0));b.type='button';b.setAttribute('aria-pressed',String(NT.tag===t));b.onclick=()=>{NT.tag=t;renderNotes()};T.append(b)}
@@ -6240,7 +6262,7 @@ if(typeof cpuPlay==='function'){const _cp=cpuPlay;cpuPlay=function(p,lv){try{if(
   if(m&&allMoves(S.b,pp).some(x=>x[0]===m[0]&&x[1]===m[1])){const k0=S.ply+':'+key(S.b,S.turn);mvAfter(()=>{if(k0===S.ply+':'+key(S.b,S.turn)&&!S.over)doMove(m)});return}}}catch(e){}
   return _cp.apply(this,arguments)}}
 // 対局画面：相手の名前を「分身」「弱点CPU」に、上の表示も合わせる
-if(typeof render==='function'){const _rd=render;render=function(){_rd.apply(this,arguments);try{if(S&&S.mbKind&&CUR==='game'){const nm=S.mbName||(S.mbKind==='clone'?((typeof myName==='function'&&myName())||'あなた')+'の分身':'弱点を突くCPU');
+if(typeof render==='function'){const _rd=render;render=function(){_rd.apply(this,arguments);try{if(S&&S.mbKind&&CUR==='game'){const nm=S.mbName||(((typeof myName==='function'&&myName())||'あなた')+(S.mbKind==='clone'?'の分身':'の天敵'));
   const b=document.querySelector('#plTop b');if(b)b.textContent=nm;const av=document.querySelector('#plTop .cpu-av,#plTop img');if(av)av.remove();const r=document.querySelector('#plTop .r');if(r)r.textContent='';$('connTxt').textContent=nm}}catch(e){}}}
 // 保存した対局に印を付ける（成績の分析から外し、克服の記録に使う）
 if(typeof saveFinished==='function'){const _sf=saveFinished;saveFinished=function(){_sf.apply(this,arguments);try{if(S&&S.mbChal&&S.over&&!S.mbChal.sent){S.mbChal.sent=1;const r=S.over.win===0?'d':S.over.win===S.hc?'w':'l';frRelay(frTopic('in',S.mbChal.uid),{t:'chres',uid:myUid(),name:myName(),id:S.mbChal.id,r,n:S.log.length})}}catch(e){}try{if(S&&S.mbKind&&S.over){const id=currentGameId(),g=loadGames(),ix=g.findIndex(x=>x.id===id);if(ix>=0){g[ix].mb=S.mbKind;if(S.mbOp)g[ix].mbOp=S.mbOp;storeGames(g)}}}catch(e){}}}
@@ -6318,7 +6340,7 @@ function wkRich(st,pv,best,worst){const R=el('div','wk');const tx=t=>(typeof T==
   if(bg){const sb=el('div','wk-sec');sb.append(el('h4','','先週いちばんの1局'));const r=el('button','wk-bg');r.type='button';const d=new Date(bg.t);
     const tx2=el('div');tx2.append(el('b','','正確度 '+ba+'%で勝ち'),el('span','',(d.getMonth()+1)+'/'+d.getDate()+'・'+(bg.opp||MODE_NAME(bg.mode))+'・'+bg.log.length+'手'));r.append(tx2,el('span','wk-go','見る ›'));r.onclick=()=>openReview(bg);sb.append(r);R.append(sb)}
   // おすすめ（押すとすぐ弱点CPU）
-  if(weak){const wl=weakList().ops.find(e=>e.name===weak);const c=el('button','wk-cta');c.type='button';c.append(document.createTextNode('弱点CPUと「'+weak+'」を指す'),el('small','','今週のおすすめ・3局'));
+  if(weak){const wl=weakList().ops.find(e=>e.name===weak);const c=el('button','wk-cta');c.type='button';c.append(document.createTextNode('天敵と「'+weak+'」を指す'),el('small','','今週のおすすめ・3局'));
     c.onclick=()=>{if(wl)startMb('weak',wl.me,{lv:(typeof WK_LV!=='undefined'&&WK_LV.v)||3,state:{mbSeq:wl.seq,mbOp:wl.name}});else{show('weak');try{renderWeak()}catch(e){}}};R.append(c)}
   return R}
 function weekReports(){if(!MB.own)return[];const out=[];const now=Date.now();let s=wkStart(now);
@@ -6328,7 +6350,7 @@ function weekReports(){if(!MB.own)return[];const out=[];const now=Date.now();let
       const md=d=>(d.getMonth()+1)+'/'+d.getDate(),last=new Date(e);last.setDate(last.getDate()-1);
       const L=['対局　'+st.n+'局'+dif(st.n,pv&&pv.n,'局'),'勝率　'+st.wr+'%'+dif(st.wr,pv&&pv.wr,'')];if(st.acc!=null)L.push('正確度　'+st.acc+'%'+dif(st.acc,pv&&pv.acc,''));if(st.bad!=null)L.push('悪手　1局に'+st.bad.toFixed(1)+'回'+dif(st.bad,pv&&pv.bad,''));
       if(best)L.push('いちばん勝てた戦型　'+best[0]+'（'+best[1][0]+'勝'+best[1][1]+'敗）');if(worst&&(!best||worst[0]!==best[0]))L.push('いちばん負けた戦型　'+worst[0]+'（'+worst[1][0]+'勝'+worst[1][1]+'敗）');
-      if(worst&&worst[1][1]>worst[1][0])L.push('','今週のおすすめ：弱点を突くCPUで「'+worst[0]+'」を3局');
+      if(worst&&worst[1][1]>worst[1][0])L.push('','今週のおすすめ：天敵と「'+worst[0]+'」を3局');
       out.push({id:'wr:'+md(b),local:1,t:Math.floor(+show/1000),tr:{ja:{t:'先週の成績（'+md(b)+'〜'+md(last)+'）',b:L.join('\n')}},rich:()=>wkRich(st,pv,best,worst)})}
     s=new Date(s);s.setDate(s.getDate()-7)}
   return out}
@@ -6371,6 +6393,71 @@ function moshi(){modeBar();try{accRow()}catch(e){}try{ntSaveBar()}catch(e){}try{
   if(!MB.moshi||v.k!==v.line.length||!v.line.length)return;const st=pvState();if(st.turn===me)return;if(revWon(st.b,3-st.turn))return;
   const key=exKey(),hn=v.hints&&v.hints[key];if(!hn||!hn.m||v.autoKey===key)return;v.autoKey=key;
   setTimeout(()=>{if(REV.pv!==v||v.k!==v.line.length||exKey()!==key)return;v.line=v.line.concat([[hn.m[0],hn.m[1]]]);v.k++;renderReview()},500)}
+
+// ---- 会員の機能の入口：その機能を使いたい人が最初に見る場所に置く ----
+// 今は持ち主だけに見せる。会員を始めたら MB_LAUNCH を true にすると、会員でない人にも「会員」の札付きで出る（押すと短い説明）
+const MB_LAUNCH=false;MB.prev=false;
+const mbShow=()=>MB.own||MB_LAUNCH,mbLocked=()=>!MB.own||MB.prev;
+const myNm=()=>{try{return (typeof myName==='function'&&myName())||'あなた'}catch(e){return 'あなた'}};
+function mbLatest(tab){const g=loadGames().filter(x=>x&&x.log&&x.log.length>=4&&x.mode!=='study').sort((a,b)=>b.t-a.t)[0];if(!g){show('history');try{renderHistory()}catch(e){}return}openReview(g);setTimeout(()=>{try{window.rvTab&&window.rvTab(tab)}catch(e){}},0)}
+const SEEN_K='bocch-mbseen';const seenSet=()=>{try{return new Set(JSON.parse(localStorage.getItem(SEEN_K)||'[]'))}catch(e){return new Set()}};
+function markSeen(k){const st=seenSet();if(!st.has(k)){st.add(k);try{localStorage.setItem(SEEN_K,JSON.stringify([...st]))}catch(e){}}document.querySelectorAll('.nw-dot[data-k="'+k+'"]').forEach(d=>d.remove())}
+function nwDot(k){if(seenSet().has(k))return null;const d=el('span','nw-dot');d.dataset.k=k;d.setAttribute('aria-hidden','true');return d}
+const lockTag=()=>el('span','mb-lock','会員');
+function mbTease(name,desc){let m=$('mbTease');if(!m){m=el('div','mb-tease');m.id='mbTease';document.body.append(m)}m.replaceChildren();
+  const b=el('div','mt-box');b.append(el('small','','bocch会員の機能'),el('b','',name),el('p','',desc),el('p','mt-soon','会員は準備中です。始まったら、お知らせでお知らせします。'));
+  const c=el('button','primary','閉じる');c.type='button';c.onclick=()=>{m.hidden=true};b.append(c);m.append(b);m.hidden=false;m.onclick=e=>{if(e.target===m)m.hidden=true}}
+const TARGET='<svg viewBox="0 0 24 24" fill="none" stroke="#ff8b80" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/></svg>';
+// 対局タブ：CPUの並びの先頭に「○○の分身」「○○の天敵」
+let MBK=null;
+const MBC={clone:{sub:()=>'あなたの癖',desc:'あなたの対局から、指し方の癖を覚えたCPU。自分と対局できます。'},weak:{sub:()=>{try{return (weakList().ops[0]||{}).name||'あなたの苦手'}catch(e){return 'あなたの苦手'}},desc:'あなたの勝率が低い形に持ち込んでくるCPU。勝つと克服の記録が付きます。'}};
+const mbName=k=>myNm()+(k==='clone'?'の分身':'の天敵');
+function mbAv(k,big){const a=el('span','cav mbav '+k+(big?' big':''));if(k==='clone')a.append(el('i','mbst'));else a.innerHTML=TARGET;return a}
+function stMb(){const lv=$('stLv');if(!lv)return;let box=$('stMb'),h=$('stMbH');
+  if(!mbShow()){if(box)box.remove();if(h)h.remove();MBK=null;return}
+  if(!box){h=el('h4','st-h','あなたから作ったCPU');h.id='stMbH';box=el('div','st-lv st-cpus st-mb');box.id='stMb';const sh=lv.previousElementSibling;(sh&&sh.classList.contains('st-h')?sh:lv).before(h,box)}
+  box.replaceChildren();if(mbLocked())MBK=null;
+  for(const k of ['clone','weak']){const b=el('button');b.type='button';b.dataset.mbk=k;b.setAttribute('aria-pressed',String(MBK===k));
+    const tx=el('span','cn');tx.append(el('b','',mbName(k)),el('small','',MBC[k].sub()));if(mbLocked())tx.append(lockTag());b.append(mbAv(k),tx);const d=nwDot('st-'+k);if(d)b.append(d);
+    b.onclick=()=>{markSeen('st-'+k);if(mbLocked()){mbTease(mbName(k),MBC[k].desc);return}MBK=k;try{window.bocchSt.sync()}catch(e){stMbSync()}};box.append(b)}}
+function stMbSync(){const box=$('stMb');if(box)box.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mbk===MBK)));const go=$('stGo');
+  const STMv=window.bocchSt?window.bocchSt.mode():'cpu';if(!MBK||STMv!=='cpu'){if(go)go.disabled=false;return}
+  $('stLv').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed','false'));
+  const pk=$('stPick');pk.innerHTML='';const tx=el('div','sp-tx'),h=el('div','sp-h');h.append(el('b','',mbName(MBK)),el('span','sp-tag',MBK==='clone'?'分身':'天敵'));let line='',ok=true;
+  if(MBK==='clone'){const P=cloneProfile();if(P.n<10){ok=false;line='分身を作るには、自分の対局が10局以上必要です（いま '+P.n+' 局）'}else line='あなたの指し方、覚えたよ。'+P.n+'局ぶん'}
+  else{const W=weakList();if(!W.ops.length){ok=false;line='同じ戦型を3局以上指すと、苦手が分かります'}else{const t=W.ops[0];line='「'+t.name+'」で来るよ。あなたは'+(t.me===1?'黒':'白')}}
+  tx.append(h,el('div','bub',line));pk.append(mbAv(MBK,true),tx);if(go){go.textContent=mbName(MBK)+' と対局';go.disabled=!ok}}
+function stMbStart(k){if(k==='clone'){const P=cloneProfile();if(P.n<10)return;const lv=P.acc==null?3:P.acc>=80?3:P.acc>=60?2:1;startMb('clone',typeof pickSide==='function'?pickSide():1,{lv,state:{mbBook:P.book,mbAcc:P.acc}})}
+  else{const t=weakList().ops[0];if(!t)return;startMb('weak',t.me,{lv:WK_LV.v||3,state:{mbSeq:t.seq,mbOp:t.name}})}}
+window.bocchStHook=()=>{try{stMbSync()}catch(e){}};
+{const lv=$('stLv');if(lv)lv.addEventListener('click',()=>{MBK=null},true);const sm=$('stMode');if(sm)sm.addEventListener('click',()=>{MBK=null},true);
+ const go=$('stGo');if(go)go.addEventListener('click',e=>{if(!MBK||(window.bocchSt&&window.bocchSt.mode()!=='cpu'))return;e.stopImmediatePropagation();stMbStart(MBK)},true)}
+// 履歴タブ：上に「成績の分析」「ノート」
+function hsMb(){const L=$('histList');if(!L)return;let box=$('hsMb');if(!mbShow()){if(box)box.remove();return}
+  if(!box){box=el('div','hs-mb');box.id='hsMb';L.before(box)}box.replaceChildren();
+  const gs=myGames(),wr=gs.length?Math.round(gs.filter(g=>g.win===g.me).length/gs.length*100):null,nn=ntLoad().length;
+  for(const [k,t,sub,desc,fn] of [['hs-st','成績の分析',wr==null?'対局するとわかります':'勝率 '+wr+'%・'+gs.length+'局','戦型・先手後手・時間帯ごとの勝率、正確度、悪手の推移。',()=>{show('mstats');renderStats()}],['hs-nt','ノート','保存した局面 '+nn,'感想戦で保存した局面とメモ。押すとその局面から検討やCPU対局ができます。',()=>{show('notes');renderNotes()}]]){
+    const b=el('button','hs-tl');b.type='button';b.append(el('b','',t),el('span','',sub));if(mbLocked())b.append(lockTag());const d=nwDot(k);if(d)b.append(d);
+    b.onclick=()=>{markSeen(k);if(mbLocked()){mbTease(t,desc);return}fn()};box.append(b)}}
+// アカウントの設定：「盤の色」
+function pfMb(){const grp=[...document.querySelectorAll('.pf-grp')].find(g=>{const h=g.querySelector('h4');return h&&h.textContent.trim()==='設定'});if(!grp)return;let r=$('pfTheme');
+  if(!mbShow()){if(r)r.remove();return}
+  if(!r){r=el('button','pf-row');r.type='button';r.id='pfTheme';const h=grp.querySelector('h4');const first=h.nextElementSibling;(first&&first.nextElementSibling?first.nextElementSibling:h).after(r)}
+  r.replaceChildren();let cur='';try{cur=localStorage.getItem('bocch-theme')||''}catch(e){}const t=THM.find(x=>x[0]===cur)||THM[0];
+  const v=el('span','pf-v');const sw=el('i','pf-sw');sw.style.background='linear-gradient(135deg,'+t[2]+' 50%,'+t[3]+' 50%)';v.append(sw,document.createTextNode(t[1]));
+  r.append(el('span','pf-l','盤の色'));if(mbLocked())r.append(lockTag());const d=nwDot('pf-th');if(d)r.append(d);r.append(v,el('span','pf-ch','›'));
+  r.onclick=()=>{markSeen('pf-th');if(mbLocked()){mbTease('盤の色','対局・感想戦・動画の盤の色を、フォンク動画と同じ5色から選べます。');return}show('mtheme');renderTheme()}}
+// フレンド：相手ごとに「挑戦状を送る」
+window.bocchChalBtn=f=>{if(!mbShow())return null;const b=el('button','fr-chal');b.type='button';b.append(document.createTextNode('挑戦状を送る'));if(mbLocked())b.append(lockTag());const d=nwDot('fr-chal');if(d)b.append(d);
+  b.onclick=()=>{markSeen('fr-chal');if(mbLocked()){mbTease('分身への挑戦状','あなたの分身CPUと、フレンドに対局してもらえます。結果はメールに届きます。');return}
+    const P=cloneProfile();if(P.n<10){alert('分身を作るには、自分の対局が10局以上必要です（いま '+P.n+' 局）');return}const lv=P.acc==null?3:P.acc>=80?3:P.acc>=60?2:1;chalSend(f,P,lv,b)};return b};
+// 会員ページ：「会員でない人の見え方」（持ち主の確認用）
+function mbPrevRow(){const L=$('mbList');if(!L)return;let r=$('mbPrev');if(!r){r=el('div','mb-prev');r.id='mbPrev';L.after(r)}r.replaceChildren();
+  const sw=el('button','ms-sw2');sw.type='button';sw.setAttribute('role','switch');sw.setAttribute('aria-checked',String(MB.prev));sw.append(el('span','','会員でない人の見え方'),el('i'));
+  sw.onclick=()=>{MB.prev=!MB.prev;mbPrevRow();mbAll()};r.append(sw,el('p','ms-cap','入れると、会員の機能の入口が、会員でない人と同じ「会員」の札付きの見え方になります（確認用。ほかの人には影響しません）'))}
+function mbAll(){for(const f of [stMb,stMbSync,hsMb,pfMb]){try{f()}catch(e){}}try{if(CUR==='friends')frRender()}catch(e){}}
+for(const [sel,f] of [['[data-scr="setup"]',()=>{stMb();stMbSync()}],['[data-scr="history"]',hsMb],['[data-scr="profile"]',pfMb],['[data-scr="member"]',mbPrevRow]]){const sc=document.querySelector(sel);if(sc)new MutationObserver(()=>{if(!sc.hidden){try{f()}catch(e){}}}).observe(sc,{attributes:true,attributeFilter:['hidden']})}
+{let was=null;setInterval(()=>{if(was!==MB.own){was=MB.own;mbAll()}},1500)}
 })();
 </script>
 <script>
@@ -6493,7 +6580,8 @@ function stSync(){LS.set('bocch-stm',STM);LS.set('bocch-stl',String(STL));
   const cur=document.querySelector('#sideSeg [aria-pressed="true"]'),sd=cur?cur.dataset.side:'b';
   $('stSide').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.side===sd?'true':'false'));
   $('stGo').textContent=STM==='cpu'&&CPU_BY[STL]?T(CPU_BY[STL].n+' と対局'):T(STM==='fr'?'部屋を作る':'対局する');
-  const on=$('onlineNow');$('stOnline').textContent=on&&!on.hidden?on.textContent:''}
+  const on=$('onlineNow');$('stOnline').textContent=on&&!on.hidden?on.textContent:'';try{window.bocchStHook&&window.bocchStHook()}catch(e){}}
+window.bocchSt={mode:()=>STM,sync:()=>stSync()};
 $('stMode').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;STM=b.dataset.m;stSync()});
 $('stLv').addEventListener('click',e=>{const b=e.target.closest('[data-lv]');if(!b)return;STL=+b.dataset.lv;stSync()});
 /* CPUの10人のカード */
