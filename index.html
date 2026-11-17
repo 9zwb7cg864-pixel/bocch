@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="周りの石の数だけ跳ぶ、読み合いの対戦ボードゲーム。無料・登録なしで、リンクを送るだけで友だちと対戦できます。">
 <meta name="twitter:image" content="https://bocchgame.com/og.jpg?v=2">
 <meta name="description" content="ひとりぼっちの石は動けない。向こう岸に2つそろえば勝ちの対戦ボードゲーム。">
-<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=63"><\/script>')})();</script>
+<script>/* 言語：?lang= → 選んだ言語 → 端末の言語の順に決める。日本語以外は i18n.js で表示を訳す */(function(){var L='ja';try{var mp=function(x){x=String(x||'').toLowerCase();if(!x)return null;if(x.indexOf('ja')===0)return 'ja';if(x.indexOf('zh')===0)return /tw|hk|mo|hant/.test(x)?'zh-Hant':'zh-Hans';if(x.indexOf('ko')===0)return 'ko';if(x.indexOf('es')===0)return 'es';if(x.indexOf('de')===0)return 'de';if(x.indexOf('en')===0)return 'en';return null};var n=mp((navigator.languages&&navigator.languages[0])||navigator.language)||'en';if(n!=='ja'){/* アプリ内ブラウザ（noteなど）は日本語の端末でも英語を名乗ることがある：言語の一覧に日本語があるか、時間帯が日本なら日本語 */var ls=(navigator.languages||[]).concat(navigator.language||[]);var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||''}catch(e){}if(ls.some(function(x){return mp(x)==='ja'})||tz==='Asia/Tokyo')n='ja'}L=n;var q=mp(new URLSearchParams(location.search).get('lang'));if(q)L=q;try{if(q)localStorage.setItem('bocch-lang',q);var s=mp(localStorage.getItem('bocch-lang'));L=q||s||n}catch(e){}}catch(e){}window.BOCCH_LANG=L;document.documentElement.lang=L;if(L!=='ja')document.write('<script src="i18n.js?v=64"><\/script>')})();</script>
 <script>/* 以前ログインした端末は、ログイン用の部品を最初に並行して読み始める */try{if(localStorage.getItem('bocch-acct')==='1')['app','auth','firestore'].forEach(n=>{const l=document.createElement('link');l.rel='preload';l.as='script';l.href='https://www.gstatic.com/firebasejs/10.12.2/firebase-'+n+'-compat.js';document.head.appendChild(l)})}catch(e){}</script>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="okiba-verification" content="okiba-f3580ee76aa15be445fb8e159f99074d">
@@ -1896,6 +1896,19 @@ body.tabs-on .scr{padding-bottom:124px}
 .ml-seg em{font-style:normal;display:inline-block;min-width:18px;height:18px;line-height:18px;padding:0 5px;margin-left:6px;border-radius:9px;background:#ff4d4d;color:#fff;font-size:11px;vertical-align:1px}
 .ml-seg em[hidden]{display:none}
 .ml-it{background:var(--p1);border-radius:14px;margin-bottom:10px;overflow:hidden}
+/* ホームのバナー（画像。横に流れ、押すとその先へ。中身は下の BANNERS で決める） */
+.hm-bn{position:relative;border-radius:16px;overflow:hidden;background:#1d1e21;box-shadow:var(--cardsh);aspect-ratio:10/3}
+.hm-bn-tr{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.hm-bn-tr::-webkit-scrollbar{display:none}
+.hm-bn-s{flex:0 0 100%;height:100%;scroll-snap-align:start;display:block}
+.hm-bn-s img{display:block;width:100%;height:100%;object-fit:cover;-webkit-user-drag:none;user-select:none}
+.hm-bn-a{position:absolute;top:50%;transform:translateY(-50%);width:26px;height:26px;min-height:0;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.38);color:#fff;border:0}
+.hm-bn-a.l{left:5px}.hm-bn-a.r{right:5px}
+.hm-bn-a svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.hm-bn.one .hm-bn-a,.hm-bn.one .hm-bn-d{display:none}
+.hm-bn-d{position:absolute;left:0;right:0;bottom:6px;display:flex;justify-content:center;gap:5px;pointer-events:none}
+.hm-bn-d i{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.35);transition:width .25s,background .25s}
+.hm-bn-d i.on{width:14px;background:#fff}
 .ml-h{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:12px 14px;background:none;border-radius:0;text-align:left;font-size:15px;font-weight:700;color:var(--fg,#fff)}
 .ml-h b{flex:1;min-width:0}
 .ml-dot{width:8px;height:8px;border-radius:50%;background:var(--acc);flex:none}
@@ -2193,7 +2206,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.11</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.12</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -2202,6 +2215,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
     </div>
     <button class="hm-chp" id="hmChamp" data-go="rank" type="button" hidden><svg class="cr" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18 L5 8 L9.5 12 L12 5 L14.5 12 L19 8 L21 18 Z" fill="#e9c46a" stroke="#8a6a3a" stroke-width="1" stroke-linejoin="round"/><rect x="3" y="18" width="18" height="2.4" rx="1" fill="#c9a24e"/></svg><small id="hmChampM"></small><b id="hmChampN" class="no-i18n"></b><span class="hm-cst"><span class="stone b" id="hmChampS"></span></span><em id="hmChampL"></em><svg class="chv" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
 
+    <div class="hm-bn" id="hmBn" hidden><div class="hm-bn-tr" id="hmBnT"></div><button class="hm-bn-a l" id="hmBnP" type="button" aria-label="前へ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><button class="hm-bn-a r" id="hmBnN" type="button" aria-label="次へ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button><div class="hm-bn-d" id="hmBnD"></div></div>
     <div class="hm-box">
       <div class="hm-qh">すぐ対局</div>
       <div class="hm-modes" id="hmModes"><button type="button" data-qm="rand" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><span>ランダム</span></button><button type="button" data-qm="cpu" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="7" width="14" height="11" rx="3"/><path d="M12 3v4M9 12h.01M15 12h.01"/></svg><span>CPU</span></button><button type="button" data-qm="fr" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M17 8v6M14 11h6"/></svg><span>友だち</span></button></div>
@@ -6211,6 +6225,31 @@ document.querySelectorAll('[data-go="mail"]').forEach(b=>b.addEventListener('cli
 if(typeof frBadge==='function'){const _b=frBadge;frBadge=function(){_b.apply(this,arguments);try{render()}catch(e){}}}
 setTimeout(load,2500);setInterval(()=>{if(!document.hidden)load()},15*60*1000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-ML.loadedAt>5*60*1000)load()});
+})();
+</script>
+<script>
+/* ホームのバナー：画像を横に流す（5秒ごとに次へ・指で送る・左右の矢印・点）。押すとその先を開く。
+   足すときは BANNERS に1行足す。画像は ui/banner/<名前>-<言語>.webp（1200×360）を全言語分置く。from/to（年-月-日）で出す期間を決められる */
+(function(){
+const BANNERS=[
+  {id:'discord',img:'discord',url:'https://discord.gg/hKm7UVFgG',alt:'bocch Discord'},
+];
+const W=document.getElementById('hmBn'),tr=document.getElementById('hmBnT'),D=document.getElementById('hmBnD');if(!W)return;
+const L=window.BOCCH_LANG||'ja',now=Date.now();
+const list=BANNERS.filter(b=>(!b.from||now>=Date.parse(b.from))&&(!b.to||now<Date.parse(b.to)+864e5));
+if(!list.length)return;
+let i=0,hold=0;
+list.forEach(b=>{const a=document.createElement('a');a.className='hm-bn-s';a.href=b.url;if(/^https?:/.test(b.url)){a.target='_blank';a.rel='noopener'}
+  const im=document.createElement('img');im.src='ui/banner/'+b.img+'-'+L+'.webp';im.alt=b.alt||'';im.decoding='async';im.width=1200;im.height=360;
+  im.onerror=()=>{if(!im.dataset.f){im.dataset.f=1;im.src='ui/banner/'+b.img+'-en.webp'}};a.append(im);tr.append(a);D.append(document.createElement('i'))});
+W.classList.toggle('one',list.length<2);W.hidden=false;
+const dots=()=>[...D.children].forEach((d,j)=>d.classList.toggle('on',j===i));dots();
+const go=(n,sm)=>{i=(n+list.length)%list.length;tr.scrollTo({left:i*tr.clientWidth,behavior:sm===false?'auto':'smooth'});dots()};
+let st=0;tr.addEventListener('scroll',()=>{clearTimeout(st);st=setTimeout(()=>{const n=Math.round(tr.scrollLeft/Math.max(1,tr.clientWidth));if(n!==i){i=n;dots()}},90)},{passive:true});
+const h=()=>{hold=Date.now()+8000};['pointerdown','touchstart','wheel'].forEach(e=>tr.addEventListener(e,h,{passive:true}));
+document.getElementById('hmBnP').onclick=()=>{h();go(i-1)};document.getElementById('hmBnN').onclick=()=>{h();go(i+1)};
+addEventListener('resize',()=>go(i,false));
+if(list.length>1)setInterval(()=>{if(document.hidden||Date.now()<hold||!W.offsetParent)return;go(i+1)},5000);
 })();
 </script>
 <script>

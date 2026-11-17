@@ -47,6 +47,7 @@ function tr(s){
   var m=s.match(/^([\s　]*)([\s\S]*?)([\s　]*)$/),a=m[1],c=m[2],z=m[3],r=s;
   if(c){var t=core(c);if(t!=null)r=a.replace(/　/g,' ')+t+z.replace(/　/g,' ')}
   cache.set(s,r);return r}
+Object.assign(D,{"前へ": ["Previous", "上一个", "上一個", "이전", "Anterior", "Zurück"]});
 window.bocchT=tr;
 var SKIP='#chatLog,script,style,textarea,.no-i18n,#langSel';
 var OUT=new WeakMap();
