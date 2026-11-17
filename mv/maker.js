@@ -313,10 +313,20 @@ ${o&&o.pro?`<div class="opt pro"><div><label for="bmvFmt">★ ${T('形')}</label
   function proOut(opt){if(!opt)return null;const fmt=opt.fmt||'v',W2=fmt==='h'?1920:1080,H2=fmt==='sq'?1080:fmt==='h'?1080:1920;if(fmt==='v'&&!opt.t1&&!opt.t2)return null;
     const oc=document.createElement('canvas');oc.width=W2;oc.height=H2;const x=oc.getContext('2d');
     const txt=(s2,y,size,col)=>{x.font='900 '+size+'px "Hiragino Sans","Noto Sans JP",system-ui,sans-serif';x.textAlign='center';x.textBaseline='middle';x.lineJoin='round';x.lineWidth=size*0.16;x.strokeStyle='rgba(0,0,0,.85)';x.strokeText(s2,W2/2,y,W2*0.92);x.fillStyle=col;x.fillText(s2,W2/2,y,W2*0.92)};
-    return {c:oc,draw(){x.clearRect(0,0,W2,H2);if(fmt!=='v'){const k=Math.max(W2/1080,H2/1920);x.save();x.filter='blur(28px) brightness(.45)';x.drawImage(CV,(W2-1080*k)/2,(H2-1920*k)/2,1080*k,1920*k);x.restore();
-        const f=H2/1920,w=1080*f;x.drawImage(CV,(W2-w)/2,0,w,H2)}else x.drawImage(CV,0,0);
-      if(opt.t1||opt.t2){const big=fmt==='v'?78:60;const g2=x.createLinearGradient(0,0,0,big*3.4);g2.addColorStop(0,'rgba(0,0,0,.7)');g2.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g2;x.fillRect(0,0,W2,big*3.4);
-        if(opt.t1)txt(opt.t1,big*1.05,big,'#ffffff');if(opt.t2)txt(opt.t2,big*(opt.t1?2.1:1.05),Math.round(big*0.6),'#e6c46a')}}}}
+    // 正方形・横長：盤のまわり（縦長の画面の y=560〜1640）を正方形に切り出して真ん中に置く。
+    // 背景のぼかしは ctx.filter を使わない（iPhoneで効かない）。小さく縮めてから引き伸ばしてぼかす
+    const hasT=!!(opt.t1||opt.t2),SQ={x:0,y:560,s:1080},tiny=document.createElement('canvas');tiny.width=24;tiny.height=24;const tx=tiny.getContext('2d');
+    const band=fmt==='v'?0:hasT?(opt.t1&&opt.t2?170:120):0,size=fmt==='v'?0:Math.min(W2,H2-band-(hasT?24:0)),ox=(W2-size)/2,oy=band+(H2-band-size)/2;
+    return {c:oc,draw(){x.clearRect(0,0,W2,H2);
+      if(fmt!=='v'){tx.imageSmoothingEnabled=true;tx.drawImage(CV,SQ.x,SQ.y,SQ.s,SQ.s,0,0,24,24);x.imageSmoothingEnabled=true;x.imageSmoothingQuality='high';x.drawImage(tiny,0,0,24,24,-W2*0.05,-H2*0.05,W2*1.1,H2*1.1);
+        x.fillStyle='rgba(8,8,12,.55)';x.fillRect(0,0,W2,H2);
+        if(size<W2||size<H2){x.save();x.shadowColor='rgba(0,0,0,.6)';x.shadowBlur=40;x.fillStyle='#000';x.fillRect(ox,oy,size,size);x.restore()}
+        x.drawImage(CV,SQ.x,SQ.y,SQ.s,SQ.s,ox,oy,size,size)}
+      else x.drawImage(CV,0,0);
+      if(hasT){const big=fmt==='v'?78:fmt==='h'?62:54;
+        if(fmt==='v'){const g2=x.createLinearGradient(0,0,0,big*3.4);g2.addColorStop(0,'rgba(0,0,0,.7)');g2.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g2;x.fillRect(0,0,W2,big*3.4)}
+        const y1=fmt==='v'?big*1.05:(opt.t2&&opt.t1?band*0.36:band*0.52),y2=fmt==='v'?big*(opt.t1?2.1:1.05):(opt.t1?band*0.76:band*0.52);
+        if(opt.t1)txt(opt.t1,y1,big,'#ffffff');if(opt.t2)txt(opt.t2,y2,Math.round(big*(opt.t1?0.6:0.8)),'#e6c46a')}}}}
   async function encodeWC(buf,S0,TT,me,opt){
     const PO=proOut(opt),SRC=PO?PO.c:CV,FPS=opt&&opt.fps>30?60:30;
     const v=await wcVideoCfg(SRC.width,SRC.height,FPS);if(!v)return null;
@@ -357,8 +367,10 @@ ${o&&o.pro?`<div class="opt pro"><div><label for="bmvFmt">★ ${T('形')}</label
       opt={fmt:q('bmvFmt').value,fps:+q('bmvFps').value,t1:q('bmvT1').value.trim(),t2:q('bmvT2').value.trim()};try{localStorage.setItem('bocch-mvpro',JSON.stringify({fmt:opt.fmt,fps:opt.fps}))}catch(e){}}
     return {S0,TT,opt}}
   // 合成した画面を、盤の画面の代わりに見せる（プレビュー中・録画中だけ）
-  function showPO(PO){if(!PO)return ()=>{};const c=PO.c,cs=getComputedStyle(CV);c.style.cssText='display:block;max-width:100%;max-height:'+(CV.getBoundingClientRect().height||cs.maxHeight)+'px;margin:0 auto;border-radius:'+cs.borderRadius;
-    if(c.width>c.height)c.style.width=Math.min(CV.parentNode.clientWidth||CV.getBoundingClientRect().width*2,9999)+'px';else c.style.height=(CV.getBoundingClientRect().height||400)+'px';
+  function showPO(PO){if(!PO)return ()=>{};const c=PO.c,cs=getComputedStyle(CV),r=CV.getBoundingClientRect(),W=r.width||CV.parentNode.clientWidth||320,H=r.height||W*16/9;
+    // 縦横の比率を保ったまま、今の盤の画面の枠に収める
+    const k=Math.min(W/c.width,H/c.height,(CV.parentNode.clientWidth||W)/c.width);c.style.cssText='display:block;margin:0 auto;width:'+Math.round(c.width*k)+'px;height:'+Math.round(c.height*k)+'px;border-radius:'+cs.borderRadius;
+    if(c.width>=c.height){const k2=(CV.parentNode.clientWidth||W)/c.width;c.style.width=Math.round(c.width*k2)+'px';c.style.height=Math.round(c.height*k2)+'px'}
     CV.after(c);CV.style.display='none';return ()=>{try{c.remove()}catch(e){}CV.style.display=''}}
   async function run(record){if(busy){if(curBtn===(record?'bmvMake':'bmvPrev'))stopRun();return}busy=true;const me=UI;curBtn=record?'bmvMake':'bmvPrev';q('bmvPrev').disabled=q('bmvMake').disabled=q('bmvTh').disabled=q('bmvCam').disabled=true;
     {const b=q(curBtn);b.disabled=false;b.textContent='■ '+T(record?'やめる':'止める')}

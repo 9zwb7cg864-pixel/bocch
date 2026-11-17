@@ -1997,7 +1997,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 /* 感想戦：まとめ／振り返りのタブ、手順の帯、下の固定ボタン、その他メニュー */
 .rv-tabs{margin:0 0 12px}
 [data-scr=review]{padding-bottom:96px}
-[data-scr=review][data-rvt=sum] :is(#msMode,#revBW,.rev-nav,#msTip,#ntSave,#revMv,#revShare2,.rev-cpu,.rev-info,.chks,#revList,#rvStrip){display:none!important}
+[data-scr=review][data-rvt=sum] :is(#msMode,#revBW,.rev-nav,#msTip,#ntSave,#revShare2,.rev-cpu,.rev-info,.chks,#revList,#rvStrip){display:none!important}
 [data-scr=review][data-rvt=play] :is(#revSum,#revGraphBox,#rvTable,#rvStart,#deepBox,.rev-nav,#revMv,#revShare2,.rev-cpu,.chks,#revList,#msMode,#revHead){display:none!important}
 [data-scr=review][data-rvt=play] #ntOpen{display:none}
 [data-scr=review][data-rvt=play] .ad-slot{display:none!important}
@@ -2064,13 +2064,15 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 .pf-acct:has(#acctOut[hidden]) .acct-h,.pf-acct:has(#acctOut[hidden]) #acctLead{display:none}
 .pf-grp>.kf-chip-prof{border-radius:0!important;background:none!important;box-shadow:none!important;border:0!important;border-top:1px solid rgba(255,255,255,.07)!important;margin:0!important;padding:12px 22px!important;width:100%;min-height:52px}
 
+[data-scr=review][data-rvt=sum] #revMv{margin-top:12px}
+
 </style>
 </head>
 <body>
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.04</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.05</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -2333,7 +2335,6 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
       <div class="nt-chips" id="ntChips"><button type="button" data-t="定跡">定跡</button><button type="button" data-t="詰み">詰み</button><button type="button" data-t="失敗">失敗</button><button type="button" data-t="そのほか" aria-pressed="true">そのほか</button></div>
       <div class="nt-row"><button type="button" id="ntCancel">やめる</button><button type="button" class="primary" id="ntDo">保存</button></div></div>
     <p class="nt-msg" id="ntMsg" hidden></p></div>
-  <button class="rev-mv" id="revMv" type="button" hidden><span class="rmv-ic" aria-hidden="true"></span><span class="rmv-tx"><b>動画を作る</b><small>この対局を、曲つきの縦型ショートに</small></span><span class="rmv-go" aria-hidden="true">›</span></button>
   <button class="rev-kshare" id="revShare2" type="button">棋譜を共有</button>
   <div class="row rev-cpu"><button id="revPlayCpu" class="i-play">この局面からCPUと対局</button></div>
   <div class="rev-info">
@@ -2346,6 +2347,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
   <div class="deep-box" id="deepBox"><button id="deepBtn" class="deep-btn"></button><p class="deep-note" id="deepNote"></p></div>
   <div class="rev-list" id="revList"></div>
   <button class="primary rv-start" id="rvStart" type="button">振り返りを始める</button>
+  <button class="rev-mv" id="revMv" type="button" hidden><span class="rmv-ic" aria-hidden="true"></span><span class="rmv-tx"><b>動画を作る</b><small>この対局を、曲つきの縦型ショートに</small></span><span class="rmv-go" aria-hidden="true">›</span></button>
   <nav class="rv-dock" id="rvDock" aria-label="感想戦の操作"><button type="button" id="rvBack" aria-label="1手戻る"><b>◀</b><span>戻る</span></button><button type="button" id="rvFwd" aria-label="1手進む"><b>▶</b><span>進む</span></button><button type="button" id="rvExp" hidden><b>⑂</b><span>検討</span></button><button type="button" id="rvSave" hidden><b>★</b><span>保存</span></button><button type="button" id="rvMore"><b>…</b><span>その他</span></button></nav>
   <div class="rv-menu" id="rvMenu" hidden><button type="button" data-m="mv">動画を作る</button><button type="button" data-m="share">棋譜を共有</button><button type="button" data-m="img">画像で共有</button><button type="button" data-m="cpu">この局面からCPUと対局</button><button type="button" data-m="best">最善手を盤に表示</button><button type="button" data-m="bad">悪手だけ追う</button><button type="button" data-m="deep">最強で深く再解析</button><button type="button" data-m="close" class="rv-mclose">閉じる</button></div>
   <div class="ad-slot" data-ad="rev" hidden aria-label="広告"></div>
@@ -4342,7 +4344,7 @@ function revWarn(t){REV.msg=t;clearTimeout(REV.msgT);REV.msgT=setTimeout(()=>{RE
 $('rgrid').addEventListener('click',e=>{const c=e.target.closest('.cell');if(!c)return;revCell(+c.id.slice(1))});
 /* 動画を作る：手が1つでもある対局ならすべて作れる。勝者と終わり方を渡す。本体（mv/maker.js）は押したときに読み込む */
 function mvOK(log){return !!(log&&log.length)}
-function mvOpen(log,win,why,me){const go=()=>window.BocchVideo.open({log,win,why,me,pro:!!(window.bocchMember&&window.bocchMember())});if(window.BocchVideo)return go();const sc=document.createElement('script');sc.src='mv/maker.js?v=14';sc.onload=go;sc.onerror=()=>alert((window.bocchT||(x=>x))('読み込めませんでした'));document.head.appendChild(sc)}
+function mvOpen(log,win,why,me){const go=()=>window.BocchVideo.open({log,win,why,me,pro:!!(window.bocchMember&&window.bocchMember())});if(window.BocchVideo)return go();const sc=document.createElement('script');sc.src='mv/maker.js?v=15';sc.onload=go;sc.onerror=()=>alert((window.bocchT||(x=>x))('読み込めませんでした'));document.head.appendChild(sc)}
 $('mvNow').addEventListener('click',()=>{if(S.over&&S.log)mvOpen(S.log.map(m=>[m[0],m[1]]),S.over.win,S.over.why,(()=>{try{return S.mode==='net'?colorOf(NET.me):S.mode===0?0:hcOf()}catch(e){return 0}})())});
 $('revMv').addEventListener('click',()=>{if(REV.g)mvOpen(REV.g.log.map(m=>[m[0],m[1]]),REV.g.win,REV.g.why,REV.g.me)});
 $('reviewNow').addEventListener('click',()=>{saveFinished();const id=currentGameId();if(id)openReview(id)});
@@ -6504,7 +6506,7 @@ function hmLive(){const el=$('hmLive'),h=$('hmLiveH');if(!el)return;const L=hwLi
   const bd=document.createElement('button');bd.type='button';bd.className='hc-board';bd.setAttribute('aria-label','観戦する');bd.append(miniB(e.b||startBoard(),{flip:e.flip,last:e.last}));if(!e.b)bd.classList.add('ld');bd.onclick=()=>hwOpen(e);
   const sd=document.createElement('div');sd.className='hc-side';const st=document.createElement('span');st.className='hw-st';st.textContent=e.n?e.n+'手目':'始まったところ';
   const top=document.createElement('div');top.className='hw-top';top.append(hwTag(e),st);
-  const go=document.createElement('button');go.type='button';go.className='hc-btn';go.textContent=L.length>1?'観戦リスト（'+L.length+'局）':'観戦リスト';go.onclick=()=>{const w=document.querySelector('[data-go="watch"]');if(w)w.click()};
+  const go=document.createElement('button');go.type='button';go.className='hc-btn';go.textContent=L.length>1?'観戦リスト（'+L.length+'局）':'観戦リスト';go.onclick=()=>{if(typeof startWatchList==='function'){show('watch');startWatchList()}else{const w=document.querySelector('[data-go="watch"]');if(w)w.click()}};
   sd.append(top,hwNames(e),go);el.append(bd,sd)}
 async function hwTick(force){if(HW.busy||document.hidden||(CUR!=='home'&&CUR!=='watch'))return;if(!force&&Date.now()-HW.at<25000)return;HW.busy=true;HW.at=Date.now();
   try{await Promise.all([hwLive(),hwFriends()]);const L=hwList().filter(e=>!e.fr&&e.room);const want=(CUR==='watch'?L.slice(0,8):L.slice(0,4));
