@@ -237,15 +237,18 @@ export class Topic extends DurableObject {
       const lang = Object.keys(LG).includes(b && b.lang) ? b.lang : "ja";
       if (!/^[A-Za-z0-9]{8,40}$/.test(u) || !name || !title || !Array.isArray(b.blocks)) return bad();
       const blocks = [];
-      for (const x of b.blocks.slice(0, 40)) {
-        if (x && x.k === "p") { const t = String(x.x || "").trim().slice(0, 3000); if (t) blocks.push({ k: "p", x: t }); }
+      // 部品：p 文章・h 見出し・lead 要点の枠・pt ポイントの枠・ul 箇条書き（1行1項目）・note 注（文字はすべて x）／b 盤の図
+      const TXT = { p: 3000, h: 80, lead: 600, pt: 1200, ul: 1500, note: 400 };
+      const cells = (a, n) => Array.isArray(a) ? [...new Set(a.filter(v => Number.isInteger(v) && v >= 0 && v < 36))].slice(0, n) : [];
+      for (const x of b.blocks.slice(0, 60)) {
+        if (x && TXT[x.k]) { const t = String(x.x || "").replace(/\r/g, "").trim().slice(0, TXT[x.k]); if (t) blocks.push({ k: x.k, x: t }); }
         else if (x && x.k === "b" && /^[012]{36}$/.test(String(x.pos || ""))) {
           const mv = Array.isArray(x.mv) && x.mv.length === 2 && x.mv.every(n => Number.isInteger(n) && n >= 0 && n < 36) ? x.mv : null;
           const ar = Array.isArray(x.ar) ? x.ar.filter(a => Array.isArray(a) && a.length === 2 && a.every(n => Number.isInteger(n) && n >= 0 && n < 36) && a[0] !== a[1]).slice(0, 12) : [];
-          blocks.push({ k: "b", pos: String(x.pos), mv, ar, cap: String(x.cap || "").trim().slice(0, 200) });
+          blocks.push({ k: "b", pos: String(x.pos), mv, ar, dt: cells(x.dt, 20), mk: cells(x.mk, 20), pair: !!x.pair, cap: String(x.cap || "").trim().slice(0, 200) });
         }
       }
-      if (!blocks.some(x => x.k === "p")) return bad();
+      if (!blocks.some(x => x.k !== "b")) return bad();
       // 同じ人の確認待ちは5本まで。書き直し（id 指定）は確認待ちか差し戻しのものだけ
       let id = String(b.id || "");
       if (id) { const o = await st.get("p:" + id); if (!o || o.u !== u || o.st === "pub") return bad(); }
@@ -271,7 +274,7 @@ export class Topic extends DurableObject {
     if (action === "pget" && req.method === "GET") {
       const p = await st.get("p:" + String(url.searchParams.get("id") || ""));
       if (!p || p.st !== "pub") return new Response("not found\n", { status: 404, headers: h });
-      return J({ ...pub(p), blocks: p.blocks.map(x => x.k === "b" ? { k: "b", pos: x.pos, mv: x.mv, ar: x.ar || [] } : { k: "p" }) });
+      return J({ ...pub(p), blocks: p.blocks.map(x => x.k === "b" ? { k: "b", pos: x.pos, mv: x.mv, ar: x.ar || [], dt: x.dt || [], mk: x.mk || [], pair: !!x.pair } : { k: x.k }) });
     }
     if (action === "pq" || action === "prev") {
       if (!(await this.passOk(req))) { await new Promise(r => setTimeout(r, 800)); return new Response("forbidden\n", { status: 401, headers: h }); }
@@ -282,7 +285,7 @@ export class Topic extends DurableObject {
           if (p.lang === "ja") return;
           try {
             const sl = LG[p.lang];
-            p.ja = { title: await gtx(p.title, "ja", sl), blocks: await Promise.all(p.blocks.map(async x => x.k === "p" ? { k: "p", x: await tx(x.x, "ja", sl) } : { ...x, cap: x.cap ? await tx(x.cap, "ja", sl) : "" })) };
+            p.ja = { title: await gtx(p.title, "ja", sl), blocks: await Promise.all(p.blocks.map(async x => x.k !== "b" ? { k: x.k, x: await tx(x.x, "ja", sl) } : { ...x, cap: x.cap ? await tx(x.cap, "ja", sl) : "" })) };
           } catch (e) {}
         }));
         return J(q);
@@ -296,10 +299,10 @@ export class Topic extends DurableObject {
         if (act === "pub") {
           const sl = LG[p.lang], tr = {};
           await Promise.all(Object.entries(LG).map(async ([k, tl]) => {
-            if (k === p.lang) { tr[k] = { t: p.title, b: p.blocks.map(x => x.k === "p" ? x.x : x.cap || "") }; return; }
+            if (k === p.lang) { tr[k] = { t: p.title, b: p.blocks.map(x => x.k !== "b" ? x.x : x.cap || "") }; return; }
             try {
               const t = await gtx(p.title, tl, sl);
-              const bb = await Promise.all(p.blocks.map(async x => { const s0 = x.k === "p" ? x.x : x.cap || ""; return s0 ? (await tx(s0, tl, sl)) || s0 : ""; }));
+              const bb = await Promise.all(p.blocks.map(async x => { const s0 = x.k !== "b" ? x.x : x.cap || ""; return s0 ? (await tx(s0, tl, sl)) || s0 : ""; }));
               tr[k] = { t: t || p.title, b: bb, auto: 1 };
             } catch (e) {}
           }));
