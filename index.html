@@ -2121,13 +2121,21 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 .st-mb .mb-lock{position:static;display:inline-block;margin-top:4px}
 .sp-info{font-size:13px;line-height:1.6;color:var(--sub,#c3c8d4);margin-top:4px}
 
+/* タブバー：くぼみの帯と玉を transform で動かす（軽くする） */
+.tabbar .tb-bg{position:absolute;inset:0;border-radius:20px;overflow:hidden;z-index:-1;pointer-events:none;box-shadow:0 8px 18px rgba(0,0,0,.45);background:transparent;isolation:isolate;transform:translateZ(0)}
+.tabbar svg.tb-shape{position:absolute!important;left:0;top:0;inset:auto!important;max-width:none!important;filter:none!important;z-index:auto!important;will-change:transform;transform:translate3d(0,0,0)}
+.tabbar .tb-orb{left:0!important;will-change:transform}
+.tabbar.tb-anim svg.tb-shape,.tabbar.tb-anim .tb-orb{transition:transform .32s cubic-bezier(.22,1,.36,1)}
+@media (prefers-reduced-motion:reduce){.tabbar.tb-anim svg.tb-shape,.tabbar.tb-anim .tb-orb{transition:none}}
+.tabbar svg.tb-shape,.tabbar svg.tb-shape path{fill:#26272c!important}
+
 </style>
 </head>
 <body>
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.09</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.10</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -2674,23 +2682,28 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
   <button type="button" data-tab="profile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg><span>アカウント</span></button>
 </nav>
 <script>
-/* タブバーのくぼみ（ノッチ） */
+/* タブバーのくぼみ（ノッチ）
+   形は大きさが変わったときだけ描く（横に2倍の長さの帯の真ん中にくぼみ）。
+   動かすときは帯と玉を transform で横にずらすだけ（GPUで動くので、画面の切り替えと重なっても止まらない） */
 (function(){var nav=document.getElementById('tabbar');if(!nav)return;var NS='http://www.w3.org/2000/svg';
- var sv=document.createElementNS(NS,'svg');sv.setAttribute('class','tb-shape');sv.setAttribute('aria-hidden','true');var pa=document.createElementNS(NS,'path');sv.appendChild(pa);nav.insertBefore(sv,nav.firstChild);
+ var bg=document.createElement('div');bg.className='tb-bg';bg.setAttribute('aria-hidden','true');
+ var sv=document.createElementNS(NS,'svg');sv.setAttribute('class','tb-shape');var pa=document.createElementNS(NS,'path');sv.appendChild(pa);bg.appendChild(sv);nav.insertBefore(bg,nav.firstChild);
  var orb=document.createElement('div');orb.className='tb-orb';orb.setAttribute('aria-hidden','true');nav.appendChild(orb);
- var bs=[].slice.call(nav.querySelectorAll('button')),x=null,cur=-1,raf=0;
- function shape(w,h,c){var R=33,d=34,a=c-R-6,b=c+R+6,r=Math.max(2,Math.min(20,a,w-b));return 'M'+r+',0 L'+a+',0 C'+(c-R+2)+',0 '+(c-R+2)+','+d+' '+c+','+d+' C'+(c+R-2)+','+d+' '+(c+R-2)+',0 '+b+',0 L'+(w-r)+',0 Q'+w+',0 '+w+','+r+' L'+w+','+(h-r)+' Q'+w+','+h+' '+(w-r)+','+h+' L'+r+','+h+' Q0,'+h+' 0,'+(h-r)+' L0,'+r+' Q0,0 '+r+',0 Z'}
- function draw(c){var w=nav.clientWidth,h=nav.clientHeight;if(!w)return;pa.setAttribute('d',shape(w,h,c));orb.style.left=c+'px'}
+ var bs=[].slice.call(nav.querySelectorAll('button')),cur=-1,W=0,H=0;
+ function build(){var w=nav.clientWidth,h=nav.clientHeight;if(!w)return false;if(w===W&&h===H)return true;W=w;H=h;
+  var R=33,d=34,c=w,a=c-R-6,b=c+R+6,L=2*w;sv.setAttribute('width',L);sv.setAttribute('height',h);sv.style.width=L+'px';sv.style.height=h+'px';sv.setAttribute('viewBox','0 0 '+L+' '+h);
+  pa.setAttribute('d','M0,0 L'+a+',0 C'+(c-R+2)+',0 '+(c-R+2)+','+d+' '+c+','+d+' C'+(c+R-2)+','+d+' '+(c+R-2)+',0 '+b+',0 L'+L+',0 L'+L+','+h+' L0,'+h+' Z');return true}
  function cx(i){var b=bs[i];return b.offsetLeft+b.offsetWidth/2}
- function sync(anim){var i=-1;bs.forEach(function(b,j){if(b.getAttribute('aria-current')==='page')i=j});if(i<0)i=cur<0?0:cur;
-  if(i!==cur){var s=bs[i].querySelector('svg');orb.innerHTML=s?s.outerHTML:''}
-  var to=cx(i),from=(x==null||!anim||i===cur)?to:x;cur=i;cancelAnimationFrame(raf);
-  var D=(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)?0:320,t0=performance.now();
-  (function f(now){var u=D?Math.min(1,(now-t0)/D):1,e=1-Math.pow(1-u,3);x=from+(to-from)*e;draw(x);if(u<1)raf=requestAnimationFrame(f)})(t0)}
+ function place(c,anim){nav.classList.toggle('tb-anim',!!anim);sv.style.transform='translate3d('+(c-W)+'px,0,0)';orb.style.transform='translate3d('+c+'px,0,0)'}
+ function sync(anim){if(!build())return;var i=-1;bs.forEach(function(b,j){if(b.getAttribute('aria-current')==='page')i=j});if(i<0)i=cur<0?0:cur;
+  if(i!==cur){var s=bs[i].querySelector('svg');orb.innerHTML=s?s.outerHTML:''}var moved=i!==cur;cur=i;place(cx(i),anim&&moved)}
  new MutationObserver(function(){sync(true)}).observe(nav,{subtree:true,attributes:true,attributeFilter:['aria-current']});
  new MutationObserver(function(){sync(false)}).observe(document.body,{attributes:true,attributeFilter:['class']});
- if(window.ResizeObserver)new ResizeObserver(function(){x=null;sync(false)}).observe(nav);
- sync(false)})();
+ if(window.ResizeObserver)new ResizeObserver(function(){W=0;sync(false)}).observe(nav);
+ sync(false);
+ var go=false;nav.addEventListener('click',function(e){if(go)return;var b=e.target.closest&&e.target.closest('[data-tab]');if(!b)return;
+  e.stopImmediatePropagation();bs.forEach(function(x){x.setAttribute('aria-current',x===b?'page':'false')});
+  requestAnimationFrame(function(){setTimeout(function(){go=true;try{b.click()}finally{go=false}},0)})},true)})();
 </script>
 
 <script id="eng">
@@ -6145,7 +6158,7 @@ const el=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=
 // ---- 会員ページ ----
 const BEN=[['成績の分析','戦型・先手後手・時間帯ごとの勝率、正確度、悪手の推移','mstats'],['検討','感想戦で別の手を試すと、相手の手をAIが指し返す','moshi'],
  ['局面の保存とメモ','感想戦で保存した、自分だけのノート','notes'],['週の成績レポート','毎週月曜の朝、メールに届く','report'],['自分の分身CPU','自分の指し方の癖を覚えたCPU','clone'],['あなたの天敵','苦手な形に持ち込んでくる','weak'],
- ['感想戦の深い解析','深く読み直して、評価が変わった手を一覧に','deep'],['コーチの会員メニュー','苦手の集中練習・定跡の授業の追加'],['動画づくりの上位版','形・文字入れ・区間・60コマ/秒','video'],
+ ['感想戦の深い解析','深く読み直して、評価が変わった手を一覧に','deep'],['動画づくりの上位版','形・文字入れ・区間・60コマ/秒','video'],
  ['盤の色','フォンク動画と同じ5色から選べる','theme'],['広告なし','広告が始まったら有効'],['支援者として名前を載せる','希望する人だけ']];
 function renderMember(){const L=$('mbList');L.replaceChildren();BEN.forEach((b,i)=>{const r=el(b[2]?'button':'div','mb-ben'+(b[2]?' on':''));if(b[2])r.type='button';
   r.append(el('span','mb-n',String(i+1)));const t=el('span','mb-t');t.append(el('b','',b[0]),el('small','',b[1]));r.append(t,el('em','mb-st '+(b[2]?'ok':'wip'),b[2]?'使える':'準備中'));
@@ -6532,7 +6545,7 @@ const g3=grp('アカウント');acct.classList.remove('card');acct.classList.add
 card.hidden=true;card.classList.add('pf-old');
 function vals(){try{rName.v.textContent=$('nameIn').value||(typeof myName==='function'?myName():'');const c=$('bdCount');rBd.v.textContent=c?c.textContent:''}catch(e){}}
 if(typeof renderProf==='function'){const _r=renderProf;renderProf=function(){const x=_r.apply(this,arguments);try{bdRender()}catch(e){}vals();return x}}
-new MutationObserver(()=>{if(!sec.hidden){try{renderProf()}catch(e){}}}).observe(sec,{attributes:true,attributeFilter:['hidden']});
+
 vals();setInterval(()=>{if(CUR==='profile')vals()},3000);
 })();
 </script>
