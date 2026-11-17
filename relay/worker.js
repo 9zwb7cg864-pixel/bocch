@@ -224,6 +224,8 @@ export class Topic extends DurableObject {
   // p:<id> = { id, u（アカウント）, name, lang, t（作った時刻）, st: "q" 確認待ち | "pub" 公開 | "back" 差し戻し, title, blocks, note, pt（公開した時刻）, tr（言語ごとの題名と本文） }
   // blocks は [{k:"p", x:文章}, {k:"b", pos:36文字の盤, mv:[from,to]（直前の手）, cap:ひとこと}]
   async posts(req, h, action, now) {
+    // マーカー（==ここ==）は翻訳の前に «» に置きかえ、訳したあとで戻す
+    const tx = async (q, tl, sl) => { const a = String(q).replace(/==([^=\n]+)==/g, "«$1»"); const o = await gtx(a, tl, sl); return o ? o.replace(/«([^»\n]+)»/g, "==$1==") : ""; };
     const st = this.ctx.storage, url = new URL(req.url), J = o => new Response(JSON.stringify(o), { headers: { ...h, "Content-Type": "application/json", "Cache-Control": "no-store" } });
     const bad = () => new Response("bad\n", { status: 400, headers: h });
     const LG = { ja: "ja", en: "en", "zh-Hans": "zh-CN", "zh-Hant": "zh-TW", ko: "ko", es: "es", de: "de" };
@@ -239,7 +241,8 @@ export class Topic extends DurableObject {
         if (x && x.k === "p") { const t = String(x.x || "").trim().slice(0, 3000); if (t) blocks.push({ k: "p", x: t }); }
         else if (x && x.k === "b" && /^[012]{36}$/.test(String(x.pos || ""))) {
           const mv = Array.isArray(x.mv) && x.mv.length === 2 && x.mv.every(n => Number.isInteger(n) && n >= 0 && n < 36) ? x.mv : null;
-          blocks.push({ k: "b", pos: String(x.pos), mv, cap: String(x.cap || "").trim().slice(0, 200) });
+          const ar = Array.isArray(x.ar) ? x.ar.filter(a => Array.isArray(a) && a.length === 2 && a.every(n => Number.isInteger(n) && n >= 0 && n < 36) && a[0] !== a[1]).slice(0, 12) : [];
+          blocks.push({ k: "b", pos: String(x.pos), mv, ar, cap: String(x.cap || "").trim().slice(0, 200) });
         }
       }
       if (!blocks.some(x => x.k === "p")) return bad();
@@ -268,7 +271,7 @@ export class Topic extends DurableObject {
     if (action === "pget" && req.method === "GET") {
       const p = await st.get("p:" + String(url.searchParams.get("id") || ""));
       if (!p || p.st !== "pub") return new Response("not found\n", { status: 404, headers: h });
-      return J({ ...pub(p), blocks: p.blocks.map(x => x.k === "b" ? { k: "b", pos: x.pos, mv: x.mv } : { k: "p" }) });
+      return J({ ...pub(p), blocks: p.blocks.map(x => x.k === "b" ? { k: "b", pos: x.pos, mv: x.mv, ar: x.ar || [] } : { k: "p" }) });
     }
     if (action === "pq" || action === "prev") {
       if (!(await this.passOk(req))) { await new Promise(r => setTimeout(r, 800)); return new Response("forbidden\n", { status: 401, headers: h }); }
@@ -279,7 +282,7 @@ export class Topic extends DurableObject {
           if (p.lang === "ja") return;
           try {
             const sl = LG[p.lang];
-            p.ja = { title: await gtx(p.title, "ja", sl), blocks: await Promise.all(p.blocks.map(async x => x.k === "p" ? { k: "p", x: await gtx(x.x, "ja", sl) } : { ...x, cap: x.cap ? await gtx(x.cap, "ja", sl) : "" })) };
+            p.ja = { title: await gtx(p.title, "ja", sl), blocks: await Promise.all(p.blocks.map(async x => x.k === "p" ? { k: "p", x: await tx(x.x, "ja", sl) } : { ...x, cap: x.cap ? await tx(x.cap, "ja", sl) : "" })) };
           } catch (e) {}
         }));
         return J(q);
@@ -296,7 +299,7 @@ export class Topic extends DurableObject {
             if (k === p.lang) { tr[k] = { t: p.title, b: p.blocks.map(x => x.k === "p" ? x.x : x.cap || "") }; return; }
             try {
               const t = await gtx(p.title, tl, sl);
-              const bb = await Promise.all(p.blocks.map(async x => { const s0 = x.k === "p" ? x.x : x.cap || ""; return s0 ? (await gtx(s0, tl, sl)) || s0 : ""; }));
+              const bb = await Promise.all(p.blocks.map(async x => { const s0 = x.k === "p" ? x.x : x.cap || ""; return s0 ? (await tx(s0, tl, sl)) || s0 : ""; }));
               tr[k] = { t: t || p.title, b: bb, auto: 1 };
             } catch (e) {}
           }));
