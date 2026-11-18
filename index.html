@@ -2233,7 +2233,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.30</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.31</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -7750,6 +7750,17 @@ $('prPub').onclick=()=>act('pub');$('prBack').onclick=()=>act('back');
 .hm-menu .ic3w{width:30px!important;height:30px!important;flex:none}
 .hm-menu span{font-size:15.5px!important;font-weight:700}
 .hm-menu .fr-badge{position:static!important;margin:0 0 0 2px!important}
+</style>
+<style>
+/* 現在の1位を目立たせる（v2.31）：金の王冠の丸、名前を大きく、2段組み */
+.hm .hm-chp,.hm-chp{display:grid!important;grid-template-columns:46px auto auto 1fr auto;grid-template-rows:auto auto;column-gap:8px;row-gap:0;align-items:center;padding:14px 2px!important}
+.hm-chp .cr{grid-row:1/3;grid-column:1;width:46px!important;height:46px!important;padding:10px!important;border-radius:50%!important;background:radial-gradient(circle at 35% 30%,#5a4a22,#2e2714)!important;box-shadow:0 0 0 1.5px #c9a24e inset}
+.hm-chp .cr path{fill:#e9c46a!important}.hm-chp .cr rect{fill:#c9a24e!important}
+.hm-chp small{grid-column:2/5;grid-row:1;color:#e9c46a!important;font-size:12px!important;font-weight:800;letter-spacing:.04em}
+.hm-chp b{grid-column:2;grid-row:2;font-size:21px!important;font-weight:900;color:#fff;line-height:1.25}
+.hm-chp .hm-cst{grid-column:3;grid-row:2}
+.hm-chp em{grid-column:4;grid-row:2;justify-self:start;color:var(--sub)!important;font-weight:700}
+.hm-chp .chv{grid-column:5;grid-row:1/3}
 </style>
 </body>
 </html>
