@@ -2233,7 +2233,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.34</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.35</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -7788,6 +7788,14 @@ $('prPub').onclick=()=>act('pub');$('prBack').onclick=()=>act('back');
   rows.forEach((r,i)=>{const lv=r[1]>100?rkDec(r[1]).lv:0;const b=document.createElement('div');b.className='hm-tr'+(r[0]===me?' me':'');
    b.innerHTML='<span class="n n'+(i+1)+'">'+(i+1)+'</span><span class="hm-cst"><span class="stone b'+rankCls(lv)+'"></span></span><b class="no-i18n"></b><em></em>';
    b.querySelector('b').textContent=r[0];b.querySelector('em').textContent=T_(lvName(lv));el.append(b)})}catch(e){}}})();
+</script>
+<script>
+/* iPhoneで言語の選択（下から出る選択の輪）を閉じたあと、下のバーが上に残る問題の対策：閉じたら位置を描き直させる（v2.35） */
+(()=>{const bar=document.getElementById('tabbar');if(!bar)return;let t=0;
+ const fix=()=>{clearTimeout(t);t=setTimeout(()=>{bar.style.transform='translateZ(0)';void bar.offsetHeight;bar.style.transform='';window.scrollTo(window.scrollX,window.scrollY)},80)};
+ document.addEventListener('focusout',e=>{if(e.target&&/^(SELECT|INPUT|TEXTAREA)$/.test(e.target.tagName))fix()},true);
+ document.addEventListener('change',e=>{if(e.target&&e.target.tagName==='SELECT')fix()},true);
+ if(window.visualViewport)visualViewport.addEventListener('resize',fix)})();
 </script>
 </body>
 </html>
