@@ -2233,7 +2233,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.28</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.29</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -7727,5 +7727,29 @@ $('prPub').onclick=()=>act('pub');$('prBack').onclick=()=>act('back');
 })();
 </script>
 
+<style>
+/* ホーム：四角いタイルと箱で区切らない（v2.29）。対局の種類は1本の切り替え、ほかは線で区切った行 */
+.hm-box{background:none!important;box-shadow:none!important;padding:0!important;border-radius:0!important;gap:12px!important}
+.hm-box .hm-qh{display:none!important}
+.hm-modes{display:flex!important;gap:0!important;background:#2d2e31;border-radius:999px;padding:5px}
+.hm-modes button,.hm-box .hm-modes button{flex:1;min-width:0;flex-direction:row!important;justify-content:center;align-items:center;gap:6px!important;padding:9px 4px!important;margin:0!important;border-radius:999px!important;background:transparent!important;box-shadow:none!important;font-size:14px!important;transform:none!important}
+.hm-modes button[aria-pressed=true],.hm-box .hm-modes button[aria-pressed=true]{background:#f4f4f2!important;color:#17181b!important}
+.hm-modes .ic3w{width:24px!important;height:24px!important;flex:none}
+#hmRkH,.hm-sh:has(+#dailyBtn){display:none!important}
+.hm-rkslot{margin-top:14px}
+.hm-chp{background:none!important;box-shadow:none!important;border-radius:0!important;padding:14px 2px!important;border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07)}
+.hm-chp .cr{background:none!important;padding:2px!important}
+.hm .hm-daily,.hm-daily{background:none!important;box-shadow:none!important;border-radius:0!important;padding:14px 2px!important;margin-top:0!important;border-bottom:1px solid rgba(255,255,255,.07)}
+.hm-rkslot:empty+.hm-sh+.hm-daily,.hm-rkslot:empty~.hm-daily{border-top:1px solid rgba(255,255,255,.07)}
+.hm-menu{display:flex!important;flex-direction:column;gap:0!important;margin-top:10px;background:none!important}
+.hm-menu button,.hm .hm-menu button{flex-direction:row!important;justify-content:flex-start;align-items:center;gap:14px!important;padding:11px 2px!important;margin:0!important;min-height:0;background:none!important;box-shadow:none!important;border-radius:0!important;border-bottom:1px solid rgba(255,255,255,.07);color:var(--fg)!important;transform:none!important}
+.hm-menu button:first-child{border-top:1px solid rgba(255,255,255,.07)}
+.hm-menu button::before{display:none!important}
+.hm-menu button::after{content:"";margin-left:auto;width:8px;height:8px;border:solid var(--mute);border-width:2px 2px 0 0;transform:rotate(45deg);margin-right:6px}
+.hm-menu button[hidden]{display:none!important}
+.hm-menu .ic3w{width:30px!important;height:30px!important;flex:none}
+.hm-menu span{font-size:15.5px!important;font-weight:700}
+.hm-menu .fr-badge{position:static!important;margin:0 0 0 2px!important}
+</style>
 </body>
 </html>
