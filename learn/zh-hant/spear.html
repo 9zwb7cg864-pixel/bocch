@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>長槍變例：白方的正解只有一個｜bocch</title>
+<meta name="description" content="在有名字的黑方戰法中，AI評價最高的是「長槍變例」。白方能回到均勢的只有6a→5b，往中央跳出的手會造出孤子而吃虧。用AI的計算來解說。">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/zh-hant/spear.html">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/spear.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/spear.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/spear.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/spear.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/spear.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/spear.html">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/spear.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/spear.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="長槍變例：白方的正解只有一個">
+<meta property="og:description" content="在有名字的黑方戰法中，AI評價最高的是「長槍變例」。白方能回到均勢的只有6a→5b，往中央跳出的手會造出孤子而吃虧。用AI的計算來解說。">
+<meta property="og:url" content="https://bocchgame.com/learn/zh-hant/spear.html">
+<meta property="og:image" content="https://bocchgame.com/og-zh-hant.jpg?v=2">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800;900&family=Outfit:wght@600;700;800&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "長槍變例：白方的正解只有一個", "description": "在有名字的黑方戰法中，AI評價最高的是「長槍變例」。白方能回到均勢的只有6a→5b，往中央跳出的手會造出孤子而吃虧。用AI的計算來解說。", "inLanguage": "zh-Hant", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about-zh-hant.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/zh-hant/spear.html", "datePublished": "2026-11-18", "dateModified": "2026-11-18"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+/* 今のサイトと同じ見た目の盤（2026-11-14以降の記事） */
+.nb .grid{background:#c9d2e3;border:0;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.nb .c{border:0}
+.nb .c:nth-child(12n+2),.nb .c:nth-child(12n+4),.nb .c:nth-child(12n+6),.nb .c:nth-child(12n+7),.nb .c:nth-child(12n+9),.nb .c:nth-child(12n+11){background:#8f9bb6}
+.nb .c.to{background:#a9cdf7!important}
+.nb .c.fr::before{border-color:rgba(28,36,54,.45)}
+.nb .c.mk{box-shadow:inset 0 0 0 3px #2f6fa8}
+.nb .s{width:80%;height:80%;font-family:"Outfit","Zen Kaku Gothic New",sans-serif;font-weight:700}
+.nb .s.b{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);color:#f4f4f4;box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.nb .s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%);color:#2a2c33;box-shadow:0 3px 4px rgba(0,0,0,.3)}
+.nb .s.z{opacity:.55}
+.nb .ar line{stroke:#2f7fd6;stroke-dasharray:none;stroke-width:2.2}.nb .ar path{fill:#2f7fd6}
+</style>
+<link rel="stylesheet" href="../app.css?v=2">
+</head>
+<body class="nb">
+<header class="top"><a class="logo" href="../../zh-hant.html">bocch</a><nav><a href="../../learn/zh-hant/">文章</a><a href="../../guide-zh-hant.html">攻略</a><a class="play" href="../../zh-hant.html">開始對局</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">定式</div>
+<h1>長槍變例：白方的正解只有一個</h1>
+<p class="meta">kairo · 2026年11月18日</p>
+<p class="lead">自從開始替bocch的定式取名字，我們用AI把黑方的戰法全部重新算了一遍。在有名字的黑方戰法中，評價最高的就是長槍變例。而且白方能回到均勢的手只有一個。</p>
+<h2>到這裡的手順</h2>
+<p>黑方把邊上的棋子往斜前方靠攏，即<strong>角落開局</strong>（1f→2e）；白方用相同形狀應對，即<strong>對稱防禦</strong>（1a→2b）。這時黑方把第2顆棋子筆直走出2格，就是<strong>長槍變例</strong>（2f→2d）。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to mk"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>2e和2d直著排成「長槍」。輪到白方</figcaption></figure>
+<p>2d走到2e的前面，第2列形成一條像長槍一樣的直線。名字就是這麼來的。AI的評價是黑方+10。在有名字的黑方戰法中，它和跳躍攻擊（3f→3c）並列評價最高。</p>
+<h2>白方的正解只有6a→5b</h2>
+<p>用AI計算白方所有的應手，能回到均勢的只有一個。</p>
+<div class="tw"><table><thead><tr><th>白方的應手</th><th>AI的評價</th></tr></thead><tbody><tr><td>6a→5b</td><td>大致均勢（白方+4）</td></tr><tr><td>2b→4d</td><td>黑方+22</td></tr><tr><td>2a→4c</td><td>黑方+25</td></tr><tr><td>6a→6b</td><td>黑方+28</td></tr><tr><td>其他的手</td><td>黑方+38～68</td></tr></tbody></table></div>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g fr"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c to mk"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>6a→5b。把另一邊的角靠攏，做成和黑方一樣的形狀</figcaption></figure>
+<p>正解是把另一邊的角斜著靠攏的6a→5b。白方也讓棋子互相靠在一起，保持數字的同時整理好形狀。評價是白方略微+4，大致均勢。</p>
+<h2>跳出去，就會成為孤子</h2>
+<p>容易想到的是2a→4c、2b→4d這種往中央跳出的手。但是跳到的地方，旁邊一顆棋子都沒有。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to mk"><b class="s w z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>2a→4c。4c旁邊沒有棋子，數字是0</figcaption></figure>
+<p>4c的數字是0，成了孤子，這樣下去動不了。黑方不慌不忙，只要走6f→5e把另一邊的角靠攏，AI的評價就擴大到黑方+25。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>6f→5e。黑方整理好形狀，白方的4c仍然動不了。黑方+25</figcaption></figure>
+<p>2b→4d也一樣。跳到4d的棋子旁邊沒有棋子，黑方走6f→5e後數字也只變成1。評價是黑方+22。</p>
+<div class="pt">開局時只有一顆棋子跳出去，那顆棋子很容易成為孤子</div>
+<h2>主線的後續</h2>
+<p>6a→5b之後，黑方有兩個有力的手。評價都大致均勢。</p>
+<ul><li><strong>3f→3d</strong>（走出中央的棋子）：這時白方走2b→4d把到達對岸的機會送給黑方，就成了<a href="cannae.html">坎尼棄兵</a>。</li><li><strong>2d→3c</strong>（把槍尖斜著推進）：這時白方跳2a→4c，就成了皮洛士棄兵。</li></ul>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>3f→3d。從這裡開始，白方的2b→4d就是坎尼棄兵</figcaption></figure>
+<h2>總結</h2>
+<ul><li>長槍變例（2f→2d）是有名字的黑方戰法中評價最高的（黑方+10）。</li><li>白方的正解只有6a→5b，這樣大致回到均勢。</li><li>用2a→4c或2b→4d跳出去，那顆棋子會成為孤子，黑方走6f→5e就佔優。</li><li>主線的後續連接到坎尼棄兵和皮洛士棄兵。</li></ul>
+<p class="note">評價來自AI的計算，正數越大，那一方越有利。在人與人的對局中，AI的最佳手不一定最容易贏。</p>
+</article>
+<section class="rel"><h2>相關文章</h2><ul><li><a href="../../learn/zh-hant/glossary.html">bocch 用語集</a></li><li><a href="../../learn/zh-hant/cannae.html">坎尼棄兵：白送的對岸會輸棋</a></li></ul></section>
+</main>
+<footer><p><a href="../../learn/zh-hant/">文章列表</a><a href="../../learn/zh-hant/glossary.html">用語集</a><a href="../../guide-zh-hant.html">獲勝攻略</a><a href="../../about-zh-hant.html">營運者資訊</a><a href="../../privacy-zh-hant.html">隱私政策、聯絡我們</a></p><p class="langs"><a href="../../learn/spear.html" lang="ja">日本語</a><a href="../../learn/en/spear.html" lang="en">English</a><a href="../../learn/zh-hans/spear.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/spear.html" aria-current="page" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/spear.html" lang="ko">한국어</a><a href="../../learn/es/spear.html" lang="es">Español</a><a href="../../learn/de/spear.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>

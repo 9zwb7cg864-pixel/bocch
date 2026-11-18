@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>스피어 바리에이션: 백의 정답은 하나뿐 | bocch</title>
+<meta name="description" content="이름이 붙은 흑의 작전 가운데 AI 평가가 가장 높은 「스피어 바리에이션」. 백이 균형을 되찾는 수는 6a→5b뿐이고, 중앙으로 뛰어나가는 수는 외톨이를 만들어 불리해집니다. AI의 수읽기로 해설합니다.">
+<meta name="google-adsense-account" content="ca-pub-7697290378023391">
+<link rel="canonical" href="https://bocchgame.com/learn/ko/spear.html">
+<link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/spear.html">
+<link rel="alternate" hreflang="en" href="https://bocchgame.com/learn/en/spear.html">
+<link rel="alternate" hreflang="zh-Hans" href="https://bocchgame.com/learn/zh-hans/spear.html">
+<link rel="alternate" hreflang="zh-Hant" href="https://bocchgame.com/learn/zh-hant/spear.html">
+<link rel="alternate" hreflang="ko" href="https://bocchgame.com/learn/ko/spear.html">
+<link rel="alternate" hreflang="es" href="https://bocchgame.com/learn/es/spear.html">
+<link rel="alternate" hreflang="de" href="https://bocchgame.com/learn/de/spear.html">
+<link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/spear.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="bocch">
+<meta property="og:title" content="스피어 바리에이션: 백의 정답은 하나뿐">
+<meta property="og:description" content="이름이 붙은 흑의 작전 가운데 AI 평가가 가장 높은 「스피어 바리에이션」. 백이 균형을 되찾는 수는 6a→5b뿐이고, 중앙으로 뛰어나가는 수는 외톨이를 만들어 불리해집니다. AI의 수읽기로 해설합니다.">
+<meta property="og:url" content="https://bocchgame.com/learn/ko/spear.html">
+<meta property="og:image" content="https://bocchgame.com/og-ko.jpg?v=2">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800;900&family=Outfit:wght@600;700;800&display=swap">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "스피어 바리에이션: 백의 정답은 하나뿐", "description": "이름이 붙은 흑의 작전 가운데 AI 평가가 가장 높은 「스피어 바리에이션」. 백이 균형을 되찾는 수는 6a→5b뿐이고, 중앙으로 뛰어나가는 수는 외톨이를 만들어 불리해집니다. AI의 수읽기로 해설합니다.", "inLanguage": "ko", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about-ko.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/ko/spear.html", "datePublished": "2026-11-18", "dateModified": "2026-11-18"}</script>
+<style>:root{
+  --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
+  --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
+  --gold:#9a6f22;--good:#2f7d58;--bad:#b0483a;--blue:#2f6fa8;
+  --f-disp:"Shippori Mincho B1","Hiragino Mincho ProN","Yu Mincho",serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Yu Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#17150f;--fg:#ece6d8;--sub:#a39b8a;--line:#3a352a;--card:#201d16;
+  --wood:#c9a46a;--wood2:#b28a4e;--grid:#6e5330;
+  --gold:#d6b26e;--good:#6fc39a;--bad:#e08c7c;--blue:#7fb2e0;color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.9;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--gold)}
+.top{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.top .logo{font-family:var(--f-disp);font-weight:700;font-size:22px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
+.top nav{display:flex;gap:14px;align-items:center;font-size:14px}
+.top nav a{color:var(--fg);text-decoration:none}
+.top nav a.play{background:var(--fg);color:var(--bg);padding:5px 12px;border-radius:999px;font-weight:700}
+main{max-width:720px;margin:0 auto;padding:28px 0 40px}
+article>*+*{margin-top:18px}
+h1{font-family:var(--f-disp);font-weight:700;font-size:clamp(26px,6.4vw,36px);line-height:1.35;margin:6px 0 0;letter-spacing:.04em;text-wrap:balance}
+h2{font-family:var(--f-disp);font-weight:700;font-size:22px;line-height:1.45;margin:44px 0 0;padding-top:4px;letter-spacing:.04em;text-wrap:balance}
+h3{font-size:17px;margin:28px 0 0}
+p{margin:0}
+ul,ol{margin:0;padding-left:1.4em}
+li+li{margin-top:6px}
+.eyebrow{font-size:12px;letter-spacing:.18em;color:var(--gold);font-weight:700}
+.meta{color:var(--sub);font-size:13px;margin-top:8px}
+.lead{color:var(--sub);font-size:15.5px;padding:14px 16px;border-left:3px solid var(--gold);background:var(--card);border-radius:0 8px 8px 0}
+.pt{padding:14px 16px;border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);border-radius:10px;background:var(--card)}
+.pt ol,.pt ul{margin-top:4px}
+.note{font-size:13.5px;color:var(--sub)}
+strong{font-weight:700;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--gold) 28%,transparent) 0)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6}
+th,td{border-bottom:1px solid var(--line);padding:8px 8px;text-align:left;vertical-align:top}
+th{font-size:12.5px;color:var(--sub);font-weight:700}
+td:not(:first-child),th:not(:first-child){white-space:nowrap}
+dl{margin:0}
+dt{font-weight:700;font-size:17px;margin-top:22px;font-family:var(--f-disp);letter-spacing:.04em}
+dd{margin:4px 0 0}
+/* 盤 */
+.bd{margin:24px auto 28px;display:flex;flex-direction:column;align-items:center;gap:8px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0 28px}
+.pair .bd{margin:0}
+.bw{display:grid;grid-template-columns:16px minmax(0,1fr);grid-template-rows:16px auto;width:min(100%,300px)}
+.cl{grid-column:2;display:grid;grid-template-columns:repeat(6,1fr);font-size:11px;line-height:16px;color:var(--sub);text-align:center}
+.rl{grid-row:2;display:grid;grid-template-rows:repeat(6,1fr);font-size:11px;color:var(--sub);align-items:center}
+.grid{grid-column:2;grid-row:2;position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));aspect-ratio:1;background:linear-gradient(135deg,var(--wood),var(--wood2));border:1.5px solid var(--grid);border-radius:4px;overflow:hidden}
+.c{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center;border-right:1px solid color-mix(in srgb,var(--grid) 55%,transparent);border-bottom:1px solid color-mix(in srgb,var(--grid) 55%,transparent);font-style:normal}
+.c:nth-child(6n){border-right:0}.c:nth-child(n+31){border-bottom:0}
+.c.g{background:color-mix(in srgb,#fff 14%,transparent)}
+.c.to{background:color-mix(in srgb,#f6d36b 55%,transparent)}
+.c.fr::before{content:"";position:absolute;inset:22%;border-radius:50%;border:2px dashed color-mix(in srgb,var(--grid) 80%,transparent)}
+.c.mk{box-shadow:inset 0 0 0 3px var(--blue)}
+.c.dt::after{content:"";width:30%;aspect-ratio:1;border-radius:50%;background:var(--good);opacity:.85}
+.s{width:76%;height:76%;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:clamp(11px,3.6vw,15px);font-style:normal;position:relative;z-index:1}
+.pair .s{font-size:clamp(9px,2.6vw,13px)}
+.s.b{background:radial-gradient(circle at 34% 28%,#5b5d60 0%,#1c1d1f 45%,#050506 100%);color:#e4e5e6;box-shadow:0 2px 3px rgba(0,0,0,.35)}
+.s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#e4e5e6 38%,#c3c5c7 72%);color:#1a1b1c;box-shadow:0 2px 3px rgba(0,0,0,.25)}
+.s.z{opacity:.6}
+.ar{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2}
+figcaption{font-size:13.5px;color:var(--sub);text-align:center;max-width:30em;line-height:1.7}
+/* 一覧 */
+.cards{list-style:none;padding:0;display:grid;gap:10px;margin-top:12px}
+.cards li+li{margin-top:0}
+.cards a{display:block;padding:14px 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--fg);text-decoration:none}
+.cards b{display:block;font-family:var(--f-disp);font-size:17.5px;letter-spacing:.03em;line-height:1.5}
+.cards span{display:block;font-size:13.5px;color:var(--sub);margin-top:4px;line-height:1.7}
+.rel{margin-top:48px;padding-top:8px;border-top:1px solid var(--line)}
+.rel h2{font-size:18px;margin-top:16px}
+.rel ul{margin-top:8px}
+footer{max-width:720px;margin:0 auto;padding:20px 0 40px;border-top:1px solid var(--line);font-size:13px;color:var(--sub)}
+footer p{display:flex;flex-wrap:wrap;gap:6px 16px;margin:0}
+footer a{color:var(--sub)}
+footer .cp{margin-top:10px}
+@media (max-width:420px){.top nav{gap:10px;font-size:13px}.top nav a.play{padding:4px 10px}}
+footer .langs{margin-top:10px;gap:4px 12px}
+footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:700}
+/* 今のサイトと同じ見た目の盤（2026-11-14以降の記事） */
+.nb .grid{background:#c9d2e3;border:0;border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.18)}
+.nb .c{border:0}
+.nb .c:nth-child(12n+2),.nb .c:nth-child(12n+4),.nb .c:nth-child(12n+6),.nb .c:nth-child(12n+7),.nb .c:nth-child(12n+9),.nb .c:nth-child(12n+11){background:#8f9bb6}
+.nb .c.to{background:#a9cdf7!important}
+.nb .c.fr::before{border-color:rgba(28,36,54,.45)}
+.nb .c.mk{box-shadow:inset 0 0 0 3px #2f6fa8}
+.nb .s{width:80%;height:80%;font-family:"Outfit","Zen Kaku Gothic New",sans-serif;font-weight:700}
+.nb .s.b{background:radial-gradient(circle at 32% 28%,#6a6c70 0%,#2a2b2e 26%,#111214 62%,#050506 100%);color:#f4f4f4;box-shadow:0 3px 4px rgba(0,0,0,.35)}
+.nb .s.w{background:radial-gradient(circle at 34% 28%,#fff 0%,#f7f5ef 30%,#e6e2d8 70%,#c9c4b8 100%);color:#2a2c33;box-shadow:0 3px 4px rgba(0,0,0,.3)}
+.nb .s.z{opacity:.55}
+.nb .ar line{stroke:#2f7fd6;stroke-dasharray:none;stroke-width:2.2}.nb .ar path{fill:#2f7fd6}
+</style>
+<link rel="stylesheet" href="../app.css?v=2">
+</head>
+<body class="nb">
+<header class="top"><a class="logo" href="../../ko.html">bocch</a><nav><a href="../../learn/ko/">글</a><a href="../../guide-ko.html">가이드</a><a class="play" href="../../ko.html">대국하기</a></nav></header>
+<main>
+<article>
+<div class="eyebrow">정석</div>
+<h1>스피어 바리에이션: 백의 정답은 하나뿐</h1>
+<p class="meta">kairo · 2026년 11월 18일</p>
+<p class="lead">bocch의 정석에 이름을 붙이기 시작하면서, 흑의 작전을 AI로 모두 다시 읽어 보았습니다. 이름이 붙은 흑의 작전 가운데 가장 평가가 높았던 것이 스피어 바리에이션입니다. 게다가 백에게는 균형을 되찾는 수가 하나밖에 없습니다.</p>
+<h2>여기까지의 수순</h2>
+<p>흑이 끝 돌을 대각선으로 붙이는 <strong>코너 오프닝</strong>(1f→2e)에, 백도 같은 모양으로 받는 <strong>대칭 디펜스</strong>(1a→2b). 여기서 흑이 두 번째 돌을 똑바로 두 칸 내보내는 것이 <strong>스피어 바리에이션</strong>(2f→2d)입니다.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to mk"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>2e와 2d가 세로로 늘어선 「창」. 백의 차례</figcaption></figure>
+<p>2e 앞으로 2d가 나와서, 2열에 창처럼 세로로 늘어선 모양이 생깁니다. 이름은 여기서 왔습니다. AI의 평가는 흑 +10. 이름이 붙은 흑의 작전 가운데 리프 어택(3f→3c)과 나란히 가장 높은 평가입니다.</p>
+<h2>백의 정답은 6a→5b뿐</h2>
+<p>백의 응수를 모두 AI로 읽어 보면, 균형을 되찾는 수는 하나밖에 없습니다.</p>
+<div class="tw"><table><thead><tr><th>백의 응수</th><th>AI의 평가</th></tr></thead><tbody><tr><td>6a→5b</td><td>거의 균형 (백 +4)</td></tr><tr><td>2b→4d</td><td>흑 +22</td></tr><tr><td>2a→4c</td><td>흑 +25</td></tr><tr><td>6a→6b</td><td>흑 +28</td></tr><tr><td>그 밖의 수</td><td>흑 +38~68</td></tr></tbody></table></div>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g fr"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c to mk"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>6a→5b. 반대쪽 모서리를 붙여 흑과 같은 모양을 만든다</figcaption></figure>
+<p>정답은 반대쪽 모서리를 대각선으로 붙이는 6a→5b입니다. 백도 돌끼리 붙여서 숫자를 유지한 채 모양을 갖춥니다. 평가는 백이 조금 앞선 +4로, 거의 균형입니다.</p>
+<h2>뛰어나가면 외톨이가 된다</h2>
+<p>눈에 띄기 쉬운 것은 2a→4c나 2b→4d처럼 중앙으로 뛰어나가는 수입니다. 하지만 뛰어간 곳에는 이웃 돌이 하나도 없습니다.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to mk"><b class="s w z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>2a→4c. 4c 옆에는 돌이 없어 숫자는 0</figcaption></figure>
+<p>4c의 숫자는 0. 외톨이가 되어 이대로는 움직이지 못합니다. 흑은 서두르지 않고 6f→5e로 반대쪽 모서리를 붙이기만 해도 AI의 평가가 흑 +25까지 벌어집니다.</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>6f→5e. 흑은 모양을 갖추고, 백의 4c는 여전히 움직이지 못한다. 흑 +25</figcaption></figure>
+<p>2b→4d도 마찬가지입니다. 뛰어간 4d에는 이웃 돌이 없고, 흑의 6f→5e로 숫자가 겨우 1이 될 뿐입니다. 평가는 흑 +22입니다.</p>
+<div class="pt">초반에 돌 하나만 뛰어나가면, 그 돌은 외톨이가 되기 쉽다</div>
+<h2>본선의 계속</h2>
+<p>6a→5b 뒤에 흑에게는 유력한 수가 두 개 있습니다. 어느 쪽도 평가는 거의 균형입니다.</p>
+<ul><li><strong>3f→3d</strong>(중앙 돌을 내보낸다): 여기서 백이 2b→4d로 흑에게 골을 내주면 <a href="cannae.html">칸나에 갬빗</a>이 됩니다.</li><li><strong>2d→3c</strong>(창끝을 대각선으로 내민다): 여기서 백이 2a→4c로 뛰면 피로스 갬빗이 됩니다.</li></ul>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>3f→3d. 여기서 백의 2b→4d가 칸나에 갬빗</figcaption></figure>
+<h2>정리</h2>
+<ul><li>스피어 바리에이션(2f→2d)은 이름이 붙은 흑의 작전 가운데 평가가 가장 높다 (흑 +10).</li><li>백의 정답은 6a→5b뿐. 이것으로 거의 균형을 되찾는다.</li><li>2a→4c나 2b→4d로 뛰어나가면 그 돌이 외톨이가 되고, 흑은 6f→5e로 유리해진다.</li><li>본선의 계속은 칸나에 갬빗과 피로스 갬빗으로 이어진다.</li></ul>
+<p class="note">평가는 AI의 수읽기에 따른 것으로, 플러스 숫자가 클수록 그쪽이 유리합니다. 사람끼리의 대국에서는 AI의 최선이 가장 이기기 쉬운 수라고는 할 수 없습니다.</p>
+</article>
+<section class="rel"><h2>관련 글</h2><ul><li><a href="../../learn/ko/glossary.html">bocch 용어집</a></li><li><a href="../../learn/ko/cannae.html">칸나에 갬빗: 공짜 골이 지는 수가 되는 형태</a></li></ul></section>
+</main>
+<footer><p><a href="../../learn/ko/">글 목록</a><a href="../../learn/ko/glossary.html">용어집</a><a href="../../guide-ko.html">승리 가이드</a><a href="../../about-ko.html">운영자 정보</a><a href="../../privacy-ko.html">개인정보 처리방침 · 문의</a></p><p class="langs"><a href="../../learn/spear.html" lang="ja">日本語</a><a href="../../learn/en/spear.html" lang="en">English</a><a href="../../learn/zh-hans/spear.html" lang="zh-Hans">简体中文</a><a href="../../learn/zh-hant/spear.html" lang="zh-Hant">繁體中文</a><a href="../../learn/ko/spear.html" aria-current="page" lang="ko">한국어</a><a href="../../learn/es/spear.html" lang="es">Español</a><a href="../../learn/de/spear.html" lang="de">Deutsch</a></p><p class="cp">© 2026 bocch</p></footer>
+</body>
+</html>
