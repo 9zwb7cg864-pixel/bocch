@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>スピア・バリエーション：白の正解は1つだけ｜bocch</title>
-<meta name="description" content="名前の付いた黒の作戦で、AIの評価がいちばん高い「スピア・バリエーション」。白が互角に戻せる手は6a-5bだけで、中央へ跳び出す手はぼっちを作って不利になります。AIの読みで解説します。">
+<title>スピア・バリエーション：似た跳び出しで明暗が分かれる｜bocch</title>
+<meta name="description" content="2f-2dと槍を伸ばすスピア・バリエーション。白の良い受けは6a-5bと2b-4dの2つで、同じ中央への跳び出しでも2a-4cは大きく不利になります。最強CPUと同じニューラルネットの評価で読み直して解説します。">
 <meta name="google-adsense-account" content="ca-pub-7697290378023391">
 <link rel="canonical" href="https://bocchgame.com/learn/spear.html">
 <link rel="alternate" hreflang="ja" href="https://bocchgame.com/learn/spear.html">
@@ -17,8 +17,8 @@
 <link rel="alternate" hreflang="x-default" href="https://bocchgame.com/learn/spear.html">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="bocch">
-<meta property="og:title" content="スピア・バリエーション：白の正解は1つだけ">
-<meta property="og:description" content="名前の付いた黒の作戦で、AIの評価がいちばん高い「スピア・バリエーション」。白が互角に戻せる手は6a-5bだけで、中央へ跳び出す手はぼっちを作って不利になります。AIの読みで解説します。">
+<meta property="og:title" content="スピア・バリエーション：似た跳び出しで明暗が分かれる">
+<meta property="og:description" content="2f-2dと槍を伸ばすスピア・バリエーション。白の良い受けは6a-5bと2b-4dの2つで、同じ中央への跳び出しでも2a-4cは大きく不利になります。最強CPUと同じニューラルネットの評価で読み直して解説します。">
 <meta property="og:url" content="https://bocchgame.com/learn/spear.html">
 <meta property="og:image" content="https://bocchgame.com/og.jpg?v=2">
 <meta property="og:locale" content="ja_JP">
@@ -26,7 +26,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="../icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800;900&family=Outfit:wght@600;700;800&display=swap">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "スピア・バリエーション：白の正解は1つだけ", "description": "名前の付いた黒の作戦で、AIの評価がいちばん高い「スピア・バリエーション」。白が互角に戻せる手は6a-5bだけで、中央へ跳び出す手はぼっちを作って不利になります。AIの読みで解説します。", "inLanguage": "ja", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/spear.html", "datePublished": "2026-11-18", "dateModified": "2026-11-18"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "スピア・バリエーション：似た跳び出しで明暗が分かれる", "description": "2f-2dと槍を伸ばすスピア・バリエーション。白の良い受けは6a-5bと2b-4dの2つで、同じ中央への跳び出しでも2a-4cは大きく不利になります。最強CPUと同じニューラルネットの評価で読み直して解説します。", "inLanguage": "ja", "author": {"@type": "Person", "name": "kairo", "url": "https://bocchgame.com/about.html"}, "publisher": {"@type": "Organization", "name": "bocch", "url": "https://bocchgame.com/"}, "url": "https://bocchgame.com/learn/spear.html", "datePublished": "2026-11-18", "dateModified": "2026-11-18"}</script>
 <style>:root{
   --bg:#f3efe6;--fg:#24201a;--sub:#6b6457;--line:#d8cfbd;--card:#fbf8f1;
   --wood:#e2c48f;--wood2:#cfa868;--grid:#8a6a3c;
@@ -133,32 +133,34 @@ footer .langs a[aria-current]{color:var(--fg);text-decoration:none;font-weight:7
 <main>
 <article>
 <div class="eyebrow">定跡</div>
-<h1>スピア・バリエーション：白の正解は1つだけ</h1>
+<h1>スピア・バリエーション：似た跳び出しで明暗が分かれる</h1>
 <p class="meta">kairo・2026年11月18日</p>
-<p class="lead">bocchの定跡に名前を付けはじめて、黒の作戦をAIでまとめて読み直しました。名前の付いた黒の作戦の中で、いちばん評価が高かったのがスピア・バリエーションです。しかも白には、互角に戻せる手が1つしかありません。</p>
+<p class="lead">スピア・バリエーションは、AIの評価ではほぼ互角の定跡です。面白いのは白の受け方で、よく似た2つの跳び出しのうち、片方は互角、もう片方ははっきり不利になります。</p>
 <h2>ここまでの手順</h2>
 <p>黒が端の石を斜めに寄せる <strong>コーナー・オープニング</strong>（1f-2e）に、白も同じ形で応じる <strong>シンメトリカル・ディフェンス</strong>（1a-2b）。ここで黒が2本目の石をまっすぐ2歩出すのが <strong>スピア・バリエーション</strong>（2f-2d）です。</p>
 <figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to mk"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>2e と 2d が縦に並んだ「槍」。白の番</figcaption></figure>
-<p>2e の前に 2d が出て、2列目に槍のような縦の並びができます。名前はここから来ています。AIの評価は黒がプラス10。名前の付いた黒の作戦の中で、リープ・アタック（3f-3c）と並んでいちばん高い評価です。</p>
-<h2>白の正解は 6a-5b だけ</h2>
-<p>白の応手をすべてAIで読むと、互角に戻せる手は1つしかありません。</p>
-<div class="tw"><table><thead><tr><th>白の応手</th><th>AIの評価</th></tr></thead><tbody><tr><td>6a-5b</td><td>ほぼ互角（白がプラス4）</td></tr><tr><td>2b-4d</td><td>黒がプラス22</td></tr><tr><td>2a-4c</td><td>黒がプラス25</td></tr><tr><td>6a-6b</td><td>黒がプラス28</td></tr><tr><td>ほかの手</td><td>黒がプラス38〜68</td></tr></tbody></table></div>
+<p>2e の前に 2d が出て、2列目に槍のような縦の並びができます。名前はここから来ています。AIの評価はほぼ互角です。</p>
+<h2>白の良い受けは2つ</h2>
+<p>白の応手をすべてAIで読むと、互角を保てる手は2つあります。</p>
+<div class="tw"><table><thead><tr><th>白の応手</th><th>AIの評価</th></tr></thead><tbody><tr><td>6a-5b</td><td>ほぼ互角</td></tr><tr><td>2b-4d</td><td>ほぼ互角</td></tr><tr><td>6a-6b</td><td>黒がプラス46</td></tr><tr><td>4a-2c</td><td>黒がプラス53</td></tr><tr><td>5a-3c</td><td>黒がプラス68</td></tr><tr><td>4a-4c</td><td>黒がプラス69</td></tr><tr><td>2a-4c</td><td>黒がプラス77</td></tr><tr><td>ほかの手</td><td>黒がプラス80〜120</td></tr></tbody></table></div>
 <figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g fr"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c to mk"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>6a-5b。反対側の角を寄せて、黒と同じ形を作る</figcaption></figure>
-<p>正解は、反対側の角を斜めに寄せる 6a-5b です。白も石どうしを寄せて、数字を保ったまま形を整えます。評価は白がわずかにプラス4で、ほぼ互角です。</p>
-<h2>跳び出すと、ぼっちになる</h2>
-<p>目につきやすいのは、2a-4c や 2b-4d のように中央へ跳び出す手です。けれど跳んだ先には、隣の石が1つもありません。</p>
-<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c to mk"><b class="s w z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>2a-4c。4c の隣には石がなく、数字は0</figcaption></figure>
-<p>4c の数字は0。ぼっちになって、このままでは動けません。黒は慌てずに 6f-5e と反対側の角を寄せるだけで、AIの評価は黒がプラス25まで広がります。</p>
-<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>6f-5e。黒は形を整え、白の 4c は動けないまま。黒がプラス25</figcaption></figure>
-<p>2b-4d も同じです。跳んだ 4d には隣の石がなく、黒の 6f-5e で数字がやっと1になるだけ。評価は黒がプラス22です。</p>
-<div class="pt">序盤に1つだけ跳び出すと、その石はぼっちになりやすい</div>
+<p>1つ目は、反対側の角を斜めに寄せる 6a-5b です。白も石どうしを寄せて、数字を保ったまま形を整えます。</p>
+<h2>跳び出すなら 2b-4d</h2>
+<p>もう1つの良い手は、中央へ跳び出す 2b-4d です。跳んだ 4d の隣には石がなく、数字は0。一見ぼっちです。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">1</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c to"><b class="s b">3</b></i><i class="c mk"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">3</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i><i class="c g"></i><svg class="ar" viewBox="0 0 100 100" aria-hidden="true"><defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="3.2" markerHeight="3.2" orient="auto"><path d="M0,0L10,5L0,10z" fill="#c0392b"/></marker></defs><line x1="61.9" y1="61.9" x2="87.4" y2="87.4" stroke="#c0392b" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round" marker-end="url(#ah)"/></svg></div></div><figcaption>黒が 6f-5e、5f-3d と形を作ると、4d の数字が2になり、4d-6f で白が先に着く</figcaption></figure>
+<p>ところが 4d は、黒が石を集めたい場所のすぐそばです。黒が 6f-5e、5f-3d と自然に形を作ると、4d の隣に黒の石が増えて数字が2になり、4d-6f で白が先に1つ着きます。黒の手が、白のぼっちに<strong>話しかけて</strong>しまうのです。</p>
+<h2>2a-4c は本当のぼっち</h2>
+<p>同じ中央への跳び出しでも、2a-4c は違います。</p>
+<figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">1</b></i><i class="c"></i><i class="c"><b class="s w">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c mk"><b class="s w z">0</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">1</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">3</b></i><i class="c g"><b class="s b">2</b></i><i class="c g fr"></i></div></div><figcaption>2a-4c。黒が 6f-5e と形を整えても、4c は数字0のまま。黒がプラス77</figcaption></figure>
+<p>4c は黒の石から遠く、黒が形を整えても隣に石が来ません。数字は0のまま動けず、白は1手を無駄にした形になります。AIの評価は黒がプラス77です。</p>
+<div class="pt">跳び出した石が生きるかどうかは、相手が石を集める場所に近いかどうかで決まる</div>
 <h2>本線の続き</h2>
-<p>6a-5b のあと、黒には有力な手が2つあります。どちらも評価はほぼ互角です。</p>
-<ul><li><strong>3f-3d</strong>（中央の石を出す）：ここで白が 2b-4d と黒にゴールを差し出すと、<a href="cannae.html">カンナエ・ギャンビット</a>になります。</li><li><strong>2d-3c</strong>（槍の先を斜めに進める）：ここで白が 2a-4c と跳ぶと、ピュロス・ギャンビットになります。</li></ul>
+<p>6a-5b のあと、黒の候補は2つです。</p>
+<ul><li><strong>2d-3c</strong>（槍の先を斜めに進める）：AIの評価はほぼ互角。ここで白が 2a-4c と跳ぶと、ピュロス・ギャンビットになります。</li><li><strong>3f-3d</strong>（中央の石を出す）：白がやや良くなります。ここで白が 2b-4d と黒にゴールを差し出すと、<a href="cannae.html">カンナエ・ギャンビット</a>になります。</li></ul>
 <figure class="bd"><div class="bw"><div class="cl"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span></div><div class="rl"><span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span></div><div class="grid"><i class="c g"></i><i class="c g"><b class="s w">2</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">3</b></i><i class="c g"><b class="s w">2</b></i><i class="c g"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"><b class="s w">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c to"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"><b class="s b">2</b></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c"></i><i class="c g"></i><i class="c g"></i><i class="c g fr"></i><i class="c g"><b class="s b">1</b></i><i class="c g"><b class="s b">2</b></i><i class="c g"><b class="s b">1</b></i></div></div><figcaption>3f-3d。ここから白の 2b-4d がカンナエ・ギャンビット</figcaption></figure>
 <h2>まとめ</h2>
-<ul><li>スピア・バリエーション（2f-2d）は、名前の付いた黒の作戦の中でいちばん評価が高い（黒がプラス10）。</li><li>白の正解は 6a-5b だけ。これでほぼ互角に戻る。</li><li>2a-4c や 2b-4d と跳び出すと、その石がぼっちになり、黒は 6f-5e で有利になる。</li><li>本線の続きは、カンナエ・ギャンビットとピュロス・ギャンビットにつながる。</li></ul>
-<p class="note">評価はAIの読みによるもので、プラスの数字が大きいほどその側が有利です。人どうしの対局では、AIの最善がいちばん勝ちやすいとは限りません。</p>
+<ul><li>スピア・バリエーション（2f-2d）は、AIの評価ではほぼ互角。</li><li>白の良い受けは 6a-5b と 2b-4d の2つ。</li><li>2b-4d の石は一見ぼっちでも、黒が形を作ると数字が増えて、白の先着につながる。</li><li>2a-4c と跳ぶと、その石は本当のぼっちになり、黒が大きく有利になる（プラス77）。</li><li>本線の続きは、ピュロス・ギャンビットとカンナエ・ギャンビットにつながる。</li></ul>
+<p class="note">評価は、アプリの最強CPUと同じニューラルネットの評価を使ったAIの読み（1局面8秒）によるもので、プラスの数字が大きいほどその側が有利です。最初の版では古い評価で読んだ数字を載せていたため、2026年11月20日に書き直しました。人どうしの対局では、AIの最善がいちばん勝ちやすいとは限りません。</p>
 </article>
 <section class="rel"><h2>関連する記事</h2><ul><li><a href="../learn/glossary.html">bocch 用語集</a></li><li><a href="../learn/cannae.html">カンナエ・ギャンビット：ただのゴールで負ける形</a></li></ul></section>
 </main>
