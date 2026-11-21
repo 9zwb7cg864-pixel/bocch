@@ -20,6 +20,11 @@
 //   POST /bocch-v1-news/prev {id,act,note} … 公開（7言語に訳す）か差し戻し（X-Pass が合うときだけ。結果は書いた人のメールに届く）
 //   GET  /bocch-v1-news/plist             … 公開された研究記事の一覧（新しい順）
 //   GET  /bocch-v1-news/pget?id=…         … 公開された研究記事1本
+//   POST /bocch-v1-pay/status {tok}      … 会員かどうか（tok はログイン中の Firebase の ID トークン）
+//   POST /bocch-v1-pay/checkout {tok,plan,cur} … Stripe の支払い画面を作って URL を返す（plan: m/y、cur: jpy/usd。初回は7日間無料）
+//   POST /bocch-v1-pay/portal {tok}      … 支払い方法の変更・解約の画面（Stripe）の URL を返す
+//   POST /bocch-v1-pay/hook              … Stripe からの知らせ（署名を確かめて会員の状態を記録する）
+//   秘密の値は Cloudflare に置く：STRIPE_SECRET（sk_…）、STRIPE_WEBHOOK_SECRET（whsec_…）
 // フレンドの受信箱（bocch-v1-in-…）だけは30日保存する（12時間だと、開かない人に申請が届かない）
 // since は all / 90s / 15m / 3h / UNIX秒。
 import { DurableObject } from "cloudflare:workers";
@@ -97,6 +102,39 @@ async function gtx0(q, tl, sl = "ja") {
   const j = await r.json();
   return Array.isArray(j && j[0]) ? j[0].map(x => x && x[0] || "").join("") : "";
 }
+// ---- Stripe ----
+async function stripe(env, method, path, form) {
+  try {
+    const r = await fetch("https://api.stripe.com/v1/" + path, { method, headers: { Authorization: "Bearer " + env.STRIPE_SECRET, ...(form ? { "Content-Type": "application/x-www-form-urlencoded" } : {}) }, body: form ? form.toString() : undefined });
+    return await r.json();
+  } catch (e) { return null; }
+}
+// Stripe-Signature: t=…,v1=…（本文を秘密の値で HMAC-SHA256 した値と比べる。5分より古い知らせは受けない）
+async function stripeSigOk(raw, sig, secret, now) {
+  const p = {}; for (const kv of sig.split(",")) { const i = kv.indexOf("="); if (i > 0) { const k = kv.slice(0, i).trim(); (p[k] = p[k] || []).push(kv.slice(i + 1).trim()); } }
+  const t = p.t && p.t[0]; if (!t || !p.v1 || Math.abs(now - Number(t)) > 300) return false;
+  const key = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const mac = new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(t + "." + raw)));
+  const hex = [...mac].map(x => x.toString(16).padStart(2, "0")).join("");
+  return p.v1.some(v => v.length === hex.length && [...v].reduce((d, c, i) => d | (c.charCodeAt(0) ^ hex.charCodeAt(i)), 0) === 0);
+}
+// ---- Firebase のログイン確認（ID トークンを Google の公開鍵で確かめる）----
+const FB_PROJECT = "bocch-7072d";
+let FB_KEYS = null, FB_KEYS_T = 0;
+const b64u = s => Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((s.length + 3) % 4)), c => c.charCodeAt(0));
+async function fbUser(tok, now) {
+  try {
+    const [hh, pp, ss] = tok.split("."); if (!ss) return null;
+    const head = JSON.parse(new TextDecoder().decode(b64u(hh))), pl = JSON.parse(new TextDecoder().decode(b64u(pp)));
+    if (head.alg !== "RS256" || pl.aud !== FB_PROJECT || pl.iss !== "https://securetoken.google.com/" + FB_PROJECT || !pl.sub || pl.exp < now || pl.iat > now + 300) return null;
+    if (!FB_KEYS || Date.now() - FB_KEYS_T > 3600e3) { const r = await fetch("https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com"); FB_KEYS = (await r.json()).keys || []; FB_KEYS_T = Date.now(); }
+    const jwk = FB_KEYS.find(k => k.kid === head.kid); if (!jwk) return null;
+    const key = await crypto.subtle.importKey("jwk", { kty: jwk.kty, n: jwk.n, e: jwk.e, alg: "RS256", ext: true }, { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" }, false, ["verify"]);
+    const ok = await crypto.subtle.verify("RSASSA-PKCS1-v1_5", key, b64u(ss), new TextEncoder().encode(hh + "." + pp));
+    return ok ? { uid: pl.sub, email: pl.email_verified ? String(pl.email || "") : "" } : null;
+  } catch (e) { return null; }
+}
+
 function rid() {
   const a = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   const r = crypto.getRandomValues(new Uint8Array(12));
@@ -187,6 +225,8 @@ export class Topic extends DurableObject {
 
     // 運営のお知らせ（話題 bocch-v1-news だけ）
     if (topic === "bocch-v1-news") return this.news(req, h, action, now);
+    // 会員の支払い（話題 bocch-v1-pay だけ）
+    if (topic === "bocch-v1-pay") return this.pay(req, h, action, now);
 
     return new Response("not found\n", { status: 404, headers: h });
   }
@@ -391,6 +431,72 @@ export class Topic extends DurableObject {
   }
   // ---- 棋譜 ----
   // 1局1行。同じ端末から同じ対局が2回届いても1回だけ残す（k = 端末ID + 対局ID）
+  // ---- 会員の支払い（Stripe）----
+  // 記録：p:<Firebase の uid> = {cus, sub, st, plan, cur, end, cancel, trial, tried}
+  async pay(req, h, action, now) {
+    const st = this.ctx.storage, env = this.env;
+    const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { ...h, "Content-Type": "application/json", "Cache-Control": "no-store" } });
+    if (req.method !== "POST") return J({ err: "method" }, 405);
+    const ready = !!(env.STRIPE_SECRET && env.STRIPE_WEBHOOK_SECRET);
+    if (action === "hook") {
+      if (!ready) return J({ err: "not ready" }, 503);
+      const raw = await req.text();
+      if (!(await stripeSigOk(raw, req.headers.get("Stripe-Signature") || "", env.STRIPE_WEBHOOK_SECRET, now))) return J({ err: "sig" }, 400);
+      let ev; try { ev = JSON.parse(raw); } catch (e) { return J({ err: "bad" }, 400); }
+      const o = ev && ev.data && ev.data.object || {};
+      if (ev.type === "checkout.session.completed" && o.mode === "subscription") {
+        const uid = o.client_reference_id || (o.metadata && o.metadata.uid);
+        if (uid && o.subscription) { const sub = await stripe(env, "GET", "subscriptions/" + o.subscription); if (sub && sub.id) await this.paySave(uid, sub); }
+      } else if (/^customer\.subscription\.(created|updated|deleted|trial_will_end|paused|resumed)$/.test(ev.type)) {
+        const uid = o.metadata && o.metadata.uid; if (uid) await this.paySave(uid, o);
+      }
+      return J({ ok: true });
+    }
+    let b; try { b = JSON.parse(await req.text()); } catch (e) { return J({ err: "bad" }, 400); }
+    const me = await fbUser(String(b && b.tok || ""), now);
+    if (!me) return J({ err: "login" }, 401);
+    const key = "p:" + me.uid, rec = (await st.get(key)) || {};
+    const active = !!rec.st && ["active", "trialing", "past_due"].includes(rec.st);
+    if (action === "status") return J({ ready, member: active, st: rec.st || "", plan: rec.plan || "", cur: rec.cur || "", end: rec.end || 0, cancel: !!rec.cancel, trial: rec.trial || 0, tried: !!rec.tried });
+    if (!ready) return J({ err: "not ready", ready: false }, 503);
+    const site = /^https?:\/\/(www\.)?bocchgame\.com$/.test(req.headers.get("Origin") || "") ? req.headers.get("Origin") : "https://bocchgame.com";
+    if (action === "checkout") {
+      if (active) return J({ err: "already" }, 409);
+      const plan = b.plan === "y" ? "y" : "m", cur = b.cur === "usd" ? "usd" : "jpy";
+      const amount = { jpy: { m: 480, y: 4800 }, usd: { m: 399, y: 3999 } }[cur][plan];
+      const f = new URLSearchParams();
+      f.set("mode", "subscription"); f.set("client_reference_id", me.uid); f.set("metadata[uid]", me.uid);
+      if (rec.cus) f.set("customer", rec.cus); else if (me.email) f.set("customer_email", me.email);
+      f.set("line_items[0][quantity]", "1");
+      f.set("line_items[0][price_data][currency]", cur);
+      f.set("line_items[0][price_data][unit_amount]", String(amount));
+      f.set("line_items[0][price_data][recurring][interval]", plan === "y" ? "year" : "month");
+      if (env.STRIPE_PRODUCT) f.set("line_items[0][price_data][product]", env.STRIPE_PRODUCT);
+      else f.set("line_items[0][price_data][product_data][name]", "bocch会員 / bocch Membership");
+      f.set("subscription_data[metadata][uid]", me.uid);
+      if (!rec.tried) f.set("subscription_data[trial_period_days]", "7");
+      f.set("success_url", site + "/?pay=ok"); f.set("cancel_url", site + "/?pay=cancel");
+      f.set("locale", "auto");
+      const s = await stripe(env, "POST", "checkout/sessions", f);
+      if (!s || !s.url) return J({ err: "stripe", msg: s && s.error && s.error.message || "" }, 502);
+      return J({ url: s.url });
+    }
+    if (action === "portal") {
+      if (!rec.cus) return J({ err: "no customer" }, 404);
+      const f = new URLSearchParams(); f.set("customer", rec.cus); f.set("return_url", site + "/?pay=back");
+      const s = await stripe(env, "POST", "billing_portal/sessions", f);
+      if (!s || !s.url) return J({ err: "stripe", msg: s && s.error && s.error.message || "" }, 502);
+      return J({ url: s.url });
+    }
+    return J({ err: "not found" }, 404);
+  }
+  async paySave(uid, sub) {
+    const key = "p:" + String(uid).slice(0, 128), old = (await this.ctx.storage.get(key)) || {};
+    const it = sub.items && sub.items.data && sub.items.data[0] || {}, pr = it.price || sub.plan || {};
+    const end = sub.current_period_end || it.current_period_end || 0;
+    await this.ctx.storage.put(key, { ...old, cus: sub.customer, sub: sub.id, st: sub.status, plan: (pr.recurring && pr.recurring.interval) || pr.interval || "", cur: pr.currency || "", end, cancel: !!sub.cancel_at_period_end, trial: sub.trial_end || 0, tried: true, t: Math.floor(Date.now() / 1000) });
+  }
+
   async kifuRec(req, h, now) {
     const txt = await req.text();
     if (new TextEncoder().encode(txt).length > KIFU_MAX) return new Response("too large\n", { status: 413, headers: h });
