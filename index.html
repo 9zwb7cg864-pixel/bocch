@@ -1951,7 +1951,7 @@ body.tabs-on .scr{padding-bottom:124px}
 .mb-ic{width:40px;height:40px;border-radius:12px;background:linear-gradient(180deg,#f3dc93,#d9b14e);display:grid;place-items:center;color:#2a2008;font-weight:900;font-size:18px;flex:none}
 .mb-tx{flex:1}.mb-tx b{display:block;font-size:15px;color:var(--fg,#fff)}.mb-tx small{font-size:12px;color:var(--sub)}
 .mb-go{color:#e6c46a;font-size:20px}
-.mb-hero{text-align:center;padding:6px 0 14px}.mb-hero b{font-size:22px;color:#e6c46a}.mb-hero p{font-size:12px;color:var(--mute);margin-top:4px}
+.mb-hero{text-align:center;padding:6px 0 14px}.mb-ttl{display:inline-flex;align-items:center;gap:8px}.mb-hb{display:inline-flex;flex:none}.mb-hero b{font-size:22px;color:#e6c46a}.mb-hero p{font-size:12px;color:var(--mute);margin-top:4px}
 .mb-ben{display:flex;align-items:center;gap:12px;width:100%;padding:12px 2px;border-top:1px solid var(--line);background:none;border-radius:0;text-align:left;min-height:0;color:inherit}
 .mb-ben:first-child{border-top:0}
 .mb-n{width:32px;height:32px;border-radius:10px;background:rgba(255,255,255,.06);display:grid;place-items:center;color:#e6c46a;font-weight:900;flex:none}
@@ -2233,7 +2233,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.43</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.44</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -2506,7 +2506,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 </section>
 <section class="scr" data-scr="member" hidden>
   <div class="topbar"><button class="back i-l" data-back>戻る</button><h2>bocch会員</h2><span class="sp"></span></div>
-  <div class="mb-hero"><b>bocch会員</b><p>月480円・7日間無料（いまは試作で、お金はかかりません）</p></div>
+  <div class="mb-hero"><b class="mb-ttl"><span class="mb-hb" aria-hidden="true"><svg viewBox="0 0 100 100" width="34" height="34"><defs><linearGradient id="mbGh" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7e3a1"/><stop offset=".5" stop-color="#d9b14e"/><stop offset="1" stop-color="#8a6a22"/></linearGradient><radialGradient id="mbSh" cx=".34" cy=".3" r=".8"><stop offset="0" stop-color="#6a6c70"/><stop offset=".3" stop-color="#2a2b2e"/><stop offset=".7" stop-color="#111214"/><stop offset="1" stop-color="#050506"/></radialGradient></defs><circle cx="50" cy="50" r="47" fill="url(#mbGh)"/><circle cx="50" cy="50" r="41" fill="#1d1e22"/><circle cx="50" cy="50" r="37" fill="url(#mbSh)"/><path d="M33 58 L36 40 L44 49 L50 36 L56 49 L64 40 L67 58 Z" fill="url(#mbGh)"/><rect x="33" y="60" width="34" height="5" rx="1.5" fill="url(#mbGh)"/></svg></span>bocch会員</b><p>月480円・7日間無料（いまは試作で、お金はかかりません）</p></div>
   <div class="fr-sec mb-list" id="mbList"></div>
   <p class="mb-foot">今の無料の機能は、会員でなくてもすべて使えます</p>
 </section>
