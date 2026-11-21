@@ -13,67 +13,79 @@
 :root{color-scheme:light dark;--bg:light-dark(#d7372b,#3a0f0c);--card:light-dark(#fbf5e8,#1d1513);--ink:light-dark(#1a1412,#f3e9dc);--sub:light-dark(#6b5c55,#b9a79b);--on:#fff7ec;--ac:light-dark(#1a1412,#ffcf3f);--line:light-dark(#e6dccb,#3a2c28)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Zen Kaku Gothic New",sans-serif;overflow-x:clip;min-height:100vh}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Zen Kaku Gothic New",sans-serif;overflow:hidden;height:100dvh;display:flex;flex-direction:column}
 h1,.big{font-family:"Dela Gothic One",sans-serif;font-weight:400}
-header{padding:20px max(4vw,16px) 8px;color:var(--on);display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline}
-header h1{margin:0;font-size:clamp(28px,5vw,44px);line-height:1.05}
-header .info{font-size:14px;opacity:.9}
-main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;padding:12px max(4vw,16px) 32px;max-width:1240px;margin:0 auto}
-@media(max-width:860px){main{grid-template-columns:minmax(0,1fr)}}
-.panel{background:var(--card);border-radius:18px;padding:18px;box-shadow:0 6px 0 rgba(0,0,0,.25)}
-.field{display:grid;gap:12px;max-width:420px}
-label{font-size:14px;color:var(--sub)}
-input{font:inherit;font-size:16px;padding:10px 12px;border:2px solid var(--line);border-radius:10px;background:transparent;color:var(--ink);width:100%}
+header{flex:none;padding:10px max(3vw,12px) 6px;color:var(--on);display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center}
+header h1{margin:0;font-size:clamp(20px,3.6vw,32px);line-height:1.05}
+header .info{font-size:13px;opacity:.9}
+main{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:12px;padding:4px max(3vw,12px) 6px;width:100%;max-width:1240px;margin:0 auto}
+@media(max-width:860px){main{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) 150px;gap:8px}}
+.panel{background:var(--card);border-radius:16px;padding:12px;box-shadow:0 5px 0 rgba(0,0,0,.25);min-height:0;overflow:hidden}
+#stage{display:flex;flex-direction:column}
+#game{flex:1;min-height:0;display:flex;flex-direction:column;gap:8px}
+.field{display:grid;gap:8px;max-width:420px}
+label{font-size:13px;color:var(--sub)}
+input{font:inherit;font-size:16px;padding:8px 12px;border:2px solid var(--line);border-radius:10px;background:transparent;color:var(--ink);width:100%}
 input:focus,button:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
-button{font:inherit;font-weight:700;min-height:44px;padding:8px 18px;border-radius:12px;border:2px solid var(--ink);background:var(--card);color:var(--ink);cursor:pointer}
+button{font:inherit;font-weight:700;min-height:44px;padding:6px 14px;border-radius:12px;border:2px solid var(--ink);background:var(--card);color:var(--ink);cursor:pointer;white-space:nowrap}
 button.main{background:var(--ink);color:var(--card)}
-#cs{flex:none;white-space:nowrap}
+#cs{flex:none}
 button:disabled{opacity:.4;cursor:default}
-.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px}
-.cardw{display:grid;gap:10px;align-content:start}
-.tag{font-size:13px;font-weight:700;color:var(--sub)}
-.card{background:var(--card);border:3px solid var(--ink);border-radius:16px;overflow:hidden;box-shadow:0 8px 0 rgba(0,0,0,.28);animation:pop .35s ease-out}
-.card .img{aspect-ratio:16/10;background:var(--line) center/cover no-repeat;display:grid;place-items:center;color:var(--sub);font-size:40px;font-family:"Dela Gothic One"}
-.card .tx{padding:12px 14px 14px}
-.card h2{margin:0 0 6px;font-family:"Dela Gothic One";font-weight:400;font-size:clamp(22px,3.2vw,30px);line-height:1.15;text-wrap:balance;overflow-wrap:anywhere}
-.card p{margin:0 0 8px;font-size:14px;color:var(--sub);display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
-.card a{font-size:13px;color:var(--sub)}
-.card.win{border-color:var(--ac);box-shadow:0 0 0 4px var(--ac),0 8px 0 rgba(0,0,0,.28)}
-.back{aspect-ratio:3/4;max-height:360px;border:3px dashed var(--line);border-radius:16px;display:grid;place-items:center;text-align:center;color:var(--sub);padding:16px}
-@keyframes pop{from{transform:translateY(14px) scale(.96);opacity:0}}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.top{flex:none;justify-content:space-between}
+.cards{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.cardw{display:flex;flex-direction:column;gap:6px;min-height:0}
+.cardw>.card,.cardw>.back{flex:1;min-height:0}
+.cardw>button,.cardw>.row,.cardw>.left,.cardw>.note,.cardw>.tag{flex:none}
+.tag{font-size:12px;font-weight:700;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card{display:flex;flex-direction:column;background:var(--card);border:3px solid var(--ink);border-radius:14px;overflow:hidden;box-shadow:0 6px 0 rgba(0,0,0,.28);animation:pop .35s ease-out}
+.card .img{flex:1;min-height:40px;background:var(--line) center/cover no-repeat;display:grid;place-items:center;color:var(--sub);font-size:32px;font-family:"Dela Gothic One"}
+.card .tx{flex:none;padding:8px 10px 10px}
+.card h2{margin:0 0 4px;font-family:"Dela Gothic One";font-weight:400;font-size:clamp(16px,2.6vw,26px);line-height:1.15;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card p{margin:0 0 4px;font-size:13px;line-height:1.45;color:var(--sub);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card a,.card .note{font-size:12px;color:var(--sub)}
+.card.win{border-color:var(--ac);box-shadow:0 0 0 4px var(--ac),0 6px 0 rgba(0,0,0,.28)}
+.back{border:3px dashed var(--line);border-radius:14px;display:grid;place-items:center;text-align:center;color:var(--sub);padding:10px}
+.back .big{font-size:clamp(16px,2.4vw,22px)}
+@keyframes pop{from{transform:translateY(10px) scale(.97);opacity:0}}
 @media(prefers-reduced-motion:reduce){.card{animation:none}}
-.left{font-size:15px}.left b{font-size:22px;font-family:"Dela Gothic One";font-weight:400}
-.res{font-family:"Dela Gothic One";font-size:clamp(28px,5vw,44px);line-height:1.1;margin:4px 0}
-.note{font-size:14px;color:var(--sub)}
-.score{display:flex;gap:16px;flex-wrap:wrap;font-size:15px}
-.chat{display:grid;grid-template-rows:auto minmax(0,1fr) auto;height:min(70vh,560px);gap:10px}
-@media(max-width:860px){.chat{height:420px}}
-.log{overflow-y:auto;display:grid;gap:6px;align-content:start;padding-right:4px}
-.msg{font-size:15px;overflow-wrap:anywhere}.msg b{margin-right:6px}.msg.sys{color:var(--sub);font-size:13px}
+.left{font-size:13px}.left b{font-size:18px;font-family:"Dela Gothic One";font-weight:400}
+.res{font-family:"Dela Gothic One";font-size:clamp(20px,3.6vw,34px);line-height:1.1}
+.note{font-size:13px;color:var(--sub)}
+.score{display:flex;gap:4px 12px;flex-wrap:wrap;font-size:13px}
+.chat{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:6px}
+.chat .big{font-size:16px}
+.log{overflow-y:auto;display:grid;gap:4px;align-content:start;padding-right:4px}
+.msg{font-size:14px;overflow-wrap:anywhere}.msg b{margin-right:6px}.msg.sys{color:var(--sub);font-size:12px}
 .msg.me b{color:light-dark(#b3261e,#ffcf3f)}
-.dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#2fbf71;margin-right:5px}.dot.off{background:#999}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#2fbf71;margin-right:4px}.dot.off{background:#999}
 .hide{display:none!important}
+footer{flex:none;text-align:center;color:var(--on);font-size:11px;padding:0 12px 6px;opacity:.85}
+footer a{color:var(--on)}
+@media(max-width:860px){.chat{grid-template-rows:minmax(0,1fr) auto}.chat>div:first-child{display:none}}
+@media(max-width:600px){.card p{-webkit-line-clamp:2}.card a{display:none}.cardw .left .note{display:none}}
+@media(max-height:620px){.card p{display:none}.lobbynote{display:none}}
 </style></head><body>
 <header><h1>強そうな方が勝ち</h1><span class="info" id="hinfo">Wikipediaのランダム記事で勝負。引き直しは10回まで、前のには戻れない。</span></header>
 <main>
 <section class="panel" id="stage">
   <div id="lobby" class="field">
-    <div class="big" style="font-size:24px">部屋に入る</div>
+    <div class="big" style="font-size:20px">部屋に入る</div>
     <div><label for="nm">名前</label><input id="nm" maxlength="12" placeholder="名前"></div>
     <div><label for="rc">部屋番号（同じ番号の人と対戦）</label><input id="rc" maxlength="8" inputmode="numeric"></div>
     <div class="row"><button class="main" id="enter">入る</button></div>
-    <p class="note">遊び方：2人とも記事を引く → 気に入らなければ引き直し（最大10回、引いたら前のには戻れない）→「これで勝負」で決定 → 2枚が公開されたらチャットで言い合って、強そうな方に投票。票が割れたら記事が長い方（情報量が多い方）の勝ち。</p>
+    <p class="note lobbynote">遊び方：2人とも記事を引く → 気に入らなければ引き直し（最大10回、引いたら前のには戻れない）→「これで勝負」で決定 → 2枚が公開されたらチャットで言い合って、強そうな方に投票。票が割れたら記事が長い方（情報量が多い方）の勝ち。</p>
   </div>
   <div id="game" class="hide"></div>
 </section>
 <aside class="panel chat" id="chatp">
-  <div><div class="big" style="font-size:20px">チャット</div><div class="note" id="who">部屋に入ると使えます</div></div>
+  <div><div class="big">チャット</div><div class="note" id="who">部屋に入ると使えます</div></div>
   <div class="log" id="log"></div>
   <form class="row" id="cf" style="flex-wrap:nowrap"><input id="ci" maxlength="200" placeholder="メッセージ" autocomplete="off" disabled><button id="cs" disabled>送る</button></form>
 </aside>
 </main>
-<footer style="text-align:center;color:#fff7ec;font-size:13px;padding:0 16px 24px">記事の文章と画像は <a href="https://ja.wikipedia.org/" style="color:#fff7ec">ウィキペディア日本語版</a> より（<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja" style="color:#fff7ec">CC BY-SA 4.0</a>）。チャットは12時間で消えます。</footer>
+<footer>記事の文章と画像は <a href="https://ja.wikipedia.org/">ウィキペディア日本語版</a> より（<a href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja">CC BY-SA 4.0</a>）。チャットは12時間で消えます。</footer>
 <script>
 {
 const RELAY="https://bocch.9zwb7cg864.workers.dev/";
@@ -179,30 +191,30 @@ function render(){
   const wins={};let draws=0;for(let r=1;r<=R;r++){const z=s.length===2&&result(r,s);if(z){if(z.w)wins[z.w]=(wins[z.w]||0)+1;else draws++}}
   const sc=s.map(i=>`<span><span class="dot${online(i)?"":" off"}"></span>${esc(players.get(i).name)}${i===myId?"（あなた）":""}：<b>${wins[i]||0}勝</b></span>`).join("")+(draws?`<span>引き分け ${draws}</span>`:"");
   $("who").innerHTML=s.length<2?"相手を待っています。招待リンクを送ってください":s.map(i=>esc(players.get(i).name)).join(" vs ")+(isP?"":"（観戦中）");
-  let h=`<div class="row" style="justify-content:space-between;margin-bottom:12px"><div class="big" style="font-size:22px">第${R}戦</div><div class="score">${sc}</div></div>`;
+  let h=`<div class="row top"><div class="big" style="font-size:18px">第${R}戦</div><div class="score">${sc}</div></div>`;
   const both=s.length===2&&x.picks[s[0]]&&x.picks[s[1]];
   if(!both){
     if(isP){
       const left=MAXDRAW-local.draws;
       h+=`<div class="cards"><div class="cardw"><div class="tag">あなたの記事</div>`;
-      h+=local.cur?card(local.cur):`<div class="back"><div><div class="big" style="font-size:22px">まだ引いていません</div><div class="note">押すとWikipediaのランダムな記事が1つ出ます</div></div></div>`;
+      h+=local.cur?card(local.cur):`<div class="back"><div><div class="big">まだ引いていません</div><div class="note">押すとWikipediaのランダムな記事が1つ出ます</div></div></div>`;
       if(!local.decided){
         h+=`<div class="row">${local.cur?`<button id="bd" ${local.busy||left<=0?"disabled":""}>${local.busy?"引いています…":"引き直す"}</button><button class="main" id="bk">これで勝負</button>`:`<button class="main" id="bd" ${local.busy?"disabled":""}>${local.busy?"引いています…":"1枚目を引く"}</button>`}</div>`;
-        h+=`<div class="left">引き直し 残り <b>${local.cur?Math.max(0,left):10}</b> 回${local.cur&&left<=0?"　もう引けません。これで勝負です":""}</div><div class="note">引き直すと、今の記事には二度と戻れません。</div>`;
+        h+=`<div class="left">引き直し残り <b>${local.cur?Math.max(0,left):10}</b> 回${local.cur&&left<=0?"　もう引けません":""} <span class="note">引き直すと前のには戻れません</span></div>`;
       }else h+=`<div class="note">決定しました。相手を待っています。</div>`;
-      h+=`</div><div class="cardw"><div class="tag">${opp?oname+" さんの記事":"相手"}</div><div class="back"><div><div class="big" style="font-size:22px">${!opp?"まだいません":x.picks[opp]?"決定済み":"考え中…"}</div><div class="note">${opp?(x.draws[opp]||0)+"回引いた":"招待リンクを送ってください"}</div></div></div></div></div>`;
+      h+=`</div><div class="cardw"><div class="tag">${opp?oname+" さんの記事":"相手"}</div><div class="back"><div><div class="big">${!opp?"まだいません":x.picks[opp]?"決定済み":"考え中…"}</div><div class="note">${opp?(x.draws[opp]||0)+"回引いた":"招待リンクを送ってください"}</div></div></div></div></div>`;
     }else{
-      h+=`<div class="back" style="aspect-ratio:auto;min-height:200px"><div><div class="big" style="font-size:22px">観戦中</div><div class="note">${s.map(i=>esc(players.get(i).name)+"："+(x.picks[i]?"決定済み":(x.draws[i]||0)+"回引いた")).join("<br>")}</div></div></div>`;
+      h+=`<div class="back" style="flex:1"><div><div class="big">観戦中</div><div class="note">${s.map(i=>esc(players.get(i).name)+"："+(x.picks[i]?"決定済み":(x.draws[i]||0)+"回引いた")).join("<br>")}</div></div></div>`;
     }
   }else{
     const z=result(R,s);
-    h+=z?`<div class="res">${z.w?esc(players.get(z.w).name)+" の勝ち！":"引き分け"}</div><div class="note" style="margin-bottom:12px">${z.how}</div>`:`<div class="note" style="margin-bottom:12px">2枚がそろいました。チャットで言い合って、強そうな方に投票してください（自分のにも入れられます）。</div>`;
+    h+=z?`<div style="flex:none"><div class="res">${z.w?esc(players.get(z.w).name)+" の勝ち！":"引き分け"}</div><div class="note">${z.how}</div></div>`:`<div class="note" style="flex:none">2枚がそろいました。チャットで言い合って、強そうな方に投票してください（自分のにも入れられます）。</div>`;
     h+=`<div class="cards">`+s.map(i=>{
       const voters=s.filter(v=>x.votes[v]===i).map(v=>esc(players.get(v).name));
       return `<div class="cardw"><div class="tag">${esc(players.get(i).name)}${i===myId?"（あなた）":""}　${x.draws[i]||"?"}回目で決定</div>${card(x.picks[i],{win:z&&z.w===i})}
-      ${isP&&!x.votes[myId]?`<button class="main" data-v="${i}">こっちが強そう</button>`:`<div class="note">${voters.length?"票："+voters.join("、"):(z?"":"投票待ち")}</div>`}</div>`}).join("")+`</div>`;
-    if(z)h+=`<div class="row" style="margin-top:16px"><button class="main" id="nx">もう一局</button></div>`;
-    else if(x.votes[myId])h+=`<p class="note">投票しました。相手の投票を待っています。</p>`;
+      ${isP&&!x.votes[myId]?`<button class="main" data-v="${i}" style="flex:none">こっちが強そう</button>`:`<div class="note">${voters.length?"票："+voters.join("、"):(z?"":"投票待ち")}</div>`}</div>`}).join("")+`</div>`;
+    if(z)h+=`<div class="row" style="flex:none"><button class="main" id="nx">もう一局</button></div>`;
+    else if(x.votes[myId])h+=`<p class="note" style="flex:none;margin:0">投票しました。相手を待っています。</p>`;
   }
   if(h===lastH)return;lastH=h;g.innerHTML=h;
   const bd=$("bd");if(bd)bd.onclick=draw;const bk=$("bk");if(bk)bk.onclick=decide;
