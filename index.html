@@ -1963,8 +1963,8 @@ body.tabs-on .scr{padding-bottom:124px}
 .mb-pl{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:12px 14px;border-radius:14px;border:1.5px solid rgba(255,255,255,.12);background:var(--p1);color:inherit;text-align:left;min-height:0}
 .mb-pl.on{border-color:#e6c46a;background:#332e22}.mb-pl small{font-size:12px;color:var(--mute)}.mb-pl b{font-size:20px}
 .mb-pl i{font-style:normal;position:absolute;top:-9px;right:10px;background:#e6c46a;color:#2a2008;font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px}
-.mb-go{width:100%;border:0;border-radius:999px;padding:14px;font-size:16px;font-weight:800;background:linear-gradient(180deg,#f3dc93,#d9b14e);color:#2a2008}
-.mb-go:disabled,.mb-sub:disabled{opacity:.6}
+.mb-cta{width:100%;border:0;border-radius:999px;padding:14px;font-size:16px;font-weight:800;background:linear-gradient(180deg,#f3dc93,#d9b14e);color:#2a2008}
+.mb-cta:disabled,.mb-sub:disabled{opacity:.6}
 .mb-note{font-size:11.5px;color:var(--mute);line-height:1.7;margin:10px 2px 0}.mb-note a{color:var(--acc,#a9cdf7)}
 .mb-st2{background:var(--p1);border-radius:14px;padding:14px;margin:0 0 10px}.mb-st2 b{color:#e6c46a}.mb-st2 p{margin:6px 0 0;font-size:13px;color:var(--mute)}
 .mb-sub{width:100%;border:1px solid rgba(255,255,255,.15);background:none;color:inherit;border-radius:999px;padding:12px;font-size:14px}
@@ -2242,7 +2242,7 @@ html.bth-lav{--sqL:#ece6fb;--sqD:#8b7bd8}html.bth-sal{--sqL:#f8e6d8;--sqD:#df958
 <div id="bdToast" aria-live="polite"></div>
 <!-- ホーム -->
 <section class="scr" data-scr="home">
-  <div class="ver" id="ver" aria-label="バージョン">v2.45</div>
+  <div class="ver" id="ver" aria-label="バージョン">v2.46</div>
   <button class="rules-link" id="rulesLink" aria-label="ルール" title="ルール"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C4 4.7 4.7 4 5.5 4H11v15H5.5c-.8 0-1.5.5-1.5 1.2V5.5z"/><path d="M20 5.5c0-.8-.7-1.5-1.5-1.5H13v15h5.5c.8 0 1.5.5 1.5 1.2V5.5z"/></svg></button>
   <div class="hm">
     <header class="hm-head"><h1><span class="hm-logo-t">bocch</span></h1><p class="hm-tag">ひとりぼっちの石は、動けない。</p><button class="hm-mail" id="hmMail" type="button" data-go="mail" aria-label="メール"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5"/><path d="M3.8 7l8.2 6 8.2-6"/></svg><span class="hm-mail-b" id="mailBadge" hidden></span></button><button class="hm-pill" id="hmPill" type="button" aria-label="アカウント"><span class="stone b" id="hmPillS"></span><b id="hmPillR"></b></button></header>
@@ -6385,7 +6385,7 @@ function renderPay(){const P=$('mbPay');if(!P)return;P.replaceChildren();const c
   const g=el('div','mb-plans');for(const k of ['m','y']){const b=el('button','mb-pl'+(PICK===k?' on':''));b.type='button';b.setAttribute('aria-pressed',String(PICK===k));
     if(k==='y')b.append(el('i','','2か月分お得'));b.append(el('small','',k==='m'?'月額':'年額'),el('b','',money(PL[k][c],c)),el('small','',k==='m'?'毎月':(c==='jpy'?'月あたり400円':'$3.33 / month')));
     b.onclick=()=>{PICK=k;renderPay()};g.append(b)}
-  const go=el('button','mb-go',PAY.tried?'会員になる':'7日間無料で始める');go.type='button';go.onclick=()=>payGo('checkout',go);
+  const go=el('button','mb-cta',PAY.tried?'会員になる':'7日間無料で始める');go.type='button';go.onclick=()=>payGo('checkout',go);
   const n=el('p','mb-note');n.append(el('span','','支払いはStripeの画面で行います（カード情報はbocchに届きません）。'));if(!PAY.tried)n.append(el('span','','7日以内に解約すれば、お金はかかりません。'));
   n.append(el('br'));const a1=el('a','','特定商取引法に基づく表記');const LG=window.BOCCH_LANG||'ja',SF={ja:'',en:'-en','zh-Hans':'-zh-hans','zh-Hant':'-zh-hant',ko:'-ko',es:'-es',de:'-de'}[LG]||'-en';a1.href=LG==='ja'?'/tokushoho.html':'/tokushoho-en.html';a1.target='_blank';const a2=el('a','','利用規約');a2.href='/terms'+SF+'.html';a2.target='_blank';n.append(a1,document.createTextNode('・'),a2);
   P.append(g,go,n)}
