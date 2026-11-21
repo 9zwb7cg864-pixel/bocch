@@ -75,7 +75,7 @@ footer a{color:var(--on)}
     <div><label for="nm">名前</label><input id="nm" maxlength="12" placeholder="名前"></div>
     <div><label for="rc">部屋番号（同じ番号の人と対戦）</label><input id="rc" maxlength="8" inputmode="numeric"></div>
     <div class="row"><button class="main" id="enter">入る</button></div>
-    <p class="note lobbynote">遊び方：2人とも記事を引く → 気に入らなければ引き直し（最大10回、引いたら前のには戻れない）→「これで勝負」で決定 → 2枚が公開されたらチャットで言い合って、強そうな方に投票。票が割れたら記事が長い方（情報量が多い方）の勝ち。</p>
+    <p class="note lobbynote">遊び方：2人とも記事を引く → 気に入らなければ引き直し（最大10回、引いたら前のには戻れない）→「これで勝負」で決定 → 3人目に入った人が審判になり、名前を伏せた2枚から強そうな方を選ぶ。判定のあとで誰の記事か分かる。</p>
   </div>
   <div id="game" class="hide"></div>
 </section>
@@ -149,9 +149,10 @@ function handle(m,time){
   render();
 }
 
-function seats(){ // 先に来た2人が対戦者。3人目からは観戦
-  return [...players.entries()].filter(([,p])=>Date.now()/1000-p.last<3*3600).sort((a,b)=>a[1].first-b[1].first).slice(0,2).map(x=>x[0]);
+function order(){ // 先に来た2人が対戦者、3人目が審判、4人目からは観戦
+  return [...players.entries()].filter(([,p])=>Date.now()/1000-p.last<3*3600).sort((a,b)=>a[1].first-b[1].first).map(x=>x[0]);
 }
+const seats=()=>order().slice(0,2),judgeId=()=>order()[2];
 const online=id=>{const p=players.get(id);return p&&Date.now()/1000-p.last<40};
 
 async function draw(){
@@ -171,26 +172,24 @@ function card(a,opt={}){
   const img=a.img?`style="background-image:url('${esc(a.img)}')"`:"";
   return `<div class="card${opt.win?" win":""}"><div class="img" ${img}>${a.img?"":"？"}</div><div class="tx"><h2>${esc(a.title)}</h2><p>${esc(a.ext||"（説明なし）")}</p><a href="${esc(a.url)}" target="_blank" rel="noopener">Wikipediaで読む</a> <span class="note">｜${Number(a.len||0).toLocaleString()}バイト</span></div></div>`;
 }
-function result(r,s){
-  const x=rounds[r];if(!x)return null;const [a,b]=s;
-  if(!x.picks[a]||!x.picks[b]||!x.votes[a]||!x.votes[b])return null;
-  if(x.votes[a]===x.votes[b])return{w:x.votes[a],how:"2人とも同じ意見"};
-  const la=x.picks[a].len||0,lb=x.picks[b].len||0;
-  if(la===lb)return{w:null,how:"票が割れて記事の長さも同じ"};
-  return{w:la>lb?a:b,how:"票が割れたので記事が長い方"};
+function result(r,s,j){
+  const x=rounds[r];if(!x||!j)return null;const [a,b]=s;
+  if(!x.picks[a]||!x.picks[b])return null;
+  const v=x.votes[j];if(v!==a&&v!==b)return null;
+  return{w:v,how:"審判 "+esc(players.get(j).name)+" さんの判定"};
 }
 
 function render(){
   const g=$("game");if(g.classList.contains("hide"))return;
   if(local.r!==R)local={r:R,draws:0,cur:null,decided:false,busy:false};
-  const s=seats(),isP=s.includes(myId),opp=s.find(i=>i!==myId);
+  const s=seats(),J=judgeId(),isJ=J===myId,isP=s.includes(myId),opp=s.find(i=>i!==myId);
   const x=R_(R),oname=opp?esc(players.get(opp).name):"";
   if(isP&&!local.cur&&(x.draws[myId]||0)>local.draws)local.draws=Math.min(x.draws[myId],MAXDRAW-1);
   if(isP&&x.picks[myId]&&!local.decided){local.decided=true;local.cur=x.picks[myId];local.draws=x.draws[myId]||MAXDRAW}
   // 成績
-  const wins={};let draws=0;for(let r=1;r<=R;r++){const z=s.length===2&&result(r,s);if(z){if(z.w)wins[z.w]=(wins[z.w]||0)+1;else draws++}}
+  const wins={};let draws=0;for(let r=1;r<=R;r++){const z=s.length===2&&result(r,s,J);if(z){if(z.w)wins[z.w]=(wins[z.w]||0)+1;else draws++}}
   const sc=s.map(i=>`<span><span class="dot${online(i)?"":" off"}"></span>${esc(players.get(i).name)}${i===myId?"（あなた）":""}：<b>${wins[i]||0}勝</b></span>`).join("")+(draws?`<span>引き分け ${draws}</span>`:"");
-  $("who").innerHTML=s.length<2?"相手を待っています。招待リンクを送ってください":s.map(i=>esc(players.get(i).name)).join(" vs ")+(isP?"":"（観戦中）");
+  $("who").innerHTML=s.length<2?"相手を待っています。招待リンクを送ってください":s.map(i=>esc(players.get(i).name)).join(" vs ")+"　審判："+(J?esc(players.get(J).name)+(isJ?"（あなた）":""):"まだいません")+(isP||isJ?"":"（観戦中）");
   let h=`<div class="row top"><div class="big" style="font-size:18px">第${R}戦</div><div class="score">${sc}</div></div>`;
   const both=s.length===2&&x.picks[s[0]]&&x.picks[s[1]];
   if(!both){
@@ -204,17 +203,19 @@ function render(){
       }else h+=`<div class="note">決定しました。相手を待っています。</div>`;
       h+=`</div><div class="cardw"><div class="tag">${opp?oname+" さんの記事":"相手"}</div><div class="back"><div><div class="big">${!opp?"まだいません":x.picks[opp]?"決定済み":"考え中…"}</div><div class="note">${opp?(x.draws[opp]||0)+"回引いた":"招待リンクを送ってください"}</div></div></div></div></div>`;
     }else{
-      h+=`<div class="back" style="flex:1"><div><div class="big">観戦中</div><div class="note">${s.map(i=>esc(players.get(i).name)+"："+(x.picks[i]?"決定済み":(x.draws[i]||0)+"回引いた")).join("<br>")}</div></div></div>`;
+      h+=`<div class="back" style="flex:1"><div><div class="big">${isJ?"あなたは審判です":"観戦中"}</div><div class="note">${s.map(i=>esc(players.get(i).name)+"："+(x.picks[i]?"決定済み":(x.draws[i]||0)+"回引いた")).join("<br>")}${isJ?"<br>2人が決めたら、名前を伏せた2枚が出ます。強そうな方を選んでください":""}</div></div></div>`;
     }
   }else{
-    const z=result(R,s);
-    h+=z?`<div style="flex:none"><div class="res">${z.w?esc(players.get(z.w).name)+" の勝ち！":"引き分け"}</div><div class="note">${z.how}</div></div>`:`<div class="note" style="flex:none">2枚がそろいました。チャットで言い合って、強そうな方に投票してください（自分のにも入れられます）。</div>`;
-    h+=`<div class="cards">`+s.map(i=>{
-      const voters=s.filter(v=>x.votes[v]===i).map(v=>esc(players.get(v).name));
-      return `<div class="cardw"><div class="tag">${esc(players.get(i).name)}${i===myId?"（あなた）":""}　${x.draws[i]||"?"}回目で決定</div>${card(x.picks[i],{win:z&&z.w===i})}
-      ${isP&&!x.votes[myId]?`<button class="main" data-v="${i}" style="flex:none">こっちが強そう</button>`:`<div class="note">${voters.length?"票："+voters.join("、"):(z?"":"投票待ち")}</div>`}</div>`}).join("")+`</div>`;
+    const z=result(R,s,J),blind=!isP&&!z;
+    const ord=(R+s[0].charCodeAt(0)+s[1].charCodeAt(0))%2?[s[1],s[0]]:s; // 並びは毎回ばらばら
+    const msg=z?"":isJ?"名前は伏せてあります。強そうな方を選んでください。判定のあとで誰の記事か分かります。":isP?(J?"審判の判定を待っています。チャットで推すのはOK。":"審判（3人目）がまだいません。招待リンクを送って、もう1人呼んでください。"):"審判の判定を待っています。";
+    h+=z?`<div style="flex:none"><div class="res">${esc(players.get(z.w).name)} の勝ち！</div><div class="note">${z.how}</div></div>`:`<div class="note" style="flex:none">${msg}</div>`;
+    h+=`<div class="cards">`+ord.map((i,k)=>{
+      const lab="AB"[k];
+      const tag=blind?`記事 ${lab}`:`${lab}：${esc(players.get(i).name)}${i===myId?"（あなた）":""}　${x.draws[i]||"?"}回目で決定`;
+      return `<div class="cardw"><div class="tag">${tag}</div>${card(x.picks[i],{win:z&&z.w===i})}
+      ${isJ&&!z?`<button class="main" data-v="${i}" style="flex:none">${lab} が強そう</button>`:""}</div>`}).join("")+`</div>`;
     if(z)h+=`<div class="row" style="flex:none"><button class="main" id="nx">もう一局</button></div>`;
-    else if(x.votes[myId])h+=`<p class="note" style="flex:none;margin:0">投票しました。相手を待っています。</p>`;
   }
   if(h===lastH)return;lastH=h;g.innerHTML=h;
   const bd=$("bd");if(bd)bd.onclick=draw;const bk=$("bk");if(bk)bk.onclick=decide;
