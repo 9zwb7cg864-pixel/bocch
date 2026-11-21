@@ -27,6 +27,7 @@ input{font:inherit;font-size:16px;padding:10px 12px;border:2px solid var(--line)
 input:focus,button:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
 button{font:inherit;font-weight:700;min-height:44px;padding:8px 18px;border-radius:12px;border:2px solid var(--ink);background:var(--card);color:var(--ink);cursor:pointer}
 button.main{background:var(--ink);color:var(--card)}
+#cs{flex:none;white-space:nowrap}
 button:disabled{opacity:.4;cursor:default}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px}
@@ -86,7 +87,7 @@ const q=new URLSearchParams(location.search);
 $("nm").value=store.get("tsy-name")||"";
 $("rc").value=q.get("r")||String(Math.floor(1000+Math.random()*9000));
 
-let joined=false,me="",room="",ws=null,seen=new Set(),retry=0;
+let lastH="",joined=false,me="",room="",ws=null,seen=new Set(),retry=0;
 const players=new Map(); // id -> {name,first,last}
 const rounds={};         // r -> {picks:{},votes:{},draws:{}}
 let R=1;
@@ -202,7 +203,7 @@ function render(){
     if(z)h+=`<div class="row" style="margin-top:16px"><button class="main" id="nx">もう一局</button></div>`;
     else if(x.votes[myId])h+=`<p class="note">投票しました。相手の投票を待っています。</p>`;
   }
-  g.innerHTML=h;
+  if(h===lastH)return;lastH=h;g.innerHTML=h;
   const bd=$("bd");if(bd)bd.onclick=draw;const bk=$("bk");if(bk)bk.onclick=decide;
   const nx=$("nx");if(nx)nx.onclick=()=>{R++;send({t:"next",r:R});render()};
   g.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{R_(R).votes[myId]=b.dataset.v;send({t:"vote",r:R,for:b.dataset.v});render()});
